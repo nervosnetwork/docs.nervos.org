@@ -1,10 +1,26 @@
 {
   "docs": {
-    "Docusaurus": ["doc1"],
-    "First Category": ["doc2"],
-    "Second Category": ["doc3"]
-  },
-  "docs-other": {
-    "First Category": ["doc4", "doc5"]
+    "Overview": ["overview"],
+    "Basics": [
+      "basics/introduction"
+    ],
+    "Reference": [
+      "reference/introduction"
+    ],
+    "Labs": [
+      "labs/introduction"
+    ],
+    "Integrate": [
+      "integrate/introduction"
+    ],
+    "Projects": [
+      "projects/introduction"
+    ],
+    "Essays": [
+      "essays/introduction"
+    ],
+    "Community": [
+      "community/introduction"
+    ]
   }
 }
