@@ -1,0 +1,26 @@
+{
+  "docs": {
+    "Overview": ["overview"],
+    "Basics": [
+      "basics/introduction"
+    ],
+    "Reference": [
+      "reference/introduction"
+    ],
+    "Labs": [
+      "labs/introduction"
+    ],
+    "Integrate": [
+      "integrate/introduction"
+    ],
+    "Projects": [
+      "projects/introduction"
+    ],
+    "Essays": [
+      "essays/introduction"
+    ],
+    "Community": [
+      "community/introduction"
+    ]
+  }
+}
