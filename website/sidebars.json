@@ -5,14 +5,10 @@
       "basics/introduction"
     ],
     "Reference": [
-      "reference/introduction",
-      "reference/cell",
-      "reference/script",
-      "reference/transaction"
+      "reference/introduction"
     ],
     "Labs": [
-      "labs/introduction",
-      "labs/sudtbycapsule"
+      "labs/introduction"
     ],
     "Integrate": [
       "integrate/introduction"
@@ -21,8 +17,7 @@
       "projects/introduction"
     ],
     "Essays": [
-      "essays/introduction",
-      "essays/devchain"
+      "essays/introduction"
     ],
     "Community": [
       "community/introduction"
