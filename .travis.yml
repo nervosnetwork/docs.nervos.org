@@ -26,9 +26,10 @@ scripts:
 deploy:
   provider: script
   script:
-    - mkdir .vercel
+    - mkdir -p .vercel
     - echo $VERCEL_CONFIG > .vercel/project.json
     - now --prod -t $VERCEL_TOKEN
+    - rm -rf .vercel
   skip_cleanup: true
   on:
     branch: develop
