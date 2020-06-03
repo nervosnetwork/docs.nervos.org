@@ -1,0 +1,34 @@
+os: linux
+dist: bionic
+
+language: node_js
+node_js:
+  - lts/*
+
+cache:
+  - npm
+
+before_install:
+  - cd website
+  - node -v
+  - npm -v
+  - npm -g install now
+  - npm -g install yarn
+  - now -v
+  - yarn -v
+
+install:
+  - yarn
+
+scripts:
+  - yarn build
+
+deploy:
+  provider: script
+  script:
+    - mkdir .vercel
+    - echo $VERCEL_CONFIG > .vercel/project.json
+    - now --prod -t $VERCEL_TOKEN
+  skip_cleanup: true
+  on:
+    branch: master
