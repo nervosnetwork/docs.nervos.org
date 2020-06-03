@@ -6,7 +6,7 @@ node_js:
   - lts/*
 
 cache:
-  - npm
+  yarn: true
 
 before_install:
   - cd website
@@ -20,16 +20,9 @@ before_install:
 install:
   - yarn
 
-scripts:
+script:
   - yarn build
-
-deploy:
-  provider: script
-  script:
-    - mkdir -p .vercel
-    - echo $VERCEL_CONFIG > .vercel/project.json
-    - now --prod -t $VERCEL_TOKEN
-    - rm -rf .vercel
-  skip_cleanup: true
-  on:
-    branch: develop
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then git config --global user.name "${GH_NAME}"; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then git config --global user.email "${GH_EMAIL}"; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then GIT_USER="${GH_NAME}" yarn run publish-gh-pages; fi
