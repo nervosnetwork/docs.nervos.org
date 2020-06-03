@@ -7,9 +7,12 @@
 
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
+const path = require('path');
 
 // List of projects/orgs using your project for the users page.
 const siteConfig = {
+  customDocsPath: path.basename(__dirname) + '/docs',
+
   title: 'Nervos CKB Docs', // Title for your website.
   tagline: 'This is the documentation site for Nervos CKB',
   url: 'https://your-docusaurus-test-site.com', // Your website URL
@@ -19,8 +22,8 @@ const siteConfig = {
   //   baseUrl: '/test-site/',
 
   // Used for publishing and more
-  projectName: 'test-site',
-  organizationName: 'facebook',
+  projectName: 'docs',
+  organizationName: 'Nervos',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
