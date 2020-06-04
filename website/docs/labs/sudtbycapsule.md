@@ -5,7 +5,7 @@ title: Write a SUDT script by Capsule
 
 ## Introduction
 
-[Capsule](https://github.com/nervosnetwork/capsule) is a set of tools for Rust developers to develop scripts on CKB which covers the entire lifecycle of script development: writing、debugging、testing and deployment. We aim to improve the development experience of Rust developers.
+[Capsule](https://github.com/nervosnetwork/capsule) is a set of tools for Rust developers to develop scripts on CKB which covers the entire lifecycle of script development: writing,debugging,testing and deployment. We aim to improve the development experience of Rust developers.
 
 In this tutorial, you will learn how to write a SUDT script using Capsule. SUDT is the abbreviation of Simple User Defined Token which defines a minimal standard that contains what’s absolutely needed for dapp developers to issue custom tokens on Nervos CKB. You can refer to [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) for more details.
 
