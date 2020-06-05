@@ -2,13 +2,15 @@
   "docs": {
     "Overview": ["overview"],
     "Basics": [
-      "basics/introduction"
+      "basics/introduction",
+      "basics/devchain"
     ],
     "Reference": [
       "reference/introduction",
       "reference/cell",
       "reference/script",
-      "reference/transaction"
+      "reference/transaction",
+      "reference/rpc"
     ],
     "Labs": [
       "labs/introduction",
@@ -21,8 +23,7 @@
       "projects/introduction"
     ],
     "Essays": [
-      "essays/introduction",
-      "essays/devchain"
+      "essays/introduction"
     ],
     "Community": [
       "community/introduction"

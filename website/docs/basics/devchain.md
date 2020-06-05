@@ -1,18 +1,28 @@
 ---
 id: devchain
-title: How to use a development blockchain
+title: How to use a development CKB blockchain
 ---
 
-Nervos CKB supports a `dev` mode that is particularly useful for development and testing. We also support to modify some parameters to run quickly for improving development efficiency. In addition，we also provide  `ckb-cli`  to support transfer、query balance (with local index)  and etc. 
+Nervos CKB supports the `dev` mode that is particularly useful for development and testing. You can run a developement CKB blockchain with `Dummy-Worker` or `Eaglesong-Worker` locally for development and testing.
+
+It is recommended to use `Dummy-Worker` for most of development scenarios because the block time is stable. `Eaglesong-Worker` is just for scenarios of validating PoW function. Please note that the block time can be extremely unstable when the mining hashrate is low in `Eaglesong-Worker`.
 
 You may follow these instructions which are explained in detail below：
 
+In `Dummy-Worker`：
 * Initialize the development blockchain
 * Modify parameters to run quickly
 * Run the development blockchain
 * Use `ckb-cli`  to transfer CKB
 
-## Initialize the development blockchain
+In `Eaglesong-Worker`：
+* Initialize the development blockchain
+* Change the PoW function to Eaglesong
+* Run the development blockchain
+
+## In `Dummy-Worker`
+
+### Initialize the development blockchain
 
 * Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases), then check if it works with:
 
@@ -45,12 +55,11 @@ create ckb-miner.toml
 ```
 </details>
 
-
-## Modify parameters to run quickly
+### Modify parameters to run quickly
 
 In the development process, sometimes we want to make the blockchain to run quickly for getting results faster.We will introduce how to modify parameters to make it. 
 
-###  Change the epoch length
+* Change the epoch length
 
 You can change the `genesis_epoch_length` in `specs/dev.toml`
 
@@ -68,7 +77,7 @@ epoch_duration_target = 14400
 
 The default epoch length is 1000 blocks，if `genesis_epoch_length = 100` that means the epoch lengh is 100 blocks.
 
-### Change the mining idle interval
+* Change the mining idle interval
 
 Change the `value` in `ckb-miner.toml`
 
@@ -81,13 +90,13 @@ delay_type = "Constant"
 
 The default mining idle interval is 5000ms, if `value = 50` that means the mining idle interval is 50ms.
 
-## Run the development blockchain
+### Run the development blockchain
 
 We need to run a miner for running the development blockchain, firstly configure the `block-assembler` in `ckb.toml` for mining.
 
-###  configure `block-assembler`
+1. configure `block-assembler`
 
-* Use `ckb-cli` to generate a miner account, we will use `lock_arg` next step, so please backup it.
+  * Use `ckb-cli` to generate a miner account, we will use `lock_arg` next step, so please backup it.
 
 ```
 ckb-cli account new
@@ -107,7 +116,7 @@ lock_hash: 0x3c78a0ea094f0d7abedde67f95143bcf8af391458cec798ceeaa3549ff53c4cb
 ```
 </details>
 
-* Fill in  `args` and  `message` of the `block_assembler`
+   * Fill in  `args` and  `message` of the `block_assembler`
 
 ```
 [block_assembler]
@@ -118,7 +127,7 @@ message = "A 0x-prefixed hex string"// "0x"(recommendation)
 
 ```
 
-### Run the development blockchain
+2. Run the development blockchain
 
 * Start a ckb node
 
@@ -154,7 +163,7 @@ Found! #4 0x334cf2af7cedb70bad4dd2001bfe9ef043a98c3cd66f679636e6153cd3c1be64
 ```
 </details>
 
-## Use `ckb-cli`  to transfer CKB
+### Use `ckb-cli`  to transfer CKB
 
 `ckb-cli` is included in the ckb releases，it’s the command line tool for CKB. You can use it to invoke RPC call to node、manage accounts、transfer/check balance、construct mock transactions, etc. You can refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli)  for more details. We will introduce how to transfer CKB here.
 
@@ -245,3 +254,114 @@ total: 10000.0 (CKB)
 </details>
 
  The transfer successes !
+
+ ## In `Eaglesong-Worker`
+
+ ### Initialize the development blockchain
+
+* Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases),it requires version v0.32.0 or above,then check if it works with:
+
+```
+ckb --version
+ckb-cli --version
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+ckb 0.32.1 (9ebc9ce 2020-05-29)
+ckb-cli 0.32.0 (0fc435d 2020-05-22)
+```
+</details>
+
+* Use `ckb-cli` to generate a miner account, we will use `lock_arg` next step, so please backup it.
+
+```
+ckb-cli account new
+```
+
+<details>
+<summary>(click here to view response)</summary>
+```bash
+Your new account is locked with a password. Please give a password. Do not forget this password.
+Password: 
+Repeat password: 
+address:
+  mainnet: ckb1qyqtxam3dpjftjm7ljehu5jeeg6r4ph966lswxq87x
+  testnet: ckt1qyqtxam3dpjftjm7ljehu5jeeg6r4ph966lsnr7cj6
+lock_arg: 0xb37771686495cb7efcb37e5259ca343a86e5d6bf
+lock_hash: 0xceabcf383964ac0485b4ef7eec3321abef9f8493210c750e3a6f7832ffac0b2e
+```
+</details>
+
+* Initialize the development blockchain with the test miner account
+
+```
+ckb init -c dev --ba-arg 0xb37771686495cb7efcb37e5259ca343a86e5d6bf // lock_arg
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
+create specs/dev.toml
+create ckb.toml
+create ckb-miner.toml
+```
+</details>
+
+### Change the PoW function to Eaglesong
+
+* Edit specs/dev.toml and change to last line to
+
+```
+func = "Eaglesong"
+```
+* Edit ckb-miner.toml and change the whole [[miner.workers]] section to
+
+```
+[[miner.workers]]
+worker_type = "EaglesongSimple"
+threads     = 1
+```
+### Run the development blockchain
+
+* Start a ckb node
+
+```
+ckb run
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+2020-06-05 11:25:31.433 +08:00 main INFO sentry  sentry is disabled
+2020-06-05 11:25:31.508 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 11:25:31.590 +08:00 main INFO ckb-db  Init database version 20191127135521
+2020-06-05 11:25:31.604 +08:00 main INFO ckb-memory-tracker  track current process: unsupported
+2020-06-05 11:25:31.604 +08:00 main INFO main  ckb version: 0.32.1 (9ebc9ce 2020-05-29)
+2020-06-05 11:25:31.604 +08:00 main INFO main  chain genesis hash: 0x823b2ff5785b12da8b1363cac9a5cbe566d8b715a4311441b119c39a0367488c
+2020-06-05 11:25:31.604 +08:00 main INFO ckb-network  Generate random key
+2020-06-05 11:25:31.604 +08:00 main INFO ckb-network  write random secret key to "/PATH/ckb_v0.32.1_x86_64-apple-darwin/data/network/secret_key"
+2020-06-05 11:25:31.608 +08:00 NetworkRuntime INFO ckb-network  p2p service event: ListenStarted { address: "/ip4/0.0.0.0/tcp/8115" }
+2020-06-05 11:25:31.610 +08:00 NetworkRuntime INFO ckb-network  Listen on address: /ip4/0.0.0.0/tcp/8115/p2p/QmcCGH7VeXbpV4jj7VgSEM7NANuud6TmGHV2DXPsSVrRkR
+2020-06-05 11:25:31.612 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 11:25:31.638 +08:00 main INFO ckb-db  Init database version 20191201091330
+```
+</details>
+
+* Start a miner, you may open another terminal
+
+```
+ckb miner
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+2020-06-05 11:25:37.867 +08:00 main INFO sentry  sentry is disabled
+EaglesongSimple-Worker-0 ⠁ [00:00:00] 
+2020-06-05 11:25:37.870 +08:00 main INFO ckb-memory-tracker  track current proceFound! #1 0x57e6ad0f15bacc4f30e53811d488d895e6619c17222981eca5484f0115f84acd
+Found! #2 0xe5831f39f928dca599a02e490c482a881ccdc47a2376371dec4e440e363fa5c0
+Found! #3 0x605b3e6449954c2daa996c06b2412bbf60b8231763149742119fb623f9de27b2
+Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
+```
+</details>
+
+
