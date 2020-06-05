@@ -2,13 +2,19 @@
   "docs": {
     "Overview": ["overview"],
     "Basics": [
-      "basics/introduction"
+      "basics/introduction",
+      "basics/devchain"
     ],
     "Reference": [
-      "reference/introduction"
+      "reference/introduction",
+      "reference/cell",
+      "reference/script",
+      "reference/transaction",
+      "reference/rpc"
     ],
     "Labs": [
-      "labs/introduction"
+      "labs/introduction",
+      "labs/sudtbycapsule"
     ],
     "Integrate": [
       "integrate/introduction"
