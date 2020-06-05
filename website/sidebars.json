@@ -3,7 +3,10 @@
     "Overview": ["overview"],
     "Basics": [
       "basics/introduction",
-      "basics/devchain"
+      "basics/devchain",
+      "basics/mainnet",
+      "basics/testnet",
+      "basics/neuron"
     ],
     "Reference": [
       "reference/introduction",
