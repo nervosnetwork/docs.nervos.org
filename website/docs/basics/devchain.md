@@ -1,6 +1,6 @@
 ---
 id: devchain
-title: How to use a development CKB blockchain
+title: Run a development CKB blockchain
 ---
 
 Nervos CKB supports the `dev` mode that is particularly useful for development and testing. You can run a developement CKB blockchain with `Dummy-Worker` or `Eaglesong-Worker` locally for development and testing.
@@ -33,8 +33,8 @@ ckb-cli --version
 <details>
 <summary>(click here to view response)</summary>
 ```bash
-ckb 0.32.0-pre (80e0bef 2020-05-06)
-ckb-cli 0.31.0 (a531b3b 2020-04-17)
+ckb 0.32.1 (9ebc9ce 2020-05-29)
+ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
 </details>
 
@@ -48,7 +48,7 @@ ckb init --chain dev
 <summary>(click here to view response)</summary>
 ```bash
 WARN: mining feature is disabled because of lacking the block assembler config options
-Initialized CKB directory in /PATH/ckb_v0.32.0-rc1_x86_64-apple-darwin-dev
+Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create specs/dev.toml
 create ckb.toml
 create ckb-miner.toml
@@ -109,10 +109,10 @@ Your new account is locked with a password. Please give a password. Do not forge
 Password: 
 Repeat password: 
 address:
-  mainnet: ckb1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qud28sv
-  testnet: ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus
-  lock_arg: 0x8d627decece439977a3a0a97815b63debaff2874
-lock_hash: 0x3c78a0ea094f0d7abedde67f95143bcf8af391458cec798ceeaa3549ff53c4cb
+  mainnet: ckb1qyqyrm8w0w8uq7puwhdp7s6xqzdjuknhf2tqzdztph
+  testnet: ckt1qyqyrm8w0w8uq7puwhdp7s6xqzdjuknhf2tqlgu5dt
+lock_arg: 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96
+lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
 </details>
 
@@ -137,12 +137,19 @@ ckb run
 <details>
 <summary>(click here to view response)</summary>
 ```bash
-2020-05-15 16:39:49.457 +08:00 main INFO sentry sentry is disabled
-2020-05-15 16:39:49.620 +08:00 main INFO ckb-memory-tracker track current process: unsupported
-2020-05-15 16:39:49.620 +08:00 main INFO main ckb version: 0.32.0-pre (80e0bef 2020-05-06)
-2020-05-15 16:39:49.620 +08:00 main INFO main chain genesis hash: 0x120ab9abd48e3b82f93b88eba8c50a0e1304cc2fffb5573fb14b56c6348f2305
-2020-05-15 16:39:49.624 +08:00 NetworkRuntime INFO ckb-network p2p service event: ListenStarted { address: "/ip4/0.0.0.0/tcp/8115" }
-2020-05-15 16:39:49.625 +08:00 NetworkRuntime INFO ckb-network Listen on address: /ip4/0.0.0.0/tcp/8115/p2p/QmcdT17iho5X7D4NGZKjzrgonQ4oQRGx5UHrwPbUWiaAwG
+2020-06-05 18:31:14.970 +08:00 main INFO sentry  sentry is disabled
+2020-06-05 18:31:15.058 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 18:31:15.136 +08:00 main INFO ckb-db  Init database version 20191127135521
+2020-06-05 18:31:15.162 +08:00 main INFO ckb-memory-tracker  track current process: unsupported
+2020-06-05 18:31:15.164 +08:00 main INFO main  ckb version: 0.32.1 (9ebc9ce 2020-05-29)
+2020-06-05 18:31:15.164 +08:00 main INFO main  chain genesis hash: 0x823b2ff5785b12da8b1363cac9a5cbe566d8b715a4311441b119c39a0367488c
+2020-06-05 18:31:15.166 +08:00 main INFO ckb-network  Generate random key
+2020-06-05 18:31:15.166 +08:00 main INFO ckb-network  write random secret key to "/PATH/ckb_v0.32.1_x86_64-apple-darwin/data/network/secret_key"
+2020-06-05 18:31:15.177 +08:00 NetworkRuntime INFO ckb-network  p2p service event: ListenStarted { address: "/ip4/0.0.0.0/tcp/8115" }
+2020-06-05 18:31:15.179 +08:00 NetworkRuntime INFO ckb-network  Listen on address: /ip4/0.0.0.0/tcp/8115/p2p/QmSHk4EucevEuX76Q44hEdYpRxr3gyDmbKtnMQ4kxGaJ6m
+2020-06-05 18:31:15.185 +08:00 main INFO ckb-db  Initialize a new database
+2020-06-05 18:31:15.211 +08:00 main INFO ckb-db  Init database version 20191201091330
+2020-06-05 18:31:26.586 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1, epoch: 0(1/1000), total_diff: 0x200, txs: 1
 ```
 </details>
 
@@ -154,18 +161,19 @@ ckb miner
 <details>
 <summary>(click here to view response)</summary>
 ```bash
-2020-05-15 16:33:55.215 +08:00 main INFO sentry sentry is disabled
-Dummy-Worker ⠁ [00:00:00]
-Found! #1 0x70949ff02180743faee29ed728d8afaf165d8922a45aa728d7187511f2a72b37
-Found! #2 0x74afc3bac2f085918a093181c046c767c2b8060a9ec6c5b503f1ef3468c7d6e0
-Found! #3 0x6570ec5c0d4434287cf53a99f23769dba923e511dced32e1f3462470fdf2fe99
-Found! #4 0x334cf2af7cedb70bad4dd2001bfe9ef043a98c3cd66f679636e6153cd3c1be64
+2020-06-05 18:31:21.558 +08:00 main INFO sentry  sentry is disabled
+Dummy-Worker ⠁ [00:00:00] 
+Found! #1 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1
+Found! #2 0x19978085abfa6204471d42bfb279eac0c20e3b81745b48c4dcaea85643e301f9
+Found! #3 0x625b230f84cb92bcd9cb0bf76d1397c1d948ab25c19df3c4edc246a765f94427
+Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
+
 ```
 </details>
 
 ### Use `ckb-cli`  to transfer CKB
 
-`ckb-cli` is included in the ckb releases，it’s the command line tool for CKB. You can use it to invoke RPC call to node、manage accounts、transfer/check balance、construct mock transactions, etc. You can refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli)  for more details. We will introduce how to transfer CKB here.
+`ckb-cli` is included in the ckb releases，it’s the command line tool for CKB. You can use it to invoke RPC call to node,manage accounts、transfer/check balance、construct mock transactions, etc. You can refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli)  for more details. We will introduce how to transfer CKB here.
 
  **Please note that `ckb-cli` is only used for developing/testing purpose.** 
 
