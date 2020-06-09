@@ -17,7 +17,7 @@ Now we are excited to introduce three projects:
 
 ## Next steps
 
-* If you're new to Nervos and you want to learn how Nervos works, then check out the [Basics](basics/doc3.md).
+* If you're new to Nervos and you want to learn how Nervos works, then check out the [Basics](basics/intro.md).
 * If you're a developer who wants to build on Nervos CKB, then check out the [Projects](projects/intro.md),[Labs](labs/intro.md) and [Essays](essays/intro.md)
 * If you're a CKB fan and you want to learn more about Nervos CKB，then check out the [Reference](reference/intro.md).
 * If you're an operator of blockchain wallet or exchange and  you want to integrate with Nervos CKB, then check out the [Integrate](integrate/intro.md).
