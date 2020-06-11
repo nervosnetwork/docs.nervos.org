@@ -3,7 +3,6 @@
     "Overview": ["overview"],
     "Basics": [
       "basics/introduction",
-      
       {
       "type": "subcategory",
       "label": "Guides",
@@ -49,14 +48,8 @@
     "Integrate": [
       "integrate/introduction"
     ],
-    "Projects": [
-      "projects/introduction"
-    ],
     "Essays": [
       "essays/introduction"
-    ],
-    "Community": [
-      "community/introduction"
     ]
   }
 }
