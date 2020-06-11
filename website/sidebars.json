@@ -24,15 +24,7 @@
           "basics/concepts/ckb-vm"
         ]
       },
-      {
-        "type": "subcategory",
-        "label": "Glossary",
-          "ids": [
-            "basics/glossary/glossary-general",
-            "basics/glossary/glossary-economic",
-            "basics/glossary/glossary-technical"
-          ]
-        }
+      "basics/glossary"
     ],
     "Reference": [
       "reference/introduction",
@@ -49,7 +41,8 @@
       "integrate/introduction"
     ],
     "Essays": [
-      "essays/introduction"
+      "essays/introduction",
+      "essays/rfcs"
     ]
   }
 }
