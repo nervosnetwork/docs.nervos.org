@@ -3,9 +3,9 @@ id: cell
 title: Cell
 ---
 
-Nervos CKB (Common Knowledge Base) is a layer 1 blockchain, a decentralized and secure layer that provides common knowledge custody for the network.  Common knowledge refers to **states** that are verified by global consensus. 
+Nervos CKB (Common Knowledge Base) is a layer 1 blockchain, a decentralized and secure layer that provides common knowledge custody for the network.  Common knowledge refers to **states** that are agreed via global consensus.
 
-**Cells are the primary state units** in CKB and are assets owned by users that must follow associated application logic specified by scripts. In Bitcoin, money is the common knowledge stored in the Bitcoin ledger. However in Nervos CKB, we want to take this one step further and store more kinds of common knowledge, hence we inherits the ideas of Bitcoin’s architecture and creates the [Cell Model](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571) from generalizing the UTXO model, retaining the consistency and simplicity of Bitcoin.
+**Cells are the primary state units** in CKB and assets owned by users. They must follow associated validation rules specified by scripts. In Bitcoin, money is the typical common knowledge stored in the Bitcoin ledger. Nervos CKB, however, takes one step further to store arbitrary common knowledge. We starts from Bitcoin's general architecture, and creates the [Cell Model](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571) by generalizing from the UTXO model, while at the same time retaining the consistency and simplicity of Bitcoin.
 
 ## Data Structure
 
@@ -25,39 +25,56 @@ Nervos CKB (Common Knowledge Base) is a layer 1 blockchain, a decentralized and 
 
 A Cell has three fields：
 
-* `capacity`: It's the size limit of the cell. A cell's size is the total size of all fields contained in it. It is not only just the amount of the stored tokens, but also a limit on how many data the cell can store. That's where the name comes from, It is the storage capacity of the cell. 
-* `lock script`: Represents the ownership of the cell. Owners of cells can transfer cells to others.
-* `type script`: It's the constraints on  `data`，also store the validation logic you need in the cell transformation.
+* `capacity`: Capacity servers 2 purposes: on one hand, it represents the amount of CKB tokens stored in the cell, on the other hand, it also sets the limit on how much information the cell can store. The basic unit for capacity is `shannon`, a bigger unit `CKByte`, or just `CKB` is also used. 1 CKB equals `10**8` shannons, 1 CKB also means the cell can store 1 byte of information. See below for how to calculate the total information size of a cell.
+* `lock script`: A script used to guard the cell: when the specified cell is used as an input cell in a transaction, the lock script included in a cell will be executed. The transaction will be rejected when the lock script fails in execution. One typical use case for lock script, is to represent the ownership of a cell, meaning a signature verification phase is usually included in the cell.
+* `type script`: A script used to validate cell structure. The type script of a cell will be executed both when the cell is included as an input cell, as well as when the cell is created as an output cell. Due to this nature, type script is typically used to validate dapp logic, such as creating UDTs.
 
-A cell also stores a piece of data, we will introduce `data`  in [Transaction](transaction.md) and also we will introduce `lock script` and `type script` in [Script](script.md).
+Each cell must have a lock script, while type script is optional, and can be omitted. Please refer to [Script](script.md) for the actual format of lock and type script.
+
+A cell is also associated with a piece of unformatted data. For future potential, the cell data part is stored directly in a transaction, outside of the cell structure here. We will introduce `data` in [Transaction](transaction.md).
+
+### Cell information size calculation
+
+Each cell on Nervos CKB, must not have a lower capacity than the total size of information stored in the cell. The size of information for a cell is calculated as the sum of the following fields:
+
+1. 8 bytes for cell capacity field.
+2. 32 bytes for code hash in lock script.
+3. 1 byte for hash type in lock script.
+4. Actual bytes of args field in lock script.
+5. If type script is present, 32 bytes for code hash in type script.
+6. If type script is present, 1 byte for hash type in type script.
+7. If type script is present, actual bytes of args field in type script.
+8. Actual bytes of cell data.
+
+By summing up all the above fields, we get the total size of information a cell needs. Cell capacity, when measured in `CKBytes`, respresents the maximum size of information that can be held, meaning a valid cell must ensure the CKBytes stored in capacity equal or is larger than the total size of information.
 
 
-## Indexing
+## Index-Query-Assemble Pattern
 
-Any transaction must include at least one input and one output. In order to construct a transaction,we first need to locate the input, we call  it "cell collect". There are two ways to implement "cell collect":
+Nervos CKB is designed based on the concept of cells. A transaction, at its core, really just consumes some cells, and create another set of cells. As a result, the ability to locate and transform cells, plays a critical role in building any CKB dapps, which leads to the `index-query-assemble` pattern:
 
-* Use the ckb indexer service
+* Index: when a new block is committed to CKB, a dapp should be able to index relevant cells to its own storage for latter usage.
+* Query: when a user action is requested, cells satisfying certain criteria will be queried from the dapp storage.
+* Assemble: based on queried cells, a new transaction would be assembled to fulfill user requests.
 
-CKB node provides indexing function to implement "cell collect" which is turned off by default. You can modify the configuration in `ckb.toml`
+We believe all CKB dapps can be decomposed into individual actions following this pattern. Here are some examples:
 
-```
-[rpc]
-...
-# List of API modules: ["Net", "Pool", "Miner", "Chain", "Stats", "Subscription", "Indexer", "Experiment"]
-modules = ["Net", "Pool", "Miner", "Chain", "Stats", "Subscription", "Experiment"]
+* In a normal CKB wallet, cells should be indexed based on lock scripts. A transfer action would first query cells from the sender, and assemble a transaction which transfer CKBytes to the receiver.
+* A NervosDAO manager might index only cells related to NervosDAO. A user might then pick a NervosDAO cell and perform withdraw action, even though there is only one cell related, we can still view it as cells queried from the NervosDAO manager, and a transaction will also be assembled which performs the actual withdraw action.
+* A state based dapp might choose to store the latest state in a CKB cell. The dapp will still need to track the latest live cell, which can also be viewed as an indexing operation, any action on the state will result in the latest live cell being queried, assembled into a transaction, then accepted by CKB with a new output cell containing the updated state.
 
-```
+### Tools
 
-To turn indexing feature on, please add “Indexer” to the array.
+Indexing & querying plays a central role in any CKB dapps. In most cases, you don't have to build an indexer from scratch. There are several existing tools one can leverage to fulfill the job:
 
-```
-modules = ["Net", "Pool", "Miner", "Chain", "Stats", "Subscription", "Experiment", **"Indexer"**]
-`
-```
+#### lumos
 
-After restarting the CKB node with `ckb run -C <path>`, register the address you want to index through the RPC method `[index_lock_hash](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#index_lock_hash)`. 
+Our dapp framework, [lumos](https://github.com/nervosnetwork/lumos) already contains a ready-to-use indexer. When you are using lumos, it is very likely the indexer is already setup for you to use. Please refer to our labs for how to setup lumos.
 
-* Construct the indexer service
+#### ckb-indexer
 
-The ckb indexer service is only for basic usage and and it is not flexible enough to accommodate additional requirements It is recommended to construct  the “cell collect” by yourself. Now we provide an example: [ckb-indexer](https://github.com/quake/ckb-indexer). You may refer to it for more details.
+A standalone [ckb-indexer](https://github.com/quake/ckb-indexer) also handles the job of indexing cells. It provides an RPC mechanism you can use to query for relevant cells. Please refer to the documentation of ckb-indexer for more details.
 
+#### perkins-tent
+
+If you are looking at a one-stop solution, [Perkins' Tent](https://github.com/xxuejie/perkins-tent) provides a single docker image that starts both CKB and ckb-indexer in one dockerisntance. With a single command, you should be able to start a CKB instance and be ready to use the enclosed ckb-indexer for querying tasks.
