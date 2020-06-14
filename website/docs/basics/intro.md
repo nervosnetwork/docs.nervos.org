@@ -1,6 +1,5 @@
 ---
 id: introduction
-title: Basics introduction
+title: Basics Introduction
 ---
 
-This is Basics introduciton.

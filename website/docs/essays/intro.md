@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: Essays introduction
+title: Essays Introduction
 ---
 
-This is Essays introduciton.
+This is Essays introduction.

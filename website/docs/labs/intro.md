@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: Labs introduction
+title: Labs Introduction
 ---
 
-This is Labs introduciton.
+This is Labs introduction.

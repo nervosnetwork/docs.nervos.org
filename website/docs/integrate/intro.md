@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: Integrate introduction
+title: Integrate Introduction
 ---
 
-This is Integrate introduciton.
+This is Integrate introduction.
