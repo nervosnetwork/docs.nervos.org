@@ -4,25 +4,25 @@
     "Basics": [
       "basics/introduction",
       {
-      "type": "subcategory",
-      "label": "Guides",
-        "ids": [
-          "basics/guides/devchain",
-          "basics/guides/mainnet",
-          "basics/guides/testnet",
-          "basics/guides/neuron"
-        ]
+        "type": "subcategory",
+        "label": "Concepts",
+          "ids": [
+            "basics/concepts/nervos-blockchain",
+            "basics/concepts/cell-model",
+            "basics/concepts/consensus",
+            "basics/concepts/economics",
+            "basics/concepts/ckb-vm"
+          ]
       },
       {
-      "type": "subcategory",
-      "label": "Concepts",
-        "ids": [
-          "basics/concepts/nervos-blockchain",
-          "basics/concepts/cell-model",
-          "basics/concepts/consensus",
-          "basics/concepts/economics",
-          "basics/concepts/ckb-vm"
-        ]
+        "type": "subcategory",
+        "label": "Guides",
+          "ids": [
+            "basics/guides/devchain",
+            "basics/guides/mainnet",
+            "basics/guides/testnet",
+            "basics/guides/neuron"
+          ]
       },
       "basics/glossary"
     ],
