@@ -116,7 +116,6 @@ Note: The Neuron bundled CKB node requires [VC++ redistributable](https://suppor
 
 <img src="../assets/neuron-wallet-guide/export.png" width = "600"/>
 
-
 ## Important
 
 The bootstrapping of a proof-of-work (PoW) chain is difficult. A new PoW chain is in many ways like a newborn baby — weak in the beginning, but with unlimited potential when mature.
