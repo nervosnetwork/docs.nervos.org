@@ -1,6 +1,6 @@
 ---
 id: overview
-title: Nervos CKB docs overview
+title: Nervos CKB Docs Overview
 ---
 This page is the top level entry point into the Nervos CKB documentation.
 
