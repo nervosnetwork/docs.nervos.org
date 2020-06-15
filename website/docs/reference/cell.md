@@ -9,7 +9,7 @@ Nervos CKB (Common Knowledge Base) is a layer 1 blockchain, a decentralized and 
 
 ## Data Structure
 
-**Example**
+**Example:**
 
 ```
 {
@@ -31,7 +31,15 @@ A Cell has three fields：
 
 Each cell must have a lock script, while type script is optional, and can be omitted. Please refer to [Script](script.md) for the actual format of lock and type script.
 
-A cell is also associated with a piece of unformatted data. For future potential, the cell data part is stored directly in a transaction, outside of the cell structure here. We will introduce `data` in [Transaction](transaction.md).
+### Cell data
+
+In addition to the above fields, each cell also contains a cell data field. Cell data is just a series of unformatted binary data. Depending on each dapp, anything could be stored in the cell data part:
+
+* Script code as explained in [Script](script.md).
+* Token amount for User Defined Token cells.
+* Latest game stats for an on-chain fantasy game.
+
+For future potential, cell data is not stored directly in a cell. It is kepted in [transaction#data-structure] directly. You might find a field named `outputs_data` in each transaction. This array should have the same length with `outputs`. At each index location, the corresponding cell data could be located for each created output cell in the transaction. Conceptually, we still consider cell data as part of each output cell.
 
 ### Cell information size calculation
 
@@ -48,6 +56,9 @@ Each cell on Nervos CKB, must not have a lower capacity than the total size of i
 
 By summing up all the above fields, we get the total size of information a cell needs. Cell capacity, when measured in `CKBytes`, respresents the maximum size of information that can be held, meaning a valid cell must ensure the CKBytes stored in capacity equal or is larger than the total size of information.
 
+## Live Cell
+
+Live cell refers to an unspent cell in CKB. It is similar to the concept of [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) in Bitcoin's terminology. The full set of live cells in CKB, is consider the full state of CKB at that particular point. Any transaction on CKB would consume some cells that were live cells just at the point before it is committed, and created new cells that are considered live cells after it is committed.
 
 ## Index-Query-Assemble Pattern
 

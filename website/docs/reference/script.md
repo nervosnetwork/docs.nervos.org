@@ -3,90 +3,90 @@ id: script
 title: Script
 ---
 
-CKB is dedicated to a brand new verification model：CKB VM is used to perform a series of validation rules to determine if transaction is valid given transaction's inputs and outputs. Every transaction represents a change of state transition, resulting in **cells transition**, the validation rules are included in cells' `lock script` and `type script` in the transaction.
+If you are used to blockchains like Ethereum, you will recognize that CKB leverages a drastically different verification model: instead of creating a transaction that alters blockchain state when executing, a transaction in CKB contains state transitions directly in the form of cells. To alter the state of an existing cell, one just destroys the original cell, then create a new one in a single, atomic transaction. CKB scripts, running on CKB VM, actually perform series of validation rules on the input cells and output cells of the transaction.
+
+In this section we will look closer at the data structure of scripts, and explain how lock scripts and type script work together to ensure the validation rules of CKB.
 
 Notes: we will distinguish between **script code** and **script**：
 
-* **script code** refers to the program you write and compile to use on CKB which is the implementation of validation rules. 
-* **script** refers to the script data structure used in `lock script` and `type script`.
+* **script code** refers to the compiled program you write and deploy to CKB. It is the actual binary CKB VM will run to perform validation rules.
+* **script** refers to the script data structure use by `lock script` and `type script` in [Cell](cell.md) data structure.
 
 ## Data Structure
 
-Both `lock script` and `type script` have the same type：**Script**
+Both `lock script` and `type script` use the same data structure：**Script**
 
-**Example：**
-
-```
-     "lock": {
-        "hashType": "type",
-        "codeHash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
-        "args": "0xc285e812f6a35c2479d6f5b9bbaa357dd4e60da1"
-      },
-      "type": {
-        "hashType": "data",
-        "codeHash": "0xe7f93d7120de3ca8548b34d2ab9c40fe662eec35023f07e143797789895b4869",
-        "args": "0x42b5561f13c2a8f7c710843bea7d179656dc6133a98b7d763cebc6e74c8ba72a"
-      }
-```
-
- 
- A script has three fields：
-
-*  `codeHash`: The hash of ELF formatted RISC-V binary that contains a CKB script. 
-*  `hashType`: The interpretation of `codeHash` when looking for matched dep cells. 
-    * If this is `data`, `code_hash` should match the blake2b hash of data in a dep cell; 
-    * if this is `type`, `code_hash` should instead match the type script hash of a dep cell.
-        * For space efficiency consideration, the actual script is attached to current transaction as a dep cell. Depending on the value of `hash_type`, the hash specified here should either match the hash of cell data part in the dep cell, or the hash of type script in the dep cell. The actual binary is loaded into an CKB-VM instance when they are specified upon the transaction verification.
-* `args`: The argument as the script input. The argument here is imported into the CKB-VM instance as the input argument for the scripts. For example, when people use the same default lock script code, each of them may hold their own pubkey hash, `args` is to hold pubkey hash.In this way，every user of CKB can have different lock script, while sharing the same lock script code.
-
-
-If you want to implement the validation rules，please follow: 
-
-* Develop the script code and compile your code into RISC-V binary. You can find some examples in the [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts) and [ckb-miscellaneous-scripts](https://github.com/nervosnetwork/ckb-miscellaneous-scripts)
-* Create a cell which stores the binary as `outputs_data` in a transaction, and send the transaction to the chain. The cell is called “code cell”.
-* Construct a script which `hashType` is `data`, and `codeHash` is the hash of the built binary.
-* Use the script as the type script or lock script in a cell.
-* If the script has to run in a transaction, include the code cell's `OutPoint` in the `cell_deps`. 
-
-
- As mentioned in [Cell](cell.md),  `lock script` stores the ownership of the cell and `type script` stores the validation logic you need in the cells transition.
-
-## Lock Script
-
-There are several use rules：
-
-* Every cell has a lock script.
-* The lock script must run when the cell is used as an transaction input. 
-* A transaction is valid only when all the lock scripts in the transaction inputs exit normally (without exceptions). 
-
-Since this script runs on inputs, it acts as the lock to control who can unlock and destroy the cell, as well as spend the capacity stored in the cell.
-
-The following is an example lock script code which always exits normally. Anyone can destroy the cell if it uses this code as the lock script.
+**Example:**
 
 ```
-int main(int argc, char *argv[]) {
-return 0;
+{
+  "hash_type": "type",
+  "code_hash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+  "args": "0xc285e812f6a35c2479d6f5b9bbaa357dd4e60da1"
+}
+
+{
+  "hash_type": "data",
+  "code_hash": "0xe7f93d7120de3ca8548b34d2ab9c40fe662eec35023f07e143797789895b4869",
+  "args": "0x42b5561f13c2a8f7c710843bea7d179656dc6133a98b7d763cebc6e74c8ba72a"
 }
 ```
 
-The most popular way to lock a digital asset is the digital signature created by asymmetric cryptography.
-The signature algorithm has two requirements:
+A script has three fields：
 
-* The cell must contain the information for the public key, so only the real private key can create a valid signature.
-* The transaction must contain the signatures, which usually signs the whole transaction as the message.
+* `code_hash`: A hash denoting which script in the transaction to execute. For space consideration, the actual script code is kept in the cell data part of a [live cell](cell#live-cell) on CKB. The current transaction should reference the live cell using a [cell dep](transaction) so as to locate and execute the script.
+* `hash_type`: The interpretation of `code_hash` when looking for script code to run from cell deps.
+    + If `hash_type` contains `data`, `code_hash` should match the blake2b hash of data(which is also the actual script code) in a dep cell;
+    + if `hash_type` contains `type`, `code_hash` should instead match the blake2b hash of type script contained by a a dep cell. Note CKB will throw a validation error when a) we are locating a script code using `type` as `hash_type`; and b) more than one cell referenced by cell deps contains the specified hash of type script.
 
-When you use the default [secp256k1 lock script](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_sighash_all.c),It’s recommended to store the public key hash in the lock script’s `args`
-field, and store the signature in the `transaction witness`.
+    The combination of a `code_hash` and a `hash_type`, will uniquely identify a script code in CKB.
+* `args`: Auxiliary arguments for a script. This is why we need to distinguish between `script code` and `script` above: through `args`, a `script` actually represents an **instance** of a `script code`. Typical examples include:
+    + While a single `script code` will be used for secp256k1 implementation, different people might include different public keys into `args` to create different `script`s, which lead to different wallets.
+    + While a single `script code` might provide implementation for the [UDT](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) specification, different people might inject different `args` for different types of tokens.
 
-## Type Script
+We will talk about how to execute a script to validate transaction structure in sections below.
 
-Type script is very similar to lock script, with two differences:
+Depending on the different types, scripts will be executed at different times:
 
-* Type script is optional.
-* In a transaction, CKB must run the type scripts in both inputs and outputs.
+1. All lock scripts from all input cells in a transaction will be executed.
+2. All type scripts(if exist) from all input cells and output cells in a transaction will be executed.
 
-Although we can only keep one type of script in the cell, we don’t want to mess the different responsibilities in a single script. The lock script is only executed for inputs, so its primary responsibility is protecting the cells. Only the owner is allowed to use the cell as input and spend any assets stored in it.
+We will consider the transaction valid only when all the required scripts complete with a success status. Failure in any script will mark the transaction as invalid.
 
-The type script is intended to store the validation logic you need in transactions. A typical use case of type script is to implement a UDT (user-defined token): the token issuance must be authorized through transaction outputs. 
+## Execution
 
+Here we are providing a basic introduction for script execution flow, for the more precise definition, please refer to the following RFCs:
 
+* [CKB VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md)
+* [VM Syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
+* [VM Cycle Limits](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
+
+Each script that needs to be executed from a CKB transaction, will be run in a [CKB VM](https://github.com/nervosnetwork/ckb-vm) instance. At its core, CKB VM is just an implementation of the [RISC-V](https://riscv.org/) Instruction Set Architecture(ISA). It means any RISC-V standard compliant program(RV64IMC to be more precise, see the RFCs for more details) will be accepted by CKB VM. The common [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format) format is used to package a binary.
+
+To use a RISC-V program as a script on CKB, one simply needs to create a new [cell](cell) with the full program binary in the cell's data part. One the transaction generating the new cell is committed on CKB, scripts can then be assembled to use the program as script code. As mentioned above, a cell dep entry must be also create to reference the newly created cell containing script code.
+
+There are cases that RISC-V ISA is not be enough, for example, a script might want to read information from the enclosing transaction to enforce validation rules, CKB provides a series of `syscalls` that will handle this task. Notice `syscall` is a concept also designed and included by the RISC-V standard ISA, we are confronting to RISC-V standard specification as much as we can.
+
+To prevent infinite loops, `cycles` are introduced to CKB VM. Each executed RISC-V instruction and each syscall made will consume certain amount of cycles. At consensus layer, CKB has a hard limit on the maximum cycles that is allowed in a single block. The total cycles consumed by all executed scripts, from all transactions included in a blocks, must not exceed this number. Otherwise the block will be rejected.
+
+## Use Cases
+
+Lock script and type script share the identical running environment, they can all access all the information contained in its enclosing transaction. But due to the fact they are executed in different times, they have formed into different use cases.
+
+### Lock Script
+
+Lock scripts are more for representing ownerships. Typical use cases for lock scripts include:
+
+* Signature verification
+* Lock period ensurance
+
+You might notice that type script can actually replace all functionalities of a lock script, meaning a cell can use a dummy lock script that does nothing, and rely on type script for all behaviors. But that is an anti-pattern of CKB now. By making lock script mandatory, we want to ensure each cell at least uses a secure lock script.
+
+Lock script can be viewed as the last defense to ensure that your tokens stay safe. So we do recommend to keep your lock as simple as possible, to avoid the potential of vulnerabilities.
+
+### Type Script
+
+Type script, on the other hand, is where innovations would more likely to happen on CKB. Some use cases of type scripts include:
+
+* User Defined Token(UDT) implementation
+* Ensuring cell data confronts to a certain format
