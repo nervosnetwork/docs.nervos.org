@@ -3,7 +3,6 @@
     "Overview": ["overview"],
     "Basics": [
       "basics/introduction",
-      "basics/tools",
       {
         "type": "subcategory",
         "label": "Concepts",
@@ -25,6 +24,7 @@
             "basics/guides/neuron"
           ]
       },
+      "basics/tools",
       "basics/glossary"
     ],
     "Reference": [
