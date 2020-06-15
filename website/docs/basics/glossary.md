@@ -3,13 +3,7 @@ id: glossary
 title: Glossary
 ---
 
-<!--
-Notes:
-- Synonyms, Not To Be Confused With, and See Also should be omitted when they are empty.
-- Avoid links in the definition. Add them to the sections in the note above.
-- Definitions should be descriptive but brief. The Glossary is not a tutorial. 
-- Links should be alphabetized with local links appearing above external links.
--->
+The Glossary is consisted of different sections: [General glossary](#general-glossary), [Economics glossary](#technical-glossary), and [Technical glossary](#economic-glossary). 
 
 ## General Glossary
 

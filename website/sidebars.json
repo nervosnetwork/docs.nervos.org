@@ -3,6 +3,7 @@
     "Overview": ["overview"],
     "Basics": [
       "basics/introduction",
+      "basics/tools",
       {
         "type": "subcategory",
         "label": "Concepts",
@@ -42,7 +43,9 @@
     ],
     "Essays": [
       "essays/introduction",
-      "essays/rfcs"
+      "essays/rfcs",
+      "essays/sdk"
+
     ]
   }
 }
