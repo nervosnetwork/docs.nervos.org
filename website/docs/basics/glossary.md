@@ -3,7 +3,13 @@ id: glossary
 title: Glossary
 ---
 
-The Glossary is consisted of different sections: [General glossary](#general-glossary), [Economics glossary](#technical-glossary), and [Technical glossary](#economic-glossary). 
+## Glossary Sections
+
+- [General Glossary](#general-glossary)
+- [Economics Glossary](#economic-glossary)
+- [Technical glossary](#technical-glossary)
+
+---
 
 ## General Glossary
 
