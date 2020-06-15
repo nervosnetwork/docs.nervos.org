@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: Reference introduction
+title: Reference Introduction
 ---
 
-This is Reference introduciton.
+This is Reference introduction.
