@@ -27,6 +27,8 @@
   -moz-osx-font-smoothing: grayscale;
  }
 
+ /* Header */
+
 .fixedHeaderContainer {
   background: black;
   min-height: 64px;
@@ -65,6 +67,34 @@
 .navigationSlider .slidingNav ul li.siteNavItemActive > a:hover,
 .navigationSlider .slidingNav ul li.siteNavGroupActive > a:hover {
   color: $primaryColor;
+}
+
+/* Article */
+
+.postHeaderTitle {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+article {
+  line-height: 150%;
+}
+
+article h2 {
+  font-size: 18px;
+}
+
+article h3 {
+  font-size: 16px;
+}
+
+article h4 {
+  font-size: 15px;
+}
+
+article li {
+  line-height: 150%;
+  margin: 14px 0;
 }
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
