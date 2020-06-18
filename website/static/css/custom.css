@@ -4,8 +4,28 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
- 
-/* your custom css */
+
+ /*
+   TODO: Docusaurus don't seem to offer an easy way to add a custom font file,
+   or reference the base URL. If we want to use the local font remember to
+   update the hardcoded `docs-new` path.
+ */
+ /*
+ @font-face {
+  font-family: 'Lato';
+  src: local('Lato'), url('/docs-new/fonts/Lato-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}*/
+
+ body {
+  font-family: $lato;
+  letter-spacing: 0.2px;
+  font-size: 14px;
+  color: black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ }
 
 .fixedHeaderContainer {
   background: black;

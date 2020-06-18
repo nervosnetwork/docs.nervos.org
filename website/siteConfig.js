@@ -50,18 +50,16 @@ const siteConfig = {
   },
 
   /* Custom fonts for website */
-  /*
   fonts: {
-    myFont: [
-      "Times New Roman",
-      "Serif"
+    lato: [
+      "Lato",
+      "sans-serif"
     ],
-    myOtherFont: [
-      "-apple-system",
-      "system-ui"
-    ]
   },
-  */
+
+  stylesheets: [
+    "https://fonts.googleapis.com/css2?family=Lato&display=swap"
+  ],
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
   copyright: `Copyright © ${new Date().getFullYear()}  Nervos Foundation. All Rights Reserved.`,
