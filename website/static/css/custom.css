@@ -7,10 +7,53 @@
  
 /* your custom css */
 
+.fixedHeaderContainer {
+  background: black;
+  min-height: 64px;
+}
+
+.fixedHeaderContainer header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.fixedHeaderContainer header img { /* logo */
+  margin: 0 70px 0 120px;
+}
+
+.fixedHeaderContainer header .headerTitleWithLogo {
+  display: none;
+}
+
+.navigationSlider .slidingNav ul li {
+  font-size: 14px;
+}
+
+.navigationSlider .slidingNav ul li a {
+  padding: 6px 16px;
+}
+
+.navigationSlider .slidingNav ul li > a:focus,
+.navigationSlider .slidingNav ul li > a:hover,
+.navigationSlider .slidingNav ul li.siteNavItemActive > a,
+.navigationSlider .slidingNav ul li.siteNavGroupActive > a {
+  background-color: black;
+}
+
+.navigationSlider .slidingNav ul li > a:focus, 
+.navigationSlider .slidingNav ul li.siteNavItemActive > a:hover,
+.navigationSlider .slidingNav ul li.siteNavGroupActive > a:hover {
+  color: $primaryColor;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
 @media only screen and (min-width: 1024px) {
+  .navigationSlider {
+    margin-left: 0;
+  }
 }
 
 @media only screen and (max-width: 1023px) {
