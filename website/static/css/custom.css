@@ -42,6 +42,7 @@
 
 .fixedHeaderContainer header img { /* logo */
   margin: 0 70px 0 120px;
+  height: 30px;
 }
 
 .fixedHeaderContainer header .headerTitleWithLogo {
