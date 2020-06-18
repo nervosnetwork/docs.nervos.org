@@ -70,6 +70,22 @@
   color: $primaryColor;
 }
 
+/* Sidebar Navigation */
+
+.toc .toggleNav .navGroup .navGroupCategoryTitle {
+  color: black;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toc .toggleNav .navGroup .navGroupSubcategoryTitle {
+  color: black;
+}
+
+.toc .toggleNav ul li a {
+  color: black;
+}
+
 /* Article */
 
 .postHeaderTitle {
