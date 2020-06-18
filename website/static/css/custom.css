@@ -95,6 +95,7 @@
 
 article {
   line-height: 150%;
+  margin-bottom: 40px;
 }
 
 article h2 {
@@ -113,6 +114,26 @@ article li {
   line-height: 150%;
   margin: 14px 0;
 }
+
+/* Pagination */
+
+.docs-prevnext {
+  border-top: solid 1px #d8d8d8;
+}
+
+.docs-prev, .docs-next {
+  border: none;
+  font-size: 16px;
+  padding: 10px 0;
+  transition: none;
+}
+
+.docs-prev:hover, .docs-next:hover {
+  background: none;
+  color: $primaryColor;
+}
+
+/* Responsive */
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
