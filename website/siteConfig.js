@@ -72,6 +72,14 @@ const siteConfig = {
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['https://buttons.github.io/buttons.js'],
 
+  // TODO: apply a new one if necessary
+  algolia: {
+    apiKey: 'ef49666369943baa0a93aedc37511318',
+    indexName: 'nervos-ckb',
+    placeholder: 'Search',
+    algoliaOptions: {} // Optional, if provided by Algolia
+  },
+
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
   // No .html extensions for paths.
