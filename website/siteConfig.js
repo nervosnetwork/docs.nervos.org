@@ -37,6 +37,7 @@ const siteConfig = {
     {doc: 'essays/introduction', label: 'Essays'}
   ],
 
+  disableHeaderTitle: true,
 
   /* path to images for header/footer */
   headerIcon: 'img/logo.png',

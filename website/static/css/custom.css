@@ -45,10 +45,6 @@
   height: 30px;
 }
 
-.fixedHeaderContainer header .headerTitleWithLogo {
-  display: none;
-}
-
 .navigationSlider {
   flex: 1;
   margin-right: 120px;
