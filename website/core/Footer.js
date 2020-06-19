@@ -21,22 +21,19 @@ class Footer extends React.Component {
           </div>
           <div className="footerSection">
             <h5>Developer</h5>
-            <a href={`${this.props.config.baseUrl}`}>
-              Docs
-            </a>
             <a href="https://github.com/nervosnetwork">
               GitHub
             </a>
             <a href="https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md">
               Whitepaper
             </a>
-            <a href="https://faucet.nervos.org/">
-              Faucet
+            <a href="https://github.com/nervosnetwork/rfcs">
+              RFCs
             </a>
           </div>
           <div className="footerSection socialLinks">
             {this.props.config.socialLinks.map((item) => (
-              <a href={item.url} className="socialLink">
+              <a href={item.url} className="socialLink" key={item.label}>
                 <img src={`${this.props.config.baseUrl}${item.icon}`} />
                 {item.label}
               </a>
