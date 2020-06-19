@@ -89,6 +89,39 @@ const siteConfig = {
   ogImage: 'img/undraw_online.svg',
   twitterImage: 'img/undraw_tweetstorm.svg',
 
+  socialLinks: [
+    {
+      label: 'Twitter',
+      icon: 'img/footer_twitter.png',
+      url: 'https://twitter.com/nervosnetwork'
+    },
+    {
+      label: 'Blog',
+      icon: 'img/footer_medium.png',
+      url: 'https://medium.com/nervosnetwork'
+    },
+    {
+      label: 'Telegram',
+      icon: 'img/footer_telegram.png',
+      url: 'https://t.me/nervosnetwork'
+    },
+    {
+      label: 'Reddit',
+      icon: 'img/footer_reddit.png',
+      url: 'https://www.reddit.com/r/NervosNetwork/'
+    },
+    {
+      label: 'YouTube',
+      icon: 'img/footer_youtube.png',
+      url: 'https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A'
+    },
+    {
+      label: 'Forum',
+      icon: 'img/footer_forum.png',
+      url: 'https://talk.nervos.org/'
+    }
+  ],
+
   // For sites with a sizable amount of content, set collapsible to true.
   // Expand/collapse the links and subcategories under categories.
   // docsSideNavCollapsible: true,
