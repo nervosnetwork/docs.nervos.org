@@ -70,7 +70,7 @@
   background-color: black;
 }
 
-.navigationSlider .slidingNav ul li > a:focus, 
+.navigationSlider .slidingNav ul li > a:focus,
 .navigationSlider .slidingNav ul li.siteNavItemActive > a:hover,
 .navigationSlider .slidingNav ul li.siteNavGroupActive > a:hover {
   color: $primaryColor;
@@ -120,8 +120,21 @@
   color: black;
 }
 
+.toc .toggleNav ul {
+  padding: 0 12px;
+}
+
 .toc .toggleNav ul li a {
   color: black;
+}
+
+.toc .toggleNav ul li.navListItemActive a::before {
+  position: absolute;
+  left: 0;
+  top: 3;
+  content: '';
+  border-left: solid 4px $primaryColor;
+  height: 22px;
 }
 
 /* Article */
