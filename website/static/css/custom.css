@@ -234,7 +234,7 @@ article li {
 /* Landing page */
 
 .homeSplashFade {
-  background: black url('/docs-new/img/doc_cover.png') no-repeat center center;
+  background: black url('/img/doc_cover.png') no-repeat center center;
   background-size: 1440px 540px;;
 }
 
