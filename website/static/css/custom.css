@@ -13,19 +13,23 @@
  /*
  @font-face {
   font-family: 'Lato';
-  src: local('Lato'), url('/docs-new/fonts/Lato-Regular.ttf') format('truetype');
+  src: local('Lato'), url('/fonts/Lato-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }*/
 
- body {
+body {
   font-family: $lato;
   letter-spacing: 0.2px;
   font-size: 14px;
   color: black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- }
+}
+
+.wrapper {
+  max-width: 1200px;
+}
 
  /* Header */
 
@@ -41,13 +45,16 @@
 }
 
 .fixedHeaderContainer header img { /* logo */
-  margin: 0 70px 0 120px;
+  margin: 0 70px 0 0;
   height: 30px;
 }
 
 .navigationSlider {
   flex: 1;
-  margin-right: 120px;
+}
+
+.navigationSlider .slidingNav ul {
+  background: black;
 }
 
 .navigationSlider .slidingNav ul li {
@@ -234,7 +241,7 @@ article li {
 /* Landing page */
 
 .homeSplashFade {
-  background: black url('/img/doc_cover.png') no-repeat center center;
+  background: black url('/img/doc_cover.png') no-repeat center top;
   background-size: 1440px 540px;;
 }
 
@@ -314,9 +321,6 @@ article li {
 
 /* Responsive */
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
-}
-
 @media only screen and (min-width: 1024px) {
   .navigationSlider {
     margin-left: 0;
@@ -327,11 +331,67 @@ article li {
   }
 }
 
+@media only screen and (max-width: 1200px) {
+  .card {
+    padding: 0 45px;
+  }
+}
+
 @media only screen and (max-width: 1023px) {
+  .reactNavSearchWrapper input#search_input_react:focus, .reactNavSearchWrapper input#search_input_react:active {
+    background: white;
+    color: black;
+  }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (max-device-width: 736px) {
+  .homeContainer .homeWrapper {
+    flex-direction: column;
+    padding: 110px 150px;
+  }
+
+  .homeContainer .homeWrapper .coverLogo {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+  }
+
+  .homeContainer .homeWrapper .coverLogo img {
+    width: 100px;
+    height: 84px;
+  }
+
+  .homeContainer .homeWrapper .projectDescription {
+    margin: 0;
+  }
+
+  .cardRow {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .card {
+    margin: 10px 20px;
+  }
 }
 
-@media only screen and (min-width: 1500px) {
+@media only screen and (max-device-width: 374px) {
+  .homeContainer .homeWrapper {
+    padding: 100px 20px;
+  }
+
+  .homeContainer .homeWrapper .coverLogo img {
+    width: 60px;
+    height: 50px;
+  }
+
+  .homeWrapper .projectTitle {
+    margin-top: 1em;
+  }
+
+  .card {
+    padding: 0 20px;
+    margin: 10px 20px;
+  }
 }

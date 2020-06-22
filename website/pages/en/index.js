@@ -135,7 +135,7 @@ class Index extends React.Component {
             />
 
             <Card
-              it="random-browsing"
+              id="random-browsing"
               title="Random Browsing"
               body={
                 <MarkdownBlock>
