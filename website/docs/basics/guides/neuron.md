@@ -17,6 +17,12 @@ Please follow these instructions which are explained in detail below：
 - Withdraw from Nervos DAO
 - Transfer CKBytes from the Neuron Wallet to other wallets and exchanges
 
+---
+
+Note： The `Asset Account` feature is experimental and can be used on the Testnet Aggron.
+
+- Manage the `Asset Account`
+
 If you run into issues when following this guide, please join the [Support](https://discord.gg/n6tx7uC) channel for support.
 
 **IMPORTANT: The Nervos Team will NEVER ask for your private key, keystore file, mnemonic seed phase or wallet password. You should NEVER share this information with anyone, doing so may result in loss of all your tokens.**
@@ -29,7 +35,7 @@ Download the latest release version of the Neuron Wallet from the [Neuron Wallet
 ## 2. Wait for the synchronization to end
 You can cross-check the `Block Number` with CKB-Explorer's `Latest Block` to make sure the synchronization to end.
 
-<img src="../assets/neuron-wallet-guide/synchronize.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/synchronize.png" width = "600"/>
 
 ## 3. Create a new wallet or import existing keystore file or seed phrase to the Neuron Wallet
 
@@ -39,17 +45,17 @@ If you have already backup the wallet and have the keystore file (use the `Backu
 
 * Backup Current Wallet: 
 
-<img src="../assets/neuron-wallet-guide/backupwallet.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/backupwallet.png" width = "600"/>
 
 - To import the mnemonic seed phrase, choose “Import Wallet Seed”, fill in your password and wait for synchronization to end. **The password does not need to match the original password from the Neuron Wallet.**
 
-<img src="../assets/neuron-wallet-guide/importseed1.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/importseed1.png" width = "600"/>
 
   - To import the keystore file, choose “Import from Keystore” and input your password - Wait for synchronization to end. **The password must match the original password from the Neuron Wallet.**
 
-<img src="../assets/neuron-wallet-guide/importkeystore.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/importkeystore.png" width = "600"/>
 
-<img src="../assets/neuron-wallet-guide/keystorefile.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/keystorefile.png" width = "600"/>
 
 
 Congratulations, once the Neuron wallet is synced, you will have full access to your tokens! You can send  and receive CKBytes and deposit into the Nervos DAO.
@@ -60,15 +66,15 @@ You may claim your vesting or locked tokens by the latest version（v0.30.0-rc1 
 
 * View the details on "Customized Assets"
 
-<img src="../assets/neuron-wallet-guide/viewlockedtoken.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/viewlockedtoken.png" width = "600"/>
 
 * Claim the vesting/locked tokens
 
 When the lock time has been reached，click `Claim` and input the wallet's password.
 
-<img src="../assets/neuron-wallet-guide/claim.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/claim.png" width = "600"/>
 
-<img src="../assets/neuron-wallet-guide/password.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/password.png" width = "600"/>
 
 ## 5. Deposit your Nervos CKByte tokens into Nervos DAO
 
@@ -78,9 +84,9 @@ The [economic model](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015
 
 - Open the Neuron Wallet (the latest version), select “Nervos DAO” and “Deposit”.
 
-<img src="../assets/neuron-wallet-guide/deposit.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/deposit.png" width = "600"/>
 
-<img src="../assets/neuron-wallet-guide/deposit2.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/deposit2.png" width = "600"/>
 
 ## 6. Withdraw your Nervos CKByte tokens from the Nervos DAO
 
@@ -88,9 +94,9 @@ The [economic model](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015
 
 You can click `Request withdraw` to withdraw your CKB.
 
-<img src="../assets/neuron-wallet-guide/withdraw1.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/withdraw1.png" width = "600"/>
 
-<img src="../assets/neuron-wallet-guide/withdraw2.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/withdraw2.png" width = "600"/>
 
 ## 7. Transfer CKBytes from the Neuron Wallet to other wallets and exchanges
 
@@ -100,7 +106,98 @@ You should have the third party wallet/exchange destination address. **Please ma
 
 - Under the “Send” tab, fill in the address details in the "Send to" field. Turn on the "Advanced fee settings" and fill in the "Transaction fee" — click  the "Send" button to complete your transfer.
 
-<img src="../assets/neuron-wallet-guide/send.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/send.png" width = "600"/>
+
+## 8. Manage the `Asset Account`
+
+`Asset Account` is used for managing the accounts which include anyone-can-pay([RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells and SUDTs (you may refer to [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)). It's recommended to use `ckb-udt-cli`to issue or transfer UDTs, you may refer the [github repository](https://github.com/ququzone/ckb-udt-cli) for more details.As this feature is experimental and only can be used on the Testnet Aggron now.  
+
+### Preparation
+
+* Run a CKB Testnet Node
+You may refer to Run a CKB Testnet Node (https://nervosnetwork.github.io/docs-new/docs/basics/guides/testnet)
+
+* Use `ckb-cli` to create a new account with `lock_arg`and export the privkey by using the`lock_arg`.
+
+```
+ckb-cli account new
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+Your new account is locked with a password. Please give a password. Do not forget this password.
+Password: 
+Repeat password: 
+address:
+  mainnet: ckb1qyqwuea9tpxr2equ75rskyn30r3wjans7fnq477mmm
+  testnet: ckt1qyqwuea9tpxr2equ75rskyn30r3wjans7fnqgmqyh8
+lock_arg: 0xee67a5584c35641cf5070b127178e2e97670f266
+lock_hash: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
+
+```
+</details>
+
+```
+ckb-cli account export --extended-privkey-path wallet --lock-arg
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+./ckb-cli account export --extended-privkey-path wallet --lock-arg 0xee67a5584c35641cf5070b127178e2e97670f266
+Password: 
+Success exported account as extended privkey to: "wallet", please use this file carefully
+
+```
+</details>
+
+```
+cat wallet 
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c  // The first line is the privkey
+c152037977043a11e7e6ef220ba050da12da16455a0ef303907865a15fa9c484% 
+
+```
+</details>
+
+* Use `ckb-udt-cli` to issue UDTs
+
+Please clone and build it firstly.
+
+```
+git clone https://github.com/ququzone/ckb-udt-cli.git
+
+cd ckb-udt-cli
+
+export GOPROXY=https://goproxy.io
+go mod download
+go build .
+```
+Issue the UDTs，please backup the `uuid`.
+
+```
+ckb-udt-cli issue -c config.yaml -k YOUR_PRIVATE_KEY -a AMOUNT // AMOUNT means the number of issued tokens
+```
+<details>
+<summary>(click here to view response)</summary>
+```bash
+./ckb-udt-cli issue -c config.yaml -k 0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c -a 1000000
+Issued sUDT transaction hash: 0x6b4458143b25e8aa37d36c1035f15e63e5051144685a4da20cf92fd7af59e56e, uuid: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
+
+```
+</details>
+
+* Open `Asset Account` in Neuron Wallet, create a SUDT account.
+
+<img src="../../assets/neuron-wallet-guide/createsudt.png" width = "600"/>
+
+You may fill `uuid` in `Token id`.
+
+<img src="../../assets/neuron-wallet-guide/tokeninfo.png" width = "600"/>
+
+Please wait untill the transaction is successful. 
 
 ## Troubleshooting
 
@@ -114,7 +211,7 @@ Note: The Neuron bundled CKB node requires [VC++ redistributable](https://suppor
 
 3. if it still doesn't work out, please join the [Support](https://discord.gg/n6tx7uC) channel, export debug information and send it.
 
-<img src="../assets/neuron-wallet-guide/export.png" width = "600"/>
+<img src="../../assets/neuron-wallet-guide/export.png" width = "600"/>
 
 ## Important
 

@@ -39,7 +39,8 @@
       "labs/sudtbycapsule"
     ],
     "Integrate": [
-      "integrate/introduction"
+      "integrate/introduction",
+      "integrate/qa"
     ],
     "Essays": [
       "essays/introduction",
