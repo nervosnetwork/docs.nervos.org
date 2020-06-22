@@ -231,6 +231,87 @@ article li {
   font-size: 12px;
 }
 
+/* Landing page */
+
+.homeSplashFade {
+  background: black url('/docs-new/img/doc_cover.png') no-repeat center center;
+  background-size: 1440px 540px;;
+}
+
+.homeContainer .homeWrapper {
+  color: white;
+  padding: 150px 0;
+  display: flex;
+  max-width: 1200px;
+}
+
+.homeContainer .homeWrapper .coverLogo {
+  width: 320px;
+  margin: 40px 80px;
+}
+
+.homeContainer .homeWrapper .coverLogo img {
+  width: 152px;
+  height: 128px;
+  max-width: 152px;
+}
+
+.homeContainer .homeWrapper .projectDescription {
+  text-align: left;
+  line-height: 2em;
+  margin-right: 110px;
+}
+
+.homeWrapper .projectTitle {
+  color: white;
+  font-size: 36px;
+}
+
+.mainContainer.cards {
+  background: #f9f9f9;
+  padding: 20px 0;
+}
+
+.cardRow {
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+  margin: 40px auto;
+  max-width: 1240px;
+}
+
+.card {
+  border-radius: 6px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12);
+  background-color: #ffffff;
+  padding: 0 60px;
+  margin: 0 20px;
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBody {
+  flex-grow: 1;
+}
+
+.cardFooter {
+  margin: 20px 0;
+}
+
+.cardFooter a {
+  display: inline-block;
+  min-width: 120px;
+  font-size: 16px;
+}
+
+.cardFooter img {
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
 /* Responsive */
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
