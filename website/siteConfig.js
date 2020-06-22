@@ -16,6 +16,7 @@ const siteConfig = {
   title: 'Nervos CKB Docs', // Title for your website.
   tagline: 'This is the documentation site for Nervos CKB',
   url: 'https://nervosnetwork.github.io', // Your website URL
+  // TODO: Update baseUrl to / after setting up custom DNS.
   baseUrl: '/docs-new/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
@@ -37,9 +38,10 @@ const siteConfig = {
     {doc: 'essays/introduction', label: 'Essays'}
   ],
 
+  disableHeaderTitle: true,
 
   /* path to images for header/footer */
-  headerIcon: 'img/favicon.png',
+  headerIcon: 'img/logo.png',
   footerIcon: 'img/favicon.png',
   favicon: 'img/favicon.png',
 
@@ -50,18 +52,16 @@ const siteConfig = {
   },
 
   /* Custom fonts for website */
-  /*
   fonts: {
-    myFont: [
-      "Times New Roman",
-      "Serif"
+    lato: [
+      "Lato",
+      "sans-serif"
     ],
-    myOtherFont: [
-      "-apple-system",
-      "system-ui"
-    ]
   },
-  */
+
+  stylesheets: [
+    "https://fonts.googleapis.com/css2?family=Lato&display=swap"
+  ],
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
   copyright: `Copyright © ${new Date().getFullYear()}  Nervos Foundation. All Rights Reserved.`,
@@ -74,6 +74,14 @@ const siteConfig = {
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['https://buttons.github.io/buttons.js'],
 
+  // TODO: apply a new one if necessary
+  algolia: {
+    apiKey: 'ef49666369943baa0a93aedc37511318',
+    indexName: 'nervos-ckb',
+    placeholder: 'Search',
+    algoliaOptions: {} // Optional, if provided by Algolia
+  },
+
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
   // No .html extensions for paths.
@@ -83,9 +91,42 @@ const siteConfig = {
   ogImage: 'img/undraw_online.svg',
   twitterImage: 'img/undraw_tweetstorm.svg',
 
+  socialLinks: [
+    {
+      label: 'Twitter',
+      icon: 'img/footer_twitter.png',
+      url: 'https://twitter.com/nervosnetwork'
+    },
+    {
+      label: 'Blog',
+      icon: 'img/footer_medium.png',
+      url: 'https://medium.com/nervosnetwork'
+    },
+    {
+      label: 'Telegram',
+      icon: 'img/footer_telegram.png',
+      url: 'https://t.me/nervosnetwork'
+    },
+    {
+      label: 'Reddit',
+      icon: 'img/footer_reddit.png',
+      url: 'https://www.reddit.com/r/NervosNetwork/'
+    },
+    {
+      label: 'YouTube',
+      icon: 'img/footer_youtube.png',
+      url: 'https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A'
+    },
+    {
+      label: 'Forum',
+      icon: 'img/footer_forum.png',
+      url: 'https://talk.nervos.org/'
+    }
+  ],
+
   // For sites with a sizable amount of content, set collapsible to true.
   // Expand/collapse the links and subcategories under categories.
-  // docsSideNavCollapsible: true,
+  docsSideNavCollapsible: true,
 
   // Show documentation's last contributor's name.
   // enableUpdateBy: true,

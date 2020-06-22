@@ -4,20 +4,394 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
- 
-/* your custom css */
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+ /*
+   TODO: Docusaurus don't seem to offer an easy way to add a custom font file,
+   or reference the base URL. If we want to use the local font remember to
+   update the hardcoded `docs-new` path.
+ */
+ /*
+ @font-face {
+  font-family: 'Lato';
+  src: local('Lato'), url('/fonts/Lato-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}*/
+
+body {
+  font-family: $lato;
+  letter-spacing: 0.2px;
+  font-size: 14px;
+  color: black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+.wrapper {
+  max-width: 1200px;
+}
+
+ /* Header */
+
+.fixedHeaderContainer {
+  background: black;
+  min-height: 64px;
+}
+
+.fixedHeaderContainer header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.fixedHeaderContainer header img { /* logo */
+  margin: 0 70px 0 0;
+  height: 30px;
+}
+
+.navigationSlider {
+  flex: 1;
+}
+
+.navigationSlider .slidingNav ul {
+  background: black;
+}
+
+.navigationSlider .slidingNav ul li {
+  font-size: 14px;
+  flex: none;
+}
+
+.navigationSlider .slidingNav ul li a {
+  padding: 6px 16px;
+}
+
+.navigationSlider .slidingNav ul li > a:focus,
+.navigationSlider .slidingNav ul li > a:hover,
+.navigationSlider .slidingNav ul li.siteNavItemActive > a,
+.navigationSlider .slidingNav ul li.siteNavGroupActive > a {
+  background-color: black;
+}
+
+.navigationSlider .slidingNav ul li > a:focus,
+.navigationSlider .slidingNav ul li.siteNavItemActive > a:hover,
+.navigationSlider .slidingNav ul li.siteNavGroupActive > a:hover {
+  color: $primaryColor;
+}
+
+/* Search */
+
+.navigationSlider .slidingNav ul li.navSearchWrapper {
+  margin-left: auto;
+}
+
+.navSearchWrapper:before {
+  border: 2px solid black;
+  height: 10px;
+  width: 10px;
+  left: 20px;
+}
+
+.navSearchWrapper:after {
+  background: black;
+  width: 2px;
+  height: 10px;
+  left: 34px;
+}
+
+.navSearchWrapper input#search_input_react {
+  background: white;
+  color: black;
+  border-radius: 3px;
+  height: 38px;
+}
+
+.navSearchWrapper input#search_input_react::placeholder {
+  color: #888;
+  opacity: 1;
+}
+
+/* Sidebar Navigation */
+
+.toc .toggleNav .navGroup .navGroupCategoryTitle {
+  color: black;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toc .toggleNav .navGroup .navGroupSubcategoryTitle {
+  color: black;
+}
+
+.toc .toggleNav ul {
+  padding: 0 12px;
+}
+
+.toc .toggleNav ul li a {
+  color: black;
+}
+
+.toc .toggleNav ul li.navListItemActive a::before {
+  position: absolute;
+  left: 0;
+  top: 3;
+  content: '';
+  border-left: solid 4px $primaryColor;
+  height: 22px;
+}
+
+/* Article */
+
+.postHeaderTitle {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+article {
+  line-height: 150%;
+  margin-bottom: 40px;
+}
+
+article h2 {
+  font-size: 18px;
+}
+
+article h3 {
+  font-size: 16px;
+}
+
+article h4 {
+  font-size: 15px;
+}
+
+article li {
+  line-height: 150%;
+  margin: 14px 0;
+}
+
+/* Pagination */
+
+.docs-prevnext {
+  border-top: solid 1px #d8d8d8;
+}
+
+.docs-prev, .docs-next {
+  border: none;
+  font-size: 16px;
+  padding: 10px 0;
+  transition: none;
+}
+
+.docs-prev:hover, .docs-next:hover {
+  background: none;
+  color: $primaryColor;
+}
+
+/* Footer */
+
+.nav-footer {
+  background: black;
+  padding: 2.5em;
+}
+
+.sitemap .footerSection h5 {
+  font-size: 26px;
+}
+
+.sitemap .footerSection>a {
+  font-size: 18px;
+  color: #acacac;
+  margin: 8px 0;
+}
+
+.sitemap .footerSection.socialLinks {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+}
+
+.sitemap .footerSection.socialLinks::before,
+.sitemap .footerSection.socialLinks::after {
+  content: '';
+  width: 100%;
+  order: 1;
+}
+
+.sitemap .footerSection a.socialLink {
+  font-size: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 16px;
+}
+
+.sitemap .footerSection a.socialLink:nth-child(n + 4) {
+  order: 1;
+}
+
+.sitemap .socialLink img {
+  width: 35px;
+}
+
+.nav-footer .copyright {
+  color: #acacac;
+  font-size: 12px;
+}
+
+/* Landing page */
+
+.homeSplashFade {
+  background: black url('/img/doc_cover.png') no-repeat center top;
+  background-size: 1440px 540px;;
+}
+
+.homeContainer .homeWrapper {
+  color: white;
+  padding: 150px 0;
+  display: flex;
+  max-width: 1200px;
+}
+
+.homeContainer .homeWrapper .coverLogo {
+  width: 320px;
+  margin: 40px 80px;
+}
+
+.homeContainer .homeWrapper .coverLogo img {
+  width: 152px;
+  height: 128px;
+  max-width: 152px;
+}
+
+.homeContainer .homeWrapper .projectDescription {
+  text-align: left;
+  line-height: 2em;
+  margin-right: 110px;
+}
+
+.homeWrapper .projectTitle {
+  color: white;
+  font-size: 36px;
+}
+
+.mainContainer.cards {
+  background: #f9f9f9;
+  padding: 20px 0;
+}
+
+.cardRow {
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+  margin: 40px auto;
+  max-width: 1240px;
+}
+
+.card {
+  border-radius: 6px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12);
+  background-color: #ffffff;
+  padding: 0 60px;
+  margin: 0 20px;
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBody {
+  flex-grow: 1;
+}
+
+.cardFooter {
+  margin: 20px 0;
+}
+
+.cardFooter a {
+  display: inline-block;
+  min-width: 120px;
+  font-size: 16px;
+}
+
+.cardFooter img {
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* Responsive */
+
 @media only screen and (min-width: 1024px) {
+  .navigationSlider {
+    margin-left: 0;
+  }
+
+  .reactNavSearchWrapper input#search_input_react {
+    width: 360px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .card {
+    padding: 0 45px;
+  }
 }
 
 @media only screen and (max-width: 1023px) {
+  .reactNavSearchWrapper input#search_input_react:focus, .reactNavSearchWrapper input#search_input_react:active {
+    background: white;
+    color: black;
+  }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (max-device-width: 736px) {
+  .homeContainer .homeWrapper {
+    flex-direction: column;
+    padding: 110px 150px;
+  }
+
+  .homeContainer .homeWrapper .coverLogo {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+  }
+
+  .homeContainer .homeWrapper .coverLogo img {
+    width: 100px;
+    height: 84px;
+  }
+
+  .homeContainer .homeWrapper .projectDescription {
+    margin: 0;
+  }
+
+  .cardRow {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .card {
+    margin: 10px 20px;
+  }
 }
 
-@media only screen and (min-width: 1500px) {
+@media only screen and (max-device-width: 374px) {
+  .homeContainer .homeWrapper {
+    padding: 100px 20px;
+  }
+
+  .homeContainer .homeWrapper .coverLogo img {
+    width: 60px;
+    height: 50px;
+  }
+
+  .homeWrapper .projectTitle {
+    margin-top: 1em;
+  }
+
+  .card {
+    padding: 0 20px;
+    margin: 10px 20px;
+  }
 }
