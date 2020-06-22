@@ -72,11 +72,13 @@ class Index extends React.Component {
             title="Getting Started"
             body={
               <MarkdownBlock>
-                If you are a beginner who just started experimenting with CKB for the first time, Basics will help you get to know CKB, and get the chain running. Reference contains advanced concepts that might also be of interest.
+                If you are a beginner who just started experimenting with CKB for the first time, [Basics](docs/basics/introduction) will help you get to know CKB, and get the chain running. [Reference](docs/reference/introduction) contains advanced concepts that might also be of interest.
              </MarkdownBlock>
             }
             footer={
               <MarkdownBlock>
+                [![basics](img/doc_basic.png) Basics](docs/basics/introduction)
+                [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
               </MarkdownBlock>
             }
           />
@@ -86,11 +88,13 @@ class Index extends React.Component {
             title="Exchange & Wallet Integration"
             body={
               <MarkdownBlock>
-                Integrate section provides first hand experience gained in integrating CKB into existing exchanges and wallets. Reference might also help you learn more about CKB specific behavior.
+                [Integrate](docs/integrate/introduction) section provides first hand experience gained in integrating CKB into existing exchanges and wallets. [Reference](docs/reference/introduction) might also help you learn more about CKB specific behavior.
              </MarkdownBlock>
             }
             footer={
               <MarkdownBlock>
+                [![integrate](img/doc_integrate.png) Integrate](docs/integrate/introduction)
+                [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
               </MarkdownBlock>
             }
           />
@@ -100,11 +104,13 @@ class Index extends React.Component {
             title="Building Dapps"
             body={
               <MarkdownBlock>
-                If you are developers who want to build dapps on CKB, Labs provides hands-on tutorials which you can follow. Reference also contains explanations for CKB concepts and specific blockchain behaviors.
+                If you are developers who want to build dapps on CKB, [Labs](docs/labs/introduction) provides hands-on tutorials which you can follow. [Reference](docs/reference/introduction) also contains explanations for CKB concepts and specific blockchain behaviors.
              </MarkdownBlock>
             }
             footer={
               <MarkdownBlock>
+                [![basics](img/doc_basic.png) Labs](docs/labs/introduction)
+                [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
               </MarkdownBlock>
             }
           />
@@ -114,11 +120,12 @@ class Index extends React.Component {
             title="Clarification"
             body={
               <MarkdownBlock>
-                As dapp developers, you might need clarifications on specific part from time to time, Reference will be your best friend on this topc.
+                As dapp developers, you might need clarifications on specific part from time to time, [Reference](docs/reference/introduction) will be your best friend on this topc.
              </MarkdownBlock>
             }
             footer={
               <MarkdownBlock>
+                [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
               </MarkdownBlock>
             }
           />
@@ -128,11 +135,13 @@ class Index extends React.Component {
             title="Random Browsing"
             body={
               <MarkdownBlock>
-                For users who are just browing to get a glimpse of CKB's design, or developers who want to learn one or two tips, Essays will provide all sorts of articles explaining CKB related topics. Reference might also be of interest since it aims to describe specific constructs in CKB.
+                For users who are just browing to get a glimpse of CKB's design, or developers who want to learn one or two tips, [Essays](docs/essays/introduction) will provide all sorts of articles explaining CKB related topics. [Reference](docs/reference/introduction) might also be of interest since it aims to describe specific constructs in CKB.
              </MarkdownBlock>
             }
             footer={
               <MarkdownBlock>
+                [![essays](img/doc_essay.png) Essays](docs/essays/introduction)
+                [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
               </MarkdownBlock>
             }
           />
