@@ -6,11 +6,6 @@
  */
 
  /*
-   TODO: Docusaurus don't seem to offer an easy way to add a custom font file,
-   or reference the base URL. If we want to use the local font remember to
-   update the hardcoded `docs-new` path.
- */
- /*
  @font-face {
   font-family: 'Lato';
   src: local('Lato'), url('/fonts/Lato-Regular.ttf') format('truetype');
