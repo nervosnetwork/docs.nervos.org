@@ -40,12 +40,12 @@
     ],
     "Integrate": [
       "integrate/introduction",
-      "integrate/qa"
+      "integrate/qa",
+      "integrate/sdk"
     ],
     "Essays": [
       "essays/introduction",
-      "essays/rfcs",
-      "essays/sdk"
+      "essays/rfcs"
 
     ]
   }

@@ -25,6 +25,6 @@ You can also run a CKB node yourself and launch Neuron wallet, then Neuron will 
 Please note that CKB-Explorer is not a wallet service provider. We do not store your private keys and we have no control over the transactions that take place over the CKB Network.
 
 ## Testnet Faucet  
-[Github](https://github.com/nervosnetwork/ckb-testnet-faucet) | [Link](https://faucet.nervos.org/auth)
+[Github](https://github.com/shaojunda/ckb-testnet-faucet) | [Link](https://faucet.nervos.org/)
 
-Testnet Faucet is where you can acquire free **Testnet CKBytes** to use while developing and testing.
+Testnet Faucet is where you can claim free **Testnet CKBytes** to use while developing and testing. You may claim 5000 CKB from the faucet once every 3 hours on Testnet Aggron.
