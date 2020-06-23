@@ -3,7 +3,7 @@ id: sdk
 title: Nervos CKB SDK
 ---
 
-ckb-sdk is a collection of libraries which allow you to interact with a local or remote CKB node by using JSON-RPC. You should get familiar with [ckb transaction structure](reference/transaction.md) and [JSON-RPC](https://github.com/nervosnetwork/ckb/tree/develop/rpc) before using it. now ckb-sdk is implemented by five kind of programming language: JavaScript、Ruby、Swift、Java and Go.
+ckb-sdk is a collection of libraries which allow you to interact with a local or remote CKB node by using JSON-RPC. You should get familiar with [ckb transaction structure](reference/transaction.md) and [JSON-RPC](https://github.com/nervosnetwork/ckb/tree/develop/rpc) before using it. Now ckb-sdk is implemented by five programming languages: JavaScript、Ruby、Swift、Java and Go.
 
 * ckb-sdk-js  [Github](https://github.com/nervosnetwork/ckb-sdk-js)
     * ckb-sdk-js is an SDK implemented in JavaScript, and published in [NPM Registry](https://www.npmjs.com/package/@nervosnetwork/ckb-sdk-core/), and provides APIs for developers to send requests to the CKB blockchain. Neuron Wallet utilizes ckb-sdk-js .

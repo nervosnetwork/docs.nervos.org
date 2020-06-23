@@ -19,7 +19,7 @@ Please follow these instructions which are explained in detail below：
 
 ---
 
-Note： The `Asset Account` feature is experimental and can be used on the Testnet Aggron.
+Note： The `Asset Account` feature is experimental and currently only can be used on the Testnet Aggron.
 
 - Manage the `Asset Account`
 
@@ -110,14 +110,15 @@ You should have the third party wallet/exchange destination address. **Please ma
 
 ## 8. Manage the `Asset Account`
 
-`Asset Account` is used for managing the accounts which include anyone-can-pay([RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells and SUDTs (you may refer to [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)). It's recommended to use `ckb-udt-cli`to issue or transfer UDTs, you may refer the [github repository](https://github.com/ququzone/ckb-udt-cli) for more details.As this feature is experimental and only can be used on the Testnet Aggron now.  
+`Asset Account` is used for managing the accounts which include anyone-can-pay( [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells and SUDTs ( [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)). It's recommended to use `ckb-udt-cli`to issue or transfer UDTs, you may refer the [github repository](https://github.com/ququzone/ckb-udt-cli) for more details. Please note that the feature is experimental and only can be used on the Testnet Aggron now.  
 
-### Preparation
+### Manage the SUDT account
+#### Preparation
 
 * Run a CKB Testnet Node
-You may refer to Run a CKB Testnet Node (https://nervosnetwork.github.io/docs-new/docs/basics/guides/testnet)
+You may refer to [Run a CKB Testnet Node](testnet.md)
 
-* Use `ckb-cli` to create a new account with `lock_arg`and export the privkey by using the`lock_arg`.
+* Use `ckb-cli` to create a new account with `lock_arg` and export the privkey by using the `lock_arg`.
 
 ```
 ckb-cli account new
@@ -138,7 +139,7 @@ lock_hash: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
 </details>
 
 ```
-ckb-cli account export --extended-privkey-path wallet --lock-arg
+ckb-cli account export --extended-privkey-path wallet --lock-arg `Your lock_arg`
 ```
 <details>
 <summary>(click here to view response)</summary>
@@ -153,10 +154,12 @@ Success exported account as extended privkey to: "wallet", please use this file 
 ```
 cat wallet 
 ```
+The first line of the result is exported private key.
 <details>
+
 <summary>(click here to view response)</summary>
 ```bash
-0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c  // The first line is the privkey
+0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c  // It is the privkey
 c152037977043a11e7e6ef220ba050da12da16455a0ef303907865a15fa9c484% 
 
 ```
@@ -164,7 +167,7 @@ c152037977043a11e7e6ef220ba050da12da16455a0ef303907865a15fa9c484%
 
 * Use `ckb-udt-cli` to issue UDTs
 
-Please clone and build it firstly.
+Please clone and build it firstly,then use [Nervos Aggron Faucet](https://faucet.nervos.org/) to claim testnet CKB for issuing.
 
 ```
 git clone https://github.com/ququzone/ckb-udt-cli.git
@@ -189,6 +192,8 @@ Issued sUDT transaction hash: 0x6b4458143b25e8aa37d36c1035f15e63e5051144685a4da2
 ```
 </details>
 
+#### Add the SUDT account to the `Asset Accounts` in Neuron Wallet 
+
 * Open `Asset Account` in Neuron Wallet, create a SUDT account.
 
 <img src="../../assets/neuron-wallet-guide/createsudt.png" width = "600"/>
@@ -198,6 +203,35 @@ You may fill `uuid` in `Token id`.
 <img src="../../assets/neuron-wallet-guide/tokeninfo.png" width = "600"/>
 
 Please wait untill the transaction is successful. 
+
+### Manage the CKB account
+`CKB account` can be used for anyone-can-pay cells and accepted by any amount of payment. It is accepted by any amount of payment between `CKB account`.
+
+* Create two `CKB account` "Anyone-can-pay1" and "Anyone-can-pay2"
+
+   The following screenshots are examples for creating "Anyone-can-pay1"
+
+<img src="../../assets/neuron-wallet-guide/createckb1.png" width = "600"/>
+
+<img src="../../assets/neuron-wallet-guide/ckbtokeninfo.png" width = "600"/>
+
+* Claim Testnet CKB for "Anyone-can-pay1" by [Nervos Aggron Testnet](https://faucet.nervos.org/)
+    
+    Get the address of "Anyone-can-pay1" and fill in [Nervos Aggron Testnet](https://faucet.nervos.org/).
+
+<img src="../../assets/neuron-wallet-guide/receiveckb.png" width = "600"/>
+
+* Transfer 1 CKB from "Anyone-can-pay1" to "Anyone-can-pay2"
+
+<img src="../../assets/neuron-wallet-guide/sendckb.png" width = "600"/>
+
+   Fill the address of "Anyone-can-pay2" in `Address`
+
+<img src="../../assets/neuron-wallet-guide/sendckb2.png" width = "600"/>
+  
+   The transfer is successful!
+
+<img src="../../assets/neuron-wallet-guide/successckb.png" width = "600"/>
 
 ## Troubleshooting
 
