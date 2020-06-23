@@ -15,12 +15,9 @@ const siteConfig = {
 
   title: 'Nervos CKB Docs', // Title for your website.
   tagline: 'This is the documentation site for Nervos CKB',
-  url: 'https://nervosnetwork.github.io', // Your website URL
-  // TODO: Update baseUrl to / after setting up custom DNS.
-  baseUrl: '/docs-new/', // Base URL for your project */
-  // For github.io type URLs, you would set the url and baseUrl like:
-  //   url: 'https://facebook.github.io',
-  //   baseUrl: '/test-site/',
+  // TODO: change this to docs.nervos.org
+  url: 'https://docs-new.nervos.org', // Your website URL
+  baseUrl: '/', // Base URL for your project */
 
   // Used for publishing and more
   projectName: 'docs-new',
