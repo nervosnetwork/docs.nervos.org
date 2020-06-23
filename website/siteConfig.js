@@ -14,10 +14,11 @@ const siteConfig = {
   customDocsPath: path.basename(__dirname) + '/docs',
 
   title: 'Nervos CKB Docs', // Title for your website.
-  tagline: 'This is the documentation site for Nervos CKB',
+  tagline: 'Nervos CKB Documentations',
   // TODO: change this to docs.nervos.org
-  url: 'https://docs-new.nervos.org', // Your website URL
-  baseUrl: '/', // Base URL for your project */
+  url: 'https://docs-new.nervos.org',
+  baseUrl: '/',
+  cname: 'docs-new.nervos.org',
 
   // Used for publishing and more
   projectName: 'docs-new',
