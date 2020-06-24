@@ -1,6 +1,10 @@
 ---
-id: introduction
-title: Labs Introduction
+id: Introduction
+title: Introduction
 ---
 
-This is Labs introduction.
+In labs, we provide a series of hands-on programming tutorial, that helps you build a complete component in CKB quickly. Some examples of the labs section include:
+
+
+* How to [build](sudtbycapsule) a CKB script in Rust.
+* How to build a standalone CKB dapp in JavaScript.
