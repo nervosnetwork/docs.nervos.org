@@ -12,7 +12,7 @@ In this tutorial, you will learn how to write a SUDT script using Capsule. SUDT 
 We expect that:
 
 * You are Rust developers and generally familiar with software development, writing code, and running your code.
-* You are generally familiar with Nervos CKB and have completed the  [How to use a development blockchain](basics/devchain.md)
+* You are generally familiar with Nervos CKB and have completed the  [How to use a development blockchain](basics/guides/devchain.md)
 * You are open to learning about the bleeding edge of blockchain development
 
 If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/n6tx7uC). 
@@ -28,7 +28,7 @@ What you will be doing:
 
 ### Run a dev chain and ckb-cli
 
-You should be able to run a dev chain and know about how to use `ckb-cli` to send transactions.  If you do not, please refer to this tutorial：[How to use a development blockchain](basics/devchain.md).  Please don't forget to add `ckb-cli` to the  PATH environment variable
+You should be able to run a dev chain and know about how to use `ckb-cli` to send transactions.  If you do not, please refer to this tutorial：[How to use a development blockchain](basics/guides/devchain.md).  Please don't forget to add `ckb-cli` to the  PATH environment variable
 
 ### Install capsule
 

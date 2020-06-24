@@ -1,6 +1,5 @@
 {
   "docs": {
-    "Overview": ["overview"],
     "Basics": [
       "basics/introduction",
       {
@@ -46,7 +45,6 @@
     "Essays": [
       "essays/introduction",
       "essays/rfcs"
-      
     ]
   }
 }
