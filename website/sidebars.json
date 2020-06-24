@@ -44,7 +44,11 @@
     ],
     "Essays": [
       "essays/introduction",
-      "essays/rfcs"
+      "essays/rfcs",
+      "essays/lifecycle",
+      "essays/debug",
+      "essays/rules",
+      "essays/dependencies"
     ]
   }
 }
