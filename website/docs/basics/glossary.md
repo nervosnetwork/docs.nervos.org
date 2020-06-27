@@ -7,7 +7,7 @@ title: Glossary
 
 - [General Glossary](#general-glossary)
 - [Economics Glossary](#economic-glossary)
-- [Technical glossary](#technical-glossary)
+- [Technical Glossary](#technical-glossary)
 
 ---
 
