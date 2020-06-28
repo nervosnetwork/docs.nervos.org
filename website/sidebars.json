@@ -48,7 +48,8 @@
       "essays/lifecycle",
       "essays/debug",
       "essays/rules",
-      "essays/dependencies"
+      "essays/dependencies",
+      "essays/introduction-to-ckb-studio"
     ]
   }
 }
