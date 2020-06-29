@@ -72,10 +72,13 @@ const siteConfig = {
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['https://buttons.github.io/buttons.js'],
 
-  // TODO: apply a new one if necessary
+  // NOTE: This is configured per documentation of docusaurus:
+  // https://docusaurus.io/docs/en/search
+  // It is expected to include apiKey here as instructed from algolia, it is
+  // not a vulnerability.
   algolia: {
-    apiKey: 'ef49666369943baa0a93aedc37511318',
-    indexName: 'nervos-ckb',
+    apiKey: '4ca49bc7433bcef238e8b9aab6dc4d11',
+    indexName: 'nervos_ckbd',
     placeholder: 'Search',
     algoliaOptions: {} // Optional, if provided by Algolia
   },
