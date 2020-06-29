@@ -26,15 +26,13 @@ transaction.outputs.all{ |output|
 }
 ```
 
-This validation is intended to prevent improperly formed transactions, such as mentioned in *https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao* 
+This validation is intended to prevent improperly constructed transactions, such as mentioned in *https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao* 
 
-Although the node can be* *configured to `passthrough` to skip this validation.
-
-Once the transaction has been submitted to your local node, the node also outputs the transaction id, which can then be used to track transaction status.
+Although the node can be configured to `passthrough` to skip this validation, once the transaction has been submitted to your local node, the node also exports the transaction id, which can then be used to track transaction status.
 
 ## Verification
 
-Before a transaction is broadcasted and enters the mempool, the transaction will be verified and executed locally.
+Before the transaction is broadcasted and enters into the mempool, it should be verified and executed locally.
 
 ### STEP 1 — Resolve
 
@@ -47,11 +45,11 @@ struct OutPoint {
 }
 ```
 
-We gather the referenced data through the pointer prior to transaction execution, this process is called “resolve transaction”. We will also need to check that all inputs of this transaction are valid (no* *duplicate or double spends).
+We gather the referenced data through the pointer prior to transaction execution, this process is called “resolve transaction”. We will also need to check that all inputs of this transaction are valid (no duplicate or double-spending).
 
-### STEP 2 — Verification
+### STEP 2 — Verify
 
-Verification involves checking a number of things:       
+The process of verification involves checking the following items:       
 
 1. version (currently must be 0) 
 2. serialized_size is less than limit 
@@ -73,19 +71,19 @@ Verification involves checking a number of things:
 8. since     
     1. ‘since’ value must follow the rules described in https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md
 
-CKB VM will then execute the transaction script and output the number of cycles consumed.
+Then CKB VM will execute the transaction script and output the number of cycles consumed.
 
 ## Broadcast to the network
 
-If the verification is successful, the current node broadcasts the transaction (with cycles value) to all of its peer nodes (nodes it is connected to). 
+If the verification is successful, the current node broadcasts the transaction (with cycles value) to all of its connected peer nodes. 
 
-If verification fails, the transaction is not broadcasted any further. The transaction flows through various “full nodes”, which repeat the verification process described in the previous step, and check that the cycles value matches the actual cycles consumed when they verified the transaction.
+If verification fails, the transaction is not broadcasted anymore. The transaction flows through various “full nodes”, which repeat the verification process described in the previous step, and check that the cycles value matches the actual cycles consumed when the transaction is verified.
 
 ## Tx-pool (mempool)
 
 <img src="../assets/essay/mempool.png" width = "600"/>
 
-CKB uses a two-step process for transaction confirmation. Transactions will be divided into different status (pending and proposed) in the tx-pool. The status of transactions will change as a block is added to the chain. When the latest block changes, all transactions in the tx-pool will be re-scanned to ensure they are still valid.
+CKB uses a two-step process for transaction confirmation. Transactions will be divided into different status (pending and proposed) in the tx-pool. The status of transactions will change when a block is added to the blockchain. When the latest block changes, all transactions in the tx-pool will be re-scanned to ensure they are still valid.
 
 `BlockAssembler` will fetch proposals and transactions from the pending pool and proposed pool for block template.
 
