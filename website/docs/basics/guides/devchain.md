@@ -57,7 +57,7 @@ create ckb-miner.toml
 
 ### Modify parameters to run quickly
 
-In the development process, sometimes we want to make the blockchain to run quickly for getting results faster.We will introduce how to modify parameters to make it. 
+In the development process, sometimes we want to make the blockchain to run quickly for getting results faster. There are certain parameters you can tweak:
 
 * Change the epoch length
 
@@ -71,11 +71,24 @@ max_block_cycles = 10_000_000_000
 cellbase_maturity = 0
 primary_epoch_reward_halving_interval = 8760
 epoch_duration_target = 14400
-**genesis_epoch_length** = 1000 （The unit of meansurement is "block".）
-
+genesis_epoch_length = 1000  # The unit of meansurement is "block".
 ```
 
 The default epoch length is 1000 blocks，if `genesis_epoch_length = 100` that means the epoch lengh is 100 blocks.
+
+* Use permanent difficulty
+
+The `params` section above has a different parameter `permanent_difficulty_in_dummy` that you can use:
+
+```
+[params]
+# ... omitted parameters
+
+genesis_epoch_length = 10
+permanent_difficulty_in_dummy = true
+```
+
+When `permanent_difficulty_in_dummy` is set to `true`. The whole difficulty adjustment algorithm will be skipped. All epochs will use the same length as the genesis epoch length. Typically, you would see the 2 parameters `genesis_epoch_length` and `permanent_difficulty_in_dummy` used together. In the above example, we are ensuring each epoch, in our current dev chain, has 10 blocks. This can be super helpful if you are testing scripts that relate to epoch, such as NervosDAO.
 
 * Change the mining idle interval
 
@@ -85,7 +98,7 @@ Change the `value` in `ckb-miner.toml`
 [[miner.workers]]
 worker_type = "Dummy"
 delay_type = "Constant"
-**value** = 5000 (The unit of measurement is "ms".)
+value = 5000  # The unit of measurement is "ms".
 ```
 
 The default mining idle interval is 5000ms, if `value = 50` that means the mining idle interval is 50ms.
