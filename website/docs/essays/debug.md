@@ -3,7 +3,7 @@ id: debug
 title: Tips for debugging CKB script
 ---
 
-CKB VM simulates the RISC-V instruction set, which is very different from other VMs that hard-code functionality through opcodes. Given the generalized nature of CKB VM, various languages and toolchains can be supported- every language and toolchain will be a bit different and implementers should provide appropriate documentation and support for the community.
+CKB uses RISC-V ISA to implement VM layer and CKB VM is very different from other VMs with hard-code functionality through opcodes. Given the generalized nature of CKB VM, various languages and toolchains can be supported- every language and toolchain will be a bit different and implementers should provide appropriate documentation and support for the community.
 
 This document introduces several tips about debugging CKB scripts.
 
@@ -14,12 +14,12 @@ The CKB node only reports an exit code on transaction verification failure; the 
 
 For example, see the default lock script error codes: [secp256k1 error codes](https://github.com/nervosnetwork/ckb-system-scripts/wiki/Error-codes)
 
-> A common mistake is mixing up lock script errors and type script errors. A simple debugging method is to remove the type script, then run again; if the error still exists, you can be sure the error is being caused by the lock script; otherwise, it is caused by the type script.
+> A common mistake is mixing up lock script errors and type script errors. It is recommended that remove the type script, then run again; if the error still exists, you can make sure the error is being caused by the lock script; otherwise, it is caused by the type script.
 
 
 ## Debug syscall
 
-When we want to output additional information from the script; the [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug) is used.
+When we want to output additional information from the script; we need use the [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug).
 
 By default, the CKB node does not output the debug syscall message, however `ckb.toml` can be configured to enable it.
 
@@ -30,12 +30,12 @@ filter = info,ckb-script=debug
 
 You can also choose to run the script under a debugging environment like [ckb-cli](https://github.com/nervosnetwork/ckb-cli), [VM debugger](https://github.com/xxuejie/ckb-standalone-debugger), or [ckb-contract-tool](https://github.com/jjyr/ckb-contract-tool).
 
-> For language / toolchain implementers, it is recommended that you integrate [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug) to print the error backtrace if your language supports it. For example: if you are using Rust with [ckb-contract-std](https://github.com/jjyr/ckb-contract-std), you can see the panic location where the program crashed.
+> For language / toolchain developers, it is recommended that integrate [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug) to print the error backtrace if the language supports it. For example: if you are using Rust with [ckb-contract-std](https://github.com/jjyr/ckb-contract-std), you can see the panic location where the program crashed.
 
 
 ## ckb-cli
 
-[ckb-cli](https://github.com/nervosnetwork/ckb-cli) supports generation of a mock transaction and verification under the debugging environment.
+[ckb-cli](https://github.com/nervosnetwork/ckb-cli) supports to generate mock transactions and verification under the debugging environment.
 
 
 ### 1. Generate mock-tx template
@@ -58,7 +58,7 @@ ckb-cli mock-tx complete --tx-file debug-tx.json
 ```
 
 
-This command signs the transaction with the private key according to your lock arg.
+This command is used to sign the transaction with the private key according to your lock arg.
 
 
 ### 4. Verify the transaction
@@ -70,7 +70,7 @@ ckb-cli mock-tx verify --tx-file debug-tx.json
 
 You will see the verification result and the debug output.
 
-See the [transaction RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md) for instructions on how to construct a transaction.
+Please refer to the [transaction RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/ 0022-transaction-structure.md) for constructing a transaction.
 
 
 ## Using VM debugger and GDB
@@ -107,7 +107,7 @@ target remote <ip>:2000
 ```
 
 
-To learn more, you can view this tutorial: [introduction to CKB script programming](https://xuejie.space/2019_07_05_introduction_to_ckb_script_programming_validation_model/).
+You may refer to the tutorial: [introduction to CKB script programming](https://xuejie.space/2019_07_05_introduction_to_ckb_script_programming_validation_model/) for more details.
 
 
 ## Report bugs
