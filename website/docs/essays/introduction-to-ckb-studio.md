@@ -130,7 +130,7 @@ Click the *Start* button to start a CKB node. Once the node is started, you can 
 
 #### Switch Networks
 
-In the *Network* dropdown menu you can switch to other networks such as the [Aggron testnet](https://docs.nervos.org/dev-guide/testnet.html) or the CKB mainnet. Switching the network will stop your curretnly running instance.
+In the *Network* dropdown menu you can switch to other networks such as the [Aggron testnet](testnet) or the CKB mainnet. Switching the network will stop your curretnly running instance.
 
 <p align="center">
   <img src="../assets/essay/ckb-studio/switch_network.png" width="300px">
@@ -154,7 +154,7 @@ CKB has a special cell-based structure for its transactions. The *TX Constructor
 
 #### Cell Explorer
 
-Cells are the fundamental elements to form CKB transactions. The bottom half of the interface is a *cell explorer* where you can look through available cells (live cells) for each address. To learn more about CKB cells, please refer to the [cell model](https://docs.nervos.org/key-concepts/cell-model.html).
+Cells are the fundamental elements to form CKB transactions. The bottom half of the interface is a *cell explorer* where you can look through available cells (live cells) for each address. To learn more about CKB cells, please refer to the [cell model](cell-model).
 
 In the cell explorer, you can
 
@@ -185,7 +185,7 @@ For some specific types of transactions, CKB Studio can help you determine which
 
 - Make regular transfer
 - Construct a new cell with custom data
-- Mint [User Defined Token (UDT)](https://docs.nervos.org/glossary/glossary-general.html#user-defined-token)
+- Mint [User Defined Token (UDT)](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)
 - Make UDT transfers
 
 For example, click the *Transfer* button next to search bar to open the *Transfer* window. You can type in the amount and the recipient address, and CKB Studio will look through all available empty cells and generate a transaction that satisfies your entered values. You can also use the same button to transfer a UDT token. Next, following the same procedures as described above to sign the transaction and push it to the running CKB network.
