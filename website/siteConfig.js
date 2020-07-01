@@ -27,6 +27,10 @@ const siteConfig = {
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
 
+  //GA settings
+  gaTrackingId: 'UA-139882771-1',
+  gaGtag: true,
+
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'basics/introduction', label: 'Basics'},
