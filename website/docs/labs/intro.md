@@ -7,4 +7,4 @@ In labs, we provide a series of hands-on programming tutorial, that helps you bu
 
 
 * How to [build](sudtbycapsule) a CKB script in Rust.
-* How to build a standalone CKB dapp in JavaScript.
+* How to [build](lumos-nervosdao) a standalone CKB dapp in JavaScript.
