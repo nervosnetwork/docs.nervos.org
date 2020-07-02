@@ -20,7 +20,7 @@ const siteConfig = {
   baseUrl: '/',
   cname: 'docs-new.nervos.org',
 
-  oldDocSiteUrl: 'https://docs-old.nervos.org',
+  oldDocSiteUrl: 'https://docs.nervos.org',
 
   // Used for publishing and more
   projectName: 'docs-new',
