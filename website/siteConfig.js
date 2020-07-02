@@ -20,6 +20,8 @@ const siteConfig = {
   baseUrl: '/',
   cname: 'docs-new.nervos.org',
 
+  oldDocSiteUrl: 'https://docs-old.nervos.org',
+
   // Used for publishing and more
   projectName: 'docs-new',
   organizationName: 'nervosnetwork',
@@ -74,7 +76,7 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: ['/js/extra.js'],
 
   // NOTE: This is configured per documentation of docusaurus:
   // https://docusaurus.io/docs/en/search
