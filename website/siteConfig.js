@@ -74,7 +74,7 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: [],
 
   // NOTE: This is configured per documentation of docusaurus:
   // https://docusaurus.io/docs/en/search
