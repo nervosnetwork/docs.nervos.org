@@ -46,8 +46,10 @@ class Footer extends React.Component {
             )}
           </section>
         </footer>
-        <div className="oldSiteLink">
-          <span>Note we've completely rebuilt Nervos Doc site!</span> <span>For the old doc site, please see <a href={this.props.config.oldDocSiteUrl}>docs-old</a></span>.
+        <div id="oldSiteLink">
+          <div>
+            <span>Note we've completely rebuilt Nervos Doc site! </span><span>For the old doc site, please see <a href={this.props.config.oldDocSiteUrl}>docs-old</a>.</span>
+          </div>
         </div>
       </>
     );

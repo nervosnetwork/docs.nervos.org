@@ -76,7 +76,7 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: [],
+  scripts: ['/js/extra.js'],
 
   // NOTE: This is configured per documentation of docusaurus:
   // https://docusaurus.io/docs/en/search

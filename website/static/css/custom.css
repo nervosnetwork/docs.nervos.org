@@ -314,6 +314,24 @@ article li {
   margin-right: 6px;
 }
 
+/* Banner link to legacy doc site */
+
+#oldSiteLink {
+  position: fixed;
+  height: 40px;
+  width: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.fixedHeaderContainer {
+  margin-top: 40px;
+}
+
 /* Responsive */
 
 @media only screen and (min-width: 1024px) {
@@ -368,6 +386,19 @@ article li {
 
   .card {
     margin: 10px 20px;
+  }
+
+  #oldSiteLink {
+    height: 60px;
+  }
+
+  #oldSiteLink span {
+    display: block;
+    text-align: center;
+  }
+
+  .fixedHeaderContainer {
+    margin-top: 60px;
   }
 }
 
