@@ -361,6 +361,21 @@ article li {
   }
 }
 
+@media only screen and (max-width: 736px) {
+  #oldSiteLink {
+    height: 60px;
+  }
+
+  #oldSiteLink span {
+    display: block;
+    text-align: center;
+  }
+
+  .fixedHeaderContainer {
+    margin-top: 60px;
+  }
+}
+
 @media only screen and (max-device-width: 736px) {
   .homeContainer .homeWrapper {
     flex-direction: column;
