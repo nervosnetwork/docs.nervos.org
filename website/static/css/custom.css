@@ -342,6 +342,10 @@ article li {
   .reactNavSearchWrapper input#search_input_react {
     width: 360px;
   }
+
+  .navPusher {
+    padding-top: 90px; /* Normal is 50, plus old site link banner */
+  }
 }
 
 @media only screen and (max-width: 1200px) {
