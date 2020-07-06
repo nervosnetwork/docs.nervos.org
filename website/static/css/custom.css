@@ -346,6 +346,10 @@ article li {
   .navPusher {
     padding-top: 90px; /* Normal is 50, plus old site link banner */
   }
+
+  .onPageNav > .toc-headings {
+    padding-top: 50px; /* Normal is 10, plus old site link banner */
+  }
 }
 
 @media only screen and (max-width: 1200px) {
