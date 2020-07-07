@@ -16,9 +16,9 @@ const siteConfig = {
   title: 'Nervos CKB Docs', // Title for your website.
   tagline: 'Nervos CKB Documentations',
   // TODO: change this to docs.nervos.org
-  url: 'https://docs-new.nervos.org',
+  url: 'https://docs.nervos.org',
   baseUrl: '/',
-  cname: 'docs-new.nervos.org',
+  cname: 'docs.nervos.org',
 
   oldDocSiteUrl: 'https://docs-old.nervos.org',
 
