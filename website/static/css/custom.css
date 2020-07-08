@@ -378,6 +378,10 @@ article li {
   .fixedHeaderContainer {
     margin-top: 60px;
   }
+
+  .docMainWrapper .wrapper {
+    padding-top: 50px;
+  }
 }
 
 @media only screen and (max-device-width: 736px) {
@@ -422,6 +426,10 @@ article li {
 
   .fixedHeaderContainer {
     margin-top: 60px;
+  }
+
+  .docMainWrapper .wrapper {
+    padding-top: 50px;
   }
 }
 
