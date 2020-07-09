@@ -32,15 +32,18 @@ You should be able to run a dev chain and know about how to use `ckb-cli` to sen
 
 ### Install capsule
 
-To use capsule, you need `cargo` and `docker`. If you don't have these tools, you may install them from here, it is recommended to install the latest version:
+To use capsule, you need `docker`. It is recommended to install the latest version:
 
-* [Install cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) 
-* [Install docker](https://www.docker.com/)
+* [Install docker](https://docs.docker.com/get-docker/)
 
-Now you can proceed to install capsule with these commands:
+Note: The current user must have permission to manage Docker instances. (How to manage Docker as a non-root user)[https://docs.docker.com/engine/install/linux-postinstall/].
+
+Now you can proceed to install capsule, It is recommended to [download the binary](https://github.com/nervosnetwork/capsule/releases/tag/v0.1.1)
+
+Or you can install from source:
 
 ```
-cargo install capsule --git https://github.com/nervosnetwork/capsule.git --tag v0.0.1-pre.2
+cargo install capsule --git https://github.com/nervosnetwork/capsule.git --tag v0.1.1
 ```
 
 Then check if it works with:
@@ -108,24 +111,81 @@ Cargo.toml  src
 ```
 </details>
 
-You can open `my-sudt/contracts/my-sudt/src/main.rs` to see some pre-written code:
+You can open `my-sudt/contracts/my-sudt/src/main.rs` to see some pre-generated code:
 
-```
+``` rust
 #![no_std]
 #![no_main]
 #![feature(lang_items)]
 #![feature(alloc_error_handler)]
 #![feature(panic_info_message)]
 
-use ckb_std::{entry, default_alloc};
+// Import from `core` instead of from `std` since we are in no-std mode
+use core::result::Result;
 
-entry!(main);
+// Import heap related library from `alloc`
+// https://doc.rust-lang.org/alloc/index.html
+use alloc::{vec, vec::Vec};
+
+// Import CKB syscalls and structures
+// https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/index.html
+use ckb_std::{
+    entry,
+    default_alloc,
+    debug,
+    high_level::{load_script, load_tx_hash},
+    error::SysError,
+    ckb_types::{bytes::Bytes, prelude::*},
+};
+
+entry!(entry);
 default_alloc!();
 
-#[no_mangle]
-fn main() -> i8 {
-    // this contract always return true
-    0
+/// Program entry
+fn entry() -> i8 {
+    // Call main function and return error code
+    match main() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
+}
+
+/// Error
+#[repr(i8)]
+enum Error {
+    IndexOutOfBound = 1,
+    ItemMissing,
+    LengthNotEnough,
+    Encoding,
+    // Add customized errors here...
+}
+
+impl From<SysError> for Error {
+    fn from(err: SysError) -> Self {
+        use SysError::*;
+        match err {
+            IndexOutOfBound => Self::IndexOutOfBound,
+            ItemMissing => Self::ItemMissing,
+            LengthNotEnough(_) => Self::LengthNotEnough,
+            Encoding => Self::Encoding,
+            Unknown(err_code) => panic!("unexpected sys error {}", err_code),
+        }
+    }
+}
+
+fn main() -> Result<(), Error> {
+    // remove below examples and write your code here
+
+    let script = load_script()?;
+    let args: Bytes = script.args().unpack();
+    debug!("script args is {:?}", args);
+
+    let tx_hash = load_tx_hash()?;
+    debug!("tx hash is {:?}", tx_hash);
+
+    let _buf: Vec<_> = vec![0u8; 32];
+
+    Ok(())
 }
 ```
 
@@ -144,13 +204,15 @@ capsule build
 
 Building contract my-sudt
     Updating crates.io index
- Downloading crates ...
-  Downloaded buddy-alloc v0.2.0
-  Downloaded ckb-std v0.1.6
-   Compiling buddy-alloc v0.2.0
-   Compiling ckb-std v0.1.6
-   Compiling my-sudt v0.1.0 (/code)
-    Finished release [optimized] target(s) in 9.86s
+   Compiling cc v1.0.56
+   Compiling cfg-if v0.1.10
+   Compiling buddy-alloc v0.3.0
+   Compiling molecule v0.6.0
+   Compiling ckb-allocator v0.1.1
+   Compiling ckb-standalone-types v0.0.1-pre.1
+   Compiling ckb-std v0.4.1
+   Compiling my-sudt v0.1.0 (/code/contracts/my-sudt)
+    Finished dev [unoptimized + debuginfo] target(s) in 8.73s
 Done
 ```
 </details>
@@ -183,57 +245,45 @@ The script is consisted of four parts：load script、check inputs、load inputs
 
 ### Check the used libraries
 
-Open `contracts/my-sudt/Cargo.toml`, you will find two dependencies:
+Open `contracts/my-sudt/Cargo.toml`, we already have a dependency:
 
 ```
 [dependencies]
-ckb-std = "0.2.1"
-ckb-types = { package = "ckb-standalone-types", version = "0.0.1-pre.1", default-features = false }
+ckb-std = "0.4.1"
 ```
 
 * `ckb-std` is a crate used to handling CKB syscalls.
-* `ckb-standalone-types` is a crate that provides the definition of CKB structures.
+* `ckb-standalone-types` is a crate which re-exported as the `ckb_std::ckb_types` provides the definition of CKB structures.
 
-You may refer to [Rust libraries](https://github.com/nervosnetwork/capsule/wiki/Rust-libraries) for more details. We can only use crates which supports `no-std` in scripts.
+You may refer to [Rust libraries](https://github.com/nervosnetwork/capsule/wiki/Rust-libraries) for more useful crates. We can only use crates which supports `no-std` in scripts.
 
 ### Load Script
 
-At the beginning of the script, we need to load the current script(SUDT) and unpack the args field, also we should check the SUDT’s mode, if it is owner mode, we simply skip the verification code and return `0`, then the verification is successful.We also need to load the current script(SUDT) and unpack the args field.
+At the beginning of the script, we need to check the SUDT’s mode, if it is owner mode, we simply skip the verification code and return `0`, which represents the verification is successful, otherwise we check the amount of UDT.
 
-Please note that we can't directly use the `std` crate since we are using `no-std` Rust.Instead, we import the `Vec` struct from the [alloc](https://doc.rust-lang.org/stable/alloc/index.html) crate, which is a rust built-in crate contains heap related structs.
+To achieve this, we need to load `args` of the current script, which the generated code already did for us. So we just remove the unused lines from the `main` function.
 
-The `buf` should be large enough to cover the `Script` data so we use `1024` bytes buffer.
+In the code below, we load the current script(SUDT)'s args field, and invoke `check_owner_mode` which we have not defined yet.
 
+Notice since we are using no-std Rust, we can't directly use the `std` in the code. Instead, we need to import the `Vec` struct from the [alloc](https://doc.rust-lang.org/stable/alloc/index.html) crate, which is a rust builtin crate contains heap related structs.
 
-```
-use alloc::vec::Vec;
-use ckb_std::{
-    ckb_constants::{CellField, Source, SysError},
-    default_alloc, entry, syscalls,
-};
-use ckb_types::{packed::Script, prelude::*};
-
-const BUF_LEN: usize = 1024
-
-fn main() -> i8 {
+``` rust
+fn main() -> Result<(), Error> {
     // load current script
-    // check the script is in owner mode or normal mode
-    let script = {
-        let mut buf = [0u8; BUF_LEN];
-        let len = syscalls::load_script(&mut buf, 0).unwrap();
-        Script::new_unchecked(buf[..len].to_vec().into())
-    };
+    // check verification branch is owner mode or normal mode
+    let script = load_script()?;
+    let args: Bytes = script.args().unpack();
 
     // unpack the Script#args field
     let args: Vec<u8> = script.args().unpack();
 
     // return success if owner mode is true
-    if check_owner_mode(&args).unwrap() {
-        return 0;
+    if check_owner_mode(&args)? {
+        return Ok(());
     }
 
     // more verifications ...
-    return 0;
+    return Ok(());
 }
 ```
 
@@ -241,44 +291,37 @@ fn main() -> i8 {
 
 Now we should  check the owner mode status by defining the `check_owner_mode` function：
 
-* Load every input's lock hash and compare it with the script's args. 
-    * If  there is  an input's lock hash matching the script's argument, the SUDT script is in owner mode; 
-    * Otherwise，iterate all the inputs and finally got an `IndexOutOfBound` error which means the SUDT script is in normal mode.
-*  `Source::Input` and `i` means load `input` from `i-th` inputs. 
-*  `CellField::LockHash` means load the `LockHash` field to the `buf`.
+We need to load every input's lock hash and compare it to the script's args. If we find an input's lock hash corresponds to the script's args, we are in owner mode; otherwise, we iterate all the inputs and finally got an `IndexOutOfBound` error, which means we are in normal mode.
 
-* Check the `len` returned by syscall,  It's always a good practice to check the loaded length.
+We use [load_cell_lock_hash](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/fn.load_cell_lock_hash.html) to load cell's lock hash from CKB. The `Source::Input` and `i` args denote we load `input` from `i-th` inputs.
 
-```
-fn check_owner_mode(args: &[u8]) -> Result<bool, SysError> {
+The error `SysError::IndexOutOfBound` represents that we request an index that does not exist, which means we cannot find a matched input cell, so we return `Ok(false)`.
+
+``` rust
+use ckb_std::{
+    high_level::{load_cell_lock_hash},
+    ckb_constants::Source,
+};
+
+fn check_owner_mode(args: &Bytes) -> Result<bool, Error> {
     // With owner lock script extracted, we will look through each input in the
     // current transaction to see if any unlocked cell uses owner lock.
-    let mut i = 0;
-    let mut buf = [0u8; 32];
-    loop {
+    for i in 0.. {
         // check input's lock_hash with script args
-        let len = match syscalls::load_cell_by_field(
-            &mut buf,
-            0,
+        let lock_hash = match load_cell_lock_hash(
             i,
             Source::Input,
-            CellField::LockHash,
         ) {
-            Ok(len) => len,
+            Ok(lock_hash) => lock_hash,
             Err(SysError::IndexOutOfBound) => return Ok(false),
-            Err(err) => return Err(err)),
+            Err(err) => return Err(err.into()),
         };
-
         // invalid length of loaded data
-        if len != buf.len() {
-            return Err(SysError::Unknown(4));
+        if args[..] == lock_hash[..] {
+           return Ok(true);
         }
-
-        if args[..] == buf[..] {
-            return Ok(true);
-        }
-        i += 1;
     }
+    Ok(false)
 }
 ```
 
@@ -300,39 +343,37 @@ Tips：
 * The data type of SUDT is  `u128`, which is 16 bytes so we use the 16 bytes buffer.
 *  `i-th` input of `Source::Input`(index of all inputs) may be or may not be the same cell of the `i-th` input of `Source::GroupInput` (index of inputs which lock/type is the current script).
 
-```
+``` rust
 const UDT_LEN: usize = 16;
 
-fn collect_inputs_amount() -> Result<u128, SysError> {
+fn collect_inputs_amount() -> Result<u128, Error> {
     // let's loop through all input cells containing current UDTs,
     // and gather the sum of all input tokens.
     let mut inputs_amount: u128 = 0;
-    let mut i = 0;
+    let mut buf = [0u8; UDT_LEN];
 
     // u128 is 16 bytes
-    let mut buf = [0u8; UDT_LEN];
-    loop {
-        // check input's lock_hash with script args
-        let len = match syscalls::load_cell_data(&mut buf, 0, i, Source::GroupInput) {
-            Ok(len) => len,
+    for i in 0.. {
+        let data = match load_cell_data(i, Source::GroupInput) {
+            Ok(data) => data,
             Err(SysError::IndexOutOfBound) => break,
             Err(err) => return Err(err.into()),
         };
 
-        if len != UDT_LEN {
-            return Err(SysError::Unknown(4));
+        if data.len() != UDT_LEN {
+            return Err(Error::Encoding);
         }
+        buf.copy_from_slice(&data);
         inputs_amount += u128::from_le_bytes(buf);
-        i += 1;
     }
     Ok(inputs_amount)
 }
 ```
 
-The `collect_outputs_amount` function is the same implementation except load data from outputs: 
+The `collect_outputs_amount` function is similar, except we load data from outputs:
 
-```
-fn collect_outputs_amount() -> Result<u128, SysError> {
+``` rust
+fn collect_outputs_amount() -> Result<u128, Error> {
     // With the sum of all input UDT tokens gathered, let's now iterate through
     // output cells to grab the sum of all output UDT tokens.
     let mut outputs_amount: u128 = 0;
@@ -340,19 +381,18 @@ fn collect_outputs_amount() -> Result<u128, SysError> {
 
     // u128 is 16 bytes
     let mut buf = [0u8; UDT_LEN];
-    loop {
-        // check input's lock_hash with script args
-        let len = match syscalls::load_cell_data(&mut buf, 0, i, Source::GroupOutput) {
-            Ok(len) => len,
+    for i in 0.. {
+        let data = match load_cell_data(i, Source::GroupOutput) {
+            Ok(data) => data,
             Err(SysError::IndexOutOfBound) => break,
-            Err(err) => return Err(err),
+            Err(err) => return Err(err.into()),
         };
 
-        if len != UDT_LEN {
-            return Err(SysError::Unknown(4));
+        if data.len() != UDT_LEN {
+            return Err(Error::Encoding);
         }
+        buf.copy_from_slice(&data);
         outputs_amount += u128::from_le_bytes(buf);
-        i += 1;
     }
     Ok(outputs_amount)
 }
@@ -360,67 +400,20 @@ fn collect_outputs_amount() -> Result<u128, SysError> {
 
 * Update the `main` function to check inputs / outputs UDT amount:
 
-```
-let inputs_amount = collect_inputs_amount()?;
-    let outputs_amount = collect_outputs_amount()?;
-
-    // return error if inputs amount < outputs amount
-    if inputs_amount < outputs_amount {
-        // return error code
-        return 5;
-    }
-
-    return 0;
-```
-
-### Error handling
-
-In the previous codes, we reuse `SysError` to indicate errors for convenience. It is recommended to define our own errors and assign reasonable error codes.
-
-* Add `#[repr(i8)]` on our error, and start error code from `1`. CKB verification engine allows the  `i8` error code, `0` represents the verification is successful, non-zero represents the verification is failure. 
-
-* Define `From` trait on `SysError`
-
-```
-// Error codes
+``` rust
+/// Error
 #[repr(i8)]
 enum Error {
     IndexOutOfBound = 1,
     ItemMissing,
     LengthNotEnough,
-    Encoding, // data encoding error
-    Amount,   // amount error
+    Encoding,
+    Amount
 }
 
-impl From<SysError> for Error {
-    fn from(err: SysError) -> Self {
-        use SysError::*;
-        match err {
-            IndexOutOfBound => Self::IndexOutOfBound,
-            ItemMissing => Self::ItemMissing,
-            LengthNotEnough(_) => Self::LengthNotEnough,
-            Unknown(err_code) => panic!("unexpected sys error {}", err_code),
-        }
-    }
-}
-```
-
-* Replace all `SysError` with `Error`.
-
-* Define `check` function to return results so we can use `?` operation, and convert errors to error code in the `main` function:
-
-```
-fn check() -> Result<(), Error> {
-    // load current script
-    // check verification branch is owner mode or normal mode
-    let script = {
-        let mut buf = [0u8; BUF_LEN];
-        let len = syscalls::load_script(&mut buf, 0)?;
-        Script::new_unchecked(buf[..len].to_vec().into())
-    };
-
-    // unpack the Script#args field
-    let args: Vec<u8> = script.args().unpack();
+fn main() -> Result<(), Error> {
+    let script = load_script()?;
+    let args: Bytes = script.args().unpack();
 
     // return success if owner mode is true
     if check_owner_mode(&args)? {
@@ -436,14 +429,61 @@ fn check() -> Result<(), Error> {
 
     Ok(())
 }
+```
 
-#[no_mangle]
-fn main() -> i8 {
-    match check() {
-        Ok(_) => 0,
-        Err(err) => err as i8,
-    }
+### Use Iterator to query cells
+
+In the previous code, we use `for` loop to iterate inputs and outputs, since iteration over cells is a common pattern in CKB programming, `ckb-std` provides a high-level interface [QueryIter](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/struct.QueryIter.html) to handle it.
+
+QueryIter needs two args, the first is a loading function, the seconds is `Source`. This is an example to load all grouped inputs cells data `QueryIter::new(load_cell_data, Source::GroupInput)`.
+
+Rewrite our functions:
+
+``` rust
+fn check_owner_mode(args: &Bytes) -> Result<bool, Error> {
+    // With owner lock script extracted, we will look through each input in the
+    // current transaction to see if any unlocked cell uses owner lock.
+    let is_owner_mode = QueryIter::new(load_cell_lock_hash, Source::Input)
+        .find(|lock_hash| args[..] == lock_hash[..]).is_some();
+    Ok(is_owner_mode)
 }
+
+fn collect_inputs_amount() -> Result<u128, Error> {
+    // let's loop through all input cells containing current UDTs,
+    // and gather the sum of all input tokens.
+    let mut buf = [0u8; UDT_LEN];
+
+    let udt_list = QueryIter::new(load_cell_data, Source::GroupInput)
+        .map(|data|{
+            if data.len() == UDT_LEN {
+                buf.copy_from_slice(&data);
+                // u128 is 16 bytes
+                Ok(u128::from_le_bytes(buf))
+            } else {
+                Err(Error::Encoding)
+            }
+        }).collect::<Result<Vec<_>, Error>>()?;
+    Ok(udt_list.into_iter().sum::<u128>())
+}
+
+fn collect_outputs_amount() -> Result<u128, Error> {
+    // With the sum of all input UDT tokens gathered, let's now iterate through
+    // output cells to grab the sum of all output UDT tokens.
+    let mut buf = [0u8; UDT_LEN];
+
+    let udt_list = QueryIter::new(load_cell_data, Source::GroupOutput)
+        .map(|data|{
+            if data.len() == UDT_LEN {
+                buf.copy_from_slice(&data);
+                // u128 is 16 bytes
+                Ok(u128::from_le_bytes(buf))
+            } else {
+                Err(Error::Encoding)
+            }
+        }).collect::<Result<Vec<_>, Error>>()?;
+    Ok(udt_list.into_iter().sum::<u128>())
+}
+
 ```
 
 
@@ -484,7 +524,7 @@ Let’s check the default tests code  `tests/src/tests.rs`  to find out how to w
 
 * In the beginning part, initialize the  `Context` which is a structure to simulate the chain environment. We can use `Context` to deploy exists cells and mock block headers.`deploy_contract` will return the  `out_point` of the script.
 
-```
+``` rust
 // deploy contract
     let mut context = Context::default();
     let contract_bin: Bytes = Loader::default().load_binary("my-sudt");
@@ -495,7 +535,7 @@ Let’s check the default tests code  `tests/src/tests.rs`  to find out how to w
 
 *Please note the default tests assume the script is a lock_script, but in our case, `my-sudt` is a type_script. We'll fix it later.*
 
-```
+``` rust
 // prepare scripts
     let lock_script = context.build_script(&contract_out_point, Default::default()).expect("script");
     let lock_script_dep = CellDep::new_builder().out_point(contract_out_point).build();
@@ -517,7 +557,7 @@ Let’s check the default tests code  `tests/src/tests.rs`  to find out how to w
 
 Please note that the  transaction's `outputs_data` must have the same length with the `outputs`, even the data is empty.
 
-```
+``` rust
 let outputs = vec![
         CellOutput::new_builder()
             .capacity(500u64.pack())
@@ -556,7 +596,7 @@ We should create mock SUDT cells and spend them for testing SUDT verification.
 As `my-sudt` script is a `type_script` we need another script as `lock_script` for mock cells, it is recommended to use `always success` script returned `0`. `always success` is built-in in the `ckb-testtool`.
 
 
-```
+``` rust
 use ckb_testtool::{builtin::ALWAYS_SUCCESS, context::Context};
 
     // deploy always_success script
@@ -578,7 +618,7 @@ Before writing the code, let's think about our  test cases:
 
 Please note that if `is_owner_mode` is true, we will set `lock_script`'s `lock_hash` as `owner script hash`; otherwise, we will set `[0u8; 32]` which implies can't enter into owner mode.
 
-```
+``` rust
 fn build_test_context(
     inputs_token: Vec<u128>,
     outputs_token: Vec<u128>,
@@ -620,7 +660,7 @@ fn build_test_context(
 
 * Build inputs and outputs according to the `inputs_token` and `outputs_token` 
 
-```
+``` rust
 // ...
     // prepare inputs
     // assign 1000 Bytes to per input
@@ -672,7 +712,7 @@ fn build_test_context(
 
 Now the helper function `build_test_context` is finished, we can write our tests: 
 
-```
+``` rust
 #[test]
 fn test_basic() {
     let (mut context, tx) = build_test_context(vec![1000], vec![400, 600], false);
