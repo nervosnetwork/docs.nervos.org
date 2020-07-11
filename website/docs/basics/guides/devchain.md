@@ -3,49 +3,43 @@ id: devchain
 title: Run a CKB Dev Blockchain
 ---
 
-Nervos CKB supports the `dev` mode that is particularly useful for development and testing. You can run a developement CKB blockchain with `Dummy-Worker` or `Eaglesong-Worker` locally for development and testing.
+Nervos CKB supports a special development mode that is particularly useful for building and testing applications. This mode of operation is highly configurable, and allows the developer to speed up the block interval, adjust epochs lengths, create blocks without having to do Proof-of-Work (PoW) mining.
 
-It is recommended to use `Dummy-Worker` for most of development scenarios because the block time is stable. `Eaglesong-Worker` is just for scenarios of validating PoW function. Please note that the block time can be extremely unstable when the mining hashrate is low in `Eaglesong-Worker`.
+When running a development blockchain you have the option of selecting between `Dummy-Worker` and `Eaglesong-Worker`. `Dummy-Worker` provides allows the mining of blocks at a constant block interval without PoW. `Eaglesong-Worker` uses real PoW to produce blocks.
 
-You may follow these instructions which are explained in detail below：
+Note: It is highly recommended that `Dummy-Worker` be used for most development scenarios. `Eaglesong-Worker` should only be used when validating the PoW function is necessary, because the block time can behave erratically with extremely low hashrates.
 
-In `Dummy-Worker`：
-* Initialize the development blockchain
-* Modify parameters to run quickly
-* Run the development blockchain
-* Use `ckb-cli`  to transfer CKB
+## Setup a Dummy-Worker Blockchain
 
-In `Eaglesong-Worker`：
-* Initialize the development blockchain
-* Change the PoW function to Eaglesong
-* Run the development blockchain
+### 1. Download the Latest CKB Binary
 
-## In `Dummy-Worker`
+Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
 
-### Initialize the development blockchain
+The following commands can be used to verify the binaries are working and to check versions:
 
-* Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases), then check if it works with:
-
-```
+```bash
 ckb --version
 ckb-cli --version
 ```
+
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
 </details>
 
-* Initialize the development blockchain, will generate some configuration files
+### 2. Initialize the Configuration
 
-```
+Use the following command to initialize the development blockchain and generate the required configuration files:
+
+```bash
 ckb init --chain dev
 ```
 
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 WARN: mining feature is disabled because of lacking the block assembler config options
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
@@ -55,68 +49,22 @@ create ckb-miner.toml
 ```
 </details>
 
-### Modify parameters to run quickly
+### 3. Configure the Block Assembler
 
-In the development process, sometimes we want to make the blockchain to run quickly for getting results faster. There are certain parameters you can tweak:
+The Block Assembler configuration specifies which address should be receive block rewards for mining.
 
-* Change the epoch length
+#### 3a. Create a New Account
 
-You can change the `genesis_epoch_length` in `specs/dev.toml`
+An address to receive the block rewards must be created. We can do this using `ckb-cli`.
 
-```
-[params]
-initial_primary_epoch_reward = 1_917_808_21917808
-secondary_epoch_reward = 613_698_63013698
-max_block_cycles = 10_000_000_000
-cellbase_maturity = 0
-primary_epoch_reward_halving_interval = 8760
-epoch_duration_target = 14400
-genesis_epoch_length = 1000  # The unit of meansurement is "block".
-```
-
-The default epoch length is 1000 blocks，if `genesis_epoch_length = 100` that means the epoch lengh is 100 blocks.
-
-* Use permanent difficulty
-
-The `params` section above has a different parameter `permanent_difficulty_in_dummy` that you can use:
-
-```
-[params]
-# ... omitted parameters
-
-genesis_epoch_length = 10
-permanent_difficulty_in_dummy = true
-```
-
-When `permanent_difficulty_in_dummy` is set to `true`. The whole difficulty adjustment algorithm will be skipped. All epochs will use the same length as the genesis epoch length. Typically, you would see the 2 parameters `genesis_epoch_length` and `permanent_difficulty_in_dummy` used together. In the above example, we are ensuring each epoch, in our current dev chain, has 10 blocks. This can be super helpful if you are testing scripts that relate to epoch, such as NervosDAO.
-
-* Change the mining idle interval
-
-Change the `value` in `ckb-miner.toml`
-
-```
-[[miner.workers]]
-worker_type = "Dummy"
-delay_type = "Constant"
-value = 5000  # The unit of measurement is "ms".
-```
-
-The default mining idle interval is 5000ms, if `value = 50` that means the mining idle interval is 50ms.
-
-### Run the development blockchain
-
-We need to run a miner for running the development blockchain, firstly configure the `block-assembler` in `ckb.toml` for mining.
-
-1. configure `block-assembler`
-
-  * Use `ckb-cli` to generate a miner account, we will use `lock_arg` next step, so please backup it.
+Note: Be sure to record the `lock_arg` value in the response which we will use in the next step.
 
 ```
 ckb-cli account new
 ```
 
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -129,26 +77,66 @@ lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
 </details>
 
-   * Fill in  `args` and  `message` of the `block_assembler`
+#### 3b. Update the Configuration
+
+Modify the `args` and `message` parameters in the `ckb.toml` file under the `block_assembler` section:
 
 ```
 [block_assembler]
-code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8" //don't have to change
-args = "0x8d627decece439977a3a0a97815b63debaff2874" // the lock_arg 
-hash_type = "type" // don't need to change
-message = "A 0x-prefixed hex string"// "0x"(recommendation)
+code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8" // Do not change this.
+args = "0x8d627decece439977a3a0a97815b63debaff2874" // Change this to your lock_arg value. 
+hash_type = "type" // Do not change this.
+message = "A 0x-prefixed hex string" // Change this to "0x" to supply an empty message.
 
 ```
 
-2. Run the development blockchain
+### 4. Adjust the Parameters to Shorten the Block Interval (Optional)
 
-* Start a ckb node
+For most development the default configuration should be sufficient, but sometimes it is beneficial to speed up certain operations so results can be viewed quickly.
+
+#### 4a. Change the Number of Blocks in an Epoch
+
+The default epoch length is `1000` blocks. Reducing this to `10` or `100` can help with testin Nervos DAO operations.
+
+Modify the `genesis_epoch_length` parameter in the `specs/dev.toml` file under the `params` section:
+
+```
+[params]
+genesis_epoch_length = 1000  # The unit of meansurement is "block".
+```
+
+#### 4b. Use Permanent Difficulty
+
+When `permanent_difficulty_in_dummy` is set to `true`, all epochs will use the same length as the genesis epoch length, skipping the difficulty adjustment entirely. This param is typically used in conjunction with `genesis_epoch_length`.
+
+Modify the `permanent_difficulty_in_dummy` parameter in the `specs/dev.toml` file under the `params` section:
+
+```
+[params]
+genesis_epoch_length = 10
+permanent_difficulty_in_dummy = true
+```
+
+#### 4c. Change the Mining Interval
+
+The default mining interval is `5000`, which is a value in milliseconds, meaning 5 seconds. Reducing this value will create blocks faster.
+
+Modify the `value` parameter in the `ckb-miner.toml` file under the `miner.workers` section:
+
+```
+[[miner.workers]]
+worker_type = "Dummy"
+delay_type = "Constant"
+value = 5000  # The unit of measurement is "ms".
+```
+
+### 5. Start the CKB Node
 
 ```
 ckb run
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 2020-06-05 18:31:14.970 +08:00 main INFO sentry  sentry is disabled
 2020-06-05 18:31:15.058 +08:00 main INFO ckb-db  Initialize a new database
@@ -166,13 +154,15 @@ ckb run
 ```
 </details>
 
-* Start a miner, you may open another terminal
+### 6. Start the CKB Miner
+
+This should be performed in a separate terminal.
 
 ```
 ckb miner
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 2020-06-05 18:31:21.558 +08:00 main INFO sentry  sentry is disabled
 Dummy-Worker ⠁ [00:00:00] 
@@ -184,143 +174,58 @@ Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
 ```
 </details>
 
-### Use `ckb-cli`  to transfer CKB
+ ## Setup an Eaglesong-Worker Blockchain
 
-`ckb-cli` is included in the ckb releases，it’s the command line tool for CKB. You can use it to invoke RPC call to node,manage accounts、transfer/check balance、construct mock transactions, etc. You can refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli)  for more details. We will introduce how to transfer CKB here.
+### 1. Download the Latest CKB Binary
 
- **Please note that `ckb-cli` is only used for developing/testing purpose.** 
+Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
 
-* Enter into the interface of  **ckb-cli**
+The following commands can be used to verify the binaries are working and to check versions:
 
-```
-ckb-cli
-```
-<details>
-<summary>(click here to view response)</summary>
 ```bash
-[  ckb-cli version ]: 0.31.0 (a531b3b 2020-04-17)
-[              url ]: http://127.0.0.1:8114 (network: Dev)
-[              pwd ]: /Users/zengbing/Documents/projects/ckb_v0.32.0-rc1_x86_64-apple-darwin-dev
-[            color ]: true
-[            debug ]: false
-[    output format ]: yaml
-[ completion style ]: List
-[       edit style ]: Emacs
-[   index db state ]: Waiting for first query
-```
-</details>
-
-* Create a new account
-
-```
-account new
-```
-<details>
-<summary>(click here to view response)</summary>
-```bash
-Your new account is locked with a password. Please give a password. Do not forget this password.
-Password:
-Repeat password:
-address:
-mainnet: ckb1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqw4c8mg
-testnet: ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
-lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
-lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
-```
-</details>
-
-
-* Check the balance of miner account
-
-You have already created a miner account for mining above, we can check the balance:
-
-```
-wallet get-capacity --address "miner's address" 
-```
-<details>
-<summary>(click here to view response)</summary>
-```bash
-CKB> wallet get-capacity --address "ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus"
-immature: 8027902.89083717 (CKB)
-total: 46253677.72927512 (CKB)
-```
-</details>
-
-* Transfer 10000 CKB to the new account
-
-```
-wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 —tx-fee 0.00001
-```
-<details>
-<summary>(click here to view response)</summary>
-```bash
-CKB> wallet transfer --from-account ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus --to-address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5 --capacity 10000 --tx-fee 0.00001
-Password: 
-0x1b66aafaaba5ce34de494f60374ef78e8f536bb3af9cab4fa63c0f29374c3f89
-```
-</details>
-
-* Check the new account’s balance
-
-```
-get-capacity —address "new account's address"
-```
-
-<details>
-<summary>(click here to view response)</summary>
-```bash
-CKB> wallet get-capacity —address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
-total: 10000.0 (CKB)
-```
-</details>
-
- The transfer successes !
-
- ## In `Eaglesong-Worker`
-
- ### Initialize the development blockchain
-
-* Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases),it requires version v0.32.0 or above,then check if it works with:
-
-```
 ckb --version
 ckb-cli --version
 ```
+
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
 </details>
 
-* Use `ckb-cli` to generate a miner account, we will use `lock_arg` next step, so please backup it.
+#### 2. Create a New Account
+
+An address to receive the block rewards must be created. We can do this using `ckb-cli`.
+
+Note: Be sure to record the `lock_arg` value in the response which we will use in the next step.
 
 ```
 ckb-cli account new
 ```
 
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
 Repeat password: 
 address:
-  mainnet: ckb1qyqtxam3dpjftjm7ljehu5jeeg6r4ph966lswxq87x
-  testnet: ckt1qyqtxam3dpjftjm7ljehu5jeeg6r4ph966lsnr7cj6
-lock_arg: 0xb37771686495cb7efcb37e5259ca343a86e5d6bf
-lock_hash: 0xceabcf383964ac0485b4ef7eec3321abef9f8493210c750e3a6f7832ffac0b2e
+  mainnet: ckb1qyqyrm8w0w8uq7puwhdp7s6xqzdjuknhf2tqzdztph
+  testnet: ckt1qyqyrm8w0w8uq7puwhdp7s6xqzdjuknhf2tqlgu5dt
+lock_arg: 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96
+lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
 </details>
 
-* Initialize the development blockchain with the test miner account
+### 3. Initialize the Configuration with the Miner Account
 
 ```
-ckb init -c dev --ba-arg 0xb37771686495cb7efcb37e5259ca343a86e5d6bf // lock_arg
+ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change this to your lock_arg value. 
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create specs/dev.toml
@@ -329,29 +234,29 @@ create ckb-miner.toml
 ```
 </details>
 
-### Change the PoW function to Eaglesong
+### 4. Change the PoW Function to Eaglesong
 
-* Edit specs/dev.toml and change to last line to
+Modify the `func` parameter in the `specs/dev.toml` file under the `pow` section:
 
 ```
 func = "Eaglesong"
 ```
-* Edit ckb-miner.toml and change the whole [[miner.workers]] section to
+
+Replace the `miner.workers` section in the `specs/dev.toml` file with the following:
 
 ```
 [[miner.workers]]
 worker_type = "EaglesongSimple"
-threads     = 1
+threads = 1
 ```
-### Run the development blockchain
 
-* Start a ckb node
+### 5. Start the CKB Node
 
 ```
 ckb run
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 2020-06-05 11:25:31.433 +08:00 main INFO sentry  sentry is disabled
 2020-06-05 11:25:31.508 +08:00 main INFO ckb-db  Initialize a new database
@@ -368,13 +273,15 @@ ckb run
 ```
 </details>
 
-* Start a miner, you may open another terminal
+### 6. Start the CKB Miner
+
+This should be performed in a separate terminal.
 
 ```
 ckb miner
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(click here to view result)</summary>
 ```bash
 2020-06-05 11:25:37.867 +08:00 main INFO sentry  sentry is disabled
 EaglesongSimple-Worker-0 ⠁ [00:00:00] 
@@ -385,4 +292,93 @@ Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
 ```
 </details>
 
+## Transferring CKBytes Using `ckb-cli`
 
+Included in CKB releases is the `ckb-cli` command line tool. This is can be used to directly invoke RPC calls to perform actions such as managing accounts, transferring CKBytes, and checking account balances. We will demonstrate a CKBytes transfer below. Please refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli) for full instructions.
+
+Note: Using `ckb-cli` to transfer CKBytes is recommended for developing and testing purposes only. For management of real funds and assets please use a wallet.
+
+### 1. Enter the `ckb-cli` Interface
+
+```
+ckb-cli
+```
+<details>
+<summary>(click here to view result)</summary>
+```bash
+[  ckb-cli version ]: 0.31.0 (a531b3b 2020-04-17)
+[              url ]: http://127.0.0.1:8114 (network: Dev)
+[              pwd ]: /Users/zengbing/Documents/projects/ckb_v0.32.0-rc1_x86_64-apple-darwin-dev
+[            color ]: true
+[            debug ]: false
+[    output format ]: yaml
+[ completion style ]: List
+[       edit style ]: Emacs
+[   index db state ]: Waiting for first query
+```
+</details>
+
+### 2. Create a New Account
+
+```
+account new
+```
+<details>
+<summary>(click here to view result)</summary>
+```bash
+Your new account is locked with a password. Please give a password. Do not forget this password.
+Password:
+Repeat password:
+address:
+mainnet: ckb1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqw4c8mg
+testnet: ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
+lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
+lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
+```
+</details>
+
+3. Check the Balance of an Existing Account
+
+In the previous sections you created a miner account that collects all mining rewards. Using the following command with the correct address will show you the current CKByte balance:
+
+```
+wallet get-capacity --address "miner's address" 
+```
+<details>
+<summary>(click here to view result)</summary>
+```bash
+CKB> wallet get-capacity --address "ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus"
+immature: 8027902.89083717 (CKB)
+total: 46253677.72927512 (CKB)
+```
+</details>
+
+### 4. Transfer 10,000 CKBytes to the New Account
+
+```
+wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 —tx-fee 0.00001
+```
+<details>
+<summary>(click here to view result)</summary>
+```bash
+CKB> wallet transfer --from-account ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus --to-address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5 --capacity 10000 --tx-fee 0.00001
+Password: 
+0x1b66aafaaba5ce34de494f60374ef78e8f536bb3af9cab4fa63c0f29374c3f89
+```
+</details>
+
+### 5. Check the New Account's Balance
+
+```
+get-capacity —address "new account's address"
+```
+
+<details>
+<summary>(click here to view result)</summary>
+```bash
+CKB> wallet get-capacity —address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
+total: 10000.0 (CKB)
+```
+</details>
+
+The transfer is successful!
