@@ -1,6 +1,6 @@
 ---
 id: devchain
-title: Run a development CKB blockchain
+title: Run a CKB Dev Blockchain
 ---
 
 Nervos CKB supports the `dev` mode that is particularly useful for development and testing. You can run a developement CKB blockchain with `Dummy-Worker` or `Eaglesong-Worker` locally for development and testing.
