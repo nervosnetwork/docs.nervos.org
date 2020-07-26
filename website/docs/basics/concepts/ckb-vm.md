@@ -25,7 +25,7 @@ Developers have complete flexibility to rely on existing open-source libraries r
 
 Any programming language that can target RISC-V can be used natively for Nervos development. Use your existing tooling, favorite IDEs, and debug tools. There is no need to rely on immature and untested tools; use whatever is best for the job.
 
-Nervos CKB offers native SDKs in a growing number of well-known general-purpose programming languages, such as Javascript, Rust, and C. Direct support for emerging smart contract languages, such as Solidity, Vyper, and Plutus is also planned.
+Nervos CKB offers native SDKs in a growing number of well-known general-purpose programming languages, such as JavaScript, Rust, and C. Direct support for emerging smart contract languages, such as Solidity, Vyper, and Plutus is also planned.
 
 ## Further Reading
 

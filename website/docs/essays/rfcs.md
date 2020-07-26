@@ -17,7 +17,7 @@ This tour provides  short introduction on our RFCs and links, hope it will be he
 
 This document provides a high-level walkthrough of all parts of the Nervos Network, with a focus on how they work together to support the overall vision of the network. 
 
-###  [Nervos CKB: A Common Knowledge Base for Crypto-Economy](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md)
+### [Nervos CKB: A Common Knowledge Base for Crypto-Economy](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md)
 
 This is Nervos CKB whitepaper, provides an overview of the Nervos Common Knowledge Base (CKB), a public permissionless blockchain and layer 1 of Nervos. 
 
@@ -35,7 +35,7 @@ This RFC introduces the crypto-economics of Nervos CKB. Nervos CKB is the base l
 
 ### [Data Structures](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
 
-This RFC explains all the basic data structures used in CKB, includes [Cell](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Cell),[Script](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Script),[Transaction](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Transaction) and [Block](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Block).
+This RFC explains all the basic data structures used in CKB, includes [Cell](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Cell), [Script](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Script), [Transaction](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Transaction) and [Block](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md#Block).
 
 ### [CKB Consensus Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0020-ckb-consensus-protocol/0020-ckb-consensus-protocol.md)
 
