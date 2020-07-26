@@ -332,6 +332,11 @@ article li {
   margin-top: 40px;
 }
 
+a.anchor {
+  /* 120px = origial 80px + margin-top 40px */
+  top: -120px; 
+}
+
 /* Responsive */
 
 @media only screen and (min-width: 1024px) {
