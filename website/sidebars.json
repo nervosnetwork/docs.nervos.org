@@ -36,7 +36,8 @@
     "Labs": [
       "labs/introduction",
       "labs/sudtbycapsule",
-      "labs/lumos-nervosdao"
+      "labs/lumos-nervosdao",
+      "labs/capsule-dynamic-loading"
     ],
     "Integrate": [
       "integrate/introduction",
