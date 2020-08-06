@@ -5,7 +5,7 @@ title: Dynamic loading in Capsule
 
 ## Introduction
 
-Many contracts have a demand for cryptography primitives. In contracts written in Rust, we can easily integrate a cryptography library by adding it as a dependency. But it is not efficient; first, it increases the binary size of the contract; we need to spend more coins to deploy the contract. Second, each contract may include duplicated libraries; it is a waste for the on-chain space.
+Many contracts have a demand for cryptography primitives. In contracts written in Rust, we can easily integrate a cryptography library by adding it as a dependency. But it is not efficient; first, it increases the binary size of the contract; we need to spend more coins to deploy the contract. Second, each contract may include duplicated libraries; it is a waste of the on-chain space.
 
 We introduce the dynamic loading mechanism to solve this problem:
 
@@ -13,9 +13,9 @@ We introduce the dynamic loading mechanism to solve this problem:
 * Using dynamic loading can significantly reduce the contract binary size.
 * Using shared libraries increases the utility of the on-chain space.
 
-Since the `v0.6` version, `ckb-std` introduces the [dynamic loading module](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/dynamic_loading/index.html), which provides a high-level interface to dynamically loading libraries from on-chain cells.
+Starting from the `v0.6` version, `ckb-std` introduces the [dynamic loading module](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/dynamic_loading/index.html), which provides a high-level interface to dynamically loading libraries from on-chain cells.
 
-In this tutorial, we make an example shared library in C, and try to dynamically load the shared library from a contract written in Rust.
+In this tutorial, we build an example shared library in C, and try to dynamically load the shared library from a contract written in Rust.
 
 If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/n6tx7uC). 
 
@@ -85,7 +85,7 @@ cd dynamic-loading-demo
 mkdir shared-lib
 ```
 
-We define two functions in our shared library. The `visibility` attribute tells the compiler to exports the following symbol into the shared library.
+We define two functions in our shared library. The `visibility` attribute tells the compiler to export the following symbol to the shared library.
 
 ``` c
 // shared-lib/shared-lib.c
@@ -239,7 +239,7 @@ Run `capsule build` to make sure the contract can be built without errors.
 
 ## Testing
 
-We need to deploy the `shared-lib.so` to a cell and reference to the cell in the testing transaction.
+We need to deploy the `shared-lib.so` to a cell, then reference the cell in the testing transaction.
 Open `tests/src/tests.rs`.
 
 ``` rust
