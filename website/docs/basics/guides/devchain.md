@@ -356,7 +356,7 @@ total: 46253677.72927512 (CKB)
 ### 4. Transfer 10,000 CKBytes to the New Account
 
 ```
-wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 —tx-fee 0.00001
+wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 --tx-fee 0.00001
 ```
 <details>
 <summary>(click here to view result)</summary>
@@ -370,13 +370,13 @@ Password:
 ### 5. Check the New Account's Balance
 
 ```
-get-capacity —address "new account's address"
+wallet get-capacity --address "new account's address"
 ```
 
 <details>
 <summary>(click here to view result)</summary>
 ```bash
-CKB> wallet get-capacity —address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
+CKB> wallet get-capacity --address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
 total: 10000.0 (CKB)
 ```
 </details>
