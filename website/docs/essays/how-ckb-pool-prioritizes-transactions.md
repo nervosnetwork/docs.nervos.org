@@ -20,7 +20,7 @@ The CKB transactions pool indeed contains 4 collections:
 
 When CKB creates a block template, it proposes transactions from the  pending pool and commit transactions from the proposed pool.
 
-The transactions in the pending pool and proposed pool are sorted by score, and transactions with higher score are picked first. The score is computed by
+The transactions in the pending pool and proposed pool are sorted by score, and transactions with higher score are tried first. When the transaction and all its ancestors in the pool can fit into the remaining capacity of the next block, the transaction and its ancestors are added to the block template together, otherwise pool tries the next transaction. The score is computed by
 
 ```
 min(
