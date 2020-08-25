@@ -1,14 +1,14 @@
 # docs-new
 
 # Nervos CKB Documentation Website
-This is new verison of Nervos CKB documentation website. 
+This is new verison of Nervos CKB documentation website.
 
 It is built with [docusaurus](https://docusaurus.io/).
 
 
 ## Clone the Repo
 ```bash
-git clone https://github.com/nervosnetwork/docs.git && \
+git clone https://github.com/nervosnetwork/docs-new.git docs && \
 cd docs && \
 cd website
 ```
