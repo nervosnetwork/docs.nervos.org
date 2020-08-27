@@ -1,3 +1,8 @@
+---
+id: Transaction--Default-Outputs-Validator
+title: Transaction Default Outputs Validator
+---
+
 **RPC `send_transaction` Default Outputs Validator**
 
 Outputs validator prevents improperly formed transactions from entering the tx-pool, in most cases the leading cause of client sending these transactions is simply because of bug code or misusing SDK, which results in a none-unlockable transaction.
