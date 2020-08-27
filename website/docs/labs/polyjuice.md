@@ -82,7 +82,6 @@ If the picture is not clear, please click：
 If the picture is not clear, please click：
 **[CKB transaction generation process](https://github.com/TheWaWaR/polyjuice/blob/docs/docs/assets/polyjuice-how-generator-works.pdf)**
 
-
 ### The CKB transaction validation process
 
 <img src="../assets/labs/polyjuice-how-validator-works.jpg" width = "600"/>
@@ -108,7 +107,6 @@ In Generator and Indexer, we use syscalls to handle the event emitted from the p
 
 A `CREATE` from a sender (EoA account) or contract will lead to contract creation. In generator,  the created cell will be assigned a type_id type script, and the contract code hash will be saved in the data field next to the account storage root hash. In validator, type script will check the contract code hash match the code_hash in the data field.
 
-
 ### How to handle contract destruction?
 
 Contract destruction only happens when a `SELFDESTRUCT` opcode is executed. In the generator, the destructed contract cell is consumed as input, then put an output cell as the beneficiary cell, and the beneficiary address is the corresponding secp256k1 sighash lock script.
@@ -129,7 +127,6 @@ Since EVM execution will use the sender information, we require the sender to si
 2. all contracts' related witnesses 
 
 The contract-related witness is serialized as part of the `WitnessArgs` molecule structure, and the information is located in input_type (contract call/destruction) field or output_type (contract creation) field.
-
 
 ### How to handle logs?
 
