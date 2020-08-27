@@ -5,23 +5,23 @@
       {
         "type": "subcategory",
         "label": "Concepts",
-          "ids": [
-            "basics/concepts/nervos-blockchain",
-            "basics/concepts/cell-model",
-            "basics/concepts/consensus",
-            "basics/concepts/economics",
-            "basics/concepts/ckb-vm"
-          ]
+        "ids": [
+          "basics/concepts/nervos-blockchain",
+          "basics/concepts/cell-model",
+          "basics/concepts/consensus",
+          "basics/concepts/economics",
+          "basics/concepts/ckb-vm"
+        ]
       },
       {
         "type": "subcategory",
         "label": "Guides",
-          "ids": [
-            "basics/guides/devchain",
-            "basics/guides/mainnet",
-            "basics/guides/testnet",
-            "basics/guides/neuron"
-          ]
+        "ids": [
+          "basics/guides/devchain",
+          "basics/guides/mainnet",
+          "basics/guides/testnet",
+          "basics/guides/neuron"
+        ]
       },
       "basics/tools",
       "basics/glossary"
@@ -31,7 +31,8 @@
       "reference/cell",
       "reference/script",
       "reference/transaction",
-      "reference/rpc"
+      "reference/rpc",
+      "reference/ckb/ckb"
     ],
     "Labs": [
       "labs/introduction",
@@ -39,11 +40,7 @@
       "labs/lumos-nervosdao",
       "labs/capsule-dynamic-loading-tutorial"
     ],
-    "Integrate": [
-      "integrate/introduction",
-      "integrate/qa",
-      "integrate/sdk"
-    ],
+    "Integrate": ["integrate/introduction", "integrate/qa", "integrate/sdk"],
     "Essays": [
       "essays/introduction",
       "essays/rfcs",
