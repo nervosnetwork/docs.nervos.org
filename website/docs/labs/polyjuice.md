@@ -2,7 +2,6 @@
 id: polyjuice
 title: Technical Bits on Polyjuice
 ---
-
 [Polyjuice](https://github.com/nervosnetwork/polyjuice) is an Ethereum compatible layer and has implemented most of the functions of Ethereum on CKB, including running an EVM contract on CKB-VM. We believe that we have achieved full-featured compatibility with the implementation of EVM,which is also the power of CKB-VM.By polyjuice we want to showcase that it is perfectly possible to use account model on Nervos CKB. The flexibility here actually enables countless opportunities.
 
 ## Basic Concepts
