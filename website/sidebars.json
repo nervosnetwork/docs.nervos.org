@@ -37,7 +37,8 @@
       "labs/introduction",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
-      "labs/capsule-dynamic-loading-tutorial"
+      "labs/capsule-dynamic-loading-tutorial",
+      "labs/polyjuice"
     ],
     "Integrate": [
       "integrate/introduction",
