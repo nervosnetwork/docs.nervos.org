@@ -40,7 +40,11 @@
       "labs/lumos-nervosdao",
       "labs/capsule-dynamic-loading-tutorial"
     ],
-    "Integrate": ["integrate/introduction", "integrate/qa", "integrate/sdk"],
+    "Integrate": [
+      "integrate/introduction", 
+      "integrate/qa", 
+      "integrate/sdk"
+    ],
     "Essays": [
       "essays/introduction",
       "essays/rfcs",
@@ -48,7 +52,8 @@
       "essays/debug",
       "essays/rules",
       "essays/dependencies",
-      "essays/introduction-to-ckb-studio"
+      "essays/introduction-to-ckb-studio",
+      "essays/faq"
     ]
   }
 }

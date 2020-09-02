@@ -2000,10 +2000,6 @@ An alternate public blockchain used for testing purposes that is running the sam
 
 ---
 
-### Timestamp
-
-median of previous 37 block timpstamp < timestamp <= local_time + 15s
-
 ### Transaction Hash
 
 Transaction is serialized via [molecule](#molecule) in CKB. Its schema is:
@@ -2052,7 +2048,7 @@ The field `transactions_root` in header is
 ckbhash(T || W)
 ```
 
-> [ckbhash](ckbhash.md) is the hash function, `||` denotes binary concatenation.
+> [ckbhash](#ckbhash) is the hash function, `||` denotes binary concatenation.
 
 T is the root of a [CKB Merkle Tree](#ckb-merkle-tree), which items are the [transaction hashes](#transaction-hash)  of all the transactions in the block.
 
