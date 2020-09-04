@@ -52,7 +52,8 @@
       "essays/debug",
       "essays/rules",
       "essays/dependencies",
-      "essays/introduction-to-ckb-studio"
+      "essays/introduction-to-ckb-studio",
+      "essays/mint-sudt-via-contract"
     ]
   }
 }

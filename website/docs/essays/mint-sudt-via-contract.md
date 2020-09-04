@@ -3,6 +3,8 @@ id: mint-sudt-via-contract
 title: Mint SUDT via Contract
 ---
 
+*Authored by [Wenchao Hu](https://github.com/huwenchao)*
+
 [Simple User Defined Tokens(Simple UDT or SUDT)](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) is a simple specification which provides a way for dapp developers to issue custom tokens on Nervos CKB.
 
 It may be familiar for users to use `SECP256K1/blake160` and `SECP256K1/multisig` to guard tokens, just like what we do with CKB. But how can we mint sUDT via contract?
