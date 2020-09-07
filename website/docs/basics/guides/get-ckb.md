@@ -1,9 +1,11 @@
 ---
 id: get-ckb
-title: Get CKB
+title: Get CKB Binary
 ---
 
-We have CI to ensure CKB works in following systems, they are also the
+CKB binary is used to run CKB node or CKB dev blockchain for development,testing and so on.You can get CKB binary by two ways: download from releases or build from source. 
+
+We have setup CI to ensure CKB works in following systems, they are also the
 recommended system to run CKB.
 
 OS           | Arch
@@ -30,15 +32,10 @@ not properly supported by CKB for now.
 
 ## Download from Releases
 
-We will publish binaries for each release via [Github Releases]. If your system
-is listed there, you can download the package directly.
+We will publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly.
 
-CKB releases are signed. It is wise and more secure to check out for their [integrity](integrity-check.md).
-
-[Github Releases]: https://github.com/nervosnetwork/ckb/releases
-
-CentOS users please use the `x86_64-unknown-centos-gnu` package, which also
-requires OpenSSL 1.0 to run:
+If you are CentOS user, please use the `x86_64-unknown-centos-gnu` package, which also
+requires OpenSSL 1.0:
 
 ```shell
 sudo yum install openssl-libs
@@ -53,36 +50,34 @@ under section *Other Tools and Frameworks*
 
 ## Build from Source
 
-The details about how to build CKB on Windows can be found [HERE](ckb-on-windows.md).
+The details about how to build CKB on Windows can be found [Build CKB on Windows](ckb-on-windows.md).
 
 ### Install Build Dependencies
 
-CKB requires Rust to build. We recommend installing [rustup](https://www.rustup.rs/) to manage Rust versions.
+CKB requires Rust to build. We recommend to install [rustup](https://www.rustup.rs/) to manage Rust versions.
 
 The required Rust version is saved in the file `rust-toolchain`. If rustup is
 available, it will pick the right version automatically.
 
 You also need to get the following packages：
 
-#### Ubuntu and Debian
+* Ubuntu and Debian
 
 ```shell
 sudo apt-get install -y git gcc libc6-dev pkg-config libssl-dev libclang-dev clang
 ```
 
-#### Arch Linux
+* Arch Linux
 
 ```shell
 sudo pacman -Sy git gcc pkgconf clang
 ```
-
-#### macOS
+* macOS
 
 ```shell
 brew install autoconf libtool
 ```
-
-#### CentOS
+* CentOS
 
 ```shell
 sudo yum install -y centos-release-scl
@@ -109,17 +104,14 @@ export SNAPPY_LIB_DIR=/usr/local/lib
 
 ### Build from source
 
-The `master` branch is regularly built and tested. It is always the latest
+The `master` branch on [Github repo](https://github.com/nervosnetwork/ckb) is regularly built and tested, which is always the latest
 released version. The default checked out branch `develop` is the latest
 version in active development.
 
-It is recommended to build a version from master.
+It is recommended to build from the `master`branch,
+or a historical version from [GitHub Releases](https://github.com/nervosnetwork/ckb/releases).
 
-You can download the source code of [master
-branch](https://github.com/nervosnetwork/ckb/archive/master.zip) from GitHub,
-or a history version from [GitHub Releases].
-
-You also can choose to clone the code via git:
+Also you can choose to clone the code via git:
 
 ```bash
 # get ckb source code
@@ -128,7 +120,7 @@ cd ckb
 git checkout master
 ```
 
-It is easy to switch to a history version and build, for example, check out
+It is easy to switch to a historical version and build, for example, check out
 v0.12.2.
 
 ```bash

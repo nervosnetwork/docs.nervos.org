@@ -1,11 +1,9 @@
 ---
 id: ckb-on-windows
-title: CKB on Windows
+title: Build CKB on Windows
 ---
 
-## Build CKB on Windows 10
-
-**All commands should be ran as PowerShell commands.**
+**Please note that all commands should be ran as PowerShell commands.**
 
 ### Setup the Build Environment
 
@@ -14,7 +12,7 @@ title: CKB on Windows
 Install [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/)
 with the workload: "Desktop development with C++".
 
-**(minimum required)** Or you can just select two individual components:
+**minimum requirements:** You can just select two individual components:
 "MSVC v142 - VS 2019 C++ x64/x86 build tools (vXX.XX)" and "Windows 10 SDK (10.0.X.0)".
 
 #### Install Tools with [Scoop]
