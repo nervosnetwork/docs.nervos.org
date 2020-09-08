@@ -382,3 +382,80 @@ total: 10000.0 (CKB)
 </details>
 
 The transfer is successful!
+
+## Adding the Genesis Issued Cells
+
+When the development blockchain configuration is generated with `ckb init --chain dev`, a few Cells are created with large amounts of capacity. These are specified in `specs/dev.toml` and exist only for your local development blockchain, and they can be useful for testing purposes.
+
+<table>
+  <tr>
+    <td colspan="2">Genesis Issued Cell #1</td>
+  </tr>
+  <tr>
+    <td>Private Key</td><td>0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc</td>
+  </tr>
+  <tr>
+    <td>Lock Arg</td><td>0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7</td>
+  </tr>
+  <tr>
+    <td>Testnet Address</td><td>ckt1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts8vyj37</td>
+  </tr>
+  <tr>
+    <td>Capcity</td><td>20,000,000,000 CKBytes</td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td colspan="2">Genesis Issued Cell #2</td>
+  </tr>
+  <tr>
+    <td>Private Key</td><td>0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d</td>
+  </tr>
+  <tr>
+    <td>Lock Arg</td><td>0x470dcdc5e44064909650113a274b3b36aecb6dc7</td>
+  </tr>
+  <tr>
+    <td>Testnet Address</td><td>ckt1qyqywrwdchjyqeysjegpzw38fvandtktdhrs0zaxl4</td>
+  </tr>
+  <tr>
+    <td>Capcity</td><td>5,198,735,037 CKBytes</td>
+  </tr>
+</table>
+
+### 1. Create Private Key Files
+
+Private keys must be added to a text file before they can be used.
+
+```
+echo 0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc > pk1
+echo 0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d > pk2
+```
+
+### 2. Import the Private Keys
+
+Import the private key files using `ckb-cli`:
+
+```
+CKB> account import --privkey-path pk1
+CKB> account import --privkey-path pk2
+```
+
+<details>
+<summary>(click here to view result)</summary>
+```
+Password:
+address:
+  mainnet: ckb1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts6f6daz
+  testnet: ckt1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts8vyj37
+lock_arg: 0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7
+Password:
+address:
+  mainnet: ckb1qyqywrwdchjyqeysjegpzw38fvandtktdhrsj8renf
+  testnet: ckt1qyqywrwdchjyqeysjegpzw38fvandtktdhrs0zaxl4
+lock_arg: 470dcdc5e44064909650113a274b3b36aecb6dc7
+```
+</details>
+
+
+
