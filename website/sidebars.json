@@ -42,7 +42,8 @@
       "labs/introduction",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
-      "labs/capsule-dynamic-loading-tutorial"
+      "labs/capsule-dynamic-loading-tutorial",
+      "labs/polyjuice"
     ],
     "Integrate": [
       "integrate/introduction", 
@@ -59,7 +60,8 @@
       "essays/introduction-to-ckb-studio",
       "essays/faq",
       "essays/ckb-core-dev",
-      "essays/integrity-check"
+      "essays/integrity-check",
+      "essays/mint-sudt-via-contract"
     ]
   }
 }
