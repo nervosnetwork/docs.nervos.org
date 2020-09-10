@@ -70,21 +70,21 @@ Indexer is a Polyjuice module for indexing every Polyjuice transaction in CKB bl
 
 ### How to organize cells in a CKB transaction?
 
-<img src="../assets/labs/polyjuice-transaction-structure.jpg" width = "600"/>
+<img src="../assets/essay/polyjuice-transaction-structure.jpg" width = "600"/>
 
 If the picture is not clear, please click：
  **[Organize cells in a CKB transaction](https://github.com/TheWaWaR/polyjuice/blob/docs/docs/assets/polyjuice-transaction-structure.pdf)**
 
 ### The CKB transaction generation process
 
-<img src="../assets/labs/polyjuice-how-generator-works.jpg" width = "600"/>
+<img src="../assets/essay/polyjuice-how-generator-works.jpg" width = "600"/>
 
 If the picture is not clear, please click：
 **[CKB transaction generation process](https://github.com/TheWaWaR/polyjuice/blob/docs/docs/assets/polyjuice-how-generator-works.pdf)**
 
 ### The CKB transaction validation process
 
-<img src="../assets/labs/polyjuice-how-validator-works.jpg" width = "600"/>
+<img src="../assets/essay/polyjuice-how-validator-works.jpg" width = "600"/>
 
 If the picture is not clear, please click：
  **[CKB transaction validation process](https://github.com/TheWaWaR/polyjuice/blob/docs/docs/assets/polyjuice-how-validator-works.pdf)**

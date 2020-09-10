@@ -42,8 +42,7 @@
       "labs/introduction",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
-      "labs/capsule-dynamic-loading-tutorial",
-      "labs/polyjuice"
+      "labs/capsule-dynamic-loading-tutorial"
     ],
     "Integrate": [
       "integrate/introduction", 
@@ -58,6 +57,7 @@
       "essays/rules",
       "essays/dependencies",
       "essays/introduction-to-ckb-studio",
+      "essays/polyjuice",
       "essays/faq",
       "essays/ckb-core-dev",
       "essays/integrity-check",

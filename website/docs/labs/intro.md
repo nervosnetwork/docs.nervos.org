@@ -9,4 +9,3 @@ In labs, we provide a series of hands-on programming tutorial, that helps you bu
 * How to [build](sudtbycapsule) a CKB script in Rust.
 * How to [build](lumos-nervosdao) a standalone CKB dapp in JavaScript.
 * How to [dynamic load](capsule-dynamic-loading-tutorial) a shared-library in Rust contract.
-* How to [run](polyjuice) an EVM contract on CKB-VM.
