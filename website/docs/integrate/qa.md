@@ -1,5 +1,5 @@
 ---
-id: introduction
+id: qa
 title: Q&A | For Wallets/Exchanges/Mining Pools
 ---
 
@@ -42,7 +42,7 @@ https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/uti
 
 * The field `capacity` is u64, which takes 8 bits.
 * The field `lock script` is `Script` type, includes `code_hash` 32 bits, `hash_type` 1 bit, `args` 20 bits
-* The field `type script` is optional. 
+* The field `type script` is optional.
 
 so the minimum transfer amount need to be 61 CKB.
 

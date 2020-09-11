@@ -45,8 +45,9 @@
       "labs/capsule-dynamic-loading-tutorial"
     ],
     "Integrate": [
-      "integrate/introduction", 
-      "integrate/qa", 
+      "integrate/integration-guide",
+      "integrate/introduction",
+      "integrate/qa",
       "integrate/sdk"
     ],
     "Essays": [
