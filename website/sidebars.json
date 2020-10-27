@@ -55,6 +55,7 @@
       "essays/rfcs",
       "essays/lifecycle",
       "essays/debug",
+      "essays/pprof",
       "essays/rules",
       "essays/dependencies",
       "essays/introduction-to-ckb-studio",
