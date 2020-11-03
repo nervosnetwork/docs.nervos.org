@@ -48,6 +48,10 @@ Cell management mainly affects cell collection and address balance display. Ther
 * Use [CKB Indexer](https://github.com/nervosnetwork/ckb-indexer) to collect cells and display balance.
   * [get_cells_capacity](https://github.com/nervosnetwork/ckb-indexer#get_cells_capacity) Returns the live cells total capacity by the lock or type script. You can use this RPC to display address balance.
 
+### Confirmation count suggestion
+
+Since Nervos CKB network is secured by [ASIC PoW miners with extreme hash rate](https://explorer.nervos.org/charts/hash-rate) now, it could achieve the same or better security threshold than Ethereum at **24 block confirmations**.
+
 ## Testing
 
 Once you’ve fully integrated with the CKB network, please test on the testnet and mainnet.
