@@ -44,9 +44,11 @@ For more information, please see the [CKB JSON-RPC protocols](https://github.com
 
 ### How to manage cells(like UTXO set)
 Cell management mainly affects cell collection and address balance display. There are many ways to manage cells; here are two typical example solutions.
-* Use your UTXO management framework to combine [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md) to scan the entire CKB blockchain.
-* Use [CKB Indexer](https://github.com/nervosnetwork/ckb-indexer) to collect cells and display balance.
+
+* **Recommended**: use [CKB Indexer](https://github.com/nervosnetwork/ckb-indexer) to collect cells and display balance.
   * [get_cells_capacity](https://github.com/nervosnetwork/ckb-indexer#get_cells_capacity) Returns the live cells total capacity by the lock or type script. You can use this RPC to display address balance.
+* Use your UTXO management framework to combine [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md) to scan the entire CKB blockchain.
+  * It is **not recommended** to use the ckb node internal [Indexer module](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md#indexer) to collect live cells, which is very slow and deprecated.
 
 ### Confirmation count suggestion
 
