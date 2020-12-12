@@ -40,6 +40,7 @@
     ],
     "Labs": [
       "labs/introduction",
+      "labs/developer-lesson-plan",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
       "labs/capsule-dynamic-loading-tutorial"
