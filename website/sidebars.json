@@ -52,6 +52,7 @@
     ],
     "Essays": [
       "essays/introduction",
+      "essays/developer-materials-guide",
       "essays/rfcs",
       "essays/lifecycle",
       "essays/debug",
