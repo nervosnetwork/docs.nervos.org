@@ -3,19 +3,21 @@ id: devchain
 title: Run a CKB Dev Blockchain
 ---
 
-Nervos CKB supports a special development mode that is particularly useful for building and testing applications. This mode of operation is highly configurable, and allows the developer to speed up the block interval, adjust epochs lengths, create blocks without having to do Proof-of-Work (PoW) mining.
+# 运行CKB开发链
 
-When running a development blockchain you have the option of selecting between `Dummy-Worker` and `Eaglesong-Worker`. `Dummy-Worker` provides allows the mining of blocks at a constant block interval without PoW. `Eaglesong-Worker` uses real PoW to produce blocks.
+Nervos CKB 支持一种特殊的开发模式，该模式对于构建和测试应用程序特别有用。这种操作模式是高度可配置的，并且使开发人员无需进行工作量证明（PoW）挖矿即可加快区块间隔，调整epochs长度，创建区块。
 
-Note: It is highly recommended that `Dummy-Worker` be used for most development scenarios. `Eaglesong-Worker` should only be used when validating the PoW function is necessary, because the block time can behave erratically with extremely low hashrates.
+运行开发链时，你有`Dummy-Worker`  和`Eaglesong-Worker`两种模式可以选择。`Dummy-Worker`提供的功能可以在没有PoW的情况下以恒定的出块时间出块。`Eaglesong-Worker`使用真实的PoW出块。
 
-## Setup a Dummy-Worker Blockchain
+注意：强烈建议将`Dummy-Worker`其用于大多数开发方案。`Eaglesong-Worker`仅在需要验证PoW功能时才应使用此方法，因为在极低的哈希率下，区块时间可能会表现异常。
 
-### 1. Download the Latest CKB Binary
+## 搭建 Dummy-Worker 模式的开发链
 
-Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
+### 1.下载最新的CKB二进制文件
 
-The following commands can be used to verify the binaries are working and to check versions:
+从[GitHub](https://github.com/nervosnetwork/ckb/releases)的CKB版本页面下载最新的ckb二进制文件。
+
+以下命令可用于验证二进制文件是否正常工作并检查版本信息：
 
 ```bash
 ckb --version
@@ -29,17 +31,16 @@ ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
 </details>
+### 2.初始化配置
 
-### 2. Initialize the Configuration
-
-Use the following command to initialize the development blockchain and generate the required configuration files:
+使用以下命令初始化开发链并生成所需的配置文件：
 
 ```bash
 ckb init --chain dev
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 WARN: mining feature is disabled because of lacking the block assembler config options
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
@@ -48,23 +49,22 @@ create ckb.toml
 create ckb-miner.toml
 ```
 </details>
+### 3.配置接收区块奖励
 
-### 3. Configure the Block Assembler
+该配置主要指定一个用于接受挖矿区块奖励的地址。
 
-The Block Assembler configuration specifies which address should be receive block rewards for mining.
+#### 3.1创建一个新账户
 
-#### 3a. Create a New Account
+必须创建一个接收区块奖励的地址。我们可以使用`ckb-cli`命令完成操作。
 
-An address to receive the block rewards must be created. We can do this using `ckb-cli`.
-
-Note: Be sure to record the `lock_arg` value in the response which we will use in the next step.
+注意：确保记录返回值中的`lock_arg`值，我们在下一步中需要使用该值。
 
 ```
 ckb-cli account new
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -76,8 +76,7 @@ lock_arg: 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96
 lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
 </details>
-
-#### 3b. Update the Configuration
+#### 3.2 更新配置
 
 Modify the `args` and `message` parameters in the `ckb.toml` file under the `block_assembler` section:
 
@@ -136,7 +135,7 @@ value = 5000  # The unit of measurement is "ms".
 ckb run
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 2020-06-05 18:31:14.970 +08:00 main INFO sentry  sentry is disabled
 2020-06-05 18:31:15.058 +08:00 main INFO ckb-db  Initialize a new database
@@ -162,7 +161,7 @@ This should be performed in a separate terminal.
 ckb miner
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 2020-06-05 18:31:21.558 +08:00 main INFO sentry  sentry is disabled
 Dummy-Worker ⠁ [00:00:00] 
@@ -188,7 +187,7 @@ ckb-cli --version
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
@@ -206,7 +205,7 @@ ckb-cli account new
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -225,7 +224,7 @@ lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change this to your lock_arg value. 
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create specs/dev.toml
@@ -256,7 +255,7 @@ threads = 1
 ckb run
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 2020-06-05 11:25:31.433 +08:00 main INFO sentry  sentry is disabled
 2020-06-05 11:25:31.508 +08:00 main INFO ckb-db  Initialize a new database
@@ -281,7 +280,7 @@ This should be performed in a separate terminal.
 ckb miner
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 2020-06-05 11:25:37.867 +08:00 main INFO sentry  sentry is disabled
 EaglesongSimple-Worker-0 ⠁ [00:00:00] 
@@ -304,7 +303,7 @@ Note: Using `ckb-cli` to transfer CKBytes is recommended for developing and test
 ckb-cli
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 [  ckb-cli version ]: 0.31.0 (a531b3b 2020-04-17)
 [              url ]: http://127.0.0.1:8114 (network: Dev)
@@ -324,7 +323,7 @@ ckb-cli
 account new
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password:
@@ -345,7 +344,7 @@ In the previous sections you created a miner account that collects all mining re
 wallet get-capacity --address "miner's address" 
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 CKB> wallet get-capacity --address "ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus"
 immature: 8027902.89083717 (CKB)
@@ -359,7 +358,7 @@ total: 46253677.72927512 (CKB)
 wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 --tx-fee 0.00001
 ```
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 CKB> wallet transfer --from-account ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus --to-address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5 --capacity 10000 --tx-fee 0.00001
 Password: 
@@ -374,7 +373,7 @@ wallet get-capacity --address "new account's address"
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 CKB> wallet get-capacity --address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
 total: 10000.0 (CKB)
@@ -442,7 +441,7 @@ CKB> account import --privkey-path pk2
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```
 Password:
 address:
