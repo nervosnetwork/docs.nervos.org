@@ -12,16 +12,16 @@ Neuron 钱包是 Nervos 基金会开发的 CKB 钱包，它可以保存你的私
 - 下载安装 Neuron 钱包
 - 等待数据同步完成
 - 创建一个新的钱包或将你的 keystore 文件或助记词导入 Neuron 钱包
-- 将代币进行锁仓
+- 申领被锁定的代币
 - 存入 Nervos DAO
 - 从 Nervos DAO 提取代币
 - 将 CKBytes 从 Neuron 钱包转移到其他钱包和交易所
 
 ---
 
-注意： `Asset Account` 功能目前处于实验状况，目前只能在 Aggron 测试网使用。
+注意： `资产账户` 功能目前处于实验状况，目前只能在 Aggron 测试网使用。
 
--  管理 `Asset Account`
+-  管理 `资产账户`
 
 如果在操作本教程的过程中遇到异常，请加入 [discord 频道](https://discord.gg/n6tx7uC) 咨询讨论。
 
@@ -40,82 +40,81 @@ Neuron 钱包是 Nervos 基金会开发的 CKB 钱包，它可以保存你的私
 
 ## 3. 创建一个新的钱包或将你的 keystore 文件或助记词导入 Neuron 钱包
 
-If you are using a new wallet, you can simply follow the steps within the Neuron Wallet.
-
 如果你使用的是新钱包，则只需按照 Neuron 钱包中的步骤操作。
 
-If you have already backup the wallet and have the keystore file (use the `Backup Current Wallet` ) or write down the seed , you need import the existing keystore file or seed, please follow the steps below.
+如果你已经备份了钱包并拥有 keystore 文件（使用`备份当前钱包`）或已经记下助记词，则需要导入现有的 keystore 文件或助记词，请按照以下步骤操作。
 
-如果你已经备份了钱包并拥有 keystore 文件（使用`Backup Current Wallet`）或已经记下助记词，则需要导入现有的 keystore 文件或助记词，请按照以下步骤操作。
-
-* Backup Current Wallet: 
+* 备份当前钱包: 
 
 <img src="../../assets/neuron-wallet-guide/backupwallet.png" width = "600"/>
 
-- To import the mnemonic seed phrase, choose “Import Wallet Seed”, fill in your password and wait for synchronization to end. **The password does not need to match the original password from the Neuron Wallet.**
+- 若是要导入助记词，则选择 “导入钱包 > 导入助记词”，然后填写密码等待同步即可。密码不需要跟此前的钱包密码一致。
 
 <img src="../../assets/neuron-wallet-guide/importseed1.png" width = "600"/>
 
-  - To import the keystore file, choose “Import from Keystore” and input your password - Wait for synchronization to end. **The password must match the original password from the Neuron Wallet.**
+  - 若是要导入 keystore 文件，则选择 “导入钱包 > 导入 keystore 文件”，然后等待同步即可。这里的密码需要跟此前设置的密码一致。
 
 <img src="../../assets/neuron-wallet-guide/importkeystore.png" width = "600"/>
 
 <img src="../../assets/neuron-wallet-guide/keystorefile.png" width = "600"/>
 
+只要 Neuron 钱包同步完成，你就可以进行操作了。你可以发送接收 CKBytes，或者存 CKBytes 到 Nervos DAO 中。
 
-Congratulations, once the Neuron wallet is synced, you will have full access to your tokens! You can send  and receive CKBytes and deposit into the Nervos DAO.
+## 4. 申领被锁定的代币
 
-## 4. Claim vesting/locked tokens
+你可以使用最新版本（或更高版本）申领被锁定的代币。不过在此之前，请耐心等待 Neuron 同步，同步完成后，在 “自定义资产” 页面会自动显示账户的资产，在你进行转账或者存款到 Nervos DAO 前，你必须手动申领资产。
 
-You may claim your vesting or locked tokens by the latest version（v0.30.0-rc1 or later）. Please patiently wait until Neuron is fully synced, the assets will automatically appear on the "Customized Assets" page. You have to manually claim it before you can transfer it or deposit it to Nervos DAO.
-
-* View the details on "Customized Assets"
+* 在 “自定义资产” 页查看详情
 
 <img src="../../assets/neuron-wallet-guide/viewlockedtoken.png" width = "600"/>
 
-* Claim the vesting/locked tokens
+* 申领被锁定的代币
 
-When the lock time has been reached，click `Claim` and input the wallet's password.
+达到锁定时间后，单击申领并输入钱包密码。
 
 <img src="../../assets/neuron-wallet-guide/claim.png" width = "600"/>
 
 <img src="../../assets/neuron-wallet-guide/password.png" width = "600"/>
 
-## 5. Deposit your Nervos CKByte tokens into Nervos DAO
+## 5. 将 CKBytes 存入 Nervos DAO
 
 The [economic model](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md) of Nervos CKB is designed to allow token holders to lock tokens in the Nervos DAO to mitigate the inflationary effect of the secondary issuance. In this case, the inflationary effect of secondary issuance is expected to be nominal, equivalent to holding tokens with a hard cap. Please refer to [Nervos DAO Explained](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c) for more details). 
 
-**Please make sure your balance is greater than 102 CKB.**
+Nervos CKB 的[经济模型](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md) 可以让代币持有者将代币锁定在Nervos DAO中，以减轻二级发行的通胀效应。在这种情况下，二级发行的通货胀效就只是名义上的通胀，持有者等同于持有总量恒定的代币。更多有关详细信息，请参考《[Nervos DAO解释](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c)》。
 
-- Open the Neuron Wallet (the latest version), select “Nervos DAO” and “Deposit”.
+请确保你的余额大于 102 CKB。
+
+- 打开Neuron 钱包（最新版本），选择 “Nervos DAO” 和 “存入”。
 
 <img src="../../assets/neuron-wallet-guide/deposit.png" width = "600"/>
 
 <img src="../../assets/neuron-wallet-guide/deposit2.png" width = "600"/>
 
-## 6. Withdraw your Nervos CKByte tokens from the Nervos DAO
+## 6. 从 Nervos DAO 提取代币
 
-> Please read the [disclaimer](/references/neuron-wallet-guide#disclaimer) below before transacting on mainnet
+> 在主网上进行交易之前，请阅读以下[免责声明](https://docs.nervos.org/references/neuron-wallet-guide#disclaimer)
 
-You can click `Request withdraw` to withdraw your CKB.
+你可以点击 “取回” 按钮取回你的代币。
 
 <img src="../../assets/neuron-wallet-guide/withdraw1.png" width = "600"/>
 
 <img src="../../assets/neuron-wallet-guide/withdraw2.png" width = "600"/>
 
-## 7. Transfer CKBytes from the Neuron Wallet to other wallets and exchanges
+## 7. 将 CKBytes 从 Neuron 钱包转移到其他钱包和交易所
 
-> Please read the [disclaimer](/references/neuron-wallet-guide#disclaimer) below before transacting on mainnet
+> 在主网上进行交易之前，请阅读以下[免责声明](https://docs.nervos.org/references/neuron-wallet-guide#disclaimer)
 
-You should have the third party wallet/exchange destination address. **Please make sure your balance is greater than 62 CKB.**
+你需要拥有第三方钱包/交易所地址，同时请确保你的账户余额大于 62 CKB。
 
-- Under the “Send” tab, fill in the address details in the "Send to" field. Turn on the "Advanced fee settings" and fill in the "Transaction fee" — click  the "Send" button to complete your transfer.
+- 点击 “转账” ，填写相关转账信息，可以打开高级设置开关自定义交易费用，点击发送，交易完成。
 
 <img src="../../assets/neuron-wallet-guide/send.png" width = "600"/>
 
-## 8. Manage the `Asset Account`
+## 8. 管理 `资产账户`
 
 `Asset Account` is used for managing the accounts which include anyone-can-pay( [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells and SUDTs ( [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)). It's recommended to use `ckb-udt-cli`to issue or transfer UDTs, you may refer the [github repository](https://github.com/ququzone/ckb-udt-cli) for more details. Please note that the feature is experimental and only can be used on the Testnet Aggron now.  
+
+`资产账户`
 
 ### Manage the SUDT account
 #### Preparation
