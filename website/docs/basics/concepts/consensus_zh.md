@@ -1,4 +1,7 @@
-# Consensus 共识
+---
+id: consensus_zh
+title: 共识
+---
 
 ## What is Consensus? 什么是共识？
 

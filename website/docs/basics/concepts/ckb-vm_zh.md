@@ -1,4 +1,7 @@
-# CKB-VM
+---
+id: ckb-vm_zh
+title: CKB-VM
+---
 
 ## What is the CKB-VM? 什么是 CKB-VM？
 

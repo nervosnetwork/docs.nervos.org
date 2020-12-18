@@ -336,8 +336,7 @@ lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
 lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
 ```
 </details>
-
-3. Check the Balance of an Existing Account
+### 3.Check the Balance of an Existing Account
 
 In the previous sections you created a miner account that collects all mining rewards. Using the following command with the correct address will show you the current CKByte balance:
 

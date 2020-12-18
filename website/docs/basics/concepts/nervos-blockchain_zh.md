@@ -1,4 +1,7 @@
-# Nervos Blockchain Nervos 区块链
+---
+id: nervos-blockchain_zh
+title: Nervos 区块链
+---
 
 ## What is the Nervos Blockchain? 什么是 Nervos 区块链
 

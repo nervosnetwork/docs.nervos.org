@@ -1,21 +1,19 @@
 ---
-id: devchain
-title: Run a CKB Dev Blockchain
+id: devchain_zh
+title: 运行CKB开发链
 ---
 
-# 运行CKB开发链
+Nervos CKB 支持一种特殊的开发模式，该模式对于构建和测试应用程序特别有用。这种操作模式是高度可配置的，并且使开发人员无需进行工作量证明（PoW）挖矿即可加快区块间隔，调整 epochs 长度，创建区块。
 
-Nervos CKB 支持一种特殊的开发模式，该模式对于构建和测试应用程序特别有用。这种操作模式是高度可配置的，并且使开发人员无需进行工作量证明（PoW）挖矿即可加快区块间隔，调整epochs长度，创建区块。
+运行开发链时，你有`Dummy-Worker`  和`Eaglesong-Worker`两种模式可以选择。`Dummy-Worker`提供的功能可以在没有 PoW 的情况下以恒定的出块时间出块。`Eaglesong-Worker`使用真实的 PoW 出块。
 
-运行开发链时，你有`Dummy-Worker`  和`Eaglesong-Worker`两种模式可以选择。`Dummy-Worker`提供的功能可以在没有PoW的情况下以恒定的出块时间出块。`Eaglesong-Worker`使用真实的PoW出块。
-
-注意：强烈建议将`Dummy-Worker`其用于大多数开发方案。`Eaglesong-Worker`仅在需要验证PoW功能时才应使用此方法，因为在极低的哈希率下，区块时间可能会表现异常。
+注意：强烈建议将`Dummy-Worker`其用于大多数开发方案。`Eaglesong-Worker `仅在需要验证 PoW 功能时才应使用此方法，因为在极低的哈希率下，区块时间可能会表现异常。
 
 ## 搭建 Dummy-Worker 模式的开发链
 
-### 1.下载最新的CKB二进制文件
+### 1.下载最新的 CKB 二进制文件
 
-从[GitHub](https://github.com/nervosnetwork/ckb/releases)的CKB版本页面下载最新的ckb二进制文件。
+从 [GitHub](https://github.com/nervosnetwork/ckb/releases) 的 CKB 版本页面下载最新的 ckb 二进制文件。
 
 以下命令可用于验证二进制文件是否正常工作并检查版本信息：
 
@@ -25,7 +23,7 @@ ckb-cli --version
 ```
 
 <details>
-<summary>(click here to view result)</summary>
+<summary>(单击此处查看结果)</summary>
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
@@ -78,7 +76,7 @@ lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 </details>
 #### 3.2 更新配置
 
-Modify the `args` and `message` parameters in the `ckb.toml` file under the `block_assembler` section:
+修改 `ckb.toml` 文件中 `block_assembler` 节段的 `args` 和 `message` 参数：
 
 ```
 [block_assembler]
@@ -89,26 +87,28 @@ message = "A 0x-prefixed hex string" // Change this to "0x" to supply an empty m
 
 ```
 
-### 4. Adjust the Parameters to Shorten the Block Interval (Optional)
+### 4. 调整参数以缩短出块间隔（可选）
 
-For most development the default configuration should be sufficient, but sometimes it is beneficial to speed up certain operations so results can be viewed quickly.
+对于大多数开发而言，默认配置应该足够了，但有时加快某些操作的速度可以快速查看结果，节省时间。
 
-#### 4a. Change the Number of Blocks in an Epoch
+#### 4.1 修改一个 Epoch 的区块数量
 
-The default epoch length is `1000` blocks. Reducing this to `10` or `100` can help with testin Nervos DAO operations.
+epoch 的默认长度是 `1000` 个区块。将其降低到  `10` 或 `100`  有助于 Nervos DAO 的相关测试操作。
 
-Modify the `genesis_epoch_length` parameter in the `specs/dev.toml` file under the `params` section:
+修改
+
+修改 `specs/dev.toml` 文件中 `params` 节段的 `genesis_epoch_length` 参数:
 
 ```
 [params]
 genesis_epoch_length = 1000  # The unit of meansurement is "block".
 ```
 
-#### 4b. Use Permanent Difficulty
+#### 4.2 Use Permanent Difficulty 使用固定挖矿难度
 
-When `permanent_difficulty_in_dummy` is set to `true`, all epochs will use the same length as the genesis epoch length, skipping the difficulty adjustment entirely. This param is typically used in conjunction with `genesis_epoch_length`.
+当 `permanent_difficulty_in_dummy` 参数设置 `true`为时，所有的 epochs 将使用与创世 epoch 相同的长度，直接跳过难度调整。该参数通常与 `genesis_epoch_length`搭配使用。
 
-Modify the `permanent_difficulty_in_dummy` parameter in the `specs/dev.toml` file under the `params` section:
+修改 `specs/dev.toml` 文件中 `params` 节段的 `permanent_difficulty_in_dummy` 参数:
 
 ```
 [params]
@@ -116,11 +116,11 @@ genesis_epoch_length = 10
 permanent_difficulty_in_dummy = true
 ```
 
-#### 4c. Change the Mining Interval
+#### 4.3 修改挖矿间隔
 
-The default mining interval is `5000`, which is a value in milliseconds, meaning 5 seconds. Reducing this value will create blocks faster.
+默认挖矿间隔为 `5000`，单位为毫秒，即5秒。降低该数值可以加速出块。
 
-Modify the `value` parameter in the `ckb-miner.toml` file under the `miner.workers` section:
+修改 `ckb-miner.toml` 文件中 `miner.workers` 节段的`value`参数:
 
 ```
 [[miner.workers]]
@@ -129,7 +129,7 @@ delay_type = "Constant"
 value = 5000  # The unit of measurement is "ms".
 ```
 
-### 5. Start the CKB Node
+### 5. 启动 CKB 节点
 
 ```
 ckb run
@@ -152,10 +152,9 @@ ckb run
 2020-06-05 18:31:26.586 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1, epoch: 0(1/1000), total_diff: 0x200, txs: 1
 ```
 </details>
+### 6. 启动 CKB Miner
 
-### 6. Start the CKB Miner
-
-This should be performed in a separate terminal.
+这条命令得在单独的终端命令窗口执行
 
 ```
 ckb miner
@@ -169,19 +168,17 @@ Found! #1 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1
 Found! #2 0x19978085abfa6204471d42bfb279eac0c20e3b81745b48c4dcaea85643e301f9
 Found! #3 0x625b230f84cb92bcd9cb0bf76d1397c1d948ab25c19df3c4edc246a765f94427
 Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
-
 ```
 </details>
+## 搭建 Eaglesong-Worker 模式的开发链
 
- ## Setup an Eaglesong-Worker Blockchain
+### 1. 下载最新 CKB 二进制文件
 
-### 1. Download the Latest CKB Binary
+从 [GitHub](https://github.com/nervosnetwork/ckb/releases) 的 CKB 版本页面下载最新的 ckb 二进制文件。
 
-Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
+以下命令可用于验证二进制文件是否正常工作并检查版本信息：
 
-The following commands can be used to verify the binaries are working and to check versions:
-
-​```bash
+```bash
 ckb --version
 ckb-cli --version
 ```
@@ -194,11 +191,11 @@ ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
 </details>
 
-#### 2. Create a New Account
+#### 2. 创建一个新账户
 
-An address to receive the block rewards must be created. We can do this using `ckb-cli`.
+我们需要创建一个用于接收区块奖励的地址，可以使用`ckb-cli` 命令。
 
-Note: Be sure to record the `lock_arg` value in the response which we will use in the next step.
+注意：确保记录返回值中的`lock_arg`值，我们在下一步中需要使用该值。
 
 ```
 ckb-cli account new
@@ -218,7 +215,7 @@ lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
 </details>
 
-### 3. Initialize the Configuration with the Miner Account
+### 3. 使用矿工账户初始化配置
 
 ```
 ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change this to your lock_arg value. 
@@ -233,15 +230,15 @@ create ckb-miner.toml
 ```
 </details>
 
-### 4. Change the PoW Function to Eaglesong
+### 4. 将PoW函数修改为 Eaglesong
 
-Modify the `func` parameter in the `specs/dev.toml` file under the `pow` section:
+修改 `specs/dev.toml` 文件中 `pow` 节段的 `func` 参数:
 
 ```
 func = "Eaglesong"
 ```
 
-Replace the `miner.workers` section in the `specs/dev.toml` file with the following:
+将 `specs/dev.toml` 文件中的 `miner.workers` 节段替换为以下配置：
 
 ```
 [[miner.workers]]
@@ -249,7 +246,7 @@ worker_type = "EaglesongSimple"
 threads = 1
 ```
 
-### 5. Start the CKB Node
+### 5. 启动 CKB 节点
 
 ```
 ckb run
@@ -272,9 +269,9 @@ ckb run
 ```
 </details>
 
-### 6. Start the CKB Miner
+### 6. 启动 CKB Miner
 
-This should be performed in a separate terminal.
+该命令需要在单独的终端命令窗口中执行：
 
 ```
 ckb miner
@@ -291,13 +288,13 @@ Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
 ```
 </details>
 
-## Transferring CKBytes Using `ckb-cli`
+## 使用`ckb-cli`进行 CKBytes 转账
 
-Included in CKB releases is the `ckb-cli` command line tool. This is can be used to directly invoke RPC calls to perform actions such as managing accounts, transferring CKBytes, and checking account balances. We will demonstrate a CKBytes transfer below. Please refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli) for full instructions.
+CKB 开发包中包含 `ckb-cli` 命令行工具。可使用该工具直接发起 RPC 调用执行如管理账户、CKBytes 转账以及检查账户余额等操作。下面我们将演示如何进行 CKBytes 转账。请参阅 [ckb-cli](https://github.com/nervosnetwork/ckb-cli) 以获取完整说明。
 
-Note: Using `ckb-cli` to transfer CKBytes is recommended for developing and testing purposes only. For management of real funds and assets please use a wallet.
+注意：建议仅在开发测试时才使用 `ckb-cli`进行 CKBytes 转账。实际操作资金资产，请使用钱包操作。
 
-### 1. Enter the `ckb-cli` Interface
+### 1. 进入`ckb-cli`命令窗口界面
 
 ```
 ckb-cli
@@ -317,7 +314,7 @@ ckb-cli
 ```
 </details>
 
-### 2. Create a New Account
+### 2. 创建新账户
 
 ```
 account new
@@ -335,10 +332,9 @@ lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
 lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
 ```
 </details>
+### 3.检查已有账户余额
 
-3. Check the Balance of an Existing Account
-
-In the previous sections you created a miner account that collects all mining rewards. Using the following command with the correct address will show you the current CKByte balance:
+上一小节中我们已经创建了一个矿工账户用于接收挖矿奖励。下面的命令我们使用此前生成的矿工账户显示 CKBytes 余额：
 
 ```
 wallet get-capacity --address "miner's address" 
@@ -352,7 +348,7 @@ total: 46253677.72927512 (CKB)
 ```
 </details>
 
-### 4. Transfer 10,000 CKBytes to the New Account
+### 4. 给新账户转 10,000 CKBytes
 
 ```
 wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 --tx-fee 0.00001
@@ -366,7 +362,7 @@ Password:
 ```
 </details>
 
-### 5. Check the New Account's Balance
+### 5. 检查新账户余额
 
 ```
 wallet get-capacity --address "new account's address"
@@ -380,11 +376,11 @@ total: 10000.0 (CKB)
 ```
 </details>
 
-The transfer is successful!
+转账成功！
 
-## Adding the Genesis Issued Cells
+## 添加创世发行的 Cells 
 
-When the development blockchain configuration is generated with `ckb init --chain dev`, a few Cells are created with large amounts of capacity. These are specified in `specs/dev.toml` and exist only for your local development blockchain, and they can be useful for testing purposes.
+当使用 `ckb init --chain dev` 这个开发链配置时，会创建一些具有大容量的 Cells。具体配置可在  `specs/dev.toml` 中修改，仅用于测试用途。
 
 <table>
   <tr>
@@ -422,18 +418,18 @@ When the development blockchain configuration is generated with `ckb init --chai
   </tr>
 </table>
 
-### 1. Create Private Key Files
+### 1. 创建私钥文件
 
-Private keys must be added to a text file before they can be used.
+必须先将私钥添加到文本文件，然后才能使用它们。
 
 ```
 echo 0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc > pk1
 echo 0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d > pk2
 ```
 
-### 2. Import the Private Keys
+### 2. 导入私钥
 
-Import the private key files using `ckb-cli`:
+使用`ckb-cli`命令导入私钥文件：
 
 ```
 CKB> account import --privkey-path pk1
@@ -455,6 +451,3 @@ address:
 lock_arg: 470dcdc5e44064909650113a274b3b36aecb6dc7
 ```
 </details>
-
-
-

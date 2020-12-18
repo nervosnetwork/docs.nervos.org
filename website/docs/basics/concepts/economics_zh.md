@@ -1,4 +1,7 @@
-# Economics 经济模型
+---
+id: economics_zh
+title: 经济模型
+---
 
 ## The Economics of the CKByte CKByte 的经济模型
 

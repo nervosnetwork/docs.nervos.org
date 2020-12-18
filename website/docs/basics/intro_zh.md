@@ -1,4 +1,7 @@
-# Basics Introduction 基础介绍
+---
+id: introduction_zh
+title: 基础介绍
+---
 
 The Basics section covers the most common essential topics relevant to users of all technical levels.
 
