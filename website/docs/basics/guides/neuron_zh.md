@@ -114,21 +114,20 @@ Nervos CKB 的[经济模型](https://github.com/nervosnetwork/rfcs/blob/master/r
 
 `Asset Account` is used for managing the accounts which include anyone-can-pay( [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells and SUDTs ( [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)). It's recommended to use `ckb-udt-cli`to issue or transfer UDTs, you may refer the [github repository](https://github.com/ququzone/ckb-udt-cli) for more details. Please note that the feature is experimental and only can be used on the Testnet Aggron now.  
 
-`资产账户`
+`资产账户` 用于管理如 anyone-can-pay( [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells 和 SUDTs ( [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)) 等这类型的账户。推荐使用  `ckb-udt-cli` 来发行或者发送 UDTs，你可以参考 [github 代码库](https://github.com/ququzone/ckb-udt-cli) 了解更多信息。请注意，该功能目前处于实验阶段，仅可在 Aggron 测试网使用。
 
-### Manage the SUDT account
-#### Preparation
+### 管理 SUDT 账户
+#### 事前准备
 
-* Run a CKB Testnet Node
-You may refer to [Run a CKB Testnet Node](testnet.md)
-
-* Use `ckb-cli` to create a new account with `lock_arg` and export the privkey by using the `lock_arg`.
+* Run a CKB Testnet Node 运行 CKB 测试网节点，可以参考  [运行 CKB 测试网节点教程](testnet_zh.md)。
+* 
+* 使用 `ckb-cli` 创建一个新账户，然后带`lock_arg` 参数导出私钥。
 
 ```
 ckb-cli account new
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(点击此处查看相应)</summary>
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -146,7 +145,7 @@ lock_hash: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
 ckb-cli account export --extended-privkey-path wallet --lock-arg `Your lock_arg`
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(点击此处查看相应)</summary>
 ​```bash
 ./ckb-cli account export --extended-privkey-path wallet --lock-arg 0xee67a5584c35641cf5070b127178e2e97670f266
 Password: 
@@ -158,10 +157,10 @@ Success exported account as extended privkey to: "wallet", please use this file 
 ```
 cat wallet 
 ```
-The first line of the result is exported private key.
+结果的第一行是导出的私钥。
 <details>
 
-<summary>(click here to view response)</summary>
+<summary>(点击此处查看相应)</summary>
 ```bash
 0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c  // It is the privkey
 c152037977043a11e7e6ef220ba050da12da16455a0ef303907865a15fa9c484% 
@@ -169,9 +168,9 @@ c152037977043a11e7e6ef220ba050da12da16455a0ef303907865a15fa9c484%
 ```
 </details>
 
-* Use `ckb-udt-cli` to issue UDTs
+* 使用`ckb-udt-cli`发行 UDT
 
-Please clone and build it firstly,then use [Nervos Aggron Faucet](https://faucet.nervos.org/) to claim testnet CKB for issuing.
+请先 clone 并编译，然后使用 [Nervos Aggron 水龙头](https://faucet.nervos.org/) 申领测试网的 CKB 代币。
 
 ```
 git clone https://github.com/ququzone/ckb-udt-cli.git
@@ -182,13 +181,13 @@ export GOPROXY=https://goproxy.io
 go mod download
 go build .
 ```
-Issue the UDTs，please backup the `uuid`.
+发行 UDTs，请备份 `uuid`。
 
 ```
 ckb-udt-cli issue -c config.yaml -k YOUR_PRIVATE_KEY -a AMOUNT // AMOUNT means the number of issued tokens
 ```
 <details>
-<summary>(click here to view response)</summary>
+<summary>(点击此处查看相应)</summary>
 ```bash
 ./ckb-udt-cli issue -c config.yaml -k 0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c -a 1000000
 Issued sUDT transaction hash: 0x6b4458143b25e8aa37d36c1035f15e63e5051144685a4da20cf92fd7af59e56e, uuid: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
@@ -196,74 +195,75 @@ Issued sUDT transaction hash: 0x6b4458143b25e8aa37d36c1035f15e63e5051144685a4da2
 ```
 </details>
 
-#### Add the SUDT account to the `Asset Accounts` in Neuron Wallet 
+#### 将 SUDT 账户添加到 Neuron 钱包的  `资产账户`中 
 
-* Open `Asset Account` in Neuron Wallet, create a SUDT account.
+* 在 Neuron 钱包中打开 `资产账户`，创建 SUDT 账户。.
 
 <img src="../../assets/neuron-wallet-guide/createsudt.png" width = "600"/>
 
-You may fill `uuid` in `Token id`.
+你需要在`代币ID` 栏填写 `uuid`。
 
 <img src="../../assets/neuron-wallet-guide/tokeninfo.png" width = "600"/>
 
-Please wait untill the transaction is successful. 
+请等待交易成功完成！
 
-### Manage the CKB account
-`CKB account` can be used for anyone-can-pay cells and accepted by any amount of payment. It is accepted by any amount of payment between `CKB account`.
+### 管理 CKB 账户
+`CKB 账户` 可用于 anyone-can-pay cells，并且可以接收`CKB 账户` 间任何数额的付款。 
 
-* Create two `CKB account` "Anyone-can-pay1" and "Anyone-can-pay2"
+* 创建两个 `CKB 账户` "Anyone-can-pay1" and "Anyone-can-pay2"
 
-   The following screenshots are examples for creating "Anyone-can-pay1"
+   以下的截屏为创建 "Anyone-can-pay1" 账户的示例。
 
 <img src="../../assets/neuron-wallet-guide/createckb1.png" width = "600"/>
 
 <img src="../../assets/neuron-wallet-guide/ckbtokeninfo.png" width = "600"/>
 
-* Claim Testnet CKB for "Anyone-can-pay1" by [Nervos Aggron Testnet](https://faucet.nervos.org/)
+*  从 [Nervos Aggron 测试网](https://faucet.nervos.org/) "Anyone-can-pay1" 账户申领测试网 CKB 代币。
     
-    Get the address of "Anyone-can-pay1" and fill in [Nervos Aggron Testnet](https://faucet.nervos.org/).
+    复制 "Anyone-can-pay1" 账户的地址然后填写到 [Nervos Aggron 测试网](https://faucet.nervos.org/).
 
 <img src="../../assets/neuron-wallet-guide/receiveckb.png" width = "600"/>
 
-* Transfer 1 CKB from "Anyone-can-pay1" to "Anyone-can-pay2"
+* 从 "Anyone-can-pay1" 账户转 1 CKB 给  "Anyone-can-pay2" 账户。
 
 <img src="../../assets/neuron-wallet-guide/sendckb.png" width = "600"/>
 
-   Fill the address of "Anyone-can-pay2" in `Address`
+   填写 "Anyone-can-pay2" 账户地址。
 
 <img src="../../assets/neuron-wallet-guide/sendckb2.png" width = "600"/>
   
-   The transfer is successful!
+   转账完成！
 
 <img src="../../assets/neuron-wallet-guide/successckb.png" width = "600"/>
 
-## Troubleshooting
+## 疑难解答
 
-### Sync failed, please check network. /Sync is slow.
+### 同步失败，请检查网络。/ 同步很慢.
 
-1. Quit and restart app several times.
+1. 退出重启钱包试试。
 
-Note: The Neuron bundled CKB node requires [VC++ redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) on Windows to work properly. 
+注意:  Neuron 钱包本地自带的 CKB 节点需要在 Windows 上具备 [VC++ redistributable 部件](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) 才能正常运作。
 
-2. If step1 can't resolve, please [run a CKB mainnet node](/getting-started/run-node) and make sure the version is v0.32.0 or later instead of running the Neuron bundled node. 
+2. 如果步骤 1 无法解决，请自行 [运行 CKB 主网节点](/getting-started/run-node) ，同时确保版本为  v0.32.0 或更高版本，不再使用 Neuron 钱包自带的节点。
 
-3. if it still doesn't work out, please join the [Support](https://discord.gg/n6tx7uC) channel, export debug information and send it.
+3. 如果依旧不生效，请加入 [discord 频道](https://discord.gg/n6tx7uC)，导出 debug 信息并发送到频道中请求帮助。
 
 <img src="../../assets/neuron-wallet-guide/export.png" width = "600"/>
 
-## Important
+## 重要提示
 
-The bootstrapping of a proof-of-work (PoW) chain is difficult. A new PoW chain is in many ways like a newborn baby — weak in the beginning, but with unlimited potential when mature.
+工作量证明（PoW）区块链网络起初的冷启动难度是很大的。新的 PoW 链就像是一个新生儿，在刚开始的时候是非常虚弱的，但未来成熟茁壮成长了，将潜力无限。
+ 
+对于一条新的 PoW 链，风险主要来源于：
 
-For a new PoW chain, risks may come from:
+1. **不稳定的哈希率：**主网启动后，随着算力的不断增加，挖矿奖励会剧烈波动。在头几周网络可能会产生分叉和叔块。因为 NC-MAX 共识算法的自身调整，区块时间可能会长于预期。 **处于安全起见，在准备 CKBytes 汇款之前，建议采用足够长的区块确认数。**
+2. **未成熟的工具链：** CKB 技术的先行开发者应该要对 NC-MAX、Cell 模型和 CKB-VM 有一个充分理解，否则可能会无意引入一些代码错误。**Nervos 基金会提供的 SDKs 可以简化 RPC 调用、交易构建/签名/发送的便利工具，但尚未在生产环境中进行足够长期的测试，请谨慎使用。**
 
-1. **Unstable Hashrate：**as the mining rewards will change drastically upon mainnet launch, an increase of hashrate is anticipated. It will create forks and uncle blocks in the first few weeks and the block time may be longer than expected due to NC-MAX's self adjustment. **For security, using a sufficiently large confirmation number is recommended before transferring CKBytes.**
-2. **Immature Toolchain：**Early adopters of CKB technology should have a good understanding of NC-MAX, Cell model and CKB-VM to begin, otherwise mistakes or bugs may be created unintentionally. **The SDKs provided by Nervos Foundation are convenient tools to simplify RPC invocation and transaction building/signing/sending but have not been tested in a production environment yet, Please use them cautiously.**
 
-We recommend CKB users exercise strong diligence in making any transactions during the first 2 to 4 weeks of mainnet as the chance of a re-org (reorganization of the current valid chain) is possible and may reverse transactions that had previous been sent. **If you need to send transaction in the early weeks, choose a sufficiently large confirmation number before transferring CKBytes.**
 
-## Disclaimer
+## 免责声明
 
 AS A DECENTRALIZED BLOCKCHAIN, NERVOS FOUNDATION DOES NOT CONTROL NERVOS CKB OR CKBYTES AND DOES NOT HAVE THE ABILITY TO STOP, BLOCK OR REVERSE ANY TRANSACTIONS. NERVOS FOUNDATION DOES NOT MAKE ANY WARRANTIES WHATSOEVER WITH RESPECT TO THE NERVOS CKB OR CKBYTES, INCLUDING ANY (i) WARRANTY OF MERCHANTABILITY; (ii) WARRANTY OF FITNESS FOR A PARTICULAR PURPOSE; (iii) WARRANTY OF TITLE; OR (iv) WARRANTY AGAINST INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS OF A THIRD PARTY; WHETHER ARISING BY LAW, COURSE OF DEALING, COURSE OF PERFORMANCE, USAGE OF TRADE, OR OTHERWISE. YOU ACKNOWLEDGE THAT YOU HAVE NOT RELIED UPON ANY REPRESENTATION OR WARRANTY MADE BY THE FOUNDATION OR ANY OTHER PERSON ON ITS BEHALF. YOU ASSUME ALL RISKS AND LIABILITIES FOR THE RESULTS OBTAINED BY THE USE OF ANY CKBYTES AND REGARDLESS OF ANY ORAL OR WRITTEN STATEMENTS MADE BY THE FOUNDATION, BY WAY OF TECHNICAL ADVICE OR OTHERWISE.
+作为去中心化的区块链，Nervos 基金会无法控制 Nervos CKB 或 CKBytes，也无法停止，阻止或逆转任何交易。Nervos 基金会对 Nervos CKB 或 CKBytes 均不作任何保证，包括任何（i）适销性保证；（ii）特定目的的适用性保证；（iii）所有权保证；或（iv）侵犯第三方知识产权的担保；无论是依法引起的，交易的过程，绩效的过程，贸易的使用还是其他方式，您承认基金会或任何其他人代表其不承担任何代表或担保的责任。对于因使用任何 CKBytes 以及该基金会作出的任何口头或书面陈述而导致的结果，您承担所有风险和责任，无论是通过技术建议还是其他方式。
 
 ```
