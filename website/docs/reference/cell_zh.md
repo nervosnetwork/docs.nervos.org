@@ -39,55 +39,54 @@ Cell 的数据结构中有三个字段：
 * UDTs 的代币数量。
 * 具体应用的相关数据统计。
 
-For future potential, cell data is not stored directly in a cell. It is kepted in [transaction#data-structure] directly. You might find a field named `outputs_data` in each transaction. This array should have the same length with `outputs`. At each index location, the corresponding cell data could be located for each created output cell in the transaction. Conceptually, we still consider cell data as part of each output cell.
-
 为了未来的开发潜力，Cell 数据没有直接存储在 Cell 中，数据直接保存在交易的数据结构中。在每笔交易中，你可以发现有一个名为 `outputs_data` 的字段。该字段数组的长度应该与 `outputs` 的长度相同。在每处索引位置，都可以为交易中的输出 Cell 定位到对应的 Cell 数据。但从概念上讲，我们仍然将 Cell 数据视为输出 Cell 的一部分。   
 
-### Cell information size calculation
+### Cell information size calculation Cell 数据大小计算
 
-Each cell on Nervos CKB, must not have a lower capacity than the total size of information stored in the cell. The size of information for a cell is calculated as the sum of the following fields:
+Nervos CKB 上的每一个 Cell，其容量不得低于该 Cell 中存储的信息总大小。Cell 的数据大小可由以下字段的总和得出：
 
-1. 8 bytes for cell capacity field.
-2. 32 bytes for code hash in lock script.
-3. 1 byte for hash type in lock script.
-4. Actual bytes of args field in lock script.
-5. If type script is present, 32 bytes for code hash in type script.
-6. If type script is present, 1 byte for hash type in type script.
-7. If type script is present, actual bytes of args field in type script.
-8. Actual bytes of cell data.
+1. Cell 的 `capacity` 字段占用 8 字节；
+2. `lock script` 脚本中的 code hash 占用 32 字节；
+3. `lock script` 脚本中的 hash type 占用 1 字节；
+4. `lock script` 脚本中 `args` 字段的实际占用大小；
+5. 如果存在 `type script `，则其 code hash 占用 32 字节；
+6. 如果存在 `type script `，则其 hash type 占用 1 字节；
+7. 如果存在 `type script `，则需要算上 `args ` 字段的实际占用大小；
+8. Cell 数据的实际占用大小；
 
-By summing up all the above fields, we get the total size of information a cell needs. Cell capacity, when measured in `CKBytes`, respresents the maximum size of information that can be held, meaning a valid cell must ensure the CKBytes stored in capacity equal or is larger than the total size of information.
+通过汇总以上所有字段的字节占用大小，我们便可以获得 Cell 存储所有数据所需的容量大小。Cell 的 `capacity`代表着其可以存储的最大数据容量，也就意味着一个有效的 Cell 必须确保其容量大于等于总数据大小。
 
 ## Live Cell
 
-Live cell refers to an unspent cell in CKB. It is similar to the concept of [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) in Bitcoin's terminology. The full set of live cells in CKB, is consider the full state of CKB at that particular point. Any transaction on CKB would consume some cells that were live cells just at the point before it is committed, and created new cells that are considered live cells after it is committed.
+`Live Cell`指的是 CKB 中未花费的 Cell，与比特币的 [UTXO](https://en.wikipedia.org/wiki/Unspent_transaction_output) 概念相似。CKB 上的完整 `live Cell`集合就是 CKB 上对应时间点的完整状态。CKB 上的所有交易都会在交易被提交前消耗掉一些 `live Cell `，然后在交易提交后生成一些新的 `live Cell`。
 
-## Index-Query-Assemble Pattern
+##  ’索引-查询-组装‘ 模式
 
-Nervos CKB is designed based on the concept of cells. A transaction, at its core, really just consumes some cells, and create another set of cells. As a result, the ability to locate and transform cells, plays a critical role in building any CKB dapps, which leads to the `index-query-assemble` pattern:
+Nervos CKB 是基于 Cell 概念展开设计的。一笔交易，本质上就只是消耗一些 Cells，然后生成一组新的 Cells。因此，在构建任何 CKB dApp 时，定位和转化 Cell 就变得尤为重要，`索引-查询-组装（index-query-assemble） ` 模式也因此油然而生。 
 
-* Index: when a new block is committed to CKB, a dapp should be able to index relevant cells to its own storage for latter usage.
-* Query: when a user action is requested, cells satisfying certain criteria will be queried from the dapp storage.
-* Assemble: based on queried cells, a new transaction would be assembled to fulfill user requests.
+* 索引（Index）：当有新区块提交到 CKB 时，dApp 应该能够将相关的 Cells 索引到自己的存储中以供后续使用。
+* 查询（Query）：当请求用户操作时，从 dApp 自身的存储中查询满足特定条件的 Cells。
+* 组装（Assemble）：基于查询所得的 Cells，将组装一个新的交易来满足用户请求。
 
-We believe all CKB dapps can be decomposed into individual actions following this pattern. Here are some examples:
+我们相信，按照这种模式，所有 CKB dApp 都可以拆分为单独的操作。例如：
 
-* In a normal CKB wallet, cells should be indexed based on lock scripts. A transfer action would first query cells from the sender, and assemble a transaction which transfer CKBytes to the receiver.
-* A NervosDAO manager might index only cells related to NervosDAO. A user might then pick a NervosDAO cell and perform withdraw action, even though there is only one cell related, we can still view it as cells queried from the NervosDAO manager, and a transaction will also be assembled which performs the actual withdraw action.
-* A state based dapp might choose to store the latest state in a CKB cell. The dapp will still need to track the latest live cell, which can also be viewed as an indexing operation, any action on the state will result in the latest live cell being queried, assembled into a transaction, then accepted by CKB with a new output cell containing the updated state.
+* 在普通的 CKB 钱包中，应该基于 `lock scripts` 对 Cells 进行索引。一个转账操作首先应该查询发送者的 Cells，然后组装一个转 CKBytes 给接受者的交易。
 
-### Tools
+* NervosDAO 管理器可能只需索引与 NervosDAO 相关的 Cells。然后用户可能会选择一个 NervosDAO 的 Cell 来执行赎回操作。即使只有一个相关的 Cell，我们依旧可以将其视为从 NervosDAO 管理器中查询来的 Cell 集合，然后组装一笔交易执行实际的赎回操作。
+* 一款基于状态的 dApp 可能会选择在一个 CKB Cell 中存储最新的状态。dApp 将需要跟踪最新的`live Cell`，这一步其实就等同于索引操作；然后，对状态的任何操作都会触发查询最新的`live Cell`，组装成一笔交易并提交到 CKB，交易提交完成后，生成包含已更新状态的输出 Cells。
 
-Indexing & querying plays a central role in any CKB dapps. In most cases, you don't have to build an indexer from scratch. There are several existing tools one can leverage to fulfill the job:
+### 工具
+
+索引 & 查询功能在任何 CKB dApp 中都扮演着核心角色。在大多数情况下，你不必从头开始构建一个索引器。目前有几个现成的工具可以用来完成该功能：
 
 #### lumos
 
-Our dapp framework, [lumos](https://github.com/nervosnetwork/lumos) already contains a ready-to-use indexer. When you are using lumos, it is very likely the indexer is already setup for you to use. Please refer to our labs for how to setup lumos.
+我们的 dApp 框架 [lumos](https://github.com/nervosnetwork/lumos) 已经包含了一个现成的索引器。当你使用 lumos 时，索引器很可能已经安装完毕可以使用了。请参与我们的开发实验室章节了解如何安装 lumos。
 
 #### ckb-indexer
 
-A standalone [ckb-indexer](https://github.com/quake/ckb-indexer) also handles the job of indexing cells. It provides an RPC mechanism you can use to query for relevant cells. Please refer to the documentation of ckb-indexer for more details.
+[ckb-indexer](https://github.com/quake/ckb-indexer) 也可以用于处理索引 Cells 的任务，它提供了 RPC 机制，可用于查询相关 Cells。请参阅 ckb-indexer 文档以获取更多详细信息。
 
 #### perkins-tent
 
-If you are looking at a one-stop solution, [Perkins' Tent](https://github.com/xxuejie/perkins-tent) provides a single docker image that starts both CKB and ckb-indexer in one dockerisntance. With a single command, you should be able to start a CKB instance and be ready to use the enclosed ckb-indexer for querying tasks.
+如果你正在寻找一站式解决方案， [Perkins' Tent](https://github.com/xxuejie/perkins-tent) 提供了一个 docker 镜像，该镜像在一个 docker 实例中同时启动了 CKB 和 ckb-indexer。使用单条命令，你就可以启动 CKB 实例，并且使用内置的 ckb-indexer 来查询任务。
