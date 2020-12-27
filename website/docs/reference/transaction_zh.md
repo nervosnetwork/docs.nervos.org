@@ -1,17 +1,17 @@
 ---
-id: transaction
-title: Transaction
+id: transaction_zh
+title: 交易
 ---
 
-Transactions are the most fundamental entities for interacting with Nervos CKB. At Layer 1, we are focusing on states, the design of CKB as a Layer 1 blockchain, naturally emphasizes on states. In CKB, transactions are the only way to trigger state changes.
+通常，我们是通过交易的方式与 Nervos CKB 进行交互。在 layer 1，我们专注于状态， CKB 作为 layer 1 区块链网络，其设计上也重点强调状态。在 CKB 上，交易是触发状态改变的唯一方式。
 
-A state change on CKB is represented by a transaction destroying some cells from previous transactions, and creating some new cells. The concept of state, is reflected via a set of live cells(including the data included in each cell) in CKB. A transaction is atomic, it either gets accepted, or rejected. Partial transaction will never be committed to Nervos CKB
+CKB 上状态的改变其实是一笔交易销毁此前交易生成的 Cells，然后生成新的 Cells 的过程。状态其实就是 CKB 上一系列 `live Cell` 的集合（包含每个 Cell 中的数据）。交易是原子性的，要么被接收，要么被拒绝。不存在有部分交易内容没提交到 Nervos CKB 的情况。
 
-Due to the above nature of CKB, state changes are usually calculated outside of Nervos CKB, the resulting state is then assembled into a transaction, which is then submitted, validated and finally accepted by Nervos CKB, which is then propagated to the entire network.
+由于 CKB 的上述特性，状态改变通常是在 Nervos CKB 之外进行计算的，然后计算得出的状态结果会被组装到交易中，随后由 Nervos CKB 提交，验证并最终接受该交易，然后将其广播到整个网络。
 
-## Data Structure
+## 数据结构
 
-**Example:**
+**例子：**
 
 ```
 {
@@ -77,7 +77,7 @@ Due to the above nature of CKB, state changes are usually calculated outside of 
 }
 ```
 
-There are already 2 RFCs that describe the transaction structure in great details:
+以下两份 RFCs 对交易的结构进行了详细的介绍：
 
-* [Data Structures](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
-* [Transaction Structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+* [数据结构](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0019-data-structures/0019-data-structures.zh.md)
+* [交易结构](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0022-transaction-structure/0022-transaction-structure.zh.md)

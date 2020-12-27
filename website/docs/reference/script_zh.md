@@ -34,60 +34,71 @@ title: Script 脚本
 
 一个 `脚本 script`  具有三个字段：
 
-* `code_hash`：该哈希值表示执行交易中的哪个脚本。处于空间占用的考虑，实际的脚本代码是保存在    [live Cell](cell#live-cell) 中的数据部分。当前交易需要通过 [cell deps](transaction) 引用该 live Cell 以定位和执行脚本。
+* `code_hash`：该哈希值表示执行交易中的哪个脚本。出于空间占用的考虑，实际的脚本代码是保存在    [live Cell](cell#live-cell) 中的数据部分。当前交易需要通过 [cell deps](transaction) 引用该 live Cell 以定位和执行脚本。
 * `hash_type`：当从 cell deps 中查找脚本代码时，对 `code_hash`  的一个辅助解释。
 
     + 如果 `hash_type` 为 `data`, `code_hash` 应该匹配 dep Cell 中数据（也是脚本代码）的 blake2b 哈希 ;
-    + if `hash_type` contains `type`, `code_hash` should instead match the blake2b hash of type script contained by a a dep cell. Note CKB will throw a validation error when a) we are locating a script code using `type` as `hash_type`; and b) more than one cell referenced by cell deps contains the specified hash of type script.
+    + 如果 `hash_type` 为 `type`, `code_hash` 应该匹配 dep Cell 中 type script 的 blake2b 哈希。注意 CKB 在以下情况会抛验证错误：1) 使用 `type` 作为 `hash type` 来定位脚本代码； 2) cell deps 引用的包含指定 type script 的 Cell 不止一个。
 
-    The combination of a `code_hash` and a `hash_type`, will uniquely identify a script code in CKB.
-* `args`: Auxiliary arguments for a script. This is why we need to distinguish between `script code` and `script` above: through `args`, a `script` actually represents an **instance** of a `script code`. Typical examples include:
-    + While a single `script code` will be used for secp256k1 implementation, different people might include different public keys into `args` to create different `script`s, which lead to different wallets.
-    + While a single `script code` might provide implementation for the [UDT](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) specification, different people might inject different `args` for different types of tokens.
+     `code_hash` 和 `hash_type` 结合可以唯一确定 CKB 中的某段脚本代码 script code。
+* `args`：脚本 script 的辅助参数。这就是我们在本节开头需要区分 `脚本代码 script code` 和 `脚本 script` 的原因： 借助 `args`参数,  `script`  实际上是代表着`script code`的一个实例。典型示例如下：
 
-We will talk about how to execute a script to validate transaction structure in sections below.
+    + While a single `script code` will be used for secp256k1 implementation, different people might include different public keys into `args` to create different `script`s, which lead to different wallets. 
+    + 虽然`script code`用于 secp256k1 实现，但是不同的人可以给 `args` 赋值不同的公钥，也就会对应着不同的钱包。
+    + While a single `script code` might provide implementation for the [UDT](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) specification, different people might inject different `args` for different types of tokens. 
+    + 虽然 `script code`可以提供 UDT 规范，但不同的用户可以插入不同的`args`参数实现不同类型的代币。
 
-Depending on the different types, scripts will be executed at different times:
+下面小节我们会讨论如何执行脚本来验证交易结构。
 
-1. All lock scripts from all input cells in a transaction will be executed.
-2. All type scripts(if exist) from all input cells and output cells in a transaction will be executed.
+根据不同的类型，脚本会在不同的时间执行：
 
-We will consider the transaction valid only when all the required scripts complete with a success status. Failure in any script will mark the transaction as invalid.
+1. 交易中的所有输入 Cells 的 `lock scripts` 都会被执行。
+2. 交易中的所有输入 Cells 和输出 Cells 的所有 `type scripts` 都会被执行。
 
-## Execution
+只有在所有必需的脚本都成功执行时，我们才认为交易有效。任何脚本的失败都意味着交易失败。
 
-Here we are providing a basic introduction for script execution flow, for the more precise definition, please refer to the following RFCs:
+## 执行
 
-* [CKB VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md)
-* [VM Syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
-* [VM Cycle Limits](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
+本章节我们只是对脚本执行流程的一个简单介绍，更详细准确的定义，可以参考一下 RFCs：
+
+* [CKB VM](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0003-ckb-vm/0003-ckb-vm.zh.md)
+* [VM Syscalls](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0009-vm-syscalls/0009-vm-syscalls.zh.md)
+* [VM Cycle Limits](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.zh.md)
 
 Each script that needs to be executed from a CKB transaction, will be run in a [CKB VM](https://github.com/nervosnetwork/ckb-vm) instance. At its core, CKB VM is just an implementation of the [RISC-V](https://riscv.org/) Instruction Set Architecture(ISA). It means any RISC-V standard compliant program(RV64IMC to be more precise, see the RFCs for more details) will be accepted by CKB VM. The common [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format) format is used to package a binary.
 
+交易中需要执行的脚本都的在 CKB VM 实例中运行。CKB VM 的核心是 [RISC-V](https://riscv.org/) 指令集体系结构（ISA）的实现。它意味着任何兼容 RISC-V 标准的程序（更准确地说是 RV64IMC，具体请参阅 RFC）都可以在 CKB VM 中运行。常用的 [ELF](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format) 格式用于打包二进制文件。
+
 To use a RISC-V program as a script on CKB, one simply needs to create a new [cell](cell) with the full program binary in the cell's data part. One the transaction generating the new cell is committed on CKB, scripts can then be assembled to use the program as script code. As mentioned above, a cell dep entry must be also create to reference the newly created cell containing script code.
+
+要将一个 RISC-V 程序在 CKB 上作为脚本使用，仅需创建一个新的 Cell，并把完整的程序二进制包放置在 Cell 的数据部分中。只要生成新 Cell 的交易提交到了 CKB 上，就会将该程序二进制包作为脚本代码组装到脚本中。如上所述，还会创建一个 cell dep 来引用包含脚本代码的新创建的 Cell。
 
 There are cases that RISC-V ISA is not be enough, for example, a script might want to read information from the enclosing transaction to enforce validation rules, CKB provides a series of `syscalls` that will handle this task. Notice `syscall` is a concept also designed and included by the RISC-V standard ISA, we are confronting to RISC-V standard specification as much as we can.
 
+在某些情况下，RISC-V ISA 是不够的，例如，脚本可能想从其所在交易中读取信息以执行验证规则，CKB 提供了一系列 `syscalls`可处理此任务。注意 `syscall` 是 RISC-V 标准 ISA 的一个概念。
+
 To prevent infinite loops, `cycles` are introduced to CKB VM. Each executed RISC-V instruction and each syscall made will consume certain amount of cycles. At consensus layer, CKB has a hard limit on the maximum cycles that is allowed in a single block. The total cycles consumed by all executed scripts, from all transactions included in a blocks, must not exceed this number. Otherwise the block will be rejected.
 
-## Use Cases
+为了避免死循环，CKB VM 引入了 `cycles(遍历)` 概念。每个执行的 RISC-V 指令和每个系统调用（syscall）都会消耗一定数量的 `cycles`。在共识层，CKB 对单个区块中的最大 `cycle(遍历)`次数有硬顶限制。单个区块中的所有交易中的所有脚本所消耗的`cycles（遍历）`数不得超过这个硬顶，否则该区块将被拒绝。
 
-Lock script and type script share the identical running environment, they can all access all the information contained in its enclosing transaction. But due to the fact they are executed in different times, they have formed into different use cases.
+## 用例
+
+`lock script` 和 `type script` 共享着相同的运行环境，它们可以访问其自身所在交易中的的任何信息。但由于它们的执行时间不同，所以也就应用于不同的用例。
 
 ### Lock Script
 
-Lock scripts are more for representing ownerships. Typical use cases for lock scripts include:
+`Lock script` 更多地是代表着所有权。其传统的用例为：
 
-* Signature verification
-* Lock period ensurance
+* 签名验证
+* 锁定期保证
 
-You might notice that type script can actually replace all functionalities of a lock script, meaning a cell can use a dummy lock script that does nothing, and rely on type script for all behaviors. But that is an anti-pattern of CKB now. By making lock script mandatory, we want to ensure each cell at least uses a secure lock script.
+你可能注意到了 `type script` 可以完成 `lock script` 的所有功能，也就是说 Cell 的 `lock script` 可以为空，然后依赖 `type script` 完成所有验证操作。但这其实跟 CKB 目前的模式是相反的。我们希望能够通过强制使用 `lock script` ，来确保每个 Cell 都具备一个安全的 `lock script`。
 
-Lock script can be viewed as the last defense to ensure that your tokens stay safe. So we do recommend to keep your lock as simple as possible, to avoid the potential of vulnerabilities.
+`lock script` 可以视为保障你代币安全的最后一道屏障。因此，我们建议你尽可能保持 `lock script` 的简单性，避免引入潜在的漏洞。
 
 ### Type Script
 
-Type script, on the other hand, is where innovations would more likely to happen on CKB. Some use cases of type scripts include:
+`type script` 更像是 CKB 上的创新创造营，可以有如下用例：
 
-* User Defined Token(UDT) implementation
-* Ensuring cell data confronts to a certain format
+* 用户自定义代币（UDT）的实现
+* Ensuring cell data confronts to a certain format 确保 Cell 数据符合某种格式
