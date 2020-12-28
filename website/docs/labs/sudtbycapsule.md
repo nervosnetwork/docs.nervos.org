@@ -105,7 +105,7 @@ ls my-sudt/contracts/my-sudt
 ```
 <details>
 <summary>(click here to view response)</summary>
-```bash
+​```bash
 
 Cargo.toml  src
 ```
@@ -225,7 +225,7 @@ ls build/debug
 ```
 <details>
 <summary>(click here to view response)</summary>
-```bash
+​```bash
 
 my-sudt
 ```
@@ -780,7 +780,7 @@ You should be running a dev chain and know about how to use `ckb-cli` to send tr
      *  `dep_groups`  describes which dep_groups to be created. Dep Group is a cell which bundles several cells as its members. When a dep group cell is used in `cell_deps`, it has the same effect as adding all its members into `cell_deps`. In our case, we don’t need `dep_groups`.
      * `lock`  describes the `lock` field of the new deployed cells.It is  recommended to set `lock` to the deployer's address(an address that you can unlock) in the dev chain and in the testnet, which is easier to update the script.
 
-2. Uncomment the configuration file and replace the cell name and location with `my-usdt`.
+2. Uncomment the configuration file and replace the cell name and location with `my-sudt`.
 
 ```
 # [[cells]]
@@ -805,7 +805,7 @@ You should be running a dev chain and know about how to use `ckb-cli` to send tr
 ```
 
 3. Build release version of the script
-   
+  
   * The release version of script  doesn’t  include debug symbols which makes the size smaller.
 
 ```
