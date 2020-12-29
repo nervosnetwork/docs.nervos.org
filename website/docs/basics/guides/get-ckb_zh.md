@@ -13,7 +13,7 @@ Ubuntu 16.04 | x64
 macOS        | x64
 Windows\*    | x64
 
-> \* 对 Windows 的支持是实验性的。在 Windows 环境下运行 CKB 存在许多严重的性能问题。
+> \* 对 Windows 的支持是实验性的。在 Windows 环境下运行 CKB 存在许多严重的性能问题。你可以参考[获取 Windows 版 CKB 包](ckb-on-windows_zh.md)了解更多。
 
 CKB 应该也适用于其他 Linux 版本，不过我们将精力集中在对以下版本的支持上：
 
@@ -26,21 +26,11 @@ CentOS 7       | x64
 
 如果你的操作系统不适合运行 CKB，你也可以使用[使用 docker](run-ckb-with-docker_zh.md) 。
 
-## Download from Releases 下载发布版
 
-每个发布版我们都会在 [Github Releases](https://github.com/nervosnetwork/ckb/releases) 发布二进制包。你可以直接下载。
-
-如果你使用 CentOS，请使用  `x86_64-unknown-centos-gnu` 包，该包需要安装 OpenSSL 1.0：
-
-```shell
-sudo yum install openssl-libs
-```
-
-Windows 包仅为实验目的，当前存在重大性能问题，我们不推荐在生产中使用。Windows Visual C++ Redistributable 包，可以通过[链接1](https://visualstudio.microsoft.com/downloads/)或者[链接2](https://www.microsoft.com/en-us/download/details.aspx?id=48145)下载。
 
 ## 由源码编译
 
-关于如何在 Windows 上编译 CKB 的更多详情，可以查阅 [在 Windows 上编译 CKB](ckb-on-windows_zh.md).
+小提醒：关于如何在 Windows 上编译 CKB 的更多详情，可以查阅 [获取 Windows 版 CKB 包](ckb-on-windows_zh.md).
 
 ### 安装编译依赖
 
@@ -117,3 +107,15 @@ export PATH="$(pwd)/target/release:$PATH"
 # or
 # ln -snf "$(pwd)/target/release/ckb" /usr/local/bin/ckb
 ```
+
+## Download from Releases 下载发布版
+
+每个发布版我们都会在 [Github Releases](https://github.com/nervosnetwork/ckb/releases) 发布二进制包。你可以直接下载。
+
+如果你使用 CentOS，请使用  `x86_64-unknown-centos-gnu` 包，该包需要安装 OpenSSL 1.0：
+
+```shell
+sudo yum install openssl-libs
+```
+
+Windows 包仅为实验目的，当前存在重大性能问题，我们不推荐在生产中使用。Windows Visual C++ Redistributable 包，可以通过[链接1](https://visualstudio.microsoft.com/downloads/)或者[链接2](https://www.microsoft.com/en-us/download/details.aspx?id=48145)下载。

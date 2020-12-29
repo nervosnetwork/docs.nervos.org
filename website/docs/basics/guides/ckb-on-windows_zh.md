@@ -1,9 +1,11 @@
 ---
 id: ckb-on-windows_zh
-title: 在 Windows 中编译 CKB
+title: 获取 Windows 版 CKB 二进制文件（实验性）
 ---
 
 **请注意，对 Windows 的支持是实验性的。已知在Windows中运行时，CKB存在严重的性能问题。**下面列出的所有命令都应通过 [PowerShell 使用](https://docs.microsoft.com/zh-cn/powershell/scripting/windows-powershell/install/installing-windows-powershell?view=powershell-7)。
+
+## 从源代码编译
 
 ### 安装编译环境
 
@@ -22,7 +24,10 @@ title: 在 Windows 中编译 CKB
 - 使用 [Scoop] 安装`git`, `llvm`, `yasm` 和`rustup` 
 
   ```posh
-  scoop install git llvm yasm rustup
+  scoop install git
+  scoop install llvm
+  scoop install yasm
+  scoop install rustup
   ```
 
 - 安装依赖
@@ -47,19 +52,22 @@ title: 在 Windows 中编译 CKB
 
 ### 在 Windows 10 上编译
 
-- 签出 [CKB] 代码
+- 签出 CKB 源代码
 
   ```posh
   git clone https://github.com/nervosnetwork/ckb
   cd ckb
   ```
 
-- 编译 [CKB]
+- 编译 CKB
 
   ```posh
   devtools/windows/make prod
   ```
 
-[CKB]: https://github.com/nervosnetwork/ckb
+## 直接下载发布版
+
+我们通过Github Releases发布每个版本的二进制文件。Windows包仅用于实验，有明显的性能问题，我们不建议在生产环境中使用，它们需要Visual C++ Redistributable Packages，可以通过[链接1](https://visualstudio.microsoft.com/downloads/)或[链接2](https://www.microsoft.com/en-us/download/details.aspx?id=48145)下载。
+
 [Scoop]: https://scoop.sh/
 
