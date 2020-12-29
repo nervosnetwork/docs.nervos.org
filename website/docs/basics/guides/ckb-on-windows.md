@@ -24,9 +24,9 @@ with the workload: "Desktop development with C++".
 - Install `git`, `llvm`, `yasm` and `rustup` via [Scoop].
 
   ```posh
-  scoop install git 
-  scoop install llvm 
-  scoop install yasm 
+  scoop install git
+  scoop install llvm
+  scoop install yasm
   scoop install rustup
   ```
 
@@ -68,6 +68,8 @@ with the workload: "Desktop development with C++".
 ## Download from Releases
 
 We publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly.The Windows packages are for experiments only and have significant performance issues, we don't recommend to use them in production environment.They requires *The Visual C++ Redistributable Packages*, which can be downloaded
-under section *Other Tools and Frameworks* 
+under section *Other Tools and Frameworks*
 [here](https://visualstudio.microsoft.com/downloads/) or
 [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
+
+[Scoop]: https://scoop.sh/
