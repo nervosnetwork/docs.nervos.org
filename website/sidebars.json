@@ -45,13 +45,14 @@
       "labs/capsule-dynamic-loading-tutorial"
     ],
     "Integrate": [
-      "integrate/integration-guide",
       "integrate/introduction",
+      "integrate/integration-guide",
       "integrate/qa",
       "integrate/sdk"
     ],
     "Essays": [
       "essays/introduction",
+      "essays/developer-materials-guide",
       "essays/rfcs",
       "essays/lifecycle",
       "essays/debug",

@@ -3,7 +3,7 @@ id: get-ckb
 title: Get CKB Binary
 ---
 
-CKB binary is used to run CKB node or CKB dev blockchain for development,testing and so on.You can get CKB binary by two ways: download from releases or build from source. 
+CKB binary is used to run CKB node or CKB dev blockchain for development,testing and so on.You can get CKB binary by two ways: build from source or download from releases. 
 
 We have setup CI to ensure CKB works in following systems, they are also the
 recommended system to run CKB.
@@ -15,7 +15,7 @@ macOS        | x64
 Windows\*    | x64
 
 > \* Support for Windows is experimental. CKB is known to have serious performance
-> issues when running in Windows.
+> issues when running in Windows. You can refer to [Get CKB Binary on Windows](ckb-on-windows.md) for more details.
 
 CKB should also work on any modern Linux distributions. However, we limit our
 energy to focus on the support of following systems:
@@ -30,27 +30,9 @@ CentOS 7       | x64
 You can also [use docker](run-ckb-with-docker.md) if your operating system is
 not properly supported by CKB for now.
 
-## Download from Releases
-
-We will publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly.
-
-If you are CentOS user, please use the `x86_64-unknown-centos-gnu` package, which also
-requires OpenSSL 1.0:
-
-```shell
-sudo yum install openssl-libs
-```
-
-The Windows packages are for experiments only, they have significant
-performance issues, we don't recommend to use them in production environment.
-They requires *The Visual C++ Redistributable Packages*, which can be downloaded
-under section *Other Tools and Frameworks*
-[here](https://visualstudio.microsoft.com/downloads/) or
-[here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
-
 ## Build from Source
 
-The details about how to build CKB on Windows can be found [Build CKB on Windows](ckb-on-windows.md).
+Tips: The details about how to build CKB on Windows can be found [Build CKB on Windows](ckb-on-windows.md).
 
 ### Install Build Dependencies
 
@@ -120,7 +102,7 @@ cd ckb
 git checkout master
 ```
 
-It is easy to switch to a historical version and build, for example, check out
+You can also switch to a historical version and build, for example, check out
 v0.12.2.
 
 ```bash
@@ -136,3 +118,14 @@ export PATH="$(pwd)/target/release:$PATH"
 # or
 # ln -snf "$(pwd)/target/release/ckb" /usr/local/bin/ckb
 ```
+## Download from Releases
+
+We publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly.
+
+If you are CentOS user, please use the `x86_64-unknown-centos-gnu` package, which also
+requires OpenSSL 1.0:
+
+```shell
+sudo yum install openssl-libs
+```
+

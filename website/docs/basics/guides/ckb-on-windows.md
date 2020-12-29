@@ -1,9 +1,11 @@
 ---
 id: ckb-on-windows
-title: Build CKB on Windows
+title: Get CKB Binary on Windows (experimental)
 ---
 
-**Please note that all commands should be ran as PowerShell commands.**
+**Please note that Support for Windows is experimental. CKB is known to have serious performance issues when running in Windows.** All commands listed below should be used through [PowerShell](https://docs.microsoft.com/zh-cn/powershell/scripting/windows-powershell/install/installing-windows-powershell?view=powershell-7).
+
+## Build from Source
 
 ### Setup the Build Environment
 
@@ -22,7 +24,10 @@ with the workload: "Desktop development with C++".
 - Install `git`, `llvm`, `yasm` and `rustup` via [Scoop].
 
   ```posh
-  scoop install git llvm yasm rustup
+  scoop install git
+  scoop install llvm
+  scoop install yasm
+  scoop install rustup
   ```
 
 - Install dependencies.
@@ -47,18 +52,24 @@ with the workload: "Desktop development with C++".
 
 ### Build CKB on Windows 10
 
-- Checkout the source code of [CKB].
+- Checkout the source code of CKB.
 
   ```posh
   git clone https://github.com/nervosnetwork/ckb
   cd ckb
   ```
 
-- Build [CKB].
+- Build CKB.
 
   ```posh
   devtools/windows/make prod
   ```
 
-[CKB]: https://github.com/nervosnetwork/ckb
+## Download from Releases
+
+We publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly.The Windows packages are for experiments only and have significant performance issues, we don't recommend to use them in production environment.They requires *The Visual C++ Redistributable Packages*, which can be downloaded
+under section *Other Tools and Frameworks*
+[here](https://visualstudio.microsoft.com/downloads/) or
+[here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
+
 [Scoop]: https://scoop.sh/
