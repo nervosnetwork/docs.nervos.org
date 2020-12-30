@@ -20,8 +20,6 @@ Lumos 作为一个框架，通常会以一种内部调用的方式进行使用�
 
 ## 初始化 CKB 安装
 
-To ease the whole process so we don't have to wait too long to see the results, let's setup our own dev chain with [tweaks](basics/guides/devchain_zh#调整参数以缩短出块间隔（可选）):
-
 为了方便整个过程，让我们不用等太久就能看到结果，我们可以[微调](basics/guides/devchain_zh#调整参数以缩短出块间隔（可选）)自己的开发链设置：
 
 ```bash
@@ -230,17 +228,15 @@ CKB 为 dApp 开发者提供了极大的灵活性进行应用开发，不过 “
 * 由于 `type script` 的验证规则，部分 Cells 可能需要在见证（witness）中设置特殊的参数。
 * 因为 Cell 中的 `lock script` 和 `type script` 都可能需要同一见证结构中的参数，所以可能需要协调。
 
+即使在处理单笔 NervosDAO 交易时，这些问题也会困扰着你。当我们考虑到包含不同 CKB 脚本的多个 Cells 一起组成时，这只会变得更加复杂。展望未来，我们需要一个解决方案。
 
+`TransactionSkeleton` 就是我们在 lumos 中提出的方案。每一个交易脚手架对应一个操作，并将构建单笔准备提交给 CKB 的交易。围绕交易脚手架 TransactionSkeleton 这个概念，我们提供了一系列便利以辅助交易组装：
 
-Those problems will haunt you even when you are dealing with a single NervosDAO transaction. It is only gonna get more complicated, when we consider multiple cells containing different CKB scripts composed together. Looking into the future, we will definitely need a solution to this issue.
+* 一个设计良好的组件应该能够自动查询，并且包含能够提供交易所需容量的 Cells。
+* 单独的脚本逻辑应该由通用的交易脚手架进行管理并给予重视。
+* 共享相同行为的脚本应该在统一的接口中一起管理。开发者能够依赖抽象而不是得迎合所有细节。
 
-`TransactionSkeleton` is the answer we propose in lumos. Each transaction skeleton corresponds to an action, and will be built into a single transaction that is ready to be submitted to CKB. Surrounding the idea of TransactionSkeleton, a series of conveniences are provided to aid transaction assembling:
-
-* A well designed component should automatically query and include cells to provide capacities required by the transaction.
-* Individual script logic should be managed and respected by the general transaction skeleton.
-* Scripts sharing the same behavior should be managed together in a unified interface. Developers can rely on abstractions instead of catering for every single detail.
-
-This still sounds quite complicated, let's walkthrough an example to see how we can leverage TransactionSkeleton.
+可能这听起来还很复杂，我们通过一个例子来看看我们是如何利用 TransactionSkeleton 的。
 
 ```
 > // In practice, you might already have the address at your hand, here we just
@@ -305,19 +301,19 @@ This still sounds quite complicated, let's walkthrough an example to see how we 
 ]
 ```
 
-Lumos, for now, does not handle message signing for the following reasons:
+出于以下原因，Lumos 当前尚不处理消息签名：
 
-* This is a serious matter that relates to the overall security of the dapp, we want to make sure we are doing this properly if/when we decide to do it.
-* Different dapps might have different requirements, some don't do signing at all, having signing built-in might render certain dapps hard to build.
+* 消息签名涉及到整个 dApp 的安全问题，在实现该功能前，我们要确保万无一失。
+* 不同的 dApp 可能有不同的要求，有些甚至完全不需要签名，内置签名反而可能会给某些 dApps 造成困扰。
 
-Using a secp256k1 tool, it's not hard to generate a signature here based on the private key listed above, and the message. And we can continue with this process:
+使用 secp256k1 工具，可以很容易地根据上述私钥和消息生成签名。我们接着往下走：
 
 ```
 > const signatures = ["0x1cb952fd224d1d14d07af621587e91a65ccb051d55ed1371b3b66d4fe169cf7758173882e4c02587cb54054d2de287cbb1fdc2fc21d848d7b320ee8c5826479901"];
 > const tx = sealTransaction(skeleton, signatures);
 ```
 
-Now we have a complete transaction assembled, and we can send it to CKB:
+现在，交易已经组装完毕，我们将其发送给 CKB：
 
 ```
 > const { RPC } = require("ckb-js-toolkit");
@@ -326,11 +322,11 @@ Now we have a complete transaction assembled, and we can send it to CKB:
 '0x88536e8c25f5f8c89866dec6a5a1a6a72cccbe282963e4a7bfb5542b4c15d376'
 ```
 
-Now we have successfully deposited CKBytes into CKB using lumos!
+现在，我们已经成功地使用 lumos 将 CKB 代币存入到 Nervos DAO 中！
 
-## Withdraw
+## 取回
 
-The following code can help us list all deposited Nervos DAO cells for an address:
+以下代码能够帮助我们例举出某地址在 Nervos DAO 中的所有存款 Cells。
 
 ```
 > for await (const cell of dao.listDaoCells(indexer, address, "deposit")) { console.log(cell); }
@@ -358,7 +354,7 @@ The following code can help us list all deposited Nervos DAO cells for an addres
 }
 ```
 
-Here we can find the cell we just deposited to Nervos DAO. Let's now try to withdraw it from Nervos DAO:
+这里我们找到了刚刚存入 Nervos DAO 的 Cell，现在我们尝试取回：
 
 ```
 > // First, we will need to locate the cell. In a real dapp this is most likely
@@ -388,17 +384,17 @@ Here we can find the cell we just deposited to Nervos DAO. Let's now try to with
 '0xe411eb6a3cf4f659461cc7a9df9ff95a72b9624bf850b9ccad0c4d7f2ab444f6'
 ```
 
-See that withdrawing transaction is not so hard!
+取回交易就是这么简单！
 
 ### Locktime Pool
 
-We could've just showed the [unlock](https://github.com/nervosnetwork/lumos/blob/ac96a3220ab2a148425120eaac216abe246ee1da/packages/common-scripts/index.d.ts#L262) method in `dao` module, which let you complete the withdrawing from Nervos DAO. But here I want to talk about a different construct in lumos: locktime pool.
+我们可以直接在 `dao` 模块中显示 [unlock](https://github.com/nervosnetwork/lumos/blob/ac96a3220ab2a148425120eaac216abe246ee1da/packages/common-scripts/index.d.ts#L262) 方法，让你完成从 Nervos DAO 中取回 CKB 代币。但这里我想要聊聊 lumos 中的一个不同的结构：锁定时间池 locktime pool。
 
-If you look closer, you would notice that the cell consumed in [withdraw phase 2](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md#withdraw-phase-2), is really nothing but a cell with a certain lock period. Likewise, there might be other scripts on CKB, when combined with certain cell, just provide lock periods. The multisig script included in genesis cell, is one such example. So the idea arises: what if we build a unified pool, that handles all cells that have lock periods? When designed properly, we can ignore the fact that they might come from different dapps, using different scripts. What we do care, is that each of those cells comes with a capacity and lock period, when the lock period is reached, they are nothing but ordinary cells in one's wallet.
+如果你仔细观察，就会注意到 [取回阶段 2](https://github.com/mazhuping/docs/blob/master/docs/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.zh.md#%E5%8F%96%E6%AC%BE%E9%98%B6%E6%AE%B5-2) 消耗的 Cell 其实不过是一个有锁定期的 Cell。同样，在 CKB 上可能还有其他脚本，当与某些 Cell 结合的时候，只提供锁定期功能。包含在创世 Cell 中的多签脚本就是这种例子。那么想法来了：如果我们建立一个统一的池，统一处理所有具有锁定期的 Cells 呢？ 如果设计得当，我们可以忽略它们可能来自不同的dapp，使用不同的脚本。我们所关心的是，每一个 Cell 都有一个容量和锁定期，当锁定期到了，它们就只是某个钱包地址中普通的 Cell 而已了。
 
-Given this thought, we designed `locktime pool` in lumos. Right now it only processes Nervos DAO cells in withdraw phase 2 and multisig cells, but in the future there is nothing stopping us from integrating more scripts that provide lock periods. From a developer point of view, locktime pool, can be used to manage all of them, provide a unified view in dapps.
+鉴于这种想法，我们在 lumos 中设计了 `锁定时间池 locktime pool`。当前它只处理在取回阶段 2 中的 Nervos DAO Cell 和多签 Cells，不过未来我们会集成更多提供锁定期的脚本。从开发者视角来看，锁定时间池可以用来管理所有这种 Cell，为 dApp 提供一种统一的视角。
 
-As usual, we can query for all cells currently in the locktime pool:
+一如既往，我们可以查询当前锁定时间池中的所有 Cells： 
 
 ```
 > const { locktimePool } = require("@ckb-lumos/common-scripts");
@@ -432,7 +428,7 @@ As usual, we can query for all cells currently in the locktime pool:
 }
 ```
 
-Here we can found the cell just created from NervosDAO withdrawing step. Let's try to consume it using locktimePool:
+这里我们可以找到在 NervosDAO 取回步骤中所创建的 Cell，我们尝试使用锁定时间池来消耗它：
 
 ```
 > // Notice you will wait till the lock period of the cell has passed, otherwise this function would throw an error:
@@ -449,11 +445,11 @@ Here we can found the cell just created from NervosDAO withdrawing step. Let's t
 }
 ```
 
-This might actually be a surprise: we invoked transfer method, but it does nothing! Turns out the reason here, is that we are using the same address as both transfer input, and transfer output. Lumos is smart enough to figure out that when you are using the same input and output, we don't need to perform the action so as to save certain transaction fee.
+你可能会奇怪：我们调用了转账方法，但什么都没有发现。其实原因是：因为我们转账的发送方和接收方都是同样的地址，Lumos 能够智能地识别这种情况，所以无需执行操作以节约交易手续费。
 
-One different question you might ask, is that we use the same address in deposit and withdraw steps, why those previous attempts work? The reason for this, is that deposited cell, or created cell in withdraw step 1 has special purposes, they represent unique **actions** that we want to perform, hence they are **freezed** in the transaction skeleton, so later when we optimize the transaction to combine inputs/outputs, we won't touch those specially created cells. On the other hand, in locktime pool design, we treat a cell with expired lock period the same as a normal cell, they really have nothing different, hence here, lumos will try to optimize the transaction, by removing the action transferring amount from an address to itself. In lumos' eye, this is a no-op.
+这时候你可能会问：在 Nervos DAO 的存入和取回步骤中，我们使用的是相同的地址，为什么就可以生效呢？原因是：存入的或在取回阶段 1 创建的 Cell 有特殊用途，它们代表着我们想要执行的**操作**，因此它们会在交易脚手架中被冻结，因此后面我们优化交易以组合输入输出时，是不会去碰这些特别创建的 Cell 的；另一方面，在锁定时间池的设计中，我们将锁定期已过的 Cell 视为普通的 Cell，因此，lumos 就会尝试优化交易，也就不会执行自己转账给自己的操作。对于 lumos 来说，这是一个空操作。
 
-Now let's try the same step using a different target address:
+现在我们使用一个不同的接收方尝试相同的步骤：
 
 ```
 > skeleton = await locktimePool.transfer(skeleton, [address], "ckt1qyqx57xrsztnq7g5mlw6r998uyc2f5hm3vnsvgsaet", 100153459536n, (await rpc.get_tip_header()));
@@ -469,7 +465,7 @@ Now let's try the same step using a different target address:
 ]
 ```
 
-We can generate the signature as always:
+同样生成签名：
 
 ```
 > const signatures3 = ["0x6edde41592b41d445fabfd1b1d6854cf643bba724a338b5751827d991affa5a979d12339250bf5ade45f7f2742cba1e3de0791e37ef03914459bcdd099908ec601"];
@@ -478,20 +474,20 @@ We can generate the signature as always:
 '0xbaa7bdd71b7ec975f5a75c49d300857981f333c4346d6d6de1297d8d9d9ce0e0'
 ```
 
-This is really the core part of this post, if you are not understanding this part, we recommend you to read it again, and try it in CKB by yourself. What we are showing here, is that by designing a set of common APIs, we can build a general facility, that manages many different script instances, given the fact that they share the same behavior. And it is really not only the secp256k1-blake160 single signing script that shall be managed by a wallet. Any scripts that follow certain behavior, can be treated as a cell managed in a wallet.
+这部分是本教程的核心，如果你不理解这部分，我们建议你再读一遍，然后自己执行一遍代码。我们在这里展示的是，通过设计一套通用的 APIs，我们可以建立一个通用的设施，管理许多不同的脚本实例，因为它们共享相同的行为。而且不仅仅是 secp256k1-blake160 单签名脚本要被钱包管理。任何遵循一定行为的脚本，都可以被视为钱包中管理的一个 Cell。
 
-## Common Script
+## 常用脚本
 
-As we show above, locktime pool is one step ahead of the journey at managing different cells/scripts with similar behaviors. But we are not stopping here, we can continue further down the path: it is mentioned above, that those cells with lock period already passed, can be thought as normal cells. Can we treat them as usual, without needing to deal with locktime pool?
+如上文所述，锁定时间池是管理具备类似行为的不同 Cells/脚本方面领先走出的一步。但我们并不止步于此，我们将继续往前探索：上文提到过，那些已过锁定期的 Cells 可视为普通 Cells。那我们可以在不处理锁定时间池，将其视为普通 Cells 吗？
 
-We have build `common` module for this. Given a set of address/configurations(since for some P2SH script, address alone won't be enough), it can manage all cells using those scripts, including cells with expired lock period. Right now this includes the following:
+针对这种情况，我们已经构建了 `common` 模块。给定一组地址/配置（因为对于某些 P2SH 脚本来说，仅有地址是不够的），它可以管理所有使用这些脚本的 Cells，包括锁定期已过的 Cell。目前，包括以下内容：
 
-* secp256k1-blake160 single signing script
-* secp256k1-blake160 multiple signing script
-* NervosDAO script(only cells in withdraw phase 2 are managed)
+* secp256k1-blake160 单签脚本
+* secp256k1-blake160 多签脚本
+* NervosDAO 脚本（只有管理取回阶段 2 的 Cells）
 
-And the list doesn't stop here, we are working to provide a common API specification, that once implemented, can enable `common` and `locktime pool` to support those additional scripts as well. We do hope those 2 modules can help enable a unified cell manager in lumos, in which `common` handles all consumable cells, while `locktime pool` gives insights into cells that are locked now but will be usable in the future.
+列表内容不限于此，我们正着手提供一个常见 API 规范，实现后，就可以让 `common` 和 `locktime pool` 模块也支持这些额外脚本。我们希望这两个模块能够帮助 lumos 实现统一的 Cell 管理，`common` 模块负责处理所有可消耗的 Cells，`locktime pool` 让我们深入了解现在被锁定但将来可以使用的 Cell。
 
-## Recap
+## 回顾
 
-Lumos aims to take care of the full lifecycle of your CKB dapp. In this post, we are just taking a sneak peek at all the powers. We will continue to work on documents as well as sample projects to showcase all the powers enabled by lumos. We welcome all of you to try out lumos, and tell us what you think of it. So we can continue enhancing it, to make it the beloved framework for building CKB dapps.
+Lumos 的目的是在你的 CKB dApp 的完整生命周期过程中提供辅助。在本教程中，我们只是小试牛刀。我们会继续完善文档实例以展示 lumos 的所有功能。我们也欢迎大家上手尝试 lumos，并且给予我们反馈。这样我们也可以继续完善，将其打造为开发 CKB dApps 的必备框架。
