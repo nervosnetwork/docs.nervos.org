@@ -321,7 +321,7 @@ Now we have a complete transaction assembled, and we can send it to CKB:
 '0x88536e8c25f5f8c89866dec6a5a1a6a72cccbe282963e4a7bfb5542b4c15d376'
 ```
 
-Now we have successfully deposited CKBytes into CKB using lumos!
+Now we have successfully deposited CKBytes into Nervos DAO using lumos!
 
 ## Withdraw
 
