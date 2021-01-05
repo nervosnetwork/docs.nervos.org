@@ -16,49 +16,46 @@ title: Q&A | 钱包/交易所/矿池
     * 如果 `hash_type` 包含`data`， `code_hash` 应该匹配 `dep cell` 中数据的 blake2b 哈希；
     * 如果 `hash_type` 包含`type`， `code_hash` 应该匹配 `dep cell` 中 `type script`  的 blake2b 哈希；注意，在以下情况 CKB 会抛出一个验证异常：a) 我们使用 `type` 作为 `hash_type` 进行定位脚本代码； b) `cell deps` 所引用的 Cells 超过不止一个包含特定的 `type script` 哈希。
 
-**Q：**Can we hardcode the  `code_hash` , `hash_type` and the corresponding `cell_dep` of two scripts? Are they the same on Testnet as on Mainnet？
+**Q：**  `code_hash` ，`hash_type` 以及两个脚本对应的 `cell_dep` 能够硬编码？测试网和主网都一样吗？
 
-**A:** `code_hash` and `hash_type` can be hardcoded and they are the same on Testnet as on Mainnet.  `cell_dep`  is not the same on the Testnet as on Manniet. But they are all get from the fixed position of the genesis block. The single signature is from the second transaction of the genesis block and the multisignature is from the second output cell, once the genesis block is confirmed, the value is fixed
+**A：** `code_hash` 和 `hash_type` 能够硬编码并且在测试网和主网都一样。`cell_dep` 在测试网上和在主网上是不一样的。不过它们都是从创世区块中的固定位置中获取得到的。.单签来自创世区块的第二笔交易，多签来自第二个输出 Cell，只要创世区块一经确认，其值也就固定下来了。
 
-**Q:** How do we use  `Type` in the outputs?
+**Q：** 我们在输出中如何使用 `Type`？
 
-**A:** `Type` can be used in many ways, such as UDT(User Defined Token). We already have an RFC: [Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) you may refer it for more details, but currently there isn’t a standard equivalent of ERC20 in Ethereum community, will have to wait until the community has developed a best practice. For wallets or exchanges, you may handle the transactions with `Type = null` If the standard is generated, you also need filter transactions by whitelist and leave transactions with `Type = null` in the future.
+**A：** `Type` 可以用于很多方面，例如 UDT（User Defined Token）。 我们已经有了一份 RFC： [Simple UDT 草案规范](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)，你可以参考了解更多，不过当前在以太坊社区还没有类似 ERC20 的标准，所以必须等待社区开发出最佳实践。对于钱包或者交易所，你可以用 `Type = null` 来处理交易。如果未来对应标准出台了，你还需要通过白名单过滤交易留下 `Type = null` 的交易。
 
-**Q:** What is the relationship between the short address, long address and lock script?
+**Q：**短地址，长地址以及 lock script 之间有什么关系？
 
-**A:**  The long address and lock Script correspond one to one. All long addresses can be converted into a lock script and vice versa.All short addresses can be converted into long addresses, but the reverse is not necessarily true.CKB have provided single signature transfer and multisignature transfer scripts by default. Also you may refer to RFC:[CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md) for more details.
+**A:**  长地址和 lock script 一一对应。所有长地址都可以转换为 lock script，反之亦然。所有短地址都可以转换为长地址，但反之则不一定。CKB 已经默认提供了单签/多签转账脚本。你也可以参考 RFC：[CKB 地址格式](<https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0021-ckb-address-format/0021-ckb-address-format.zh.md>)了解更多。
 
-**Q:** Are there some test cases for address resolution and generation in other programming languages?
+**Q：** 是否有一些其他编程语言版本的地址解析和生成的测试用例？
 
-**A:** Yes, you may refer to the test cases of ckb-sdk-java：
+**A：** 有，你可以参考 ckb-sdk-java 的测试用例：
 https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/utils/AddressParserTest.java
 https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/utils/AddressGeneratorTest.java
 
+**Q：** 为什么最小转账数额不能小于 61 CKB？
 
-**Q:** Why the minimum transfer amount cannot be less than 61 CKB?
+**A：** 一个 Cell 有 3 个字段以及自身需要占用容量，你可以参考 [Cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell) 了解更多：
 
-**A:** A Cell has three fields and itself should take up capacity, you may refer to [Cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell) for more details：
+*  `capacity` 字段类型为 u64，占用 8 字节。
+*  `lock script` 为 `Script` 类型，其中包含`code_hash` 32 字节，`hash_type` 1 字节， `args` 20 字节。
+* `type script` 字段可选。
 
-* The field `capacity` is u64, which takes 8 bits.
-* The field `lock script` is `Script` type, includes `code_hash` 32 bits, `hash_type` 1 bit, `args` 20 bits
-* The field `type script` is optional.
+所以最小转账数额不能小于 61 CKB。
 
-so the minimum transfer amount need to be 61 CKB.
+**Q：** 如果我的地址中有 100 CKB，然后转出 61 CKB，剩余余额不足交易失败，我该怎么办？
 
-**Q:** If I have 100 tokens in my address and transfer 61 CKB,  the left balance isn’t enough to create change. How can I deal with it?
+**A：** 推荐提示用户余额不足，可以使用比特币粉尘 UTXO 处理逻辑。另外，CKB 也有一个新的 lock script 能够接收任意数额的转账，你可以参考 [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438) 了解更多。
 
-**A:** It’s recommended to prompt users for insufficient balance, which use Bitcoin dust UTXO processing logic. Also there is a new lock script for CKB that can accept any amount of payment. You may refer [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438) for more details.
+**Q：** `output_data` 能用作交易所入金凭证吗？
 
-**Q:** Can `output_data` be used as exchange entry certificate?
+**A：**CKB 编程模型是一个泛化版的 UTXO 模型。我们建议为每个用户生成对应不同的账户地址而不是共享地址然后通过 memo 区分。
 
-**A:** CKB Programming model is a generalized version of the UTXO model.It is recommended to generate different account addresses for each user instead of sharing one address and distinguish them by memo.
+**Q：** 有没有类似比特币钱包的API来管理CKB？
 
+**A：** 如果你已经有比特币的 UTXO 管理框架，你可以继续使用并且扫描 CKB 网络上的每一个区块。如果没有，你可以参考 [Cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell#tools) 使用工具进行索引查询。
 
-**Q:** Are there APIs similar to Bitcoin Wallet’s APIs to manage CKB?
+**Q：** 如果我想要获取交易列表，交易余额以及发送交易，我应该调用哪些 APIs?
 
-**A:** If you already have UTXO management framework for Bitcoin, you may continue to use it and scan every block of CKB blockchain.If you don’t, you may refer to [Cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell#tools) and use the tools to index or query.
-
-
-**Q:** Which APIs need to be invoked if I want to get transaction lists, transaction balance, initiate transactions and etc.
-
-**A:** You may refer to our [JSON RPC](https://nervosnetwork.github.io/docs-new/docs/reference/rpc) document.
+**A：**你可以参考我们的 [JSON RPC](https://nervosnetwork.github.io/docs-new/docs/reference/rpc) 文档。
