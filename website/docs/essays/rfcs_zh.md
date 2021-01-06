@@ -30,8 +30,6 @@ Nervos Network 由一系列协议和创新方法组成。关键协议的设计�
 
 ### [Nervos CKB 经济模型](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.zh.md)
 
-This RFC introduces the crypto-economics of Nervos CKB. Nervos CKB is the base layer of the overall Nervos Network which is a preservation focused, "Store of Assets" blockchain. Economically, it's designed to provide sustainable security and decentralization.
-
 本 RFC 介绍了 Nervos CKB 的经济模型。Nervos CKB 是整个 Nervos 网络的基础层，一个专注于“资产存储”的区块链。在经济上，它的设计是为了提供可持续的安全性和去中心化。
 
 ### [数据结构](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0019-data-structures/0019-data-structures.zh.md)
@@ -68,41 +66,44 @@ CKB 使用 ***Complete Binary Merkle Tree(CBMT)*** 来为静态数据项生成 *
 
 ### [VM 系统调用](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0009-vm-syscalls/0009-vm-syscalls.zh.md)
 
+本 RFC 描述了当前 CKB 已实现的所有 RISC-V VM 系统调用。CKB VM 系统调用用于实现基于 RISC-V 的 CKB VM 与 CKB 进程之间的通讯，可以在运行在 VM 中的脚本读取当前交易信息以及通用的链上信息。
 
+### [Eaglesong（Nervos CKB 的 PoW 函数）](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0010-eaglesong/0010-eaglesong.zh.md)
 
-This RFC describes all the RISC-V VM syscalls implemented in CKB so far.CKB VM syscalls are used to implement communications between the RISC-V based CKB VM, and the main CKB process, allowing scripts running in the VM to read current transaction information as well as general blockchain information from CKB. 
+本 RFC 详细介绍了 Nervos CKB 的工作量证明哈希函数：Eaglesong。 
 
-### [Eaglesong (Proof-of-Work Function for Nervos CKB)](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0010-eaglesong/0010-eaglesong.md)
+### [交易过滤](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0011-transaction-filter-protocol/0011-transaction-filter-protocol.zh.md)
 
-This RFC specifies the Eaglesong hash function as it is to be used in the context of Nervos CKB proof-of-work.
+交易过滤协议能够帮助节点减少需要发送的交易数据量，这是为了让低容量的节点也能维持对链上某些特定交易的最新状态或者验证交易的执行情况的高度安全保证。
 
-### [Transaction Filter](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0011-transaction-filter-protocol/0011-transaction-filter-protocol.md)
+### [节点发现](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0012-node-discovery/0012-node-discovery.zh.md)
 
-Transaction filter protocol allows peers to reduce the amount of transaction data they send which is to allow low-capacity peers to maintain a high-security assurance about the up to date state of some particular transactions of the chain or verify the execution of transactions.
+本 RFC 介绍 CKB 的节点发现协议。主要参考了 [比特币的协议](https://en.bitcoin.it/wiki/Satoshi_Client_Node_Discovery)。主要不同点如下:
+- 节点版本号包含在 `GetNodes` 消息中
+- 通过 `Nodes` 消息来定时广播当前连接的所有节点
+- 我们使用 `multiaddr` 作为节点地址的格式 (不允许出现 `/p2p/` 段，如果违反会被认为是*不良*行为并被打低分)
 
-### [Node Discovery](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0012-node-discovery/0012-node-discovery.md)
+### [区块模板](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0013-get-block-template/0013-get-block-template.zh.md)
 
-This RFC introduces the CKB Node Discovery.It mainly refers to [Satoshi Client Node Discovery](https://en.bitcoin.it/wiki/Satoshi_Client_Node_Discovery). The differences between them are summarized below:
-* The node version number is included in the `GetNodes` message.
-* The `Nodes` message is used to periodically broadcast all nodes currently connected.
-* We use `multiaddr` as the format of node addresses (It MUST NOT include `/p2p/` segment otherwise it's considered as *misbehavior* and a low score SHOULD be given.)
+本 RFC 主要是用来描述去中心化的 CKB 挖矿协议，该协议通过使区块去中心化来提高 CKB 网络的安全性。
 
-### [Block Template](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0013-get-block-template/0013-get-block-template.md)
+### [VM Cycle 限制](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.zh.md)
 
-This RFC describes the decentralized CKB mining protocol which is to improve the security of the CKB network by making blocks decentralized.
+这个 RFC 描述了用于规范 VM 脚本的 cycle 限制。
 
-### [VM Cycle Limits](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
+CKB VM 是一个灵活的虚拟机，可以自由地实现许多流程控制，比如 loops 或者 branches。因此，我们需要在 CKB VM 中强制执行某些规则来防止恶意脚本，比如带有无限循环的脚本。
 
-This RFC describes cycle limits used to regulate VM scripts.CKB VM is a flexible VM that is free to implement many control flow constructs. We need to enforce certain rules in CKB VM to prevent malicious scripts, such as a script with infinite loops.
+### [交易有效字段：since](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0017-tx-valid-since/0017-tx-valid-since.zh.md)
 
-### [Transaction valid since](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md)
+这个 RFC 建议通过添加一个新的共识规则，来防止在某个特定的区块时间戳或者区块号之前使用某个 Cell。
 
-This RFC introduces a new consensus rule to prevent a cell to be spent before a certain block timestamp or a block number by adding a new `u64`  type field:  `since` in the transaction input.
+### [CKB 地址格式](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0021-ckb-address-format/0021-ckb-address-format.zh.md)
 
-### [CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md)
+本 RFC 介绍如何实现 CKB 地址格式，这个 Cell 的 lock script 在应用层的显示建议。lock script 主要由三个关键参数组成，包括：`code_hash`，`hash_type` 和 `args`。CKB 地址将 lock script 封装为单行的、可验证的和人类可读的格式。
 
-This RFC introduces how to implement CKB Address Format which is an application level cell lock script display recommendation.CKB address packages lock script into a single line, verifiable, and human read friendly format.
+### [Nervos DAO 的存入和取出](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.zh.md)
 
-### [Deposit and Withdraw in Nervos DAO](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md)
+本文描述了 Nervos DAO 中的存入和取出机制。Nervos DAO 是一个智能合约，就像 CKB 上其他的智能合约一样，用户可以与之交互。Nervos DAO 的功能之一就是为 CKByte 持币者提供一种抗稀释的功能。
 
-This RFC describes deposit and withdraw transaction in Nervos DAO. Nervos DAO is a smart contract and one function of Nervos DAO is to provide an dilution counter-measure for CKByte holders. Please pay attention to  [Common Gotchas](https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao) which including common and very important points you should be aware to use Nervos DAO well without losing CKBs.
+注意: 这里有常见问题汇总：[Common Gotchas](https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao)，如果您想要清楚地了解如何使用 Nervos DAO 并且不丢失 CKB，那么请务必阅读该部分，里面包含了一些常见的且非常重要的要点
+
