@@ -382,494 +382,492 @@ CKB-VM 的指令集为 RISC-V。
 ---
 
 ### 一等资产
-A unique property of CKB wherein ownership of a Cell, and the data contained within, is not assigned by the issuer, developer, or smart contract. The user owns the cell and is responsible for costs associated with state rent.
+一等资产（first-class asset）是 CKB的一个独特属性，其中 Cell 的所有权以及其中包含的数据不由发行者、开发者或智能合约分配。用户拥有 Cell 的所有权，并负责支付与状态租金相关的费用。
 
 #### 参考
 - [Cell](#cell)
-- [Cell Model](#cell-model)
-- [State Rent](#state-rent)
-- [First-Class Asset on the Nervos Network Blog](https://medium.com/nervosnetwork/first-class-asset-ff4feaf370c4)
+- [Cell 模型](#cell-模型)
+- [状态租金](#状态租金)
+- [Nervos 博客对一等资产的解释](https://medium.com/nervosnetwork/first-class-asset-ff4feaf370c4)
 
 ---
 
-### Fungible Token
-Any token where every unit has identical characteristics and is interchangeable with other tokens of the same type.
+### 同质化代币
+同种代币中，每个代币都具有相同的特性，并可与其他代币无区别互换。
 
-Fungible tokens represent the vast majority of cryptocurrencies.
+当前大部分加密货币都属于同质化代币。
 
 #### 参考
-- [Non-Fungible Token](#non-fungible-token)
-- [Token](#token)
-- [User-Defined Token](#user-defined-token)
+- [非同质化代币](#非同质化代币)
+- [代币](#代币)
+- [用户自定义代币](#用户自定义代币)
 
 ---
 
-### Full Node
-A node that contains a complete copy of the entire blockchain history.
+### 全节点
+拥有区块链完整历史账本数据的节点。
 
 #### 同义词
-- [Node](#node)
+- [节点](#节点)
 
 ---
 
-### Hardware Wallet
-A cryptocurrency wallet that uses a physical hardware component to store private keys. These devices are permanently disconnected from the internet and typically interface with computers only for specific activities such as sending funds.
+### 硬件钱包
+一种使用物理硬件的形式存储私钥的加密货币钱包。这些设备永不触网，通常只与计算机接口交互，用于发送资金等特定活动。
 
-A hardware wallet is a form of cold wallet.
+硬件钱包是冷钱包的一种形式。
 
 #### 参考
-- [Cold Storage](#cold-storage)
-- [Cold Wallet](#cold-wallet)
-- [Private Key](#private-key)
-- [Wallet](#wallet)
+- [冷存储](#冷存储)
+- [冷钱包](#冷钱包)
+- [私钥](#私钥)
+- [钱包](#钱包)
 
 ---
 
-### Hash Rate
-A measure of the speed at which a computer is able to complete cryptographic operations. These operations are known as "hashing", and are often measured in hashes per second.
+### 哈希率/算力
+计算机处理加密运算能力的度量单位。这些运算也被称为“哈希”，即每秒钟能做多少次hash碰撞，就是其“算力”的代表，单位写成hash/s。
 
 #### 参考
-- [Miner](#miner)
-- [Network Hash Rate](#network-hash-rate)
+- [矿工](#矿工)
+- [网络哈希率](#网络哈希率)
 
 ---
 
-### Height
-A shorthand name for block height.
+### 高度
+区块高度的简称。
 
 ### 同义词
-- [Block Height](#block-height)
+- [区块高度](#区块高度)
 
 ---
 
-### Light Client
-A type of node software with much lower resource requirements than a full node. A light client allows for the most common basic functions, but does not have advanced functionality.
+### 轻客户端
+相比于全节点，对资源要求更低的节点软件。轻客户端可以实现最常见的基本功能，但不具备高级功能。
 
-Light clients do not contain a copy of the full blockchain or full state. They typically rely on full nodes in the network in order to operate.
+轻客户端不包含区块链网络的完整状态。它们通常依靠网络中的完整节点来运行。
 
 #### 参考
-- [Blockchain](#blockchain)
-- [Full Node](#full-node)
-- [Node](#node)
+- [区块链](#区块链)
+- [全节点](#全节点)
+- [节点](#节点)
 
 ---
 
-### Mainnet
-The Nervos CKB public blockchain.
+### 主网
+特指 Nervos CKB。
 
-The name of the Nervos CKB Mainnet is Lina.
+Nervos CKB 主网的名字为 Lina。
 
 #### 同义词
 - [CKB](#ckb)
-- [Common Knowledge Base](#common-knowledge-base)
+- [共同知识库](#共同知识库)
 - [Lina](#lina)
 - [Nervos CKB](#nervos-ckb)
 
-#### Not To Be Confused With
+#### 易混淆
 - [Aggron](#aggron)
-- [Testnet](#testnet)
+- [测试网](#测试网)
 
 ---
 
-### Mempool
-A shorthand name for memory pool. A "waiting area" on full nodes for transactions that have been broadcasted to the network but have not yet been confirmed on the blockchain.
+### 内存池
+内存池（mempool，memory pool 的简称）。在全节点中已向全网广播但仍未确认的交易，都会暂时记录在内存池中。
 
 #### 参考
-- [Confirmation](#confirmation)
-- [Transaction](#transaction)
+- [确认](#确认)
+- [交易](#交易)
 
 ---
 
-### Micro-State
-A small piece of state that is isolated and often able to be acted upon independently without knowing the total state of the network.
+### 微状态
+一个孤立的状态片，通常能够在不知道网络完整状态的情况下进行状态变更。
 
-On Nervos, micro-state is represented by a Cell.
+在 Nervos 中，一个 Cell 即为一个微状态。
 
 #### 同义词
 - [Cell](#cell)
 
 #### 参考
-- [State](#state)
+- [状态](#状态)
 
 ---
 
-### Miner
-A miner is a computer that provides computing power to validate transactions and create the blocks in the blockchain.
+### 矿工
+矿工指为区块链网络提供算力进行交易验证以及出块的计算机节点。
 
 #### 参考
-- [Block](#block)
-- [Blockchain](#blockchain)
+- [区块](#区块)
+- [区块链](#区块链)
 
 ---
 
-### Miner Fee
-Another term for transaction fee.
+### 矿工费
+交易费用的另一种说法。
 
 #### 同义词
-- [Transaction Fee](#transaction-fee)
+- [交易费用](#交易费用)
 
 ---
 
-### Mining
-The practice of providing computational power to validate transactions and create blocks in the blockchain in exchange for a mining reward.
+### 挖矿
+在区块链网络中提供算力进行交易验证和出块，以获得挖矿奖励的行为。
 
 #### 参考
-- [Block](#block)
-- [Blockchain](#blockchain)
-- [Mining Reward](#mining-reward)
-- [Transaction](#transaction)
+- [区块](#区块)
+- [区块链](#区块链)
+- [挖矿奖励](#挖矿奖励)
+- [交易](#交易)
 
 ---
 
-### Mining Reward
-Native tokens that are paid to a miner in exchange for providing the computational resources required for mining.
+### 挖矿奖励
+支付给矿工作为其提供计算挖矿算力的原生代币报酬。
 
 #### 参考
-- [Miner](#miner)
-- [Mining](#mining)
-- [Native Token](#native-token)
+- [矿工](#矿工)
+- [挖矿](#挖矿)
+- [原生代币](#原生代币)
 
 ---
 
-### Native Token
-A token type which is used for paying fees and rewards on a public blockchain. This token is often unique as it is the only token that must exist on the blockchain in order to operate.
+### 原生代币
+公链上用于支付交易费用和矿工/验证者奖励的代币类型。
 
-On Nervos the native token is the CKByte.
+Nervos 区块链的原生代币是 CKByte。
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Token](#token)
+- [代币](#代币)
 
 ---
 
 ### NC-MAX
-The consensus algorithm used on the Nervos blockchain.
+Nervos 区块链上的共识算法。
 
 #### 参考
-- [Consensus](#consensus)
-- [Nervos Blockchain](#nervos-blockchain)
+- [共识](#共识)
+- [Nervos 区块链](#nervos-区块链)
 
 ---
 
-### Neighbor
-A node that is directly connected to another node in the blockchain peer to peer network.
+### 相邻节点
+在区块链点对点网络中与节点直接连接的另一个节点。
 
 #### 参考
-- [Node](#node)
-- [Peer to Peer](#peer-to-peer)
+- [节点](#节点)
+- [点对点](#点对点)
 
 ---
 
-### Nervos Blockchain
-The layer 1 blockchain of the Nervos Network known as the Common Knowledge Base.
+### Nervos 区块链
+Nervos 网络的 layer1，即共同知识库。
 
 #### 同义词
-- [Common Knowledge Base](#common-knowledge-base)
+- [共同知识库](#共同知识库)
 - [Layer 1](#layer-1)
 - [Nervos CKB](#nervos-ckb)
 
 ---
 
 ### Nervos DAO
-A system that allows users to lock CKBytes for a period of time to earn rewards from Secondary Issuance. This process is similar to staking on other platforms.
+可以让用户将 CKB 代币进行锁仓以获得二级发行奖励的系统。类似于其他公链的质押系统。
 
 #### 参考
 - [CKByte](#ckbyte)
 - [DAO](#dao)
-- [Secondary Issuance](#secondary-issuance)
-- [Nervos DAO Explained on the Nervos Blog](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c)
+- [二级发行](#二级发行)
+- [Nervos 博客对 Nervos DAO 的解释](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c)
 
 ---
 
-### Network Hash Rate
-A measurement of the total computational processing power which is dedicated to providing security to the network.
+### 网络哈希率
+网络总算力的度量指标，网络哈希率越高，网络安全性越高。
 
 #### 参考
-- [Hash Rate](#hash-rate)
-- [Miner]
+- [哈希率](#哈希率)
+- [矿工](#矿工)
 
 ---
 
-### Node
-A computer that is running the blockchain node software, which allows them to participate in the blockchain's peer to peer network.
+### 节点
+运行区块链节点软件的计算机。
 
 #### 同义词
-- [Full Node](#full-node)
+- [全节点](#全节点)
 
 #### 参考
-- [Pruned Node](#pruned-node)
+- [精简节点](#精简节点)
 
 ---
 
-### Non-Fungible Token
-Any token where every unit within the same type can have different characteristics, making each token unique.
+### 非同质化代币
+即使是同种类型的代币，但每一枚代币都有不同的特性，都是独一无二的，这种代币就是非同质化代币。
 
-Non-fungible tokens are often used for digital representation of unique real-world items, such as real-estate.
+非同质化代币通常用于独特的现实世界项目的数字表示，如不动产。
 
 #### 参考
-- [Fungible Token](#fungible-token)
-- [Token](#token)
-- [User-Defined Token](#user-defined-token)
+- [同质化代币](#同质化代币)
+- [代币](#代币)
+- [用户自定义代币](#用户自定义代币)
 
 ---
 
-### Open Source
-A piece of software where source code is freely available for examination or alteration by any third-party.
+### 开源
+一个软件，其源代码可供任何第三方自由查看或修改。
 
 #### 参考
-- [What is Open Source at OpenSource.com](https://opensource.com/resources/what-open-source)
+- [OpenSource.com 对开源的定义](https://opensource.com/resources/what-open-source)
 
 ---
 
 ### P2P
-A shortname name for peer to peer.
+点对点的英文简称。
 
 #### 同义词
-- [Peer to Peer](#peer-to-peer)
+- [点对点](#点对点)
 
 ---
 
-### Paper Wallet
-A form of storing a recovery phrase or private keys offline by printing them on a piece of paper. This document would then be stored by traditional means in a secured location of the user's choosing, such as a safe.
+### 纸钱包
+将助记词或私钥打印在一张纸上离线储存的一种形式。然后，该文件将以传统方式存储在用户选择的安全地点，如保险柜。
 
 #### 参考
-- [Private Key](#private-key)
-- [Wallet](#wallet)
+- [私钥](#私钥)
+- [钱包](#钱包)
 
 ---
 
 ### 支付地址
-A string of letters and numbers that cryptocurrency and assets can be sent to and from.
+一串数字字母混合的字符串，可用于加密货币和资产的转账和接收。
 
-Nervos addresses always begin with the letters "ckb" and are 46 characters in length.
-
-A payment address is designed to be shared with others, similar to an email address.
+Nervos 地址以 “ckb” 开头，总长度 46 个字符。
 
 #### 同义词
-- [Address](#address)
+- [地址](#地址)
 
 ---
 
-### Peer to Peer
-A type of network where the nodes communicate directly with each other instead of going through an intermediary centralized server.
+### 点对点
+一种节点之间彼此直接通讯，而不是通过中间第三方服务器路由的网络类型。
 
 #### 同义词
 - [P2P](#p2p)
 
 #### 参考
-- [Node](#node)
+- [节点](#节点)
 
 ---
 
-### Proof of Work
-A type of consensus algorithm that requires high computational resources in order to produce answers to cryptographic puzzles in return for a mining reward paid in native tokens.
+### 工作量证明
+一种需要高计算资源的共识算法，以产生密码谜题的答案，来换取以原生代币支付的挖矿奖励。
 
-These answers used to produce blocks and process transactions in a public blockchain. The computational difficulty itself is the basis for security in the public blockchain because it is extremely costly to replicate.
+这些答案用于在公链中出块和处理交易。计算难度本身就是公链安全性的基础，因为它的复制成本极高。
 
 #### 参考
-- [Block](#block)
-- [Consensus](#consensus)
-- [Mining Reward](#mining-reward)
-- [Proof of Stake](#proof-of-stake)
-- [Transaction](#transaction)
+- [区块](#区块)
+- [共识](#共识)
+- [挖矿奖励](#挖矿奖励)
+- [权益证明](#权益证明)
+- [交易](#交易)
 
 ---
 
-### Proof of Stake
-A type of consensus algorithm where the participants of the network cast votes to reach agreement on the creation of blocks and processing of transactions. The strength of each vote is weighted by the amount of native token owned by the voter.
+### 权益证明
+一种共识算法，网络的参与者通过投票，就出块和交易处理达成一致。每一次投票权重是根据投票者拥有的原生代币数量加权的。
 
 #### 参考
-- [Consensus](#consensus)
-- [Mining Reward](#mining-reward)
-- [Proof of Work](#proof-of-work)
-- [Transaction](#transaction)
+- [共识](#共识)
+- [挖矿奖励](#挖矿奖励)
+- [工作量证明](#工作量证明)
+- [交易](#交易)
 
 ---
 
-### Propagation
-A shorthand name for Block Propagation.
+### 广播
+区块广播的简写。
 
 #### 同义词
-- [Block Propagation](#block-propagation)
+- [区块广播](#区块广播)
 
 ---
 
 ### Private Key
-A string of letters and numbers that is used to prove ownership of cryptocurrency or digital assets, allowing them to be sent to other payment addresses. A private key is normally stored in a wallet.
+一串字母数字混合的字符串，用于证明加密货币或数字资产的所有权，允许将它们发送到其他支付地址。私钥通常存储在钱包中。
 
-A private key must be kept secret at all times. A private key works similarly to a key to a safe containing your cryptocurrency. Anyone with the key has the ability to open the safe and take the contents.
+私钥在任何时候都必须保密。私钥的工作原理类似于装有你的加密货币的保险箱的钥匙。任何拥有钥匙的人都有能力打开保险箱并拿走里面的东西。
 
 #### 参考
-- [Digital Asset](#digital-asset)
-- [Paper Wallet](#paper-wallet)
-- [Payment Address](#payment-address)
-- [Wallet](#wallet)
+- [数字资产](#数字资产)
+- [纸钱包](#纸钱包)
+- [支付地址](#支付地址)
+- [钱包](#钱包)
 
 ---
 
-### Pruned Node
-A node which contains only part of the blockchain history.
+### 精简节点
+值包含部分区块链历史数据的节点。
 
 #### 参考
-- [Node](#node)
+- [节点](#节点)
 
 ---
 
 ### Shannon
-A fractional denomination of CKBytes. One CKByte is equal to 100,000,000 Shannons.
+CKByte 的最小单位，1 CKByte = 100,000,000 Shannons。
 
-A Shannon is the equivalent of a Bitcoin Satoshi.
+香农（Shannon）类似于比特币的聪（Satoshi）。
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Common Knowledge Byte](#common-knowledge-byte)
-- [Satoshi (denomination) on Bitcoin.org](https://bitcoin.org/en/glossary/denominations)
+- [共同知识字节](#共同知识字节)
+- [Bitcoin.org 上聪的解释](https://bitcoin.org/en/glossary/denominations)
 
 ---
 
-### Signature
-A shorthand name for cryptographic signature.
+### 签名
+加密签名的简写。
 
 #### 同义词
-- [Cryptographic Signature](#cryptographic-signature)
+- [加密签名](#加密签名)
 
 ---
 
-### State
-Data stored on the blockchain. In most contexts this this means current data and excludes historical data.
+### 状态
+存储在区块链中的数据。在大多数情况下，这意味着当前数据，不包括历史数据。
 
 #### 参考
-- [Blockchain](#blockchain)
+- [区块链](#区块链)
 
 ---
 
-### Testnet
-An alternate public blockchain used for testing purposes that is running the same or similar software as the Mainnet. All tokens and data on testnets have no value.
+### 测试网
+一个用于测试目的的备用公共区块链，运行着与主网相同或类似的软件。测试网上的所有代币和数据都没有价值。
 
-The name of the Nervos Testnet is Aggron.
+Nervos 的测试网为 Aggron。
 
 #### 同义词
 - [Aggron](#aggron)
 
-#### Not To Be Confused With
+#### 易混淆
 - [Lina](#lina)
-- [Mainnet](#mainnet)
+- [主网](#主网)
 
 ---
 
-### Tip
-A shorthand name for tip block.
+### 链头
+链头区块（tip block）的简称。
 
 #### 同义词
-- [Tip Block](#tip-block)
+- [链头区块](#链头区块)
 
 ---
 
-### Tip Block
-The most recent block to be confirmed in a blockchain. The tip block has the highest block height in the blockchain.
+### 链头区块
+区块链中最近确认的区块。链头区块在区块链中具有最高的区块高度。
 
 #### 同义词
-- [Tip](#tip)
+- [链头](#链头)
 
 #### 参考
-- [Block](#block)
-- [Block Height](#block-height)
-- [Blockchain](#blockchain)
+- [区块](#区块)
+- [区块高度](#区块高度)
+- [区块链](#区块链)
 
 ---
 
-### Transaction
-An entry in the blockchain that describes any change in state. 
+### 交易
+区块链中描述任何状态变化的条目。
 
 #### 参考
-- [Blockchain](#blockchain)
-- [Nervos Blockchain](#nervos-blockchain)
+- [区块链](#区块链)
+- [Nervos 区块链](#nervos-区块链)
 
 ---
 
-### Transaction Fee
-A fee which is paid in the native token to miners in exchange for processing a transaction.
+### 交易费用
+发起交易时需要支付给矿工的以原生代币计价的费用。
 
 #### 同义词
-- [Miner Fee](#miner-fee)
+- [矿工费](#矿工费)
 
 #### 参考
-- [Miner](#miner)
-- [Native Token](#native-token)
-- [Transaction](#transaction)
+- [矿工](#矿工)
+- [原生代币](#原生代币)
+- [交易](#交易)
 
 ---
 
-### Token
-A single unit of information used to facilitate a transaction on a blockchain.
+### 代币
+用于促进区块链上交易的一个信息单位。
 
 #### 参考
-- [Blockchain](#blockchain)
-- [Digital Asset](#digital-asset)
-- [Transaction](#transaction)
+- [区块链](#区块链)
+- [数字资产](#数字资产)
+- [交易](#交易)
 
 ---
 
 ### UDT
-An abbreviation for User-Defined Token.
+用户自定义代币（User-Defined Token）的缩写。
 
 #### 同义词
-- [User-Defined Token](#user-defined-token)
+- [用户自定义代币](#用户自定义代币)
 
 ---
 
-### Unconfirmed
-The state of a transaction that has not yet been confirmed. An unconfirmed transaction is not finalized and cannot be guaranteed.
+### 未确认
+尚未确认的交易状态。未经确认的交易不能保证最终一致性。
 
 #### 同义词
-- [Unconfirmed Transaction](#unconfirmed-transaction)
+- [未确认交易](#未确认交易)
 
 #### 参考
-- [Confirmation](#confirmation)
-- [Transaction](#transaction)
+- [确认](#确认)
+- [交易](#交易)
 
 ---
 
-### Unconfirmed Transaction
-A transaction that has not yet been confirmed. An unconfirmed transaction is not finalized and cannot be guaranteed.
+### 未确认交易
+尚未确认的交易。未经确认的交易不能保证最终一致性。
 
 #### 同义词
-- [Unconfirmed](#unconfirmed)
+- [未确认](#未确认)
 
 #### 参考
-- [Confirmation](#confirmation)
-- [Transaction](#transaction)
+- [确认](#确认)
+- [交易](#交易)
 
 ---
 
-### User-Defined Token
-A custom token created with properties defined by the user. In normal usage, this most commonly refers to fungible tokens.
+### 用户自定义代币
+由用户定义属性创建的自定义代币。在一般情况下，这最常见的是指同质化代币。
 
-A User-Defined Token is usually referred to by its abbreviation, UDT.
+用户自定义代币（User-Defined Token）通常使用其英文缩写表示： UDT。
 
 #### 同义词
-- [Fungible Token](#fungible-token)
+- [同质化代币](#同质化代币)
 - [UDT](#udt)
 
 #### 参考
-- [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
-- [ERC777 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-777)
-- [Simple UDT Draft Spec on Nervos Talk](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)
+- [ERC20](https://eips.ethereum.org/EIPS/eip-20)
+- [ERC777](https://eips.ethereum.org/EIPS/eip-777)
+- [简单 UDT 草案规范（Simple UDT Draft Spec）](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)
 
 ---
 
-### Wallet
-A piece of software used to manage a user's private keys and payment addresses. A wallet allows a user to send and receive cryptocurrency payments. Some wallets also incorporate functionality to manage digital assets.
+### 钱包
+一个用于管理用户私钥和支付地址的软件。钱包允许用户发送和接收加密货币。一些钱包还包含管理数字资产的功能。
 
 #### 参考
-- [Paper Wallet](#paper-wallet)
-- [Private Key](#private-key)
-- [Payment Address](#payment-address)
-- [Digital Asset](#digital-asset)
+- [纸钱包](#纸钱包)
+- [私钥](#私钥)
+- [支付地址](#支付地址)
+- [数字资产](#数字资产)
 
 ---
 
-## Economics Glossary
+## 经济类术语
 
 ### Base Issuance
 The creation of new CKBytes through temporary inflation that is paid to miners through Base Rewards.
@@ -879,196 +877,196 @@ Base Issuance is paid for by using a fixed and decreasing inflation schedule. Ap
 #### 参考
 - [Base Reward](#base-reward)
 - [CKByte](#ckbyte)
-- [Secondary Issuance](#secondary-issuance)
-- [Miner](#miner)
+- [二级发行](#二级发行)
+- [矿工](#矿工)
 - [Crypto-Economics RFC on Nervos Network GitHub](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md)
 
 ---
 
-### Base Reward
-A subsidy paid to miners in CKBytes for providing the compute and storage requirements required for processing transactions and persisting data on Nervos.
+### 基础奖励
+向矿工支付的 CKB 代币补贴，奖励矿工提供处理交易和在 Nervos 上持久化保存数据所需的计算和存储需求。
 
-Base Rewards are created from Base Issuance and will decrease over time until eventually ending.
+基础奖励来源于基础发行，随着时间线性减少，直至最终结束。
 
 #### 参考
-- [Base Issuance](#base-issuance)
+- [基础发行](#基础发行)
 - [CKByte](#ckbyte)
-- [Miner](#miner)
-- [Transaction](#transaction)
+- [矿工](#矿工)
+- [交易](#交易)
 
 ---
 
-### Commit Reward
-A reward paid to miners in CKBytes for committing a previously proposed transaction. After the transaction has been committed it is confirmed.
-
-#### 参考
-- [CKByte](#ckbyte)
-- [Confirmation](#confirmation)
-- [Miner](#miner)
-- [Transaction](#transaction)
-
----
-
-### Fiat Currency
-Fiat currency is a form of money that has no intrinsic value. The value of fiat currency is derived from the support of the governing body that maintains it, and by the agreed value by parties that transact with it.
-
-#### 参考
-- [Cryptocurrency](#cryptocurrency)
-- [Digital Currency](#digital-currency)
-
----
-
-### Heavy Asset Problem
-A common problem found in multi-asset blockchain platforms where the value of the assets stored on the chain gains significant value but the native token of the chain does not. This raises the incentive to attack the the network, but does not increase the security because the value of the native token is what is used to secure the network.
-
-#### 参考
-- [Asset](#asset)
-- [Starving Layer 1 Problem](#starving-layer-1-problem)
-- [Tragedy of the Security Commons](#tragedy-of-the-security-commons)
-
----
-
-### Liquidity
-The ability for an asset to be bought or sold easily without causing a significant change in the current market price.
-
-#### 参考
-- [Asset](#asset)
-
----
-
-### Proposal Reward
-A reward paid to miners in CKBytes for proposing an unconfirmed transaction. After the transaction has been proposed it becomes eligible to be committed.
+### 区块提交奖励
+支付给矿工的 CKB 奖励，奖励矿工提交之前提议的交易。交易提交后，交易便已确认。
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Confirmation](#confirmation)
-- [Miner](#miner)
-- [Transaction](#transaction)
+- [确认](#确认)
+- [矿工](#矿工)
+- [交易](#交易)
 
 ---
 
-### Secondary Issuance
-The creation of new CKBytes through limited and decreasing inflation that is paid to miners through Secondary Rewards.
-
-Secondary Issuance follows a fixed inflation schedule of 1.344 billion CKBytes per year. This amount does not change. Unlike Base Issuance, Secondary Issuance does not affect everyone on the network. It is a small and targeted inflation from users that occupy space on Nervos or hold their CKBytes outside of the Nervos DAO.
+### 法定货币
+法定货币是一种没有内在价值的货币形式。法币的价值来自于维持法币的管理机构的支持，以及与法币进行交易的各方商定的价值。
 
 #### 参考
-- [Base Issuance](#base-issuance)
+- [加密货币](#加密货币)
+- [数字货币](#数字货币)
+
+---
+
+### 重资产问题
+在多资产公链中发现的一个常见问题，即存储在链上的资产价值获得了巨大的价值，但链上的原生代币却没有。这提高了攻击网络的动机，但并没有提高安全性，因为本机代币的价值是用来保护网络安全的。
+
+#### 参考
+- [资产](#资产)
+- [Layer 1 流失问题](#layer-1-流失问题)
+- [共同安全悲剧](#共同安全悲剧)
+
+---
+
+### 流动性
+某项资产在不引起当前市场价格重大变化的情况下，能够轻易地买进或卖出的能力。
+
+#### 参考
+- [资产](#资产)
+
+---
+
+### 区块提议奖励
+支付给矿工的 CKB 奖励，以奖励他们提出一笔未经确认的交易。在提出交易后，该交易才能被提交。
+
+#### 参考
+- [CKByte](#ckbyte)
+- [确认](#确认)
+- [矿工](#矿工)
+- [交易](#交易)
+
+---
+
+### 二级发行
+有限递降的 CKB 通胀，用于支付矿工的二级奖励。
+
+二次发行遵循固定的通货膨胀时间表，每年 13.44 亿 CKB。这个数额不会改变。与基础发行不同，二次发行并不影响网络上的所有人。它是来自占用 Nervos 空间或在 Nervos DAO 以外持有 CKB 的用户的小规模定向膨胀。
+
+#### 参考
+- [基础发行](#基础发行)
 - [CKByte](#ckbyte)
 - [Nervos DAO](#nervos-dao)
-- [Secondary Reward](#secondary-reward)
-- [State](#state)
-- [Crypto-Economics RFC on Nervos Network GitHub](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md)
+- [二级奖励](#二级奖励)
+- [状态](#状态)
+- [经济模型 RFC](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.zh.md)
 
 ---
 
-### Secondary Reward
-A subsidy paid to miners in CKBytes for providing the compute and storage requirements required for processing transactions and persisting data on Nervos.
+### 二级奖励
+向矿工支付的 CKB 补贴，奖励矿工提供处理交易和在 Nervos 上持久化保存数据所需的计算和存储需求。
 
-Secondary Rewards are created from Secondary Issuance, and continuously pay miners for the preservation of state data contained on the blockchain.
+二次奖励来源于二次发行，持续向矿工支付区块链中包含的状态数据的保存费用。
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Miner](#miner)
-- [Secondary Issuance](#secondary-issuance)
-- [Transaction](#transaction)
+- [矿工](#矿工)
+- [二级发行](#二级发行)
+- [交易](#交易)
 
 ---
 
-### Starving Layer 1 Problem
-A scenario that can arise in multi-layer blockchain platforms where the vast majority of the transaction traffic moves from layer 1 to layer 2, taking the vast majority of transaction fees with it. If layer 1 relies exclusively on transaction fees to support the security of the platform, it may end up not having enough incentives available to properly secure it.
+### Layer 1 流失问题
+多层区块链平台可能出现的情况是，绝大部分交易流量从 layer1 转移到 layer2，带走了绝大部分的交易费用。如果 layer1 完全依靠交易费用来支持平台的安全，那么最终可能没有足够的激励机制来妥善保障平台的安全。
 
 #### 参考
-- [Heavy Asset Problem](#heavy-asset-problem)
+- [重资产问题](#重资产问题)
 - [Layer 1](#layer-1)
 - [Layer 2](#layer-2)
-- [Transaction](#transaction)
-- [Transaction Fee](#transaction-fee)
+- [交易](#交易)
+- [交易费用](#交易费用)
 
 ---
 
-### State Rent
-A recurring fee that is paid to persist and secure state data.
+### 状态租金
+为持久化和保护状态数据而支付的经常性费用。
 
-On Nervos, Secondary Issuance is used to facilitate the paying of State Rent by the users who occupy the space on the Nervos blockchain.
+在 Nervos 上，二次发行对占据 Nervos 区块链空间的用户产生的稀释，就是支付状态租金的一种方式。
 
 #### 参考
-- [Secondary Issuance](#secondary-issuance)
-- [Nervos Blockchain](#nervos-blockchain)
-- [Crypto-Economics RFC on Nervos Network GitHub](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md)
+- [二级发行](#二级发行)
+- [Nervos 区块链](#nervos-区块链)
+- [经济模型 RFC](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.zh.md)
 
 ---
 
-### Store of Assets
-A platform which is designed to safely preserve multiple types of assets, each of which could be a store of value.
+### 资产存储
+一个旨在安全保存多种类型资产的平台，每一种资产都可以成为价值储藏。
 
 #### 参考
-- [Store of Value](#store-of-value)
+- [价值存储](#价值存储)
 
 ---
 
-### Store of Value
-An asset that is purchased to retain purchasing power in the long-term.
+### 价值存储
+一种用于维持长期购买力的资产。
 
-A good store of value either match or outpace the inflation rate of fiat currency, and has a reasonable amount of liquidity, allowing the asset to be easily sold.
+一个好的价值存储要么与货币的通货膨胀率相匹配，要么超过货币的通货膨胀率，并且具有合理的流动性，使资产可以轻易地出售。
 
 #### 参考
-- [Store of Assets](#store-of-assets)
-- [Liquidity](#liquidity)
+- [资产存储](#资产存储)
+- [流动性](#流动性)
 
 ---
 
 ### Tail Emission
-A type of reward that is paid to miners through a fixed amount of inflation.
+一种通过固定的通货膨胀率支付给矿工的奖励。
 
 #### 参考
-- [Secondary Reward](#secondary-reward)
+- [二级奖励](#二级奖励)
 
 ---
 
-### Targeted Inflation
-A form of inflation that only affects a specific subset of users.
+### 定向通胀
+一种只影响特定用户群的通货膨胀形式。
 
-Nervos uses Secondary Issuance to create targeted inflation on users who occupy space on the Nervos blockchain to pay State Rent. Long-term holders of CKBytes have the option of locking them in the Nervos DAO, which acts and an inflation shelter.
+Nervos 利用二次发行对占用Nervos区块链空间的用户进行定向通胀，以支付状态租金。CKB 的长期持有者可以选择将其锁定在 Nervos DAO 中，Nervos DAO 起到抵消通胀的作用。
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Secondary Issuance](#secondary-issuance)
-- [Nervos Blockchain](#nervos-blockchain)
+- [二级发行](#二级发行)
+- [Nervos 区块链](#nervos-区块链)
 - [Nervos DAO](#nervos-dao)
-- [Crypto-Economics RFC on Nervos Network GitHub](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md)
+- [经济模型 RFC](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.zh.md)
 
 ---
 
-### Tragedy of the Commons
-A situation in a system where the participants act in accordance with their own self interest and deplete or destroy a shared resource through their collective action.
+### 公地悲剧
+在一个系统中，参与者按照自己的利益行事，所有参与者的行为消耗或破坏共享资源的情况。
 
 #### 参考
-- [Tragedy of the Security Commons](#tragedy-of-the-security-commons)
-- [Tragedy of the Storage Commons](#tragedy-of-the-storage-commons)
+- [公共安全悲剧](#公共安全悲剧)
+- [公共存储悲剧](#公共存储悲剧)
 
 ---
 
-### Tragedy of the Security Commons
-A situation that can emerge on multi-asset blockchain platforms where asset tokens rely on the storage and security of the blockchain platform, but do not contribute back to the platform. As the number of assets that "ride for free" increases, so does the burden placed on the underlying blockchain platform. If the assets do not contribute to the underlying platform, the available security may not properly support the network.
+### 公共安全悲剧
+在多资产区块链平台上可能会出现一种情况，即资产代币依赖区块链平台的存储和安全，但不对平台进行回馈。随着 “免费搭车” 的资产数量的增加，给底层区块链平台带来的负担也会增加。如果资产对底层平台没有贡献，现有的安全性可能无法正常支持网络。
 
 #### 参考
-- [Heavy Asset Problem](#heavy-asset-problem)
-- [Tragedy of the Commons](#tragedy-of-the-commons)
-- [Tragedy of the Storage Commons](#tragedy-of-the-storage-commons)
+- [重资产问题](#重资产问题)
+- [公地悲剧](#公地悲剧)
+- [公共存储悲剧](#公共存储悲剧)
 
 ---
 
-### Tragedy of the Storage Commons
-A situation that can emerge on incentivized blockchain platforms where mining rewards are paid for inclusion of data to the blockchain, but no rewards exist for the long-term persistance of the blockchain data. As the size of the chain grows, so do the costs associated with persisting the data. If there is no direct incentive for persisting data, fewer and fewer nodes will do so. Eventually, too few nodes will be available to properly support the network.
+### 公共存储悲剧
+在激励型区块链平台上，可能会出现这样一种情况：将数据纳入区块链会获得挖矿奖励，但对区块链数据的长期持久化不存在奖励。随着区块链的规模扩大，数据持久化的相关成本也会增加。如果没有持久化数据的直接激励，越来越少的节点会这样做。最终，可用来适当支持网络的节点将太少。
 
 #### 参考
-- [Tragedy of the Commons](#tragedy-of-the-commons)
-- [Tragedy of the Security Commons](#tragedy-of-the-security-commons)
+- [公地悲剧](#公地悲剧)
+- [公共安全悲剧](#公共安全悲剧)
 
 ---
 
-## Technical Glossary
+## 技术类术语
 
 ### Active Cell
 A Cell in the current state of CKB. Active cells can be used as inputs to transactions.
@@ -1079,7 +1077,7 @@ A Cell in the current state of CKB. Active cells can be used as inputs to transa
 #### 参考
 - [Cell](#cell)
 - [Input](#input)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1095,7 +1093,7 @@ The name of the main public testnet for Nervos CKB.
 
 #### Not To Be Confused With
 - [Lina](#lina)
-- [Mainnet](#mainnet)
+- [主网](#主网)
 
 ---
 
@@ -1149,7 +1147,7 @@ The subsidy consists is the portion of the total block reward that is issued out
 
 #### 同义词
 - [Block Reward](#block-reward)
-- [Transaction Fee](#transaction-fee)
+- [交易费用](#交易费用)
 
 ---
 
@@ -1167,7 +1165,7 @@ BLS is short for Boneh–Lynn–Shacham.
 A lightweight Rust library for verifying the Nervos layer 1 blockchain, the Common Knowledge Base.
 
 #### 参考
-- [Common Knowledge Base](#common-knowledge-base)
+- [共同知识库](#共同知识库)
 - [Boxer on GitHub](https://github.com/xxuejie/ckb-boxer)
 
 ---
@@ -1257,9 +1255,9 @@ Miners are incentivized to commit transactions by being paid a commit reward.
 
 #### 参考
 - [Commit Reward](#commit-reward)
-- [Confirmation](#confirmation)
+- [确认](#确认)
 - [Propose](#propose)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1267,9 +1265,9 @@ Miners are incentivized to commit transactions by being paid a commit reward.
 Section of the block that contains transaction commitments. The commitment zone can only contain valid transactions which have appeared in the proposal zone of one of the previous 2 to 10 blocks.
 
 #### 参考
-- [Block](#block)
+- [区块](#区块)
 - [Proposal Zone](#proposal-zone)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1320,7 +1318,7 @@ A dead cell is the equivalent of a "spent UTXO" in Bitcoin.
 - [Cell](#cell)
 - [Cell Model](#cell-model)
 - [Consume](#consume)
-- [Transaction](#transaction)
+- [交易](#交易)
 - [UTXO on Bitcoin.org](https://bitcoin.org/en/glossary/unspent-transaction-output)
 
 ---
@@ -1365,7 +1363,7 @@ Dependencies are commonly referred to as deps.
 - [Cell](#cell)
 - [Consume](#consume)
 - [Script](#script)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1385,7 +1383,7 @@ A measurement of how difficult it is to solve the Proof of Work cryptographic pu
 Networks automatically adjust the difficulty to control the speed at which blocks are generated as mining participants enter and exit the network.
 
 #### 参考
-- [Proof of Work](#proof-of-work)
+- [工作量证明](#工作量证明)
 
 ---
 
@@ -1412,9 +1410,9 @@ An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777
 
 #### 参考
 - [ERC777](#erc777)
-- [Fungible Token](#fungible-token)
-- [Token](#token)
-- [User-Defined Token](#user-defined-token)
+- [同质化代币](#同质化代币)
+- [代币](#代币)
+- [用户自定义代币](#用户自定义代币)
 - [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
 
 ---
@@ -1424,7 +1422,7 @@ An Ethereum token standard for non-fungible tokens.
 
 #### 参考
 - [Non-Fungible Token](#non-fungible-token)
-- [Token](#token)
+- [代币](#代币)
 - [ERC721 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-721)
 
 ---
@@ -1436,9 +1434,9 @@ An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777
 
 #### 参考
 - [ERC20](#erc20)
-- [Fungible Token](#fungible-token)
-- [Token](#token)
-- [User-Defined Token](#user-defined-token)
+- [同质化代币](#同质化代币)
+- [代币](#代币)
+- [用户自定义代币](#用户自定义代币)
 - [ERC777 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-777)
 
 ---
@@ -1447,10 +1445,10 @@ An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777
 An Ethereum token standard that supports the creation any number of fungible or non-fungible tokens on a single contract.
 
 #### 参考
-- [Fungible Token](#fungible-token)
+- [同质化代币](#同质化代币)
 - [Non-Fungible Token](#non-fungible-token)
-- [Token](#token)
-- [User-Defined Token](#user-defined-token)
+- [代币](#代币)
+- [用户自定义代币](#用户自定义代币)
 - [ERC1155 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-1155)
 
 ---
@@ -1460,7 +1458,7 @@ A program that is used to create transactions that can be broadcast to the Nervo
 
 #### 参考
 - [Nervos CKB](#nervos-ckb)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1468,8 +1466,8 @@ A program that is used to create transactions that can be broadcast to the Nervo
 The first block on a blockchain. The genesis block is unique because it does not contain a reference to the previous block because it is the first.
 
 #### 参考
-- [Block](#block)
-- [Blockchain](#blockchain)
+- [区块](#区块)
+- [区块链](#区块链)
 
 ---
 
@@ -1535,7 +1533,7 @@ A Live Cell that is used in a transaction. If the transaction is accepted by the
 - [Consume](#consume)
 - [Dead Cell](#dead-cell)
 - [Live Cell](#live-cell)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1563,7 +1561,7 @@ A proof of work blockchain known as the Common Knowledge Base (CKB) that serves 
 
 #### 同义词
 - [CKB](#ckb)
-- [Common Knowledge Base](#common-knowledge-base)
+- [共同知识库](#共同知识库)
 
 #### 参考
 - [Layer 2](#layer-2)
@@ -1584,7 +1582,7 @@ Layer 2 systems often address different concerns than layer 1, allowing for a wi
 The name of public Mainnet of the Nervos CKB.
 
 #### 同义词
-- [Mainnet](#mainnet)
+- [主网](#主网)
 
 #### Not To Be Confused With
 - [Aggron](#aggron)
@@ -1633,7 +1631,7 @@ A Blake2b hash of a Lock Script which is used as an identifier for the Script wh
 An address format used on Nervos that includes the full code hash of the lock script which is associated with it.
 
 #### 参考
-- [Address](#address)
+- [地址](#地址)
 - [Code Hash](#code-hash)
 - [Lock Script](#lock-script)
 - [Short Address](#short-address)
@@ -1649,7 +1647,7 @@ The Nervos CKB public blockchain.The name of the Nervos CKB Mainnet is Lina.
 
 #### 同义词
 - [CKB](#ckb)
-- [Common Knowledge Base](#common-knowledge-base)
+- [共同知识库](#共同知识库)
 - [Lina](#lina)
 - [Nervos CKB](#nervos-ckb)
 
@@ -1663,7 +1661,7 @@ The Nervos CKB public blockchain.The name of the Nervos CKB Mainnet is Lina.
 The process of creating of new tokens.
 
 #### 参考
-- [Token](#token)
+- [代币](#代币)
 
 ---
 
@@ -1692,8 +1690,8 @@ Nervos CKB is often referred to as the Nervos Blockchain.
 
 #### 同义词
 - [CKB](#ckb)
-- [Common Knowledge Base](#common-knowledge-base)
-- [Nervos Blockchain](#nervos-blockchain)
+- [共同知识库](#共同知识库)
+- [Nervos 区块链](#nervos-区块链)
 
 #### 参考
 - [Layer 1](#layer-1)
@@ -1755,8 +1753,8 @@ A signed piece of a transaction that is incomplete and invalid on its own. When 
 One use of open transactions is to create the functionality required for a trustless decentalized exchange.
 
 #### 参考
-- [Cryptographic Signature](#cryptographic-signature)
-- [Transaction](#transaction)
+- [加密签名](#加密签名)
+- [交易](#交易)
 
 ---
 
@@ -1781,7 +1779,7 @@ On Nervos, orphan blocks are better described as Uncles.
 - [Uncle](#uncle)
 
 #### 参考
-- [Block](#block)
+- [区块](#区块)
 - [Orphan Rate](#orphan-rate)
 
 ---
@@ -1800,7 +1798,7 @@ A particular output Cell in a transaction.
 #### 参考
 - [Cell](#cell)
 - [Output](#output)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1810,7 +1808,7 @@ A Live Cell that is created in a transaction.
 #### 参考
 - [Cell](#cell)
 - [Live Cell](#live-cell)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1847,11 +1845,11 @@ Miners are incentivized to propose transactions by being paid a proposal reward.
 
 #### 参考
 - [Commit](#commit)
-- [Confirmation](#confirmation)
+- [确认](#确认)
 - [Mempool](#mempool)
 - [Proposal Reward](#proposal-reward)
 - [Proposal Zone](#proposal-zone)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -1906,7 +1904,7 @@ A Shannon is the equivalent of a Bitcoin Satoshi.
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Common Knowledge Byte](#common-knowledge-byte)
+- [共同知识字节](#共同知识字节)
 - [Satoshi (denomination) on Bitcoin.org](https://bitcoin.org/en/glossary/denominations)
 
 ---
@@ -1917,7 +1915,7 @@ An address format on Nervos that does not include the code hash of the associate
 The short address format is the most common address format used, and is often referred to as simply "address".
 
 #### 同义词
-- [Address](#address)
+- [地址](#地址)
 
 #### 参考
 - [Code Hash](#code-hash)
@@ -1937,9 +1935,9 @@ An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 and ERC77
 - [SUDT](#sudt)
 
 #### 参考
-- [Token](#token)
+- [代币](#代币)
 - [UDT](#udt)
-- [User-Defined Token](#user-defined-token)
+- [用户自定义代币](#用户自定义代币)
 - [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
 - [Simple UDT RFC Draft Spec on Nervos Talk](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333/1)
 
@@ -1992,7 +1990,7 @@ An alternate public blockchain used for testing purposes that is running the sam
 
 #### Not To Be Confused With
 - [Lina](#lina)
-- [Mainnet](#mainnet)
+- [主网](#主网)
 
 ---
 
@@ -2123,7 +2121,7 @@ Validators are Scripts that run within the CKB-VM, and are either Lock Scripts o
 - [CKB-VM](#risc-v)
 - [Lock Script](#lock-script)
 - [Type Script](#type-script)
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -2131,7 +2129,7 @@ Validators are Scripts that run within the CKB-VM, and are either Lock Scripts o
 A set of cryptographic signatures that contains the data required to prove authorization to the resources used in a transaction.
 
 #### 参考
-- [Transaction](#transaction)
+- [交易](#交易)
 
 ---
 
@@ -2141,7 +2139,7 @@ A form of cryptographic proof, that when used in cryptocurrencies, allows for pr
 Zk-SNARKs require a trusted setup, but are otherwise trustless.
 
 #### 参考
-- [Transaction](#transaction)
+- [交易](#交易)
 - [Zk-STARK](#zk-stark)
 - [Non-interactive zero-knowledge proofs on Wikipedia](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)
 
@@ -2153,7 +2151,7 @@ A form of cryptographic proof, that when used in cryptocurrencies, allows for pr
 Unlike Zk-SNARKs, Zk-STARKs do not require a trusted setup.
 
 #### 参考
-- [Transaction](#transaction)
+- [交易](#交易)
 - [Zk-SNARK](#zk-snark)
 - [Non-interactive zero-knowledge proofs on Wikipedia](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)
 
