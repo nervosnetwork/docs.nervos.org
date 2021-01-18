@@ -1068,30 +1068,31 @@ Nervos 利用二次发行对占用Nervos区块链空间的用户进行定向通�
 
 ## 技术类术语
 
-### Active Cell
-A Cell in the current state of CKB. Active cells can be used as inputs to transactions.
+### 活跃  Cell
+
+处于 CKB 当前状态的 Cell。活跃 Cells 可以作为交易的输入。
 
 #### 同义词
-- [Live Cell](#live-cell)
+- [可用 Cell](#可用-cell)
 
 #### 参考
 - [Cell](#cell)
-- [Input](#input)
+- [输入](#输入)
 - [交易](#交易)
 
 ---
 
 ### Aggron
-The name of the main public testnet for Nervos CKB.
+Nervos CKB 的测试网。
 
-- **ckb version**: >= v0.32.0 (latest stable is recommended)
-- **genesis hash**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
-- **launched at**: 2020-05-22 04:00:00 UTC
+- **ckb 版本**: >= v0.32.0 （推荐使用最新稳定版）
+- **创世哈希**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
+- **启动于**: 2020-05-22 04:00:00 UTC
 
 #### 同义词
-- [Testnet](#testnet)
+- [测试网](#测试网)
 
-#### Not To Be Confused With
+#### 易混淆
 - [Lina](#lina)
 - [主网](#主网)
 
@@ -1099,81 +1100,82 @@ The name of the main public testnet for Nervos CKB.
 
 ### Animagus
 A framework layer that runs on top of Nervos CKB which provides an easy way to query for account balances without having to go through the Cell Collection process.
+一个运行在 Nervos CKB 之上的框架，它提供了一种简单的方式来查询账户余额，而无需经过 Cells 收集过程。
 
 #### 参考
-- [Cell Collection](#cell-collection)
+- [Cell 收集](#cell-收集)
 - [Nervos CKB](#nervos-ckb)
-- [Animagus Introduction on the Nervos Blog](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-animagus-part-1-introduction-66fa8ce27ccd-cfb361a7d883)
+- [Nervos 博客上的 Animagus 介绍](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-animagus-part-1-introduction-66fa8ce27ccd-cfb361a7d883)
 
 ---
 
 ### Args
-Args is short for arguments, and is data provided to a Lock Script or Type Script within a Cell. This is nearly identical to arguments provided to a normal command-line application.
+`Args`  是参数（arguments）的英文简写，是 Cell 中提供给锁脚本（Lock Script）或者类型脚本（Type Script）的数据。这与提供给普通命令行应用程序的参数几乎相同。
 
-Arguments are stored as part of the Cell when it is created.
+当创建 Cell 时，参数作为 Cell 的一部分被存储。
 
 #### 参考
 - [Cell](#cell)
-- [Lock Script](#lock-script)
-- [Type Script](#type-script)
+- [锁脚本](#锁脚本)
+- [类型脚本](#类型脚本)
 
 ---
 
 ### Axon
-A layer 2 side-chain of the Nervos CKB developed by the Nervos Core Team. Axon provides high-performance smart contract execution while utilizing Nervos CKB as a trust layer.
+Nervos 核心团队开发的 Nervos CKB 的第 layer 2 侧链。Axon 提供高性能的智能合约执行，同时利用 Nervos CKB 作为信任层。
 
 #### 参考
 - [Layer 2](#layer-2)
 - [Nervos CKB](#nervos-ckb)
-- [Axon on Nervos.org](https://www.nervos.org/network/)
+- [Axon 官网介绍](https://www.nervos.org/network/)
 
 ---
 
 ### Blake2b
-A general-purpose cryptographic hashing algorithm that can create a succinct data fingerprint for any type of data.CKB uses blake2b as the default hash algorithm. 
+一个通用的加密哈希算法，可以为任何类型的数据创建一个简洁的数据指纹。CKB使用 blake2b 作为默认的哈希算法。
 
 #### 参考
-- [Blake2b paper](https://blake2.net/blake2.pdf)
+- [Blake2b 文档](https://blake2.net/blake2.pdf)
 - [Ckbhash](#ckbhash)
-- [Blake Hash Function on Wikipedia](https://en.wikipedia.org/wiki/BLAKE_(hash_function))
-- [Hash Function on Wikipedia](https://en.wikipedia.org/wiki/Hash_function)
+- [维基百科上 Blake 哈希函数介绍](https://en.wikipedia.org/wiki/BLAKE_(hash_function))
+- [维基百科上哈希函数的介绍](https://en.wikipedia.org/wiki/Hash_function)
 
 ---
 
-### Block Subsidy
-A payment that is made in the native currency of the blockchain that is paid to to miners for providing the computational resources create a block and secure the blockchain.
+### 区块补贴
+支付给矿工的 CKB 代币，奖励矿工提供创建区块的计算资源并保障网络的安全。
 
-The subsidy consists is the portion of the total block reward that is issued out of inflation for creating the block, but does not include any additional transaction fees that may be paid on top.
+补贴来源于出块产生的通胀，是总区块奖励的一部分，区块奖励还包括对应区块中的额外交易费用。
 
 #### 同义词
-- [Block Reward](#block-reward)
+- [区块奖励](#区块奖励)
 - [交易费用](#交易费用)
 
 ---
 
 ### BLS
-A cryptographic signature scheme for signing and verification.
+一种用于签名和验证的加密签名方案。
 
-BLS is short for Boneh–Lynn–Shacham.
+BLS 的全称为 Boneh–Lynn–Shacham。
 
 #### 参考
-- [Boneh–Lynn–Shacham on Wikipedia](https://en.wikipedia.org/wiki/Boneh%E2%80%93Lynn%E2%80%93Shacham)
+- [维基百科上 Boneh–Lynn–Shacham 的介绍](https://en.wikipedia.org/wiki/Boneh%E2%80%93Lynn%E2%80%93Shacham)
 
 ---
 
 ### Boxer
-A lightweight Rust library for verifying the Nervos layer 1 blockchain, the Common Knowledge Base.
+一个轻量级的 Rust 库，用于验证 Nervos layer 1 区块链，即共同知识库。
 
 #### 参考
 - [共同知识库](#共同知识库)
-- [Boxer on GitHub](https://github.com/xxuejie/ckb-boxer)
+- [Boxer GitHub](https://github.com/xxuejie/ckb-boxer)
 
 ---
 
-### Cell Collection
-The process of gathering cells that meet certain criteria.
+### Cell 收集
+收集符合一定条件的 Cell 的过程。
 
-For example: To find the balance of a particular account, all active cells for the address would need to be collected.
+例如： 要知道某个账户的余额，需要收集该地址的所有活跃 Cells。
 
 #### 参考
 - [Cell](#cell)
@@ -1181,23 +1183,23 @@ For example: To find the balance of a particular account, all active cells for t
 ---
 
 ### Cellbase
-The transaction in each block that is responsible for the minting of new CKBytes.
+每个区块中负责铸造新 CKB 代币的交易。
 
-This is the equivalent of a coinbase transaction in Bitcoin.
+相当于比特币中的 Coinbase 交易。
 
 #### 参考
 - [CKByte](#ckbyte)
-- [Coinbase on Bitcoin.org](https://bitcoin.org/en/glossary/coinbase)
+- [Bitcoin.org 的 Coinbase 解释](https://bitcoin.org/en/glossary/coinbase)
 
 ---
 
 ### Ckbhash
-CKB uses blake2b as the default hash algorithm with following configurations:
+CKB 使用 blake2b 作为默认的哈希算法，配置如下：
 
-- output digest size: `32`
-- personalization: `ckb-default-hash`
+- 输出摘要大小：`32`
+- 个性化：`ckb-default-hash`
 
-`ckbhash` is used to denote the blake2b hash with the configurations above, there are example and test vectors in python 3:
+`ckbhash` 用来表示配置如上的 blake2b 哈希，python 3中有实例和测试用例：
 
 ```python
 import hashlib
@@ -1221,166 +1223,164 @@ if __name__ == '__main__':
 
 ---
 
-### CKB Merkle Tree
+### CKB  默尔克树
 
-CKB Merkle Tree is a CBMT( [Complete Binary Merkle Tree](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0006-merkle-tree/0006-merkle-tree.md#complete-binary-merkle-tree) ) using following merge function:
+CKB 默尔克树是一种完全二叉树( [CBMT, Complete Binary Merkle Tree](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0006-merkle-tree/0006-merkle-tree.md#complete-binary-merkle-tree) ) ，使用以下合并函数。
 
 ```
 ckbhash(left || right)
 ```
 
-> [ckbhash](#ckbhash) is the hash function, `||` denotes binary concatenation.
+> [ckbhash](#ckbhash) 是哈希函数, `||` 表示二进制连接。
 
 #### 参考
-- [Merkle Tree for Static Data](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0006-merkle-tree/0006-merkle-tree.md)
+- [静态默尔克树](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0006-merkle-tree/0006-merkle-tree.md)
 - [Ckbhash](#ckbhash)
-- [Merkle Tree](https://en.wikipedia.org/wiki/Merkle_tree)
+- [默尔克树](https://en.wikipedia.org/wiki/Merkle_tree)
 
 ---
 
-### Code Hash
-A field in a Cell that contains a hash value which could refer to a specific piece of data, or a specific cell referenced by Type ID.
+### 代码哈希（Code Hash）
+Cell 中的一个字段，包含一个哈希值，它可能指的是一个特定的数据，或一个由类型 ID （Type ID）引用的特定 Cell。
 
 #### 参考
 - [Cell](#cell)
-- [Data](#data)
-- [Type ID](#type-id)
+- [数据](#数据)
+- [类型 ID](#类型-id)
 
 ---
 
-### Commit
-The process of taking a proposed transaction and adding it to the blockchain. After the transaction has been committed it is confirmed.
+### 提交（Commit）
+将提议（propose）的交易加入区块链网络的过程。在交易被提交（commit）后，即被确认。
 
-Miners are incentivized to commit transactions by being paid a commit reward.
+网络通过给予矿工提交奖励，以激励矿工提交交易。
 
 #### 参考
-- [Commit Reward](#commit-reward)
+- [提交奖励](#提交奖励)
 - [确认](#确认)
-- [Propose](#propose)
+- [提议](#提议)
 - [交易](#交易)
 
 ---
 
-### Commitment Zone
-Section of the block that contains transaction commitments. The commitment zone can only contain valid transactions which have appeared in the proposal zone of one of the previous 2 to 10 blocks.
+### 提交区
+包含已提交交易的一段区块。提交区只能包含出现在前 2 至 10 个区块之一的提议区的有效交易。
 
 #### 参考
 - [区块](#区块)
-- [Proposal Zone](#proposal-zone)
+- [提议区](#提议区)
 - [交易](#交易)
 
 ---
 
-### Consume
-The process of using a Live Cell as an input to a transaction.
+### 消耗
+使用一个可用 Cell（Live Cell）作为交易输入的过程。
 
-The process of consumption marks the Live Cell as a Dead Cell. This is the equivalent of marking a UTXO as spent in Bitcoin.
-
-#### 参考
-- [Cell](#cell)
-- [Cell Model](#cell-model)
-- [Dead Cell](#dead-cell)
-- [Live Cell](#live-cell)
-- [UTXO on Bitcoin.org](https://bitcoin.org/en/glossary/unspent-transaction-output)
-
----
-
-### Crypto Primitives
-Well-established, low-level cryptographic algorithm commonly used to build out a cryptographic protocol.
-
-#### 参考
-- [Cryptographic Primitive on Wikipedia](https://en.wikipedia.org/wiki/Cryptographic_primitive)
-
----
-
-### Data
-In Nervos specific contexts, data may refer to the data structure within a Cell. This structure is used to hold any form of information that needs to be stored on the Nervos blockchain.
-
-In more general contexts, data may refer to any form of information.
+消耗的过程将可用 Cell 标记为被销毁 Cell（Dead Cell），相当于将比特币的 UTXO 标记为已花费。
 
 #### 参考
 - [Cell](#cell)
-- [Cell Model](#cell-model)
+- [Cell 模型](#cell-模型)
+- [已销毁 Cell](#已销毁-cell)
+- [可用 Cell](#可用-cell)
+- [Bitcoin.org 上 UTXO 的定义](https://bitcoin.org/en/glossary/unspent-transaction-output)
 
 ---
 
-### Dead Cell
-A cell that has been used as an input to a previous transaction and is consumed.
+### 密码学原语
+完善的、底层的加密算法，常用来构建一个加密协议。
 
-A dead cell cannot be used as an input to a new transaction, nor can it be used as a dependency. It is effectively destroyed and removed from the active state of the network.
+#### 参考
+- [维基百科的密码学原语解释](https://en.wikipedia.org/wiki/Cryptographic_primitive)
 
-A dead cell is the equivalent of a "spent UTXO" in Bitcoin.
+---
+
+### 数据
+在 Nervos 特定的语境中，数据可以指 Cell 内的数据结构。该结构用于保存需要存储在 Nervos 区块链上的任何形式的信息。
+
+#### 参考
+- [Cell](#cell)
+- [Cell 模型](#cell-模型)
+
+---
+
+### 已销毁 Cell
+已被用作此前交易的输入并被消耗的 Cell。
+
+已销毁 Cell（Dead Cell）不能作为新交易的输入，也不能作为依赖关系使用。它实际上已被销毁，并从网络的活跃状态中删除。
+
+已销毁 Cell（Dead Cell）相当于比特币中已花费的 UTXO。
 
 #### 同义词
-- [Historical Cell](#historical-cell)
+- [历史 Cell](#历史-cell)
 
 #### 参考
 - [Cell](#cell)
-- [Cell Model](#cell-model)
-- [Consume](#consume)
+- [Cell 模型](#cell-模型)
+- [消耗](#消耗)
 - [交易](#交易)
-- [UTXO on Bitcoin.org](https://bitcoin.org/en/glossary/unspent-transaction-output)
+- [Bitcoin.org 上 UTXO 的介绍](https://bitcoin.org/en/glossary/unspent-transaction-output)
 
 ---
 
-### Dep Group
-A method for referencing multiple dependencies which are commonly used together using a single dependency field.
+### 依赖组
+依赖组（Dep Group）是一种用于引用多个依赖的方法，这些依赖通常使用单个依赖字段一起使用。
 
 #### 参考
-- [Dep Type](#dep-type)
-- [Dependencies](#dependencies)
-- [CKB Transaction Structure on GitHub](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- [依赖类型](#依赖类型)
+- [Deps](#Deps)
+- [CKB 交易结构 RFC](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0022-transaction-structure/0022-transaction-structure.zh.md)
 
 ---
 
-### Dep Type
-A field that specifies the type of the dependency.
+### 依赖类型
+依赖类型（Dep Type）是指定具体依赖的类型的字段。
 
 #### 参考
-- [Dep Group](#dep-group)
-- [Dependencies](#dependencies)
-- [CKB Transaction Structure on GitHub](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- [依赖组](#依赖组)
+- [Dependencies](#Dependencies )
+- [CKB 交易结构 RFC](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0022-transaction-structure/0022-transaction-structure.zh.md)
 
 ---
 
 ### Deps
-A shorthand name for dependencies.
+依赖（Deps），dependencies 的简写。
 
 #### 同义词
-- [Dependencies](#dependencies)
+- [Dependencies ](#Dependencies )
 
 ---
 
-### Dependencies
-Cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any Scripts executing within the transaction. Dependencies are not consumed.
+### Dependencies 
+依赖（Dependencies ）是指交易中引用的 Cells。被引用为依赖的 Cell 是只读的，可以让交易中任何执行中的脚本访问读取。依赖不会被消耗。
 
-Dependencies are commonly referred to as deps.
+依赖（Dependencies）通常用 deps 表示。
 
 #### 同义词
 - [Deps](#deps)
 
 #### 参考
 - [Cell](#cell)
-- [Consume](#consume)
+- [消耗](#消耗)
 - [Script](#script)
 - [交易](#交易)
 
 ---
 
 ### Duktape
-Duktape is an embeddable Javascript engine, with a focus on portability and compact footprint.
+Duktape是一个可嵌入的 Javascript 引擎，专注于可移植性和紧凑的内存使用.
 
-Duktape is used to run Javascript based smart contracts on Nervos.
+Duktape 用于在 Nervos 上运行基于 Javascript 的智能合约。
 
 #### 参考
-- [Duktape Official Website](https://duktape.org/)
+- [Duktape 官网](https://duktape.org/)
 
 ---
 
-### Difficulty
-A measurement of how difficult it is to solve the Proof of Work cryptographic puzzle required to create a block.
+### 难度
+衡量解决创建一个区块所需的工作量证明密码难题的难度。
 
-Networks automatically adjust the difficulty to control the speed at which blocks are generated as mining participants enter and exit the network.
+网络自动调整难度，以控制挖矿参与者进入和退出网络时出块的速度。
 
 #### 参考
 - [工作量证明](#工作量证明)
@@ -1388,73 +1388,73 @@ Networks automatically adjust the difficulty to control the speed at which block
 ---
 
 ### Diviner
-A deterministic testing framework for Rust.
+Rust 的确定性测试框架。
 
 #### 参考
-- [Diviner on GitHub](https://github.com/xxuejie/diviner)
+- [Diviner GitHub](https://github.com/xxuejie/diviner)
 
 ---
 
 ### Eaglesong
-The proof of work function used for mining on Nervos CKB.
+Nervos CKB 上挖矿的工作量证明函数。
 
 #### 参考
-- [Eaglesong RFC on the Nervos Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0010-eaglesong/0010-eaglesong.md)
+- [Eaglesong RFC](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0010-eaglesong/0010-eaglesong.zh.md)
 
 ---
 
 ### ERC20
-An Ethereum token standard for basic fungible tokens.
+用于创建基础的同质化代币的一个以太坊代币标准，
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+Nervos 上的 SUDT 相当于以太坊代币协议的 ERC20 或者 ERC777。
 
 #### 参考
 - [ERC777](#erc777)
 - [同质化代币](#同质化代币)
 - [代币](#代币)
 - [用户自定义代币](#用户自定义代币)
-- [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
+- [Ethereum.org 上 ERC20 的介绍](https://eips.ethereum.org/EIPS/eip-20)
 
 ---
 
 ### ERC721
-An Ethereum token standard for non-fungible tokens.
+用于创建非同质化代币的以太坊代币标准。
 
 #### 参考
-- [Non-Fungible Token](#non-fungible-token)
+- [非同质化代币](#非同质化代币)
 - [代币](#代币)
-- [ERC721 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-721)
+- [Ethereum.org 上 ERC721 的介绍](https://eips.ethereum.org/EIPS/eip-721)
 
 ---
 
 ### ERC777
-An updated Ethereum token standard for basic fungible tokens that is backwards compatible with ERC20.
+用于创建基础的同质化代币的一个已升级的以太坊代币标准，向后兼容 ERC20。
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+Nervos 上的 SUDT 相当于以太坊代币协议的 ERC20 或者 ERC777。
 
 #### 参考
 - [ERC20](#erc20)
 - [同质化代币](#同质化代币)
 - [代币](#代币)
 - [用户自定义代币](#用户自定义代币)
-- [ERC777 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-777)
+- [Ethereum.org 上 ERC777 的介绍](https://eips.ethereum.org/EIPS/eip-777)
 
 ---
 
 ### ERC1155
-An Ethereum token standard that supports the creation any number of fungible or non-fungible tokens on a single contract.
+支持在一个合约上创建任意数量的同质化或非同质化代币的以太坊代币标准。
 
 #### 参考
 - [同质化代币](#同质化代币)
-- [Non-Fungible Token](#non-fungible-token)
+- [非同质化代币](#非同质化代币)
 - [代币](#代币)
 - [用户自定义代币](#用户自定义代币)
-- [ERC1155 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-1155)
+- [Ethereum.org 上 ERC1155 的介绍](https://eips.ethereum.org/EIPS/eip-1155)
 
 ---
 
-### Generator
-A program that is used to create transactions that can be broadcast to the Nervos CKB network.
+### 生成器
+用于创建可向 Nervos CKB 网络广播的交易的程序。
 
 #### 参考
 - [Nervos CKB](#nervos-ckb)
@@ -1462,8 +1462,8 @@ A program that is used to create transactions that can be broadcast to the Nervo
 
 ---
 
-### Genesis Block
-The first block on a blockchain. The genesis block is unique because it does not contain a reference to the previous block because it is the first.
+### 创世区块
+区块链上的第一个区块。创世区块是独一无二的，因为它不包含对前一个区块的引用，因为它是第一个区块。
 
 #### 参考
 - [区块](#区块)
@@ -1472,10 +1472,10 @@ The first block on a blockchain. The genesis block is unique because it does not
 ---
 
 ### Godwoken
-A tool that provides a programmable layer on Nervos CKB that emulates the account model used by other cryptocurrencies like Ethereum.
+一个在 Nervos CKB 上提供一个可编程层的工具，它可以模拟其他加密货币（如以太坊）使用的账户模型。
 
 #### 参考
-- [Godwoken on GitHub](https://github.com/jjyr/godwoken)
+- [Godwoken GitHub](https://github.com/jjyr/godwoken)
 
 ---
 
@@ -1486,7 +1486,7 @@ A Type Script which defines the monetary policy of a User Defined Token (UDT).
 - [Governance Script Hash](#governance-script-hash)
 - [UDT](#udt)
 - [User Defined Token](#user-defined-token)
-- [Type Script](#type-script)
+- [类型脚本](#类型脚本)
 
 ---
 
@@ -1500,7 +1500,7 @@ A Blake2b hash of a Type Script which is used as an identifier for the Script wh
 - [Governance Script](#governance-script)
 - [UDT](#udt)
 - [User Defined Token](#user-defined-token)
-- [Type Script](#type-script)
+- [类型脚本](#类型脚本)
 
 ---
 
@@ -1508,11 +1508,11 @@ A Blake2b hash of a Type Script which is used as an identifier for the Script wh
 An alternative term for Dead Cell.
 
 #### 同义词
-- [Dead Cell](#dead-cell)
+- [已销毁 Cell](#已销毁-cell)
 
 #### 参考
 - [Cell](#cell)
-- [Cell Model](#cell-model)
+- [Cell 模型](#cell-模型)
 
 ---
 
@@ -1521,7 +1521,7 @@ An application or library that keeps track of live Cells that match criteria spe
 
 #### 参考
 - [Cells](#cells)
-- [Live Cell](#live-cell)
+- [可用 Cell](#可用-cell)
 
 ---
 
@@ -1530,9 +1530,9 @@ A Live Cell that is used in a transaction. If the transaction is accepted by the
 
 #### 参考
 - [Cell](#cell)
-- [Consume](#consume)
-- [Dead Cell](#dead-cell)
-- [Live Cell](#live-cell)
+- [消耗](#消耗)
+- [已销毁 Cell](#已销毁-cell)
+- [可用 Cell](#可用-cell)
 - [交易](#交易)
 
 ---
@@ -1541,7 +1541,7 @@ A Live Cell that is used in a transaction. If the transaction is accepted by the
 A specification of how to manage wallet Lock Scripts which apply to a specific user.
 
 #### 参考
-- [Lock Script](#lock-script)
+- [锁脚本](#锁脚本)
 - [Keyper on GitHub](https://github.com/ququzone/keyper)
 
 ---
@@ -1586,7 +1586,7 @@ The name of public Mainnet of the Nervos CKB.
 
 #### Not To Be Confused With
 - [Aggron](#aggron)
-- [Testnet](#testnet)
+- [测试网](#测试网)
 
 #### 参考
 - [Nervos CKB](#nervos-ckb)
@@ -1603,7 +1603,7 @@ This is similar to an unspent transaction output (UTXO) in Bitcoin.
 
 #### 参考
 - [Cell](#cell)
-- [Cell Model](#cell-model)
+- [Cell 模型](#cell-模型)
 - [UTXO on Bitcoin.org](https://bitcoin.org/en/glossary/unspent-transaction-output)
 
 ---
@@ -1613,7 +1613,7 @@ A Script that enforces access and ownership of a Cell. This Script controls who 
 
 #### 参考
 - [Cell](#cell)
-- [Type Script](#type-script)
+- [类型脚本](#类型脚本)
 - [Script](#script)
 
 ---
@@ -1623,7 +1623,7 @@ A Blake2b hash of a Lock Script which is used as an identifier for the Script wh
 
 #### 参考
 - [Cell](#cell)
-- [Lock Script](#lock-script)
+- [锁脚本](#锁脚本)
 
 ---
 
@@ -1633,7 +1633,7 @@ An address format used on Nervos that includes the full code hash of the lock sc
 #### 参考
 - [地址](#地址)
 - [Code Hash](#code-hash)
-- [Lock Script](#lock-script)
+- [锁脚本](#锁脚本)
 - [Short Address](#short-address)
 
 ---
@@ -1653,7 +1653,7 @@ The Nervos CKB public blockchain.The name of the Nervos CKB Mainnet is Lina.
 
 #### Not To Be Confused With
 - [Aggron](#aggron)
-- [Testnet](#testnet)
+- [测试网](#测试网)
 
 ---
 
@@ -1807,7 +1807,7 @@ A Live Cell that is created in a transaction.
 
 #### 参考
 - [Cell](#cell)
-- [Live Cell](#live-cell)
+- [可用 Cell](#可用-cell)
 - [交易](#交易)
 
 ---
@@ -1824,7 +1824,7 @@ A byzantine fault tollerant consensus algorithm designed by Nervos for Huobi whi
 An Ethereum compatible layer that provides account model functionality on top of Nervos' Cell Model.
 
 #### 参考
-- [Cell Model](#cell-model)
+- [Cell 模型](#cell-模型)
 - [Polyjuice on GitHub](https://github.com/nervosnetwork/polyjuice)
 
 ---
@@ -1834,7 +1834,7 @@ Section of the block that contains transaction proposals.
 
 #### 参考
 - [Commitment Zone](#commitment-zone)
-- [Propose](#propose)
+- [提议](#提议)
 
 ---
 
@@ -1848,7 +1848,7 @@ Miners are incentivized to propose transactions by being paid a proposal reward.
 - [确认](#确认)
 - [Mempool](#mempool)
 - [Proposal Reward](#proposal-reward)
-- [Proposal Zone](#proposal-zone)
+- [提议区](#提议区)
 - [交易](#交易)
 
 ---
@@ -1882,9 +1882,9 @@ A Script is a binary executable in the ELF format for the RISC-V architecture.
 
 #### 参考
 - [CKB-VM](#risc-v)
-- [Lock Script](#lock-script)
+- [锁脚本](#锁脚本)
 - [RISC-V](#risc-v)
-- [Type Script](#type-script)
+- [类型脚本](#类型脚本)
 - [ELF on Wikipedia](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
 
 ---
@@ -1919,7 +1919,7 @@ The short address format is the most common address format used, and is often re
 
 #### 参考
 - [Code Hash](#code-hash)
-- [Lock Script](#lock-script)
+- [锁脚本](#锁脚本)
 - [Long Address](#long-address)
 
 ---
@@ -2061,7 +2061,7 @@ A Script that enforces the rules that must be followed in a transaction for a Ce
 
 #### 参考
 - [Cell](#cell)
-- [Lock Script](#lock-script)
+- [锁脚本](#锁脚本)
 - [Script](#script)
 - [Type Script Hash](#type-script-hash)
 
@@ -2073,17 +2073,17 @@ A Blake2b hash of a Type Script which is used as an identifier for the Script wh
 #### 参考
 - [Cell](#cell)
 - [Script](#script)
-- [Type Script](#type-script)
+- [类型脚本](#类型脚本)
 
 ---
 
-### Type ID
-A unique identifier for asset types on Nervos. This idenfier is based on the Type Script and Arguments of a Cell.
+### 类型 ID
+类型 ID（Type ID）是 Nervos上资产类型的唯一标识符。这个标识符基于 Cell 的类型脚本和参数。
 
 #### 参考
 - [Args](#args)
 - [Cell](#cell)
-- [Type Script](#type-script)
+- [类型脚本](#类型脚本)
 
 ---
 
@@ -2119,8 +2119,8 @@ Validators are Scripts that run within the CKB-VM, and are either Lock Scripts o
 
 #### 参考
 - [CKB-VM](#risc-v)
-- [Lock Script](#lock-script)
-- [Type Script](#type-script)
+- [锁脚本](#锁脚本)
+- [类型脚本](#类型脚本)
 - [交易](#交易)
 
 ---
