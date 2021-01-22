@@ -23,7 +23,8 @@
           "basics/guides/neuron",
           "basics/guides/run-ckb-with-docker",
           "basics/guides/get-ckb",
-          "basics/guides/ckb-on-windows"
+          "basics/guides/ckb-on-windows",
+          "basics/guides/ckb-tuning-guide"
 
         ]
       },
