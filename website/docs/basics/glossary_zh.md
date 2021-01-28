@@ -1479,33 +1479,33 @@ Nervos 上的 SUDT 相当于以太坊代币协议的 ERC20 或者 ERC777。
 
 ---
 
-### Governance Script
-A Type Script which defines the monetary policy of a User Defined Token (UDT).
+### 治理脚本
+治理脚本（Governance Script）是一个定义了用户自定义代币（UDT）的货币政策的类型脚本（Type Script）。
 
 #### 参考
-- [Governance Script Hash](#governance-script-hash)
+- [治理脚本哈希](#治理脚本哈希)
 - [UDT](#udt)
 - [User Defined Token](#user-defined-token)
 - [类型脚本](#类型脚本)
 
 ---
 
-### Governance Script Hash
-A Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
+### 治理脚本哈希
+治理脚本哈希（Governance Script Hash）是一个类型脚本（Type Script）的Blake2b 哈希，当该治理脚本被 Cell 引用时，其哈希可作为脚本的唯一标识。
 
 #### 同义词
-- [Type Script Hash](#type-script-hash)
+- [类型脚本哈希](#类型脚本哈希)
 
 #### 参考
-- [Governance Script](#governance-script)
+- [治理脚本](#治理脚本)
 - [UDT](#udt)
-- [User Defined Token](#user-defined-token)
+- [用户自定义代币](#用户自定义代币)
 - [类型脚本](#类型脚本)
 
 ---
 
-### Historical Cell
-An alternative term for Dead Cell.
+### 历史 Cell
+已销毁 Cell（Dead Cell）的另一种说法。
 
 #### 同义词
 - [已销毁 Cell](#已销毁-cell)
@@ -1516,8 +1516,8 @@ An alternative term for Dead Cell.
 
 ---
 
-### Indexer
-An application or library that keeps track of live Cells that match criteria specified by the developer or user.
+### 索引器
+查找符合开发者或用户指定标准的可用 Cells（Live Cells）的应用程序或库。
 
 #### 参考
 - [Cells](#cells)
@@ -1525,8 +1525,8 @@ An application or library that keeps track of live Cells that match criteria spe
 
 ---
 
-### Input
-A Live Cell that is used in a transaction. If the transaction is accepted by the network, the Live Cell will be consumed, and marked as a Dead Cell.
+### 输入
+在交易中被使用的可用 Cell（Live Cell）。如果交易被网络接受，则可用 Cell 被消耗，标记为已销毁 Cell。
 
 #### 参考
 - [Cell](#cell)
@@ -1538,26 +1538,27 @@ A Live Cell that is used in a transaction. If the transaction is accepted by the
 ---
 
 ### Keyper
-A specification of how to manage wallet Lock Scripts which apply to a specific user.
+一个关于如何管理应用于特定用户的钱包锁脚本（Lock Scripts）的规范。
 
 #### 参考
 - [锁脚本](#锁脚本)
-- [Keyper on GitHub](https://github.com/ququzone/keyper)
+- [Keyper  GitHub](https://github.com/ququzone/keyper)
 
 ---
 
-### Late Spawning
-When a node joins a blockchain network for the first time after the network has already been in operation for a period of time.
+### 后期追块
+当网络已经运行一段时间后，节点才刚刚首次加入区块链网络的行为。
 
-A network is said to support late spawning if that participant can download and verify the entire blockchain without having to trust any of the participants in the network to feed them unaltered data.
+如果一个网络可以下载并验证整个区块链，而不必信任网络中的任何一个参与者向他们提供未经修改的数据，那么这个网络就被称为支持后期追块。
+
 
 #### 参考
-- [Genesis Block](#genesis-block)
+- [创世区块](#创世区块)
 
 ---
 
 ### Layer 1
-A proof of work blockchain known as the Common Knowledge Base (CKB) that serves as the base layer for the Nervos Network.
+在 Nervos 的特定语境中，特指 Nervos Network 的基础网络层，即运行 PoW 证明机制的共同知识库（CKB）。
 
 #### 同义词
 - [CKB](#ckb)
@@ -1569,9 +1570,9 @@ A proof of work blockchain known as the Common Knowledge Base (CKB) that serves 
 ---
 
 ### Layer 2
-Any framework or protocol that is built on top of and dependent on a layer 1 blockchain.
+在 Nervos 的特定语境下，任何基于 Nervos CKB 之上进行构建的任何框架或者协议，都属于 Layer 2。
 
-Layer 2 systems often address different concerns than layer 1, allowing for a wider range of use cases while directly inheriting many of benefits of layer 1.
+Layer 2 系统往往解决了与 Layer 1 不同的问题，在直接继承 Layer 1 的许多优点的同时，还可以实现更广泛的用例。
 
 #### 参考
 - [Layer 1](#layer-1)
@@ -1579,12 +1580,12 @@ Layer 2 systems often address different concerns than layer 1, allowing for a wi
 ---
 
 ### Lina
-The name of public Mainnet of the Nervos CKB.
+Nervos CKB 主网名称。
 
 #### 同义词
 - [主网](#主网)
 
-#### Not To Be Confused With
+#### 易混淆
 - [Aggron](#aggron)
 - [测试网](#测试网)
 
@@ -1593,33 +1594,33 @@ The name of public Mainnet of the Nervos CKB.
 
 ---
 
-### Live Cell
-A Cell that has not been consumed and is available for use.
+### 可用 Cell
+尚未被消耗仍然可用的 Cell。
 
-This is similar to an unspent transaction output (UTXO) in Bitcoin.
+类似于比特币的未花费支出（UTXO）。
 
 #### 同义词
-- [Active Cell](#active-cell)
+- [活跃 Cell](#活跃-cell)
 
 #### 参考
 - [Cell](#cell)
 - [Cell 模型](#cell-模型)
-- [UTXO on Bitcoin.org](https://bitcoin.org/en/glossary/unspent-transaction-output)
+- [Bitcoin.org 上 UTXO 的介绍](https://bitcoin.org/en/glossary/unspent-transaction-output)
 
 ---
 
-### Lock Script
-A Script that enforces access and ownership of a Cell. This Script controls who has permission to use the Cell as an input. 
+### 锁脚本
+锁脚本（Lock Script）是一种强制执行 Cell 的访问和所有权的脚本。该脚本控制谁有权限使用 Cell 作为输入。
 
 #### 参考
 - [Cell](#cell)
 - [类型脚本](#类型脚本)
-- [Script](#script)
+- [脚本](#脚本)
 
 ---
 
-### Lock Script Hash
-A Blake2b hash of a Lock Script which is used as an identifier for the Script when referenced by a Cell.
+### 锁脚本哈希
+锁脚本哈希（Lock Script Hash）是一个锁脚本（Lock Script）的 Blake2b 哈希，当该锁脚本被 Cell 引用时，其哈希可作为脚本的唯一标识。
 
 #### 参考
 - [Cell](#cell)
@@ -1627,23 +1628,23 @@ A Blake2b hash of a Lock Script which is used as an identifier for the Script wh
 
 ---
 
-### Long Address
-An address format used on Nervos that includes the full code hash of the lock script which is associated with it.
+### 长地址
+Nervos 上使用的一种地址格式，包括与之相关联的锁脚本的完整代码哈希。
 
 #### 参考
 - [地址](#地址)
-- [Code Hash](#code-hash)
+- [代码哈希](#代码哈希)
 - [锁脚本](#锁脚本)
-- [Short Address](#short-address)
+- [短地址](#短地址)
 
 ---
 
-### Mainnet
-The Nervos CKB public blockchain.The name of the Nervos CKB Mainnet is Lina.
+### 主网
+特指 Nervos CKB 主网，Nervos CKB 主网的名字为 Lina。
 
-- **ckb version**: >= v0.25.2 (latest stable is recommended)
-- **genesis hash**: 0x92b197aa1fba0f63633922c61c92375c9c074a93e85963554f5499fe1450d0e5
-- **launched at**: 2019-11-15 21:11:00 UTC
+- **ckb 版本**: >= v0.25.2 （推荐使用最新稳定币）
+- **创世哈希**: 0x92b197aa1fba0f63633922c61c92375c9c074a93e85963554f5499fe1450d0e5
+- **启动于**: 2019-11-15 21:11:00 UTC
 
 #### 同义词
 - [CKB](#ckb)
@@ -1651,14 +1652,14 @@ The Nervos CKB public blockchain.The name of the Nervos CKB Mainnet is Lina.
 - [Lina](#lina)
 - [Nervos CKB](#nervos-ckb)
 
-#### Not To Be Confused With
+#### 易混淆
 - [Aggron](#aggron)
 - [测试网](#测试网)
 
 ---
 
-### Minting
-The process of creating of new tokens.
+### 铸造
+发行更多代币的过程。
 
 #### 参考
 - [代币](#代币)
@@ -1666,27 +1667,27 @@ The process of creating of new tokens.
 ---
 
 ### Molecule
-A serialization framework for encoding data which is used extensively on the Nervos blockchain.
+一个用于编码数据的序列化框架，在 Nervos 区块链上被广泛使用。
 
 #### 参考
-- [Molecule Specification](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md)
-- [Molecule on Github](https://github.com/nervosnetwork/molecule)
-- [Molecule Schema used in CKB](https://github.com/nervosnetwork/ckb/tree/develop/util/types/schemas)
+- [Molecule 规范](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0008-serialization/0008-serialization.zh.md)
+- [Molecule Github](https://github.com/nervosnetwork/molecule)
+- [Molecule 在 CKB 上的使用模式](https://github.com/nervosnetwork/ckb/tree/develop/util/types/schemas)
 
 ---
 
 ### Muta
-A framework used to create highly customizable layer 2 blockchain implementations on Nervos.
+一个用于在 Nervos 上创建高度可定制的 Layer 2 区块链的框架实现。
 
 #### 参考
-- [Muta on GitHub](https://github.com/nervosnetwork/muta)
+- [Muta GitHub](https://github.com/nervosnetwork/muta)
 
 ---
 
 ### Nervos CKB
-The layer 1 blockchain of the Nervos Network, the Common Knowledge Base.
+ Nervos Network 的 Layer 1，即共同知识库 CKB。
 
-Nervos CKB is often referred to as the Nervos Blockchain.
+Nervos CKB 通常被称为 Nervos 区块链。
 
 #### 同义词
 - [CKB](#ckb)
@@ -1698,59 +1699,59 @@ Nervos CKB is often referred to as the Nervos Blockchain.
 
 ---
 
-### Off-Chain Computation
-A programming model where all computation is done off-chain to reduce the burden on the nodes in the network and provide higher levels of scalability.
+### 链下计算
+一种编程模型，所有的计算都在链下完成，以减轻网络中节点的负担，并提供更高的可扩展性。
 
-Nervos uses off-chain computation and on-chain verification.
+Nervos 使用链下计算和链上验证。
 
 #### 参考
-- [On-Chain Computation](#on-chain-computation)
-- [On-Chain Verification](#on-chain-verification)
+- [链上计算](#链上计算)
+- [链上验证](#链上验证)
 
 ---
 
-### Off-Chain State
-A programming model where the data that represents the state of an application is not stored on the blockchain, or is not accessible by on-chain smart contracts.
+### 链下状态
+一种编程模型，代表应用状态的数据不存储在区块链上，或者说链上智能合约无法访问。
 
 #### 参考
-- [On-Chain State](#on-chain-state)
+- [链上状态](#链上状态)
 
 ---
 
-### On-Chain Computation
-A programming model where all computation by smart contracts is done on-chain every node on the network simultaneously.
+### 链上计算
+一种编程模型，智能合约的所有计算都是在链上每一个网络节点同时完成。
 
-Ethereum uses on-chain computation.
+以太坊就是使用链上计算。
 
 #### 参考
-- [Off-Chain Computation](#off-chain-computation)
+- [链下计算](#链下计算)
 
 ---
 
-### On-Chain State
-A programming model where the data that represents the state of an application is stored on the blockchain and is accessible by on-chain smart contracts.
+### 链上状态
+一种编程模型，其中代表应用程序状态的数据存储在区块链上，并可通过链上智能合约访问。
 
-Nervos provides on-chain state for all smart contracts.
+Nervos 为所有智能合约提供链上状态。
 
 #### 参考
-- [Off-Chain State](#off-chain-state)
+- [链下状态](#链下状态)
 
 ---
 
-### On-Chain Verification
-A programming model where all computation is done off-chain to reduce the burden on the nodes in the network, but verification of the resulting data is done on-chain to enforce the smart contract rules created by the developer.
+### 链上验证
+一种编程模式，所有的计算都是在链下完成的，以减轻网络中节点的负担，但对所得数据的验证是在链上完成的，以执行开发者创建的智能合约规则。
 
-Nervos uses off-chain computation and on-chain verification.
+Nervos 使用链下计算和链上验证。
 
 #### 参考
-- [On-Chain Computation](#on-chain-computation)
+- [链上计算](#链上计算)
 
 ---
 
-### Open Transaction
-A signed piece of a transaction that is incomplete and invalid on its own. When combined with other signed transaction pieces can form a complete transaction which can be processed.
+### 开放式交易
+已签署的交易片段，其本身是不完整和无效的。当与其他已签署的交易片段结合在一起时，才可以形成一个完整的交易并进行处理。
 
-One use of open transactions is to create the functionality required for a trustless decentalized exchange.
+开放式交易的一个用途是创建免信任的去中心化交易所所需的功能。
 
 #### 参考
 - [加密签名](#加密签名)
@@ -1758,52 +1759,42 @@ One use of open transactions is to create the functionality required for a trust
 
 ---
 
-### Orphan
-A shorthand name for Orphan Block.
+### 孤块
+一个有效区块与另一个矿工的另一个有效区块同时被发现，但由于该区块在另一个区块之后到达而未被网络选择。
+
+孤块在正常操作下会出现，除非出现的频率太高，否则不会成为问题。
+
+在 Nervos 上，将孤块描述为叔块更为合适。
 
 #### 同义词
-- [Orphan Block](#orphan-block)
-- [Uncle](#uncle)
-
----
-
-### Orphan Block
-A valid block that was found simultaneously with another valid block by another miner, but was not selected by network because it arrived after the other block.
-
-Orphan blocks are expected to occur under normal operation and do not become a problem unless they occur too frequently.
-
-On Nervos, orphan blocks are better described as Uncles.
-
-#### 同义词
-- [Orphan](#orphan)
-- [Uncle](#uncle)
+- [叔块](#叔块)
 
 #### 参考
 - [区块](#区块)
-- [Orphan Rate](#orphan-rate)
+- [孤块率](#孤块率)
 
 ---
 
-### Orphan Rate
-A measure of the speed at which Orphan blocks occur within the blockchain network.
+### 孤块率
+衡量孤块在区块链网络中出现的频率。
 
 #### 参考
-- [Orphan Block](#orphan-block)
+- [孤块](#孤块)
 
 ---
 
-### Outpoint
-A particular output Cell in a transaction.
+### 输出点
+输出点（Outpoint）指的是交易中一个特定的输出 Cell。
 
 #### 参考
 - [Cell](#cell)
-- [Output](#output)
+- [输出](#输出)
 - [交易](#交易)
 
 ---
 
-### Output
-A Live Cell that is created in a transaction.
+### 输出
+交易中所创建的可用 Cell（Live Cell）。
 
 #### 参考
 - [Cell](#cell)
@@ -1813,84 +1804,84 @@ A Live Cell that is created in a transaction.
 ---
 
 ### Overlord
-A byzantine fault tollerant consensus algorithm designed by Nervos for Huobi which can support thousands of transactions per second.
+由 Nervos 为火币设计的一种拜占庭容错共识算法，可以支持每秒数千次的交易。
 
 #### 参考
-- [Overlord on Medium](https://medium.com/nervosnetwork/overlord-a-new-consensus-algorithm-3cc51690d269)
+- [Overlord  介绍](https://medium.com/nervosnetwork/overlord-a-new-consensus-algorithm-3cc51690d269)
 
 ---
 
 ### Polyjuice
-An Ethereum compatible layer that provides account model functionality on top of Nervos' Cell Model.
+一个以太坊兼容层，在 Nervos 的 Cell 模型之上提供账户模型功能。
 
 #### 参考
 - [Cell 模型](#cell-模型)
-- [Polyjuice on GitHub](https://github.com/nervosnetwork/polyjuice)
+- [Polyjuice GitHub](https://github.com/nervosnetwork/polyjuice)
 
 ---
 
-### Proposal Zone
-Section of the block that contains transaction proposals.
+### 提议区
+包含交易提议的一段区块。
 
 #### 参考
-- [Commitment Zone](#commitment-zone)
+- [提交区](#提交区)
 - [提议](#提议)
 
 ---
 
-### Propose
-The process of taking an unconfirmed transaction out of the mempool and proposing it for commitment. A transaction is not confirmed until after it has been committed.
+### 提议
+将未确认的交易从内存池中取出并提议的过程。在交易被提交之前，交易仍处于未确认状态。
 
-Miners are incentivized to propose transactions by being paid a proposal reward.
+网络会支付矿工提议奖励，以激励矿工进行提议交易。
 
 #### 参考
-- [Commit](#commit)
+- [提交](#提交)
 - [确认](#确认)
-- [Mempool](#mempool)
-- [Proposal Reward](#proposal-reward)
+- [内存池](#内存池)
+- [提议奖励](#提议奖励)
 - [提议区](#提议区)
 - [交易](#交易)
 
 ---
 
 ### RISC-V
-An open standard instruction set architecture (ISA) for general computing.
+一种用于通用计算的开放标准指令集架构（ISA）。
 
-RISC-V is the instruction set used by the CKB-VM.
+RISC-V 是 CKB-VM 使用的指令集。
 
 #### 参考
 - [CKB-VM](#risc-v)
-- [RISC-V on Wikipedia](https://en.wikipedia.org/wiki/RISC-V)
+- [维基百科上 RISC-V 的介绍](https://zh.wikipedia.org/wiki/RISC-V)
 
 ---
 
-### Schnorr Signature
-A cryptographic signature scheme for signing and verification.
+### Schnorr 签名
+一种用于签名和验证的加密签名方案。
 
 #### 参考
-- [Schnorr Signature on Wikipedia](https://en.wikipedia.org/wiki/Schnorr_signature)
+- [维基百科上的 Schnorr 签名的介绍](https://en.wikipedia.org/wiki/Schnorr_signature)
 
 ---
 
-### Script
-A program that executes on the CKB-VM. A Script can be one of two types:
+### 脚本
+在 CKB-VM 中执行的程序。在 CKB 中有两类脚本：
 
-- Lock Script - Used to control ownership and access to a Cell.
-- Type Script - Used to control how a Cell is used in a transaction.
+- 锁脚本（Lock Script）：用于控制 Cell 的访问权以及所有权。
+- 类型脚本（Type Script）：用于控制 Cell 在交易中的使用方式。
 
-A Script is a binary executable in the ELF format for the RISC-V architecture.
+脚本是 RISC-V 架构下 ELF 格式的二进制可执行文件。
 
 #### 参考
 - [CKB-VM](#risc-v)
 - [锁脚本](#锁脚本)
 - [RISC-V](#risc-v)
 - [类型脚本](#类型脚本)
-- [ELF on Wikipedia](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
+- [维基百科上 ELF 的介绍](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
 
 ---
 
-### Seed Cell
-A design pattern on Nervos from creating unique identifiers used to create unforgeable assets.
+### 种子 Cell
+Nervos 上的一种设计模式，通过创建独特的标识符来创建不易遗忘的资产。
 
 #### 参考
 - [Cell](#cell)
@@ -1898,38 +1889,38 @@ A design pattern on Nervos from creating unique identifiers used to create unfor
 ---
 
 ### Shannon
-A fractional denomination of CKBytes. One CKByte is equal to 100,000,000 Shannons.
+Shannon（香农），CKB 代币的最小单位，1 CKB =100,000,000 Shannons。
 
-A Shannon is the equivalent of a Bitcoin Satoshi.
+Shannon 相当于比特币的 Satoshi。
 
 #### 参考
 - [CKByte](#ckbyte)
 - [共同知识字节](#共同知识字节)
-- [Satoshi (denomination) on Bitcoin.org](https://bitcoin.org/en/glossary/denominations)
+- [Bitcoin.org 上 Satoshi 的介绍](https://bitcoin.org/en/glossary/denominations)
 
 ---
 
-### Short Address
-An address format on Nervos that does not include the code hash of the associated lock script, and instead uses one of many commonly used lock scripts.
+### 短地址
+Nervos 上的一种地址格式，它不包括相关锁脚本的代码哈希，而是使用许多常用的锁脚本之一。
 
-The short address format is the most common address format used, and is often referred to as simply "address".
+短地址格式是最常用的地址格式，通常被简单地称为“地址”。
 
 #### 同义词
 - [地址](#地址)
 
 #### 参考
-- [Code Hash](#code-hash)
+- [代码哈希](#代码哈希)
 - [锁脚本](#锁脚本)
-- [Long Address](#long-address)
+- [长地址](#长地址)
 
 ---
 
-### Simple UDT
-A standard that defines a the most basic implementation of a UDT fungible token on Nervos.
+### 简单 UDT
+一个定义了在 Nervos 上最基本的 UDT 同质化代币实现的标准。
 
-A Simple UDT is often referred to by its abbreviation, SUDT.
+简单 UDT 通常用其缩写 SUDT 来表示。
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 and ERC777.
+Nervos 上的 SUDT 相当于以太坊代币标准 ERC20 和 ERC777。
 
 #### 同义词
 - [SUDT](#sudt)
@@ -1938,13 +1929,13 @@ An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 and ERC77
 - [代币](#代币)
 - [UDT](#udt)
 - [用户自定义代币](#用户自定义代币)
-- [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
-- [Simple UDT RFC Draft Spec on Nervos Talk](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333/1)
+- [Ethereum.org 上 ERC20 的介绍](https://eips.ethereum.org/EIPS/eip-20)
+- [Simple UDT RFC](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333/1)
 
 ---
 
 ### Since
-A field on a Cell which can contain an optional value that prevents consumption before a certain block timestamp or a block number.
+Cell 中的一个字段，它可以包含一个可选的值，以防止在某个区块时间戳或区块号之前消耗。
 
 #### 参考
 - [Cell](#cell)
@@ -1956,14 +1947,18 @@ An abbreviation for Simplified Payment Verification. A protocol for using a bloc
 
 SPV clients require far less data to be stored, but also must requires the trust of the network clients it is connected to directly.
 
+简化支付验证（Simplified Payment Verification）的缩写。一种无需操作完整的节点的协议。
+
+SPV 客户端需要存储的数据要少得多，但也必须要求它直接连接到的可信的网络客户端。
+
 #### 参考
-- [SPV Wallet](#spv-wallet)
-- [Simplified Payment Verification on BitcoinWiki](https://en.bitcoinwiki.org/wiki/Simplified_Payment_Verification)
+- [SPV 钱包](#spv-前阿伯)
+- [BitcoinWiki 上 SPV 的介绍](https://en.bitcoinwiki.org/wiki/Simplified_Payment_Verification)
 
 ---
 
-### SPV Wallet
-A light-weight cryptocurrency wallet that uses the SPV protocol.
+### SPV 钱包
+使用 SPV 协议的轻量级加密货币钱包。
 
 #### 参考
 - [SPV](#spv)
@@ -1971,15 +1966,15 @@ A light-weight cryptocurrency wallet that uses the SPV protocol.
 ---
 
 ### SUDT
-An abbreviation for Simple UDT.
+简单用户自定义代币（Simple UDT）的缩写。
 
 #### 同义词
-- [Simple UDT](#simple-udt)
+- [简单 UDT](#简单-udt)
 
 ---
 
-### Testnet
-An alternate public blockchain used for testing purposes that is running the same or similar software as the Mainnet. All tokens and data on testnets have no value.The name of the Nervos CKB Testnet is Aggron.
+### 测试网
+一个用于测试目的的备用公共区块链，运行着与Mainnet相同或类似的软件。testnet上的所有代币和数据都没有价值.Nervos CKB Testnet的名字是Aggron。
 
 - **ckb version**: >= v0.32.0 (latest stable is recommended)
 - **genesis hash**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
@@ -1988,35 +1983,15 @@ An alternate public blockchain used for testing purposes that is running the sam
 #### 同义词
 - [Aggron](#aggron)
 
-#### Not To Be Confused With
+#### 易混淆
 - [Lina](#lina)
 - [主网](#主网)
 
 ---
 
-### Transaction Hash
+### 交易哈希
 
-Transaction is serialized via [molecule](#molecule) in CKB. Its schema is:
-
-```
-table Transaction {
-    raw:            RawTransaction,
-    witnesses:      BytesVec,
-}
-```
-
-Transaction hash is generated by the serialized `raw` structure through [ckbhash](#ckbhash).
-
-#### 参考
-- [Transaction Witness Hash](#transaction-witness-hash)
-- [Molecule](#molecule)
-- [Ckbhash](#ckbhash)
-
----
-
-### Transaction Witness Hash
-
-Transaction is serialized via [molecule](#molecule) in CKB. Its schema is:
+CKB 中的交易是通过 [molecule](#molecule) 进行序列化。它的结构如下：
 
 ```
 table Transaction {
@@ -2025,54 +2000,74 @@ table Transaction {
 }
 ```
 
-Transaction witness hash is generated by the serialized transaction through [ckbhash](#ckbhash).
+交易哈希是通过 [ckbhash](#ckbhash) 由序列化的 raw 结构生成的。
 
 #### 参考
-- [Transaction Hash](#transaction-hash)
+- [交易见证哈希](#交易见证哈希)
 - [Molecule](#molecule)
 - [Ckbhash](#ckbhash)
 
 ---
 
-### Transaction Root
+### 交易见证哈希
 
-The field `transactions_root` in header is
+CKB 中的交易是通过 [molecule](#molecule) 进行序列化。它的结构如下：
+
+```
+table Transaction {
+    raw:            RawTransaction,
+    witnesses:      BytesVec,
+}
+```
+
+交易见证（witness）哈希是通过 [ckbhash](#ckbhash) 由序列化的 witness 结构生成的。
+
+#### 参考
+- [交易哈希](#交易哈希)
+- [Molecule](#molecule)
+- [Ckbhash](#ckbhash)
+
+---
+
+### 交易根
+
+头中的交易根 `transactions_root` 如下：
 
 ```
 ckbhash(T || W)
 ```
 
-> [ckbhash](#ckbhash) is the hash function, `||` denotes binary concatenation.
+> [ckbhash](#ckbhash) 是哈希函数, `||` 表示二进制连接。
 
-T is the root of a [CKB Merkle Tree](#ckb-merkle-tree), which items are the [transaction hashes](#transaction-hash)  of all the transactions in the block.
+T 表示 [CKB 默克尔树](#ckb-默克尔树) 的根，默克尔树的子项是区块中所有交易的交易哈希值。
 
-W is also the root of a [CKB Merkle Tree](#ckb-merkle-tree), but the items are the [Transaction Witness Hash](#transaction-witness-hash) of all the transactions in the block.
+W 也表示 [CKB 默克尔树](#ckb-默克尔树) 的根，但其子项是区块中所有交易的交易见证哈希值。
 
 #### 参考
 - [Ckbhash](#ckbhash)
-- [CKB Merkle Tree](#ckb-merkle-tree)
-- [Transaction Witness Hash](#transaction-witness-hash)
+- [CKB 默尔克树](#ckb-默尔克树)
+- [交易见证哈希](#交易见证哈希)
 
 ---
 
 
-### Type Script
-A Script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output.
+### 类型脚本
+类型脚本（Type Script）是一种不管 Cell 是作为输入被消耗或作为输出被创建，都强制执行交易中必须遵循的规则的脚本。
 
 #### 参考
 - [Cell](#cell)
 - [锁脚本](#锁脚本)
-- [Script](#script)
-- [Type Script Hash](#type-script-hash)
+- [脚本](#脚本)
+- [类型脚本哈希](#类型脚本哈希)
 
 ---
 
-### Type Script Hash
-A Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
+### 类型脚本哈希
+类型脚本哈希（Type Script Hash）是一个类型脚本（Type Script）的 Blake2b 哈希，当该类型脚本被 Cell 引用时，其哈希可作为脚本的唯一标识。
 
 #### 参考
 - [Cell](#cell)
-- [Script](#script)
+- [脚本](#脚本)
 - [类型脚本](#类型脚本)
 
 ---
@@ -2081,41 +2076,41 @@ A Blake2b hash of a Type Script which is used as an identifier for the Script wh
 类型 ID（Type ID）是 Nervos上资产类型的唯一标识符。这个标识符基于 Cell 的类型脚本和参数。
 
 #### 参考
-- [Args](#args)
+- #### [Args](#args)
 - [Cell](#cell)
 - [类型脚本](#类型脚本)
 
 ---
 
-### Uncle
-A valid block that was found simultaneously with another valid block by another miner, but was not selected by network because it arrived after the other block.
+### 叔块
+一个有效区块与另一个有效区块同时被另一个矿工发现，但由于该区块在另一个区块之后到达而未被网络选中。
 
-Uncles are paid a reduced block reward when they are found and reported.
+当叔块被发现并上报时，会给予少量的区块奖励。
 
-On Nervos, Uncles are tracked by consensus to adjust the block interval of the network.
+在 Nervos上，叔块是通过共识追踪来调整网络的区块间隔时间的。
 
 #### 同义词
-- [Orphan Block](#orphan-block)
+- [孤块](#孤块)
 
 #### 参考
-- [Block Interval](#block-interval)
-- [Orphan Rate](#orphan-rate)
-- [Uncle](#uncle)
+- [区块间隔时间](#区块间隔时间)
+- [孤块率](#孤块率)
+- [叔块](#叔块)
 
 ---
 
-### Uncle Rate
+### 叔块率
 
 #### 参考
-- [Orphan Rate](#orphan-rate)
-- [Uncle](#uncle)
+- [孤块率](#孤块率)
+- [叔块](#叔块)
 
 ---
 
-### Validator
-A Script that is used to ensure that a transaction created by a Generator is valid.
+### 验证者
+验证者（Validator）是用于确保生成器创建的交易是有效的脚本。
 
-Validators are Scripts that run within the CKB-VM, and are either Lock Scripts or Type Scripts.
+验证器是在 CKB-VM 中运行的脚本，是锁脚本或类型脚本。
 
 #### 参考
 - [CKB-VM](#risc-v)
@@ -2125,8 +2120,8 @@ Validators are Scripts that run within the CKB-VM, and are either Lock Scripts o
 
 ---
 
-### Witness
-A set of cryptographic signatures that contains the data required to prove authorization to the resources used in a transaction.
+### 见证
+见证（Witness），一组加密签名，其中包含证明对交易中使用的资源授权所需的数据。
 
 #### 参考
 - [交易](#交易)
@@ -2134,25 +2129,25 @@ A set of cryptographic signatures that contains the data required to prove autho
 ---
 
 ### Zk-SNARK
-A form of cryptographic proof, that when used in cryptocurrencies, allows for privacy features which do not reveal the amounts or participants in transactions.
+一种加密证明的形式，在加密货币中使用时，允许不透露交易金额或参与者的隐私功能。
 
-Zk-SNARKs require a trusted setup, but are otherwise trustless.
+Zk-SNARKs 需要一个可信的设置，但在其他方面是免信任的。
 
 #### 参考
 - [交易](#交易)
 - [Zk-STARK](#zk-stark)
-- [Non-interactive zero-knowledge proofs on Wikipedia](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)
+- [维基百科上零知识证明的介绍](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)
 
 ---
 
 ### Zk-STARK
-A form of cryptographic proof, that when used in cryptocurrencies, allows for privacy features which do not reveal the amounts or participants in transactions.
+一种加密证明的形式，在加密货币中使用时，允许不透露交易金额或参与者的隐私功能。
 
-Unlike Zk-SNARKs, Zk-STARKs do not require a trusted setup.
+与 Zk-SNARKs 不同，Zk-STARKs 不需要可信的设置。
 
 #### 参考
 - [交易](#交易)
 - [Zk-SNARK](#zk-snark)
-- [Non-interactive zero-knowledge proofs on Wikipedia](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)
+- [维基百科上零知识证明的介绍](https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof)
 
 ---
