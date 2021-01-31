@@ -73,13 +73,13 @@ scl enable llvm-toolset-7 bash
 
 ### 增加环境变量
 
-如果你的操作系统包含预编译的`snappy` 库，你可以设置`SNAPPY_LIB_DIR` 环境变量指向该库的目录，这样可以减少编译时间。
+如果你的操作系统包含预编译的`snappy` 库，你可以设置 `SNAPPY_LIB_DIR` 环境变量指向该库的目录，这样可以减少编译时间。
 
 ```shell
 export SNAPPY_LIB_DIR=/usr/local/lib
 ```
 
-### Build from source
+### 源码编译
 
  [Github 代码库](https://github.com/nervosnetwork/ckb) 上的  `master` 分支会定期进行编译测试，并且始终是最新版本。默认的签出分支 `develop` 是开发状态中的最新版本。
 
@@ -108,7 +108,7 @@ export PATH="$(pwd)/target/release:$PATH"
 # ln -snf "$(pwd)/target/release/ckb" /usr/local/bin/ckb
 ```
 
-## Download from Releases 下载发布版
+## 下载发布版
 
 每个发布版我们都会在 [Github Releases](https://github.com/nervosnetwork/ckb/releases) 发布二进制包。你可以直接下载。
 

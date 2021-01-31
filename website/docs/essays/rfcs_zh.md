@@ -99,7 +99,7 @@ CKB VM 是一个灵活的虚拟机，可以自由地实现许多流程控制，�
 
 ### [CKB 地址格式](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0021-ckb-address-format/0021-ckb-address-format.zh.md)
 
-本 RFC 介绍如何实现 CKB 地址格式，这个 Cell 的 lock script 在应用层的显示建议。lock script 主要由三个关键参数组成，包括：`code_hash`，`hash_type` 和 `args`。CKB 地址将 lock script 封装为单行的、可验证的和人类可读的格式。
+本 RFC 介绍如何实现 CKB 地址格式，这个 Cell 的锁脚本（lock script）在应用层的显示建议。lock script 主要由三个关键参数组成，包括：`code_hash`，`hash_type` 和 `args`。CKB 地址将锁脚本（lock script）封装为单行的、可验证的和人类可读的格式。
 
 ### [Nervos DAO 的存入和取出](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.zh.md)
 

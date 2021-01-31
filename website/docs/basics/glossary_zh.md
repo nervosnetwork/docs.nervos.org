@@ -1,6 +1,6 @@
 ---
-id: glossary
-title: Glossary
+id: glossary_zh
+title: 术语表
 ---
 
 ## 术语小节

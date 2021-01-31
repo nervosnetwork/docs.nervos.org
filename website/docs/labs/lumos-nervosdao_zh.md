@@ -225,8 +225,8 @@ Lumos 基于[索引-查询-组装](../reference/cell_zh#索引-查询-组装 模
 CKB 为 dApp 开发者提供了极大的灵活性进行应用开发，不过 “能力越大，责任也越大”，一个灵活的编程模型也会大大复杂化交易的组装。其中包括但不限于以下这些难题：
 
 * 交易输入中的不同脚本要求消息生成分离以及签名步骤分离。
-* 由于 `type script` 的验证规则，部分 Cells 可能需要在见证（witness）中设置特殊的参数。
-* 因为 Cell 中的 `lock script` 和 `type script` 都可能需要同一见证结构中的参数，所以可能需要协调。
+* 由于 `类型脚本（type script）` 的验证规则，部分 Cells 可能需要在见证（witness）中设置特殊的参数。
+* 因为 Cell 中的 `锁脚本（lock script）` 和 `类型脚本（type script）` 都可能需要同一见证结构中的参数，所以可能需要协调。
 
 即使在处理单笔 NervosDAO 交易时，这些问题也会困扰着你。当我们考虑到包含不同 CKB 脚本的多个 Cells 一起组成时，这只会变得更加复杂。展望未来，我们需要一个解决方案。
 
@@ -269,7 +269,7 @@ CKB 为 dApp 开发者提供了极大的灵活性进行应用开发，不过 “
 > // * The transaction is not signed yet
 > // Let's take a look at them separately.
 
-> // First, since we are using the default secp256k1-blake160 lock script, an
+> // First, since we are using the default secp256k1-blake160 锁脚本（lock script）, an
 > // existing module in common-scripts can be leveraged to incur transaction
 > // fee. Here we are using the same address to provide 1 CKByte as transaction
 > // fee.
@@ -290,7 +290,7 @@ CKB 为 dApp 开发者提供了极大的灵活性进行应用开发，不过 “
 > // used for signing.
 > skeleton = secp256k1Blake160.prepareSigningEntries(skeleton);
 > // This method actually loops through the skeleton, and create `signingEntries`
-> // that are using the default secp256k1-blake160 lock script:
+> // that are using the default secp256k1-blake160 锁脚本（lock script）:
 > skeleton.get("signingEntries").toArray();
 [
   {

@@ -12,11 +12,11 @@ title: Polyjuice 的技术细节
 
 **合约账户**
 
-Polyjuice 中的合约账户是一个由 Polyjuice `type script` 约束的 Cell。`type script` 的 `args` 是一个`type_id`值，所以 `type script` 是唯一的。Cell 数据的前 32 个字节是合约的`存储根 stogage root`（sparse-merkle-tree）。Cell 数据的第二个 32 字节是合约的`code_hash`（blake2b(code)）。由于我们希望每个人都能使用该合约，所以我们默认使用总是成功的 `lock script`。我们也可以使用任何`lock script`进行访问控制或其他目的。
+Polyjuice 中的合约账户是一个由 Polyjuice `类型脚本（type script）` 约束的 Cell。`类型脚本（type script）` 的 `args` 是一个`type_id`值，所以 `类型脚本（type script）` 是唯一的。Cell 数据的前 32 个字节是合约的`存储根 stogage root`（sparse-merkle-tree）。Cell 数据的第二个 32 字节是合约的`code_hash`（blake2b(code)）。由于我们希望每个人都能使用该合约，所以我们默认使用总是成功的 `锁脚本（lock script）`。我们也可以使用任何`锁脚本（lock script）`进行访问控制或其他目的。
 
 **EoA 账户**
 
-Polyjuice 的 EoA 账户是默认被 secp256k1 sighash 的 `lock script` 锁定的所有  `live cell`。账户的 id 就是 `lock script` 的 args。
+Polyjuice 的 EoA 账户是默认被 secp256k1 sighash 的 `锁脚本（lock script）` 锁定的所有 `可用 Cell（live cell）`。账户的 id 就是 `锁脚本（lock script）` 的 args。
 
 
 ### 合约
@@ -39,7 +39,7 @@ max(block_number(inputs))
 
 `DIFFICULTY` 值指的是[Nervos CKB](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0020-ckb-consensus-protocol/0020-ckb-consensus-protocol.md#dynamic-difficulty-adjustment-mechanism) 的难度。这里的 `GASLIMIT` 是一个常量值，等于 `int64_t `（9223372036854775807）的最大值。交易费用取决于交易的规模以及 [cycles](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.zh.md)，所以 gas 限制在 Polyjuice 中是无意义的。
 
-`COINBASE` 的返回值和  `SELFDESTRUCT` 受益人地址是 `lock script` 哈希的前 20 字节，如下：
+`COINBASE` 的返回值和  `SELFDESTRUCT` 受益人地址是 `锁脚本（lock script）` 哈希的前 20 字节，如下：
 
 ```
 blake2b(lock_script)[0..20]
@@ -60,11 +60,11 @@ fn call(sender: H160, contract_address: H160, input: Bytes) -> TransactionReceip
 
 ### 验证器
 
-Polyjuice 验证器是一个 `type script`，用于验证合约 Cell 的转换。
+Polyjuice 验证器是一个 `类型脚本（type script）`，用于验证合约 Cell 的转换。
 
 ### 索引器
 
-索引器是 Polyjuice 的一个模块，用于索引 CKB 区块中的所有 Polyjuice 交易。合约元数据，修改以及 Polyjuice 交易的所有日志都会被保存。另外，所有 live Cells 也会索引，以便运行生成器（编译 Polyjuice 交易）
+索引器是 Polyjuice 的一个模块，用于索引 CKB 区块中的所有 Polyjuice 交易。合约元数据，修改以及 Polyjuice 交易的所有日志都会被保存。另外，所有可用 Cell（live cell）s 也会索引，以便运行生成器（编译 Polyjuice 交易）
 
 ## 设计细节
 
@@ -105,11 +105,11 @@ Polyjuice 验证器是一个 `type script`，用于验证合约 Cell 的转换�
 
 ### 如何进行合约创建？
 
-发送者（EoA账户）或合约中 CREATE 指令可以完成合约的创建。在生成器中，创建的 Cell 将被分配一个type_id `type script`，合约的 `code hash` 将被保存在账户存储根哈希值旁边的数据字段中。在验证器中， `type script`将检查合约的 `code hash` 是否与数据字段中的 `code_hash` 匹配。
+发送者（EoA账户）或合约中 CREATE 指令可以完成合约的创建。在生成器中，创建的 Cell 将被分配一个type_id `类型脚本（type script）`，合约的 `code hash` 将被保存在账户存储根哈希值旁边的数据字段中。在验证器中， `类型脚本（type script）`将检查合约的 `code hash` 是否与数据字段中的 `code_hash` 匹配。
 
 ### 如何进行合约销毁？
 
-只有在执行 `SELFDESTRUCT` 操作码时才会发生合约销毁。在生成器中，将销毁后的合约 Cell 作为输入消耗，然后把一个输出 Cell 作为受益 Cell，受益地址就是对应的 secp256k1 sighash `lock script`。
+只有在执行 `SELFDESTRUCT` 操作码时才会发生合约销毁。在生成器中，将销毁后的合约 Cell 作为输入消耗，然后把一个输出 Cell 作为受益 Cell，受益地址就是对应的 secp256k1 sighash `锁脚本（lock script）`。
 
 ### 如何生成合约间调用的 CKB 交易？
 

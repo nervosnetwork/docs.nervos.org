@@ -78,8 +78,6 @@ Neuron 钱包是 Nervos 基金会开发的 CKB 钱包，它可以保存你的私
 
 ## 5. 将 CKBytes 存入 Nervos DAO
 
-The [economic model](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md) of Nervos CKB is designed to allow token holders to lock tokens in the Nervos DAO to mitigate the inflationary effect of the secondary issuance. In this case, the inflationary effect of secondary issuance is expected to be nominal, equivalent to holding tokens with a hard cap. Please refer to [Nervos DAO Explained](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c) for more details). 
-
 Nervos CKB 的[经济模型](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md) 可以让代币持有者将代币锁定在Nervos DAO中，以减轻二级发行的通胀效应。在这种情况下，二级发行的通货胀效就只是名义上的通胀，持有者等同于持有总量恒定的代币。更多有关详细信息，请参考《[Nervos DAO解释](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c)》。
 
 请确保你的余额大于 102 CKB。
@@ -111,8 +109,6 @@ Nervos CKB 的[经济模型](https://github.com/nervosnetwork/rfcs/blob/master/r
 <img src="../../assets/neuron-wallet-guide/send.png" width = "600"/>
 
 ## 8. 管理 `资产账户`
-
-`Asset Account` is used for managing the accounts which include anyone-can-pay( [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells and SUDTs ( [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)). It's recommended to use `ckb-udt-cli`to issue or transfer UDTs, you may refer the [github repository](https://github.com/ququzone/ckb-udt-cli) for more details. Please note that the feature is experimental and only can be used on the Testnet Aggron now.  
 
 `资产账户` 用于管理如 anyone-can-pay( [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)) cells 和 SUDTs ( [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)) 等这类型的账户。推荐使用  `ckb-udt-cli` 来发行或者发送 UDTs，你可以参考 [github 代码库](https://github.com/ququzone/ckb-udt-cli) 了解更多信息。请注意，该功能目前处于实验阶段，仅可在 Aggron 测试网使用。
 

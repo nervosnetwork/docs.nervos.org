@@ -12,16 +12,16 @@ CKB 使用 RISC-V ISA 来实现 VM 层，CKB VM 不同于其他通过硬编码�
 
 CKB 节点只在交易验证失败时报告一个退出代码，区分错误的最直接方法是使用不同的退出代码（在 -128 和 127 之间）来表示错误。
 
-我们可以看看默认的 lock script 错误代码： [secp256k1 error codes](https://github.com/nervosnetwork/ckb-system-scripts/wiki/Error-codes)
+我们可以看看默认的锁脚本（lock script）错误代码： [secp256k1 error codes](https://github.com/nervosnetwork/ckb-system-scripts/wiki/Error-codes)
 
-> 一个常见的错误是把 lock script 错误和 type script 错误混为一谈。建议删除 type script，然后再运行；如果错误仍然存在，可以确定错误是由 lock script 引起的；否则，就是由 type script 引起的。
+> 一个常见的错误是把锁脚本（lock script）错误和类型脚本（type script）错误混为一谈。建议删除类型脚本（type script），然后再运行；如果错误仍然存在，可以确定错误是由锁脚本（lock script）引起的；否则，就是由类型脚本（type script） 引起的。
 
 
 ## 调试系统调用（Debug syscall）
 
-当我们想从脚本中输出额外的信息时，我们可以使用 [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug).
+当我们想从脚本中输出额外的信息时，我们可以使用[系统调用调试](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug).
 
-默认情况下，CKB 节点不会输出 debug syscall 消息，但是可以配置 ckb.toml 来启用它。
+默认情况下，CKB 节点不会输出系统调用调试消息，但是可以配置 ckb.toml 来启用它。
 
 ```
 [logger]
@@ -46,7 +46,7 @@ ckb-cli mock-tx template --lock-arg <your lock-arg> --output-file debug-tx.json
 
 ### 2. 修改模板
 
-将你的脚本 Cell 添加到 `cell_deps` ，然后修改交易结构，以使用 lock script 或者 type script。
+将你的脚本 Cell 添加到 `cell_deps` ，然后修改交易结构，以使用锁脚本（lock script）或者类型脚本（type script）。
 
 
 ### 3. 模板完成
@@ -56,7 +56,7 @@ ckb-cli mock-tx complete --tx-file debug-tx.json
 ```
 
 
-该命令是根据你的 lock arg，使用私钥对交易进行签名。
+该命令是根据你的锁参数（lock arg），使用私钥对交易进行签名。
 
 
 ### 4. 验证交易

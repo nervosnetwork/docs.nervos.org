@@ -15,11 +15,7 @@ title: Dynamic loading in Capsule 在 Capsule 中实现动态加载
 
 从  `v0.6`  版本开始， `ckb-std` 引入了[动态加载模块](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/dynamic_loading/index.html)，该模块提供了一个从链上 Cell 中动态加载库的高水平接口。
 
-In this tutorial, we build an example shared library in C, and try to dynamically load the shared library from a contract written in Rust.
-
 在本教程中，我们使用 C 语言构建了一个示例的共享库，然后从 Rust 编写的合同中动态加载共享库。
-
-If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/n6tx7uC). 
 
 在本教程中如果你遇到任何问题，可以[提交 issue](https://github.com/nervosnetwork/capsule)，或者在 [Nervos 论坛](https://talk.nervos.org/)或[Discord](https://discord.gg/n6tx7uC) 上联系我们。
 

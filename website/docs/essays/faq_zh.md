@@ -47,7 +47,7 @@ transaction.outputs.all{ |output|
 
 ---
 
-## How the primary and secondary epoch reward is allocated among blocks?在区块间，基础奖励以及二级奖励是如何分配的？
+## 在区块间，基础奖励以及二级奖励是如何分配的？
 
 假设 epoch 奖励为 R，epoch 长度为 L，纪元的起始区块高度为 S。
 
@@ -75,8 +75,6 @@ floor(R / L)
 普通二进二出的交易大小为 597 字节， 为了计算交易费用，我们需要额外增加 4 个字节的大小作为在区块中序列化交易的成本。
 
 `(tx_size + 4) * fee_rate / 1000`
-
-Let's suppose that we use `1000 shannons/KB` as fee_rate(how many shannons per KB charge), the transaction fee is `(597 + 4) * 1000 / 1000`, 601 shannons (0.00000601 CKB).
 
 假设我们用 `1000 shannons/KB` 作为 fee_rate（每 KB 收费多少 shannons），交易费用是（597+4）*1000/1000，601 shannons （0.00000601 CKB）。
 
@@ -226,7 +224,7 @@ function cell_occupied_bytes(cell) {
 ```
 
 
-There is the test case:
+这是测试用例：
 
 ```js
 console.log(
@@ -278,7 +276,7 @@ socket.send(`{"id": 2, "jsonrpc": "2.0", "method": "unsubscribe", "params": [0]}
 ---
 
 
-## CKB 中有哪些特殊的 live cells 吗？
+## CKB 中有哪些特殊的可用 cells（live cells） 吗？
 
 在测试网的确有部署一些特殊的 live cells。
 

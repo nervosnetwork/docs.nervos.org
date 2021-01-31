@@ -3,9 +3,7 @@ id: tools_zh
 title: 工具
 ---
 
-Nervos Community is a cohesive community that embraces the contributions of every member. We welcome everyone to provide passion, innovation and diversity of ideas to improve Nervos.If you are new here, there are three tools **Neuron Wallet**, **CKB-Explorer** and **Testnet Faucet**, hope it will be helpful for you.
-
-Nervos 社区是一个极具凝聚力的社区，重视所有社区成员的贡献。我们鼓励社区提供各种创新性的想法建议来共同推动社区发展。如果你接触 Nervos，可以先了解 **Neuron 钱包**，**CKB 浏览器**和**测试网水龙头**这三个工具，希望对你有所帮助
+Nervos 社区是一个极具凝聚力的社区，重视所有社区成员的贡献。我们鼓励社区提供各种创新性的想法建议来共同推动社区发展。如果你刚开始了解 Nervos，可以先了解 **Neuron 钱包**，**CKB 浏览器**和**测试网水龙头**这三个工具，希望对你有所帮助。
 
 ## Neuron 钱包
 [Github](https://github.com/nervosnetwork/neuron) | [下载](https://github.com/nervosnetwork/neuron/releases)
@@ -16,7 +14,7 @@ Neuron 钱包是由 Nervos 基金会开发的一款 CKB 钱包，它可以帮助
 
 目前 Neuron 钱包默认内置着一个连接主网的 CKB 主网节点。安装完成后，只要你打开 Neuron 钱包，内置的主网节点将会运行。
 
-你也可以自己运行 CKB 节点然后再启动 Neuron 钱包，这时候 Neuron 钱包就不会启动内置节点，而是连接到你自己的节点。你可以参考  [Neuron 钱包指南](guides/neuron_zh.md) 了解详细信息。
+你也可以自己运行 CKB 节点然后再启动 Neuron 钱包，这时候 Neuron 钱包就不会启动内置节点，而是连接到你自己的节点。你可以参考 [Neuron 钱包指南](guides/neuron_zh.md) 了解详细信息。
 
 
 ## CKB 浏览器
@@ -28,7 +26,5 @@ Neuron 钱包是由 Nervos 基金会开发的一款 CKB 钱包，它可以帮助
 
 ## Nervos Aggron 水龙头
 [Github](https://github.com/shaojunda/ckb-testnet-faucet) | [链接](https://faucet.nervos.org/)
-
-Nervos Aggron Faucet is where you can claim free **Testnet CKBytes** to use while developing and testing. You may claim 5000 CKB from the faucet once every 3 hours on Testnet Aggron.
 
 当你进行 CKB 相关的开发测试时，你可以在 Nervos Aggron 水龙头上申领免费的测试网 CKBytes 进行测试。在 Aggron 测试网上，每隔 3 小时就可以申领 5000 CKB。

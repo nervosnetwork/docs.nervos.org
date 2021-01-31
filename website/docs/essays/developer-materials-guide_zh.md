@@ -7,7 +7,7 @@ title: 开发者资料指南
 
 ## 第一节：介绍与基础入门
 
-这些资料适用于新手，也可用于温习巩固为什么 Nervos 能够作为成为一个独特强大的平台，与现有公链竞争的基础知识。
+这些资料适用于新手，也可用于温习巩固为什么 Nervos 能够作为一个独特强大的平台，与现有公链竞争的基础知识。
 
 ### 推荐资料
 
@@ -77,7 +77,7 @@ title: 开发者资料指南
 * [CKB Studio](https://www.obsidians.io/) - 一个内置区块链开发和交易测试工具的开发 IDE。
     * [教程](https://medium.com/nervos-ckb-israel/collection-of-ckb-studio-tutorials-9ffd573894)
     * [视频教程：如何使用 CKB Studio](https://www.youtube.com/watch?v=lOxXrVIfT2Y)
-* [Synapse Web Wallet](https://github.com/rebase-network/synapse-extension) - 支持多个 lock scripts 的 Dapp 钱包。
+* [Synapse Web Wallet](https://github.com/rebase-network/synapse-extension) - 支持多个锁脚本（lock scripts）的 Dapp 钱包。
     * [文档](https://github.com/rebase-network/synapse-extension/tree/master/docs)
     * [Demo 项目： 极简 Dapp + Synapse](https://github.com/rebase-network/simplestdapp)
 
@@ -131,8 +131,6 @@ title: 开发者资料指南
 * [Neuron Wallet](https://github.com/nervosnetwork/neuron/releases) 或 [Portal Wallet](https://ckb.pw/) - 用于管理主网资金。
 
 ### 开发堆栈推荐
-
-These are the recommended software stacks for any team building on Nervos CKB. These selections are based on current industry trends and the tooling available today.
 
 以下是进行 Nervos CKB 开发推荐使用的软件堆栈，堆栈的选择是基于当前行业趋势以及当前可用的工具的考量。
 

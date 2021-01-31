@@ -47,7 +47,7 @@ duktape 脚本代码现在需要一个参数： 你要执行的 JavaScript 源�
 pry(main)> duktape_hello_type_script = CKB::Types::Script.new(code_hash: duktape_data_hash, args: CKB::Utils.bin_to_hex("CKB.debug(\"I'm running in JS!\")"))
 ```
 
-注意，使用不同的参数，你可以为不同的用例创建不同的 duktape 类的 lock script。
+注意，使用不同的参数，你可以为不同的用例创建不同的 duktape 类的锁脚本（lock script）。
 
 ```
 pry(main)> duktape_hello_type_script = CKB::Types::Script.new(code_hash: duktape_data_hash, args: CKB::Utils.bin_to_hex("var a = 1;\nvar b = a + 2;"))
@@ -55,7 +55,7 @@ pry(main)> duktape_hello_type_script = CKB::Types::Script.new(code_hash: duktape
 
 这与上面提到的关于脚本代码与脚本的区别相呼应：这里 duktape 作为脚本代码提供了一个 JavaScript 引擎，而利用 duktape 脚本代码的不同脚本在链上起到了不同的作用。
 
-现在，我们可以创建一个带有 duktape type script 的 Cell。
+现在，我们可以创建一个带有 duktape 类型脚本（type script）的 Cell。
 
 ```
 pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(200))
@@ -95,7 +95,7 @@ void *ckb_dlsym(void *handle, const char *symbol);
 
 在交易数据结构中，有两个不同的依赖字段： [`cell_deps`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#code-locating) 和 [`header_deps`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#header-deps)。
 
-`cell_deps` 可以让交易中的脚本读取引用的 live cells。 
+`cell_deps` 可以让交易中的脚本读取引用的可用 Cells（live cells）。 
 
 `header_deps` 可以让交易中的脚本读取引用的过去的区块头数据。 
 

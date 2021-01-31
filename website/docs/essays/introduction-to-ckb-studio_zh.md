@@ -46,8 +46,6 @@ CKB Studio 是一个用于开发 CKB 脚本的 IDE，它包含：
 
 #### 项目列表
 
-The main interface will show a list of CKB projects. If you open CKB Studio for the first time, this list will be empty. You can click the *New* button to create a new CKB project. CKB Studio has provided a list of templates to help you get started:
-
 主界面会显示一个 CKB 项目的列表。如果你第一次打开 CKB Studio，这个列表将是空的。你可以点击新建按钮来创建一个新的 CKB 项目。CKB Studio 提供了一个模板列表来帮助你入门：
 
 - [JavaScript] moleculec-es
@@ -161,11 +159,11 @@ Cells 是形成 CKB 交易的基本元素。界面的下半部分是 Cell 浏览
 
 - 双击一个 Cell，查看其详细信息。
 
-- 使用显示空 Cell 显示开关来显示/隐藏空 Cell（没有数据和 type script 的 Cell）。
+- 使用显示空 Cell 显示开关来显示/隐藏空 Cell（没有数据和类型脚本（type script）的 Cell）。
 
 - 将 Cell 拖动到输入或 Deps 来构建交易。
 
-- 生成特定类型的CKB交易（见 [下文](#生成特定类型的交易)）。
+- 生成特定类型的 CKB 交易（见 [下文](#生成特定类型的交易)）。
 
 
 #### 手动组装常规交易

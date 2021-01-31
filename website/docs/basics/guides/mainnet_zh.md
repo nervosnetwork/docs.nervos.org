@@ -9,13 +9,13 @@ title: 运行 CKB 主网节点
 
 步骤1：从 [GitHub的CKB版本页面](https://github.com/nervosnetwork/ckb/releases) 下载最新版本的 CKB 二进制文件
 
-步骤2：将下载的文件解压缩到易于访问的文件夹中。对于Windows，我们建议`C:\ckb` ；在Mac上，我们建议`~/Documents`。
+步骤2：将下载的文件解压缩到易于访问的文件夹中。对于Windows，我们建议`C:\ckb` ；在Mac上，我们建议 `~/Documents`。
 
 步骤3：打开终端（Mac）或命令行（Windows）。
 
 * Mac 环境:
 
-    * 以下两种方式选一种：1) 打开你的“应用程序”文件夹，然后打开“实用程序”并双击“终端”；或者 2) 按`Command - Spacebar`或`Control -Spacebar`以启动 Spotlight 并键入“ Terminal”，然后双击搜索结果，然后在 Terminal 上执行以下步骤。
+    * 以下两种方式选一种：1) 打开你的“应用程序”文件夹，然后打开“实用程序”并双击“终端”；或者 2) 按 `Command - Spacebar `或 `Control -Spacebar `以启动 Spotlight 并键入“ Terminal”，然后双击搜索结果，然后在 Terminal 上执行以下步骤。
 
 * Windows 环境:
 

@@ -1,5 +1,7 @@
+---
 id: sudtbycapsule_zh
 title: 使用 Capsule 编写 SUDT 脚本
+---
 
 ## 介绍
 
@@ -30,7 +32,7 @@ title: 使用 Capsule 编写 SUDT 脚本
 
 ### 安装 capsule
 
-要使用 capsule，你需要使用`docker`。推荐安装最新版本：
+要使用 capsule，你需要使用 `docker`。推荐安装最新版本：
 
 * [安装docker](https://docs.docker.com/get-docker/)
 
@@ -236,8 +238,8 @@ my-sudt
 
 SUDT 脚本可以有 **`所有者模式 owner mode`** 和**`普通模式 normal mode`，**其中包括不同的验证规则，我们在编码前应该对这两者有所了解。
 
-* **所有者模式 owner mode**：如果交易中的某个输入中有一个 `lock script` 与SUDT 脚本参数相匹配，那么 SUDT 脚本将处于所有者模式。我们不需要执行检查，所有者可以执行任何操作，如发行更多的 SUDT 或烧毁 SUDT。
-* **普通模式 normal mode：**否则，SUDT 脚本将处于正常模式。我们需要确保所有输入容量之和不小于所有输出容量之和。请注意，每个唯一的 `lock script` 只能发行出一种类型的SUDT。
+* **所有者模式 owner mode**：如果交易中的某个输入中有一个 `锁脚本（lock script）` 与SUDT 脚本参数相匹配，那么 SUDT 脚本将处于所有者模式。我们不需要执行检查，所有者可以执行任何操作，如发行更多的 SUDT 或烧毁 SUDT。
+* **普通模式 normal mode：**否则，SUDT 脚本将处于正常模式。我们需要确保所有输入容量之和不小于所有输出容量之和。请注意，每个唯一的 `锁脚本（lock script）` 只能发行出一种类型的SUDT。
 
 该脚本由四部分组成：加载脚本（load script）、检查输入（check inputs）、加载输入/输出UDT量（load inputs / outputs UDT amount）、错误处理（error handling）。我们在编码前要检查已使用的库。
 
@@ -252,8 +254,6 @@ ckb-std = "0.4.1"
 
 * `ckb-std` 是用于处理 CKB 系统调用（syscalls）的包。
 * `ckb-standalone-types` 是一个以 `ckb_std::ckb_types`的形式重新导出的包，它提供了 CKB 结构的定义。
-
-You may refer to [Rust libraries](https://github.com/nervosnetwork/capsule/wiki/Rust-libraries) for more useful crates. We can only use crates which supports `no-std` in scripts.
 
 你可以参考 [Rust 库](https://github.com/nervosnetwork/capsule/wiki/Rust-libraries) 获取更多有用的包，我们只能使用在脚本中支持 `no-std` 的包。
 
@@ -304,7 +304,7 @@ use ckb_std::{
 };
 
 fn check_owner_mode(args: &Bytes) -> Result<bool, Error> {
-    // With owner lock script extracted, we will look through each input in the
+    // With owner 锁脚本（lock script） extracted, we will look through each input in the
     // current transaction to see if any unlocked cell uses owner lock.
     for i in 0.. {
         // check input's lock_hash with script args
@@ -337,7 +337,7 @@ fn check_owner_mode(args: &Bytes) -> Result<bool, Error> {
 
 小提醒：
 
-*  在系统调用中使用 `Source::GroupInput` ，CKB 验证引擎会自动按 `lock script` 和 `type script `  对输入/输出 Cells 进行分组。
+*  在系统调用中使用 `Source::GroupInput` ，CKB 验证引擎会自动按 `锁脚本（lock script）` 和 `类型脚本（type script） `  对输入/输出 Cells 进行分组。
 *  SUDT 的数据类型是 `u128`，为 16 字节，所以我们使用 16 字节缓存。
 *   `Source::Input`（所有输入的索引） 的 `i-th` 输入跟 `Source::GroupInput` （lock 或者 type 脚本是当前脚本的输入的索引）的 `i-th` 输入可能是相同的 Cell，也可能不是。
 
@@ -431,8 +431,6 @@ fn main() -> Result<(), Error> {
 
 ### 使用迭代器查询 Cells
 
-In the previous code, we use `for` loop to iterate inputs and outputs, since iteration over cells is a common pattern in CKB programming, `ckb-std` provides a high-level interface [QueryIter](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/struct.QueryIter.html) to handle it.
-
 在上文代码中，我们使用 `for` 循环来遍历输入输出，由于对 Cells 进行遍历是 CKB 编程中的常见模式，所以 `ckb-std` 提供了一个高级接口 [QueryIter](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/struct.QueryIter.html) 来处理它。
 
 QueryIter 需要两个参数，第一个是一个加载函数，第二个是 `Source`。我们看看一个加载所有已分组输入 Cells 数据的例子： `QueryIter::new(load_cell_data, Source::GroupInput)`。
@@ -441,7 +439,7 @@ QueryIter 需要两个参数，第一个是一个加载函数，第二个是 `So
 
 ``` rust
 fn check_owner_mode(args: &Bytes) -> Result<bool, Error> {
-    // With owner lock script extracted, we will look through each input in the
+    // With owner 锁脚本（lock script） extracted, we will look through each input in the
     // current transaction to see if any unlocked cell uses owner lock.
     let is_owner_mode = QueryIter::new(load_cell_lock_hash, Source::Input)
         .find(|lock_hash| args[..] == lock_hash[..]).is_some();
@@ -486,8 +484,6 @@ fn collect_outputs_amount() -> Result<u128, Error> {
 
 ```
 
-Now we have finished the SUDT script, you may refer to [Full code of my-sudt](https://github.com/jjyr/my-sudt/blob/master/contracts/my-sudt/src/main.rs) to check the full script code. If you are interested, you may also check [the SUDT script written in C](https://github.com/nervosnetwork/ckb-miscellaneous-scripts/blob/master/c/simple_udt.c).
-
 现在我们已经完成了 SUDT 脚本，你可以参考[查看完整代码](https://github.com/jjyr/my-sudt/blob/master/contracts/my-sudt/src/main.rs) 。如果你感兴趣的话，也可以查看用[C 语言编写 SUDT 脚本](https://github.com/nervosnetwork/ckb-miscellaneous-scripts/blob/master/c/simple_udt.c) 。
 
 ### 编译项目
@@ -530,9 +526,9 @@ failures:
     let contract_out_point = context.deploy_contract(contract_bin);
 ```
 
-* 然后， 带脚本的 `out_point` 参数调用 `build_script` 方法，该方法返回 `Script` ，其将我们的脚本用作为代码。 `create_cell` 创建了一个已存在的 Cell，该 Cell 将我们的脚本用作为 `lock script`。
+* 然后， 带脚本的 `out_point` 参数调用 `build_script` 方法，该方法返回 `Script` ，其将我们的脚本用作为代码。 `create_cell` 创建了一个已存在的 Cell，该 Cell 将我们的脚本用作为 `锁脚本（lock script）`。
 
-*请注意默认测试用例假设脚本是 `lock script`，但在本例子中，我们的脚本 `my-sudt `是 `type script` ，后续我们将修复这一点*
+*请注意默认测试用例假设脚本是 `锁脚本（lock script）`，但在本例子中，我们的脚本 `my-sudt `是 `类型脚本（type script）` ，后续我们将修复这一点*
 
 ``` rust
 // prepare scripts
@@ -552,7 +548,6 @@ failures:
         .build();
 ```
 
-* After that, build two outputs cells and a transaction structure.It is necessary to include  `cell_deps` field in the transaction which should contain all the referenced scripts, in this case, we can only refer to `my-sudt`.  `complete_tx`  also implement `cell_deps`, while the field is already completed manually, this line is not necessary.
 * 之后，构建两个输出 Cells 和一个交易结构。交易中需要包含 `cell_deps` 字段，该字段包含所有引用的脚本，在我们的例子中，我们只需要引用 `my-sudt`。`complete_tx` 也实现了 `cell_deps`，不过该字段已经手动实现了，所以这一行就没有必要了。
 
 请注意交易的 `outputs_data` 必须跟 `outputs` 具有相同的长度。即使数据为空。
@@ -592,10 +587,7 @@ let outputs = vec![
 
 ### Write new tests 编写新的测试用例
 
-We should create mock SUDT cells and spend them for testing SUDT verification.
-As `my-sudt` script is a `type_script` we need another script as `lock_script` for mock cells, it is recommended to use `always success` script returned `0`. `always success` is built-in in the `ckb-testtool`.
-
-我们应该创建模拟的 SUDT Cells 然后在测试 SUDT 验证时花费掉它们。因为我们的 `my-sudt` 脚本是一个 `type_script` ，所以我们需要另一个脚本作为 `lock script` 用于模拟 Cells，我们推荐使用 `always success` 脚本返回 `0`。 `always success`  内置在 `ckb-testtool`中。 
+我们应该创建模拟的 SUDT Cells 然后在测试 SUDT 验证时花费掉它们。因为我们的 `my-sudt` 脚本是一个 `type_script` ，所以我们需要另一个脚本作为 `锁脚本（lock script）` 用于模拟 Cells，我们推荐使用 `always success` 脚本返回 `0`。 `always success`  内置在 `ckb-testtool`中。 
 
 
 ``` rust
@@ -618,7 +610,7 @@ use ckb_testtool::{builtin::ALWAYS_SUCCESS, context::Context};
 
 * 部署 SUDT 和 `always-success` 脚本。
 
-请注意，如果处于所有者模式，我们就需要将 `lock script` 的 `lock hash` 设置为 `所有者脚本的哈希`; 否则，我们将会设置 `[0u8; 32]` ，表示不能进入所有者模式。
+请注意，如果处于所有者模式，我们就需要将 `锁脚本（lock script）` 的 `lock hash` 设置为 `所有者脚本的哈希`; 否则，我们将会设置 `[0u8; 32]` ，表示不能进入所有者模式。
 
 ``` rust
 fn build_test_context(
@@ -633,7 +625,7 @@ fn build_test_context(
     // deploy always_success script
     let always_success_out_point = context.deploy_contract(ALWAYS_SUCCESS.clone());
 
-    // build lock script
+    // build 锁脚本（lock script）
     let lock_script = context
         .build_script(&always_success_out_point, Default::default())
         .expect("script");
@@ -767,8 +759,6 @@ You may refer to [my-sudt tests](https://github.com/jjyr/my-sudt/blob/master/tes
 
 ### 运行开发链和 ckb-cli
 
-You should be running a dev chain and know about how to use `ckb-cli` to send transactions before deployment. 
-
 在部署之前，你应该运行一条开发链，并且知道如何使用 `ckb-cli` 进行发送交易。
 
 ### 部署
@@ -810,7 +800,7 @@ You should be running a dev chain and know about how to use `ckb-cli` to send tr
 ```
 
 3. 编译发布版脚本
-  
+
   * 发布版脚本不包含相关调试符号，所以文件可以更小点
 
 ```
@@ -890,8 +880,6 @@ Confirm deployment? (Yes/No)
 ```
 
 ## 后续
-
-This is the end of our journey into writing a SUDT script by Capsule. We have launched the [Nervos Grants Program](https://www.nervos.org/grants/) and [CKLabs](https://medium.com/nervosnetwork/introducing-cklabs-the-nervos-incubator-3e5a2c443c7c) to empower innovation and development and support the growth of a diverse and thriving ecosystem. We can't wait to see what you build next!
 
 使用 Capsule 编写 SUDT 脚本的教程就到这里了。我们已经启动了 [Nervos Grants Program](https://www.nervos.org/grants/) 和[CKLabs](https://medium.com/nervosnetwork/introducing-cklabs-the-nervos-incubator-3e5a2c443c7c)以促进创新和发展，支持多样化和繁荣的生态系统的增长。欢迎来 Nervos CKB 生态开发构建！
 

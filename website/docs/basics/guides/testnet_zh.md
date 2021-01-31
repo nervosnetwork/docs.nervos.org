@@ -9,7 +9,7 @@ title: 运行测试网节点
 
 **系统要求**
 
-任何搭配 macOS / Linux / Windows 操作系统的现代计算机都应能够运行 CKB 节点和挖矿程序。另外，如果 CKB 目前无法适配你的操作系统，你也可以使用 [Docker](https://github.com/nervosnetwork/ckb/blob/develop/docs/run-ckb-with-docker.md)。
+任何搭配 macOS / Linux / Windows 操作系统的现代计算机都能够运行 CKB 节点和挖矿程序。另外，如果 CKB 目前无法适配你的操作系统，你也可以使用 [Docker](https://github.com/nervosnetwork/ckb/blob/develop/docs/run-ckb-with-docker.md)。
 
 我们按照以下步骤说明来尝试运行 CKB 节点： 
 

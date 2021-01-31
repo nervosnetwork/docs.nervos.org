@@ -17,11 +17,11 @@ docker run --rm -it nervos/ckb:latest run
 ```
 
 
-以下介绍一下 DockerHub 上列举的一些 [tags](https://hub.docker.com/r/nervos/ckb/tags) 。
+以下介绍一下 DockerHub 上列举的一些[参数符](https://hub.docker.com/r/nervos/ckb/tags) 。
 
--   Tag `latest` 表示镜像是由最新 ckb 编译而来的。
--   Tags `vx.y.z` 表示镜像是由所指定的历史发行版编译而来的。
--   Tags `vx.y.z-rc` 表示镜像是由所指定的历史预发行版编译而来的。
+-   `latest` 表示镜像是由最新 ckb 编译而来的。
+-   `vx.y.z` 表示镜像是由所指定的历史发行版编译而来的。
+-   `vx.y.z-rc` 表示镜像是由所指定的历史预发行版编译而来的。
 
 ### 挂载配置文件，然后运行 CKB 主网节点
 
@@ -89,13 +89,13 @@ docker run -e CKB_CHAIN=testnet --rm -it nervos/ckb:latest run
 
 ### 挂载配置文件，然后运行 CKB 测试网节点
 
-* 创建一个数据卷 volume
+* 创建一个数据卷 volume：
 
 ```bash
 docker volume create ckb-testnet
 ```
 
-* 使用以下测试网参数规范初始化目录
+* 使用以下测试网参数规范初始化目录：
 
 ```bash
 docker run --rm -it \
@@ -128,13 +128,13 @@ docker cp ckb-testnet-node:/var/lib/ckb/ckb.toml .
 docker cp ckb-testnet-node:/var/lib/ckb/ckb-miner.toml .
 ```
 
-* 启动节点:
+* 启动节点：
 
 ```bash
 docker start -i ckb-testnet-node
 ```
 
-* 然后在同个容器中启动矿工程序
+* 然后在同个容器中启动矿工程序：
 
 ```bash
 docker exec ckb-testnet-node ckb miner

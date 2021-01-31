@@ -3,11 +3,11 @@ id: devchain_zh
 title: 运行CKB开发链
 ---
 
-Nervos CKB 支持一种特殊的开发模式，该模式对于构建和测试应用程序特别有用。这种操作模式是高度可配置的，并且使开发人员无需进行工作量证明（PoW）挖矿即可加快区块间隔，调整 epochs 长度，创建区块。
+Nervos CKB 支持一种特殊的开发模式，该模式对于构建和测试应用程序特别有用。这种操作模式是高度可配置的，并且使开发者无需进行工作量证明（PoW）挖矿即可加快区块间隔，调整 epochs 长度，创建区块。
 
-运行开发链时，你有`Dummy-Worker`  和`Eaglesong-Worker`两种模式可以选择。`Dummy-Worker`提供的功能可以在没有 PoW 的情况下以恒定的出块时间出块。`Eaglesong-Worker`使用真实的 PoW 出块。
+运行开发链时，你有 `Dummy-Worker` 和 `Eaglesong-Worker` 两种模式可以选择。`Dummy-Worker` 提供的功能可以在没有 PoW 的情况下以恒定的出块时间出块。`Eaglesong-Worker` 使用真实的 PoW 出块。
 
-注意：强烈建议将`Dummy-Worker`其用于大多数开发方案。`Eaglesong-Worker `仅在需要验证 PoW 功能时才应使用此方法，因为在极低的哈希率下，区块时间可能会表现异常。
+注意：强烈建议将 `Dummy-Worker` 用于大多数开发方案。`Eaglesong-Worker ` 仅在需要验证 PoW 功能时才应使用此方法，因为在极低的哈希率下，区块时间可能会表现异常。
 
 ## 搭建 Dummy-Worker 模式的开发链
 
@@ -53,9 +53,9 @@ create ckb-miner.toml
 
 #### 3.1创建一个新账户
 
-必须创建一个接收区块奖励的地址。我们可以使用`ckb-cli`命令完成操作。
+必须创建一个接收区块奖励的地址。我们可以使用 `ckb-cli` 命令完成操作。
 
-注意：确保记录返回值中的`lock_arg`值，我们在下一步中需要使用该值。
+注意：确保记录返回值中的 `lock_arg` 值，我们在下一步中需要使用该值。
 
 ```
 ckb-cli account new
@@ -120,7 +120,7 @@ permanent_difficulty_in_dummy = true
 
 默认挖矿间隔为 `5000`，单位为毫秒，即5秒。降低该数值可以加速出块。
 
-修改 `ckb-miner.toml` 文件中 `miner.workers` 节段的`value`参数:
+修改 `ckb-miner.toml` 文件中 `miner.workers` 节段的 `value` 参数:
 
 ```
 [[miner.workers]]
@@ -193,7 +193,7 @@ ckb-cli 0.32.0 (0fc435d 2020-05-22)
 
 #### 2. 创建一个新账户
 
-我们需要创建一个用于接收区块奖励的地址，可以使用`ckb-cli` 命令。
+我们需要创建一个用于接收区块奖励的地址，可以使用 `ckb-cli` 命令。
 
 注意：确保记录返回值中的`lock_arg`值，我们在下一步中需要使用该值。
 
