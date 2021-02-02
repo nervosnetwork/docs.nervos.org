@@ -19,8 +19,6 @@ title: 构造交易的一般工作流程
 
 这种方法也不能根据更详细的搜索条件进行 cell 收集。例如，用这种方法无法找到合约 cell。
 
-Regardless of these shortcomings, let's start with this method to better understand how cell collection works. By default, this feature is turned off in the CKB node. To turn it on, manually change the configuration file as outlined below and restart the CKB node.
-
 我们先不管这些缺陷，先用这个方法来帮助我们理解 cell 收集的工作原理。默认情况下，这个功能在 CKB 节点中是关闭的。要打开它，请按照下面的说明手动更改配置文件，然后重新启动 CKB 节点。
 
 在 `ckb.toml` 文件中找到下面配置项：
@@ -42,8 +40,6 @@ modules = ["Net", "Pool", "Miner", "Chain", "Stats", "Subscription", "Experiment
 
 使用 `ckb run -C <path>` 命令重启 CKB 节点后，通过RPC方法 [index_lock_hash](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#index_lock_hash) 注册你要索引的地址。
 
-*Note that the `index_from` parameter controls the point that indexing starts from: a null value begins indexing from the current chain tip (current latest block), while a value of 0 begins indexing from the genesis block.*
-
 *需要注意的是，`index_from` 参数控制了索引的起始点：空值从当前链尾（最新的区块）开始索引，而值为 0 的则从创世区块开始索引。*
 
 等待索引服务重编译，然后使用索引服务的 RPC 接口查看对应地址的可用 cell/交易/容量值。可以参考 [JSON-RPC](reference/rpc.md)。
@@ -64,6 +60,8 @@ modules = ["Net", "Pool", "Miner", "Chain", "Stats", "Subscription", "Experiment
 * 选定 cells 后是否需要进行过滤/确认？
 
 The indexing service that comes with the CKB node does not address these requirements and cannot be configured to include additional requirements that may be needed in the future. The most effective approach to cell collection is to build the functionality yourself.
+
+CKB 节点自带的索引服务并不能满足这些要求，也不能配置成包含未来可能需要的额外要求。cell 收集最有效的方法是自行构建服务。
 
 **How to build cell collection**
 
