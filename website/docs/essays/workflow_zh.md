@@ -59,22 +59,20 @@ modules = ["Net", "Pool", "Miner", "Chain", "Stats", "Subscription", "Experiment
 * 有没有什么 cell 数据或者 cell 类型需要特殊进行处理的？
 * 选定 cells 后是否需要进行过滤/确认？
 
-The indexing service that comes with the CKB node does not address these requirements and cannot be configured to include additional requirements that may be needed in the future. The most effective approach to cell collection is to build the functionality yourself.
-
 CKB 节点自带的索引服务并不能满足这些要求，也不能配置成包含未来可能需要的额外要求。cell 收集最有效的方法是自行构建服务。
 
-**How to build cell collection**
+**如何构建 Cell 收集服务**
 
-As a new block is added to the chain, the cells used as inputs to the block must be removed from the live cell set and the outputs created by the block must be added into the live cell set.
+当一个新的区块被添加到链中时，作为区块输入的 cells 必须从可用 cells（live cells）集合中移除，而由区块创建的输出必须添加到可用 cells（live cells）集合中。
 
-We know that short forks are always possible in PoW blockchains. When a fork negates the effects of a previously accepted block, the input and output changes from that block must be rolled back. A cache design may help to speed up synchronization, for example, caching the last *n* blocks in the chain and removing the live cells consumed in these blocks.
+我们知道，在 PoW 链中，小段分叉的情况是存在的。当一个分叉推翻了之前接受的区块的状态变更，该区块的输入和输出变更必须回滚。缓存设计可能有助于加快同步速度，例如，缓存链中最后 n 个区块，并删除这些区块中消耗的可用 cells（live cells）。
 
 
-## Constructing a Transaction
+## 构造一笔交易
 
-Now that we have covered cell collection, we can start the process of constructing a transaction. There are a series of concepts that need to be explained, including the construction of witnesses, the calculation of transaction fees and the use of some small tricks. [Refer to RFC0022 - Transaction Structure for more detailed information.](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+现在我们已经介绍了 cell 的收集，我们可以开始构造交易。有一系列的概念需要解释，包括见证（witnesses）的构造、交易费用的计算和一些小技巧的使用。更详细的信息请参考[RFC0022：交易结构](https://github.com/nervoscommunity/docs/blob/master/docs/rfcs/0022-transaction-structure/0022-transaction-structure.zh.md)。
 
-All types are serialized based on the [molecule](https://github.com/nervosnetwork/molecule) serialization system, the core struct is:
+所有的类型都是通过 [molecule](https://github.com/nervosnetwork/molecule) 序列化系统进行序列化的，核心结构如下：
 
 ```
 table RawTransaction {
@@ -92,7 +90,7 @@ table Transaction {
 }
 ```
 
-`cell_deps` and `inputs` are a series of pointers to live cells on the chain. The difference is that `cell_deps` are a reference (read-only) and inputs are consumed in the transaction. The index struct for these transaction inputs is:
+`cell_deps` 和 `inputs` 指向链上一系列可用 cells（live cells）的指针。区别是 `cell_deps` 是一种只读的 cell 引用，`inputs` 引用的 cells 则会在该交易中消耗：
 
 ```
 struct OutPoint {
@@ -106,23 +104,22 @@ struct CellDep {
 }
 ```
 
-`tx_hash` and `index` are used to locate cells (a reference to the transaction that created them and the index number the cell appeared in the outputs). The `cell_dep` has an extra `dep_type` field, which is used to express whether the data in the cell is `code` or `dep_group`. Code stored in multiple cells can be combined using the `dep_group` functionality.
+`tx_hash` 和 `index` 用于定位 cells（分别对创建 cell 的交易的一个引用，以及 cell 对应在输出中的索引位置）。`cell_dep` 还有一个额外的字段 `dep_type` ，用于表明 cell 中的数据是 `code` 还是 `dep_group`。存储在多个 cells 中的代码可以使用  `dep_group` 功能进行组合。
 
-For `dep_type`:
+对于 `dep_type`：
 
-* Use value of 0 to indicate `code`, meaning that the cell data can be used directly
+* 值为 0 表示是 `code` ，表示 cell 数据能够直接使用。
+* 值为 1 表示是 `dep group` ，表示 cell 中的数据是一个重定向字段（此处不允许递归）。引用的 `dep group` 数据使用  `vector OutPointVec <OutPoint>`  来列出所有需要的 OutPoint。
 
-* Use value of 1 to indicate a `dep group`, which means that the data in this cell is a redirect field (recursion is not allowed here). The referred `dep group` data uses `vector OutPointVec <OutPoint>` to list all needed outpoints. 
+`dep_group` 的使用实例：默认锁 cell 使用 `dep group` 功能，将 secp256k1 库分成两个 cell 来存储乘法表和代码。之所以需要这样做，是因为区块大小有限，如果总的dep 数据太大，无法放在一个区块中，可以将其存储在多个 cell 中（分别在不同的事务中添加，在不同的区块中确认），之后可以在运行时通过 `dep_group` 功能一起加载。
 
-An example of `dep_group` usage: the default lock cell uses dep group functionality to divide the secp256k1 library into two cells to store the multiplication table and code. This is needed because block size is limited, if total dep data is too large to fit in one block, it can be stored in multiple cells (added in separate transactions confirmed in separate blocks) and later can be loaded together at runtime through the dep_group functionality.
+`outputs` 和 `outputs_data` 是两个一对一的列表。 `output` 只有容量（capacity ）和类型/锁（type/lock）脚本。输出数据放在与索引对应的 `outputs_data` 中。
 
-`outputs` and `outputs_data` are two one-to-one lists. There is only capacity and type/lock script in the `output`. The output data is placed in the `outputs_data` corresponding to the index.
+`header_dep` 是过去区块头哈希的列表。CKB 脚本在执行过程中可以访问这个列表中引用的头数据。
 
-The `header_dep` is a list of past block header hashes. Header data referenced in this list can be accessed by CKB scripts during execution.
+现在已经解释了交易结构的基本原理，让我们来探讨一个稍微复杂的结构。
 
-Now that the basics of the transaction structure have been explained, let's explore a slightly more complicated structure.
-
-### script
+### 脚本
 
 ```
 table Script {
@@ -134,18 +131,20 @@ table Script {
 
 `code_hash` and `hash_type` are used to specify a lock cell, `args` are the parameters required by the lock script. The `hash_type` field has two possible values:
 
-* when it is "data" represented by 0, code_hash means lock cell's data hash
-* when it is "type" represented by 1, code_hash means lock cell's type script hash
+`code_hash` 和 `hash_type` 用于指定锁 cell，args 是锁脚本（lock script）所需的参数。`hash_type` 字段有两个可能的值：
 
-It is very easy to understand what will happen when a `hash_type` value of “code” is used, but what about a value of “type”? What does this mean for contract developers?
+* 为 0 时， `code_hash ` 表示锁 cell 的数据哈希。
+* 为 1 时， `code_hash ` 表示锁 cell 的类型脚本（type script）。
 
-When a value of “type” is used, the value that is specified is a cell type script hash. The default lock script of CKB is indexed by type. The dep cells of the transaction will be examined for a cell that has this value as its type script, and the data in that cell will be used as the code for type script execution. 
+当 `hash_type` 的值为代码（即 0）时，很容易理解会发生什么，但为类型（即 1） 时呢，这对合约开发者来说意味着什么？
 
-To see how this functionality can be used, we can take a look at the implementation of TypeID, which is used to refer to a cell by reference. You can see that the type script of the second output of the genesis block is a TypeID script. If your published library also binds this TypeID script, it will generate a unique id(code hash) for indexing the data. You can then update the content of this library without changing the typeid. Any contract that references this library (by the unique type script value) will still work even if the library is changed. This is a solution to update on-chain libraries.
+当值为类型时，指定的值是 cell 类型脚本哈希。CKB 的默认锁脚本是以类型为索引的。事务中的 dep cells 将被检查是否有一个 cell 以这个值作为其类型脚本，该 cell 中的数据将被用作类型脚本执行的代码。
 
-### witness
+为了了解如何使用这个功能，我们可以看看 TypeID 的实现，它是用来通过引用来引用一个 cell 的。你可以看到，创世区块的第二个输出的类型脚本是一个 TypeID 脚本。如果你发布的库也绑定了这个 TypeID 脚本，就会生成一个唯一的id（代码哈希，code hash），用于索引数据。然后，你可以在不改变 typeid 的情况下更新这个库的内容。任何引用这个库（通过唯一的 type 脚本值）的合约，即使库被改变，也仍然可以使用。这是一个更新链上库的解决方案。
 
-Now that all `RawTransaction` fields have been set, let's take a look at the witnesses field. This field ensures that the transaction cannot tamper with other transactions, and this field also allows inclusion of temporary variables that may be needed by the contract. It consists of a series of witnesses:
+### 见证（witness）
+
+现在所有的 `RawTransaction` 字段都已经设置好了，我们来看看见证（witnesses）字段。这个字段确保交易不能篡改其他交易，这个字段还允许包含合约可能需要的临时变量。它由一系列的见证（witnesses）组成：
 
 ```
 table WitnessArgs {
@@ -155,21 +154,20 @@ table WitnessArgs {
 }
 ```
 
+一个输入需要一个见证（witnesses）来验证。然而，如果多个输入使用相同的锁脚本（lock script），那么为每个输入加入一个见证（witnesses）将是低效的。当对每个单独的交易进行验证时，脚本将首先被分成若干组（具有相同脚本哈希值的交易将被分组），然后以脚本组为单位依次执行。
 
-An input requires a witness for verification. However, including a witness for every input would be inefficient if multiple inputs used the same lockscript. When each individual transaction is verified, scripts will first be separated into groups (transactions with the same script hash will be grouped together) and then executed sequentially in units of script groups.
+这相当于将多个脚本验证合并为一个执行，减少了资源消耗和见证（witness）数据的大小。但这确实需要开发者在编写脚本时注意，应该考虑到用这种方式验证多个 cells 的情况。
 
-This is equivalent to combining multiple script verifications into a single execution, reducing resource consumption and the size of witness data. This does however require the developer to be aware when writing the script that it should consider the case of validating multiple cells in this way.
+见证（witness）是对整个交易的 blake2b-hash 的签名，包括 `tx_hash`，长度，以及一个清零的见证数据占位符（一旦签名生成，它将被放在这个字段中）。具体的签名过程以及不同脚本组的见证数据如何排列的约定可以在这个 [wiki](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction) 中找到。
 
-The witness is a signature on the blake2b-hash of the entire transaction, including `tx_hash`, length, and a zero-ed out placeholder for witness data (once the signature is generated it will be placed in this field). The specific signing process and the convention regading how the witnesses for different script groups are arranged can be found in this [wiki](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction).
+### 格式和手续费
 
-### Format and Fee
+通过上述过程，我们已经获得了一个完整的交易结构。此时，为了得出矿工所能接受的绝对最低费用，我们需要做一些回测（根据实际消耗的周期）以及修改现有的交易。
 
-Through the above process, we have obtained a complete `Transaction` structure. At this time, to derive the absolute minimum fee that will be accepted by miners, we will need to do some backtesting (based on actual cycles consumed) and modification of the existing transaction.
+### 如何预估交易手续费？
 
-### how to estimate A TRANSACTION fee?
+交易手续费是序列化交易的大小（molecule）和执行指令实际消耗的计算资源（cycles）之和。大小单位默认为1,000 shannons / KB（ shannons 是 CKByte 的1/100,000,000）。
 
-The transaction fee is the sum of the size of the serialized transaction (molecule) and the sum of actual cycles consumed by executed instructions. The size unit is 1,000 shannons / KB (kilobyte) by default (shannon is 1/100,000,000 of CKByte).
+不过，矿工可以修改这个默认单位。如果你需要查看实时交易费用估算，可以通过RPC使用 `estimate_fee_rate` 查看。
 
-However, miners can modify this default unit. If you need to see the real-time transaction fee estimate, you can view it through RPC using `estimate_fee_rate`.
-
-If you want to use the lowest fee possible, you can continuously adjust the difference between the transaction’s input capacity and output capacity and regenerate the transaction until you are satisfied (using a binary search).
+如果你想用最低的费用，你可以不断调整交易的输入容量（input capacity）和输出容量（input capacity）之间的差距，并重新生成交易，直到你满意为止（使用二分法搜索）。
