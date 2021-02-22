@@ -5,7 +5,7 @@ title: Run a CKB Dev Blockchain
 
 Nervos CKB supports a special development mode that is particularly useful for building and testing applications. This mode of operation is highly configurable, and allows the developer to speed up the block interval, adjust epochs lengths, create blocks without having to do Proof-of-Work (PoW) mining.
 
-When running a development blockchain you have the option of selecting between `Dummy-Worker` and `Eaglesong-Worker`. `Dummy-Worker` provides allows the mining of blocks at a constant block interval without PoW. `Eaglesong-Worker` uses real PoW to produce blocks.
+When running a development blockchain you have the option of selecting between `Dummy-Worker` and `Eaglesong-Worker`. `Dummy-Worker` allows the mining of blocks at a constant block interval without PoW. `Eaglesong-Worker` uses real PoW to produce blocks.
 
 Note: It is highly recommended that `Dummy-Worker` be used for most development scenarios. `Eaglesong-Worker` should only be used when validating the PoW function is necessary, because the block time can behave erratically with extremely low hashrates.
 
@@ -13,7 +13,7 @@ Note: It is highly recommended that `Dummy-Worker` be used for most development 
 
 ### 1. Download the Latest CKB Binary
 
-Download the latest ckb binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
+Download the latest `ckb` binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
 
 The following commands can be used to verify the binaries are working and to check versions:
 
