@@ -59,7 +59,7 @@ docker cp ckb-mainnet-node:/var/lib/ckb/ckb-miner.toml .
 ```
 
 * Edit the config files.
-If you want to run a miner, remember to replace `[block_assembler]` section in `ckb.toml`. you can refer to [Configure the Block Assembler](http://localhost:3000/docs/basics/guides/devchain#3-configure-the-block-assembler).
+If you want to run a miner, remember to replace `[block_assembler]` section in `ckb.toml`. you can refer to [Configure the Block Assembler](devchain.md#3-configure-the-block-assembler).
 
 * Copy back the edited config files back to container:
 
@@ -121,7 +121,7 @@ docker cp ckb-testnet-node:/var/lib/ckb/ckb-miner.toml .
 ```
 
 * Edit the config files. 
-If you want to run a miner, remember to replace `[block_assembler]` section in `ckb.toml`. you can refer to [Configure the Block Assembler](http://localhost:3000/docs/basics/guides/devchain#3-configure-the-block-assembler).
+If you want to run a miner, remember to replace `[block_assembler]` section in `ckb.toml`. you can refer to [Configure the Block Assembler](devchain.md#3-configure-the-block-assembler).
 
 * Copy back the edited config files back to container:
 
