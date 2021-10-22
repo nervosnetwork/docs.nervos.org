@@ -1,9 +1,9 @@
 ---
 id: ckb-on-windows
-title: Get CKB Binary on Windows (experimental)
+title: Get CKB Binary on Windows
 ---
 
-**Please note that Support for Windows is experimental. CKB is known to have serious performance issues when running in Windows.** All commands listed below should be used through [PowerShell](https://docs.microsoft.com/zh-cn/powershell/scripting/windows-powershell/install/installing-windows-powershell?view=powershell-7).
+**Please note that**, All commands listed below should be used through [PowerShell](https://docs.microsoft.com/zh-cn/powershell/scripting/windows-powershell/install/installing-windows-powershell?view=powershell-7).
 
 ## Build from Source
 
@@ -67,9 +67,6 @@ with the workload: "Desktop development with C++".
 
 ## Download from Releases
 
-We publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly.The Windows packages are for experiments only and have significant performance issues, we don't recommend to use them in production environment.They requires *The Visual C++ Redistributable Packages*, which can be downloaded
-under section *Other Tools and Frameworks*
-[here](https://visualstudio.microsoft.com/downloads/) or
-[here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
+We publish binaries for each release via [Github Releases](https://github.com/nervosnetwork/ckb/releases). You can download the package directly. They requires *The Visual C++ Redistributable Packages*, which can be downloaded under section *Other Tools and Frameworks* [here](https://visualstudio.microsoft.com/downloads/) or [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
 
 [Scoop]: https://scoop.sh/
