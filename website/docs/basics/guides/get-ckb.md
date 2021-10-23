@@ -5,17 +5,15 @@ title: Get CKB Binary
 
 CKB binary is used to run CKB node or CKB dev blockchain for development,testing and so on.You can get CKB binary by two ways: build from source or download from releases. 
 
-We have setup CI to ensure CKB works in following systems, they are also the
-recommended system to run CKB.
+We have setup CI to ensure CKB works in following systems, they are also the recommended system to run CKB.
 
 OS           | Arch
 -------------|------
 Ubuntu 16.04 | x64
 macOS        | x64
-Windows\*    | x64
+Windows      | x64
 
-> \* Support for Windows is experimental. CKB is known to have serious performance
-> issues when running in Windows. You can refer to [Get CKB Binary on Windows](ckb-on-windows.md) for more details.
+You can refer to [Get CKB Binary on Windows](ckb-on-windows.md) for more details on building CKB on windows.
 
 CKB should also work on any modern Linux distributions. However, we limit our
 energy to focus on the support of following systems:
