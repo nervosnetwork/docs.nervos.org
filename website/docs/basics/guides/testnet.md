@@ -27,6 +27,7 @@ ckb-cli --version
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
+
 </details>
 
 **Step 2: Connect to Aggron Testnet**
@@ -45,6 +46,7 @@ Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create ckb.toml
 create ckb-miner.toml
 ```
+
 </details>
 
 **Step 3: Start the CKB Testnet node**
@@ -74,4 +76,5 @@ ckb run
 2020-06-05 18:23:10.927 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0xd5ac7cf8c34a975bf258a34f1c2507638487ab71aa4d10a9ec73704aa3abf9cd, epoch: 0(1/1000), total_diff: 0x1800060, txs: 1
 
 ```
+
 </details>
