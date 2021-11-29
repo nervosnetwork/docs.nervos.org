@@ -24,10 +24,12 @@ ckb-cli --version
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
+
 </details>
 
 ### 2. Initialize the Configuration
@@ -40,6 +42,7 @@ ckb init --chain dev
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 WARN: mining feature is disabled because of lacking the block assembler config options
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
@@ -47,6 +50,7 @@ create specs/dev.toml
 create ckb.toml
 create ckb-miner.toml
 ```
+
 </details>
 
 ### 3. Configure the Block Assembler
@@ -65,6 +69,7 @@ ckb-cli account new
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -75,6 +80,7 @@ address:
 lock_arg: 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96
 lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
+
 </details>
 
 #### 3b. Update the Configuration
@@ -137,6 +143,7 @@ ckb run
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 2020-06-05 18:31:14.970 +08:00 main INFO sentry  sentry is disabled
 2020-06-05 18:31:15.058 +08:00 main INFO ckb-db  Initialize a new database
@@ -152,6 +159,7 @@ ckb run
 2020-06-05 18:31:15.211 +08:00 main INFO ckb-db  Init database version 20191201091330
 2020-06-05 18:31:26.586 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1, epoch: 0(1/1000), total_diff: 0x200, txs: 1
 ```
+
 </details>
 
 ### 6. Start the CKB Miner
@@ -163,6 +171,7 @@ ckb miner
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 2020-06-05 18:31:21.558 +08:00 main INFO sentry  sentry is disabled
 Dummy-Worker ⠁ [00:00:00] 
@@ -172,6 +181,7 @@ Found! #3 0x625b230f84cb92bcd9cb0bf76d1397c1d948ab25c19df3c4edc246a765f94427
 Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
 
 ```
+
 </details>
 
  ## Setup an Eaglesong-Worker Blockchain
@@ -189,10 +199,12 @@ ckb-cli --version
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
+
 </details>
 
 #### 2. Create a New Account
@@ -207,6 +219,7 @@ ckb-cli account new
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -217,6 +230,7 @@ address:
 lock_arg: 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96
 lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
 ```
+
 </details>
 
 ### 3. Initialize the Configuration with the Miner Account
@@ -226,12 +240,14 @@ ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change th
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create specs/dev.toml
 create ckb.toml
 create ckb-miner.toml
 ```
+
 </details>
 
 ### 4. Change the PoW Function to Eaglesong
@@ -257,6 +273,7 @@ ckb run
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 2020-06-05 11:25:31.433 +08:00 main INFO sentry  sentry is disabled
 2020-06-05 11:25:31.508 +08:00 main INFO ckb-db  Initialize a new database
@@ -271,6 +288,7 @@ ckb run
 2020-06-05 11:25:31.612 +08:00 main INFO ckb-db  Initialize a new database
 2020-06-05 11:25:31.638 +08:00 main INFO ckb-db  Init database version 20191201091330
 ```
+
 </details>
 
 ### 6. Start the CKB Miner
@@ -282,6 +300,7 @@ ckb miner
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 2020-06-05 11:25:37.867 +08:00 main INFO sentry  sentry is disabled
 EaglesongSimple-Worker-0 ⠁ [00:00:00] 
@@ -290,6 +309,7 @@ Found! #2 0xe5831f39f928dca599a02e490c482a881ccdc47a2376371dec4e440e363fa5c0
 Found! #3 0x605b3e6449954c2daa996c06b2412bbf60b8231763149742119fb623f9de27b2
 Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
 ```
+
 </details>
 
 ## Transferring CKBytes Using `ckb-cli`
@@ -305,6 +325,7 @@ ckb-cli
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 [  ckb-cli version ]: 0.31.0 (a531b3b 2020-04-17)
 [              url ]: http://127.0.0.1:8114 (network: Dev)
@@ -316,6 +337,7 @@ ckb-cli
 [       edit style ]: Emacs
 [   index db state ]: Waiting for first query
 ```
+
 </details>
 
 ### 2. Create a New Account
@@ -325,6 +347,7 @@ account new
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password:
@@ -335,6 +358,7 @@ testnet: ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
 lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
 lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
 ```
+
 </details>
 
 3. Check the Balance of an Existing Account
@@ -346,11 +370,13 @@ wallet get-capacity --address "miner's address"
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 CKB> wallet get-capacity --address "ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus"
 immature: 8027902.89083717 (CKB)
 total: 46253677.72927512 (CKB)
 ```
+
 </details>
 
 ### 4. Transfer 10,000 CKBytes to the New Account
@@ -360,11 +386,13 @@ wallet transfer --from-account "miner's address" --to-address "new account's add
 ```
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 CKB> wallet transfer --from-account ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus --to-address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5 --capacity 10000 --tx-fee 0.00001
 Password: 
 0x1b66aafaaba5ce34de494f60374ef78e8f536bb3af9cab4fa63c0f29374c3f89
 ```
+
 </details>
 
 ### 5. Check the New Account's Balance
@@ -375,10 +403,12 @@ wallet get-capacity --address "new account's address"
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```bash
 CKB> wallet get-capacity --address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
 total: 10000.0 (CKB)
 ```
+
 </details>
 
 The transfer is successful!
@@ -443,6 +473,7 @@ CKB> account import --privkey-path pk2
 
 <details>
 <summary>(click here to view result)</summary>
+
 ```
 Password:
 address:
@@ -455,6 +486,7 @@ address:
   testnet: ckt1qyqywrwdchjyqeysjegpzw38fvandtktdhrs0zaxl4
 lock_arg: 470dcdc5e44064909650113a274b3b36aecb6dc7
 ```
+
 </details>
 
 

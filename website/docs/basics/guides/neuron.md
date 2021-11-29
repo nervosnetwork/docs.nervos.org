@@ -125,6 +125,7 @@ ckb-cli account new
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
 Password: 
@@ -136,6 +137,7 @@ lock_arg: 0xee67a5584c35641cf5070b127178e2e97670f266
 lock_hash: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
 
 ```
+
 </details>
 
 ```
@@ -143,12 +145,14 @@ ckb-cli account export --extended-privkey-path wallet --lock-arg `Your lock_arg`
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 ./ckb-cli account export --extended-privkey-path wallet --lock-arg 0xee67a5584c35641cf5070b127178e2e97670f266
 Password: 
 Success exported account as extended privkey to: "wallet", please use this file carefully
 
 ```
+
 </details>
 
 ```
@@ -158,11 +162,13 @@ The first line of the result is exported private key.
 <details>
 
 <summary>(click here to view response)</summary>
+
 ```bash
 0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c  // It is the privkey
 c152037977043a11e7e6ef220ba050da12da16455a0ef303907865a15fa9c484% 
 
 ```
+
 </details>
 
 * Use `ckb-udt-cli` to issue UDTs
@@ -185,11 +191,13 @@ ckb-udt-cli issue -c config.yaml -k YOUR_PRIVATE_KEY -a AMOUNT // AMOUNT means t
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 ./ckb-udt-cli issue -c config.yaml -k 0a348a7cd1449ece26f1cede3916266793ce18beb280b75dda690057ebfcda3c -a 1000000
 Issued sUDT transaction hash: 0x6b4458143b25e8aa37d36c1035f15e63e5051144685a4da20cf92fd7af59e56e, uuid: 0x8b2595bb1c4720951a5363fbf0adb0ab1e2ff5acd7391f123837242712fc8490
 
 ```
+
 </details>
 
 #### Add the SUDT account to the `Asset Accounts` in Neuron Wallet 

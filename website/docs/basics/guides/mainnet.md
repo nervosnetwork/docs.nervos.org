@@ -51,6 +51,7 @@ ckb-cli --version
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ```
+
 </details>
 
 Step 5: To run the CKB node, copy and paste the commands below into the Terminal (Mac) / Command Line (Windows):
@@ -70,6 +71,7 @@ Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create ckb.toml
 create ckb-miner.toml
 ```
+
 </details>
 
 * Start the node.
@@ -96,4 +98,5 @@ ckb run
 2020-06-05 18:10:20.451 +08:00 NetworkRuntime INFO ckb-sync  Ignoring getheaders from peer=SessionId(1) because node is in initial block download
 2020-06-05 18:10:20.749 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x2567f226c73b04a6cb3ef04b3bb10ab99f37850794cd9569be7de00bac4db875, epoch: 0(1/1743), total_diff: 0x3b1bb3d4c1376a, txs: 1
 ```
+
 </details>
