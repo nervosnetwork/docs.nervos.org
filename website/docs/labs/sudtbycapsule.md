@@ -605,10 +605,10 @@ use ckb_testtool::{builtin::ALWAYS_SUCCESS, context::Context};
 
 Before writing the code, let's think about our  test cases:
 
-1. Return success when inputs capacity equals to outputs capacity.
-2. Return success when inputs capacity is greater than outputs capacity.
-3. Return failure when inputs capacity is less than outputs capacity.
-4. Return success when inputs capacity is less than outputs token with `owner mode` activated.
+1. Return success when input tokens equals to output tokens.
+2. Return success when input tokens is greater than output tokens.
+3. Return failure when input tokens is less than output tokens.
+4. Return success when input tokens is less than output tokens with `owner mode` activated.
 
 * Define `build_test_context` to build transactions. There are three args: 
     * The data type of  `inputs_token` and `outputs_token`  is  `u128`. The function can generate SUDT inputs cells and outputs cells according to the two args.
