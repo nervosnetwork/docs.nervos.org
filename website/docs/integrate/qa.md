@@ -38,14 +38,14 @@ https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/uti
 
 **Q:** Why is it that the minimum transfer amount cannot be less than 61 CKB?
 
-**A:** A cell is used to represent a balance on-chain, and one must hold 1 CKB for every 1 byte of space that the cell occupies. The data in a every cell is broken down into four fields: capacity, lock script, type script, and data. Capacity and lock script are required, and type script and data are optional. For more detailed information about the structure of a cell, refer to the [cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell) reference page.
+**A:** A cell is used to represent a balance on-chain, and one must hold 1 CKB for every 1 byte of space that the cell occupies. The data in every cell is broken down into four fields: capacity, lock script, type script, and data. Capacity and lock script are required, and type script and data are optional. For more detailed information about the structure of a cell, refer to the [cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell) reference page.
 
 The most common basic cell is one that represent a CKB balance. Often this will use the default lock script, which is used for short CKB addresses supported by most wallets. A basic cell like this does not require a type script or any additional data. The fields of this cell are as follows:
 
-* The field `capacity` field is used to hold the number of CKB balance in the cell. This is a u64, which takes 8 bytes.
-* The field `lock script` is `Script` type. This inclues a `code_hash` that is 32 bytes, a `hash_type` that is 1 byte, and an `args` field that is 20 bytes.
-* The field `type script` is optional and is not used for this cell.
-* The field `data` is optional and is not used for this cell.
+* The `capacity` field is used to hold the number of CKB balance in the cell. This is a u64, which takes 8 bytes.
+* The `lock script` field is `Script` type. This inclues a `code_hash` that is 32 bytes, a `hash_type` that is 1 byte, and an `args` field that is 20 bytes.
+* The `type script` field is optional and is not used for this cell.
+* The `data` field is optional and is not used for this cell.
 
 When you add these up, you get 61 bytes: 8 + 32 + 1 + 20 + 0 + 0 = 61.
 
