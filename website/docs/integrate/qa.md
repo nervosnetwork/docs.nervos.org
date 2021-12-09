@@ -19,7 +19,7 @@ The following three questions are related to transaction processing, you may ref
 
 **Q:**Can we hardcode the  `code_hash` , `hash_type` and the corresponding `cell_dep` of two scripts? Are they the same on Testnet as on Mainnet？
 
-**A:** `code_hash` and `hash_type` can be hardcoded and they are the same on Testnet as on Mainnet.  `cell_dep`  is not the same on the Testnet as on Manniet. But they are all get from the fixed position of the genesis block. The single signature is from the second transaction of the genesis block and the multisignature is from the second output cell, once the genesis block is confirmed, the value is fixed
+**A:** `code_hash` and `hash_type` can be hardcoded and they are the same on Testnet as on Mainnet. `cell_dep`  is not the same on the Testnet as on Manniet. But they are all get from the fixed position of the genesis block. The single signature is from the second transaction of the genesis block and the multisignature is from the second output cell, once the genesis block is confirmed, the value is fixed
 
 **Q:** How do we use  `Type` in the outputs?
 
@@ -27,7 +27,7 @@ The following three questions are related to transaction processing, you may ref
 
 **Q:** What is the relationship between the short address, long address and lock script?
 
-**A:**  The long address and lock Script correspond one to one. All long addresses can be converted into a lock script and vice versa.All short addresses can be converted into long addresses, but the reverse is not necessarily true.CKB have provided single signature transfer and multisignature transfer scripts by default. Also you may refer to RFC:[CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md) for more details.
+**A:**  The long address and lock Script correspond one to one. All long addresses can be converted into a lock script and vice versa. All short addresses can be converted into long addresses, but the reverse is not necessarily true. CKB have provided single signature transfer and multisignature transfer scripts by default. Also you may refer to RFC:[CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md) for more details.
 
 **Q:** Are there some test cases for address resolution and generation in other programming languages?
 
@@ -36,19 +36,32 @@ https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/uti
 https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/utils/AddressGeneratorTest.java
 
 
-**Q:** Why the minimum transfer amount cannot be less than 61 CKB?
+**Q:** Why is it that the minimum transfer amount cannot be less than 61 CKB?
 
-**A:** A Cell has three fields and itself should take up capacity, you may refer to [Cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell) for more details：
+**A:** A cell is used to represent a balance on-chain, and one must hold 1 CKB for every 1 byte of space that the cell occupies. The data in every cell is broken down into four fields: capacity, lock script, type script, and data. Capacity and lock script are required, and type script and data are optional. For more detailed information about the structure of a cell, refer to the [cell](https://nervosnetwork.github.io/docs-new/docs/reference/cell) reference page.
 
-* The field `capacity` is u64, which takes 8 bits.
-* The field `lock script` is `Script` type, includes `code_hash` 32 bits, `hash_type` 1 bit, `args` 20 bits
-* The field `type script` is optional.
+The most common basic cell is one that represent a CKB balance. Often this will use the default lock script, which is used for short CKB addresses supported by most wallets. A basic cell like this does not require a type script or any additional data. The fields of this cell are as follows:
 
-so the minimum transfer amount need to be 61 CKB.
+* The `capacity` field is used to hold the number of CKB balance in the cell. This is a u64, which takes 8 bytes.
+* The `lock script` field is `Script` type. This inclues a `code_hash` that is 32 bytes, a `hash_type` that is 1 byte, and an `args` field that is 20 bytes.
+* The `type script` field is optional and is not used for this cell.
+* The `data` field is optional and is not used for this cell.
 
-**Q:** If I have 100 tokens in my address and transfer 61 CKB,  the left balance isn’t enough to create change. How can I deal with it?
+When you add these up, you get 61 bytes: 8 + 32 + 1 + 20 + 0 + 0 = 61.
 
-**A:** It’s recommended to prompt users for insufficient balance, which use Bitcoin dust UTXO processing logic. Also there is a new lock script for CKB that can accept any amount of payment. You may refer [RFC: anyone-can-pay lock](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438) for more details.
+This is why the minimum transfer is 61 CKB, because 61 bytes are required to represent this information on-chain.
+
+While 61 CKB is the minimum, in many cases it is recommended that 62 CKB be sent as the minimum. This is because 61 CKB is the absolute minimum that is required for the cell to exist, and if there are no extra available, then transaction fees cannot be paid from this cell, if needed.
+
+**Q:** If I have 100 CKB in my address and transfer 61 CKB, the balance remaining (39 CKB) isn’t enough to create a change cell. How should I handle this?
+
+**A:** There are several ways that this can be handled.
+
+The most simple method is to inform users that they have an insufficient balance, and prompt them to add more CKB as needed. This requires only basic processing logic to be implemented.
+
+A second option is to tranfer the entire balance of 100 CKB (minus tx fees) so that there is nothing left. If the balance is exactly 0 CKB, then the cell can be consumed and removed from the state completely. This works well if the user wants to withdraw their total balance.
+
+A third option is to use a more specialized lock script that supports the "Anyone Can Pay" (ACP) protocol. When both the sender and receiver are setup to use ACP, a balance of any size can be transferred between two parties without the sender having to include any CKB for the cell itself. For more information on ACP, please see the [Anyone Can Pay RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0026-anyone-can-pay/0026-anyone-can-pay.md).
 
 **Q:** Can `output_data` be used as exchange entry certificate?
 
