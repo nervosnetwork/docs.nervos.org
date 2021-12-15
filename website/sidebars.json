@@ -28,6 +28,7 @@
         ]
       },
       "basics/tools",
+	  "basics/faq",
       "basics/glossary"
     ],
     "Reference": [
