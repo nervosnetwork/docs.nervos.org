@@ -28,7 +28,6 @@
         ]
       },
       "basics/tools",
-	  "basics/faq",
       "basics/glossary"
     ],
     "Reference": [
@@ -66,6 +65,9 @@
       "essays/ckb-core-dev",
       "essays/integrity-check",
       "essays/mint-sudt-via-contract"
+    ],
+	"CKB FAQs": [
+      "faq/general"
     ]
   }
 }
