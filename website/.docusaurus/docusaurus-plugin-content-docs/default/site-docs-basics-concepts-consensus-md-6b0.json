@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/concepts/consensus",
+  "id": "basics/concepts/consensus",
+  "title": "Consensus",
+  "description": "What is Consensus?",
+  "source": "@site/docs/basics/concepts/consensus.md",
+  "sourceDirName": "basics/concepts",
+  "slug": "/basics/concepts/consensus",
+  "permalink": "/docs/basics/concepts/consensus",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "consensus",
+    "title": "Consensus"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Cell Model",
+    "permalink": "/docs/basics/concepts/cell-model"
+  },
+  "next": {
+    "title": "Economics",
+    "permalink": "/docs/basics/concepts/economics"
+  }
+}

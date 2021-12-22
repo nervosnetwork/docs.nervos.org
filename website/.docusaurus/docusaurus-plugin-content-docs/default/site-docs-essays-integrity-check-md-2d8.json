@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/integrity-check",
+  "id": "essays/integrity-check",
+  "title": "Integrity Check for CKB Release",
+  "description": "All the binaries in CKB releases are signed via following PGP keys.",
+  "source": "@site/docs/essays/integrity-check.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/integrity-check",
+  "permalink": "/docs/essays/integrity-check",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "integrity-check",
+    "title": "Integrity Check for CKB Release"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Tips for CKB development",
+    "permalink": "/docs/essays/ckb-core-dev"
+  },
+  "next": {
+    "title": "Mint SUDT via Contract",
+    "permalink": "/docs/essays/mint-sudt-via-contract"
+  }
+}

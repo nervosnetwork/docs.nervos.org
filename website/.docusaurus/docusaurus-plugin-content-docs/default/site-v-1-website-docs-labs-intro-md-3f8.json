@@ -1,0 +1,28 @@
+{
+  "unversionedId": "labs/introduction",
+  "id": "labs/introduction",
+  "title": "Introduction",
+  "description": "In labs, we provide a series of hands-on programming tutorial, that helps you build a complete component in CKB quickly. Some examples of the labs section include:",
+  "source": "@site/../v1-website/docs/labs/intro.md",
+  "sourceDirName": "labs",
+  "slug": "/labs/introduction",
+  "permalink": "/docs/labs/introduction",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "introduction",
+    "title": "Introduction"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "JSON-RPC",
+    "permalink": "/docs/reference/rpc"
+  },
+  "next": {
+    "title": "Write a SUDT script by Capsule",
+    "permalink": "/docs/labs/sudtbycapsule"
+  }
+}

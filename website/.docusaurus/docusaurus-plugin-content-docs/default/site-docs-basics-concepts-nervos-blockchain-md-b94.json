@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/concepts/nervos-blockchain",
+  "id": "basics/concepts/nervos-blockchain",
+  "title": "Nervos Blockchain",
+  "description": "What is the Nervos Blockchain?",
+  "source": "@site/docs/basics/concepts/nervos-blockchain.md",
+  "sourceDirName": "basics/concepts",
+  "slug": "/basics/concepts/nervos-blockchain",
+  "permalink": "/docs/basics/concepts/nervos-blockchain",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "nervos-blockchain",
+    "title": "Nervos Blockchain"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Basics Introduction",
+    "permalink": "/docs/basics/introduction"
+  },
+  "next": {
+    "title": "Cell Model",
+    "permalink": "/docs/basics/concepts/cell-model"
+  }
+}

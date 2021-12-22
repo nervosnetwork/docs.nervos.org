@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/guides/neuron",
+  "id": "basics/guides/neuron",
+  "title": "Neuron Wallet Guide",
+  "description": "Neuron Wallet is a CKB wallet produced by the Nervos Foundation, it holds your keys and can create and broadcast transactions on your behalf. Now Neuron Wallet has bundled a CKB Mainnet node and configured to connect to the CKB Mainnet. After installation, as you open the Neuron Wallet, the bundled Mainnet node will run.",
+  "source": "@site/../v1-website/docs/basics/guides/neuron.md",
+  "sourceDirName": "basics/guides",
+  "slug": "/basics/guides/neuron",
+  "permalink": "/docs/basics/guides/neuron",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "neuron",
+    "title": "Neuron Wallet Guide"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Run a CKB Testnet Node",
+    "permalink": "/docs/basics/guides/testnet"
+  },
+  "next": {
+    "title": "Run a CKB Mainnet Node and Testnet Node with Docker",
+    "permalink": "/docs/basics/guides/run-ckb-with-docker"
+  }
+}

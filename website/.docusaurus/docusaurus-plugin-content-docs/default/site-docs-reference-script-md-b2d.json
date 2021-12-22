@@ -1,0 +1,28 @@
+{
+  "unversionedId": "reference/script",
+  "id": "reference/script",
+  "title": "Script",
+  "description": "If you are used to blockchains like Ethereum, you will recognize that CKB leverages a drastically different verification model: instead of creating a transaction that alters blockchain state when executing, a transaction in CKB contains state transitions directly in the form of cells. To alter the state of an existing cell, one just destroys the original cell, then create a new one in a single, atomic transaction. CKB scripts, running on CKB VM, actually perform series of validation rules on the input cells and output cells of the transaction.",
+  "source": "@site/docs/reference/script.md",
+  "sourceDirName": "reference",
+  "slug": "/reference/script",
+  "permalink": "/docs/reference/script",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "script",
+    "title": "Script"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Cell",
+    "permalink": "/docs/reference/cell"
+  },
+  "next": {
+    "title": "Transaction",
+    "permalink": "/docs/reference/transaction"
+  }
+}

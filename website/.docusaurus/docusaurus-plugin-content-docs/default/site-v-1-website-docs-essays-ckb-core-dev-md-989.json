@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/ckb-core-dev",
+  "id": "essays/ckb-core-dev",
+  "title": "Tips for CKB development",
+  "description": "Nervos CKB is the layer 1 of Nervos Network, a public/permissionless blockchain, which is an open source project on github. There are some tips for ckb development below, hope it will be useful for you.",
+  "source": "@site/../v1-website/docs/essays/ckb-core-dev.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/ckb-core-dev",
+  "permalink": "/docs/essays/ckb-core-dev",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "ckb-core-dev",
+    "title": "Tips for CKB development"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "CKB FAQs",
+    "permalink": "/docs/essays/faq"
+  },
+  "next": {
+    "title": "Integrity Check for CKB Release",
+    "permalink": "/docs/essays/integrity-check"
+  }
+}

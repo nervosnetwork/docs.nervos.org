@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/polyjuice",
+  "id": "essays/polyjuice",
+  "title": "Technical Bits on Polyjuice",
+  "description": "Polyjuice is an Ethereum compatible layer and has implemented most of the functions of Ethereum on CKB, including running an EVM contract on CKB-VM. We believe that we have achieved full-featured compatibility with the implementation of EVM,which is also the power of CKB-VM.By polyjuice we want to showcase that it is perfectly possible to use account model on Nervos CKB. The flexibility here actually enables countless opportunities.",
+  "source": "@site/docs/essays/polyjuice.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/polyjuice",
+  "permalink": "/docs/essays/polyjuice",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "polyjuice",
+    "title": "Technical Bits on Polyjuice"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Introduction to CKB Studio",
+    "permalink": "/docs/essays/introduction-to-ckb-studio"
+  },
+  "next": {
+    "title": "CKB FAQs",
+    "permalink": "/docs/essays/faq"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/concepts/economics",
+  "id": "basics/concepts/economics",
+  "title": "Economics",
+  "description": "The Economics of the CKByte",
+  "source": "@site/../v1-website/docs/basics/concepts/economics.md",
+  "sourceDirName": "basics/concepts",
+  "slug": "/basics/concepts/economics",
+  "permalink": "/docs/basics/concepts/economics",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "economics",
+    "title": "Economics"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Consensus",
+    "permalink": "/docs/basics/concepts/consensus"
+  },
+  "next": {
+    "title": "CKB-VM",
+    "permalink": "/docs/basics/concepts/ckb-vm"
+  }
+}

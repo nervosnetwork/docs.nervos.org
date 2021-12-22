@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/debug",
+  "id": "essays/debug",
+  "title": "Tips for debugging CKB script",
+  "description": "CKB uses RISC-V ISA to implement VM layer and CKB VM is very different from other VMs with hard-code functionality through opcodes. Given the generalized nature of CKB VM, various languages and toolchains can be supported- every language and toolchain will be a bit different and implementers should provide appropriate documentation and support for the community.",
+  "source": "@site/docs/essays/debug.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/debug",
+  "permalink": "/docs/essays/debug",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "debug",
+    "title": "Tips for debugging CKB script"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Transaction validation lifecycle",
+    "permalink": "/docs/essays/lifecycle"
+  },
+  "next": {
+    "title": "Tips for profiling CKB script",
+    "permalink": "/docs/essays/pprof"
+  }
+}

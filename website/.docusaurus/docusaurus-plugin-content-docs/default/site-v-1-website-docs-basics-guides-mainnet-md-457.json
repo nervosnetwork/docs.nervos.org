@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/guides/mainnet",
+  "id": "basics/guides/mainnet",
+  "title": "Run a CKB Mainnet Node",
+  "description": "Fun Fact: Running a CKB Mainnet node not only helps contribute to the robustness and decentralized nature of the Network, it also means you do not need to rely on any 3rd party to provide data from the blockchain, which increases your security.",
+  "source": "@site/../v1-website/docs/basics/guides/mainnet.md",
+  "sourceDirName": "basics/guides",
+  "slug": "/basics/guides/mainnet",
+  "permalink": "/docs/basics/guides/mainnet",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "mainnet",
+    "title": "Run a CKB Mainnet Node"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Run a CKB Dev Blockchain",
+    "permalink": "/docs/basics/guides/devchain"
+  },
+  "next": {
+    "title": "Run a CKB Testnet Node",
+    "permalink": "/docs/basics/guides/testnet"
+  }
+}

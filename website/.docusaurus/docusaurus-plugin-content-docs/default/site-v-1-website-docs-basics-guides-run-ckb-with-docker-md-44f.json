@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/guides/run-ckb-with-docker",
+  "id": "basics/guides/run-ckb-with-docker",
+  "title": "Run a CKB Mainnet Node and Testnet Node with Docker",
+  "description": "We have introduced Run a CKB Mainnet Node & Run a CKB Testnet Node.If you want to run CKB node or miner process quickly for testing, it is recommended to use Docker. Before follow the instructions below, you need to Install Docker first.",
+  "source": "@site/../v1-website/docs/basics/guides/run-ckb-with-docker.md",
+  "sourceDirName": "basics/guides",
+  "slug": "/basics/guides/run-ckb-with-docker",
+  "permalink": "/docs/basics/guides/run-ckb-with-docker",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "run-ckb-with-docker",
+    "title": "Run a CKB Mainnet Node and Testnet Node with Docker"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Neuron Wallet Guide",
+    "permalink": "/docs/basics/guides/neuron"
+  },
+  "next": {
+    "title": "Get CKB Binary",
+    "permalink": "/docs/basics/guides/get-ckb"
+  }
+}

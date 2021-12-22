@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/developer-materials-guide",
+  "id": "essays/developer-materials-guide",
+  "title": "Developer Materials Guide",
+  "description": "This guide will help introduce new developers to the essential topics and tools needed to get started.",
+  "source": "@site/../v1-website/docs/essays/developer-materials-guide.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/developer-materials-guide",
+  "permalink": "/docs/essays/developer-materials-guide",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "developer-materials-guide",
+    "title": "Developer Materials Guide"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/docs/essays/introduction"
+  },
+  "next": {
+    "title": "A Tour of RFCs",
+    "permalink": "/docs/essays/rfcs"
+  }
+}

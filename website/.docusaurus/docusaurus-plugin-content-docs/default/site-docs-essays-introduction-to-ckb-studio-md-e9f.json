@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/introduction-to-ckb-studio",
+  "id": "essays/introduction-to-ckb-studio",
+  "title": "Introduction to CKB Studio",
+  "description": "Authored by Phil Li @ Obsidian Labs",
+  "source": "@site/docs/essays/introduction-to-ckb-studio.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/introduction-to-ckb-studio",
+  "permalink": "/docs/essays/introduction-to-ckb-studio",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "introduction-to-ckb-studio",
+    "title": "Introduction to CKB Studio"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Script dependencies",
+    "permalink": "/docs/essays/dependencies"
+  },
+  "next": {
+    "title": "Technical Bits on Polyjuice",
+    "permalink": "/docs/essays/polyjuice"
+  }
+}

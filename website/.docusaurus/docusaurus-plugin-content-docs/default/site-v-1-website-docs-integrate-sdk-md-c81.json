@@ -1,0 +1,28 @@
+{
+  "unversionedId": "integrate/sdk",
+  "id": "integrate/sdk",
+  "title": "Nervos CKB SDK",
+  "description": "ckb-sdk is a collection of libraries which allow you to interact with a local or remote CKB node by using JSON-RPC. You should get familiar with ckb transaction structure and JSON-RPC before using it. Now ckb-sdk is implemented by the following programming languages: JavaScript/TypeScript,Ruby,Swift,Java and Go.",
+  "source": "@site/../v1-website/docs/integrate/sdk.md",
+  "sourceDirName": "integrate",
+  "slug": "/integrate/sdk",
+  "permalink": "/docs/integrate/sdk",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "sdk",
+    "title": "Nervos CKB SDK"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Q&A | For Wallets/Exchanges/Mining Pools",
+    "permalink": "/docs/integrate/qa"
+  },
+  "next": {
+    "title": "Introduction",
+    "permalink": "/docs/essays/introduction"
+  }
+}

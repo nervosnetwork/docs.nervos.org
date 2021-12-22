@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/guides/devchain",
+  "id": "basics/guides/devchain",
+  "title": "Run a CKB Dev Blockchain",
+  "description": "Nervos CKB supports a special development mode that is particularly useful for building and testing applications. This mode of operation is highly configurable, and allows the developer to speed up the block interval, adjust epochs lengths, create blocks without having to do Proof-of-Work (PoW) mining.",
+  "source": "@site/docs/basics/guides/devchain.md",
+  "sourceDirName": "basics/guides",
+  "slug": "/basics/guides/devchain",
+  "permalink": "/docs/basics/guides/devchain",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "devchain",
+    "title": "Run a CKB Dev Blockchain"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "CKB-VM",
+    "permalink": "/docs/basics/concepts/ckb-vm"
+  },
+  "next": {
+    "title": "Run a CKB Mainnet Node",
+    "permalink": "/docs/basics/guides/mainnet"
+  }
+}

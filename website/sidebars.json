@@ -35,8 +35,7 @@
       "reference/cell",
       "reference/script",
       "reference/transaction",
-      "reference/rpc",
-      "reference/ckb/ckb"
+      "reference/rpc"
     ],
     "Labs": [
       "labs/introduction",
@@ -46,7 +45,6 @@
     ],
     "Integrate": [
       "integrate/introduction",
-      "integrate/integration-guide",
       "integrate/qa",
       "integrate/sdk"
     ],

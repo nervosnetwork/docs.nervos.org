@@ -1,0 +1,228 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "basics/introduction",
+          "docs": [
+            {
+              "id": "basics/concepts/cell-model",
+              "path": "/docs/basics/concepts/cell-model",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/concepts/ckb-vm",
+              "path": "/docs/basics/concepts/ckb-vm",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/concepts/consensus",
+              "path": "/docs/basics/concepts/consensus",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/concepts/economics",
+              "path": "/docs/basics/concepts/economics",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/concepts/nervos-blockchain",
+              "path": "/docs/basics/concepts/nervos-blockchain",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/glossary",
+              "path": "/docs/basics/glossary",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/ckb-on-windows",
+              "path": "/docs/basics/guides/ckb-on-windows",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/devchain",
+              "path": "/docs/basics/guides/devchain",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/get-ckb",
+              "path": "/docs/basics/guides/get-ckb",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/mainnet",
+              "path": "/docs/basics/guides/mainnet",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/neuron",
+              "path": "/docs/basics/guides/neuron",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/run-ckb-with-docker",
+              "path": "/docs/basics/guides/run-ckb-with-docker",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/guides/testnet",
+              "path": "/docs/basics/guides/testnet",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/introduction",
+              "path": "/docs/basics/introduction",
+              "sidebar": "docs"
+            },
+            {
+              "id": "basics/tools",
+              "path": "/docs/basics/tools",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/ckb-core-dev",
+              "path": "/docs/essays/ckb-core-dev",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/debug",
+              "path": "/docs/essays/debug",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/dependencies",
+              "path": "/docs/essays/dependencies",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/developer-materials-guide",
+              "path": "/docs/essays/developer-materials-guide",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/faq",
+              "path": "/docs/essays/faq",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/integrity-check",
+              "path": "/docs/essays/integrity-check",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/introduction",
+              "path": "/docs/essays/introduction",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/introduction-to-ckb-studio",
+              "path": "/docs/essays/introduction-to-ckb-studio",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/lifecycle",
+              "path": "/docs/essays/lifecycle",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/mint-sudt-via-contract",
+              "path": "/docs/essays/mint-sudt-via-contract",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/polyjuice",
+              "path": "/docs/essays/polyjuice",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/pprof",
+              "path": "/docs/essays/pprof",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/rfcs",
+              "path": "/docs/essays/rfcs",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/rules",
+              "path": "/docs/essays/rules",
+              "sidebar": "docs"
+            },
+            {
+              "id": "essays/rules",
+              "path": "/docs/essays/rules",
+              "sidebar": "docs"
+            },
+            {
+              "id": "integrate/introduction",
+              "path": "/docs/integrate/introduction",
+              "sidebar": "docs"
+            },
+            {
+              "id": "integrate/qa",
+              "path": "/docs/integrate/qa",
+              "sidebar": "docs"
+            },
+            {
+              "id": "integrate/sdk",
+              "path": "/docs/integrate/sdk",
+              "sidebar": "docs"
+            },
+            {
+              "id": "labs/capsule-dynamic-loading-tutorial",
+              "path": "/docs/labs/capsule-dynamic-loading-tutorial",
+              "sidebar": "docs"
+            },
+            {
+              "id": "labs/introduction",
+              "path": "/docs/labs/introduction",
+              "sidebar": "docs"
+            },
+            {
+              "id": "labs/lumos-nervosdao",
+              "path": "/docs/labs/lumos-nervosdao",
+              "sidebar": "docs"
+            },
+            {
+              "id": "labs/sudtbycapsule",
+              "path": "/docs/labs/sudtbycapsule",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/cell",
+              "path": "/docs/reference/cell",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/introduction",
+              "path": "/docs/reference/introduction",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/rpc",
+              "path": "/docs/reference/rpc",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/script",
+              "path": "/docs/reference/script",
+              "sidebar": "docs"
+            },
+            {
+              "id": "reference/transaction",
+              "path": "/docs/reference/transaction",
+              "sidebar": "docs"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "unversionedId": "labs/sudtbycapsule",
+  "id": "labs/sudtbycapsule",
+  "title": "Write a SUDT script by Capsule",
+  "description": "Introduction",
+  "source": "@site/docs/labs/sudtbycapsule.md",
+  "sourceDirName": "labs",
+  "slug": "/labs/sudtbycapsule",
+  "permalink": "/docs/labs/sudtbycapsule",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "sudtbycapsule",
+    "title": "Write a SUDT script by Capsule"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/docs/labs/introduction"
+  },
+  "next": {
+    "title": "Introduction to Lumos via NervosDAO",
+    "permalink": "/docs/labs/lumos-nervosdao"
+  }
+}

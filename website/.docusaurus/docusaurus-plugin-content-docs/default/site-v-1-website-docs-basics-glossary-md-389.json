@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/glossary",
+  "id": "basics/glossary",
+  "title": "Glossary",
+  "description": "Glossary Sections",
+  "source": "@site/../v1-website/docs/basics/glossary.md",
+  "sourceDirName": "basics",
+  "slug": "/basics/glossary",
+  "permalink": "/docs/basics/glossary",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "glossary",
+    "title": "Glossary"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Tools",
+    "permalink": "/docs/basics/tools"
+  },
+  "next": {
+    "title": "Introduction",
+    "permalink": "/docs/reference/introduction"
+  }
+}

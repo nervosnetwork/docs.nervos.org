@@ -1,0 +1,28 @@
+{
+  "unversionedId": "integrate/introduction",
+  "id": "integrate/introduction",
+  "title": "Nervos CKB Mainnet - Integration Guide",
+  "description": "Connecting to the CKB network is extremely easy and only requires running one node on a machine. Once you've connected to the CKB network, you can use the RPC interface to interacting with the node.",
+  "source": "@site/docs/integrate/integration-guide.md",
+  "sourceDirName": "integrate",
+  "slug": "/integrate/introduction",
+  "permalink": "/docs/integrate/introduction",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "introduction",
+    "title": "Nervos CKB Mainnet - Integration Guide"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Dynamic loading in Capsule",
+    "permalink": "/docs/labs/capsule-dynamic-loading-tutorial"
+  },
+  "next": {
+    "title": "Q&A | For Wallets/Exchanges/Mining Pools",
+    "permalink": "/docs/integrate/qa"
+  }
+}

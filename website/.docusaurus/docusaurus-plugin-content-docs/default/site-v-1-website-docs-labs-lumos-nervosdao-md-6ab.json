@@ -1,0 +1,28 @@
+{
+  "unversionedId": "labs/lumos-nervosdao",
+  "id": "labs/lumos-nervosdao",
+  "title": "Introduction to Lumos via NervosDAO",
+  "description": "In the real world, one hardly sees a blockchain exposed and used directly by the ordinary users. Apps, websites or other services are built on top of blockchains to provide a seamless service. Based on this belief, we built lumos, a JavaScript/TypeScript framework, that aids dapp development on CKB. Lumos should be able to free you from most, if not all of the hassles for dealing with CKB, and let you focus on the specific logic in your dapp.",
+  "source": "@site/../v1-website/docs/labs/lumos-nervosdao.md",
+  "sourceDirName": "labs",
+  "slug": "/labs/lumos-nervosdao",
+  "permalink": "/docs/labs/lumos-nervosdao",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "lumos-nervosdao",
+    "title": "Introduction to Lumos via NervosDAO"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Write a SUDT script by Capsule",
+    "permalink": "/docs/labs/sudtbycapsule"
+  },
+  "next": {
+    "title": "Dynamic loading in Capsule",
+    "permalink": "/docs/labs/capsule-dynamic-loading-tutorial"
+  }
+}

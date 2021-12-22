@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/rules",
+  "id": "essays/rules",
+  "title": "The General Workflow for Constructing a Transaction",
+  "description": "This document will explain how to build a verifiable transaction on CKB in the simplest and most common way possible. It doesn't involve constructing validation scripts, contracts, etc.",
+  "source": "@site/docs/essays/workflow.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/rules",
+  "permalink": "/docs/essays/rules",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "rules",
+    "title": "The General Workflow for Constructing a Transaction"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Tips for profiling CKB script",
+    "permalink": "/docs/essays/pprof"
+  },
+  "next": {
+    "title": "Script dependencies",
+    "permalink": "/docs/essays/dependencies"
+  }
+}

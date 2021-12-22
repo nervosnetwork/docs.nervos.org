@@ -1,0 +1,28 @@
+{
+  "unversionedId": "essays/introduction",
+  "id": "essays/introduction",
+  "title": "Introduction",
+  "description": "Essays provide a place for all developers to write independent articles. The articles here, don't need a unified theme. Each article might contain quite different topic, including:",
+  "source": "@site/../v1-website/docs/essays/intro.md",
+  "sourceDirName": "essays",
+  "slug": "/essays/introduction",
+  "permalink": "/docs/essays/introduction",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "introduction",
+    "title": "Introduction"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Nervos CKB SDK",
+    "permalink": "/docs/integrate/sdk"
+  },
+  "next": {
+    "title": "Developer Materials Guide",
+    "permalink": "/docs/essays/developer-materials-guide"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "unversionedId": "basics/guides/testnet",
+  "id": "basics/guides/testnet",
+  "title": "Run a CKB Testnet Node",
+  "description": "We have launched Aggron Testnet for developers to test their integration and smart contracts in real environment.The Aggron Testnet’s info has been published via Wiki:",
+  "source": "@site/docs/basics/guides/testnet.md",
+  "sourceDirName": "basics/guides",
+  "slug": "/basics/guides/testnet",
+  "permalink": "/docs/basics/guides/testnet",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "formattedLastUpdatedAt": "10/14/2018",
+  "frontMatter": {
+    "id": "testnet",
+    "title": "Run a CKB Testnet Node"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Run a CKB Mainnet Node",
+    "permalink": "/docs/basics/guides/mainnet"
+  },
+  "next": {
+    "title": "Neuron Wallet Guide",
+    "permalink": "/docs/basics/guides/neuron"
+  }
+}

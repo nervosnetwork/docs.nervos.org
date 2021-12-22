@@ -44,8 +44,8 @@ ckb --version
 ckb-cli --version
 ```
 
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 
 ckb 0.32.1 (9ebc9ce 2020-05-29)
@@ -62,8 +62,8 @@ Step 5: To run the CKB node, copy and paste the commands below into the Terminal
 ckb init --chain mainnet
 ```
 
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 
 WARN: mining feature is disabled because of lacking the block assembler config options
@@ -74,14 +74,14 @@ create ckb-miner.toml
 
 </details>
 
-* Start the node.
+** Start the node.
 
 ```
 ckb run
 ```
 
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 
 2020-06-05 18:10:19.785 +08:00 main INFO sentry  sentry is disabled
@@ -96,7 +96,7 @@ ckb run
 2020-06-05 18:10:20.146 +08:00 NetworkRuntime INFO ckb-relay  RelayProtocol(1).connected peer=SessionId(1)
 2020-06-05 18:10:20.146 +08:00 NetworkRuntime INFO ckb-sync  SyncProtocol.connected peer=SessionId(1)
 2020-06-05 18:10:20.451 +08:00 NetworkRuntime INFO ckb-sync  Ignoring getheaders from peer=SessionId(1) because node is in initial block download
-2020-06-05 18:10:20.749 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x2567f226c73b04a6cb3ef04b3bb10ab99f37850794cd9569be7de00bac4db875, epoch: 0(1/1743), total_diff: 0x3b1bb3d4c1376a, txs: 1
+2020-06-05 18:10:20.749 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x2567f226c73b04a6cb3ef04b3bb10ab99f37850794cd9569be7de00bac4db875, epoch: 0(1/1743), total_diff: 0x3b1bb3d4c1376a, txs:1
 ```
 
 </details>
