@@ -3,9 +3,9 @@
     "Basics": [
       "basics/introduction",
       {
-        "type": "subcategory",
+        "type": "category",
         "label": "Concepts",
-        "ids": [
+        "items": [
           "basics/concepts/nervos-blockchain",
           "basics/concepts/cell-model",
           "basics/concepts/consensus",
@@ -14,9 +14,9 @@
         ]
       },
       {
-        "type": "subcategory",
+        "type": "category",
         "label": "Guides",
-        "ids": [
+        "items": [
           "basics/guides/devchain",
           "basics/guides/mainnet",
           "basics/guides/testnet",
