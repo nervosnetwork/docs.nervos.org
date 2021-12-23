@@ -38,7 +38,7 @@ cargo test --all
 
 The lay2 team has developed the [PW-core](https://github.com/lay2dev/pw-core), a front-end JS SDK based on Typescript, to interwork with PW-lock. Some additional supports may be required if working in a non-JavaScript environment. 
 
-In addition to the ACP unlock method, pw-lock also supports the similar unlock of the CKB secp256k1 lock [P2PKH](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#p2pkh) signature verification. The difference is that the current version of pw-lock uses a slightly different hash algorithm to that of secp256k1_blake160.
+In addition to the ACP unlock method, PW-lock also supports the similar unlock of the CKB secp256k1 lock [P2PKH](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#p2pkh) signature verification. The difference is that the current version of pw-lock uses a slightly different hash algorithm to that of secp256k1_blake160.
 
 ```
 // pw-lock
