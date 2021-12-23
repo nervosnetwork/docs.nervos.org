@@ -64,7 +64,8 @@
       "essays/faq",
       "essays/ckb-core-dev",
       "essays/integrity-check",
-      "essays/mint-sudt-via-contract"
+      "essays/mint-sudt-via-contract",
+	  "essays/pw-lock"
     ]
   }
 }
