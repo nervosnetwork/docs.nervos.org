@@ -50,7 +50,7 @@ Blake2b(Blake2b(Tx) | witness)
 
 pw-lock script provides two signature verification methods: [`eth_personalSign`](https://github.com/lay2dev/pw-lock#eth_personalsign) and [`eth_signTypedData_v4`](https://github.com/lay2dev/pw-lock#eth_signtypeddata_v4). In addition, PW-lock also integrated with the CKB [`anyone-can-pay`](https://github.com/nervosnetwork/ckb-production-scripts) lock. 
 
-## Todo
+## Features In Development
 
 Add support for chains other than ETH, such as [EOS, TRON, BITCOIN, DOGECOIN](https://github.com/XuJiandong/pw-lock/blob/develop/c/pw_lock.h#L197-L230), etc. in the upcoming pw-lock.
 
