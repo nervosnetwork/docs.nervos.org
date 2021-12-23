@@ -5,7 +5,7 @@ title: Introduction of PW-lock
 
 ## Overview
 
-[PW-lock](https://github.com/lay2dev/pw-lock), developed by the [lay2](https://github.com/lay2dev/pw-lock) Team, is a ckb lock script which can make use of other blockchain wallets as ckb wallets. PW-lock is based on the concept of implementing the signature verification algorithms of other chains (e.g. ETH/Tron/EOS/BTC) so as to reuse others' facilities. Also, pw-lock is a lock with [ACP](https://github.com/nervosnetwork/ckb-production-scripts/blob/master/c/anyone_can_pay.c) logic.
+[PW-lock](https://github.com/lay2dev/pw-lock), developed by the [lay2](https://github.com/lay2dev/pw-lock) Team, is a lock script which can make use of other blockchain wallets as CKB wallets. PW-lock is based on the concept of implementing the signature verification algorithms of other chains (e.g. ETH/TRON/EOS/BTC) so as to reuse others' facilities. Also, PW-lock is a lock with [ACP](https://github.com/nervosnetwork/ckb-production-scripts/blob/master/c/anyone_can_pay.c) logic.
 
 Current pw-lock supports the Ethereum [EIP-191](https://eips.ethereum.org/EIPS/eip-191) signature verification standard. It is possible to communicate with MetaMask, the Ethereum wallet, through the RPC [personal_sign](https://docs.metamask.io/guide/signing-data.html#signing-data-with-metamask), and sign the [hash_all](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#p2pkh) message, then verify the transaction in the pw-lock script before unlocking.
 
