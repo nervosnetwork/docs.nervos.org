@@ -13,6 +13,8 @@ Current PW-lock supports the Ethereum [EIP-191](https://eips.ethereum.org/EIPS/e
 ## Quick Start
 
 ```
+https://github.com/lay2dev/pw-lock.git
+cd pw-lock
 git submodule init
 git submodule update
 make install-tools
