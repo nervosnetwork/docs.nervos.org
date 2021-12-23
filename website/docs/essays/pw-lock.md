@@ -34,7 +34,7 @@ cargo test --all
     - lock: 65 bytes - secp256k1 signature_data
 ```
 
-## Implementation
+## Offchain
 
 The lay2 team has developed the [PW-core](https://github.com/lay2dev/pw-core), a front-end JS SDK based on Typescript, to interwork with PW-lock. Some additional supports may be required if working in a non-JavaScript environment. 
 
