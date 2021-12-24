@@ -9,18 +9,16 @@ We have setup CI to ensure CKB works in following systems, they are also the rec
 
 OS           | Arch
 -------------|------
-Ubuntu 16.04 | x64
+Ubuntu 18.04 | x64
 macOS        | x64
 Windows      | x64
-
-You can refer to [Get CKB Binary on Windows](ckb-on-windows.md) for more details on building CKB on windows.
 
 CKB should also work on any modern Linux distributions. However, we limit our
 energy to focus on the support of following systems:
 
 OS             | Arch
 ---------------|------
-Ubuntu 18.04   | x64
+Ubuntu 20.04   | x64
 Debian Stretch | x64
 Arch Linux     | x64
 CentOS 7       | x64
@@ -39,7 +37,12 @@ CKB requires Rust to build. We recommend to install [rustup](https://www.rustup.
 The required Rust version is saved in the file `rust-toolchain`. If rustup is
 available, it will pick the right version automatically.
 
-You also need to get the following packages：
+CKB also requires C++ toolchain and clang. It's recommended to:
+
+- use GCC 7.3.1 or newer as the default C/C++ toolchain,
+- and install LLVM 5.0.1 or newer.
+
+You can use the following commands to install the dependencies:
 
 * Ubuntu and Debian
 
@@ -52,22 +55,24 @@ sudo apt-get install -y git gcc libc6-dev pkg-config libssl-dev libclang-dev cla
 ```shell
 sudo pacman -Sy git gcc pkgconf clang
 ```
+
 * macOS
 
 ```shell
 brew install autoconf libtool
 ```
+
 * CentOS
 
 ```shell
 sudo yum install -y centos-release-scl
-sudo yum install -y git make gcc-c++ openssl-devel llvm-toolset-7
+sudo yum install -y git make gcc-c++ openssl-devel devtoolset-7 llvm-toolset-7
 ```
 
-Start a shell enabling clang
+Start a shell enabling gcc-7 and clang
 
 ```shell
-scl enable llvm-toolset-7 bash
+scl enable devtoolset-7 llvm-toolset-7 bash
 ```
 
 Remember to run following commands in this console.
@@ -101,10 +106,10 @@ git checkout master
 ```
 
 You can also switch to a historical version and build, for example, check out
-v0.12.2.
+v0.43.2.
 
 ```bash
-git checkout -b branch-v0.12.2 v0.12.2
+git checkout -b branch-v0.43.2 v0.43.2
 ```
 
 Run `make prod` inside the source code directory. It will build the executable
