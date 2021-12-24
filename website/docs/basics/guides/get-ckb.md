@@ -37,7 +37,7 @@ CKB requires Rust to build. We recommend to install [rustup](https://www.rustup.
 The required Rust version is saved in the file `rust-toolchain`. If rustup is
 available, it will pick the right version automatically.
 
-CKB also requires C++ toolchain and clang, it's recommended to:
+CKB also requires C++ toolchain and clang. It's recommended to:
 
 - use GCC 7.3.1 or newer as the default C/C++ toolchain,
 - and install LLVM 5.0.1 or newer.
