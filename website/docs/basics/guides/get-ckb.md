@@ -42,7 +42,7 @@ CKB also requires C++ toolchain and clang. It's recommended to:
 - use GCC 7.3.1 or newer as the default C/C++ toolchain,
 - and install LLVM 5.0.1 or newer.
 
-You can using following commands to install the dependencies:
+You can use the following commands to install the dependencies:
 
 * Ubuntu and Debian
 
