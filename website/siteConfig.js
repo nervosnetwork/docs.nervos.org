@@ -30,7 +30,7 @@ const siteConfig = {
   //   organizationName: 'JoelMarcey'
 
   //GA settings
-  gaTrackingId: 'UA-139882771-1',
+  gaTrackingId: 'G-XWR9LDJKW3',
   gaGtag: true,
 
   // For no header links in the top nav bar -> headerLinks: [],
