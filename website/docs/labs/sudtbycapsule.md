@@ -38,7 +38,7 @@ To use capsule, you need `docker`. It is recommended to install the latest versi
 
 Note: The current user must have permission to manage Docker instances. (How to manage Docker as a non-root user)[https://docs.docker.com/engine/install/linux-postinstall/].
 
-Now you can proceed to install capsule, It is recommended to [download the binary](https://github.com/nervosnetwork/capsule/releases/tag/v0.1.3)
+Now you can proceed to install capsule. It is recommended to download the binary [here](https://github.com/nervosnetwork/capsule/releases).
 
 Or you can install from source:
 
