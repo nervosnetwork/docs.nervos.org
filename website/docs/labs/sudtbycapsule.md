@@ -34,7 +34,7 @@ You should be able to run a dev chain and know about how to use `ckb-cli` to sen
 
 To use capsule, you need to install Docker. It is recommended to install the latest version of Docker:
 
-* [Install docker](https://docs.docker.com/get-docker/)
+* [Install Docker](https://docs.docker.com/get-docker/)
 
 Note: The current user must have permission to manage Docker instances. For more information, see [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
 
