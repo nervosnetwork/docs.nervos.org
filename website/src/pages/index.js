@@ -5,18 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const React = require('react');
-
-const CompLibrary = {
-  Container: props => <div {...props}></div>,
-  GridBlock: props => <div {...props}></div>,
-  MarkdownBlock: props => <div {...props}></div>
-};
-
+import React from 'react';
 import Layout from "@theme/Layout";
-
-const MarkdownBlock = CompLibrary.MarkdownBlock;
-const Container = CompLibrary.Container;
 
 class Index extends React.Component {
   render() {
@@ -57,17 +47,17 @@ class Index extends React.Component {
               <Logo img_src={`${baseUrl}img/cover_logo.png`} />
               <div className="projectDescription">
                 <ProjectTitle title={siteConfig.title} />
-                <MarkdownBlock>
+                <p>
                   Nervos CKB is a public permissionless blockchain and the layer 1 of Nervos.
-                </MarkdownBlock>
+                </p>
 
-                <MarkdownBlock>
+                <p>
                   CKB generates trust and extends this trust to upper layers, making Nervos a trust network. It's also the value store of the Nervos network, providing public, secure and censorship-resistant custody services for assets, identities and other common knowledge created in the network. We will also vigorously develop the developer community and aim to offer blockchain developers exciting new capabilities.
-                </MarkdownBlock>
+                </p>
 
-                <MarkdownBlock>
-                  If you run into an issue on our documentation website you can contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/AqGTUE9).
-                </MarkdownBlock>
+                <p>
+                    If you run into an issue on our documentation website you can contact us on <a href="https://talk.nervos.org/">Nervos talk</a> or <a href="https://discord.gg/AqGTUE9">Discord</a>.
+                </p>
               </div>
             </div>
           </div>
@@ -79,32 +69,25 @@ class Index extends React.Component {
               id="getting-started"
               title="Getting Started"
               body={
-                <MarkdownBlock>
-                  If you are a beginner who just started experimenting with CKB for the first time, [Basics](docs/basics/introduction) will help you get to know CKB, and get the chain running. [Reference](docs/reference/introduction) contains advanced concepts that might also be of interest.
-             </MarkdownBlock>
+                  <p>If you are a beginner who just started experimenting with CKB for the first time, <a href="docs/basics/introduction">Basics</a> will help you get to know CKB, and get the chain running. <a href="docs/reference/introduction">Reference</a> contains advanced concepts that might also be of interest.</p>
               }
               footer={
-                <MarkdownBlock>
-                  [![basics](img/doc_basic.png) Basics](docs/basics/introduction)
-                  [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
-              </MarkdownBlock>
-              }
+                  <p><a href="docs/basics/introduction"><img src="img/doc_basic.png" alt="basics"/> Basics</a>
+                      <a href="docs/reference/introduction"><img src="img/doc_reference.png" alt="reference"/> Reference</a></p>
+                  }
             />
 
             <Card
               id="wallet-integration"
               title="Exchange & Wallet Integration"
               body={
-                <MarkdownBlock>
-                  [Integrate](docs/integrate/introduction) section provides first hand experience gained in integrating CKB into existing exchanges and wallets. [Reference](docs/reference/introduction) might also help you learn more about CKB specific behavior.
-             </MarkdownBlock>
+                  <p><a href="docs/integrate/introduction">Integrate</a> section provides first hand experience gained in integrating CKB into existing exchanges and wallets. <a href="docs/reference/introduction">Reference</a> might also help you learn more about CKB specific behavior.</p>
               }
               footer={
-                <MarkdownBlock>
-                  [![integrate](img/doc_integrate.png) Integrate](docs/integrate/introduction)
-                  [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
-              </MarkdownBlock>
-              }
+                  <p><a href="docs/integrate/introduction"><img src="img/doc_integrate.png" alt="integrate"/> Integrate</a>
+                      <a href="docs/reference/introduction"><img src="img/doc_reference.png" alt="reference"/> Reference</a></p>
+
+                  }
             />
           </div>
 
@@ -113,46 +96,37 @@ class Index extends React.Component {
               id="building-dapps"
               title="Building Dapps"
               body={
-                <MarkdownBlock>
-                  If you are developers who want to build dapps on CKB, [Labs](docs/labs/introduction) provides hands-on tutorials which you can follow. [Reference](docs/reference/introduction) also contains explanations for CKB concepts and specific blockchain behaviors.
-             </MarkdownBlock>
+                  <p>If you are developers who want to build dapps on CKB, <a href="docs/labs/introduction">Labs</a> provides hands-on tutorials which you can follow. <a href="docs/reference/introduction">Reference</a> also contains explanations for CKB concepts and specific blockchain behaviors.</p>
               }
               footer={
-                <MarkdownBlock>
-                  [![basics](img/doc_basic.png) Labs](docs/labs/introduction)
-                  [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
-              </MarkdownBlock>
-              }
+                  <p><a href="docs/labs/introduction"><img src="img/doc_basic.png" alt="basics" /> Labs</a>
+                      <a href="docs/reference/introduction"><img src="img/doc_reference.png" alt="reference" /> Reference</a></p>
+
+                  }
             />
 
             <Card
               id="clarification"
               title="Clarification"
               body={
-                <MarkdownBlock>
-                  As dapp developers, you might need clarifications on specific part from time to time, [Reference](docs/reference/introduction) will be your best friend on this topc.
-             </MarkdownBlock>
+                  <p>As dapp developers, you might need clarifications on specific part from time to time, <a href="docs/reference/introduction">Reference</a> will be your best friend on this topc.</p>
               }
               footer={
-                <MarkdownBlock>
-                  [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
-              </MarkdownBlock>
-              }
+                  <p><a href="docs/reference/introduction"><img src="img/doc_reference.png" alt="reference"/> Reference</a></p>
+                  }
             />
 
             <Card
               id="random-browsing"
               title="Random Browsing"
               body={
-                <MarkdownBlock>
-                  For users who are just browing to get a glimpse of CKB's design, or developers who want to learn one or two tips, [Essays](docs/essays/introduction) will provide all sorts of articles explaining CKB related topics. [Reference](docs/reference/introduction) might also be of interest since it aims to describe specific constructs in CKB.
-             </MarkdownBlock>
+                  <p>For users who are just browing to get a glimpse of CKB&#39;s design, or developers who want to learn one or two tips, <a href="docs/essays/introduction">Essays</a> will provide all sorts of articles explaining CKB related topics. <a href="docs/reference/introduction">Reference</a> might also be of interest since it aims to describe specific constructs in CKB.</p>
               }
               footer={
-                <MarkdownBlock>
-                  [![essays](img/doc_essay.png) Essays](docs/essays/introduction)
-                  [![reference](img/doc_reference.png) Reference](docs/reference/introduction)
-              </MarkdownBlock>
+                <p>
+                    <a href="docs/essays/introduction"><img src="img/doc_essay.png" alt="essays" />Essays</a>
+                    <a href="docs/reference/introduction"><img src="img/doc_reference.png" alt="reference" />Reference</a>
+                </p>
               }
             />
 
