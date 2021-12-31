@@ -1,6 +1,6 @@
 ---
 id: sudtbycapsule
-title: Write a SUDT script by Capsule
+title: Write an SUDT Script by Capsule
 ---
 
 ## Introduction
@@ -12,7 +12,7 @@ In this tutorial, you will learn how to write a SUDT script using Capsule. SUDT 
 We expect that:
 
 * You are Rust developers and generally familiar with software development, writing code, and running your code.
-* You are generally familiar with Nervos CKB and have completed the  [How to use a development blockchain](basics/guides/devchain.md)
+* You are generally familiar with Nervos CKB and have completed the [How to use a development blockchain](basics/guides/devchain.md)
 * You are open to learning about the bleeding edge of blockchain development
 
 If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/n6tx7uC). 
@@ -30,23 +30,23 @@ What you will be doing:
 
 You should be able to run a dev chain and know about how to use `ckb-cli` to send transactions.  If you do not, please refer to this tutorial：[How to use a development blockchain](basics/guides/devchain.md).  Please don't forget to add `ckb-cli` to the  PATH environment variable
 
-### Install capsule
+### Install Capsule
 
-To use capsule, you need `docker`. It is recommended to install the latest version:
+To use capsule, you need to install Docker. It is recommended to install the latest version of Docker:
 
-* [Install docker](https://docs.docker.com/get-docker/)
+* [Install Docker](https://docs.docker.com/get-docker/)
 
-Note: The current user must have permission to manage Docker instances. (How to manage Docker as a non-root user)[https://docs.docker.com/engine/install/linux-postinstall/].
+Note: The current user must have permission to manage Docker instances. For more information, see [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
 
-Now you can proceed to install capsule, It is recommended to [download the binary](https://github.com/nervosnetwork/capsule/releases/tag/v0.1.3)
+Now you can proceed to install Capsule. It is recommended to download the binary [here](https://github.com/nervosnetwork/capsule/releases).
 
-Or you can install from source:
+Or you can install Capsule from it's source:
 
 ```
 cargo install capsule --git https://github.com/nervosnetwork/capsule.git --tag v0.1.3
 ```
 
-Then check if it works with:
+Then check if it works with the following command:
 
 ```
 capsule check
