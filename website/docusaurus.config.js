@@ -72,11 +72,12 @@ module.exports = {
   plugins: [],
   themeConfig: {
     colorMode: {
-      defaultMode: "dark",
-      disableSwitch: true,
+      defaultMode: "light",
+      disableSwitch: false,
       respectPrefersColorScheme: false,
     },
     navbar: {
+      style: "dark",
       logo: {
         src: "img/logo.png",
       },

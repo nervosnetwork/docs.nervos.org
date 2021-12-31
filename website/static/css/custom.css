@@ -28,7 +28,7 @@
 }*/
 
 body {
-  font-family: "Lato", serif;
+  font-family: "Lato", sans-serif;
   letter-spacing: 0.2px;
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
@@ -253,7 +253,8 @@ article li {
 }
 
 .homeContainer .homeWrapper {
-  /*color: white;*/
+  color: white;
+  margin: auto;
   padding: 150px 0;
   display: flex;
   max-width: 1200px;
