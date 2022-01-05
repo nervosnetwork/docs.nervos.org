@@ -29,12 +29,12 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PERSONAL_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
           publish_dir: ./website/build
           # Assign commit authorship to the official GH-Actions bot for deploys to `gh-pages` branch:
           # https://github.com/actions/checkout/issues/13#issuecomment-724415212
           # The GH actions bot is used by default if you didn't specify the two fields.
           # You can swap them out with your own user credentials.
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          user_name: jiangxianliang007
+          user_email: op@nervos.org
