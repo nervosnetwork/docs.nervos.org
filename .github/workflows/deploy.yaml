@@ -1,6 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
+  # TODO: Temporarily try, the build should NOT be allowed in the PR
+  pull_request:
+    branches: [ develop ]
+    paths: [ website/** ]
   push:
     branches: [develop]
     paths: [website/**]
