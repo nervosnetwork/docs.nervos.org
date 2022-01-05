@@ -5,7 +5,7 @@ title: Basics Introduction
 
 The Basics section covers the most common essential topics relevant to users of all technical levels.
 
-Being familiar with blockchain technology is helpful, but it's not absolutely essential. Links to additional reading materials will provided along the way.
+Being familiar with blockchain technology is helpful, but it's not absolutely essential. Links to additional reading materials will be provided along the way.
 
 ## Concepts
 
