@@ -42,8 +42,8 @@ Then check if it works with:
 ```
 capsule check
 ```
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 ------------------------------
 docker    installed
@@ -59,8 +59,8 @@ ckb-cli    installed
 ```
 capsule new dynamic-loading-demo
 ```
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 New project "dynamic-loading-demo"
 Created file "capsule.toml"
@@ -273,8 +273,9 @@ let tx = TransactionBuilder::default()
 ```
 
 Run `capsule test`.
-<details>
-<summary>(click here to view response)</summary>
+
+<details><summary>(click here to view response)</summary>
+
 ```bash
 running 1 test
 consume cycles: 1808802

@@ -21,8 +21,8 @@ ckb --version
 ckb-cli --version
 ```
 
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 ckb 0.32.1 (9ebc9ce 2020-05-29)
 ckb-cli 0.32.0 (0fc435d 2020-05-22)
@@ -38,8 +38,8 @@ ckb-cli 0.32.0 (0fc435d 2020-05-22)
 ckb init --chain testnet
 ```
 
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 WARN: mining feature is disabled because of lacking the block assembler config options
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
@@ -52,10 +52,10 @@ create ckb-miner.toml
 **Step 3: Start the CKB Testnet node**
 
 ```
-ckb run
+<p>ckb run</p>
 ```
-<details>
-<summary>(click here to view response)</summary>
+<details><summary>(click here to view response)</summary>
+
 ```bash
 2020-06-05 18:23:10.086 +08:00 main INFO sentry  **Notice**: The ckb process will send stack trace to sentry on Rust panics. This is enabled by default before mainnet, which can be opted out by setting the option `dsn` to empty in the config file. The DSN is now https://dda4f353e15f4b62800d273a2afe70c2@sentry.nervos.org/4
 2020-06-05 18:23:10.172 +08:00 main INFO main  Miner is disabled, edit ckb.toml to enable it
