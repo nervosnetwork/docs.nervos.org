@@ -1,9 +1,6 @@
 name: Deploy to GitHub Pages
 
 on:
-  pull_request:
-    branches: [develop]
-    paths: [website/**]
   push:
     branches: [develop]
     paths: [website/**]
@@ -18,6 +15,7 @@ jobs:
         with:
           node-version: 14.x
           cache: yarn
+          cache-dependency-path: website/yarn.lock
       - name: Build website
         working-directory: website
         run: |
