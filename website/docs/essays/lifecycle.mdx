@@ -5,7 +5,7 @@ title: Transaction validation lifecycle
 
 Transactions are the most fundamental entities for interacting with Nervos CKB. When you interact with the CKB, you are submitting state transitions through transactions. This document will explain the lifecycle of CKB transaction validation.
 
-<img src="../assets/essay/lifecycle.png" width = "300"/>
+<img src={require("../assets/essay/lifecycle.png").default} width = "300"/>
 
 ##  Submit the transaction through RPC
 
@@ -81,7 +81,7 @@ If verification fails, the transaction is not broadcasted anymore. The transacti
 
 ## Tx-pool (mempool)
 
-<img src="../assets/essay/mempool.png" width = "600"/>
+<img src={require("../assets/essay/mempool.png").default} width = "600"/>
 
 CKB uses a two-step process for transaction confirmation. Transactions will be divided into different status (pending and proposed) in the tx-pool. The status of transactions will change when a block is added to the blockchain. When the latest block changes, all transactions in the tx-pool will be re-scanned to ensure they are still valid.
 

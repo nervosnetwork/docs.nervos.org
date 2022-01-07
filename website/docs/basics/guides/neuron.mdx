@@ -35,7 +35,7 @@ Download the latest release version of the Neuron Wallet from the [Neuron Wallet
 ## 2. Wait for the synchronization to end
 You can cross-check the `Block Number` with CKB-Explorer's `Latest Block` to make sure the synchronization to end.
 
-<img src="../../assets/neuron-wallet-guide/synchronize.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/synchronize.png").default} width = "600"/>
 
 ## 3. Create a new wallet or import existing keystore file or seed phrase to the Neuron Wallet
 
@@ -45,17 +45,17 @@ If you have already backup the wallet and have the keystore file (use the `Backu
 
 * Backup Current Wallet: 
 
-<img src="../../assets/neuron-wallet-guide/backupwallet.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/backupwallet.png").default} width = "600"/>
 
 - To import the mnemonic seed phrase, choose “Import Wallet Seed”, fill in your password and wait for synchronization to end. **The password does not need to match the original password from the Neuron Wallet.**
 
-<img src="../../assets/neuron-wallet-guide/importseed1.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/importseed1.png").default} width = "600"/>
 
   - To import the keystore file, choose “Import from Keystore” and input your password - Wait for synchronization to end. **The password must match the original password from the Neuron Wallet.**
 
-<img src="../../assets/neuron-wallet-guide/importkeystore.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/importkeystore.png").default} width = "600"/>
 
-<img src="../../assets/neuron-wallet-guide/keystorefile.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/keystorefile.png").default} width = "600"/>
 
 
 Congratulations, once the Neuron wallet is synced, you will have full access to your tokens! You can send  and receive CKBytes and deposit into the Nervos DAO.
@@ -66,15 +66,15 @@ You may claim your vesting or locked tokens by the latest version（v0.30.0-rc1 
 
 * View the details on "Customized Assets"
 
-<img src="../../assets/neuron-wallet-guide/viewlockedtoken.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/viewlockedtoken.png").default} width = "600"/>
 
 * Claim the vesting/locked tokens
 
 When the lock time has been reached，click `Claim` and input the wallet's password.
 
-<img src="../../assets/neuron-wallet-guide/claim.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/claim.png").default} width = "600"/>
 
-<img src="../../assets/neuron-wallet-guide/password.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/password.png").default} width = "600"/>
 
 ## 5. Deposit your Nervos CKByte tokens into Nervos DAO
 
@@ -84,9 +84,9 @@ The [economic model](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015
 
 - Open the Neuron Wallet (the latest version), select “Nervos DAO” and “Deposit”.
 
-<img src="../../assets/neuron-wallet-guide/deposit.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/deposit.png").default} width = "600"/>
 
-<img src="../../assets/neuron-wallet-guide/deposit2.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/deposit2.png").default} width = "600"/>
 
 ## 6. Withdraw your Nervos CKByte tokens from the Nervos DAO
 
@@ -94,9 +94,9 @@ The [economic model](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015
 
 You can click `Request withdraw` to withdraw your CKB.
 
-<img src="../../assets/neuron-wallet-guide/withdraw1.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/withdraw1.png").default} width = "600"/>
 
-<img src="../../assets/neuron-wallet-guide/withdraw2.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/withdraw2.png").default} width = "600"/>
 
 ## 7. Transfer CKBytes from the Neuron Wallet to other wallets and exchanges
 
@@ -106,7 +106,7 @@ You should have the third party wallet/exchange destination address. **Please ma
 
 - Under the “Send” tab, fill in the address details in the "Send to" field. Turn on the "Advanced fee settings" and fill in the "Transaction fee" — click  the "Send" button to complete your transfer.
 
-<img src="../../assets/neuron-wallet-guide/send.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/send.png").default} width = "600"/>
 
 ## 8. Manage the `Asset Account`
 
@@ -204,11 +204,11 @@ Issued sUDT transaction hash: 0x6b4458143b25e8aa37d36c1035f15e63e5051144685a4da2
 
 * Open `Asset Account` in Neuron Wallet, create a SUDT account.
 
-<img src="../../assets/neuron-wallet-guide/createsudt.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/createsudt.png").default} width = "600"/>
 
 You may fill `uuid` in `Token id`.
 
-<img src="../../assets/neuron-wallet-guide/tokeninfo.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/tokeninfo.png").default} width = "600"/>
 
 Please wait untill the transaction is successful. 
 
@@ -219,27 +219,27 @@ Please wait untill the transaction is successful.
 
    The following screenshots are examples for creating "Anyone-can-pay1"
 
-<img src="../../assets/neuron-wallet-guide/createckb1.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/createckb1.png").default} width = "600"/>
 
-<img src="../../assets/neuron-wallet-guide/ckbtokeninfo.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/ckbtokeninfo.png").default} width = "600"/>
 
 * Claim Testnet CKB for "Anyone-can-pay1" by [Nervos Aggron Testnet](https://faucet.nervos.org/)
     
     Get the address of "Anyone-can-pay1" and fill in [Nervos Aggron Testnet](https://faucet.nervos.org/).
 
-<img src="../../assets/neuron-wallet-guide/receiveckb.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/receiveckb.png").default} width = "600"/>
 
 * Transfer 1 CKB from "Anyone-can-pay1" to "Anyone-can-pay2"
 
-<img src="../../assets/neuron-wallet-guide/sendckb.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/sendckb.png").default} width = "600"/>
 
    Fill the address of "Anyone-can-pay2" in `Address`
 
-<img src="../../assets/neuron-wallet-guide/sendckb2.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/sendckb2.png").default} width = "600"/>
   
    The transfer is successful!
 
-<img src="../../assets/neuron-wallet-guide/successckb.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/successckb.png").default} width = "600"/>
 
 ## Troubleshooting
 
@@ -253,7 +253,7 @@ Note: The Neuron bundled CKB node requires [VC++ redistributable](https://suppor
 
 3. if it still doesn't work out, please join the [Support](https://discord.gg/n6tx7uC) channel, export debug information and send it.
 
-<img src="../../assets/neuron-wallet-guide/export.png" width = "600"/>
+<img src={require("../../assets/neuron-wallet-guide/export.png").default} width = "600"/>
 
 ## Important
 
