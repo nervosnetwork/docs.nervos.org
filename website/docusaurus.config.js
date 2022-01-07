@@ -57,7 +57,7 @@ module.exports = {
       "@docusaurus/preset-classic",
       {  
 		googleAnalytics: {
-          trackingID: 'G-XWR9LDJKW3',
+          trackingID: 'G-CPNK56S8G3',
           anonymizeIP: true,
         },
         docs: {
