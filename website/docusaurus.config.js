@@ -55,7 +55,11 @@ module.exports = {
   presets: [
     [
       "@docusaurus/preset-classic",
-      {
+      {  
+		googleAnalytics: {
+          trackingID: 'G-XWR9LDJKW3',
+          anonymizeIP: true,
+        },
         docs: {
           path: "./docs",
           showLastUpdateAuthor: true,
@@ -179,9 +183,6 @@ module.exports = {
       indexName: "nervos_ckbd",
       placeholder: "Search",
       algoliaOptions: {},
-    },
-    gtag: {
-      trackingID: "G-XWR9LDJKW3",
-    },
+    }
   },
 };
