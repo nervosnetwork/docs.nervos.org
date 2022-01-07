@@ -181,7 +181,7 @@ module.exports = {
       algoliaOptions: {},
     },
     gtag: {
-      trackingID: "UA-139882771-1",
+      trackingID: "G-XWR9LDJKW3",
     },
   },
 };
