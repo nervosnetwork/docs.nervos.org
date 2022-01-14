@@ -1,8 +1,8 @@
 {
-  "docs": {
-    "Basics": [
-      "basics/introduction",
-      {
+
+	"Basics": [
+		"basics/introduction",
+		{
         "type": "category",
         "label": "Concepts",
         "items": [
@@ -11,9 +11,9 @@
           "basics/concepts/consensus",
           "basics/concepts/economics",
           "basics/concepts/ckb-vm"
-        ]
-      },
-      {
+		]
+        },
+		{
         "type": "category",
         "label": "Guides",
         "items": [
@@ -26,29 +26,37 @@
           "basics/guides/ckb-on-windows"
 
         ]
-      },
-      "basics/tools",
-      "basics/glossary"
-    ],
-    "Reference": [
+		},
+		"basics/tools",
+		"basics/glossary"
+   ],
+
+
+	"Reference":[
       "reference/introduction",
       "reference/cell",
       "reference/script",
       "reference/transaction",
       "reference/rpc"
     ],
-    "Labs": [
+
+
+	"Labs":[
       "labs/introduction",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
       "labs/capsule-dynamic-loading-tutorial"
     ],
-    "Integrate": [
+
+
+	"Integrate":[
       "integrate/introduction",
       "integrate/qa",
       "integrate/sdk"
     ],
-    "Essays": [
+
+
+	"Essays":[
       "essays/introduction",
       "essays/developer-materials-guide",
       "essays/rfcs",
@@ -65,5 +73,5 @@
       "essays/mint-sudt-via-contract",
 	  "essays/pw-lock"
     ]
-  }
+
 }

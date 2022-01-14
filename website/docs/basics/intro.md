@@ -1,6 +1,6 @@
 ---
 id: introduction
-title: Basics Introduction
+title: Introduction
 ---
 
 The Basics section covers the most common essential topics relevant to users of all technical levels.

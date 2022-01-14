@@ -64,7 +64,7 @@ module.exports = {
           path: "./docs",
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
-          sidebarPath: "./sidebars.json",
+          sidebarPath: require.resolve("./sidebars.json"),
         },
         blog: {},
         theme: {
