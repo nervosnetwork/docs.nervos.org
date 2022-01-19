@@ -3,9 +3,13 @@ id: introduction
 title: Introduction
 ---
 
-In labs, we provide a series of hands-on programming tutorial, that helps you build a complete component in CKB quickly. Some examples of the labs section include:
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+import Link from "@docusaurus/Link";
+
+In the Labs section, we provide a series of hands-on programming tutorials, that help you build a complete component in CKB quickly. Some examples of the Labs section include:
 
 
-* How to [build](sudtbycapsule) a CKB script in Rust.
-* How to [build](lumos-nervosdao) a standalone CKB dapp in JavaScript.
-* How to [dynamic load](capsule-dynamic-loading-tutorial) a shared-library in Rust contract.
+* <Link to={useBaseUrl('/docs/labs/sudtbycapsule')}>How to build a CKB script in Rust</Link>.
+* <Link to={useBaseUrl('/docs/labs/lumos-nervosdao')}>How to build a standalone CKB DApp in JavaScript</Link>.
+* <Link to={useBaseUrl('/docs/labs/capsule-dynamic-loading-tutorial')}>How to load a shared-library in Rust contract dynamically.</Link>.
