@@ -22,3 +22,7 @@ A list of common tools used with Nervos, such as the Neuron Wallet, the CKB Expl
 ## Glossary
 
 A comprehensive list of terminology used in blockchain and cryptocurrency.
+
+## FAQ
+
+The FAQ section includes questions that are commonly asked by customers and cover topics including CKB address or layer 1, cell model, consensus and more.
