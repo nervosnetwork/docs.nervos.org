@@ -3,6 +3,10 @@ id: general
 title: General FAQ
 ---
 
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+import Link from "@docusaurus/Link";
+
 ### **Q**: Which consensus does Nervos use?
 
 **A**: Consensus refers to the consistent state of distributed network participants, in other words, the historical data and current ledger state of the blockchain that the nodes on the network agree on unanimously. The ledger state consists of records of user accounts and asset balances, such as the number of CKBytes and tokens they own. The consensus algorithm Nervos is using is called NC-MAX. NC-MAX is based on Proof of Work (PoW) and Nakamoto consensus (used by Bitcoin) and is an ambitious project as much as Nervos. It is a consensus solution with zero compromise in terms of security and decentralization, while maximizing the use of network bandwidth. After thoughtful considerations, Nervos believed Proof of Work (PoW) is the best solution.
@@ -41,7 +45,7 @@ More information is available at:
 
 **A**: SUDT is the abbreviation of Simple User Defined Token, which is equivalent to the ERC20 standard on Ethereum. It defines an easy-to-understand token standard, which contains the content that DApp developers need while minting their own tokens on Nervos CKB. You can check [SUDT RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md) for more details. For the method of writing and mining SUDT, please refer to the following documents:
 
-- Write an SUDT script by Capsule - Nervos CKB Docs:  https://docs.nervos.org/docs/labs/sudtbycapsule
-- Mint SUDT via Contract - Nervos CKB Docs: https://docs.nervos.org/docs/essays/mint-sudt-via-contract
+- <Link to={useBaseUrl('/docs/labs/sudtbycapsule')}>Write an SUDT script by Capsule</Link>
+- <Link to={useBaseUrl('/docs/essays/mint-sudt-via-contract')}>Mint SUDT via Contract</Link>
 
 ---
