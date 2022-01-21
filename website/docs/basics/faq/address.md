@@ -7,7 +7,7 @@ title: CKB Address
 
 **A**: [Here](https://github.com/rev-chaos/ckb-address-demo) is a demo in Python where you to see the cases for testing. Compared with the bitcoin address format bech32, CKB’s solution only differs in payload. They have the same programming scheme. For example, RFCs in Python demo have added Bitcoin's latest bech32m address format.
 
-[Here](https://codesandbox.io/s/ckb-address-transformer-524gi) is a Javascripot demo on Codebox, which shows how to transform addresses in different formats.
+[Here](https://codesandbox.io/s/ckb-address-transformer-524gi) is a JavaScript demo on Codebox, which shows how to transform addresses in different formats.
 
 ---
 
@@ -15,7 +15,11 @@ title: CKB Address
 
 **A**: Nervos’ desktop wallets Neuron, versatile command-line tool ckb-cli, and mobile/hardware wallets, like imToken and Safepal, support transfer funds out to full addresses. ckb-cli, web wallet ckb.pw, and DAS in-app wallet can generate full address and receive funds with it.
 
-You can test a full address that supports transfer to a full address on testnet with a minimum amount, for example, [ckt1qr6k6tltndf5kh09zl4p63wju9cejya9mangkkns3aaugkm6mm8tgq2vctn9ycsy4e4zar70ztm663e0gxskqm2mjcjta67jzhtcpqyldff9d38e4h6hpw6rvzjvtg29mtjjr69dzwpedzjdayled8ufjr2ln5reqgqqqqqqqqgpreg7](https://explorer.nervos.org/aggron/address/ckt1qr6k6tltndf5kh09zl4p63wju9cejya9mangkkns3aaugkm6mm8tgq2vctn9ycsy4e4zar70ztm663e0gxskqm2mjcjta67jzhtcpqyldff9d38e4h6hpw6rvzjvtg29mtjjr69dzwpedzjdayled8ufjr2ln5reqgqq). After transferring, you can check the transaction status on explorer.
+You can test a full address that supports transfer to a full address on testnet with a minimum amount.
+
+A full address example, [ckt1qr6k6tltndf5kh09zl4p63wju9cejya9mangkkns3aaugkm6mm8tgq2vctn9ycsy4e4zar70ztm663e0gxskqm2mjcjta67jzhtcpqyldff9d38e4h6hpw6rvzjvtg29mtjjr69dzwpedzjdayled8ufjr2ln5reqgqqqqqqqqgpreg7](https://explorer.nervos.org/aggron/address/ckt1qr6k6tltndf5kh09zl4p63wju9cejya9mangkkns3aaugkm6mm8tgq2vctn9ycsy4e4zar70ztm663e0gxskqm2mjcjta67jzhtcpqyldff9d38e4h6hpw6rvzjvtg29mtjjr69dzwpedzjdayled8ufjr2ln5reqgqq). 
+
+After transferring, you can check the transaction status on explorer.
 
 ---
 
@@ -36,6 +40,6 @@ In the latest version of Java SDK, you can use `AddressTools.ConvertToBech32mFul
 You can also use `AddressTools.ConvertToShortAddress` to convert secp, ACP and multi-sig script address of any format into short address, and  `ConvertToBech32FullAddress` to convert any address format to the old full address.
 For details about Java SDK, you may refer to: https://github.com/nervosnetwork/ckb-sdk-java.
 
-In the latest version (0.18.0-rc3) of Lumos, we provide a brand new API [`encodeToAddress`](https://github.com/nervosnetwork/lumos/pull/205)` `to generate the new full address format, while retaining the old API `generateAddres`*`s`* to generate an address. However, the `generateAddress` is going to be marked as deprecated, and we recommend that you can migrate to the new `encodeToAddress`. If users find out some platforms (e.g. Nervos Aggron Faucet) do not yet support the new address format, the old API can still be used. You can use `yarn add @ckb-lumos/lumos@next` to install if using the latest version of Lumos.
+In the latest version (0.18.0-rc3) of Lumos, we provide a brand new [`encodeToAddress`](https://github.com/nervosnetwork/lumos/pull/205) API to generate the new full address format, while retaining the old `generateAddress` API to generate an address. However, the `generateAddress` is going to be marked as deprecated, and we recommend that you can migrate to the new `encodeToAddress` API. If users find out some platforms (e.g. Nervos Aggron Faucet) do not yet support the new address format, the old API can still be used. You can use `yarn add @ckb-lumos/lumos@next` to install if using the latest version of Lumos.
 
 ---
