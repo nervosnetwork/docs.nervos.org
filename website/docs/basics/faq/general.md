@@ -12,6 +12,7 @@ Proof of Stake (PoS) is one of PoW's competitors. One advantage that PoS has is 
 Based on the Satoshi Nakamoto consensus of Bitcoin, NC-MAX significantly increases the transaction volume per second and reduces the confirmation time without affecting security or decentralization. Compared with Ethereum, Nervos currently provides 10 times the throughput growth, which is expected to increase exponentially with the development of Layer 2 solutions.
 
 Read more information: https://[docs.nervos.org/docs/basics/concepts/consensus](http://docs.nervos.org/docs/basics/concepts/consensus);
+
 More discussions on POS and POW: https://talk.nervos.org/t/pow-pos-discussion-in-history/5457
 
 ---
@@ -40,7 +41,7 @@ More information is available at:
 
 **A**: SUDT is the abbreviation of Simple User Defined Token, which is equivalent to the ERC20 standard on Ethereum. It defines an easy-to-understand token standard, which contains the content that DApp developers need while minting their own tokens on Nervos CKB. You can check [SUDT RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md) for more details. For the method of writing and mining SUDT, please refer to the following documents:
 
-- Write an SUDT script by Capsule · Nervos CKB Docs:  https://docs.nervos.org/docs/labs/sudtbycapsule
-- Mint SUDT via Contract · Nervos CKB Docs: https://docs.nervos.org/docs/essays/mint-sudt-via-contract
+- Write an SUDT script by Capsule - Nervos CKB Docs:  https://docs.nervos.org/docs/labs/sudtbycapsule
+- Mint SUDT via Contract - Nervos CKB Docs: https://docs.nervos.org/docs/essays/mint-sudt-via-contract
 
 ---
