@@ -28,7 +28,15 @@
         ]
 		},
 		"basics/tools",
-		"basics/glossary"
+		"basics/glossary",
+		{
+        "type": "category",
+        "label": "FAQ",
+        "items": [
+          "basics/faq/address",
+          "basics/faq/general"
+        ]
+		}
    ],
 
 
