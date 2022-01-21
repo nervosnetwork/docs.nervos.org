@@ -3,7 +3,7 @@ id: general
 title: General FAQ
 ---
 
-**Q**: Which consensus does Nervos use?
+### **Q**: Which consensus does Nervos use?
 
 **A**: Consensus refers to the consistent state of distributed network participants, in other words, the historical data and current ledger state of the blockchain that the nodes on the network agree on unanimously. The ledger state consists of records of user accounts and asset balances, such as the number of CKBytes and tokens they own. The consensus algorithm Nervos is using is called NC-MAX. NC-MAX is based on Proof of Work (PoW) and Nakamoto consensus (used by Bitcoin) and is an ambitious project as much as Nervos. It is a consensus solution with zero compromise in terms of security and decentralization, while maximizing the use of network bandwidth. After thoughtful considerations, Nervos believed Proof of Work (PoW) is the best solution.
 
@@ -17,7 +17,7 @@ More discussions on POS and POW: https://talk.nervos.org/t/pow-pos-discussion-in
 
 ---
 
-**Q**: What is CKByte?
+### **Q**: What is CKByte?
 
 **A**: CKByte is the token required for the use of the basic functions of the Nervos network. CKByte is the native token of the Nervos CKB blockchain, which can be redeemed for transaction fees, and is also a unit of CKB on-chain space. Possessing 1 CKByte means having 1 byte of storage capacity on CKB, i.e. ownership of 1 byte of a common knowledge base. Instead of cloud servers or general distributed storage, data stored in Common Knowledge Base has a higher value density as the data will be verified by permissionless global consensus and smart contracts throughout the network before being stored on countless nodes in the distributed network. Either the fungible token or non-fungible token, for example, is typical of data held in the common knowledge base.
 
@@ -37,7 +37,7 @@ More information is available at:
 
 ---
 
-**Q**: What is SUDT?
+### **Q**: What is SUDT?
 
 **A**: SUDT is the abbreviation of Simple User Defined Token, which is equivalent to the ERC20 standard on Ethereum. It defines an easy-to-understand token standard, which contains the content that DApp developers need while minting their own tokens on Nervos CKB. You can check [SUDT RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md) for more details. For the method of writing and mining SUDT, please refer to the following documents:
 
