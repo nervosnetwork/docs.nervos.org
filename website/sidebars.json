@@ -10,7 +10,8 @@
           "basics/concepts/cell-model",
           "basics/concepts/consensus",
           "basics/concepts/economics",
-          "basics/concepts/ckb-vm"
+          "basics/concepts/ckb-vm",
+          "basics/concepts/cryptowallet"
 		]
         },
 		{
@@ -23,8 +24,18 @@
           "basics/guides/neuron",
           "basics/guides/run-ckb-with-docker",
           "basics/guides/get-ckb",
-          "basics/guides/ckb-on-windows"
-
+          "basics/guides/ckb-on-windows",
+		  {
+			"type": "category",
+			"label": "Crypto Wallet",
+			"items": [
+			  "basics/guides/crypto wallets/neuron",
+			  "basics/guides/crypto wallets/imtoken",
+			  "basics/guides/crypto wallets/safepal",
+			  "basics/guides/crypto wallets/portalwallet",
+			  "basics/guides/crypto wallets/bitpie"
+			]
+		}
         ]
 		},
 		"basics/tools",
