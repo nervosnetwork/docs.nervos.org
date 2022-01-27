@@ -11,7 +11,7 @@ Portal Wallet (PW) currently supports the following wallets: [MetaMask](https://
 
 The Portal wallet is a superb alternative to Neuron Wallet by allowing users to use on the mobile phone. In addition, it does not require manual sync with a Mainnet node and supports a variety of wallets. Using Portal Wallet is quite simple. The user needs to possess at least one cryptocurrency account and at least one cryptocurrency wallet in use. On the Portal Wallet, users can check the Ethereum address and CKB address, view the balance, and lock the CKB in the Nervos DAO.
 
-**Note**: The wallet must have a minimum of **102** CKBs for a Nervos DAO deposit operation and **61** CKBs for a Nervos DAO withdraw operation.
+**Note**: The wallet must have a minimum of **102** CKBs for a Nervos DAO deposit operation and **61** CKBs for a Nervos DAO withdrawal operation.
 
 
 ## Use PW With MetaMask

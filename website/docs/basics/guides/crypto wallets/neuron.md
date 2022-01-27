@@ -92,7 +92,7 @@ To deposit CKB into Nervos DAO:
 
 ## Withdraw CKB from Nervos DAO
 
-**Note**: The wallet must have a minimum of **61** CKBs for a Nervos DAO withdraw operation.
+**Note**: The wallet must have a minimum of **61** CKBs for a Nervos DAO withdrawal operation.
 
 To withdraw CKB from Nervos DAO:
 
