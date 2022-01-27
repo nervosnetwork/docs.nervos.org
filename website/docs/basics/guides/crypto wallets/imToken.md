@@ -83,7 +83,7 @@ There is no problem transferring all CKBs from the account. In the case of a par
 
 ## Troubleshooting
 
-Network connection issue is a common cause for data sync failure, such as the problem that withdrawn assets is unreceived in imToken.
+Network connection issue is a common cause for data sync failure, such as the problem that withdrawn asset is unreceived in imToken.
 
 Try the following process to solve the problem:
 
