@@ -81,3 +81,13 @@ There is no problem transferring all CKBs from the account. In the case of a par
 
 **imKey** is a hardware wallet, or cold wallet. The imKey is used to protect privkeys and other confidential data of the user. imKey is integrated with the CC EAL 6+ security chip, fully compatible with all imToken 2.0 supported digital assets such as BTC, ETH, COSMOS and EROS. For more details and usage processes, refer to [imkey support](https://support.imkey.im/hc/en-us).
 
+## Troubleshooting
+
+Network connection issue is a common cause for data sync failure, such as the problem that withdrawn assets is unreceived in imToken.
+
+Try the following process to solve the problem:
+
+1. Upgrade imToken to the latest version.
+2. Set up a VPN on the phone.
+3. If it still doesn't work out, go to My Profile -> Settings -> Network Detection to check the network connection. Copy the detected information and send it to the imToken support team.
+

@@ -7,7 +7,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 
 **Portal Wallet** is a web wallet that runs directly in a browser. It is a dApp wallet that allows users to receive and send Nervos CKBs with existing Ethereum addresses and wallets. 
 
-Portal Wallet (PW) currently supports the following wallets: [MetaMask](https://metamask.io/), [imToken](https://token.im/), [Coinbase Wallet](https://wallet.coinbase.com/), [Opera](https://www.opera.com/), [ABC Wallet](https://abcwallet.com/), [Bitpie](https://bitpie.com/), [TokenPocket](https://www.tokenpocket.pro/), [AlphaWallet](https://alphawallet.com/).
+Portal Wallet (PW) currently supports the following wallets: [MetaMask](https://metamask.io/), [imToken](https://token.im/), [Huobi Wallet](https://www.huobiwallet.com/en/), [BitKeep](https://bitkeep.org/), [Coinbase Wallet](https://wallet.coinbase.com/), [Opera](https://www.opera.com/), [ABC Wallet](https://abcwallet.com/), [Bitpie](https://bitpie.com/), [TokenPocket](https://www.tokenpocket.pro/), [AlphaWallet](https://alphawallet.com/).
 
 The Portal wallet is a superb alternative to Neuron Wallet by allowing users to use on the mobile phone. In addition, it does not require manual sync with a Mainnet node and supports a variety of wallets. Using Portal Wallet is quite simple. The user needs to possess at least one cryptocurrency account and at least one cryptocurrency wallet in use. On the Portal Wallet, users can check the Ethereum address and CKB address, view the balance, and lock the CKB in the Nervos DAO.
 

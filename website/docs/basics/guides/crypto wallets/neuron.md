@@ -11,9 +11,9 @@ Neuron Wallet is bundled with a CKB Mainnet node and configured to connect to th
 
 ## Install Neuron Wallet
 
-Download and install the latest version of the Neuron Wallet from the [Neuron Wallet releases page](https://github.com/nervosnetwork/neuron/releases) on Github. 
+Download and install the latest version of Neuron Wallet from the [Neuron Wallet releases page](https://github.com/nervosnetwork/neuron/releases) on Github. 
 
-**Note**: Make sure the version is the latest.
+**Note**: Install the latest version of Neuron Wallet. For Windows versions before Windows 10, the latest [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) must be installed before installing Neuron Wallet.
 
 ## Set Up a Neuron Wallet
 
@@ -58,13 +58,13 @@ After the Neuron wallet is synced, full access to the tokens of the wallet is av
 
 ## Transfer CKB from Neuron Wallet to Other Wallets or Exchanges
 
-**Note**: Make sure the balance of the wallet is more than **61** CKBs.
+**Note**: The wallet must have a minimum of **61** CKBs for a transfer operation.
 
 To transfer CKB:
 
-1. Fill in the **Send to** field with the address details of the third party wallet or exchange on the **Send** page.
+1. Fill in the **Send to** field with the address of the third party wallet or exchange on the **Send** page.
 
-2. Enable **Advanced fee settings** and fill in the transaction fee.
+2. Use the default fee settings or change the fee settings in **Advanced fee settings**.
 
 3. Click the **Send** button.
 
@@ -74,7 +74,7 @@ To transfer CKB:
 
 ## Deposit CKB into Nervos DAO
 
-**Note**: Make sure the balance of the wallet is more than 102 CKBs.
+**Note**: The wallet must have a minimum of **102** CKBs for a Nervos DAO deposit operation.
 
 The economic model of Nervos CKB is designed to allow token holders to lock their tokens in Nervos DAO to mitigate the inflationary effect of the secondary issuance. In this case, the inflationary effect of the secondary issuance is expected to be nominal and equivalent to holding tokens with a hard cap.
 
@@ -92,9 +92,11 @@ To deposit CKB into Nervos DAO:
 
 ## Withdraw CKB from Nervos DAO
 
+**Note**: The wallet must have a minimum of **61** CKBs for a Nervos DAO withdraw operation.
+
 To withdraw CKB from Nervos DAO:
 
-1. Choose the deposit that you want to withdraw from the deposits list and click the **withdraw** button.
+1. Choose the deposit that you want to withdraw from the deposits list and click the **Withdraw** button.
 
    <img src={useBaseUrl("img/wallet/neuron_06.png")} width="60%"/>
 
@@ -272,17 +274,15 @@ CKB accounts can be used for anyone-can-pay cells and support any amount of paym
 
 ## Troubleshooting
 
-**Sync failed, please check network.  or Sync is slow.**
+Try the following process to solve the sync failure "Sync failed, please check network, or Sync is slow.":
 
-To fix the issue:
-
-1. Quit and restart Neuron several times.
+1. Quit and restart Neuron.
 
    **Note**: Neuron is bundled with a CKB node that requires [VC++ redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) on Windows to work properly. 
 
 2. Run a CKB Mainnet node of version v0.32.0 or later instead of running the Neuron bundled node. 
 
-3. If it still doesn't work out, please join the [Support](https://discord.gg/n6tx7uC) channel and export the debug information, and send it to the support group for further investigation.
+3. If it still doesn't work out, please join the [Support](https://discord.gg/TfC9rExfHh) channel and export the debug information, and send it to the support group for further investigation.
 
    <img src={useBaseUrl("img/wallet/neuron_19.png")} width="60%"/>
 
