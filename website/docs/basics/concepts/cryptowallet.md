@@ -14,11 +14,11 @@ A crypto wallet is a software program or physical device that keeps your private
 A crypto wallet consists of a collection of key pairs. Each key pair consists of a private key and a public key corresponding to an address. The public key is similar to a bank account number and the private key is similar to the secret PIN that provides control over the account. 
 The public key is generated from the private key by a one-way cryptographic function. The wallet address is generated from the public key by a one-way cryptographic hash function. The wallet address is human-readable and is used for sending and receiving cryptocurrencies. The keys and addresses establish the ownership of cryptocurrencies. 
 
-## **Types of Crypto Wallets**
+## Types of Crypto Wallets
 
 There are two main categories of crypto wallets, hot and cold wallets, which are defined by the internet connectivity. Hot wallets are internet-connected, less secure, and pose more risk, but are user-friendly. Cold wallets, on the other hand, are stored offline, do not require an internet connection, with higher security and lower risk.
 
-### **Hot Wallets**
+### Hot Wallets
 
 Hot wallets are basically internet-connected wallets that offer a higher level of user-friendliness. Hot wallets are easy to set up and have fast access to assets.
 
@@ -36,7 +36,7 @@ The three main types of hot wallets are:
 
   Mobile wallets are also one of the crucial cryptocurrency wallet categories in hot wallets. Functioning similarly to desktop wallets, users must install a mobile application on their phone to serve as a wallet. Mobile wallets bring better flexibility for exchanging funds, but there are also some security risks. Mobile wallets, such as the [Blockchain.com](http://blockchain.com/) wallet, allow users to store cryptocurrencies, send/receive transactions, and "scan" the privkey of an existing wallet into the app by scanning a QR code.
 
-### **Cold Wallets**
+### Cold Wallets
 
 **Cold wallets** are types of crypto wallets used for cold storage. These wallets store the cryptos in an offline mode and offer better security. Cold wallets are always a secure option compared to other wallets, as these act as a vault for daily transactions.
 
