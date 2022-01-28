@@ -13,17 +13,13 @@ To set up a CKB wallet:
 
 2. Open Bitpie, and click **Create Wallet**.
 
-   <img src={useBaseUrl("img/bitpie_01.png")}/>
+   <img src={useBaseUrl("img/wallet/bitpie_01.png")} width="30%"/>
 
 3. Click **Noticed, start to backup** to back up the seed phrase.
 
-   :::note
+   **Note**: Do **not** reveal the seed phrase or take a picture of it. Keep the seed phrase offline.
 
-   Do **not** reveal the seed phrase or take a picture of it. Keep the seed phrase offline.
-
-   :::
-
-   <img src={useBaseUrl("img/bitpie_02.png")}/>
+   <img src={useBaseUrl("img/wallet/bitpie_02.png")} width="30%"/>
 
 4. Click **I know it** on the pop-up window to confirm NOT to reveal the seed phrase to anyone. 
 
@@ -39,10 +35,10 @@ To set up a CKB wallet:
 
 10. Confirm the PIN code and click **OK**.
 
-11. Choose CKB from the selection list to add CKB asset. 
+11. Choose **CKB** from the selection list to add CKB asset. 
 
-    <img src={useBaseUrl("img/bitpie_03.png")}/>
+    <img src={useBaseUrl("img/wallet/bitpie_03.png")} width="30%"/>
 
-12. Choose CKB on the Choose Wallet System page.
+12. Choose CKB on the **Choose Wallet System** page.
 
-    <img src={useBaseUrl("img/bitpie_04.png")}/>
+    <img src={useBaseUrl("img/wallet/bitpie_04.png")} width="30%"/>

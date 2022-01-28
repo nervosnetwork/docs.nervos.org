@@ -11,7 +11,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 
 1. Download and install [imToken.](https://token.im)
 
-2. Open imToken, click `Create Identity` and confirm `Terms of Service`.
+2. Open imToken, click **Create Identity** and confirm **Terms of Service**.
 
 3. Enter the identity name and the password to create an account. 
 
@@ -21,13 +21,13 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 
    <img src={useBaseUrl("img/wallet/imtoken_02.png")} width="30%"/> 
 
-5. Click `Backup Wallet` under `manage the identity wallet` to back up the mnemonic phrase. 
+5. Click **Backup Wallet** under **Manage your identity wallet** to back up the mnemonic phrase. 
 
-   Note: Never give the phrase away; otherwise, your coins will be at risk. 
+   **Note**: Never give the phrase away; otherwise, your coins will be at risk. 
 
-   The mnemonic phrase consists of 12 random words. Write them down in a safe place by order. These mnemonic words are required when restoring the wallet. Once the words have been written down, select `Confirmed Backup`.
+   The mnemonic phrase consists of 12 random words. Write them down in a safe place by order. These mnemonic words are required when restoring the wallet. Once the words have been written down, select **Confirmed Backup**.
 
-6. Confirm the phrase has been well noted. Choose the word in the correct order, and click `Next`. Now the wallet has been successfully configured.
+6. Confirm the phrase has been well noted. Choose the word in the correct order, and click **Next**. Now the wallet has been successfully configured.
 
 ### Transfer CKB
 
@@ -49,7 +49,7 @@ To transfer CKB:
 
    <img src={useBaseUrl("img/wallet/imtoken_05.jpg")} width="30%"/>
 
-6. Once the payment is confirmed, the transaction will be broadcast to the network. Click on `Query Details` to see the on-chain confirmation status of the transaction. The on-chain information can be found on the [Nervos Explorer](https://explorer.nervos.org/).
+6. Once the payment is confirmed, the transaction will be broadcast to the network. Click on **Query Details** to see the on-chain confirmation status of the transaction. The on-chain information can be found on the [Nervos Explorer](https://explorer.nervos.org/).
 
    <img src={useBaseUrl("img/wallet/imtoken_06.jpg")} width="30%"/>
 
@@ -61,9 +61,9 @@ To transfer CKB:
 
 To receive CKB:
 
-1. Click **CKB** to enter the CKB Wallet
+1. Click **CKB** to enter the CKB Wallet.
 
-2. Click the CKB balance that is visible under the Assets section.
+2. Click the CKB balance that is visible under the **Assets** section.
 
 3. Click **Receive**.
 
@@ -73,13 +73,13 @@ To receive CKB:
 
 ## A Word to Note
 
-As the unique Cell model of CKB, there are several things to be aware of for CKB transfers. CKB has a **minimum** transfer amount of **61 CKB**s, which means that the transfer amount **cannot be less than** 61 CKBs **excluding** the fee or miner fee.
+As the unique Cell model of CKB, there are several things to be aware of for CKB transfers. CKB has a **minimum** transfer amount of **61** CKBs, which means that the transfer amount **cannot be less than** 61 CKBs **excluding** the fee or miner fee.
 
 There is no problem transferring all CKBs from the account. In the case of a partial transfer of CKB, if the account balance is less than 61 CKBs, it is impossible to make any future transfers. If the balance is equal to 61, transfers will also be impossible. For an account balance less than 61, the wallet will indicate that the transfer does not meet the required amount or will directly report an error when transferring. Due to the minimum transfer amount requirement, ensure that the account balance is at least 62 CKBs so that the full amount can be transferred the next time. 
 
 ## imKey
 
-**imKey** is a hardware wallet, or cold wallet. The imKey is used to protect privkeys and other confidential data of the user. imKey is integrated with the CC EAL 6+ security chip, fully compatible with all imToken 2.0 supported digital assets such as BTC, ETH, COSMOS and EROS. For more details and usage processes, refer to [imkey support](https://support.imkey.im/hc/en-us).
+**imKey** is a hardware wallet, or cold wallet. The imKey is used to protect privkeys and other confidential data of the user. imKey is integrated with the CC EAL 6+ security chip, fully compatible with all imToken 2.0 supported digital assets such as BTC, ETH, COSMOS and EROS. For more details and usage processes, see [imkey support](https://support.imkey.im/hc/en-us).
 
 ## Troubleshooting
 

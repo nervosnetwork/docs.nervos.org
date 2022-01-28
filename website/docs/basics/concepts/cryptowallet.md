@@ -44,11 +44,11 @@ There are two main types of cold wallets, paper wallets and hardware wallets:
 
 - **Paper Wallets**
 
-Paper wallet is nothing but a physical piece of paper. This paper must contain all the data a user needs to access the cryptocurrency.
+  Paper wallet is nothing but a physical piece of paper. This paper must contain all the data a user needs to access the cryptocurrency.
 
 - **Hardware Wallets**
 
-Hardware wallets store private keys on a physical device in an offline environment. It can be connected to a computer or other device effortlessly by using a USB drive. When the device is connected to the internet, the private key remains on the device. The device will request transaction details and provide verification for the data to complete the transaction. The transaction details are sent to the network where the transaction is logged. Trezor and Ledger are among the popular hardware wallets available today.
+  Hardware wallets store private keys on a physical device in an offline environment. It can be connected to a computer or other device effortlessly by using a USB drive. When the device is connected to the internet, the private key remains on the device. The device will request transaction details and provide verification for the data to complete the transaction. The transaction details are sent to the network where the transaction is logged. Trezor and Ledger are among the popular hardware wallets available today.
 
 ## Benefits of Using Crypto Wallets
 
@@ -70,7 +70,7 @@ Wallets that provide custody and security services to CKB include:
 
 <img src={useBaseUrl("img/wallet/wallet_01.png")}/>
 
-For more information, see the guides of <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/neuron')}>Neuron Wallet</Link>, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/imtoken')}>imToken & imKey</Link>, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/safepal')}>SafePal</Link>, Portal Wallet, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/bitpie')}>Bitpie</Link>.
+For more information, see the guides of <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/neuron')}>Neuron Wallet</Link>, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/imtoken')}>imToken & imKey</Link>, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/safepal')}>SafePal</Link>, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/portalwallet')}>Portal Wallet</Link>, <Link to={useBaseUrl('/docs/basics/guides/crypto wallets/bitpie')}>Bitpie</Link>.
 
 ## CKB Addresses
 
@@ -88,19 +88,15 @@ The following two address formats have been deprecated:
 
 A new full address format is supported now. Both the community and partners in the Nervos ecosystem are encouraged to migrate to the new full address format.
 
-Example: 
-
-```
-ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4
-```
+Example: `ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`
 
 For more information, see [RFC: CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md). 
 
 Here are three solutions for CKB address generation and transformation:
 
 - [CKB.tools](https://ckb.tools/): allow the parsing or generating of deprecated addresses for applications that do not yet support the new full address format, such as the faucet.
-- Lumos Page ([CKB Lumos](https://main--boring-euler-1b5fa4.netlify.app/tools/)): can be used to generate new full addresses
-- [Codesandbox](https://codesandbox.io/s/ckb-address-transformer-524gi): can be used to convert a deprecated address into a new full addresses and vice versa.
+- Lumos Page ([CKB Lumos](https://main--boring-euler-1b5fa4.netlify.app/tools/)): can be used to generate new full addresses.
+- [ckb-address-transformer](https://codesandbox.io/s/ckb-address-transformer-524gi): can be used to convert a deprecated address into a new full address and vice versa.
 
 ## Minimum Requirements of a CKB Transfer
 

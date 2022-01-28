@@ -19,35 +19,39 @@ The Portal wallet is a superb alternative to Neuron Wallet by allowing users to 
 To use PW with MetaMask:
 
 1. Open [ckb.pw](http://ckb.pw) in a browser that has installed the MetaMask wallet extension. Type the password to log in to the MetaMask.
-<img src={useBaseUrl("img/wallet/pw_01.png")} width="50%"/>
-<img src={useBaseUrl("img/wallet/pw_02.png")} width="30%"/>
+
+  <img src={useBaseUrl("img/wallet/pw_01.png")} width="50%"/>
+
+  <img src={useBaseUrl("img/wallet/pw_02.png")} width="30%"/>
 
 2. A MetaMask connection request will automatically pop up. Choose the address desired for login.
 
    <img src={useBaseUrl("img/wallet/pw_03.png")} width="30%"/>
-3. Sign the Authorised Signature, click Connect to open the Portal Wallet in the browser.
-<img src={useBaseUrl("img/wallet/pw_04.png")} width="30%"/>
-<img src={useBaseUrl("img/wallet/pw_05.png")} width="40%"/>
 
-It is simple to use Portal Wallet. One needs to have at least one crypto account and have at least one cryptocurrency wallet in use. Users can check Ethereum addresses and CKB addresses, view the balance and lock CKB in the Nervos DAO on Portal Wallet.
+3. Sign the **Authorised Signature**, then click **Connect** to open the Portal Wallet in the browser.
+  <img src={useBaseUrl("img/wallet/pw_04.png")} width="30%"/>
 
-The Portal wallet is a superb alternative to Neuron Wallet, which allows users to use on mobile phones. In addition, it does not require manual sync with the Mainnet node and supports a variety of wallets.
+  <img src={useBaseUrl("img/wallet/pw_05.png")} width="40%"/>
 
 ## Receive Payments
 
+To receive payments:
+
 1. Choose CKB and click **Receive** on the home page.
 
-   <img src={useBaseUrl("img/wallet/pw_06.png")} width="30%"/>
+   <img src={useBaseUrl("img/wallet/pw_06.png")} width="40%"/>
 
-   <img src={useBaseUrl("img/wallet/pw_07.png")} width="30%"/>
+   <img src={useBaseUrl("img/wallet/pw_07.png")} width="40%"/>
 
-2. Two addresses will appear, ETH *address* and CKB *address*.<img src={useBaseUrl("img/wallet/pw_08.png")} width="30%"/>
+2. Two addresses will appear, ETH *address* and CKB *address*.
 
-   <img src={useBaseUrl("img/wallet/pw_09.png")} width="30%"/>
+   <img src={useBaseUrl("img/wallet/pw_08.png")} width="40%"/>
+
+   <img src={useBaseUrl("img/wallet/pw_09.png")} width="38%"/>
 
    The address needs to be modified depending on where to receive payments:
 
-   - To receive funds from **another** **Portal Wallet**, click **ETH address** on the left.
+   - To receive funds from **another Portal Wallet**, click **ETH address** on the left.
    - To transfer from **other wallets or exchanges** to Portal Wallet, click **CKB address** on the right.
 
 Portal Wallet currently supports multi-chain addresses, users can transfer payments to each other using CKB addresses, Ether addresses, ENS, etc., in Portal Wallet. However, other wallets/exchanges are less supported at the moment, so it is necessary to align the receiving address with where the payment is to be made.
@@ -75,7 +79,7 @@ Portal Wallet has a fee-setting function that allows users to customize the fee 
 
 Transfer fee for CKB = transaction size * exchange rate
 
-The minimum fee rate on the CKB is 1000 Shannon/KB (1 Shannon = 10<sup>8</sup>  CKB).
+The minimum fee rate on CKB is 1000 Shannon/KB (1 Shannon = 10<sup>8</sup>  CKB).
 
 ## Add a Transfer Note
 

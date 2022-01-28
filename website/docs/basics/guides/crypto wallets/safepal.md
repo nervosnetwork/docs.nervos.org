@@ -58,6 +58,7 @@ To add another existing wallet simply tap on the **+** icon.
 ### Add CKB to Asset List
 
 SafePal lists 5 coins by default on the Asset page. 
+
 To add CKB to Asset list:
 
 1. Enter CKB in the **Search** bar.
@@ -66,7 +67,7 @@ To add CKB to Asset list:
 
 2. Add **CKB (Nervos)** to the list.
 
-   Note: The search results show such tokens as **CKB (Godwoken)**, **CKB(ERC20)** and **CKB(BEP20)**, all of which serve different purposes here. Do NOT add them to the asset list.
+   **Note**: The search results show such tokens as **CKB (Godwoken)**, **CKB(ERC20)** and **CKB(BEP20)**, all of which serve different purposes here. Do NOT add them to the asset list.
 
    <img src={useBaseUrl("img/wallet/safepal_07.png")} width="30%"/>
 
