@@ -36,6 +36,8 @@ These materials are recommended for all developers who want to develop Dapps or 
 * [Video Lecture: Dapps with CKB Workshop - Lecture 1: Introduction (English)](https://youtu.be/6nYyYikSZj0)
 * [Video Lecture: Dapps with CKB Workshop - Lecture 1: Introduction (Chinese + English Subtitles)](https://youtu.be/iVjccs3z5q0)
 * [Nervos YouTube - Programming CKB Part 1](https://www.youtube.com/watch?v=HyYXzEIdF90)
+* [Nervos YouTube - Programming CKB Part 2](https://www.youtube.com/watch?v=Co-rzOhwuHs)
+* [Nervos YouTube - Programming CKB Part 3](https://www.youtube.com/watch?v=13w6Wvu9ff0)
 
 ### Available When You Need Them (Optional)
 
@@ -48,11 +50,11 @@ These materials are much more in-depth, but only relevant for specific topics. W
 
 ## Section 3: Developer Tooling
 
-Learn about the tools that are available for developing on Nervos. 
+Learn about the tools that are available for developing on Nervos.
 
 ### Recommended Tooling
 
-These are the recommended tools for developing on Nervos CKB. 
+These are the recommended tools for developing on Nervos CKB.
 
 * [Capsule](https://github.com/nervosnetwork/capsule) - A framework for developing on-chain smart contracts in Rust and C.
     * [Documentation](https://github.com/nervosnetwork/capsule/wiki)
@@ -100,7 +102,7 @@ These are smart contract scripts written in C and Rust. For most developers we r
 * [Simple UDT Type Script (C)](https://github.com/nervosnetwork/ckb-miscellaneous-scripts/blob/master/c/simple_udt.c)
 * [Token Sale Lock Script (Rust + Capsule)](https://github.com/jordanmack/token-sale)
     * [Documentation](https://github.com/jordanmack/token-sale/blob/master/README.md)
-    * [Video Tutorial: Understanding the Token Sale Lock Script (English)](https://youtu.be/ysUbx4FAKlE) 
+    * [Video Tutorial: Understanding the Token Sale Lock Script (English)](https://youtu.be/ysUbx4FAKlE)
 * [Anyone Can Pay Lock Script (C)](https://github.com/nervosnetwork/ckb-anyone-can-pay/blob/master/c/anyone_can_pay.c)
 * [Open Transaction Lock Script (C)](https://github.com/nervosnetwork/ckb-miscellaneous-scripts/blob/master/c/open_transaction.c)
     * [Nervos Talk - Open Transaction Four Part](https://talk.nervos.org/t/open-tx-protocol-brainstorm-1-otx-in-general/4010)[Brainstorm](https://talk.nervos.org/t/open-tx-protocol-brainstorm-1-otx-in-general/4010)
