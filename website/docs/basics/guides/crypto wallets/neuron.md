@@ -51,7 +51,7 @@ To import a keystore file:
 1. Select **Import from Keystore**.
 2. Enter the password, then wait for the sync to complete.
 
-### Await for the Sync to Complete
+### Await the Sync to Complete
 
 The **Block Number** can be cross-checked with the **Latest Block** on the [CKB Explorer](https://explorer.nervos.org/) page to ensure that the sync is completed.
 

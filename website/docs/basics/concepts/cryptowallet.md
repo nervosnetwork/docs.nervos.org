@@ -60,7 +60,7 @@ There are two main types of cold wallets, paper wallets and hardware wallets:
 
 - Low transaction fees. The cost of transferring funds is much lower than with traditional banks.
 
-- Access to multiple cryptocurrencies. One of the benefits of utilizing a well-known cryptocurrency wallet is that having many cryptocurrency alternatives to choose from. It facilitates the ease of the crypto conversion whilst reducing risk and increasing the total profit potential.
+- Access to multiple cryptocurrencies. One of the benefits of utilizing a well-known cryptocurrency wallet is having many cryptocurrency alternatives to choose from. It facilitates the ease of the crypto conversion whilst reducing risk and increasing the total profit potential.
 
 ## CKB Wallets
 
