@@ -45,8 +45,7 @@
         "label": "FAQ",
         "items": [
           "basics/faq/general",
-          "basics/faq/address",
-          "basics/faq/mercury"
+          "basics/faq/address"
         ]
 		}
    ],
