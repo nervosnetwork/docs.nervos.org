@@ -25,7 +25,7 @@ Nervos CKB (Common Knowledge Base) is a layer 1 blockchain, a decentralized and 
 
 A Cell has three fields：
 
-* `capacity`: Capacity servers 2 purposes: on one hand, it represents the amount of CKB tokens stored in the cell, on the other hand, it also sets the limit on how much information the cell can store. The basic unit for capacity is `shannon`, a bigger unit `CKByte`, or just `CKB` is also used. 1 CKB equals `10**8` shannons, 1 CKB also means the cell can store 1 byte of information. See below for how to calculate the total information size of a cell.
+* `capacity`: Capacity serves 2 purposes: on one hand, it represents the amount of CKB tokens stored in the cell, on the other hand, it also sets the limit on how much information the cell can store. The basic unit for capacity is `shannon`, a bigger unit `CKByte`, or just `CKB` is also used. 1 CKB equals `10**8` shannons, 1 CKB also means the cell can store 1 byte of information. See below for how to calculate the total information size of a cell.
 * `lock script`: A script used to guard the cell: when the specified cell is used as an input cell in a transaction, the lock script included in a cell will be executed. The transaction will be rejected when the lock script fails in execution. One typical use case for lock script, is to represent the ownership of a cell, meaning a signature verification phase is usually included in the cell.
 * `type script`: A script used to validate cell structure. The type script of a cell will be executed both when the cell is included as an input cell, as well as when the cell is created as an output cell. Due to this nature, type script is typically used to validate dapp logic, such as creating UDTs.
 
@@ -39,7 +39,7 @@ In addition to the above fields, each cell also contains a cell data field. Cell
 * Token amount for User Defined Token cells.
 * Latest game stats for an on-chain fantasy game.
 
-For future potential, cell data is not stored directly in a cell. It is kepted in [transaction#data-structure] directly. You might find a field named `outputs_data` in each transaction. This array should have the same length with `outputs`. At each index location, the corresponding cell data could be located for each created output cell in the transaction. Conceptually, we still consider cell data as part of each output cell.
+For future potential, cell data is not stored directly in a cell. It is kept directly in the [Transaction](transaction.md#data-structure). You might find a field named `outputs_data` in each transaction. This array should have the same length with `outputs`. At each index location, the corresponding cell data could be located for each created output cell in the transaction. Conceptually, we still consider cell data as part of each output cell.
 
 ### Cell information size calculation
 
