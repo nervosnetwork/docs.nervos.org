@@ -13,8 +13,14 @@ title: Glossary
 
 ## General Glossary
 
+
+### Account
+A kind of basic object in distributed ledger used to keep the balance and other information of users.
+
+---
+
 ### Address
-A shorthand name for Payment Address.
+A label consists of string of letters and numbers that anonymously represents user's identity on chain. Crypto assets can be sent to and/or from addresses.
 
 #### Synonyms
 - [Payment Address](#payment-address)
@@ -22,7 +28,7 @@ A shorthand name for Payment Address.
 ---
 
 ### Asset
-A shorthand name for digital asset.
+A piece of data that has value or that represents an entity having value.
 
 #### Synonyms
 - [Digital Asset](#digital-asset)
@@ -31,7 +37,7 @@ A shorthand name for digital asset.
 ---
 
 ### Block
-A record in the blockchain that contains and confirms transactions.
+A grouping of transactions, marked with a timestamp, and a fingerprint of the previous block. The block header is hashed to produce a proof of work, thereby validating the transactions. Valid blocks are added to the main blockchain by network consensus.
 
 #### See Also
 - [Blockchain](#blockchain)
@@ -41,9 +47,7 @@ A record in the blockchain that contains and confirms transactions.
 ---
 
 ### Block Height
-The block height is the total number of blocks that have been confirmed on the blockchain.
-
-This term can also used to refer to identify a single unique block when specifying a specific block height since there is always exactly one block at any block height.
+Block height is the total number of blocks that have been confirmed on the blockchain, also used to identify a unique block when specifying a particular block height, as there is always an exact block at any block height.
 
 #### Synonyms
 - [Height](#height)
@@ -56,7 +60,7 @@ This term can also used to refer to identify a single unique block when specifyi
 ---
 
 ### Block Interval
-The approximate amount of time between between the creation of two blocks in a blockchain.
+Also known as Block time. block interval is the length of time it takes to create a new block in a cryptocurrency blockchain. Block interval is the measure of the time it takes the miners or validators within a network to verify transactions within one block and produce a new block in that blockchain. The block interval is variable on Nervos blockchain.
 
 On Bitcoin blockchain the block interval is approximately every 10 minutes. On the Nervos blockchain the block interval is variable, but normally under 10 seconds.
 
@@ -70,7 +74,9 @@ On Bitcoin blockchain the block interval is approximately every 10 minutes. On t
 ---
 
 ### Block Propagation
-The process of synchronizing a new block to the majority of full nodes in the network.
+The process of synchronizing a new block to the majority of full nodes in the network. Block propagation is a well-known bottleneck that prevents Bitcoin from scaling. 
+
+Block propagation time is an average time that is needed for the new block to reach the majority of nodes in the network. Long block propagation delay reduces the node's resistance against 51% attacks.
 
 #### Synonyms
 - [Propagation](#propagation)
@@ -83,7 +89,7 @@ The process of synchronizing a new block to the majority of full nodes in the ne
 ---
 
 ### Block Reward
-A payment that is made in the native currency of the blockchain that is paid to to miners for providing the computational resources create a block and secure the blockchain.
+The amount of cryptocurrency credited to a miner's account after the miner successfully adds a block of transactions to the blockchain. The amount of CKBytes credited to a miner's account after the miner successfully adds a block to CKB.
 
 #### See Also
 - [Block](#block)
@@ -100,10 +106,17 @@ A alternate name for Block Interval.
 ---
 
 ### Blockchain
-An immutable data structure that where each subsequent block of data is cryptographically linked to the previous blocks. This creates a chain like structure where none of the historical data can be altered without causing a validation error.
+A data structure maintaining a growing list of records, organized as a chain of blocks. Each block, apart from the first one, is cryptographically linked to the previous block, thus creating a chain-like structure. 
+
+The cryptographic link ensures any party with the last block can verify that none of the historical data is modified after the creation of this block.
 
 #### See Also
 - [Block](#block)
+
+---
+
+### BLS signature
+A cryptographic signature scheme for signing and verification. BLS is short for Boneh–Lynn–Shacham.
 
 ---
 
@@ -117,7 +130,7 @@ A message that is sent to all nodes in a blockchain network.
 ---
 
 ### Capacity
-The maximum amount of space (in bytes) that a Cell can occupy on the Nervos blockchain.
+The maximum space (in bytes) that a Cell can occupy on the Nervos CKB.
 
 #### Synonyms
 - [CKByte](#ckbyte)
@@ -131,24 +144,27 @@ The maximum amount of space (in bytes) that a Cell can occupy on the Nervos bloc
 ---
 
 ### Cell
-A simple structure used hold a piece of state or data on the Nervos CKB.
-
-A Cell is similar in concept to a Bitcoin UTXO.
+All data on the Nervos CKB is stored in the cells. Cells are the primary state units in CKB, within them users can include arbitrary states. A cell has 4 fields: capacity, data, type and lock.
 
 #### Synonyms
 - [Micro-State](#micro-state)
 
 #### See Also
+- [Capacity](#capacity)
+- [Data](#data)
 - [Dead Cell](#dead-cell)
 - [Live Cell](#live-cell)
 - [Nervos CKB](#nervos-ckb)
+- [Lock](#lock)
 - [Cell Model in Key Concepts](/key-concepts/cell-model)
 - [UTXO on Bitcoin.org](https://bitcoin.org/en/glossary/unspent-transaction-output)
 
 ---
 
 ### Cell Model
-A representation of how state is managed on Nervos CKB.
+A representation of how state is managed on Nervos CKB. The Cell model is a more generic state model compared to the UTXO or Account model. 
+
+Cell Model is a new construction that can provide many of the benefits of the Account model (utilized in Ethereum), while preserving the asset ownership and proof-based verification properties of the UTXO model (utilized in Bitcoin).
 
 #### See Also
 - [Lock Script](#lock-script)
@@ -195,15 +211,18 @@ CKByte is also sometimes shortened to CKB. Exchanges often use CKB as the ticker
 ---
 
 ### CKB-VM
-The virtual machine used to execute Scripts on Nervos CKB.
-
-The instruction set of CKB-VM is RISC-V.
+CKB VM is a crypto-agnostic virtual machine, a RISC-V instruction set based VM for executing both on-chain and off-chain code.
 
 #### See Also
 - [Nervos CKB](#nervos-ckb)
 - [RISC-V](#risc-v)
 - [Script](#script)
 - [Virtual Machine on Wikipedia](https://en.wikipedia.org/wiki/Virtual_machine)
+
+---
+
+### Code Hash
+A field in a cell which contains a hash value that can refer to a specific piece of data, or a specific cell referenced by Type ID.
 
 ---
 
@@ -223,6 +242,21 @@ A wallet that is used to secure assets offline. This wallet is permanently disco
 #### See Also
 - [Cold Storage](#cold-storage)
 - [Wallet](#wallet)
+
+---
+
+### Commit
+NC-Max consensus consists of two phases: propose and commit. Commit is the process of including a valid proposed transaction into a new block.
+
+---
+
+### Commit-Chain
+A scheme that enables the off-chain processing of transactions by one or more operators with on-chain state update commitments that do not contain per-transaction data.
+
+---
+
+### Commit Reward
+A reward paid to miners in CKBytes on inclusion of previously proposed transactions.
 
 ---
 
@@ -261,6 +295,12 @@ Owning a CKByte entitles the holder to store one byte of data on the Nervos CKB.
 - [Shannon](#shannon)
 
 ---
+
+### censorship-resistant
+Censorship resistance in blockchain generally means that it is difficult for a malicious party to prevent the blockchain from confirming a set of transactions generated by honest users.
+
+---
+
 ### Confirmation
 A process where a transaction has been accepted and verified by the network and included in a block.
 
@@ -272,7 +312,7 @@ A process where a transaction has been accepted and verified by the network and 
 ---
 
 ### Consensus
-Consensus is a state of agreement between the participants (nodes) of a decentralized network.
+An algorithm executed among a number of distributed participants, ensuring that all participants faithfully executing this algorithm can reach agreement on some data value even if the other participants are faulty or malicious.
 
 #### See Also
 - [Full Node](#full-node)
@@ -280,8 +320,22 @@ Consensus is a state of agreement between the participants (nodes) of a decentra
 
 ---
 
+
+### Consume
+The process of using a live cell as an input to a transaction. The consumption processes indicate that live cell turns into dead cell.
+
+---
+
+### Contract Account
+An account containing code that executes automatically whenever it receives an event from another account.
+
+#### See Also
+- [Account](#account)
+
+---
+
 ### Cryptocurrency
-Digital currency that relies on mathematics and cryptography to secure funds and facilitate transfers from one party to another.
+A cryptocurrency is a digital or virtual currency that is secured by blockchain and cryptography, which makes it nearly impossible to counterfeit or double-spend.
 
 #### See Also
 - [Digital Currency](#digital-currency)
@@ -290,7 +344,7 @@ Digital currency that relies on mathematics and cryptography to secure funds and
 ---
 
 ### Cryptographic Signature
-A concise piece of proof data which is used to prove that the creator of the signature has ownership of a specific private key by "signing" a unique piece of data. This signing process proves ownership of the private keys without revealing the private keys.
+A concise piece of proof data. Cryptographic signature schemes are a fundamental component of cryptocurrency networks that verify the integrity and non-repudiation of transaction messages across the network.
 
 #### Synonyms
 - [Private Key](#private-key)
@@ -299,7 +353,7 @@ A concise piece of proof data which is used to prove that the creator of the sig
 ---
 
 ### Cryptography
-The study and practice of using mathematics to secure communications and information.
+Cryptography is the practice and study of techniques for secure communication in the presence of adversarial behavior.
 
 #### See Also
 - [Cryptography at Wikipedia](https://en.wikipedia.org/wiki/Cryptography)
@@ -307,7 +361,7 @@ The study and practice of using mathematics to secure communications and informa
 ---
 
 ### Cycles
-The number of RISC-V computational cycles required by a script to execute.
+The number of RISC-V computational cycles required by a script to execute. 
 
 This is a similar concept to Ethereum's Gas.
 
@@ -319,19 +373,37 @@ This is a similar concept to Ethereum's Gas.
 ---
 
 ### DAO
-Short for Decentralized Autonomous Organization. A DAO is an organization run by the rules of a computer program. A DAO is controlled by stakeholders, and may not have a physical location, therefore reducing the influence of governments.
+A decentralized autonomous organization (DAO) is an organization represented by rules encoded as a computer program that is transparent, controlled by the organization members and not influenced by a centralized entity, in other words they are member-owned communities without centralized leadership. A DAO's financial transaction record and program rules are maintained on a blockchain.
 
 #### See Also
 - [DAO on Wikipedia](https://en.wikipedia.org/wiki/Decentralized_autonomous_organization)
 
 ---
 
-### Decentralization
-The process of spreading the responsibility and ownership between multiple parties in order to mitigate the risks associated with a single party being in control.
+### DApp
+Decentralized application. At a minimum, it is a smart contract and a web user interface. More broadly, a DApp is a web application that is built on top of open, decentralized, peer-to-peer infrastructure services. In addition, many DApps include decentralized storage and/or a message protocol and platform.
 
+---
+
+### Data
+In cell model, data is a field in Cell which can store arbitrary bytes.
+
+#### See Also
+- [Cell](#cell)
+- [Cell Model](#cell-model)
+
+---
+
+### Decentralization
+In blockchain, decentralization refers to the transfer of control and decision-making from a centralized entity (individual, organization, or group thereof) to a distributed network.
 #### See Also
 - [Distributed](#distributed)
 - [Decentralization on Wikipedia](https://en.wikipedia.org/wiki/Decentralization)
+
+---
+
+### DeFi
+Short for "decentralized finance," a broad category of dapps aiming to provide financial services backed by the blockchain, without any intermediaries, so anyone with an internet connection can participate.
 
 ---
 
@@ -363,9 +435,7 @@ A system where components are spread across multiple nodes to parallelize worklo
 ---
 
 ### Double Spend
-A double spend is a fraudlent action where a cryptocurrency token is spent in two places at once, effectively allowing the attacker to spend more tokens than they actually own.
-
-The potential for a double spend is based on network synchronization delays. These problems are automatically resolved over time, which is why most blockchains set guidelines on the minimum number of confirmations that should be accumulated before considering a transaction final.
+Double-spending is the risk that a digital token is spent twice or more. In the context of blockchain, it happens when the transaction spending a digital token is cancelled after confirmation, and the same token is spent in another transaction.
 
 #### See Also
 - [Confirmation](#confirmation)
@@ -376,30 +446,44 @@ The potential for a double spend is based on network synchronization delays. The
 ---
 
 ### Epoch
-An epoch is a period of time for a set of blocks.
+An epoch is a period of time for a set of blocks. 
 
-In Nervos an epoch is approximately four hours.
+In Nervos, the PoW difficulty changes on new epoch. All the blocks in the same epoch share the same difficulty target. The difficulty adjustment algorithm tries to stabilize orphan block rate at 2.5% and epoch duration at 4 hours.
 
 #### See Also
 - [Block](#block)
 
 ---
 
+### Fee
+The sender of a transaction often includes a fee to the network for processing the requested transaction. There's no minimum fee rate set in consensus, but there's a de facto minimum fee rate 1000 Shannon/KB in CKB's p2p network. (1 Shannon = 10^-8 CKB)
+
+#### See Also
+- [Feerate on RFC in Nervos Network Github](https://github.com/nervosnetwork/ckb/tree/develop/rpc#error-poolrejectedtransactionbyminfeerate)
+
+---
+
 ### First-Class Assets
-A unique property of CKB wherein ownership of a Cell, and the data contained within, is not assigned by the issuer, developer, or smart contract. The user owns the cell and is responsible for costs associated with state rent.
+Assets that 1. the asset itself (rather than a reference to the asset) can be passed directly in smart contract interactions, and 2. directly controlled by owners without any intermediaries. 
 
 #### See Also
 - [Cell](#cell)
 - [Cell Model](#cell-model)
 - [State Rent](#state-rent)
-- [First-Class Asset on the Nervos Network Blog](https://medium.com/nervosnetwork/first-class-asset-ff4feaf370c4)
+- [First-Class Asset on the Nervos Network Blog](https://medium.com/nervosnetwork/the-smart-contract-risk-in-defi-c28e53b92f03)
+- [Introduction to First-Class Asset](https://talk.nervos.org/t/first-class-asset/1293)
+
+---
+
+### Fork
+A change in protocol causing the creation of an alternative chain, or a temporal divergence in two potential block paths during mining.
 
 ---
 
 ### Fungible Token
-Any token where every unit has identical characteristics and is interchangeable with other tokens of the same type.
+A fungible token can be fiat currencies like the dollar or a cryptocurrency like Bitcoin. 
 
-Fungible tokens represent the vast majority of cryptocurrencies.
+Fungible tokens or assets are divisible and non-unique.
 
 #### See Also
 - [Non-Fungible Token](#non-fungible-token)
@@ -408,18 +492,45 @@ Fungible tokens represent the vast majority of cryptocurrencies.
 
 ---
 
+### Full Address
+An address format used on Nervos that includes the full code hash of the lock script associated.
+
+#### See Also
+-[Address](#address)
+
+---
+
 ### Full Node
-A node that contains a complete copy of the entire blockchain history.
+A trust minimized node that independently verifies and stores a complete copy of the entire blockchain history.
 
 #### Synonyms
 - [Node](#node)
 
 ---
 
-### Hardware Wallet
-A cryptocurrency wallet that uses a physical hardware component to store private keys. These devices are permanently disconnected from the internet and typically interface with computers only for specific activities such as sending funds.
+### Full Payload Format
+The deprecated full payload format directly encodes all data field of lock script. The encode rule of deprecated full payload format is Bech32.
 
-A hardware wallet is a form of cold wallet.
+#### See Also
+-[Lock Script](#lock-script)
+
+---
+
+### Gas Limit
+The maximum amount of gas a transaction or block may consume.
+
+#### See Also
+- [Gas on the Ethereum Wiki](https://github.com/ethereum/wiki/wiki/Glossary)
+
+---
+
+### Hard-Fork
+A permanent divergence in the blockchain; also known as a hard-forking change. One commonly occurs when nonupgraded nodes can’t validate blocks created by upgraded nodes that follow newer consensus rules. Not to be confused with a fork, soft fork, software fork, or Git fork.
+
+---
+
+### Hardware Wallet
+A hardware wallet is a form of cold wallet. A hardware wallet is a cryptocurrency wallet that stores the user's private keys (a critical piece of information used to authorize outgoing transactions on the blockchain network) in a secure hardware device.
 
 #### See Also
 - [Cold Storage](#cold-storage)
@@ -429,8 +540,13 @@ A hardware wallet is a form of cold wallet.
 
 ---
 
+### Hash
+A fixed-length fingerprint of variable-size input, produced by a hash function.
+
+---
+
 ### Hash Rate
-A measure of the speed at which a computer is able to complete cryptographic operations. These operations are known as "hashing", and are often measured in hashes per second.
+Hash rate is a measure of the computational power per second used when mining. These operations are known as "hashing".
 
 #### See Also
 - [Miner](#miner)
@@ -447,9 +563,7 @@ A shorthand name for block height.
 ---
 
 ### Light Client
-A type of node software with much lower resource requirements than a full node. A light client allows for the most common basic functions, but does not have advanced functionality.
-
-Light clients do not contain a copy of the full blockchain or full state. They typically rely on full nodes in the network in order to operate.
+As a low-resource node, a light client allows users to sync with a blockchain in a cryptographically secure manner without having to store the whole blockchain.
 
 #### See Also
 - [Blockchain](#blockchain)
@@ -476,11 +590,21 @@ The name of the Nervos CKB Mainnet is Lina.
 ---
 
 ### Mempool
-A shorthand name for memory pool. A "waiting area" on full nodes for transactions that have been broadcasted to the network but have not yet been confirmed on the blockchain.
+Short for "memory pool". A waiting area on full nodes for transactions that have been broadcasted to the network but have not yet been confirmed on the blockchain.
 
 #### See Also
 - [Confirmation](#confirmation)
 - [Transaction](#transaction)
+
+---
+
+### Metadata
+Metadata is data that provides information about other data. Capacity, type and lock in cells are metadata, they occupy cell capacity and incur a state cost as well.
+
+#### See Also
+- [Capacity](#capacity)
+- [lock](#lock)
+- [Cell](#cell)
 
 ---
 
@@ -498,7 +622,7 @@ On Nervos, micro-state is represented by a Cell.
 ---
 
 ### Miner
-A miner is a computer that provides computing power to validate transactions and create the blocks in the blockchain.
+A network node that finds valid proof of work for new blocks, by repeated hashing.
 
 #### See Also
 - [Block](#block)
@@ -515,7 +639,7 @@ Another term for transaction fee.
 ---
 
 ### Mining
-The practice of providing computational power to validate transactions and create blocks in the blockchain in exchange for a mining reward.
+Mining is the process by which a blockchain node get new token reward by verifying new transactions, finding valid proof of work and creating new blocks.
 
 #### See Also
 - [Block](#block)
@@ -525,8 +649,20 @@ The practice of providing computational power to validate transactions and creat
 
 ---
 
+### Mining Node
+Nodes participate in the CKB consensus process. Mining nodes collect new transactions, package them into blocks and produce new blocks when they have found a Proof-of-Work.
+
+#### See Also
+- [Block](#block)
+- [Consensus](#consensus)
+- [Miner](#miner)
+- [Mining](#mining)
+- [Proof Of Work](#proof-of-work)
+
+---
+
 ### Mining Reward
-Native tokens that are paid to a miner in exchange for providing the computational resources required for mining.
+Native tokens paid to miners as a reward for providing the necessary computing resources for mining.
 
 #### See Also
 - [Miner](#miner)
@@ -535,10 +671,13 @@ Native tokens that are paid to a miner in exchange for providing the computation
 
 ---
 
-### Native Token
-A token type which is used for paying fees and rewards on a public blockchain. This token is often unique as it is the only token that must exist on the blockchain in order to operate.
+### Multisig
+The term multisig stands for multi-signature, which is a specific type of digital signatures that can be created through the combination of multiple unique signatures.
 
-On Nervos the native token is the CKByte.
+---
+
+### Native Token
+The token issued as reward to a blockchain's consensus nodes. Nervos CKB's native token is CKByte.
 
 #### See Also
 - [CKByte](#ckbyte)
@@ -547,11 +686,12 @@ On Nervos the native token is the CKByte.
 ---
 
 ### NC-MAX
-The consensus algorithm used on the Nervos blockchain.
+Nervos CKB's consensus algorithm, which follows NC's backbone protocol. The main innovation here is a two-step transaction confirmation mechanism
 
 #### See Also
 - [Consensus](#consensus)
 - [Nervos Blockchain](#nervos-blockchain)
+- [NC-MAC](https://eprint.iacr.org/2020/1101)
 
 ---
 
@@ -575,13 +715,15 @@ The layer 1 blockchain of the Nervos Network known as the Common Knowledge Base.
 ---
 
 ### Nervos DAO
-A system that allows users to lock CKBytes for a period of time to earn rewards from Secondary Issuance. This process is similar to staking on other platforms.
+Nervos DAO enable users to lock CKBytes to get compensation from Nervos CKB secondary issuance. This process is similar to staking on other platforms. Nervos DAO provides a "virtual hardcap" for CKByte holders to insulate them from inflation.
 
 #### See Also
 - [CKByte](#ckbyte)
 - [DAO](#dao)
 - [Secondary Issuance](#secondary-issuance)
 - [Nervos DAO Explained on the Nervos Blog](https://medium.com/nervosnetwork/nervos-dao-explained-95e33898b1c)
+- [Nervos DAO in RFC on Nervos Network Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md)
+- [Inflation Rate Chart](https://explorer.nervos.org/charts/inflation-rate)
 
 ---
 
@@ -595,7 +737,7 @@ A measurement of the total computational processing power which is dedicated to 
 ---
 
 ### Node
-A computer that is running the blockchain node software, which allows them to participate in the blockchain's peer to peer network.
+A software client that participates in the network.
 
 #### Synonyms
 - [Full Node](#full-node)
@@ -605,10 +747,17 @@ A computer that is running the blockchain node software, which allows them to pa
 
 ---
 
-### Non-Fungible Token
-Any token where every unit within the same type can have different characteristics, making each token unique.
+### Nonce
+In cryptography, a value that can only be used once. Nonce can refer to two things in blockchain context: 1. a proof-of-work nonce is the random value in a block satisfying the proof of work requirement; 2. an account nonce is a transaction counter in each account, which is used to prevent replay attacks.
 
-Non-fungible tokens are often used for digital representation of unique real-world items, such as real-estate.
+#### See Also
+- [Block](#block)
+- [Proof Of Work](#proof-of-work)
+
+---
+
+### Non-Fungible Token
+Non-fungible tokens or NFTs are cryptographic assets on a blockchain with unique identification codes and metadata that distinguish them from each other.
 
 #### See Also
 - [Fungible Token](#fungible-token)
@@ -643,19 +792,25 @@ A form of storing a recovery phrase or private keys offline by printing them on 
 ---
 
 ### Payment Address
-A string of letters and numbers that cryptocurrency and assets can be sent to and from.
+A string of letters and numbers that cryptocurrency and assets can be sent to and from. 
 
-Nervos addresses always begin with the letters "ckb" and are 46 characters in length.
-
-A payment address is designed to be shared with others, similar to an email address.
+Nervos CKB mainnet addresses always begin with the prefix "ckb".
 
 #### Synonyms
 - [Address](#address)
 
 ---
 
+### Payment Channel
+A micropayment channel or payment channel is class of techniques designed to allow users to make multiple payment transactions without committing all of the transactions to the layer 1 blockchain. In a typical payment channel, only two transactions are added to the block chain but an unlimited or nearly unlimited number of payments can be made between the participants.
+
+#### See Also
+- [Layer 1](#layer-1)
+
+---
+
 ### Peer to Peer
-A type of network where the nodes communicate directly with each other instead of going through an intermediary centralized server.
+A peer-to-peer (P2P) service is a decentralized platform whereby two individuals interact directly with each other, without intermediation by a third party.
 
 #### Synonyms
 - [P2P](#p2p)
@@ -666,9 +821,9 @@ A type of network where the nodes communicate directly with each other instead o
 ---
 
 ### Proof of Work
-A type of consensus algorithm that requires high computational resources in order to produce answers to cryptographic puzzles in return for a mining reward paid in native tokens.
+PoW asks users to solve a cryptographic puzzle to prove ownershipo of a certain amount of computational resource to participate in the consensus. In general PoW is a more permissionless consensus mechanism than PoS. 
 
-These answers used to produce blocks and process transactions in a public blockchain. The computational difficulty itself is the basis for security in the public blockchain because it is extremely costly to replicate.
+In contrast to wildly spread misconception, PoW is not a "waste" of energy and does not induce more carbon emission. PoW is used in the Nervos layer 1 blockchain CKB.
 
 #### See Also
 - [Block](#block)
@@ -680,7 +835,7 @@ These answers used to produce blocks and process transactions in a public blockc
 ---
 
 ### Proof of Stake
-A type of consensus algorithm where the participants of the network cast votes to reach agreement on the creation of blocks and processing of transactions. The strength of each vote is weighted by the amount of native token owned by the voter.
+PoS asks users to prove ownership of a certain amount of cryptocurrency (their “stake” in the network) in order to be able to participate in the consensus. PoS relies on weak-subjectivity due to unsolvable issues like long-range attack. In PoS system the future consensus quorum is decided by existing participants completely. PoS is used in layer 2 protocols on Nervos Network.
 
 #### See Also
 - [Consensus](#consensus)
@@ -699,9 +854,7 @@ A shorthand name for Block Propagation.
 ---
 
 ### Private Key
-A string of letters and numbers that is used to prove ownership of cryptocurrency or digital assets, allowing them to be sent to other payment addresses. A private key is normally stored in a wallet.
-
-A private key must be kept secret at all times. A private key works similarly to a key to a safe containing your cryptocurrency. Anyone with the key has the ability to open the safe and take the contents.
+A private key, also known as a secret key, is a variable in cryptography, known only to the owner(s) of the key, that is used with an algorithm to encrypt and decrypt data.
 
 #### See Also
 - [Digital Asset](#digital-asset)
@@ -716,6 +869,27 @@ A node which contains only part of the blockchain history.
 
 #### See Also
 - [Node](#node)
+
+---
+
+### Public Key
+A notion used only in public-key cryptography, a.k.a. asymmetric cryptography. A public key is a piece of information that can be known to others without compromising security. Unique for each user, a public key is associated with a private key known only to the user. The public key can be used to encrypt a message so that it can only be decrypted with the corresponding private key, or to verify that a message is authorized by the user with the corresponding private key.
+
+#### See Also
+-[Private Key](#private-key)
+
+---
+
+### Reward
+An amount of CKBytes included in each new block as a reward by the network to the miner who found the proof-of-work solution.
+
+#### See Also
+- [Base Reward](#base-reward)
+- [Block Reward](#block-reward)
+- [Commit Reward](#commit-reward)
+- [Mining Reward](#mining-reward)
+- [Proposal Reward](#proposal-reward)
+- [Secondary Reward](#secondary-reward)
 
 ---
 
@@ -739,11 +913,26 @@ A shorthand name for cryptographic signature.
 
 ---
 
+### Smart Contract
+A smart contract is a self-executing contract with the terms of the agreement between contract creators and contract users being directly written into lines of code. The code and the agreements contained therein exist across a distributed, decentralized blockchain network. Also known as script on Nervos CKB. 
+
+---
+
 ### State
 Data stored on the blockchain. In most contexts this this means current data and excludes historical data.
 
 #### See Also
 - [Blockchain](#blockchain)
+
+---
+
+### State Bloat
+The unlimited increase of state data in Ethereum. State bloat slows down node synchronization, raises the barrier of full node, thus hurts network decentralization.
+
+---
+
+### State Channel 
+A layer 2 solution where a channel is set up between participants, where they can transact freely and cheaply. Only a transaction to set up the channel and close the channel is sent to mainnet. This allows for very high transaction throughput, but does rely on knowing number of participants up front and locking up of funds.
 
 ---
 
@@ -783,7 +972,7 @@ The most recent block to be confirmed in a blockchain. The tip block has the hig
 ---
 
 ### Transaction
-An entry in the blockchain that describes any change in state. 
+Transaction is the basic object created and signed by users to interact with distributed ledger. Transactions update ledger state at users requests. A CKB transaction destroys some outputs created in previous transactions and creates some new outputs. We call the transaction output a cell in CKB.
 
 #### See Also
 - [Blockchain](#blockchain)
@@ -805,7 +994,7 @@ A fee which is paid in the native token to miners in exchange for processing a t
 ---
 
 ### Token
-A single unit of information used to facilitate a transaction on a blockchain.
+A “token” often refers to non-native token on smart contract platform, such as UDT on Nervos Network or ERC20 on Ethereum.
 
 #### See Also
 - [Blockchain](#blockchain)
@@ -814,8 +1003,13 @@ A single unit of information used to facilitate a transaction on a blockchain.
 
 ---
 
+### Turing Complete 
+Turing Complete refers to a machine that, given enough time and memory along with the necessary instructions, can solve any computational problem, no matter how complex. The term is normally used to describe modern programming languages as most of them are Turing Complete (C++, Python, JavaScript, etc.).
+
+---
+
 ### UDT
-An abbreviation for User-Defined Token.
+Short for User-Defined Token, a customised token created with properties defined by the user. In normal usage, this most commonly refers to fungible tokens.
 
 #### Synonyms
 - [User-Defined Token](#user-defined-token)
@@ -863,7 +1057,7 @@ A User-Defined Token is usually referred to by its abbreviation, UDT.
 ---
 
 ### Wallet
-A piece of software used to manage a user's private keys and payment addresses. A wallet allows a user to send and receive cryptocurrency payments. Some wallets also incorporate functionality to manage digital assets.
+User-facing software used to interact with on-chain entities such as assets, smart contracts and dapps. A wallet can include key management itself or delegate key management to external hardware for improved security.
 
 #### See Also
 - [Paper Wallet](#paper-wallet)
@@ -876,9 +1070,10 @@ A piece of software used to manage a user's private keys and payment addresses. 
 ## Economics Glossary
 
 ### Base Issuance
-The creation of new CKBytes through temporary inflation that is paid to miners through Base Rewards.
+### Base Inssuance
+Base Issuance is the basic CKByte issuance with a fixed and decreasing schedule. Base issuance is awarded to miners as incentives to protect the network and also as an indirect token distribution method.
 
-Base Issuance is paid for by using a fixed and decreasing inflation schedule. Approximately every four years the amount is halved until eventually stopping when the cap of 33.6 billion CKBytes have been issued.
+Base issuance is limited to a finite total supply 33.6G (33.6 billion) CKBytes. 
 
 #### See Also
 - [Base Reward](#base-reward)
@@ -890,9 +1085,7 @@ Base Issuance is paid for by using a fixed and decreasing inflation schedule. Ap
 ---
 
 ### Base Reward
-A subsidy paid to miners in CKBytes for providing the compute and storage requirements required for processing transactions and persisting data on Nervos.
-
-Base Rewards are created from Base Issuance and will decrease over time until eventually ending.
+Base reward is the block reward (in CKBytes) to miners generated from the base issuance. Base reward halves approximately every 4 years until eventually reaching 0, like Bitcoin.
 
 #### See Also
 - [Base Issuance](#base-issuance)
@@ -913,8 +1106,13 @@ A reward paid to miners in CKBytes for committing a previously proposed transact
 
 ---
 
+### Economic Abstraction
+With proper tool support users can use tokens other than CKByte (for example, stable coins) to pay transactions fees, a concept known as "Economic Abstraction".
+
+---
+
 ### Fiat Currency
-Fiat currency is a form of money that has no intrinsic value. The value of fiat currency is derived from the support of the governing body that maintains it, and by the agreed value by parties that transact with it.
+Fiat currencies are a medium of exchange established as money, often by government regulation. Fiat money does not have intrinsic value and does not have use value. It has value only because a government maintains its value, or because parties engaging in exchange agree on its value.
 
 #### See Also
 - [Cryptocurrency](#cryptocurrency)
@@ -941,7 +1139,7 @@ The ability for an asset to be bought or sold easily without causing a significa
 ---
 
 ### Proposal Reward
-A reward paid to miners in CKBytes for proposing an unconfirmed transaction. After the transaction has been proposed it becomes eligible to be committed.
+A reward paid to miners in CKBytes for proposing an unconfirmed transaction.
 
 #### See Also
 - [CKByte](#ckbyte)
@@ -952,9 +1150,7 @@ A reward paid to miners in CKBytes for proposing an unconfirmed transaction. Aft
 ---
 
 ### Secondary Issuance
-The creation of new CKBytes through limited and decreasing inflation that is paid to miners through Secondary Rewards.
-
-Secondary Issuance follows a fixed inflation schedule of 1.344 billion CKBytes per year. This amount does not change. Unlike Base Issuance, Secondary Issuance does not affect everyone on the network. It is a small and targeted inflation from users that occupy space on Nervos or hold their CKBytes outside of the Nervos DAO.
+The creation of new CKBytes that is paid to miners through secondary rewards. Secondary issuance follows a fixed inflation schedule of 1.344 billion CKBytes per year. Nervos DAO stakers are not affected by secondary issuance.
 
 #### See Also
 - [Base Issuance](#base-issuance)
@@ -969,13 +1165,21 @@ Secondary Issuance follows a fixed inflation schedule of 1.344 billion CKBytes p
 ### Secondary Reward
 A subsidy paid to miners in CKBytes for providing the compute and storage requirements required for processing transactions and persisting data on Nervos.
 
-Secondary Rewards are created from Secondary Issuance, and continuously pay miners for the preservation of state data contained on the blockchain.
+Secondary rewards are created from secondary issuance, and continuously pay miners for the verification of transactions and preservation of blockchain state.
 
 #### See Also
 - [CKByte](#ckbyte)
 - [Miner](#miner)
 - [Secondary Issuance](#secondary-issuance)
 - [Transaction](#transaction)
+
+---
+
+### Selfish Mining Attack
+Selfish mining is a concept that was addressed by Cornell University researchers in detail in a 2013 report. In this attack, malicious miners gain unfair block rewards by deliberately orphaning blocks mined by others.
+
+#### See Also
+- [Selfish Mining Related Paper](https://www.cs.cornell.edu/~ie53/publications/btcProcFC.pdf)
 
 ---
 
@@ -992,9 +1196,9 @@ A scenario that can arise in multi-layer blockchain platforms where the vast maj
 ---
 
 ### State Rent
-A recurring fee that is paid to persist and secure state data.
+A recurring fee that is paid to persist and secure state data. 
 
-On Nervos, Secondary Issuance is used to facilitate the paying of State Rent by the users who occupy the space on the Nervos blockchain.
+On Nervos, secondary issuance is used to boost the payment of state rent by users who occupy space on the Nervos blockchain.
 
 #### See Also
 - [Secondary Issuance](#secondary-issuance)
@@ -1004,7 +1208,7 @@ On Nervos, Secondary Issuance is used to facilitate the paying of State Rent by 
 ---
 
 ### Store of Assets
-A platform which is designed to safely preserve multiple types of assets, each of which could be a store of value.
+Similar to the concept of "Store of Value" in the context of Bitcoin, we call the utility "Store of Assets" when a blockchain keeps any crypto-assets securely and censorship-resistantly. Nervos CKB is such a Store of Assets or SoA.
 
 #### See Also
 - [Store of Value](#store-of-value)
@@ -1012,7 +1216,7 @@ A platform which is designed to safely preserve multiple types of assets, each o
 ---
 
 ### Store of Value
-An asset that is purchased to retain purchasing power in the long-term.
+Assets which can maintain their worth over time without depreciating
 
 A good store of value either match or outpace the inflation rate of fiat currency, and has a reasonable amount of liquidity, allowing the asset to be easily sold.
 
@@ -1075,7 +1279,7 @@ A situation that can emerge on incentivized blockchain platforms where mining re
 ## Technical Glossary
 
 ### Active Cell
-A Cell in the current state of CKB. Active cells can be used as inputs to transactions.
+Or live cell, a cell exists in the current CKB state. Only active cells can be used as inputs to new transactions.
 
 #### Synonyms
 - [Live Cell](#live-cell)
@@ -1088,7 +1292,7 @@ A Cell in the current state of CKB. Active cells can be used as inputs to transa
 ---
 
 ### Aggron
-The name of the main public testnet for Nervos CKB.
+The first Nervos CKB testnet corresponding to mainnet Lina.
 
 - **ckb version**: >= v0.32.0 (latest stable is recommended)
 - **genesis hash**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
@@ -1114,7 +1318,7 @@ A framework layer that runs on top of Nervos CKB which provides an easy way to q
 ---
 
 ### Args
-Args is short for arguments, and is data provided to a Lock Script or Type Script within a Cell. This is nearly identical to arguments provided to a normal command-line application.
+Args is short for arguments. Arguments are data provided to the lock script or type script of a cell, similar to args provided to a function or method call.
 
 Arguments are stored as part of the Cell when it is created.
 
@@ -1126,7 +1330,7 @@ Arguments are stored as part of the Cell when it is created.
 ---
 
 ### Axon
-A layer 2 side-chain of the Nervos CKB developed by the Nervos Core Team. Axon provides high-performance smart contract execution while utilizing Nervos CKB as a trust layer.
+Axon is a chain-based layer 2 protocol and framework with a practical security and economic model. Axon chains allow anyone to stake tokens on CKB to become a validator and participate in consensus.
 
 #### See Also
 - [Layer 2](#layer-2)
@@ -1136,7 +1340,7 @@ A layer 2 side-chain of the Nervos CKB developed by the Nervos Core Team. Axon p
 ---
 
 ### Blake2b
-A general-purpose cryptographic hashing algorithm that can create a succinct data fingerprint for any type of data.CKB uses blake2b as the default hash algorithm. 
+A cryptographic hash function. BLAKE2b(orBLAKE2) is optimized for 64-bit platforms including NEON-enabled ARMs and produces digests of any size between 1 and 64 bytes. BLAKE2b is optimized for 8- to 32-bit platforms, and produces digests of any size between 1 and 32 bytes. CKB uses blake2b as the default hash algorithm.
 
 #### See Also
 - [Blake2b paper](https://blake2.net/blake2.pdf)
@@ -1311,7 +1515,7 @@ In more general contexts, data may refer to any form of information.
 ---
 
 ### Dead Cell
-A cell that has been used as an input to a previous transaction and is consumed.
+A cell that has been used as an input to a previous transaction and is consumed. 
 
 A dead cell cannot be used as an input to a new transaction, nor can it be used as a dependency. It is effectively destroyed and removed from the active state of the network.
 
@@ -1358,9 +1562,7 @@ A shorthand name for dependencies.
 ---
 
 ### Dependencies
-Cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any Scripts executing within the transaction. Dependencies are not consumed.
-
-Dependencies are commonly referred to as deps.
+ependencies are commonly referred to as deps. Cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any Scripts executing within the transaction. Dependencies, or deps, are not consumed. 
 
 #### Synonyms
 - [Deps](#deps)
@@ -1402,10 +1604,11 @@ A deterministic testing framework for Rust.
 ---
 
 ### Eaglesong
-The proof of work function used for mining on Nervos CKB.
+Eaglesong is a new hash function developed specifically for Nervos CKB proof-of-work, which is also suitable in other use cases in which a secure hash function is needed. 
 
 #### See Also
 - [Eaglesong RFC on the Nervos Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0010-eaglesong/0010-eaglesong.md)
+- [Introducing to Eagleson](https://medium.com/nervosnetwork/the-proof-of-work-function-of-nervos-ckb-3cc8364464d9)
 
 ---
 
@@ -1460,7 +1663,9 @@ An Ethereum token standard that supports the creation any number of fungible or 
 ---
 
 ### Generator
-A program that is used to create transactions that can be broadcast to the Nervos CKB network.
+A program used to create transactions that can be broadcast to the Nervos CKB network. 
+
+Generators run locally on the client side (off-chain).They utilize user input and existing cells as program inputs, to create new cells with new states as output.
 
 #### See Also
 - [Nervos CKB](#nervos-ckb)
@@ -1469,7 +1674,7 @@ A program that is used to create transactions that can be broadcast to the Nervo
 ---
 
 ### Genesis Block
-The first block on a blockchain. The genesis block is unique because it does not contain a reference to the previous block because it is the first.
+The first block in the blockchain, used to initialise the global state. The genesis block is unique because it does not contain a reference to the previous block because it is the first.
 
 #### See Also
 - [Block](#block)
@@ -1478,10 +1683,11 @@ The first block on a blockchain. The genesis block is unique because it does not
 ---
 
 ### Godwoken
-A tool that provides a programmable layer on Nervos CKB that emulates the account model used by other cryptocurrencies like Ethereum.
+Godwoken is a layer 2 rollup framework for Nervos CKB. It provides scaling capability, as well as an abstract account model to CKB.
 
 #### See Also
-- [Godwoken on GitHub](https://github.com/jjyr/godwoken)
+- [Godwoken on GitHub](https://github.com/nervosnetwork/godwoken)
+- [Godwoken Documentation Site](https://docs.godwoken.io/)
 
 ---
 
@@ -1523,7 +1729,7 @@ An alternative term for Dead Cell.
 ---
 
 ### Indexer
-An application or library that keeps track of live Cells that match criteria specified by the developer or user.
+An application or library to trace live cells that comply with criteria specified by the developer or user.
 
 #### See Also
 - [Cells](#cells)
@@ -1532,7 +1738,7 @@ An application or library that keeps track of live Cells that match criteria spe
 ---
 
 ### Input
-A Live Cell that is used in a transaction. If the transaction is accepted by the network, the Live Cell will be consumed, and marked as a Dead Cell.
+A live cell that is used in a transaction. If the transaction is accepted by the network, the live cell gets consumed as input and labeled as a dead cell.
 
 #### See Also
 - [Cell](#cell)
@@ -1540,6 +1746,14 @@ A Live Cell that is used in a transaction. If the transaction is accepted by the
 - [Dead Cell](#dead-cell)
 - [Live Cell](#live-cell)
 - [Transaction](#transaction)
+
+---
+
+### Inbound Connection
+Inbound connection means it is initiated by the remote peer; and the connection itself is outgoing connection when we switch the subject to the remote peer.
+
+#### See Also
+- [Outbound Connection](#outbound-connection)
 
 ---
 
@@ -1563,7 +1777,7 @@ A network is said to support late spawning if that participant can download and 
 ---
 
 ### Layer 1
-A proof of work blockchain known as the Common Knowledge Base (CKB) that serves as the base layer for the Nervos Network.
+A proof of work blockchain known as the Common Knowledge Base (CKB) that serves as the base layer for the Nervos Network. Layer 1 of a decentralized ecosystem is the underlying blockchain architecture.
 
 #### Synonyms
 - [CKB](#ckb)
@@ -1575,9 +1789,9 @@ A proof of work blockchain known as the Common Knowledge Base (CKB) that serves 
 ---
 
 ### Layer 2
-Any framework or protocol that is built on top of and dependent on a layer 1 blockchain.
+Layer 2 refers to a secondary framework or protocol that is built on top of an existing blockchain system. 
 
-Layer 2 systems often address different concerns than layer 1, allowing for a wider range of use cases while directly inheriting many of benefits of layer 1.
+The main goal of these protocols is to solve the transaction speed and scaling difficulties that are being faced by the major cryptocurrency networks.
 
 #### See Also
 - [Layer 1](#layer-1)
@@ -1614,8 +1828,14 @@ This is similar to an unspent transaction output (UTXO) in Bitcoin.
 
 ---
 
+### Lock
+Script that represents the ownership of the cell. A user successfully unlocks a cell and is able to consume it if the cell's lock script exits normally. 
+
+#### See Also
+- [Lock Script](#lock-script)
+
 ### Lock Script
-A Script that enforces access and ownership of a Cell. This Script controls who has permission to use the Cell as an input. 
+A Script that enforces access and ownership of a Cell. This Script controls who has permission to use the Cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
 
 #### See Also
 - [Cell](#cell)
@@ -1645,7 +1865,7 @@ An address format used on Nervos that includes the full code hash of the lock sc
 ---
 
 ### Mainnet
-The Nervos CKB public blockchain.The name of the Nervos CKB Mainnet is Lina.
+Short for "main network", the running Nervos CKB public blockchain. The name of Nervos CKB 1st mainnet is Lina.
 
 - **ckb version**: >= v0.25.2 (latest stable is recommended)
 - **genesis hash**: 0x92b197aa1fba0f63633922c61c92375c9c074a93e85963554f5499fe1450d0e5
@@ -1672,7 +1892,7 @@ The process of creating of new tokens.
 ---
 
 ### Molecule
-A serialization framework for encoding data which is used extensively on the Nervos blockchain.
+A serialisation framework for encoding data widely used on the Nervos Network.
 
 #### See Also
 - [Molecule Specification](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md)
@@ -1682,7 +1902,7 @@ A serialization framework for encoding data which is used extensively on the Ner
 ---
 
 ### Muta
-A framework used to create highly customizable layer 2 blockchain implementations on Nervos.
+A highly customizable, high-performance blockchain framework designed to support Proof-of-Stake, BFT consensus and smart contracts.
 
 #### See Also
 - [Muta on GitHub](https://github.com/nervosnetwork/muta)
@@ -1705,9 +1925,7 @@ Nervos CKB is often referred to as the Nervos Blockchain.
 ---
 
 ### Off-Chain Computation
-A programming model where all computation is done off-chain to reduce the burden on the nodes in the network and provide higher levels of scalability.
-
-Nervos uses off-chain computation and on-chain verification.
+A programming model where all computation is done off-chain to reduce the burden on the nodes in the network and provide higher levels of scalability. Nervos uses off-chain computation and on-chain verification.
 
 #### See Also
 - [On-Chain Computation](#on-chain-computation)
@@ -1715,8 +1933,16 @@ Nervos uses off-chain computation and on-chain verification.
 
 ---
 
+### Off-Chain Scaling
+Off-chain scaling is the approach that only using the blockchain as a secure asset and settlement platform in conjunction with transferring almost all transactions off the blockchain.
+
+#### See Also
+-[On-Chain Scaling](#on-chain-scaling)
+
+---
+
 ### Off-Chain State
-A programming model where the data that represents the state of an application is not stored on the blockchain, or is not accessible by on-chain smart contracts.
+The data of an application that is not stored on the blockchain, or is not accessible by on-chain smart contracts.
 
 #### See Also
 - [On-Chain State](#on-chain-state)
@@ -1724,7 +1950,7 @@ A programming model where the data that represents the state of an application i
 ---
 
 ### On-Chain Computation
-A programming model where all computation by smart contracts is done on-chain every node on the network simultaneously.
+A programming model where all computation by smart contracts is done on-chain by every node on the network simultaneously.
 
 Ethereum uses on-chain computation.
 
@@ -1733,8 +1959,16 @@ Ethereum uses on-chain computation.
 
 ---
 
+### On-Chain Scaling
+On-chain scaling solution refer to extending the throughput of the consensus process, or increasing network throughput as node number increases.
+
+#### See Also
+- [Off-chain Scaling](#off-chain-scaling)
+
+---
+
 ### On-Chain State
-A programming model where the data that represents the state of an application is stored on the blockchain and is accessible by on-chain smart contracts.
+The data of an application that is stored on the blockchain and is accessible by on-chain smart contracts.
 
 Nervos provides on-chain state for all smart contracts.
 
@@ -1764,6 +1998,15 @@ One use of open transactions is to create the functionality required for a trust
 
 ---
 
+### Optimistic Rollup
+A rollup of transactions that use fraud proofs to offer increased layer 2 transaction throughput while using the security and data availability provided by layer 1.
+
+#### See Also
+- [Layer 1](#layer-1)
+- [Layer 2](#layer-2)
+
+---
+
 ### Orphan
 A shorthand name for Orphan Block.
 
@@ -1774,9 +2017,7 @@ A shorthand name for Orphan Block.
 ---
 
 ### Orphan Block
-A valid block that was found simultaneously with another valid block by another miner, but was not selected by network because it arrived after the other block.
-
-Orphan blocks are expected to occur under normal operation and do not become a problem unless they occur too frequently.
+An orphan block is a valid block that is not included in main fork due to, for example, a lag within the network itself. There can be two miners who solve for a block simultaneously in NC-Max.
 
 On Nervos, orphan blocks are better described as Uncles.
 
@@ -1798,6 +2039,24 @@ A measure of the speed at which Orphan blocks occur within the blockchain networ
 
 ---
 
+### Orphan transactions 
+Orphan transactionsare those whose parental transactions are missing at the time that they are processed. These transactions are not propagated to other nodes until all of their missing parents are received, and they thus end up languishing in a local buffer until evicted or their parents are found.
+
+#### See Also
+- [Orphan Block](#orphan-block)
+
+---
+
+### Outbound Connection
+Also knowns as "outgoing connection".
+
+A TCP connection is outgoing for the node if it was initiated (sent the TCP SYN packet) by the node in the context.
+
+#### See Also
+- [Inbound Connection](#inbound-connection)
+
+---
+
 ### Outpoint
 A particular output Cell in a transaction.
 
@@ -1809,7 +2068,7 @@ A particular output Cell in a transaction.
 ---
 
 ### Output
-A Live Cell that is created in a transaction.
+A live cell that is created in a transaction.
 
 #### See Also
 - [Cell](#cell)
@@ -1826,8 +2085,13 @@ A byzantine fault tollerant consensus algorithm designed by Nervos for Huobi whi
 
 ---
 
+### P2WSH
+A Pay-to-Witness-Script-Hash (P2WSH) is a type of Bitcoin transaction similar to a P2SH transaction in most ways, except that it uses SegWit.
+
+---
+
 ### Polyjuice
-An Ethereum compatible layer that provides account model functionality on top of Nervos' Cell Model.
+Polyjuice provides an Ethereum compatible runtime on Godwoken.
 
 #### See Also
 - [Cell Model](#cell-model)
@@ -1884,7 +2148,7 @@ A program that executes on the CKB-VM. A Script can be one of two types:
 - Lock Script - Used to control ownership and access to a Cell.
 - Type Script - Used to control how a Cell is used in a transaction.
 
-A Script is a binary executable in the ELF format for the RISC-V architecture.
+A script is a binary executable in the ELF format for the RISC-V architecture, a program that runs on the CKB-VM.
 
 #### See Also
 - [CKB-VM](#risc-v)
@@ -1916,7 +2180,7 @@ A Shannon is the equivalent of a Bitcoin Satoshi.
 ---
 
 ### Short Address
-An address format on Nervos that does not include the code hash of the associated lock script, and instead uses one of many commonly used lock scripts.
+An address format on Nervos that does not include a code hash of the associated lock script, instead using one of the many common lock scripts.
 
 The short address format is the most common address format used, and is often referred to as simply "address".
 
@@ -1931,9 +2195,7 @@ The short address format is the most common address format used, and is often re
 ---
 
 ### Simple UDT
-A standard that defines a the most basic implementation of a UDT fungible token on Nervos.
-
-A Simple UDT is often referred to by its abbreviation, SUDT.
+A standard that defines a the most basic implementation of a UDT fungible token on Nervos. 
 
 An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 and ERC777.
 
@@ -1945,12 +2207,12 @@ An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 and ERC77
 - [UDT](#udt)
 - [User-Defined Token](#user-defined-token)
 - [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
-- [Simple UDT RFC Draft Spec on Nervos Talk](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333/1)
+- [Simple UDT RFC on Nervos Nerwork Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md)
 
 ---
 
 ### Since
-A field on a Cell which can contain an optional value that prevents consumption before a certain block timestamp or a block number.
+`since` is the u64 (unsigned 64-bit integer) field in transaction input for preventing inclusion before a certain block timestamp or a block number.
 
 #### See Also
 - [Cell](#cell)
@@ -1985,7 +2247,7 @@ An abbreviation for Simple UDT.
 ---
 
 ### Testnet
-An alternate public blockchain used for testing purposes that is running the same or similar software as the Mainnet. All tokens and data on testnets have no value.The name of the Nervos CKB Testnet is Aggron.
+Short for “test network,” a network used to simulate the behavior of the mainnet. The name of the Nervos CKB Testnet is Aggron.
 
 - **ckb version**: >= v0.32.0 (latest stable is recommended)
 - **genesis hash**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
@@ -2002,7 +2264,7 @@ An alternate public blockchain used for testing purposes that is running the sam
 
 ### Transaction Hash
 
-Transaction is serialized via [molecule](#molecule) in CKB. Its schema is:
+Transaction hash, or Txhash, is the unique identifier of a transaction in a blockchain that acts as a record or proof that the transaction has taken place. To get a transaction hash in CKB, the transaction is serialized via Molecule, then the serialized raw is feed to ckbhash function. Its schema is:
 
 ```
 table Transaction {
@@ -2017,12 +2279,13 @@ Transaction hash is generated by the serialized `raw` structure through [ckbhash
 - [Transaction Witness Hash](#transaction-witness-hash)
 - [Molecule](#molecule)
 - [Ckbhash](#ckbhash)
+- [Transaction Hash in RFC on Nervos Network Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0027-block-structure/0027-block-structure.md#transaction-hash)
 
 ---
 
 ### Transaction Witness Hash
 
-Transaction is serialized via [molecule](#molecule) in CKB. Its schema is:
+Transaction witness hash is generated by the serialized transaction through ckbhash. Transaction is serialized via [molecule](#molecule) in CKB. Its schema is:
 
 ```
 table Transaction {
@@ -2030,8 +2293,6 @@ table Transaction {
     witnesses:      BytesVec,
 }
 ```
-
-Transaction witness hash is generated by the serialized transaction through [ckbhash](#ckbhash).
 
 #### See Also
 - [Transaction Hash](#transaction-hash)
@@ -2094,7 +2355,7 @@ A unique identifier for asset types on Nervos. This idenfier is based on the Typ
 ---
 
 ### Uncle
-A valid block that was found simultaneously with another valid block by another miner, but was not selected by network because it arrived after the other block.
+ Or Uncle Block. Uncle blocks are created when two blocks are mined and submitted to the ledger at roughly the same time. Only one can enter the ledger as an included block, and the other does not.
 
 Uncles are paid a reduced block reward when they are found and reported.
 
@@ -2119,9 +2380,7 @@ On Nervos, Uncles are tracked by consensus to adjust the block interval of the n
 ---
 
 ### Validator
-A Script that is used to ensure that a transaction created by a Generator is valid.
-
-Validators are Scripts that run within the CKB-VM, and are either Lock Scripts or Type Scripts.
+A Script that is used to ensure that the transactions created by the generators are valid. Validators are scripts that run in CKB-VM as either lock scripts or type scripts.
 
 #### See Also
 - [CKB-VM](#risc-v)
@@ -2132,7 +2391,7 @@ Validators are Scripts that run within the CKB-VM, and are either Lock Scripts o
 ---
 
 ### Witness
-A set of cryptographic signatures that contains the data required to prove authorization to the resources used in a transaction.
+A set of cryptographic proof containing the data required to prove authorisation of the resources used in the transaction.
 
 #### See Also
 - [Transaction](#transaction)
