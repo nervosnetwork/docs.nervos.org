@@ -6,7 +6,7 @@ title: Glossary
 ## Glossary Sections
 
 - [General Glossary](#general-glossary)
-- [Economics Glossary](#economic-glossary)
+- [Economics Glossary](#economics-glossary)
 - [Technical Glossary](#technical-glossary)
 
 ---
