@@ -5,47 +5,47 @@ title: Nervos Blockchain
 
 ## What is the Nervos Blockchain?
 
-The Nervos blockchain, also known as the Common Knowledge Base, is the bottom-most layer in the Nervos ecosystem. It serves as a foundation to build on and provides trust to all layers built on top. It is designed to maximize decentralization while remaining minimal, flexible, and secure. Its main purpose is the reliable preservation of any data and assets stored within it.
+Nervos blockchain, also known as Common Knowledge Base, is the rock-bottom layer of the Nervos ecosystem. As the foundation, Nervos blockchain provides trust for all the layers built on top of it. It is designed to maximize decentralization while remaining minimal, flexible, and secure. Its primary objective is to reliably preserve any data and assets stored therein.
 
 ## Multi-Layer Architecture
 
-Trade-offs must be made when designing any decentralized system. An example of a common trade-off is between scalability, security, and decentralization. Achieving high levels of all three on a single layer is difficult to impossible, but different layers can each address different concerns.
+Trade-offs are inevitable in designing any decentralized system. A common example of the trade-off concerns between scalability, security, and decentralization. It is tough to achieve all the three at the same high level on a single layer, but having different layers can solve different problems separately.
 
-An example of how layering helps improve this:
+An example on how layering helps improve this:
 
 * Layer 1 focuses on security and decentralization, providing trust to higher layers.
 * Layer 2 focuses on scalability, providing nearly instantaneous transactions for millions of users.
 
-The two layers function together to achieve higher levels of decentralization, security, and scalability.
+These two layers function together to achieve higher levels of decentralization, security, and scalability.
 
-The Nervos blockchain represents layer 1 of the multi-layer architecture, and its core design principles prioritize security and decentralization.
+The Nervos blockchain represents the layer 1 of a multi-layer architecture that prioritizes secutiry and decentralization as coure design principles. 
 
 ## What is a CKByte?
 
-The native token of Nervos is known as the CKByte, or CKB for short. One CKByte token entitles the holder to one byte of data storage on Nervos. The CKByte is also used to pay any fees associated with transactions and computation.
+The native token of Nervos is known as the CKByte, or CKB for short. One CKByte token entitles the holder to one byte of data storage on Nervos. The CKByte is also used to pay fees associated with any transactions and computations.
 
-If you need to store 100 bytes of data in Nervos, you must own 100 CKBytes. While your data is occupying space on Nervos, your CKBytes will remain locked. If your data is no longer needed and you remove it from Nervos, then the 100 CKBytes can be used for other purposes.
+To store 100 bytes of data in Nervos, it is mandatory to have 100 CKBytes. If your data occupies space on Nervos, your CKBytes will remain locked. If your data is no longer needed and is removed from Nervos, the 100 CKBytes will be available for other purposes.
 
-CKBytes can also be deposited in the Nervos DAO where they gain interest in a process similar to staking.
+CKBytes can also be deposited in the Nervos DAO，where they gain interests in a staking-like process.
 
-We will cover more about the CKByte in the [Cell Model](cell-model.md) and [Economics](economics.md) sections.
+Further information about CKByte will be presented in the [Cell Model](cell-model.md) and [Economics](economics.md) sections.
 
 ## Programming on Nervos
 
 Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as Javascript, Rust, and C.
 
-All programs on Nervos can store data and state on-chain. This makes the creation of complex applications and customized tokens a simple and straightforward process.
+All programs on Nervos can store data and state on-chain，which makes creating complex applications and customized tokens a simple and straightforward process.
 
-All code is executed in CKB-VM, a high-performance RISC-V virtual machine that provides a safe, consistent, and flexible environment for developers to utilize. Multiple instances of CKB-VM can execute different smart contracts at the same time, enabling substantial scaling improvements through massive parallelization.
+All code runs in CKB-VM. CKB-VM is a high-performance RISC-V virtual machine that provides a secure, consistent and flexible environment for developers. Multiple instances of CKB-VM can execute different smart contracts concurrently, which enables substantial scaling improvements through massive parallelization.
 
-We will cover more about programming on Nervos in the [Cell Model](cell-model.md) and [CKB-VM](ckb-vm.md) sections.
+More details about programming on Nervos will be covered in the [Cell Model](cell-model.md) and [CKB-VM](ckb-vm.md) sections.
 
 ## Consensus
 
-Nervos uses a Proof of Work (PoW) based consensus algorithm known as NC-MAX. PoW has repeatedly been proven to be the best in class solution for incentivized security.
+Nervos uses a Proof of Work (PoW) based consensus algorithm，known as NC-MAX. PoW has been repeatedly proven to be the best in class solution for incentivized security.
 
-Building on Bitcoin’s Nakamoto Consensus, NC-MAX dramatically increases transactions per second and decreases confirmation time without compromising on security or decentralization.
+Building on Bitcoin’s Nakamoto Consensus, NC-MAX dramatically increases transactions per second and decreases confirmation time without compromising security or decentralization.
 
-Nervos currently provides a 10x throughput increase compared to Ethereum and is expected to grow exponentially as layer 2 solutions are developed.
+Nervos currently provides a 10x throughput boost compared to Ethereum, and is expected to grow exponentially as layer 2 solutions come to the table.
 
-We will cover more about the design of Nervos’ consensus implementation in the [Consensus](consensus.md) section.
+More details on the design of Nervos’ consensus implementation will be discussed in the [Consensus](consensus.md) section.
