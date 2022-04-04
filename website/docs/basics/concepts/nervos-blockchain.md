@@ -9,7 +9,7 @@ Nervos blockchain, also known as Common Knowledge Base, is the rock-bottom layer
 
 ## Multi-Layer Architecture
 
-Trade-offs are inevitable in designing any decentralized system. A common example of the trade-off concerns between scalability, security, and decentralization. It is tough to achieve all the three at the same high level on a single layer, but having different layers can solve different problems separately.
+Trade-offs are inevitable in designing any decentralized system. A common example of the trade-off concerns scalability, security, and decentralization. It is tough to achieve all three at the same high level on a single layer, but having different layers can solve different problems separately.
 
 An example on how layering helps improve this:
 
@@ -18,7 +18,7 @@ An example on how layering helps improve this:
 
 These two layers function together to achieve higher levels of decentralization, security, and scalability.
 
-The Nervos blockchain represents the layer 1 of a multi-layer architecture that prioritizes secutiry and decentralization as coure design principles. 
+The Nervos blockchain represents the layer 1 of a multi-layer architecture that prioritizes security and decentralization as core design principles. 
 
 ## What is a CKByte?
 
@@ -42,7 +42,7 @@ More details about programming on Nervos will be covered in the [Cell Model](cel
 
 ## Consensus
 
-Nervos uses a Proof of Work (PoW) based consensus algorithm，known as NC-MAX. PoW has been repeatedly proven to be the best in class solution for incentivized security.
+Nervos uses a Proof of Work (PoW) based consensus algorithm，known as NC-MAX. PoW has been repeatedly proven to be the best in class solution for incentivize security.
 
 Building on Bitcoin’s Nakamoto Consensus, NC-MAX dramatically increases transactions per second and decreases confirmation time without compromising security or decentralization.
 
