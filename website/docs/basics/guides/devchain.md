@@ -258,7 +258,7 @@ Modify the `func` parameter in the `specs/dev.toml` file under the `pow` section
 func = "Eaglesong"
 ```
 
-Replace the `miner.workers` section in the `specs/dev.toml` file with the following:
+Replace the `miner.workers` section in the `ckb-miner.toml` and `specs/dev.toml` files with the following:
 
 ```
 [[miner.workers]]
