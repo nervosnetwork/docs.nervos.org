@@ -9,13 +9,13 @@ Cell is the most basic structure for representing a single piece of data in Nerv
 
 Each Cell contains a small program called a **Lock Script** that defines who has permission to use it. In general, the Lock Script defines one user as the owner of a Cell, it can also do more complex operations such as having multiple owners (multi-sig) or conditional uses of time-locking within particular time-frames.
 
-A Cell can opt to include a second program, called a **Type Script**, to execute a set of rules on the usage of cell. As a result, developers are empowered to create complex smart across a wide range of use cases, from CryptoKitties to tokens, DeFi, and everything in between.
+A Cell can opt to include a second program, called a **Type Script**, to execute a set of rules on the usage of cell. As a result, developers are empowered to create complex smart contracts across a wide range of use cases, from CryptoKitties to tokens, DeFi, and everything in between.
 
 ## What is the Cell Model?
 
 The cell model defines how each cell in Nervos acts and interacts with each other, and the process must be followed for updating the data contained within the cells. People familiar with Bitcoin’s UTXO model may notice the similarities, because the cell model was inspired by it.
 
-Cells are immutable. This means no changes can be mande once cells have been added to the blockchain. For any data update, the containing cell must undergo a process called **consumption**. When a Cell is **consumed**, data gets extracted and the cell gets destroyed. The data can be updated as needed while being extracted. A new cell with updated data will then be created and added to the blockchain.
+Cells are immutable. This means no changes can be made once cells have been added to the blockchain. For any data update, the containing cell must undergo a process called **consumption**. When a Cell is **consumed**, data gets extracted and the cell gets destroyed. The data can be updated as needed while being extracted. A new cell with updated data will then be created and added to the blockchain.
 
 Each Cell can be consumed only once. A non-consumed cell is known as a **live cell**. A consumed cell is known as a **dead cell**. Once dead, the cell can no longer be used.
 
