@@ -20,7 +20,7 @@ Lumos is designed as a framework, meaning it is expected to be used in a intrins
 
 ## Initial CKB Setup
 
-To ease the whole process so we don't have to wait too long to see the results, let's setup our own dev chain with [tweaks](basics/guides/devchain#modify-parameters-to-run-quickly):
+To ease the whole process so we don't have to wait too long to see the results, let's setup our own dev chain with [tweaks](../basics/guides/devchain#4-adjust-the-parameters-to-shorten-the-block-interval-optional):
 
 ```bash
 $ export TOP=$(pwd)

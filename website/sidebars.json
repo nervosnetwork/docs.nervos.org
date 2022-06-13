@@ -21,7 +21,6 @@
           "basics/guides/devchain",
           "basics/guides/mainnet",
           "basics/guides/testnet",
-          "basics/guides/neuron",
           "basics/guides/run-ckb-with-docker",
           "basics/guides/get-ckb",
           "basics/guides/ckb-on-windows",

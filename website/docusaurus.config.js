@@ -179,10 +179,9 @@ module.exports = {
       copyright: "Copyright © 2021  Nervos Foundation. All Rights Reserved.",
     },
     algolia: {
-      apiKey: "4ca49bc7433bcef238e8b9aab6dc4d11",
-      indexName: "nervos_ckbd",
-      placeholder: "Search",
-      algoliaOptions: {},
+      appId: 'LU9B8PQ7W5',
+      apiKey: "122c7efa6c0425cfd6852286c746e653",
+      indexName: "nervos",
     }
   },
 };

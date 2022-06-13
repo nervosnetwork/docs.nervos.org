@@ -3,6 +3,10 @@ id: introduction-to-ckb-studio
 title: Introduction to CKB Studio
 ---
 
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+import Link from "@docusaurus/Link";
+
 *Authored by [Phil Li @ Obsidian Labs](https://github.com/qftgtr)*
 
 # Introduction to CKB Studio
@@ -130,7 +134,7 @@ Click the *Start* button to start a CKB node. Once the node is started, you can 
 
 #### Switch Networks
 
-In the *Network* dropdown menu you can switch to other networks such as the [Aggron testnet](testnet) or the CKB mainnet. Switching the network will stop your curretnly running instance.
+In the *Network* dropdown menu you can switch to other networks such as the Aggron testnet or the CKB mainnet. Switching the network will stop your currently running instance.
 
 <p align="center">
   <img src={require("../assets/essay/ckb-studio/switch_network.png").default} width="300px"/>
@@ -154,7 +158,7 @@ CKB has a special cell-based structure for its transactions. The *TX Constructor
 
 #### Cell Explorer
 
-Cells are the fundamental elements to form CKB transactions. The bottom half of the interface is a *cell explorer* where you can look through available cells (live cells) for each address. To learn more about CKB cells, please refer to the [cell model](cell-model).
+Cells are the fundamental elements to form CKB transactions. The bottom half of the interface is a *cell explorer* where you can look through available cells (live cells) for each address. To learn more about CKB cells, please refer to the <Link to={useBaseUrl('/docs/basics/concepts/cell-model')}>cell model</Link>.
 
 In the cell explorer, you can
 

@@ -15,7 +15,7 @@ Proof of Stake (PoS) is one of PoW's competitors. One advantage that PoS has is 
 
 Based on the Satoshi Nakamoto consensus of Bitcoin, NC-MAX significantly increases the transaction volume per second and reduces the confirmation time without affecting security or decentralization. Compared with Ethereum, Nervos currently provides 10 times the throughput growth, which is expected to increase exponentially with the development of Layer 2 solutions.
 
-For more information, see <Link to={useBaseUrl('/docs/concepts/consensus')}>Consensus</Link>. 
+For more information, see <Link to={useBaseUrl('/docs/basics/concepts/consensus')}>Consensus</Link>. 
 
 More discussions on POS and POW: https://talk.nervos.org/t/pow-pos-discussion-in-history/5457.
 

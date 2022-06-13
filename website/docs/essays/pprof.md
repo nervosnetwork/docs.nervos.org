@@ -3,7 +3,7 @@ id: pprof
 title: Tips for profiling CKB script
 ---
 
-Before starting, make sure you have understood the concept of [cycles](basics/glossary#cycles).
+Before starting, make sure you have understood the concept of [cycles](../basics/glossary#cycles).
 
 In the development phase of dapps, it is a wide range of needs to estimate how many cycles our dapp will consume.
 

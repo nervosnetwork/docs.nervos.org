@@ -1,5 +1,5 @@
 ---
-id: rules
+id: workflow
 title: The General Workflow for Constructing a Transaction
 ---
 
