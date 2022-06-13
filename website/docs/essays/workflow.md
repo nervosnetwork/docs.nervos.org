@@ -7,13 +7,15 @@ This document will explain how to build a verifiable transaction on CKB in the s
 
 On CKB, any transaction must have at least one input and one output. To construct a transaction, the first thing that is needed is a way to effectively locate an input and this process is referred to as “cell collect”.
 
+<!--test-->
+
 ## Cell Collect
 
 It is important to first understood that CKB’s [cell model](https://docs.nervos.org/basic-concepts/cell-model.html) is very similar to the UTXO model, which means that without any pre-caching it is not possible to know the current state of any address. The information that makes up the current state of an address may be scattered across different cells in many corners of the blockchain and a cell collection method is a prerequisite to properly using CKB. The cell model of CKB is described in detail in [Cell](reference/cell.md).
 
 Let’s take a look at how to collect cells, as there are two ways to do this:
 
-### USING the ckb indexer service
+### Using the CKB Indexer Service
 
 This section introduces a simple method which can identify limited information about a specified address (such as live_cell count, transaction count, total capacity). However, this method is based on the CKB node’s indexing function and is only suitable for simple usage (it also consumes resources of the CKB node). 
 
@@ -47,7 +49,7 @@ Wait for the index service to be rebuilt, then use the RPC interface of the inde
 
 To turn the indexing service off, follow this process: unregister the watch list through RPC, shut down the service and remove the “Indexer” value from the array in the `ckb.toml` file.
 
-### CREATING YOUR OWN CELL COLLECTION SERVICE 
+### Creating Your Own Cell Collection Service 
 
 **What are the advantages to creating your own cell collection service?**
 
@@ -165,7 +167,7 @@ The witness is a signature on the blake2b-hash of the entire transaction, includ
 
 Through the above process, we have obtained a complete `Transaction` structure. At this time, to derive the absolute minimum fee that will be accepted by miners, we will need to do some backtesting (based on actual cycles consumed) and modification of the existing transaction.
 
-### how to estimate A TRANSACTION fee?
+### How to Estimate a Transaction Fee?
 
 The transaction fee is the sum of the size of the serialized transaction (molecule) and the sum of actual cycles consumed by executed instructions. The size unit is 1,000 shannons / KB (kilobyte) by default (shannon is 1/100,000,000 of CKByte).
 
