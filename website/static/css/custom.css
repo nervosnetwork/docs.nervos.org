@@ -404,7 +404,7 @@ a.anchor {
 @media only screen and (max-device-width: 736px) {
   .homeContainer .homeWrapper {
     flex-direction: column;
-    padding: 110px 150px;
+    padding: 16px;
   }
 
   .homeContainer .homeWrapper .coverLogo {
