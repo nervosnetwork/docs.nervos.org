@@ -38,7 +38,7 @@
         ]
 		},
 		"basics/tools",
-    "basics/sharedNodes",
+    "basics/communitynodes",
 		"basics/glossary",
 		{
         "type": "category",
