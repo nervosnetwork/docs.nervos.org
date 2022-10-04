@@ -38,6 +38,7 @@
         ]
 		},
 		"basics/tools",
+    "basics/communitynodes",
 		"basics/glossary",
 		{
         "type": "category",
