@@ -28,7 +28,7 @@ producers of hardware, and each model has its own interface, so you'll need to s
 Here is a brief list of items that you will need to have to get started:
 
 Essentials -
-- **`ASIC Miner`** (Ultimately GPUs aren't used any longer due to inefficiencies,-you will be looking for an ASIC miner)
+- **`ASIC Miner`** (Ultimately GPUs aren't used any longer due to inefficiencies, thus you will be most likely looking for an ASIC miner)
 - **`Power Supply`** (Pro Tip: If buying more than one miner, save money buy purchasing one power supply that feeds multiple miners)
 - **`Ethernet Cables`** (Unless you are mining over wifi)
 - **`Surge Protector`**
