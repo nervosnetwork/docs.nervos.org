@@ -61,13 +61,13 @@ Other considerations include:
 - **`Transparency`**: The pool should have an active dashboard for instance, or some way of visualizing how the pool is performing, so you can see the results of the collective mining effort.
 - **`Security`**: The pool should have some history and a track record of successful payouts.
 - **`Proximity`**: Closer to you is better.
-- **`51% Attack Friendly`**: The pool should not be so large that the network is either close to, or at risk for a 51% attack.  The issue here is that potential attackers would be able to prevent new transactions from gaining confirmations, which would allow them to halt payments between some or all users. Also, they would be able to reverse transactions that were completed while they were in control. Reversing transactions could allow them to double-spend coins, one of the main issues proof-of-work is trying to prevent.
+- **`51% Attack Friendly`**: [Here](https://99bitcoins.com/51-percent-attack/) is a great article on what a 51% attack is. The pool should not be so large that the network is either close to, or at risk for a 51% attack.  The issue here is that potential attackers would be able to prevent new transactions from gaining confirmations, which would allow them to halt payments between some or all users. Also, they would be able to reverse transactions that were completed while they were in control. Reversing transactions could allow them to double-spend coins, one of the main issues proof-of-work is trying to prevent.
 
-[Here](https://99bitcoins.com/51-percent-attack/) is a great article on what a 51% attack is. It is very important to [choose](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool/) a pool that is NOT consuming too much of the hash rate on a blockchain. 
+ It is very important to [choose](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool/) a pool that is NOT consuming too much of the hash rate on a blockchain. 
 
 It cannot be stressed enough how important it is to choose mining pools that are not consuming too much of the overall hashrate.  We have seen blockchains like [Firo](https://decrypt.co/54751/firo-gets-hit-by-51-attack-300-blocks-rolled-back), and [Eth Classic](https://www.coindesk.com/markets/2020/08/29/ethereum-classic-hit-by-third-51-attack-in-a-month/) undergo security attacks, because too much of the hash rate was given to one entity.  
 
-**As a miner on the CKB network, it is truly our privilege and duty to protect the integrity of the network, and we do this by choosing pools that aren't edging anywhere close acquiring 51% or more of the total hashrate.**
+**As a miner on the CKB network, it is truly our privilege and duty to protect the integrity of the network, and we do this by choosing pools that aren't edging anywhere close to acquiring 51% or more of the total hashrate.**
 
 For ideas on mining pool options, you can find a few useful pools below:
 - https://miningpoolstats.stream/nervos
