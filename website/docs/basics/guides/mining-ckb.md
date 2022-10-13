@@ -1,6 +1,6 @@
 ---
 id: mining-ckb
-title: Mining CKB
+title: Mine CKB
 ---
 
 CKB mining is a critical part of securing the Nervos network, which in turn is fundamental to maintaining a decentralized cryptocurrency.  Not only can CKB mining be an enjoyable learning experience, it can be profitable, and a valuable way to help grow and expand this democratizing industry which so many people around the world desperately need. 
@@ -20,9 +20,7 @@ There a few decisions to make when it comes to selecting a miner:
 - Miner Type: On Nervos, mining hardware is all ASIC-based now. There are a couple main
 producers of hardware, and each model has its own interface, so you'll need to sort through a few things in order to decide.  Obviously, higher cost should relate to higher hash power, and thus more block rewards.  Energy consumption would be another consideration to keep in mind.  [Here](https://www.asicminervalue.com/) is a website listing various miners, their profitability, and specifications.  At the time of this wriging, two popular brands are Bitmain and Goldshell.
   
-- Miner characteristics: Miners generate noise, heat, and [consume energy](https://www.reddit.com/r/NervosNetwork/comments/nb2yzw/ckb_proof_of_work_energy_consumptions/).  These are all considerations you will want to consider. 
-  
-  All of these considerations and more are covered in details in the articles written [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency/) and [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency-part-2/).
+- Miner characteristics: Miners generate noise, heat, and [consume energy](https://www.reddit.com/r/NervosNetwork/comments/nb2yzw/ckb_proof_of_work_energy_consumptions/).  These are all considerations you will want to consider. All of these considerations and more are covered in details in the articles written [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency/) and [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency-part-2/).
 
 
 ### Step 3 - Make a List
@@ -45,24 +43,24 @@ Optional -
 - Fire Extinguisher
 
 ### Step 4 - Set up and Configure Your miner
-This is actually easier than you think. Once you receive your miner (can sometimes take a couple weeks to ship, depending on country of origin) check the miner for damage.  Damage to components is quite possible during shipping, especially internationally. Prepare network cables and power supply, and make the appropriate connections.  Make sure you have a good internet connection, all cables, including the power supply are attached securely. Make sure you have some method of keeping your miner from overheating (use a fan, or position in a cool place in the home, etc).
+This is actually easier than you think. Once you receive your miner (can sometimes take a couple weeks to ship, depending on country of origin) check the miner for damage.  Damage to components is quite possible during shipping, especially internationally. Secure all of your network cables, your power supply, and make sure you have a good internet connection. Of course, you should also have some method of accounting for excess heat generated from your mining equipment (use a fan, or position in a cool place in the home--everyone will have a different situation here).
 
 Once you have everything in place, it is time to configure the software that will be used to mine. Each miner will have a different configuration required, but in general, you will (1) create a new account (2) acquire your IP address (3) connect your miner to the software, (4) update any firmware needed, and (5) make sure your miner is connected and operating as expected (see last step below on joining a pool).
 
 ### Step 5 - Join a Mining Pool
 There are many considerations to think about when you begin your CKB mining journey.  One of the most important ones is should you join a mining pool, and if so, which one.
 
-First, these days most miners join a pool, in order to pool their hash power to secure more block rewards.  These rewards are then distributed to the miners via various scheme, for a fee.  Your job as a miner is to figure out which pool works for you based on these fee structures, and how rewards get paid out.  Essentially, you are providing the pool a portion of their mining power, and thus should receive adequate, transparent rewards that secure the network in question, increase security and enhance decentralization.
+First, you will likely want to join a mining pool as mining on your own is likely not going to generate many new blocks--solo miners just don't have the required hash power (in general). By joining a mining pool, you are sharing in that pools rewards (for a fee of course).  Your job as a new miner is to figure out which mining pool works for you based on their fee structures, and how rewards get paid out.  
 
 Popular pools for instance, lead to more blocks produced, and thus faster payouts for miners.  However, the payouts are smaller since you represent a smaller slice of the total pool. Less popular pools will have slower payouts, but will be larger in size. In theory, total earnings between a large and small pool should be roughly similar in the long-term.
 
-In that case, what other considerations are there?
+Other considerations include:
 
 - Transaction Fees: Fees hover roughly around 1-3%...Fees higher than this would be considered high.  [Here](https://medium.com/luxor/mining-pool-payment-methods-pps-vs-pplns-ac699f44149f) is an article describing the payout methods, and fees associated with mining.
-- Transparency: The pool should have an active dashboard, so you can see the results of the collective mining effort.
+- Transparency: The pool should have an active dashboard for instance, or some way of visualizing how the pool is performing, so you can see the results of the collective mining effort.
 - Security: The pool should have some history and a track record of successful payouts.
 - Proximity: Closer to you is better.
-- Decentralized: The pool should not be so large that the network is either close to, or at risk for a 51% attack.  The isue is that the attackers would be able to prevent new transactions from gaining confirmations, which would allow them to halt payments between some or all users. Also, they would be able to reverse transactions that were completed while they were in control. Reversing transactions could allow them to double-spend coins, one of the main issues proof-of-work is trying to prevent.
+- 51% Attack Friendly: The pool should not be so large that the network is either close to, or at risk for a 51% attack.  The issue here is that potential attackers would be able to prevent new transactions from gaining confirmations, which would allow them to halt payments between some or all users. Also, they would be able to reverse transactions that were completed while they were in control. Reversing transactions could allow them to double-spend coins, one of the main issues proof-of-work is trying to prevent.
 
 [Here](https://99bitcoins.com/51-percent-attack/) is a great article on what a 51% attack is. It is very important to [choose](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool/) a pool that is NOT consuming too much of the hash rate on a blockchain. 
 
@@ -75,4 +73,4 @@ For ideas on mining pool options, you can find a few useful pools below:
 - https://wheretomine.io/coins/nervos
 - https://minerstat.com/coin/ckb/pools
 
-For more information, please drop by our [Nervos Mining Discord](https://discord.com/channels/657799690070523914/671647273603694625)
+For more information, please drop by our [Nervos Mining Discord](https://discord.com/channels/657799690070523914/671647273603694625).
