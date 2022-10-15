@@ -1,77 +1,89 @@
 ---
 id: mining-ckb
-title: Mine CKB
+title: Mining CKB
 ---
 
-CKB mining is a critical part of securing the Nervos network, which in turn is fundamental to maintaining a decentralized cryptocurrency.  Not only can CKB mining be an enjoyable learning experience, it can be profitable, and a valuable way to help grow and expand this democratizing industry which so many people around the world desperately need. 
+Nervos Network's layer 1 blockchain, the Common Knowledge Base, relies on Proof of Work (PoW) mining to provide consensus at the bottom-most layer of the ecosystem. PoW mining serves a critical role in the ecosystem, providing both security and decentralization guarantees to the entire ecosystem.
 
-What follows is both a guide on how to get started mining CKB.  We will include a discussion on how to choose the right equipment, the importance of choosing the right mining pools, and where to go for more information.  Whatever your interest might be in mining CKB, we want you to know that we depend on our CKB miners daily, and are here to support you in that regard.
+Miners are an important part of the community, and they provide an essential service to Nervos. In exchange for providing this service, they are paid a reward in CKBytes (CKB) to align their interests in a way that benefits all users of the blockchain. Mining can be both fun and profitable, but it also has inherent risks and challenges that are not for everyone. It is important to understand what you're getting into before diving in.
 
-As you move through this guide, please note that some sections are meant to be brief, and links are included to elaborate concepts should you need them.  This guide is specific to mining CKB, but also general enough to provide value to any reader just looking to understand cryptocurrency mining in general.
+This guide will help those who are interested in mining get started on Nervos. We will discuss the essential basics, such as how to find compatible equipment, the importance of choosing a mining pool, and most importantly, we will point out a few other informational resources that will help you to make your mining operation successful.
 
-### Step 1 - Create a Dedicated CKB Wallet
-You will want a dedicated wallet to support your mining efforts in order to separate your mining earnings from any other cryptocurrency transactions you make in other wallets.  Ideally, a good CKB wallet would be one that is secure, decentralized, and easy to use with good support.  
+## Step 1 - Research and Planning
 
-At Nervos Network, we provide the [Neuron Wallet](https://docs.nervos.org/docs/basics/guides/crypto%20wallets/neuron/), which is also a full node (at the time of this writing) and keeps the network secure just by using it. Keep in mind that this wallet will require downloading the full Nervos blockchain, and could take up to 72 hours to sync with the Nervos network.  Another recommended wallet is the [CK Bull wallet](https://ckbull.app/).  This is a wallet you can operate from your mobile device, is easy to use, and has great support.
+Planning is the most important step in any successful mining operation. Do you have a well-ventilated place where the sound of the miners will not bother anyone? Do you have the proper electrical wiring to support your miners? Are your electricity rates competitive year-round? These are the kinds of questions you need to be able to answer _before_ you start buying equipment.
 
-### Step 2 - Select Your CKB Miner
-There a few decisions to make when it comes to selecting a CKB miner:
+Many of these considerations and covered in the articles written [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency/) and [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency-part-2/). There are also many video resources on [YouTube](https://www.youtube.com/results?search_query=nervos+mining) that may also help you to get a better idea of what is involved with mining on Nervos. Using free tools like [mining calculators](https://minerstat.com/algorithm/eaglesong) can help you to understand what your costs will be. You can ask questions to other miners in the community-run [Nervos Mining CKB](https://t.me/NervosMining) Telegram channel or in the [#mining-chat](https://discord.com/channels/657799690070523914/671647273603694625) channel on the Nervos Discord server.
 
-- **CKB Miner Type**: On Nervos, mining hardware is all ASIC-based now. There are a couple main
-producers of hardware, and each model has its own interface, so you'll need to sort through a few things in order to decide.  Obviously, higher cost should relate to higher hash power, and thus more block rewards.  Energy consumption would be another consideration to keep in mind.  [Here](https://www.asicminervalue.com/) is a website listing various miners, their profitability, and specifications.  At the time of this wriging, two popular brands are Bitmain and Goldshell.
-  
-- **CKB Miner characteristics**: CKB miners generate noise, heat, and [consume energy](https://www.reddit.com/r/NervosNetwork/comments/nb2yzw/ckb_proof_of_work_energy_consumptions/).  These are all considerations you will want to consider. All of these considerations and more are covered in details in the articles written [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency/) and [here](https://www.cryptowendyo.com/should-i-start-mining-cryptocurrency-part-2/).
+Unlike mining for gold, there is very little guesswork in cryptocurrency mining. If you have properly done your research, then you should have realistic expectations about miner operation and profitability before you have made any kind of commitment. Don't skip out here! A little bit of research goes a very long way.
 
+## Step 2 - Select Your Mining Hardware
 
-### Step 3 - Make a List
+Nervos uses the Eaglesong hashing algorithm in mining, and specialized miners called ASICs are used to mine CKB. You must use a miner that is specifically designed for Nervos. You cannot use a miner from a different currency, because it is likely to be incompatible.
 
-Here is a brief list of items that you will need to have to get started:
+In the past, mining was done using GPUs and FPGA miners, but now ASICs are required. This is because ASICs are more specialized, and are the fastest and most efficient. GPUs and FPGA mining is still possible, but it is not efficient enough to be profitable.
 
-Essentials -
-- **`ASIC Miner`** (Ultimately GPUs aren't used any longer due to inefficiencies, thus you will be most likely looking for an ASIC miner)
-- **`Power Supply`** (Pro Tip: If buying more than one miner, save money buy purchasing one power supply that feeds multiple miners)
-- **`Ethernet Cables`** (Unless you are mining over wifi)
-- **`Surge Protector`**
-- **`Ethernet Switch`** 
-- **`Rack System`** (For larger setups involving multiple miners)
-  
-Optional - 
-- **`Power Cable`** (Some miners don't come with this, check with your manufacturer)
-- **`Infrared Temperature Sensor`** (Used to detect overheating conditions in wiring)
-- **`Ethernet Outlet Extender`** (In case you wish to turn your electrical outlet into a router (essentially) for hard to reach areas of the home)
-- **`Video Camera`** (Used to surveil your setup while you are away)
-- **`Fire Extinguisher`**
+There are many ASIC miners available, but not all are created equally. Some are better than others. New and improved miners come out regularly. Sites like [ASIC Miner Value](https://www.asicminervalue.com/efficiency/eaglesong) have information on what miners are available for the Eaglesong algorithm, as well as the specifications. Some are quiet, and some are extremely noisy. Some run on 110-volt electricity and others require 220-volt electricity. All these things must be considered.
 
-### Step 4 - Set up and Configure Your CKB miner
-This is actually easier than you think. Once you receive your CKB miner (can sometimes take a couple weeks to ship, depending on country of origin) check the miner for damage.  Damage to components is quite possible during shipping, especially internationally. Secure all of your network cables, your power supply, and make sure you have a good internet connection. Of course, you should also have some method of accounting for excess heat generated from your mining equipment (use a fan, or position in a cool place in the home--everyone will have a different situation here).
+If you're unsure, you can always ask other miners on [Telegram](https://t.me/NervosMining) or [Discord](https://discord.com/channels/657799690070523914/671647273603694625) about their experiences.
 
-Once you have everything in place, it is time to configure the software that will be used to mine. Each CKB miner will have a different configuration required, but in general, you will (1) create a new account (2) acquire your IP address (3) connect your CKB miner to the software, (4) update any firmware needed, and (5) make sure your CKB miner is connected and operating as expected (see last step below on joining a pool).
+## Step 3 - Select a Wallet
 
-### Step 5 - Join a Mining Pool
-There are many considerations to think about when you begin your CKB mining journey.  One of the most important ones is should you join a mining pool, and if so, which one.
+The CKB that you earn from mining are sent to the Nervos address that you specify. To create an address you will need to install wallet software. Nervos has many different wallet options available for both desktop computers and mobile phones, and any of them can be used for mining.
 
-[Here](https://99bitcoins.com/51-percent-attack/) is a great article on what a 51% attack is. It is very important to [choose](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool/) a pool that is NOT consuming too much of the hash rate on a blockchain. 
-First, you will likely want to join a mining pool as mining on your own is likely not going to generate many new blocks--solo miners just don't have the required hash power (in general). By joining a mining pool, you are enjoying rewards that are based on collective computing power of the pool. There are fees of course, and each pool has a different way of awarding as well as charging a fee to their contributors. Your job as a new miner is to figure out which mining pool works for you based on their [fee structures, and payout method](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool).  
+[Neuron Wallet](/docs/basics/guides/crypto%20wallets/neuron) is a desktop wallet produced by the Nervos Foundation. It is a full node wallet, which means that it will download the full Nervos blockchain in the background. Because it runs a full node, it is often regarded to be the most secure wallet. However, the full node takes many gigabytes of disk space and may take up to 72 hours to complete the initial synchronization. Ledger hardware wallets can also be used with Neuron to give an extra layer of security.
 
-Popular pools for instance, lead to more blocks produced, and thus faster payouts for miners.  However, the payouts are smaller since you represent a smaller slice of the total pool. Less popular pools will have slower payouts, but will be larger in size. In theory, total earnings between a large and small pool should be roughly similar in the long-term.
+[CKBull](https://ckbull.app/), [imToken](/docs/basics/guides/crypto%20wallets/imToken), and [SafePal](/docs/basics/guides/crypto%20wallets/safepal) are popular mobile wallets provided by third-party companies. All three wallets support both Google Android devices and Apple iOS devices.
 
-Other considerations include: 
+Many other wallets are also available. The Nervos Community maintains a more comprehensive [list of wallets](https://linktr.ee/thirdpartywallets) within the Nervos ecosystem.
 
-- **`Transaction Fees`**: Fees hover roughly around 1-3%...Fees higher than this would be considered high.  [Here](https://medium.com/luxor/mining-pool-payment-methods-pps-vs-pplns-ac699f44149f) is an article describing the payout methods, and fees associated with mining.
-- **`Transparency`**: The pool should have an active dashboard for instance, or some way of visualizing how the pool is performing, so you can see the results of the collective mining effort.
-- **`Security`**: The pool should have some history and a track record of successful payouts.
-- **`Proximity`**: Closer to you is better.
-- **`51% Attack Friendly`**: [Here](https://99bitcoins.com/51-percent-attack/) is a great article on what a 51% attack is. The pool should not be so large that the network is either close to, or at risk for a 51% attack.  The issue here is that potential attackers would be able to prevent new transactions from gaining confirmations, which would allow them to halt payments between some or all users. Also, they would be able to reverse transactions that were completed while they were in control. Reversing transactions could allow them to double-spend coins, one of the main issues proof-of-work is trying to prevent.
+## Step 4 - Select a Mining Pool
 
- It is very important to [choose](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool/) a pool that is NOT consuming too much of the hash rate on a blockchain. 
+Selecting a mining pool is one of the most important decisions you will make when you start mining. This is not only important for your profitability as a miner, but it is also important for the long-term health of the network itself.
 
-It cannot be stressed enough how important it is to choose mining pools that are not consuming too much of the overall hashrate.  We have seen blockchains like [Firo](https://decrypt.co/54751/firo-gets-hit-by-51-attack-300-blocks-rolled-back), and [Eth Classic](https://www.coindesk.com/markets/2020/08/29/ethereum-classic-hit-by-third-51-attack-in-a-month/) undergo security attacks, because too much of the hash rate was given to one entity.  
+> Decentralized blockchains can become more vulnerable to a [51% attack](https://99bitcoins.com/51-percent-attack/) when too much mining power is concentrated in single mining pools. When [choosing a pool](https://www.investopedia.com/tech/how-choose-cryptocurrency-mining-pool/), consider selecting one of the smaller pools to help keep the hash power decentralized.
 
-**As a miner on the CKB network, it is truly our privilege and duty to protect the integrity of the network, and we do this by choosing pools that aren't edging anywhere close to acquiring 51% or more of the total hashrate.**
+Larger pools tend to find blocks more quickly, and thus have faster payouts for miners. However, the payouts are smaller since you represent a smaller slice of the total pool. Smaller pools will have slower payouts but each payout will be larger. In theory, total earnings between a large and small pool should be roughly the same in the long term.
 
-For ideas on mining pool options, you can find a few useful pools below:
+A few other things to consider when selecting a pool:
+
+- **Mining Pool Fees**: Mining pool fees normally hover between 1% and 3%. In addition to the percentage, there are also different [payment systems](https://medium.com/luxor/mining-pool-payment-methods-pps-vs-pplns-ac699f44149f) to consider.
+- **Transparency**: Most pools have metrics and charts available that give users the ability to see how the pool is performing. A dishonest pool could claim to have a low fee and then take an unfair share of the mining rewards. The more transparent the pool is, the less likely this is to occur.
+- **Security**: A well-run pool should have some history and a track record of successful payouts. Remember, you are trusting the pool with your earnings. If they have poor security, they may lose some of your funds.
+- **Proximity**: Pools that are closer to your location are usually better. This is because PoW is inherently a race to find answers. The closer you are to a pool, the faster you can communicate, and this can result in slightly higher payouts.
+
+Part of a miner's duty is to protect the integrity of the network. A successful [51% attack](https://99bitcoins.com/51-percent-attack/) on the network would likely result in lower profitability for all miners. This is why we stress so thoroughly that you perform your due diligence when selecting a pool and do your part to promote decentralization by supporting smaller pools.
+
+The steps to create a pool account and the settings needed for your miner can differ from pool to pool. This information is specific to each pool and provided by the pools themselves.
+
+Here are a few more helpful resources to see the hashrate, fees, and various features on several of the pools that support Nervos.
+
 - https://miningpoolstats.stream/nervos
-- https://wheretomine.io/coins/nervos
 - https://minerstat.com/coin/ckb/pools
+- https://wheretomine.io/coins/nervos
 
-For more information, please drop by our [Nervos Mining Discord](https://discord.com/channels/657799690070523914/671647273603694625).
+## Step 5 - Set Up and Configure Your CKB Miner
+
+Once you have your miner, wallet address, and pool account, you are ready to start mining. If this is the first time you're setting up a miner, there are a few things you may want to check.
+
+- Inspect your miner for damage carefully. Most miners are shipped internationally, and equipment can easily be damaged in transit.
+- Check your area for loose materials like paper and plastic bags. Some miners have strong fans which can become clogged easily. That can lead to overheating which results in poor performance or even hardware damage.
+- After your miner is running, verify the temperature of the miner and all power cables in the area periodically. It's normal for miners to be warm to the touch, but a scorching hot miner or cable could indicate a ventilation problem that could lead to a fire.
+
+Every miner has different interfaces and specific procedures that must be followed for setup and configuration. However, most will follow these basic steps:
+
+1. Connect your miner's network and power cables.
+2. Locate your miner's IP address on the network.
+3. Open your miner's admin panel in a web browser.
+4. Check for updates to your miner's firmware.
+5. Update your miner's configuration with your pool settings.
+
+After these steps are completed, your miner should be up and running. Sometimes it can take a few minutes to start but after 10-15 minutes your miner's activity should be visible within your pool dashboard.
+
+## Where to Get Help
+
+If you have trouble with your miner, check to see if the manufacturer provides support. Some pools will also offer support for users who need help configuring their miners.
+
+You can also ask other CKB miners on [Telegram](https://t.me/NervosMining) and [Discord](https://discord.com/channels/657799690070523914/671647273603694625) for help since many of them will be running similar equipment on similar pools.
+
+The Nervos Community maintains a [list of mining resources](https://linktr.ee/CKBMining) that has lots of helpful information and tips.
