@@ -5,9 +5,9 @@ title: CKB Address
 
 ### **Q**: Is there any demos available for encoding and decoding full addresses? 
 
-**A**: [Here](https://github.com/rev-chaos/ckb-address-demo) is a demo in Python where you to see the cases for testing. Compared with the bitcoin address format bech32, CKB’s solution only differs in payload. They have the same programming scheme. For example, RFCs in Python demo have added Bitcoin's latest bech32m address format.
+**A**: [Here](https://lumos-website.vercel.app/tools/address-conversion) is a tool to help you check if an address is a full address or a deprecated address
 
-[Here](https://codesandbox.io/s/ckb-address-transformer-524gi) is a JavaScript demo on Codebox, which shows how to transform addresses in different formats.
+[Here](https://github.com/rev-chaos/ckb-address-demo) is a demo in Python where you to see the cases for testing. Compared with the bitcoin address format bech32, CKB’s solution only differs in payload. They have the same programming scheme. For example, RFCs in Python demo have added Bitcoin's latest bech32m address format.
 
 ---
 
