@@ -55,9 +55,9 @@ module.exports = {
   presets: [
     [
       "@docusaurus/preset-classic",
-      {  
-		gtag: {
-          trackingID: 'G-CPNK56S8G3',
+      {
+        gtag: {
+          trackingID: "G-CPNK56S8G3",
           anonymizeIP: true,
         },
         docs: {
@@ -70,6 +70,9 @@ module.exports = {
         theme: {
           customCss: [path.join(__dirname, "./static/css/custom.css")],
         },
+        docs: {
+          editUrl: 'https://github.com/nervosnetwork/docs-new/tree/develop/website'
+        }
       },
     ],
   ],
@@ -179,9 +182,9 @@ module.exports = {
       copyright: "Copyright © 2021  Nervos Foundation. All Rights Reserved.",
     },
     algolia: {
-      appId: 'LU9B8PQ7W5',
+      appId: "LU9B8PQ7W5",
       apiKey: "122c7efa6c0425cfd6852286c746e653",
       indexName: "nervos",
-    }
+    },
   },
 };
