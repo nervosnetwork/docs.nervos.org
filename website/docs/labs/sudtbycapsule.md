@@ -53,12 +53,14 @@ capsule check
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 ------------------------------
 docker    installed
 ckb-cli    installed
 ------------------------------
 ```
+
 </details>
 
 
@@ -69,6 +71,7 @@ capsule new my-sudt
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 New project "my-sudt"
 Created file "capsule.toml"
@@ -82,6 +85,7 @@ Created tests
      Created binary (application) `tests` package
 Done
 ```
+
 </details>
 
 
@@ -92,10 +96,12 @@ ls my-sudt
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 
 build  capsule.toml  Cargo.toml  contracts  deployment.toml  migrations  README.md  tests
 ```
+
 </details>
 
 The default contract is under `my-sudt/contracts/my-sudt` directory which is a normal cargo project:
@@ -105,10 +111,12 @@ ls my-sudt/contracts/my-sudt
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 
 Cargo.toml  src
 ```
+
 </details>
 
 You can open `my-sudt/contracts/my-sudt/src/main.rs` to see some pre-generated code:
@@ -200,6 +208,7 @@ capsule build
 
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 
 Building contract my-sudt
@@ -215,6 +224,7 @@ Building contract my-sudt
     Finished dev [unoptimized + debuginfo] target(s) in 8.73s
 Done
 ```
+
 </details>
 
 
@@ -225,10 +235,12 @@ ls build/debug
 ```
 <details>
 <summary>(click here to view response)</summary>
+
 ```bash
 
 my-sudt
 ```
+
 </details>
 
 
