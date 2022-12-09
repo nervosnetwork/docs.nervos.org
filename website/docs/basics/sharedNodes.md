@@ -32,17 +32,6 @@ Ankr is a decentralized Web3 infrastructure provider offering a distributed node
 
 ----
 
-## GetBlock
-
-GetBlock is a Blockchain-as-a-Service (BaaS) platform that provides instant API access to the full nodes of multiple blockchains. CKB developers can test or build their projects using GetBlock's instant API connection to full nodes from CKB.
-
-<img src={useBaseUrl("img/getblock.png")}/>
-
-- [Nervos GetBlock Endpoints](https://getblock.io/nodes/ckb/)
-- [GetBlock Documentation](https://getblock.io/docs/nodes-endpoints/)
-
-----
-
 ## Unifra
 
 Unifra is a Web3 developer platform focused on simplifying blockchain development. They've built a suite of developer tools, enhanced APIs, and a node infrastructure to seamlessly build and run blockchain applications. As a member of Nervos community, Unifra provides public RPC services for CKB mainnet (Mirana).
