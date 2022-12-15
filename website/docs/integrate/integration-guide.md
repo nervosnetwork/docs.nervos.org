@@ -82,8 +82,8 @@ Below listed the items to be configured:
 
 | Items  | Description |
 | ------------- | ------------- |
-| store = \<PATH>  | Indexer db directory. Configured as data/indexer/store by default.  |
-| secondary_path = \<PATH>  | Indexer directory for node data synchronization. Configured as  data/indexer/secondary_path by default.  |
+| store = `<PATH>`  | Indexer db directory. Configured as data/indexer/store by default.  |
+| secondary_path = `<PATH>`  | Indexer directory for node data synchronization. Configured as  data/indexer/secondary_path by default.  |
 | poll_interval = 2  | Indexer data synchronization interval. Measured in second, 2s by default. Mainly used for testing. We recommended not to modify. |
 | index_tx_pool = bool  | Whether to create index for the unconfirmed transactions in tx_pool. |
 | db_background_jobs = 6  | Number of indexer db background job. 6 by default. We recommended not to modify. |
