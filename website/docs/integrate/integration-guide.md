@@ -50,6 +50,108 @@ Cell management mainly affects cell collection and address balance display. Ther
 * Use your UTXO management framework to combine [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md) to scan the entire CKB blockchain.
   * It is **not recommended** to use the ckb node internal [Indexer module](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md#indexer) to collect live cells, which is very slow and deprecated.
 
+### CKB built-in indexer
+
+#### CKB
+
+Since v0.105.0, CKB has integrated the functions in previous standalone ckb-indexers. Users of v0.105.0 nodes or above have no need to start ckb-indexer service separately. Ckb-indexer-related RPC is included in the current RPC as a module. Users don't have to configure the indexer port separately.
+
+There are three ways to enable CKB built-in indexer:
+
+- Add the parameter `--indexer` to the command line to start CKB
+
+```
+ckb run -C <path> --indexer
+```
+
+- Add Indexer module in the RPC section of CKB config file. CKB built-in indexer will be enabled along with the node.
+
+```
+[rpc]
+modules = [..., "Indexer"]
+```
+
+- Add indexer_v2 section to the config file to configure the indexer. Since the indexer section was deprecated in the configuration file once before, the v2 suffix is added to avoid conflicts and to be compatible with older config files. Once the indexer section is configured, the CKB built-in indexer will be enabled along with the node.
+    
+```
+[indexer_v2]
+index_tx_pool = false
+```
+    
+
+These three methods do not mutually conflict. Users can choose based on their preferences. The third method supports advanced indexer configuration. 
+
+Below listed the items to be configured: 
+
+| Items  | Description |
+| ------------- | ------------- |
+| store = `<PATH>`  | Indexer db directory. Configured as data/indexer/store by default.  |
+| secondary_path = `<PATH>`  | Indexer directory for node data synchronization. Configured as  data/indexer/secondary_path by default.  |
+| poll_interval = 2  | Indexer data synchronization interval. Measured in second, 2s by default. Mainly used for testing. We recommended not to modify. |
+| index_tx_pool = bool  | Whether to create index for the unconfirmed transactions in tx_pool. |
+| db_background_jobs = 6  | Number of indexer db background job. 6 by default. We recommended not to modify. |
+| db_keep_log_file_num = 1  | Number of indexer db debug logs. 1 by default. |
+
+Block_filter and cell_filter bprovide options to customize index rules via a simple Rhai script. 
+Configured as below:
+
+```
+block_filter = "block.header.number.to_uint() > "1000000".to_uint()"
+cell_filter = 'let script = output.lock; script.code_hash == "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8" && script.hash_type == "type" && script.args == "0xa897829e60ee4e3fb0e4abe65549ec4a5ddafad7"'
+```
+
+
+Also note that the difference between the RPC of CKB built-in indexer and the RPC of the previous standalone ckb-indexer:
+
+* get_tip RPC in ckb-indexer is renamed to get_indexer_tip to avoid ambiguity.
+* get_indexer_info RPC is removed.
+
+#### Ckb-cli
+
+Ckb-cli requires v1.2.0 or higher to support CKB built-in indexer.
+
+Specifying [`ckb-indexer-url`](http://ckb-indexer-url.is) is no longer necessary.
+
+#### Ckb-sdk
+
+**Go SDK**
+
+Importing [Go SDK](http://github.com/nervosnetwork/ckb-sdk-go/indexer) is no longer necessary.
+
+ All previous method calls are switched from `indexerClient` to CKB client as follows:
+
+```
+//import [github.com/nervosnetwork/ckb-sdk-go/indexer](http://github.com/nervosnetwork/ckb-sdk-go/indexer)
+import github.com/nervosnetwork/ckb-sdk-go/rpc
+
+///BEFORE
+//!!NOTE: OLD ONE, this is deprated!
+//indexerClient, err := indexer.Dial("http://127.0.0.1:8114")
+//indexerClient.GetCells....
+
+///AFTER
+//!!NOTE: USE THIS INSTEAD
+var client, _ = rpc.Dial("https://testnet.ckb.dev")
+//client.GetCells(...)
+```
+
+#### Lumos
+
+Lumos needs v0.19.0 to adapt to CKB build-in indexer.
+ 
+```
+import { Indexer } from '@ckb-lumos/lumos';
+
+// before
+// const indexer = new Indexer(
+//   "https://testnet.ckb.dev/indexer", 
+//   "https://testnet.ckb.dev/rpc",
+// );
+
+// after
+const indexer = new Indexer("https://testnet.ckb.dev/rpc");
+```
+
 ### Confirmation count suggestion
 
 Since Nervos CKB network is secured by [ASIC PoW miners with extreme hash rate](https://explorer.nervos.org/charts/hash-rate) now, it could achieve the same or better security threshold than Ethereum at **24 block confirmations**.
