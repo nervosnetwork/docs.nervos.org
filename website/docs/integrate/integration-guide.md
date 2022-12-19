@@ -19,7 +19,7 @@ You’ll need to deploy nodes to connect with the CKB network, read data from th
 * RAM: 4G
 * Storage: 100G SSD
 
-## Before Integration
+## A Checklist for Integration
 Before starting your integration, we recommend reading [CKB Transaction Structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md) RFC to familiarize yourself with an essential data structure in CKB. Some common issues and corresponding example solutions (using [CKB SDK Java](https://github.com/nervosnetwork/ckb-sdk-java/tree/v0.35.1)) are listed below.
 
 ### Generating and Parsing Address
