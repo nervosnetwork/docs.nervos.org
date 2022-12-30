@@ -3,6 +3,10 @@ id: tx-pool
 title: Transaction Pool
 ---
 
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+import Link from "@docusaurus/Link";
+
 ## Transaction Chaining
 
 In CKB, transactions are organized in chains, whereby one transaction spends or `dep` references the outputs of the previous transaction (known as the parent)  and creates outputs for the subsequent transaction (known as the child).
