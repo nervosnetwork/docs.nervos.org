@@ -87,5 +87,8 @@ CKB uses a two-step process for transaction confirmation. Transactions will be d
 
 `BlockAssembler` will fetch proposals and transactions from the pending pool and proposed pool for block template.
 
-More information about this two-step transaction confirmation process can be found here:
-https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0020-ckb-consensus-protocol/0020-ckb-consensus-protocol.md#two-step-transaction-confirmation
+More information about this two-step transaction confirmation process can be found [here](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0020-ckb-consensus-protocol/0020-ckb-consensus-protocol.md#two-step-transaction-confirmation).
+
+## Tx-pool Two-Step Transaction Confirmation
+Since CKB v0.101, the tx-pool will not run the two-step transaction confirmation mechanism for non-miner nodes, i.e. nodes that are not configured with block assembler, and the status of the transaction will not be displayed when the transaction is fetched via rpc.
+
