@@ -273,17 +273,63 @@ CKB accounts can be used for anyone-can-pay cells and support any amount of paym
 
       <img src={useBaseUrl("img/wallet/neuron_18.png")} width="70%"/>
 
-## Troubleshooting
+## Sync Failure Troubleshooting
 
-Try the following process to solve the sync failure "Sync failed, please check network, or Sync is slow.":
+There are several causes that lead to Neuron Wallet sync errors. Here is a step-by-step troubleshooting guide to help you resolve the issue.
 
-1. Quit and restart Neuron.
+### General Troubleshooting Process
 
-   **Note**: Neuron is bundled with a CKB node that requires [VC++ redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) on Windows to work properly. 
+First, check if ckb and ckb-indexer are running.
 
-2. Run a CKB Mainnet node of version v0.32.0 or later instead of running the Neuron bundled node. 
+- Windows: Open Task Manager
 
-3. If it still doesn't work out, please join the [Support](https://discord.gg/TfC9rExfHh) channel and export the debug information, and send it to the support group for further investigation.
+ <img src={useBaseUrl("img/wallet/Neuron trouble task manager.png")} width="70%"/>
+ 
+- MacOS: Open Activity Monitor
 
-   <img src={useBaseUrl("img/wallet/neuron_19.png")} width="70%"/>
+<img src={useBaseUrl("img/wallet/neuron trouble activity monitor.png")} width="70%"/>
 
+If ckb and ckb-indexer are both down, to restart, add a network in `setting -> network -> add network` with `rpc url: [http://localhost:8114](http://localhost:8114)` and `name: mainnet`. Switch to the mainnet. Neuron will reconnect to the running CKB node.
+
+If the above doesn't work, we need more information to locate the problem. Get the info by `menu -> help -> export debug info` and export the files below:
+
+```
+bundled-ckb.log        # ckb log file
+hd_public_key_info.csv # generated address index with its transaction count
+main.log               # log of Neuron's main process
+renderer.log           # log of Neuron's renderer process
+status.json            # general info including neuron's version, ckb's version.
+```
+
+Open `bundled-ckb.log` and scroll down to the bottom. The error (if exists) is usually displayed there. Listed below are four potential cases:
+
+- If you see text like  `Neuron\chains\mainnet\data\db\LOCK` or `Neuron/chains/mainnet/data/db/LOCK` It's a problem with the database lock. Remove the `.../LOCK` file.
+    - Remove the entire directory by selecting `tools -> clear all synchronized data`, but it leads to a new sync from scratch.
+
+Windows:
+
+<img src={useBaseUrl("img/wallet/neuron trouble remove windows.png")} width="70%"/>
+
+MacOS:
+
+<img src={useBaseUrl("img/wallet/neuron trouble remove macos.png")} width="70%"/>
+
+- If you see text like `main INFO main ckb version:`, check if the version is up to date; If not, remove chain data and restart the synchronization by `tools -> clear all synchronized data`
+
+- If you see text like `thread 'main' panicked at 'Internal(DataCorrupted(failed to load the options file: IO error: No such file or directory` or `EINVAL: invalid argument`, follow this [issue](https://github.com/nervosnetwork/neuron/issues/2497#issuecomment-1270288737) to check if your username of PC has non-UTF8 characters.
+
+- If you see text like `error while loading shared libraries: libssl.so.1.1: cannot open shared object file`, follow this [issue](https://github.com/nervosnetwork/neuron/issues/2126#issuecomment-1232666236) to check if it's caused by the incompatibility of OpenSSL.
+
+### Non UTF-8 Characters In Username
+
+<img src={useBaseUrl("img/wallet/neuron trouble Non UTF-8.png")} width="70%"/>
+
+If an exception like this occurs, make sure that your `username` in file path `\Users\{username}\AppData\Roaming\Neuron\...` is inside the UTF-8 charset. `usename` outside of UTF-8 is not allowed, which leads to the failure of running `ckb node` in Neuron Wallet.
+
+Please follow [these steps](https://github.com/nervosnetwork/neuron/issues/2264#issuecomment-1126792201) to check if it's caused by the non-UTF8 issue.
+
+Once confirmed, the simplest way to run Neuron is to create a new account with UTF-8 characters.
+
+### Report Your Issue
+
+If you’ve followed the above troubleshooting guide but still cannot locate the problem, export the log and use [this template](https://github.com/nervosnetwork/neuron/issues/new?assignees=Keith-CY&labels=bug&template=synchronization-issue.yml&title=%5BSynchronization%5D+%2A%2Abrief+description%2A%2A) to submit the issue.
