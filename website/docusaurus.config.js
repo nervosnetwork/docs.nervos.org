@@ -10,7 +10,6 @@ module.exports = {
   organizationName: "nervosnetwork",
   projectName: "docs-new",
   scripts: ["/js/extra.js"],
-  stylesheets: ["https://fonts.googleapis.com/css2?family=Lato&display=swap"],
   stylesheets: [
   {
     href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
