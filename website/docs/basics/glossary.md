@@ -2217,6 +2217,20 @@ Short for “test network,” a network used to simulate the behavior of the [Ma
 - [Mainnet](#mainnet)
 
 ---
+### Transaction Confirmation Number
+The number of confirmations required for a transaction to be added to a block. 
+
+As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation here).
+
+In blockchain settlement assurance, transaction confirmation is one of the variables that cannot be easily quantified (See Nic Carter’s [article](https://medium.com/@nic__carter/its-the-settlement-assurances-stupid-5dcd1c3f4e41)). The exact number is open to adjustment depending on the security level that users desire. Nervos CKB sets a minimum of 15 confirmations, which should be considered conservative.
+
+#### See Also
+- [Confirmation](#confirmation)
+- [NC-Max](#nc-max)
+- [Orphan Block](#orphan-block)
+- [Orphan Rate](#orphan-rate)
+
+---
 
 ### Transaction Hash
 
