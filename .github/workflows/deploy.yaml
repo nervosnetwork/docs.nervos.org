@@ -19,7 +19,7 @@ jobs:
       - name: Build website
         working-directory: website
         run: |
-          npm install --save remark-math@3 rehype-katex@5 hast-util-is-element@1.1.0
+          yarn add remark-math@3 rehype-katex@5 hast-util-is-element@1.1.0
           yarn install --frozen-lockfile
           yarn build
 
