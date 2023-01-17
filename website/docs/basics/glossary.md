@@ -1333,6 +1333,17 @@ A lightweight Rust library for verifying the Nervos layer 1 blockchain, the Comm
 - [Common Knowledge Base](#common-knowledge-base)
 - [Boxer on GitHub](https://github.com/xxuejie/ckb-boxer)
 
+
+---
+### `block_version`
+Version of a block. This field is reserved for the system, set to 0 by default.
+
+```
+pub const BLOCK_VERSION: Version = 0;
+```
+#### See Also
+- [Block](#block)
+
 ---
 
 ### Cell Collection
@@ -1353,6 +1364,32 @@ This is the equivalent of a coinbase transaction in Bitcoin.
 #### See Also
 - [CKByte](#ckbyte)
 - [Coinbase on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
+
+---
+
+### `cellbase_maturity`
+
+Any referenced cellbase output must meet this requirement in a transaction; otherwise, the transaction is rejected. Cellbase outputs are "locked" and have to wait for 4 epochs (approximately 16 hours) to be confirmed before they become ready to be spent. This restriction is to avoid the risk of later transactions with cellbase root being rollbacked when a soft fork occurs.
+
+```
+pub(crate) const CELLBASE_MATURITY: EpochNumberWithFraction =
+EpochNumberWithFraction::new_unchecked(4, 0, 1);
+```
+
+#### See Also
+- [Cellbase](#cellbase)
+
+---
+
+### `cell_deps`
+
+Pointers to live cells on the chain that allow scripts in the transaction to access (read-only) referenced live cells.
+
+Find more in the essay [Script dependencies](https://docs.nervos.org/docs/essays/dependencies/#how-dependencies-work).
+
+#### See Also
+
+- [Dependencies](#dependencies)
 
 ---
 
@@ -1455,6 +1492,16 @@ Well-established, low-level cryptographic algorithm commonly used to build out a
 
 #### See Also
 - [Cryptographic Primitive on Wikipedia](https://en.wikipedia.org/wiki/Cryptographic_primitive)
+
+---
+
+### `dao_type_hash`
+NervosDAO’s `type_hash`. 
+
+Find more in [CKB Genesis Script List](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#ckb-genesis-script-list).
+
+#### See Also
+- [`type_hash`](#`type_hash`)
 
 ---
 
@@ -1567,6 +1614,21 @@ Eaglesong is a new hash function developed specifically for Nervos CKB proof-of-
 
 ---
 
+### `epoch_duration_target`
+
+The estimated epoch duration specified by NC-Max. Set as 4 hours in CKB. 
+
+```
+pub(crate) const DEFAULT_EPOCH_DURATION_TARGET: u64 = 4 * 60 * 60; // 4 hours, unit: second
+```
+
+#### See Also
+- [Epoch](#epoch)
+- [NC-Max](#nc-max)
+
+---
+
+
 ### ERC20
 An Ethereum token standard for basic fungible tokens.
 
@@ -1643,6 +1705,22 @@ The first block in the blockchain, used to initialize the global state. The gene
 - [Block](#block)
 - [Blockchain](#blockchain)
 
+
+---
+
+### `genesis_hash`
+
+Hash of CKB genesis block. CKB Genesis Block was created in a decentralized manner that encourages everyone to generate a unique genesis block verifiably through the [Genesis Block Generator](https://github.com/nervosnetwork/genesis-block-generator/blob/master/spec.md). Nodes thus created and activated can be connected to any other node across the network to form a decentralized Common Knowledge Base.
+
+The genesis block contains two main components:
+
+- [System script](https://github.com/nervosnetwork/ckb-system-scripts/blob/v0.5.4/c/dao.c)
+- Token pre-allocation based on the Nervos Foundation‘s [announcement](https://medium.com/nervosnetwork/nervos-ckb-official-public-sale-announcement-431438f4cc39#:~:text=Key%20details%20of%20the%20Nervos%20Public%20Sale&text=The%20initial%20total%20supply%20of,be%201%20CKB%20%3D%200.01%20USD.).
+
+#### See Also
+
+- [Genesis block](#genesis-block)
+
 ---
 
 ### Godwoken
@@ -1707,6 +1785,26 @@ An application or library to trace live cells that comply with criteria specifie
 
 - [Cell](#cell)
 - [Live Cell](#live-cell)
+
+---
+
+### `initial_primary_epoch_reward`
+
+Incentives paid to miners in CKBytes by epoch in CKB base issuance. Under CKB's consensus, block interval is uncertain, while epoch can be fixed at approximately 4 hours, so reward issuance is determined by epoch. Each epoch issues 1_917_808_21917808 Shannons of CKBytes, whose total amount is fixed but halves every 4 years. 
+
+The initial base issuance is 4.2 billion CKBytes per year. Similar to Bitcoin, the base issuance halves approximately every 4 years until it stops.
+
+To calculate, [block reward](https://docs.nervos.org/docs/basics/glossary/#block-reward) = `initial_primary_epoch_reward` / epoch_length (the number of blocks in the epoch).
+
+```
+pub(crate) const INITIAL_PRIMARY_EPOCH_REWARD: Capacity = Capacity::shannons(1_917_808_21917808);
+```
+
+#### See Also
+- [Block Reward](#block-reward)
+- [Epoch](#epoch)
+- [`secondary_epoch_reward`](#`secondary_epoch_reward`)
+- [`primary_epoch_reward_havling_interval`](#`primary_epoch_reward_havling_interval`)
 
 ---
 
@@ -1838,6 +1936,67 @@ Short for "main network", the running Nervos CKB public blockchain. The name of 
 #### Not To Be Confused With
 - [Aggron](#aggron)
 - [Testnet](#testnet)
+
+---
+### `max_block_bytes`
+
+The maximum transaction size limit allowed in a block in bytes. Estimated based on the size consumed by 1000 2-in-2-out secp256k1 transactions.
+
+```
+pub const MAX_BLOCK_BYTES: u64 = TWO_IN_TWO_OUT_BYTES * TWO_IN_TWO_OUT_COUNT;
+```
+
+---
+### `max_block_cycles`
+
+The maximum transaction cycle limit allowed in a block. Estimated based on the cycles consumed by 1000 2-in-2-out secp256k1 transactions.
+
+```
+/// cycles of a typical two-in-two-out tx.
+pub const TWO_IN_TWO_OUT_CYCLES: Cycle = 3_500_000;
+
+/// count of two-in-two-out txs a block should capable to package.
+const TWO_IN_TWO_OUT_COUNT: u64 = 1_000;
+pub(crate) const MAX_BLOCK_CYCLES: u64 = TWO_IN_TWO_OUT_CYCLES * TWO_IN_TWO_OUT_COUNT;
+```
+
+#### See Also
+- [Cycles](#cycles)
+
+---
+### `max_block_proposals_limit`
+
+The maximum amount of proposals contained in one block. The default value starts from 1.5.
+
+```
+TWO_IN_TWO_OUT_COUNT
+pub const MAX_BLOCK_PROPOSALS_LIMIT: u64 = 1_500;
+```
+
+#### See Also
+- [Proposal Zone](#proposal-zone)
+
+---
+### `max_uncles_num`
+
+The maximum number (Uint64) of uncle blocks allowed for one block. Set as 2 by default.
+
+```
+const MAX_UNCLE_NUM: usize = 2;
+```
+
+#### See Also
+- [Uncle](#uncle)
+
+---
+
+### `median_time_block_count`
+
+A timestamp is valid only when it is greater than the median timestamp of the previous 37 blocks.
+
+```
+const MEDIAN_TIME_BLOCK_COUNT: usize = 37;
+```
 
 ---
 
@@ -1976,9 +2135,9 @@ A shorthand name for Orphan Block.
 ---
 
 ### Orphan Block
-An orphan block is a valid block that is not included in main fork due to, for example, a lag within the network itself. There can be two miners who solve for a block simultaneously in NC-Max.
+An orphan block is a valid block that is not included in the main fork due to, for example, a lag within the network itself. There can be two miners who solve a block simultaneously in NC-Max. They are non-main-chain blocks, also known as stale blocks.
 
-On Nervos, orphan blocks are better described as Uncles.
+In Nervos, orphan blocks are better described as Uncles.
 
 #### Synonyms
 - [Orphan](#orphan)
@@ -1995,6 +2154,21 @@ On Nervos, orphan blocks are better described as Uncles.
 A measure of the speed at which Orphan blocks occur within the blockchain network.
 
 #### See Also
+- [Orphan Block](#orphan-block)
+- [`orphan_rate_target`](#`orphan_rate_target`)
+
+---
+
+### `orphan_rate_target`
+The estimated orphan block rate specified in NC-max. Set as 2.5% in CKB.
+
+```
+// o_ideal = 1/40 = 2.5%
+pub(crate) const DEFAULT_ORPHAN_RATE_TARGET: (u32, u32) = (1, 40);
+```
+
+#### See Also
+- [Orphan Rate](#orphan-rate)
 - [Orphan Block](#orphan-block)
 
 ---
@@ -2050,12 +2224,35 @@ A Pay-to-Witness-Script-Hash (P2WSH) is a type of Bitcoin transaction similar to
 
 ---
 
+### `permanent_difficulty_in_dummy`
+Keeps the difficulty permanent if PoW is dummy when dev-chain disables NC-MAX difficulty adjustment. As `boolean`, it can be enabled through configuration.
+
+#### See Also
+- [Difficulty](#difficulty)
+
+---
+
+
 ### Polyjuice
 Polyjuice provides an Ethereum compatible runtime on Godwoken.
 
 #### See Also
 - [Godwoken](#godwoken)
 - [Polyjuice on GitHub](https://github.com/nervosnetwork/polyjuice)
+
+---
+
+### `primary_epoch_reward_halving_interval`
+
+The halving cycle of epoch reward in CKB base issuance, typically every four years. The mining reward halves when the halving interval occurs.
+
+```
+pub(crate) const DEFAULT_PRIMARY_EPOCH_REWARD_HALVING_INTERVAL: EpochNumber =
+4 * 365 * 24 * 60 * 60 / DEFAULT_EPOCH_DURATION_TARGET; // every 4 years
+```
+
+#### See Also
+- [`initial_primary_epoch_reward`](#`initial_primary_epoch_reward`)
 
 ---
 
@@ -2082,6 +2279,20 @@ Miners are incentivized to propose transactions by being paid a proposal reward.
 - [Transaction](#transaction)
 
 ---
+
+### `proposer_reward_ratio`
+The reward ratio from transaction fees for miners who submit proposals specified by NC-Max. It is set as 40% in CKB, meaning the miner who first submits the transaction proposal will be rewarded with 40% of the transaction fee.
+
+```
+const PROPOSER_REWARD_RATIO: Ratio = Ratio::new(4, 10);
+```
+
+#### See Also
+- [Proposal Reward](#proposal-reward)
+- [NC-Max](#nc-max)
+
+---
+
 
 ### RISC-V
 An open standard instruction set architecture (ISA) for general computing.
@@ -2116,6 +2327,39 @@ A script is a binary executable in the ELF format for the RISC-V architecture, a
 - [RISC-V](#risc-v)
 - [Type Script](#type-script)
 - [ELF on Wikipedia](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
+
+---
+
+### `secondary_epoch_reward`
+The secondary reward per epoch. Issued according to CKB’s tokenomics detailed in [RFC0015](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md). 
+
+Secondary issuance is designed to collect state rent, and has an issuance amount that is constant over time. After base issuance stops, there will only be secondary issuance.
+
+Secondary issuance has two parts. One is a fixed amount of base incentive (approximately 134.4 million CKBytes per year), while the other varies according to the number of CKBytes currently occupied.
+
+```
+pub(crate) const DEFAULT_SECONDARY_EPOCH_REWARD: Capacity = Capacity::shannons(613_698_63013698);
+```
+#### See also
+- [`initial_primary_epoch_reward`](#`initial_primary_epoch_reward`)
+- [Secondary Reward](#secondary-reward)
+- [Secondary Issuance](#secondary-issuance)
+
+---
+
+### `secp256k1_blake160_sighash_all_type_hash`
+
+Type hash of `secp256k1_blake160_sighash_all` in [CKB genesis scripts](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#ckb-genesis-script-list).
+
+Find more details [here](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160).
+
+---
+
+### `secp256k1_blake160_multisig_all_type_hash`
+
+Type hash of `secp256k1_blake160_multisig_all` in [CKB genesis scripts](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#ckb-genesis-script-list).
+
+Find more details [here](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1multisig).
 
 ---
 
@@ -2220,7 +2464,7 @@ Short for “test network,” a network used to simulate the behavior of the [Ma
 ### Transaction Confirmation Number
 The number of confirmations required for a transaction to be added to a block. 
 
-As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation here).
+As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation [here](https://docs.nervos.org/docs/essays/tx-confirmation/)).
 
 In blockchain settlement assurance, transaction confirmation is one of the variables that cannot be easily quantified (See Nic Carter’s [article](https://medium.com/@nic__carter/its-the-settlement-assurances-stupid-5dcd1c3f4e41)). The exact number is open to adjustment depending on the security level that users desire. Nervos CKB sets a minimum of 15 confirmations, which should be considered conservative.
 
@@ -2292,6 +2536,49 @@ W is also the root of a [CKB Merkle Tree](#ckb-merkle-tree), but the items are t
 
 ---
 
+### `tx_proposal_window`
+Interval for submitting proposals in the second stage specified by NC-Max. Set between 2 and 10 blocks in CKB.
+
+<img src={useBaseUrl("img/tx-proposal-window.png")}/>
+
+As shown above, when a transaction is first proposed in Block 13, it can be committed in the window between Block 15 and Block 23.
+
+```
+pub(crate) const TX_PROPOSAL_WINDOW: ProposalWindow = ProposalWindow(2, 10);
+```
+
+---
+
+### `tx_version`
+The version of a transaction. This field is set to 0 and is reserved for the system.
+
+```
+pub const TX_VERSION: Version = 0;
+```
+---
+
+### `type_id`
+
+One of the CKB `system_scripts`. A unique feature of Type ID is that it‘s a CKB built-in script directly implemented in Rust. It doesn't run in CKB-VM but can be used in the same way as other [CKB genesis scripts](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#type-id).
+
+For a deeper understanding of Type ID, check out this blog post: [Introduction to CKB Script Programming 6: Type ID](https://xuejie.space/2020_02_03_introduction_to_ckb_script_programming_type_id/) (also translated into [Chinese](https://talk.nervos.org/t/ckb-type-id/4258)).
+
+#### See Also
+- [Script](#script)
+- [Type Script](#type-script)
+
+---
+
+### `type_id_code_hash`
+
+The `code_hash` of `type_id`. In view of the specificity of `type_id`, `type_id_code_hash` is hard-coded, not the hash of the actual code.
+
+#### See Also
+
+- [`type_id`](#`type_id`)
+
+---
+
 
 ### Type Script
 A script that enforces the rules that must be followed in a transaction for a cell to be consumed as an input or for a cell to be created as an output.
@@ -2305,22 +2592,21 @@ A script that enforces the rules that must be followed in a transaction for a ce
 ---
 
 ### Type Script Hash
-A Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
+
+Or `type_hash`, a Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
+
+The two entities in the data structure of CKB’s cell are `lock` and `type`. Type scripts can capture any validation logic needed in the cell transformation.
+
+Type scripts can implement economic constructs as well. NervosDAO is completely implemented as a type script with minimal support from the consensus layer.
+
 
 #### See Also
 - [Cell](#cell)
 - [Script](#script)
 - [Type Script](#type-script)
+- [Lock Script](#lock-script)
+- [NervosDAO](https://github.com/nervosnetwork/ckb-system-scripts/blob/66d7da8ec72dffaa7e9c55904833951eca2422a9/c/dao.c)
 
----
-
-### Type ID
-A unique identifier for asset types on Nervos. This idenfier is based on the Type Script and Arguments of a Cell.
-
-#### See Also
-- [Args](#args)
-- [Cell](#cell)
-- [Type Script](#type-script)
 
 ---
 
@@ -2330,6 +2616,33 @@ Or Uncle Block. Uncle blocks are created when two blocks are mined and submitted
 Uncles are paid a reduced block reward when they are found and reported.
 
 On Nervos, Uncles are tracked by consensus to adjust the block interval of the network.
+
+An uncle block has to meet the following conditions:
+
+- An uncle should not be on the main chain; in other words, it should not be an uncle if it includes any block from the main chain.
+- Uncle’s block number must be smaller than the block‘s number that later includes it.
+- Uncle‘s parent must be on the main chain, or uncle’s parent must also be an uncle. In other words, uncle must be linkable to the main chain in any way. It can never be a random block that is not on the main chain.
+
+```
+- if !snapshot.is_main_chain(&uncle.hash()) // It should not be on the main chain.
+- && !snapshot.is_uncle(&uncle.hash()) // It should not be an uncle twice. 
+- && uncle.number() < candidate_number // The block number of the uncle should be smaller than that of any block on the main chain. 
+- && (uncles.iter().any(|u| u.hash() == parent_hash) 
+|| snapshot.is_main_chain(&parent_hash) // Uncle block should not be parentless. The parent of un uncle must be a block on the main chain or another uncle. 
+|| snapshot.is_uncle(&parent_hash))
+```
+
+<img src={useBaseUrl("img/uncle_rule.png")}/>
+
+As illustrated above, A is the main chain. B3 can be the uncle of A4 (to be included in A4), since B3 is linked to A2. However, B4 cannot be included in A4, since the uncle’s block number must be smaller than A4, the current block on the main chain.
+
+Similarly, B4 can be the uncle of A5 (be included by A5). Although B4‘s parent, B3, is not on the main chain, B3 is the uncle of A4. For this reason, B4 is a legal uncle, and B3 cannot be included by A5.
+
+C2 and C3 cannot be linked to the main chain as their parent is unknown, therefore, they cannot be uncles.
+
+#### See Also
+- [`max_uncles_num`](#`max_uncles_num`)
+
 
 #### Synonyms
 - [Orphan Block](#orphan-block)

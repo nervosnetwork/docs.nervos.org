@@ -156,6 +156,8 @@ const indexer = new Indexer("https://testnet.ckb.dev/rpc");
 
 Since Nervos CKB network is secured by [ASIC PoW miners with extreme hash rate](https://explorer.nervos.org/charts/hash-rate) now, it could achieve the same or better security threshold than Ethereum at **24 block confirmations**.
 
+[This essay](https://docs.nervos.org/docs/essays/tx-confirmation/) demonstrates how the transaction confirmation number is calculated.
+
 ## Testing
 
 Once you’ve fully integrated with the CKB network, please test on the testnet and mainnet.

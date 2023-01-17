@@ -1,4 +1,6 @@
 const path = require("path");
+const math = require("remark-math");
+const katex = require("rehype-katex");
 
 module.exports = {
   title: "Nervos CKB",
@@ -8,7 +10,16 @@ module.exports = {
   organizationName: "nervosnetwork",
   projectName: "docs-new",
   scripts: ["/js/extra.js"],
-  stylesheets: ["https://fonts.googleapis.com/css2?family=Lato&display=swap"],
+  stylesheets: [
+    "https://fonts.googleapis.com/css2?family=Lato&display=swap",
+    {
+      href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
+      type: "text/css",
+      integrity:
+        "sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM",
+      crossorigin: "anonymous",
+    },
+  ],
   favicon: "img/favicon.png",
   customFields: {
     oldDocSiteUrl: "https://docs-old.nervos.org",
@@ -62,17 +73,15 @@ module.exports = {
         },
         docs: {
           path: "./docs",
-          showLastUpdateAuthor: true,
-          showLastUpdateTime: true,
-          sidebarPath: require.resolve("./sidebars.json"),
+          remarkPlugins: [math],
+          rehypePlugins: [katex],
+          editUrl:
+            "https://github.com/nervosnetwork/docs-new/tree/develop/website",
         },
         blog: {},
         theme: {
           customCss: [path.join(__dirname, "./static/css/custom.css")],
         },
-        docs: {
-          editUrl: 'https://github.com/nervosnetwork/docs-new/tree/develop/website'
-        }
       },
     ],
   ],
