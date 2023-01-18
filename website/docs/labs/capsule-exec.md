@@ -5,7 +5,7 @@ title: Exec syscall in Capsule
 
 ## Introduction
 
-[Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) is a new syscall provided by [ckb2021](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0037-ckb2021/0037-ckb2021.md). To understand what exec syscall does, we recommend you read this article first: [https://man7.org/linux/man-pages/man3/exec.3.html](https://man7.org/linux/man-pages/man3/exec.3.html). In short: Exec runs an executable file from specified cell data in the context of an already existing vm, replacing the previous executable. The used cycles does not change, but the code, registers and memory of the vm are replaced by those of the new program. This means, **control flow will never return to the main script**.
+[Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) is a new syscall provided by [ckb2021](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0037-ckb2021/0037-ckb2021.md). To understand what exec syscall does, we recommend reading [this article](https://man7.org/linux/man-pages/man3/exec.3.html) first. In short: Exec runs an executable file from specified cell data in the context of an already existing VM, replacing the previous executable. The used cycles do not change, but the code, registers, and memory of the VM are replaced by those of the new program, meaning **control flow will never return to the main script**.
 
 You can imagine exec as a router. When some conditions are met, the main script will completely hand over control to a certain sub-script.
 
@@ -15,7 +15,7 @@ Main script --+--> if State2 --> Exec(Sub-script2)
               └--> if State3 --> Exec(Sub-script3)
 ```
 
-Compare with [Dynamic libraries](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial/), exec has the following significant advantages:
+Compared with [Dynamic libraries](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial/), exec has the following significant advantages:
 
 - All sub-scripts are complete scripts. They can be used alone, or they can be called by exec.
 - Sub-scripts have a separate 4M memory space.
@@ -77,9 +77,9 @@ Done
 
 </details>
 
-## Write Always failure sub-script
+## Write always-failure sub-script
 
-Put the following codes into `contracts/always-failure/main.rs`. As you can see, the script always returns 42, which means that if the script is used as a lock script, the cell will never be unlocked.
+Put the following code into `contracts/always-failure/main.rs`. As you can see, the script always returns 42, which means that if the script is used as a lock script, the cell will never be unlocked.
 
 ```rs
 fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
@@ -89,7 +89,7 @@ fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
 
 ## Write exec demo script
 
-Put the following codes into `contracts/ckb-exec-demo/main.rs`.
+Put the following code into `contracts/ckb-exec-demo/main.rs`.
 
 ```rs
 fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
@@ -102,7 +102,7 @@ fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
 }
 ```
 
-This script does only one thing, when executing `exec(0, Source::CellDep, 0, 0, &[])`, CKB-VM will look for the first dep_cell, and execute the code in it.
+This script does only one thing: When executing `exec(0, Source::CellDep, 0, 0, &[])`, CKB-VM will look for the first dep_cell, and execute the code in it.
 
 ## Testing
 
