@@ -20,7 +20,12 @@ Compared with [Dynamic libraries](https://docs.nervos.org/docs/labs/capsule-dyna
 - All sub-scripts are complete scripts. They can be used alone, or they can be called by exec.
 - Sub-scripts have a separate 4M memory space.
 
-**We recommend that you use exec instead of dynamic libraries**.
+At the same time Exec has the following limitations:
+
+- Never return.
+- Hard to exchange data between scripts.
+
+When dynamic libraries and exec syscall both meet your needs, we recommend that you use exec instead of dynamic libraries.
 
 In this tutorial, we'll write two scripts in Rust, and exec one script into the other.
 
