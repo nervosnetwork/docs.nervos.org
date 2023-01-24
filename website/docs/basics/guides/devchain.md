@@ -179,9 +179,23 @@ Found! #1 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1
 Found! #2 0x19978085abfa6204471d42bfb279eac0c20e3b81745b48c4dcaea85643e301f9
 Found! #3 0x625b230f84cb92bcd9cb0bf76d1397c1d948ab25c19df3c4edc246a765f94427
 Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
+```
+</details>
+
+### 7. Start the CKB Indexer
+
+This should be performed in a separate terminal. Download the latest released binary [Here](https://github.com/nervosnetwork/ckb-indexer/releases). For other options please click [Here](https://github.com/nervosnetwork/ckb-indexer/).
 
 ```
+RUST_LOG=info ./ckb-indexer -s /tmp/ckb-indexer-test
+```
+<details>
+<summary>(click here to view result)</summary>
 
+```
+[2023-01-24T20:16:35.567Z INFO  ckb_indexer::service] append 9599, Byte32(0x2423756c95785636073cca5c160dcd11350311d679a4cf78f1d5ca6aee614814)
+[2023-01-24T20:16:39.577Z INFO  ckb_indexer::service] append 9600, Byte32(0xf83186fd2c04262bded04bc7afc2783c91ba8d065bd3952bc8966af93242fe77)
+```
 </details>
 
  ## Setup an Eaglesong-Worker Blockchain
@@ -311,6 +325,24 @@ Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
 ```
 
 </details>
+
+
+### 7. Start the CKB Indexer
+
+This should be performed in a separate terminal. Download the latest released binary [Here](https://github.com/nervosnetwork/ckb-indexer/releases). For other options please click [Here](https://github.com/nervosnetwork/ckb-indexer/).
+
+```
+RUST_LOG=info ./ckb-indexer -s /tmp/ckb-indexer-test
+```
+<details>
+<summary>(click here to view result)</summary>
+
+```
+[2023-01-24T20:16:35.567Z INFO  ckb_indexer::service] append 9599, Byte32(0x2423756c95785636073cca5c160dcd11350311d679a4cf78f1d5ca6aee614814)
+[2023-01-24T20:16:39.577Z INFO  ckb_indexer::service] append 9600, Byte32(0xf83186fd2c04262bded04bc7afc2783c91ba8d065bd3952bc8966af93242fe77)
+```
+</details>
+
 
 ## Transferring CKBytes Using `ckb-cli`
 
