@@ -89,10 +89,10 @@ Modify the `args` and `message` parameters in the `ckb.toml` file under the `blo
 
 ```
 [block_assembler]
-code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8" // Do not change this.
-args = "0x8d627decece439977a3a0a97815b63debaff2874" // Change this to your lock_arg value. 
-hash_type = "type" // Do not change this.
-message = "A 0x-prefixed hex string" // Change this to "0x" to supply an empty message.
+code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8" # Do not change this.
+args = "0x8d627decece439977a3a0a97815b63debaff2874" # Change this to your lock_arg value. 
+hash_type = "type" # Do not change this.
+message = "A 0x-prefixed hex string" # Change this to "0x" to supply an empty message.
 
 ```
 
