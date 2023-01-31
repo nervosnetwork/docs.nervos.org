@@ -152,7 +152,6 @@ let tx = TransactionBuilder::default()
     .input(input)
     .outputs(outputs)
     .outputs_data(outputs_data.pack())
-    .cell_dep(lock_script_dep)
     // reference to echo cell
     .cell_dep(echo_dep)
     .build();
