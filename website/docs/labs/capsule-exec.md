@@ -19,6 +19,7 @@ Compared with [Dynamic libraries](https://docs.nervos.org/docs/labs/capsule-dyna
 
 - All sub-scripts are complete scripts. They can be used alone, or they can be called by exec.
 - Sub-scripts have a separate 4M memory space.
+- Allow passing in arguments.
 
 At the same time Exec has the following limitations:
 
@@ -63,18 +64,18 @@ Done
 
 </details>
 
-Let's create the second contract named `always-failure`.
+Let's create the second contract named `echo`.
 
 ```sh
 $ cd ckb-exec-demo
-$ capsule new-contract always-failure
+$ capsule new-contract echo
 ```
 
 <details><summary>(click here to view response)</summary>
 
 ```text
-New contract "always-failure"
-     Created binary (application) `always-failure` package
+New contract "echo"
+     Created binary (application) `echo` package
 Rewrite Cargo.toml
 Rewrite capsule.toml
 Done
@@ -82,13 +83,24 @@ Done
 
 </details>
 
-## Write always-failure sub-script
+## Write echo sub-script
 
-Put the following code into `contracts/always-failure/main.rs`. As you can see, the script always returns 42, which means that if the script is used as a lock script, the cell will never be unlocked.
+Put the following code into `contracts/echo/main.rs`. As you can see, the script always returns 0 if argc is 0, which means that if the script is used as a alone lock script, anyone can unlock this cell. If echo used as a sub-script of exec, it will parse the first argument and use that as the exit code.
 
 ```rs
-fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
-    return 42;
+use ckb_std::cstr_core::CStr;
+
+fn program_entry(argc: u64, argv: *const *const u8) -> i8 {
+    // This script will always return 0 if used alone.
+    if argc == 0 {
+        return 0;
+    };
+
+    // When calling the script by exec and passing in the arguments.
+    let args = unsafe { core::slice::from_raw_parts(argv, argc as usize) };
+    let arg1 = unsafe { CStr::from_ptr(args[0]) }.to_str().unwrap();
+    let exit = arg1.parse::<i8>().unwrap();
+    return exit;
 }
 ```
 
@@ -97,34 +109,42 @@ fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
 Put the following code into `contracts/ckb-exec-demo/main.rs`.
 
 ```rs
+use ckb_std::cstr_core::CStr;
+use ckb_std::{ckb_constants::Source, default_alloc, syscalls::exec};
+
 fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
-    let r = exec(0, Source::CellDep, 0, 0, &[]);
+    let r = exec(
+        0,
+        Source::CellDep,
+        0,
+        0,
+        &[&CStr::from_bytes_with_nul(b"42\0").unwrap()],
+    );
     if r != 0 {
-        // Call exec syscall failed.
         return 10;
     }
     return 0;
 }
 ```
 
-This script does only one thing: When executing `exec(0, Source::CellDep, 0, 0, &[])`, CKB-VM will look for the first dep_cell, and execute the code in it.
+This script does only one thing: When executing `exec(...)`, CKB-VM will look for the first dep_cell, and execute the code in it.
 
 ## Testing
 
-We need to deploy the `always-failure` to a cell, then reference the cell in the testing transaction. Open `tests/src/tests.rs`:
+We need to deploy the `echo` to a cell, then reference the cell in the testing transaction. Open `tests/src/tests.rs`:
 
 ```rs
-let always_failure_bin = {
+let echo_bin = {
     let mut buf = Vec::new();
-    File::open("../build/debug/always-failure")
+    File::open("../build/debug/echo")
         .unwrap()
         .read_to_end(&mut buf)
         .expect("read code");
     Bytes::from(buf)
 };
-let always_failure_out_point = context.deploy_cell(always_failure_bin);
-let always_failure_dep = CellDep::new_builder()
-    .out_point(always_failure_out_point)
+let echo_out_point = context.deploy_cell(echo_bin);
+let echo_dep = CellDep::new_builder()
+    .out_point(echo_out_point)
     .build();
 
 // build transaction
@@ -133,8 +153,8 @@ let tx = TransactionBuilder::default()
     .outputs(outputs)
     .outputs_data(outputs_data.pack())
     .cell_dep(lock_script_dep)
-    // reference to always-failure cell
-    .cell_dep(always_failure_dep)
+    // reference to echo cell
+    .cell_dep(echo_dep)
     .build();
 }
 
@@ -165,3 +185,4 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 In this article, we use the index to locate sub-scripts. If you want to use the script hash to locate, you can refer to our:
 
 - [C language implementation](https://github.com/nervosnetwork/ckb-c-stdlib/blob/8d56515e726c63b7f9811e10914dbe930d1ea134/ckb_syscalls.h#L368-L378)
+- [Rust language implementation](https://github.com/nervosnetwork/ckb-std/tree/c660da768df85fa2b0fe78673278d49425ce6333/contracts/exec-caller-by-code-hash)
