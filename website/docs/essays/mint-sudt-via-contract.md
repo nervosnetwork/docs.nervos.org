@@ -113,9 +113,9 @@ Outputs:
         Type:
             code: SUDT-typescript
             args: eth-bridge-lockscript-hash
-            data: amount
         Lock:
             <User Lockscript>
+        Data: amount
 Witnesses:
     0: eth-spv-proof
     1: signature to unlock provide-capacity-cell
