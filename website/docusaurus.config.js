@@ -73,6 +73,7 @@ module.exports = {
         },
         docs: {
           path: "./docs",
+          sidebarPath: path.join(__dirname, "sidebars.json"),
           remarkPlugins: [math],
           rehypePlugins: [katex],
           editUrl:
