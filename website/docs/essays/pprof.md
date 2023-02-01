@@ -1,6 +1,6 @@
 ---
 id: pprof
-title: Tips for profiling CKB script
+title: Tips for Profiling CKB Script
 ---
 
 Before starting, make sure you have understood the concept of [cycles](../basics/glossary#cycles).

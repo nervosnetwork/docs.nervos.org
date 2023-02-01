@@ -1,6 +1,6 @@
 ---
 id: dependencies
-title: Script dependencies
+title: Script Dependencies
 ---
 
 ## Deploy a VM and run code on the VM
