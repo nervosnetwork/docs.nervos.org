@@ -57,7 +57,8 @@
       "reference/cell",
       "reference/script",
       "reference/transaction",
-      "reference/rpc"
+      "reference/rpc",
+      "reference/halving"
     ],
 
 
