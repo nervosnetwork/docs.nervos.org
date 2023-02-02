@@ -1,6 +1,6 @@
 ---
 id: debug
-title: Tips for debugging CKB script
+title: Tips for Debugging CKB Script
 ---
 
 CKB uses RISC-V ISA to implement VM layer and CKB VM is very different from other VMs with hard-code functionality through opcodes. Given the generalized nature of CKB VM, various languages and toolchains can be supported- every language and toolchain will be a bit different and implementers should provide appropriate documentation and support for the community.

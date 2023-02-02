@@ -1,6 +1,6 @@
 ---
 id: ckb-core-dev
-title: Tips for CKB development
+title: Tips for CKB Development
 ---
 [Nervos CKB](https://github.com/nervosnetwork/ckb) is the layer 1 of Nervos Network, a public/permissionless blockchain, which is an open source project on github. There are some tips for ckb development below, hope it will be useful for you.
 
