@@ -24,7 +24,7 @@ The following are the next 10 halving windows of CKBytes, and the corresponding 
 
 |Event          |Date                  |Epoch number      |Epoch reward  |Daily reward  |Total new CKB between events  |
 |---------------|----------------------|------------------|-------------:|--------------:|----------------------------:|
-|Nervos launches|16 November 2016      |0 (genesis epoch) |1,917,808 CKB |11,506,849 CKB |16,800,000,000 CKB           |
+|Nervos launches|16 November 2019      |0 (genesis epoch) |1,917,808 CKB |11,506,849 CKB |16,800,000,000 CKB           |
 |**First halving**  |**Expected November 2023**|**8,760**             |**958,904 CKB**   |**5,753,424 CKB**  |**8,400,000,000 CKB**            |
 |Second halving |Expected November 2027|17,520            |479,452 CKB   |2,876,712 CKB  |4,200,000,000 CKB            |
 |3rd halving    |Expected November 2031|26,280            |239,726 CKB   |1,438,356 CKB  |2,100,000,000 CKB            |
