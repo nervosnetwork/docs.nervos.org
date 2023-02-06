@@ -92,7 +92,8 @@
       "essays/integrity-check",
       "essays/mint-sudt-via-contract",
 	"essays/pw-lock",
-	"essays/tx-pool"
+	"essays/tx-pool",
+	"essays/tx-confirmation"
     ]
 
 }
