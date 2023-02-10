@@ -75,14 +75,49 @@ floor(R / L)
 
 ## How do you calculate transaction fee?
 
+Let's start with a brief introduction to Transaction Weight.
+
+### Transaction Weight
+
+The miners select transactions to fill the limited block space which gives the highest fee. Because there are two different limits, serialized size and consumed cycles, the selection algorithm is a multi-dimensional knapsack problem. Introducing the Transaction weight converts the multi-dimensional knapsack to a typical knapsack problem.
+
+```
+/// Equal to MAX_BLOCK_BYTES / MAX_BLOCK_CYCLES, see [glossary](https://docs.nervos.org/docs/basics/glossary).
+pub const BYTES_PER_CYCLES: f64 = 0.000_170_571_4_f64;
+
+get_transaction_weight(tx_size: usize, cycles: u64) -> u64 {
+    max(
+        tx_size as u64,
+        (cycles as f64 * BYTES_PER_CYCLES) as u64,
+    )
+}
+```
+
+### Estimate cycles
+
+The cycles of the transaction can be obtained via rpc [estimate_cycles](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-estimate_cycles)
+
+Here depends on the type of transaction to be built, if the transaction consists of small cycles of scripts, you can disregard cycles and directly replace weight with tx_size to calculate the transaction fee
+
+```
+(tx_size + 4) * fee_rate / 1000
+```
+
+if the transaction consists of large cycles of script, then you need to include cycles in the calculation of the fee, otherwise the fee rate of the transaction will not meet the expectations, of course, it also depends on the scenario, if the priority of the transaction confirm does not need so precise control, you can also directly use a rough estimate of the cycles, or do not consider cycles can also be, according to your own needs trade-offs.
+
+### Estimate FeeRate
+
+Normally, you can just use the majority of the default values, which is [min_fee_rate](#what-is-the-min_fee_rate), but when network congestion occurs, if you want the confirmation time of the transaction to be manageable, then you need to focus on fee rate of the on-chain transaction, through [get_fee_rate_statics](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-get_fee_rate_statics) rpc can get the statistics of the fee rate of confirmed  transactions on the chain in the recent history, you can use it according to your needs, for example, directly using the mean of the rates of the transactions in the last 21 blocks, or if you want to reduce the confirmation time even further, you can use the mean * 1.2.
+
+### Transaction Fee
+
 The size of a normal two-in-two-out transaction is 597 bytes, to calculate transaction fee we need add extra 4 bytes size due to the cost of serialized tx in a block.
 
-`(tx_size + 4) * fee_rate / 1000`
+```
+get_transaction_weight(tx_size + 4, cycles) * fee_rate / 1000
+```
 
-Let's suppose that we use `1000 shannons/KB` as fee_rate(how many shannons per KB charge), the transaction fee is `(597 + 4) * 1000 / 1000`, 601 shannons (0.00000601 CKB).
-
-> NOTICE: this fee calculation method may do not match txs consumed too many cycles. In that case,  unless you pay more, the node will package tx in low priority.
-
+Let's suppose that we use `1000 shannons/KB` as fee_rate(how many shannons per KB charge),3_600_000 as cycles, the transaction weight is `max((597 + 4), 3_600_000 * 0.000_170_571_4)`, 614.05704, the transaction fee is `614.05704 * 1000 / 1000`, approximately 615 shannons (0.00000615 CKB).
 
 ---
 
@@ -100,7 +135,7 @@ The default value of `min_fee_rate` is `1000`.
 min_fee_rate = 1_000 # shannons/KB
 ```
 
-Which mean a tx need at least `(tx_size + 4) * 1000 / 1000` shannons as the tx fee.
+Which mean a tx need at least `(tx_size + 4) * 1000 / 1000` shannons as the tx fee. min_fee_rate is used for cheap check threshold, so cycles are not considered in the calculation, this is different from when fee rate is used as a transaction processing priority.
 
 > NOTICE: Even though you can set `min_fee_rate` lower than the default value, other nodes in the network may still use the default value, which may cause the tx you accept still can't be relayed to other nodes, unless your node is also a miner or mining pool so that you can mine those txs by yourself.
 
