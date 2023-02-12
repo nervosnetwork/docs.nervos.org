@@ -45,7 +45,7 @@ For more information, please see the [CKB JSON-RPC protocols](https://github.com
 ### How to manage cells(like UTXO set)
 Cell management mainly affects cell collection and address balance display. There are many ways to manage cells; here are two typical example solutions.
 
-* **Recommended**: use CKB indexer to collect cells and display balance. Recommend using [built-in](#ckb-built-in-indexer) version available since v0.105.0, [standalone](https://github.com/nervosnetwork/ckb-indexer) version is also available.
+* **Recommended**: use CKB indexer to collect cells and display balance. Recommend using [built-in](#ckb-built-in-indexer) version available since v0.106.0, [standalone](https://github.com/nervosnetwork/ckb-indexer) version is also available.
   * [get_cells_capacity](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-get_cells_capacity) Returns the live cells total capacity by the lock or type script. You can use this RPC to display address balance.
 * Use your UTXO management framework to combine [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md) to scan the entire CKB blockchain.
 
@@ -54,7 +54,7 @@ Cell management mainly affects cell collection and address balance display. Ther
 
 #### CKB
 
-Since v0.105.0, CKB has integrated the functions in previous standalone ckb-indexers. Users of v0.105.0 nodes or above have no need to start ckb-indexer service separately. Ckb-indexer-related RPC is included in the current RPC as a module. Users don't have to configure the indexer port separately.
+Since v0.106.0, CKB has integrated the functions in previous standalone ckb-indexers. Users of v0.106.0 nodes or above have no need to start ckb-indexer service separately. Ckb-indexer-related RPC is included in the current RPC as a module. Users don't have to configure the indexer port separately.
 
 There are three ways to enable CKB built-in indexer:
 
