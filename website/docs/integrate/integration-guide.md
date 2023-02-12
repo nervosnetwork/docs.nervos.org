@@ -43,7 +43,7 @@ You can make a JSON-RPC request to your CKB node with the SDK. There are some [C
 For more information, please see the [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md). Other available SDK: [CKB SDK JS](https://github.com/nervosnetwork/ckb-sdk-js/tree/v0.35.0).
 
 ### How to manage cells(like UTXO set)
-Cell management mainly affects cell collection and address balance display. There are many ways to manage cells; here are two typical example solutions.
+Cell management mainly affects cell collection and address balance display. There are many ways to manage cells; Here are two typical example solutions.
 
 * **Recommended**: use CKB indexer to collect cells and display balance. Recommend using [built-in](#ckb-built-in-indexer) version available since v0.106.0, [standalone](https://github.com/nervosnetwork/ckb-indexer) version is also available.
   * [get_cells_capacity](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-get_cells_capacity) Returns the live cells total capacity by the lock or type script. You can use this RPC to display address balance.

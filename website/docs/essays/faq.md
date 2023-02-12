@@ -103,7 +103,7 @@ Here depends on the type of transaction to be built, if the transaction consists
 (tx_size + 4) * fee_rate / 1000
 ```
 
-if the transaction consists of large cycles of script, then you need to include cycles in the calculation of the fee, otherwise the fee rate of the transaction will not meet the expectations, of course, it also depends on the scenario, if the priority of the transaction confirm does not need so precise control, you can also directly use a rough estimate of the cycles, or do not consider cycles can also be, according to your own needs trade-offs.
+If the transaction consists of large cycles of script, then you need to include cycles in the calculation of the fee, otherwise the fee rate of the transaction will not meet the expectations, of course, it also depends on the scenario, if the priority of the transaction confirm does not need so precise control, you can also directly use a rough estimate of the cycles, or do not consider cycles can also be, according to your own needs trade-offs.
 
 ### Estimate FeeRate
 
@@ -111,7 +111,7 @@ Normally, you can just use the majority of the default values, which is [min_fee
 
 ### Transaction Fee
 
-The size of a normal two-in-two-out transaction is 597 bytes, to calculate transaction fee we need add extra 4 bytes size due to the cost of serialized tx in a block.
+The size of a normal two-in-two-out transaction is 597 bytes, to calculate transaction fee we need to add extra 4 bytes size due to the cost of serialized tx in a block.
 
 ```
 get_transaction_weight(tx_size + 4, cycles) * fee_rate / 1000
@@ -135,7 +135,7 @@ The default value of `min_fee_rate` is `1000`.
 min_fee_rate = 1_000 # shannons/KB
 ```
 
-Which mean a tx need at least `(tx_size + 4) * 1000 / 1000` shannons as the tx fee. min_fee_rate is used for cheap check threshold, so cycles are not considered in the calculation, this is different from when fee rate is used as a transaction processing priority.
+Which mean a tx need at least `(tx_size + 4) * 1000 / 1000` shannons as the tx fee. `min_fee_rate` is used for cheap check threshold, so cycles are not considered in the calculation, this is different from when fee rate is used as a transaction processing priority.
 
 > NOTICE: Even though you can set `min_fee_rate` lower than the default value, other nodes in the network may still use the default value, which may cause the tx you accept still can't be relayed to other nodes, unless your node is also a miner or mining pool so that you can mine those txs by yourself.
 
