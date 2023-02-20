@@ -40,3 +40,15 @@ Unifra is a Web3 developer platform focused on simplifying blockchain developmen
 
 - [Unifra Nervos CKB API](https://unifra.readme.io/reference/module-chain)
 - [Unifra Documentation](https://unifra.readme.io/reference/welcome-to-unifra)
+
+----
+
+## GetBlock
+
+[GetBlock](https://getblock.io/) is a provider of blockchain nodes APIs that connects dApps to RPC endpoints of 50+ blockchains. Working with GetBlock removes the necessity of running self-hosted nodes for Web3 developers.
+
+![GetBlock CKB](https://i.ibb.co/HnrRJFP/Screenshot-2023-02-20-at-16-52-51.png)
+
+[GetBlock Nervos CKB endopints](https://getblock.io/nodes/ckb/)
+[GetBlock Documentation](https://getblock.io/docs/)
+
