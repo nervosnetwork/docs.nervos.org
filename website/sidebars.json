@@ -92,7 +92,9 @@
       "essays/ckb-core-dev",
       "essays/integrity-check",
       "essays/mint-sudt-via-contract",
-	  "essays/pw-lock"
+	"essays/pw-lock",
+	"essays/tx-pool",
+	"essays/tx-confirmation"
     ]
 
 }
