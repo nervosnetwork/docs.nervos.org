@@ -49,7 +49,7 @@ During the initial launch of the network, CKBytes had a low value, which indicat
 
 Base Issuance is very similar to Bitcoin's mining process. Miners are paid a fixed amount of CKBytes for providing the computer resources to process transactions and secure the network. The assets stored on the network will gain value over time, and fewer subsidies will be required.
 
-Base Issuance is paid for with a fixed inflationary schedule. Approximately every four years, the subsidy amount is halved, and it eventually stops, when the cap of 33.6 billion CKBytes is issued. This provides a monetary policy that is transparent and predictable.
+Base Issuance is paid for with a fixed inflationary schedule. Approximately every four years, the subsidy amount is <Link to={useBaseUrl('/docs/reference/halving')}>halved</Link>, and it eventually stops, when the cap of 33.6 billion CKBytes is issued. This provides a monetary policy that is transparent and predictable.
 
 ## Secondary Issuance
 
