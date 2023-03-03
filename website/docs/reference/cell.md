@@ -84,7 +84,7 @@ Our dapp framework, [lumos](https://github.com/nervosnetwork/lumos) already cont
 
 #### ckb-indexer
 
-A standalone [ckb-indexer](https://github.com/quake/ckb-indexer) also handles the job of indexing cells. It provides an RPC mechanism you can use to query for relevant cells. Please refer to the documentation of ckb-indexer for more details.
+A [ckb-indexer](https://docs.nervos.org/docs/integrate/introduction/#ckb-built-in-indexer) is built into ckb, also handles the job of indexing cells. It provides an RPC mechanism you can use to query for relevant cells. Please refer to the documentation of ckb-indexer for more details.
 
 #### perkins-tent
 

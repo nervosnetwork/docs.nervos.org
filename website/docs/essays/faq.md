@@ -52,7 +52,7 @@ For `passthrough` validator, it will skip validation.
 
 ## How the primary and secondary epoch reward is allocated among blocks?
 
-Let's suppose that the epoch reward is R, and the epoch length is L. The start block number of the epoch is S. 
+Let's suppose that the epoch reward is R, and the epoch length is L. The start block number of the epoch is S.
 
 ```
 M = R mod L
@@ -75,14 +75,49 @@ floor(R / L)
 
 ## How do you calculate transaction fee?
 
-The size of a normal two-in-two-out transaction is 597 bytes, to calculate transaction fee we need add extra 4 bytes size due to the cost of serialized tx in a block.
+Let's start with a brief introduction to Transaction Weight.
 
-`(tx_size + 4) * fee_rate / 1000`
+### Transaction Weight
 
-Let's suppose that we use `1000 shannons/KB` as fee_rate(how many shannons per KB charge), the transaction fee is `(597 + 4) * 1000 / 1000`, 601 shannons (0.00000601 CKB).
+The miners select transactions to fill the limited block space which gives the highest fee. Because there are two different limits, serialized size and consumed cycles, the selection algorithm is a multi-dimensional knapsack problem. Introducing the Transaction weight converts the multi-dimensional knapsack to a typical knapsack problem.
 
-> NOTICE: this fee calculation method may do not match txs consumed too many cycles. In that case,  unless you pay more, the node will package tx in low priority.
+```
+/// Equal to MAX_BLOCK_BYTES / MAX_BLOCK_CYCLES, see [glossary](https://docs.nervos.org/docs/basics/glossary).
+pub const BYTES_PER_CYCLES: f64 = 0.000_170_571_4_f64;
 
+get_transaction_weight(tx_size: usize, cycles: u64) -> u64 {
+    max(
+        tx_size as u64,
+        (cycles as f64 * BYTES_PER_CYCLES) as u64,
+    )
+}
+```
+
+### Estimate cycles
+
+The cycles of the transaction can be obtained via rpc [estimate_cycles](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-estimate_cycles)
+
+Here depends on the type of transaction to be built, if the transaction consists of small cycles of scripts, you can disregard cycles and directly replace weight with tx_size to calculate the transaction fee
+
+```
+(tx_size + 4) * fee_rate / 1000
+```
+
+If the transaction consists of large cycles of script, then you need to include cycles in the calculation of the fee, otherwise the fee rate of the transaction will not meet the expectations, of course, it also depends on the scenario, if the priority of the transaction confirm does not need so precise control, you can also directly use a rough estimate of the cycles, or do not consider cycles can also be, according to your own needs trade-offs.
+
+### Estimate FeeRate
+
+Normally, you can just use the majority of the default values, which is [min_fee_rate](#what-is-the-min_fee_rate), but when network congestion occurs, if you want the confirmation time of the transaction to be manageable, then you need to focus on fee rate of the on-chain transaction, through [get_fee_rate_statics](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-get_fee_rate_statics) rpc can get the statistics of the fee rate of confirmed  transactions on the chain in the recent history, you can use it according to your needs, for example, directly using the mean of the rates of the transactions in the last 21 blocks, or if you want to reduce the confirmation time even further, you can use the mean * 1.2.
+
+### Transaction Fee
+
+The size of a normal two-in-two-out transaction is 597 bytes, to calculate transaction fee we need to add extra 4 bytes size due to the cost of serialized tx in a block.
+
+```
+get_transaction_weight(tx_size + 4, cycles) * fee_rate / 1000
+```
+
+Let's suppose that we use `1000 shannons/KB` as fee_rate(how many shannons per KB charge),3_600_000 as cycles, the transaction weight is `max((597 + 4), 3_600_000 * 0.000_170_571_4)`, 614.05704, the transaction fee is `614.05704 * 1000 / 1000`, approximately 615 shannons (0.00000615 CKB).
 
 ---
 
@@ -100,7 +135,7 @@ The default value of `min_fee_rate` is `1000`.
 min_fee_rate = 1_000 # shannons/KB
 ```
 
-Which mean a tx need at least `(tx_size + 4) * 1000 / 1000` shannons as the tx fee.
+Which mean a tx need at least `(tx_size + 4) * 1000 / 1000` shannons as the tx fee. `min_fee_rate` is used for cheap check threshold, so cycles are not considered in the calculation, this is different from when fee rate is used as a transaction processing priority.
 
 > NOTICE: Even though you can set `min_fee_rate` lower than the default value, other nodes in the network may still use the default value, which may cause the tx you accept still can't be relayed to other nodes, unless your node is also a miner or mining pool so that you can mine those txs by yourself.
 
@@ -122,11 +157,11 @@ The CKB node supports to estimate transaction fee, you can open the `Experiment`
 
 It is similar to `nBits` of bitcoin, the original `nBits` implementation inherits properties from a signed data class,if the high bit of the effective number of bits is set, the target threshold will be negative. This is useless—the header hash is considered as an unsigned number, so it can never be equal to or lower than a negative target threshold.
 
-In CKB, the "compact" format is represented a whole number N using an unsigned 32bit number,which is similar to a floating-point format. 
+In CKB, the "compact" format is represented a whole number N using an unsigned 32bit number,which is similar to a floating-point format.
 
 * The most significant 8 bits are the unsigned exponent of base 256.
-* The exponent can be considered as "number of bytes of N". 
-* The lower 24 bits are the mantissa. 
+* The exponent can be considered as "number of bytes of N".
+* The lower 24 bits are the mantissa.
 
 ```
 N = mantissa * 256^(exponent-3)
@@ -382,8 +417,3 @@ median of previous 37 block timpstamp < timestamp <= local_time + 15s
 Due to CKB's unique flexibility, it also comes with some gotchas to be aware of. Otherwise there might be risk locking your cell forever with no way to unlock them. Here, we try our best to document the gotchas we know:
 
 * Nervos DAO only supports *absolute epoch number* as since value when withdrawing from Nervos DAO. So if you are using a lock that supports lock period, such as the system included [multi-sign script](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c), please make sure to ONLY use *absolute epoch number* as lock period. Otherwise the locked Nervos DAO cell cannot be spent.
-
-* CKB has a maturity limitation on referencing headers: a block header can only be referenced in a cell that is committed at least 4 epochs after the referenced block header. This means in situations where header deps are used, those 4 epoch limitation also applies. Nervos DAO, for example, is restricted in the following places:
-   + Phase 1 transaction can only be committed 4 epochs after the fund is originally deposited.
-   + Phase 2 transaction can only be committed 4 epochs after phase 1 transaction is committed.
-

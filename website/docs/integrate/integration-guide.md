@@ -43,18 +43,18 @@ You can make a JSON-RPC request to your CKB node with the SDK. There are some [C
 For more information, please see the [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md). Other available SDK: [CKB SDK JS](https://github.com/nervosnetwork/ckb-sdk-js/tree/v0.35.0).
 
 ### How to manage cells(like UTXO set)
-Cell management mainly affects cell collection and address balance display. There are many ways to manage cells; here are two typical example solutions.
+Cell management mainly affects cell collection and address balance display. There are many ways to manage cells; Here are two typical example solutions.
 
-* **Recommended**: use [CKB Indexer](https://github.com/nervosnetwork/ckb-indexer) to collect cells and display balance.
-  * [get_cells_capacity](https://github.com/nervosnetwork/ckb-indexer#get_cells_capacity) Returns the live cells total capacity by the lock or type script. You can use this RPC to display address balance.
+* **Recommended**: use CKB indexer to collect cells and display balance. Recommend using [built-in](#ckb-built-in-indexer) version available since v0.106.0, [standalone](https://github.com/nervosnetwork/ckb-indexer) version is also available.
+  * [get_cells_capacity](https://github.com/nervosnetwork/ckb/tree/master/rpc#method-get_cells_capacity) Returns the live cells total capacity by the lock or type script. You can use this RPC to display address balance.
 * Use your UTXO management framework to combine [CKB JSON-RPC protocols](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md) to scan the entire CKB blockchain.
-  * It is **not recommended** to use the ckb node internal [Indexer module](https://github.com/nervosnetwork/ckb/blob/v0.35.0/rpc/README.md#indexer) to collect live cells, which is very slow and deprecated.
+
 
 ### CKB built-in indexer
 
 #### CKB
 
-Since v0.105.0, CKB has integrated the functions in previous standalone ckb-indexers. Users of v0.105.0 nodes or above have no need to start ckb-indexer service separately. Ckb-indexer-related RPC is included in the current RPC as a module. Users don't have to configure the indexer port separately.
+Since v0.106.0, CKB has integrated the functions in previous standalone ckb-indexers. Users of v0.106.0 nodes or above have no need to start ckb-indexer service separately. Ckb-indexer-related RPC is included in the current RPC as a module. Users don't have to configure the indexer port separately.
 
 There are three ways to enable CKB built-in indexer:
 
@@ -72,16 +72,16 @@ modules = [..., "Indexer"]
 ```
 
 - Add indexer_v2 section to the config file to configure the indexer. Since the indexer section was deprecated in the configuration file once before, the v2 suffix is added to avoid conflicts and to be compatible with older config files. Once the indexer section is configured, the CKB built-in indexer will be enabled along with the node.
-    
+
 ```
 [indexer_v2]
 index_tx_pool = false
 ```
-    
 
-These three methods do not mutually conflict. Users can choose based on their preferences. The third method supports advanced indexer configuration. 
 
-Below listed the items to be configured: 
+These three methods do not mutually conflict. Users can choose based on their preferences. The third method supports advanced indexer configuration.
+
+Below listed the items to be configured:
 
 | Items  | Description |
 | ------------- | ------------- |
@@ -92,7 +92,7 @@ Below listed the items to be configured:
 | db_background_jobs = 6  | Number of indexer db background job. 6 by default. We recommended not to modify. |
 | db_keep_log_file_num = 1  | Number of indexer db debug logs. 1 by default. |
 
-Block_filter and cell_filter bprovide options to customize index rules via a simple Rhai script. 
+Block_filter and cell_filter provide options to customize index rules via a simple Rhai script.
 Configured as below:
 
 ```
@@ -138,13 +138,13 @@ var client, _ = rpc.Dial("https://testnet.ckb.dev")
 #### Lumos
 
 Lumos needs v0.19.0 to adapt to CKB build-in indexer.
- 
+
 ```
 import { Indexer } from '@ckb-lumos/lumos';
 
 // before
 // const indexer = new Indexer(
-//   "https://testnet.ckb.dev/indexer", 
+//   "https://testnet.ckb.dev/indexer",
 //   "https://testnet.ckb.dev/rpc",
 // );
 

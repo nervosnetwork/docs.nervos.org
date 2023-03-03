@@ -76,9 +76,6 @@ These are the recommended tools for developing on Nervos CKB.
 
 ### Available When You Need Them (Optional)
 
-* [CKB Studio](https://www.obsidians.io/) - An development IDE with a built-in dev blockchain and transaction testing tool.
-    * [Tutorials](https://medium.com/nervos-ckb-israel/collection-of-ckb-studio-tutorials-9ffd573894)
-    * [Video Tutorial: How to Use CKB Studio](https://www.youtube.com/watch?v=lOxXrVIfT2Y)
 * [Synapse Web Wallet](https://github.com/rebase-network/synapse-extension) - A Dapp wallet with support for multiple lock types.
     * [Documentation](https://github.com/rebase-network/synapse-extension/tree/master/docs)
     * [Demo Project: Simplest Dapp + Synapse](https://github.com/rebase-network/simplestdapp)
@@ -126,7 +123,6 @@ Recommendations for setting up your development environment and which technologi
 These are the minimum software recommendations for any developer building on Nervos CKB.
 
 * OS: MacOS, Ubuntu Linux, or Windows 10 + WSL2 (Ubuntu)
-* IDE: [CKB Studio](https://www.obsidians.io/) or your favorite IDE! 😁
 * [CKB Development Blockchain](https://docs.nervos.org/docs/basics/guides/devchain) - For testing smart contracts and Dapps.
 * [Docker](https://docs.docker.com/get-docker/) - For smart contract development using Capsule.
 * [NPM](https://www.npmjs.com/get-npm) or [Yarn](https://classic.yarnpkg.com/en/docs/install/) - For Dapp development using [Lumos](https://github.com/nervosnetwork/lumos) and [PW-SDK](https://github.com/lay2dev/pw-core).
