@@ -65,6 +65,7 @@
       "labs/introduction",
       "labs/sudtbycapsule",
       "labs/lumos-nervosdao",
+      "labs/capsule-exec",
       "labs/capsule-dynamic-loading-tutorial"
     ],
 
