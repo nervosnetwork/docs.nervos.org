@@ -1,6 +1,6 @@
 ---
 id: upgradability
-title: Upgradable CKB Contracts: Why And How
+title: Upgradable CKB Contracts—Why And How
 ---
 
 In the blockchain space, there's a pair of issues that everyone has to pick sides: upgradability vs determinism.
