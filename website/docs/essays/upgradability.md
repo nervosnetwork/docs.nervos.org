@@ -97,7 +97,7 @@ We do want to mention that this design is not without its drawbacks. You should 
 
 Type ID does provide a solution to challenges with regards to Determinism Property A: when a bug is discovered, it's possible to fix the smart contracts without affecting existing cells using the same smart contracts. But it does require certain considerations.
 
-**Ownership**
+#### **Ownership**
 
 With a type ID solution, people might be able to steal your coin by hacking the cell containing smart contracts you use. Since typical cells are guarded by one or more signatures, some human errors could cause major problems. Fundamentally, it's a tradeoff situation:
 
@@ -108,7 +108,7 @@ For example, if you look at the deployed system scripts in CKB's mainnet, they a
 
 There are some initial ideas that you can use to guard the script contained in a cell. For example, in addition to type ID logic, the type script can also contains other logics to validate the actual script contained in its cell. For example, formal analysis methods might be used, or certain test cases can be provided in which the type script runs the actual script against. Only when the analysis or the test cases pass, will one be able to change script contained in a cell. Though I must say, these are just some preliminary ideas, much research and development work needs to be done to make this a reality.
 
-**Availability**
+#### **Availability**
 
 A different issue with type ID, is the availability of the script. When you have a cell using a script with `hash type` set as `data`, you are not worried someone might destroy the used script, you can always redeploy the script on-chain then unlock your cell.
 
