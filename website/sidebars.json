@@ -95,6 +95,7 @@
 	"essays/pw-lock",
 	"essays/tx-pool",
 	"essays/tx-confirmation"
+      "essays/upgradability"
     ]
 
 }
