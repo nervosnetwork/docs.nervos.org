@@ -32,6 +32,8 @@ In this tutorial, we'll write two scripts in Rust, and exec one script into the 
 
 ## Setup the develop environment
 
+This tutorial targets cpasule 0.9 and ckb-std 0.12.
+
 ### Install capsule
 
 The installation steps can refer to [here](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial#install-capsule).
@@ -82,6 +84,12 @@ Done
 ```
 
 </details>
+
+If you are using an older version of capsule, you may need to update the ckb-std dependency manually:
+
+```toml title="contracts/echo/Cargo.toml"
+ckb-std = "0.12.1"
+```
 
 ## Write echo sub-script
 
@@ -220,8 +228,10 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ## Other resources
 
-- [Full code](https://github.com/mohanson/ckb-exec-demo)
 - [Exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec)
+- [Ckb-std exec_cell function](https://docs.rs/ckb-std/0.12.1/ckb_std/high_level/fn.exec_cell.html)
+- [Ckb-std argv function](https://docs.rs/ckb-std/0.12.1/ckb_std/env/fn.argv.html)
+- [Ckb-std exec syscall](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.exec.html)
 
 In this article, we use the index to locate sub-scripts. If you want to use the script hash to locate, you can refer to our:
 
