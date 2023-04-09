@@ -5,7 +5,7 @@ title: Write an SUDT Script by Capsule
 
 ## Introduction
 
-[Capsule](https://github.com/nervosnetwork/capsule) is a set of tools for Rust developers to develop scripts on CKB which covers the entire lifecycle of script development: writing,debugging,testing and deployment. We aim to improve the development experience of Rust developers.
+[Capsule](https://github.com/nervosnetwork/capsule) is a set of tools for Rust developers to develop scripts on CKB which covers the entire lifecycle of script development: writing, debugging, testing and deployment. We aim to improve the development experience of Rust developers.
 
 In this tutorial, you will learn how to write a SUDT script using Capsule. SUDT is the abbreviation of Simple User Defined Token which defines a minimal standard that contains what’s absolutely needed for dapp developers to issue custom tokens on Nervos CKB. You can refer to [RFC: Simple UDT Draft Spec](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333) for more details.
 
@@ -43,7 +43,7 @@ Now you can proceed to install Capsule. It is recommended to download the binary
 Or you can install Capsule from it's source:
 
 ```
-cargo install capsule --git https://github.com/nervosnetwork/capsule.git --tag v0.1.3
+cargo install ckb-capsule --git https://github.com/nervosnetwork/capsule.git --branch develop
 ```
 
 Then check if it works with the following command:
@@ -136,7 +136,7 @@ use core::result::Result;
 use alloc::{vec, vec::Vec};
 
 // Import CKB syscalls and structures
-// https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/index.html
+// https://docs.rs/ckb-std/0.12.1/ckb_std/
 use ckb_std::{
     entry,
     default_alloc,
@@ -219,7 +219,7 @@ Building contract my-sudt
    Compiling molecule v0.6.0
    Compiling ckb-allocator v0.1.1
    Compiling ckb-standalone-types v0.0.1-pre.1
-   Compiling ckb-std v0.4.1
+   Compiling ckb-std v0.12.1
    Compiling my-sudt v0.1.0 (/code/contracts/my-sudt)
     Finished dev [unoptimized + debuginfo] target(s) in 8.73s
 Done
@@ -261,7 +261,7 @@ Open `contracts/my-sudt/Cargo.toml`, we already have a dependency:
 
 ```
 [dependencies]
-ckb-std = "0.4.1"
+ckb-std = "0.12.1"
 ```
 
 * `ckb-std` is a crate used to handling CKB syscalls.
@@ -305,7 +305,7 @@ Now we should  check the owner mode status by defining the `check_owner_mode` fu
 
 We need to load every input's lock hash and compare it to the script's args. If we find an input's lock hash corresponds to the script's args, we are in owner mode; otherwise, we iterate all the inputs and finally got an `IndexOutOfBound` error, which means we are in normal mode.
 
-We use [load_cell_lock_hash](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/fn.load_cell_lock_hash.html) to load cell's lock hash from CKB. The `Source::Input` and `i` args denote we load `input` from `i-th` inputs.
+We use [load_cell_lock_hash](https://docs.rs/ckb-std/0.12.1/ckb_std/high_level/fn.load_cell_lock_hash.html) to load cell's lock hash from CKB. The `Source::Input` and `i` args denote we load `input` from `i-th` inputs.
 
 The error `SysError::IndexOutOfBound` represents that we request an index that does not exist, which means we cannot find a matched input cell, so we return `Ok(false)`.
 
@@ -445,7 +445,7 @@ fn main() -> Result<(), Error> {
 
 ### Use Iterator to query cells
 
-In the previous code, we use `for` loop to iterate inputs and outputs, since iteration over cells is a common pattern in CKB programming, `ckb-std` provides a high-level interface [QueryIter](https://nervosnetwork.github.io/ckb-std/riscv64imac-unknown-none-elf/doc/ckb_std/high_level/struct.QueryIter.html) to handle it.
+In the previous code, we use `for` loop to iterate inputs and outputs, since iteration over cells is a common pattern in CKB programming, `ckb-std` provides a high-level interface [QueryIter](https://docs.rs/ckb-std/0.12.1/ckb_std/high_level/struct.QueryIter.html) to handle it.
 
 QueryIter needs two args, the first is a loading function, the seconds is `Source`. This is an example to load all grouped inputs cells data `QueryIter::new(load_cell_data, Source::GroupInput)`.
 
