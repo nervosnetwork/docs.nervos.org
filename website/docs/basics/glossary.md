@@ -377,11 +377,14 @@ Cryptography is the practice and study of techniques for secure communication in
 ---
 
 ### Cycles
-The number of RISC-V computational cycles required by a script to execute. 
+The number of RISC-V computational cycles required by a script to execute. It's a metric used to prevent malicious behavior such as infinite loops, that's why it is called cycles. 
 
-This is a similar concept to Ethereum's Gas.
+This is a similar concept to Ethereum's Gas, we set cycles to ensure optimal performance and security. Scripts must stay within cycle limits, otherwise the block will be rejected by CKB nodes.
 
 #### See Also
+- [Estimate cycles](https://docs.nervos.org/docs/essays/faq/#estimate-cycles)
+- [Max_block_cycles](#max_block_cycles)
+- [Rules for calculating cycles in RFC on Nervos Network Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md )
 - [Script](#script)
 - [RISC-V](#risc-v)
 - [Ethereum's Gas](https://ethereum.org/en/glossary/#gas)
@@ -476,9 +479,18 @@ The sender of a transaction often includes a fee to the network for processing t
 
 #### See Also
 - [Shannon](#shannon)
+- [Fee rate](#Fee-Rate)
 - [Fee rate in RFC on Nervos Network Github](https://github.com/nervosnetwork/ckb/tree/develop/rpc#error-poolrejectedtransactionbyminfeerate)
 
 ---
+
+### Fee Rate
+A tip per byte that a user offers to the miners for including his transaction in a block on the blockchain.
+
+This is a same concept to Bitcoin's [Fee Rate(often spelled feerate)](https://en.bitcoin.it/wiki/Miner_fees#Feerates).
+
+#### See Also
+- [Fee](#Fee)
 
 ### First-Class Assets
 Assets that 1. the asset itself (rather than a reference to the asset) can be passed directly in smart contract interactions, and 2. directly controlled by owners without any intermediaries. 
