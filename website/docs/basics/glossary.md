@@ -490,7 +490,7 @@ A tip per byte that a user offers to the miners for including his transaction in
 This is a same concept to Bitcoin's [Fee Rate(often spelled feerate)](https://en.bitcoin.it/wiki/Miner_fees#Feerates).
 
 #### See Also
-- [Fee](#Fee)
+- [Fee](#fee)
 
 ### First-Class Assets
 Assets that 1. the asset itself (rather than a reference to the asset) can be passed directly in smart contract interactions, and 2. directly controlled by owners without any intermediaries. 
