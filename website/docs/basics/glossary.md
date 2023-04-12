@@ -479,7 +479,7 @@ The sender of a transaction often includes a fee to the network for processing t
 
 #### See Also
 - [Shannon](#shannon)
-- [Fee rate](#Fee-Rate)
+- [Fee rate](#fee-rate)
 - [Fee rate in RFC on Nervos Network Github](https://github.com/nervosnetwork/ckb/tree/develop/rpc#error-poolrejectedtransactionbyminfeerate)
 
 ---
