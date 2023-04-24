@@ -70,7 +70,7 @@ ckb-cli mock-tx verify --tx-file debug-tx.json
 
 You will see the verification result and the debug output.
 
-Please refer to the [transaction RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/ 0022-transaction-structure.md) for constructing a transaction.
+Please refer to the [transaction RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md) for constructing a transaction.
 
 
 ## Using VM debugger and GDB
