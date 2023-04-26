@@ -30,8 +30,19 @@ filter = info,ckb-script=debug
 
 You can also choose to run the script under a debugging environment like [ckb-cli](https://github.com/nervosnetwork/ckb-cli), [VM debugger](https://github.com/xxuejie/ckb-standalone-debugger), or [ckb-contract-tool](https://github.com/jjyr/ckb-contract-tool).
 
-> For language / toolchain developers, it is recommended that integrate [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug) to print the error backtrace if the language supports it. For example: if you are using Rust with [ckb-contract-std](https://github.com/jjyr/ckb-contract-std), you can see the panic location where the program crashed.
+> For language / toolchain developers, it is recommended that integrate [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug) to print the error backtrace if the language supports it.
 
+### Rust and ckb-std
+
+If you are a Rust developer and uses the crate ckb-std, you can use the [`debug`](https://docs.rs/ckb-std/latest/ckb_std/macro.debug.html) macro.
+
+Rust developers who use the ckb-std crate can utilize the [`debug` macro](https://docs.rs/ckb-std/latest/ckb_std/macro.debug.html).
+
+```rust
+debug!("there is a universal error caused by {}", 42);
+```
+
+This macro triggers the debug syscall in Rust's debug build profile. In the release build profile, it does nothing. To debug the release build, append the `--cfg debug_assertions` arguments to `cargo build.` For users of Capsule, the debug macro can be enabled in the release build by running `capsule build --release --debug-output`.
 
 ## ckb-cli
 
