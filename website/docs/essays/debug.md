@@ -34,8 +34,6 @@ You can also choose to run the script under a debugging environment like [ckb-cl
 
 ### Rust and ckb-std
 
-If you are a Rust developer and uses the crate ckb-std, you can use the [`debug`](https://docs.rs/ckb-std/latest/ckb_std/macro.debug.html) macro.
-
 Rust developers who use the ckb-std crate can utilize the [`debug` macro](https://docs.rs/ckb-std/latest/ckb_std/macro.debug.html).
 
 ```rust
