@@ -49,27 +49,18 @@ We gather the referenced data through the pointer prior to transaction execution
 
 ### STEP 2 — Verify
 
-The process of verification involves checking the following items:       
-
-1. version (currently must be 0) 
-2. serialized_size is less than limit 
-    1. pub fn serialized_size(&self) -> usize {
-            // the offset in TransactionVec header is u32
-            self.as_slice().len() + molecule::NUMBER_SIZE
-            // molecule::NUMBER_SIZE = `size_of::<u32>() 4`
-        }
-3. inputs are not empty
-    1. inputs().is_empty() || outputs().is_empty()
-4. inputs are mature
-    1. For each input and dep, if the referenced output transaction is a cellbase, it must have at least 4 epoch confirmations
-5. capacity
-    1. sum of inputs’ capacity must less than or equal to outputs’ capacity
-6. duplicate_deps
-    1. deps should not be duplicated
-7. outputs_data_verifier
-    1. number of ‘output data' fields must equal number of outputs
-8. since     
-    1. ‘since’ value must follow the rules described in https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md
+The process of verification involves checking the [following items](https://github.com/nervosnetwork/ckb/blob/92b3bcadc019b0d7ecb46bbd82a890f123cf2c35/verification/src/block_verifier.rs#L38):       
+```
+fn verify(&self, target: &BlockView) -> Result<(), Error> {
+        let max_block_proposals_limit = self.consensus.max_block_proposals_limit();
+        let max_block_bytes = self.consensus.max_block_bytes();
+        BlockProposalsLimitVerifier::new(max_block_proposals_limit).verify(target)?;
+        BlockBytesVerifier::new(max_block_bytes).verify(target)?;
+        CellbaseVerifier::new().verify(target)?;
+        DuplicateVerifier::new().verify(target)?;
+        MerkleRootVerifier::new().verify(target)
+}
+```
 
 Then CKB VM will execute the transaction script and output the number of cycles consumed.
 
