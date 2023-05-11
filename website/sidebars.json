@@ -22,6 +22,7 @@
           "basics/guides/mainnet",
           "basics/guides/testnet",
           "basics/guides/run-ckb-with-docker",
+	  "basics/guides/monitor-nodes",
           "basics/guides/get-ckb",
           "basics/guides/ckb-on-windows",
           "basics/guides/mining-ckb",
