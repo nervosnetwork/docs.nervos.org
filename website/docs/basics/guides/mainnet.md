@@ -1,32 +1,33 @@
 ---
 id: mainnet
-title: Run a CKB Mainnet Node
+title: Run a CKB Node
 ---
 
-*Fun Fact: Running a CKB Mainnet node not only helps contribute to the robustness and decentralized nature of the Network, it also means you do not need to rely on any 3rd party to provide data from the blockchain, which increases your security.*
+Running a CKB node not only contributes to the robustness and decentralized nature of the network, but also allows you to access data from the blockchain without any third party, which in turn increases your security.
 
-Running a node requires using the command line. If you have never used a command line before, you may refer to [how to use the command line tool](https://www.google.com/search?q=learn+command+line) on your computer. Although it may seem complicated at first, it is quite simple and you should be able to easily run a CKB node following the specific instructions below.
+To run a node, you need to use the command line. If you have never used it before, you may refer to [how to use the command line tool](https://www.google.com/search?q=learn+command+line) to get started on your computer. Although it may seem complicated at first, it is quite simple and following the specific instructions below should allow you to easily run a CKB mainnet node.
 
-Step 1: Download the latest release CKB binary file from [CKB releases page on GitHub](https://github.com/nervosnetwork/ckb/releases) 
+## Run a CKB Mainnet Node
 
-Step 2:  Unzip / extract the downloaded file to an easily accessible folder. 
-For Windows we recommend `C:\ckb` 
-On Mac we recommend `~/Documents`
+Step 1: Download the latest CKB binary file from [CKB releases page on GitHub](https://github.com/nervosnetwork/ckb/releases) 
 
-Step 3: Open up Terminal (Mac) or command line (Windows).
+Step 2:  Unzip and extract the downloaded file to an easily accessible folder. We recommend `C:\ckb` for Windows and `~/Documents` for Mac.
+
+Step 3: Open Terminal on Mac or Command Prompt on Windows.
 
 * On Mac:
 
-    * Either 1) open your Applications folder, then open Utilities and double-click on Terminal, or 2) press `Command - Spacebar` or `Control -Spacebar` to launch Spotlight and type "Terminal," then double-click the search result and the following steps are performed on Terminal.
+You can open Terminal in two ways: either go to the Applications folder, then open Utilities and double-click on Terminal, or launch Spotlight search by pressing `Command - Spacebar` or `Control -Spacebar`, then type "Terminal" and double-click on the search result. The subsequent steps will be executed in Terminal.
 
 * On Windows:
 
-    * Please note: if you are familiar with command line operation on Windows, you can skip this step and open the `cmd` or `Power Shell` terminal instead.
-    * Download Git for windows from [Git-Downloads](https://git-scm.com/downloads), double-click to install it and open Git Bash in start menu. The following steps will be performed in Git Bash.
+(If you are familiar with command line in Windows, you can skip this step and open `cmd` or `Power Shell` instead.)
 
-Step 4：Copy and paste the commands below into the Terminal (Mac) / Command Line (Windows):
+Download Git for Windows from [Git-Downloads](https://git-scm.com/downloads), double-click to install and open Git Bash in the start menu. The subsequent steps will be executed in in Git Bash.
 
-* Please note: the directory and folder name on your computer must match the commands below, if not, please modify the command script correspondingly. 
+Step 4：Copy and paste the commands below into the Terminal (Mac) or Command Prompt (Windows):
+
+Note: make sure the directory and folder names on your computer match the commands below. Modify the commands according if they don't match. 
 
 * Mac
 
@@ -54,7 +55,7 @@ ckb-cli 0.32.0 (0fc435d 2020-05-22)
 
 </details>
 
-Step 5: To run the CKB node, copy and paste the commands below into the Terminal (Mac) / Command Line (Windows):
+Step 5: To run the CKB mainnet node, copy and paste the commands below into Terminal (Mac) / Command Prompt (Windows):
 
 * Initialize the node (run only once)
 
@@ -100,3 +101,106 @@ ckb run
 ```
 
 </details>
+
+## Run a Public RPC Node
+CKB nodes have built-in RPC functionality, which becomes available as soon as the node is started.
+
+RPC is private by default. Exposing RPC through the `rpc.listen_address` configuration option allows arbitrary machines to access the JSON-RPC port, posing a security risk. Therefore, it is strongly discouraged. 
+
+However, if you have to expose them, make sure to strictly limit the access to trusted machines only, by following the method below.
+
+### RPC Access Control
+Here we use Nginx API Gateway to configure the RPC access control.
+
+Step 1: Install Docker-Compose and Docker
+
+```jsx
+apt install docker-compose
+apt install docker
+```
+
+Step 2: Clone Code
+
+```jsx
+git clone https://github.com/jiangxianliang007/ckb-nginx-proxy.git
+```
+
+Step 3: Replace Default Value With Your CKB RPC Address
+
+```jsx
+cd ckb-nginx-proxy
+
+sed -i "s/YOUR_CKR_RPC_IP:8114/192.168.1.100:8114/" nginx.conf
+```
+
+Step 4: Run Proxy
+
+```
+docker-compose up -d
+```
+
+### Example
+
+Get tip block hash and number:
+```
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "get_tip_header",
+    "params": []
+}' \
+| tr -d '\n' \
+| curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+
+// Note that http://192.168.1.100:80 needs to be changed to your proxy IP!
+```
+
+Result:
+```
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "compact_target": "0x1d090fbe",
+        "dao": "0xba17553fab3db84154bc4aa9f09b2600e826a2b0df99010400ed51b4686b5808",
+        "epoch": "0x7080687001539",
+        "extra_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "0x7a46e779a3fc2d5b55c82aad852e721b0097bf873927b9751409b1d185599ce4",
+        "nonce": "0xd265e70dfd205dbbed33b29294121856",
+        "number": "0x7037f2",
+        "parent_hash": "0x3d105fe9ec60f138baa6623abd16af70ba1be90ad23d1943bcaa55d5f14fcb6f",
+        "proposals_hash": "0x2581d1769886226a8c90ee99baf2d8696e24c7f6bb6751748ff8b4452f8006e5",
+        "timestamp": "0x1847a2bfad2",
+        "transactions_root": "0x28157a5962c4ae1d3e153b1d8d331e5fd3c158866287f5398ab7f7d38210dfb0",
+        "version": "0x0"
+    },
+    "id": 2
+}
+```
+Execute `clear_tx_pool`:
+
+```jsx
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "clear_tx_pool",
+    "params": []
+}' | tr -d '\n' | curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+```
+
+Result:
+```
+This method has been banned
+```
+
+### List of Restricted Methods
+```
+clear_banned_addresses
+set_ban
+set_network_active
+add_node
+remove_node
+remove_transaction
+clear_tx_pool
+```
