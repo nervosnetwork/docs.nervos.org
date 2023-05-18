@@ -21,33 +21,45 @@ If you run into an issue on this tutorial you can [create a new issue](https://g
 
 ## Setup the develop environment
 
-### Install capsule
+### Install Capsule
 
-To use capsule, you need `docker`. It is recommended to install the latest version:
+#### Prerequisites
 
-* [Install docker](https://docs.docker.com/get-docker/)
+The following must be installed and available to use Capsule.
 
-Note: The current user must have permission to manage Docker instances. (How to manage Docker as a non-root user)[https://docs.docker.com/engine/install/linux-postinstall/].
-
-Now you can proceed to install capsule, It is recommended to [download the binary](https://github.com/nervosnetwork/capsule/releases/tag/v0.2.0)
-
-Or you can install from source:
-
+- Cargo and Rust - Capsule uses cargo to generate Rust contracts and run tests. [Install Rust](https://www.rust-lang.org/tools/install.)
+- Docker - Capsule uses `docker` container to reproducible build contracts. It's also used by `cross`. https://docs.docker.com/get-docker/
+- `cross-rs` - Capsule uses `cross` to build rust contracts. Install with 
+```bash
+# Do this after you installed cargo
+cargo install cross --git https://github.com/cross-rs/cross
 ```
-cargo install capsule --git https://github.com/nervosnetwork/capsule.git --tag v0.2.0
+Note: The current user must have permission to manage Docker instances. For more information, see [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
+### 
+
+Now you can proceed to install Capsule. It is recommended to download the binary [here](https://github.com/nervosnetwork/capsule/releases).
+
+Or you can install Capsule from it's source:
+
+```bash
+cargo install capsule --git https://github.com/nervosnetwork/capsule.git --tag v0.1.3
 ```
 
-Then check if it works with:
+Then check if it works with the following command:
 
-```
+```bash
 capsule check
 ```
-<details><summary>(click here to view response)</summary>
+<details>
+<summary>(click here to view response)</summary>
 
 ```bash
 ------------------------------
-docker    installed
-ckb-cli    installed
+cargo      installed
+docker     installed
+cross-util installed
+ckb-cli    installed v1.4.0 (required v1.2.0)
 ------------------------------
 ```
 
