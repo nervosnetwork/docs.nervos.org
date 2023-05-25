@@ -337,6 +337,7 @@ In the code below, we load the current script(SUDT)'s args field, and invoke `ch
 Notice since we are using no-std Rust, we can't directly use the `std` in the code. Instead, we need to import the `Vec` struct from the [alloc](https://doc.rust-lang.org/stable/alloc/index.html) crate, which is a rust builtin crate contains heap related structs.
 
 ``` rust
+// contracts/my-sudt/src/entry.rs
 fn main() -> Result<(), Error> {
     // load current script
     // check verification branch is owner mode or normal mode
@@ -466,27 +467,59 @@ fn collect_outputs_amount() -> Result<u128, Error> {
     Ok(outputs_amount)
 }
 ```
+* Update the `error.rs` to add an error stands for "Not enough amount"
 
-* Update the `main` function to check inputs / outputs UDT amount:
+```rust
+use ckb_std::error::SysError;
 
-``` rust
 /// Error
 #[repr(i8)]
-enum Error {
+pub enum Error {
     IndexOutOfBound = 1,
     ItemMissing,
     LengthNotEnough,
     Encoding,
-    Amount
+    // Add customized errors here...
+    Amount,
 }
 
-fn main() -> Result<(), Error> {
+impl From<SysError> for Error {
+    fn from(err: SysError) -> Self {
+        use SysError::*;
+        match err {
+            IndexOutOfBound => Self::IndexOutOfBound,
+            ItemMissing => Self::ItemMissing,
+            LengthNotEnough(_) => Self::LengthNotEnough,
+            Encoding => Self::Encoding,
+            Unknown(err_code) => panic!("unexpected sys error {}", err_code),
+        }
+    }
+}
+```
+
+* Update the `main` function in `entry.rs` to check inputs / outputs UDT amount:
+
+``` rust
+pub fn main() -> Result<(), Error> {
+    // remove below examples and write your code here
+
     let script = load_script()?;
     let args: Bytes = script.args().unpack();
+    debug!("script args is {:?}", args);
+
+    // return an error if args is invalid
+    if args.is_empty() {
+        return Err(Error::LengthNotEnough);
+    }
+
+    let tx_hash = load_tx_hash()?;
+    debug!("tx hash is {:?}", tx_hash);
+
+    let _buf: Vec<_> = vec![0u8; 32];
 
     // return success if owner mode is true
     if check_owner_mode(&args)? {
-        return Ok(());
+        return Ok(())
     }
 
     let inputs_amount = collect_inputs_amount()?;
@@ -495,7 +528,7 @@ fn main() -> Result<(), Error> {
     if inputs_amount < outputs_amount {
         return Err(Error::Amount);
     }
-
+    // more verifications ...
     Ok(())
 }
 ```
@@ -506,9 +539,15 @@ In the previous code, we use `for` loop to iterate inputs and outputs, since ite
 
 QueryIter needs two args, the first is a loading function, the seconds is `Source`. This is an example to load all grouped inputs cells data `QueryIter::new(load_cell_data, Source::GroupInput)`.
 
-Rewrite our functions:
+Rewrite our functions in `entry.rs`:
 
 ``` rust
+
+// import this
+use ckb_std::high_level::QueryIter;
+
+// Other codes...
+
 fn check_owner_mode(args: &Bytes) -> Result<bool, Error> {
     // With owner lock script extracted, we will look through each input in the
     // current transaction to see if any unlocked cell uses owner lock.
