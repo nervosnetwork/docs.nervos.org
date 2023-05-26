@@ -110,7 +110,7 @@ RPC is private by default. Exposing RPC through the `rpc.listen_address` configu
 However, if you have to expose them, make sure to strictly limit the access to trusted machines only, by following the method below.
 
 ### RPC Access Control
-Here we use Nginx API Gateway to configure the RPC access control.
+Here is an example to use Nginx API Gateway to configure the RPC access control. Explore more solutions or submit new ones using the GitHub tag [ckb-rpc-proxy](https://github.com/topics/ckb-rpc-proxy).
 
 Step 1: Install Docker-Compose and Docker
 
