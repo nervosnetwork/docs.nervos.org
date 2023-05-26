@@ -5,7 +5,7 @@ title: Monitor Nodes With CKBGuardian
 
 [CKBGuardian](https://cryptape.github.io/CkbGuardian/index.html) is a RPC status monitor for CKB public nodes. It can also check whether CKB and CKB proxy have been started properly. Its purpose is to verify the connectivity of the RPC, not the validity of the results.
 
-## Local Setting
+## Local Testting
 
 Step 1: Clone Code
 
