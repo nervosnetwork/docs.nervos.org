@@ -122,7 +122,7 @@ apt install docker
 Step 2: Clone Code
 
 ```jsx
-git clone https://github.com/jiangxianliang007/ckb-nginx-proxy.git
+git clone https://github.com/cryptape/ckb-nginx-proxy.git
 ```
 
 Step 3: Replace Default Value With Your CKB RPC Address
