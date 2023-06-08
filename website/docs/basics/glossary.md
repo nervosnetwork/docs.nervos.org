@@ -495,10 +495,16 @@ A change in protocol causing the creation of an alternative chain, or a temporal
 ---
 
 ### Full Node
-A trust minimized node that independently verifies and stores a complete copy of the entire blockchain history.
+A full node is an essential component of the CKB network. It stores and syncs the entire blockchain, verifies the validity of blocks and transactions, and enforces the network's consensus rules.
 
-#### Synonyms
+```
+ckb init --chain mainnet && ckb run
+```
+
+#### See Also
 - [Node](#node)
+- [Light Node](#light-node)
+- [Mining Node](#mining-node)
 
 ---
 
@@ -576,6 +582,21 @@ As a low-resource node, a light client allows users to sync with a blockchain in
 
 ---
 
+### Light Node
+A light node downloads only the headers of the blockchain, conserving resources. It relies on other nodes for full transaction data and is a lightweight option for network participation.
+
+```
+ckb-light-client run --config-file ./testnet.toml
+```
+
+#### See Also
+- [Node](#node)
+- [Full Node](#full-node)
+- [Mining Node](#mining-node)
+
+
+---
+
 ### Mempool
 Short for "memory pool". A waiting area on full nodes for transactions that have been broadcasted to the network but have not yet been confirmed on the blockchain.
 
@@ -637,7 +658,11 @@ Mining is the process by which a blockchain node get new token reward by verifyi
 ---
 
 ### Mining Node
-Nodes participate in the CKB consensus process. Mining nodes collect new transactions, package them into blocks and produce new blocks when they have found a proof of work.
+Mining nodes create new blocks by solving computational puzzles. They contribute to the network's security and consensus by actively validating and adding blocks to the blockchain.
+
+```
+ckb init --chain mainnet && ckb miner
+```
 
 #### See Also
 - [Block](#block)
@@ -645,6 +670,8 @@ Nodes participate in the CKB consensus process. Mining nodes collect new transac
 - [Miner](#miner)
 - [Mining](#mining)
 - [Proof of Work](#proof-of-work)
+- [Full Node](#full-node)
+- [Light Node](#light-node)
 
 ---
 
@@ -726,11 +753,10 @@ A measurement of the total computational processing power which is dedicated to 
 ### Node
 A software client that participates in the network.
 
-#### Synonyms
-- [Full Node](#full-node)
-
 #### See Also
-- [Pruned Node](#pruned-node)
+- [Full Node](#full-node)
+- [Light Node](#light-node)
+- [Mining Node](#mining-node)
 
 ---
 
@@ -852,13 +878,6 @@ A shorthand name for Block Propagation.
 #### Synonyms
 - [Block Propagation](#block-propagation)
 
----
-
-### Pruned Node
-A node which contains only part of the blockchain history.
-
-#### See Also
-- [Node](#node)
 
 ---
 
