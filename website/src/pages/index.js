@@ -120,7 +120,7 @@ class Index extends React.Component {
               id="random-browsing"
               title="Random Browsing"
               body={
-                  <p>For users who are just browing to get a glimpse of CKB&#39;s design, or developers who want to learn one or two tips, <a href="docs/essays/introduction">Essays</a> will provide all sorts of articles explaining CKB related topics. <a href="docs/reference/introduction">Reference</a> might also be of interest since it aims to describe specific constructs in CKB.</p>
+                  <p>For users who are just browsing to get a glimpse of CKB&#39;s design, or developers who want to learn one or two tips, <a href="docs/essays/introduction">Essays</a> will provide all sorts of articles explaining CKB related topics. <a href="docs/reference/introduction">Reference</a> might also be of interest since it aims to describe specific constructs in CKB.</p>
               }
               footer={
                 <p>

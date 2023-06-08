@@ -54,7 +54,7 @@ Each cell on Nervos CKB, must not have a lower capacity than the total size of i
 7. If type script is present, actual bytes of args field in type script.
 8. Actual bytes of cell data.
 
-By summing up all the above fields, we get the total size of information a cell needs. Cell capacity, when measured in `CKBytes`, respresents the maximum size of information that can be held, meaning a valid cell must ensure the CKBytes stored in capacity equal or is larger than the total size of information.
+By summing up all the above fields, we get the total size of information a cell needs. Cell capacity, when measured in `CKBytes`, represents the maximum size of information that can be held, meaning a valid cell must ensure the CKBytes stored in capacity equal or is larger than the total size of information.
 
 ## Live Cell
 

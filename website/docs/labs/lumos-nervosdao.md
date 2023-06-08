@@ -11,7 +11,7 @@ In this tutorial, we will provide an introduction on lumos via a real example: [
 
 Lumos is designed as a framework, meaning it is expected to be used in a intrinsic way: certain setup code will be needed when you first boot your application. Global states might also be kept in your application memory space for bookkeeping purposes. That being said, lumos is also organized into several components, some of which might be used in a non-intrinsic stateless fashion. In general, lumos consists of the following components:
 
-* [indexer](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/indexer): a CKB cell indexer that fulfills [Index-Query-Assemble](../reference/cell#index-query-assemble-pattern) pattern. For now, this package only contains RocksDB backed indexer. A [separate pacakge](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/sql-indexer) contains SQL backed indexer using the same interface. Later, we might merge the 2 packages into one for consistency.
+* [indexer](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/indexer): a CKB cell indexer that fulfills [Index-Query-Assemble](../reference/cell#index-query-assemble-pattern) pattern. For now, this package only contains RocksDB backed indexer. A [separate package](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/sql-indexer) contains SQL backed indexer using the same interface. Later, we might merge the 2 packages into one for consistency.
 * [base](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/base): a base package containing common types and utilities that are used by most packages. If there is a CKB specific task you need to perform, you might want to look here first. Chances are they are already provided.
 * [helpers](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/helpers): a helper package containing more utilities. The difference between `helpers` and `base`, is that `base` contains pure stateless functions, while `helpers` works in a more intrinsic way: it requires `config-manager` mentioned below to be setup.
 * [common-scripts](https://github.com/nervosnetwork/lumos/tree/v0.4.0/packages/common-scripts): integrations for known scripts on CKB. While we try our best to provide integrations for popular CKB scripts, people might be working on innovations everyday. As a result, we are also designing a set of APIs, so developers can freely integrate their own scripts into lumos for everyone to use. One integrated, `common-scripts` should be able to leverage those new scripts as well.
@@ -188,7 +188,7 @@ Now config manager is successfully setup, we can proceed to the next step.
 
 ## Booting Indexer
 
-Lumos is designed based on the [Index-Query-Assemble](../reference/cell#index-query-assemble-pattern) pattern, meaning a dapp shall hava an indexer that keeps indexing new blocks in a format that is easier to query. This means any dapp built with lumos, should also have an indexer configured and running at all time:
+Lumos is designed based on the [Index-Query-Assemble](../reference/cell#index-query-assemble-pattern) pattern, meaning a dapp shall have an indexer that keeps indexing new blocks in a format that is easier to query. This means any dapp built with lumos, should also have an indexer configured and running at all time:
 
 ```
 > const { Indexer } = require("@ckb-lumos/indexer");

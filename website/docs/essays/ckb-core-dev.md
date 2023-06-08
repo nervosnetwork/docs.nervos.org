@@ -69,7 +69,7 @@ interval = 600
   make build-for-profiling
   ```
 
-  After compiling, a script named `jeprof` will be generated in `target` direcotry.
+  After compiling, a script named `jeprof` will be generated in `target` directory.
 
   ```sh
   find target/ -name "jeprof"
