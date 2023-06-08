@@ -32,6 +32,8 @@ In this tutorial, we'll write two scripts in Rust, and exec one script into the 
 
 ## Setup the develop environment
 
+This tutorial targets cpasule 0.9 and ckb-std 0.12.
+
 ### Install capsule
 
 The installation steps can refer to [here](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial#install-capsule).
@@ -83,22 +85,26 @@ Done
 
 </details>
 
+If you are using an older version of capsule, you may need to update the ckb-std dependency manually:
+
+```toml title="contracts/echo/Cargo.toml"
+ckb-std = "0.12.1"
+```
+
 ## Write echo sub-script
 
-Put the following code into `contracts/echo/main.rs`. As you can see, the script always returns 0 if argc is 0, which means that if the script is used as a alone lock script, anyone can unlock this cell. If echo used as a sub-script of exec, it will parse the first argument and use that as the exit code.
+Put the following code into `contracts/echo/src/main.rs`, replacing the existing `program_entry` function. As you can see, the script always returns 0 if argc is 0, which means that if the script is used as a alone lock script, anyone can unlock this cell. If echo used as a sub-script of exec, it will parse the first argument and use that as the exit code.
 
-```rs
-use ckb_std::cstr_core::CStr;
-
-fn program_entry(argc: u64, argv: *const *const u8) -> i8 {
+```rust
+fn program_entry() -> i8 {
+    let argv = ckb_std::env::argv();
     // This script will always return 0 if used alone.
-    if argc == 0 {
+    if argv.len() == 0 {
         return 0;
     };
 
     // When calling the script by exec and passing in the arguments.
-    let args = unsafe { core::slice::from_raw_parts(argv, argc as usize) };
-    let arg1 = unsafe { CStr::from_ptr(args[0]) }.to_str().unwrap();
+    let arg1 = argv[0].to_str().unwrap();
     let exit = arg1.parse::<i8>().unwrap();
     return exit;
 }
@@ -106,13 +112,13 @@ fn program_entry(argc: u64, argv: *const *const u8) -> i8 {
 
 ## Write exec demo script
 
-Put the following code into `contracts/ckb-exec-demo/main.rs`.
+Put the following code into `contracts/ckb-exec-demo/src/main.rs`, replacing the existing `program_entry` function:
 
-```rs
-use ckb_std::cstr_core::CStr;
-use ckb_std::{ckb_constants::Source, default_alloc, syscalls::exec};
+```rust
+use core::ffi::CStr;
+use ckb_std::{ckb_constants::Source, syscalls::exec};
 
-fn program_entry(_argc: u64, _argv: *const *const u8) -> i8 {
+fn program_entry() -> i8 {
     let r = exec(
         0,
         Source::CellDep,
@@ -131,35 +137,79 @@ This script does only one thing: When executing `exec(...)`, CKB-VM will look fo
 
 ## Testing
 
-We need to deploy the `echo` to a cell, then reference the cell in the testing transaction. Open `tests/src/tests.rs`:
+We need to deploy the `echo` to a cell, then reference the cell in the testing transaction. Replace the content of `tests/src/tests.rs`:
 
-```rs
-let echo_bin = {
-    let mut buf = Vec::new();
-    File::open("../build/debug/echo")
-        .unwrap()
-        .read_to_end(&mut buf)
-        .expect("read code");
-    Bytes::from(buf)
-};
-let echo_out_point = context.deploy_cell(echo_bin);
-let echo_dep = CellDep::new_builder()
-    .out_point(echo_out_point)
-    .build();
+```rust
+use super::*;
+use ckb_testtool::ckb_error::Error;
+use ckb_testtool::ckb_types::{bytes::Bytes, core::TransactionBuilder, packed::*, prelude::*};
+use ckb_testtool::context::Context;
 
-// build transaction
-let tx = TransactionBuilder::default()
-    .input(input)
-    .outputs(outputs)
-    .outputs_data(outputs_data.pack())
-    // reference to echo cell
-    .cell_dep(echo_dep)
-    .build();
+const MAX_CYCLES: u64 = 10_000_000;
+
+fn assert_script_error(err: Error, err_code: i8) {
+    let error_string = err.to_string();
+    assert!(
+        error_string.contains(format!("error code {} ", err_code).as_str()),
+        "error_string: {}, expected_error_code: {}",
+        error_string,
+        err_code
+    );
 }
 
-let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();
-// check the return code is 42
-assert_script_error(err, 42);
+#[test]
+fn test_success() {
+    // deploy contract
+    let mut context = Context::default();
+    let contract_bin: Bytes = Loader::default().load_binary("ckb-exec-demo");
+    let out_point = context.deploy_cell(contract_bin);
+
+    let echo_bin: Bytes = Loader::default().load_binary("echo");
+    let echo_out_point = context.deploy_cell(echo_bin);
+    let echo_dep = CellDep::new_builder().out_point(echo_out_point).build();
+
+    // prepare scripts
+    let lock_script = context
+        .build_script(&out_point, Default::default())
+        .expect("script");
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point)
+        .build();
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    let outputs_data = vec![Bytes::new(); 2];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .cell_dep(echo_dep)
+        .build();
+    let tx = context.complete_tx(tx);
+
+    // run
+    let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();
+    assert_script_error(err, 42);
+}
 ```
 
 Run `capsule test`.
@@ -178,8 +228,10 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ## Other resources
 
-- [Full code](https://github.com/mohanson/ckb-exec-demo)
 - [Exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec)
+- [Ckb-std exec_cell function](https://docs.rs/ckb-std/0.12.1/ckb_std/high_level/fn.exec_cell.html)
+- [Ckb-std argv function](https://docs.rs/ckb-std/0.12.1/ckb_std/env/fn.argv.html)
+- [Ckb-std exec syscall](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.exec.html)
 
 In this article, we use the index to locate sub-scripts. If you want to use the script hash to locate, you can refer to our:
 

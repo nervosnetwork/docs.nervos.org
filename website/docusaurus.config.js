@@ -88,6 +88,9 @@ module.exports = {
   ],
   plugins: [],
   themeConfig: {
+    prism: {
+      additionalLanguages: ["rust"],
+    },
     colorMode: {
       defaultMode: "light",
       disableSwitch: false,
