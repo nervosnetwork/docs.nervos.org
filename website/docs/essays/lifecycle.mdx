@@ -63,7 +63,7 @@ The process of verification involves checking the following items:
 4. inputs are mature
     1. For each input and dep, if the referenced output transaction is a cellbase, it must have at least 4 epoch confirmations
 5. capacity
-    1. sum of inputs’ capacity must less than or equal to outputs’ capacity
+    1. sum of inputs’ capacity must greater than or equal to sum of outputs’ capacity
 6. duplicate_deps
     1. deps should not be duplicated
 7. outputs_data_verifier
