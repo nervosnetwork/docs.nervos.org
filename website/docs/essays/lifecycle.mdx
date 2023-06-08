@@ -58,8 +58,8 @@ The process of verification involves checking the following items:
             self.as_slice().len() + molecule::NUMBER_SIZE
             // molecule::NUMBER_SIZE = `size_of::<u32>() 4`
         }
-3. inputs are not empty
-    1. inputs().is_empty() || outputs().is_empty()
+3. inputs and outputs are not empty
+    1. The transaction should not have empty inputs, and it should also not have empty outputs, except in the case of a cellbase transaction.
 4. inputs are mature
     1. For each input and dep, if the referenced output transaction is a cellbase, it must have at least 4 epoch confirmations
 5. capacity
