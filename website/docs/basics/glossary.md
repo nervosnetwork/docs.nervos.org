@@ -658,7 +658,7 @@ Mining is the process by which a blockchain node get new token reward by verifyi
 ---
 
 ### Mining Node
-Mining nodes are participants in a blockchain network, responsible for creating and proposing new blocks by solving computational puzzles. They contribute to the network's security and consensus by actively validating and adding blocks to the blockchain.
+Mining nodes create new blocks by solving computational puzzles. They contribute to the network's security and consensus by actively validating and adding blocks to the blockchain.
 
 ```
 ckb init --chain mainnet && ckb miner
