@@ -15,19 +15,26 @@ Step 2:  Unzip and extract the downloaded file to an easily accessible folder. W
 
 Step 3: Open Terminal on Mac or Command Prompt on Windows.
 
-* On Mac:
+* Mac:
 
 You can open Terminal in two ways: either go to the Applications folder, then open Utilities and double-click on Terminal, or launch Spotlight search by pressing `Command - Spacebar` or `Control -Spacebar`, then type "Terminal" and double-click on the search result. The subsequent steps will be executed in Terminal.
 
-* On Windows:
+* Windows:
 
 (If you are familiar with command line in Windows, you can skip this step and open `cmd` or `Power Shell` instead.)
 
-Download Git for Windows from [Git-Downloads](https://git-scm.com/downloads), double-click to install and open Git Bash in the start menu. The subsequent steps will be executed in in Git Bash.
+Download and install [Git for Windows](https://git-scm.com/download/win), once the installation is complete, open the Command Prompt.
+
+In the Command Prompt window, type the following git command and press Enter:
+
+```
+git --version
+```
+This verify Git commands are available and its current version (--version)
 
 Step 4：Copy and paste the commands below into the Terminal (Mac) or Command Prompt (Windows):
 
-Note: make sure the directory and folder names on your computer match the commands below. Modify the commands according if they don't match. 
+Note: make sure to edit the commands according to your folder names and directory. 
 
 * Mac
 
