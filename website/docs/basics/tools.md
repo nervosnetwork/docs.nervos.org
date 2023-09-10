@@ -14,7 +14,7 @@ Neuron Wallet is a CKB wallet produced by the Nervos Foundation, it holds your k
 
 Now Neuron Wallet has bundled a CKB Mainnet node and configured to connect to the CKB Mainnet. After installation, as you open the Neuron Wallet, the bundled Mainnet node will run.
 
-You can also run a CKB node yourself and launch Neuron wallet, then Neuron will NOT start the bundled node, but connects to your node instead. You may refer to [Neuron Waller Guide](guides/crypto%20wallets/neuron) for more details.
+You can also run a CKB node yourself and launch Neuron wallet, then Neuron will NOT start the bundled node, but connects to your node instead. You may refer to [Neuron Wallet Guide](https://docs-old.nervos.org/references/neuron-wallet-guide) for more details.
 
 
 ## CKB-Explorer  
