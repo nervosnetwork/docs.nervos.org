@@ -95,7 +95,7 @@ For more information, see [RFC: CKB Address Format](https://github.com/nervosnet
 Here are three solutions for CKB address generation and transformation:
 
 - [CKB.tools](https://ckb.tools/): allow the parsing or generating of deprecated addresses for applications that do not yet support the new full address format, such as the faucet.
-- Lumos Page ([CKB Lumos](https://main--boring-euler-1b5fa4.netlify.app/tools/)): can be used to generate new full addresses.
+- Lumos Page ([CKB Lumos](https://lumos-website.vercel.app/#2-generate-a-wallet-account)): can be used to generate new full addresses.
 - [ckb-address-transformer](https://codesandbox.io/s/ckb-address-transformer-524gi): can be used to convert a deprecated address into a new full address and vice versa.
 
 ## Minimum Requirements of a CKB Transfer
