@@ -1,4 +1,4 @@
-![image](https://github.com/nervosnetwork/docs.nervos.org/assets/122437870/3c766328-1b3f-4836-a5ef-b2b6998cdcb3)---
+---
 id: neuron
 title: Neuron Wallet
 ---
@@ -13,7 +13,7 @@ Neuron Wallet is bundled with a CKB Mainnet node and configured to connect to th
 
 ## Install Neuron Wallet
 
-Download and install the latest version of Neuron Wallet from the [Neuron Wallet releases page](https://github.com/nervosnetwork/neuron/releases) on Github. 
+Download and install the latest version of Neuron Wallet from the [Neuron Wallet releases page](https://github.com/nervosnetwork/neuron/releases/latest) on Github. 
 
 **Note**: For Windows versions before Windows 10, the latest [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) must be installed before installing Neuron Wallet.
 
@@ -55,7 +55,7 @@ To import a keystore file:
 
 The **Block Number** can be cross-checked with the **Latest Block** on the [CKB Explorer](https://explorer.nervos.org/) page to ensure that the sync is completed.
 
-![Sync](https://github.com/nervosnetwork/docs.nervos.org/assets/122437870/a4d6dd9c-611d-4f8c-b07d-8264c43d4cf3)
+![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/8e108ffe-55fb-400f-bbd7-5c2176df1e53)
 
 After the Neuron wallet is synced, full access to the tokens of the wallet is available. Sending, receiving CKBs, and depositing CKBs to Nervos DAO is possible.
 
@@ -73,7 +73,7 @@ To transfer CKB:
 
 4. Input the password and click **Confirm** to complete the transfer.
 
-~~![image](https://github.com/nervosnetwork/docs.nervos.org/assets/122437870/2fac4886-4bc2-4fe0-9ecc-50963a0f730b)~~
+![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/7727fcfa-03fc-487f-b9b4-2cd03076e031)
 
 ## Deposit CKB into Nervos DAO
 
@@ -87,12 +87,11 @@ To deposit CKB into Nervos DAO:
 
 2. Input the amount of CKB tokens for the deposit and then click **Proceed**.
 
-~~<img src={useBaseUrl("img/wallet/neuron_04.png")} width="70%"/>~~
+![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/19f6f69c-fc3d-4410-8304-79ecff25e414)
  
 3. Input the password and click **Confirm** to submit the deposit transaction.
-
  
-~~<img src={useBaseUrl("img/wallet/neuron_05.png")} width="70%"/>~~
+![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/57d84b95-c877-4f37-80ee-c1930ea41662)
  
 
 ## Withdraw CKB from Nervos DAO
@@ -103,11 +102,11 @@ To withdraw CKB from Nervos DAO:
 
 1. Choose the deposit that you want to withdraw from the deposits list and click **Withdraw**.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_06.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/720ef824-2728-4b04-a960-8b58f480803b)
 
 2. Click **Next** on the pop-up window and verify the password to complete the withdrawal operation.
 
-   ![image](https://github.com/nervosnetwork/docs.nervos.org/assets/122437870/bb741fa4-82dc-4134-882f-febfc461b7c6)
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/ecc843fa-2220-4f52-bc38-1835ebb3de64)
 
 
 ## Claim Vested or Locked Tokens
@@ -120,13 +119,12 @@ To claim vested or locked tokens:
 
 1. View details of **Customized Assets**.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_08.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/74783d76-56a3-4f59-9dbd-47f006220951)
 
 2. Click **Claim** when the lock time is expired, and enter the password for the wallet.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_09.png")} width="70%"/>~~
-
-   ~~<img src={useBaseUrl("img/wallet/neuron_10.png")} width="70%"/>~~
+   ![new_page_1](https://github.com/Danie0918/docs.nervos.org/assets/122437870/d78046c3-a825-4fea-82c3-05ee7d082c60)
+   
 
 ## Manage Asset Account
 
@@ -235,11 +233,11 @@ To add the SUDT account into Asset Accounts:
 
 1. Open the **Asset Account** page in Neuron Wallet, and click the **+** button to create an asset account.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_11.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/4777bfe2-e368-4434-a8e7-cf8287a4f300)
 
 2. Fill the `uuid` in the **Token ID** field.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_12.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/0cedbf6c-dc43-4be0-b80b-62cd4144341b)
 
 3. Fill in the other required fields and click **Confirm**.
 
@@ -252,29 +250,30 @@ CKB accounts can be used for anyone-can-pay cells and support any amount of paym
 1. Create two CKB accounts, `Anyone-can-pay1` and `Anyone-can-pay2`.
    The following figures show the steps of creating `Anyone-can-pay1`. The steps of creating `Anyone-can-pay2` are the same as creating `Anyone-can-pay1`.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_13.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/846cda7b-f34b-404c-ac52-21270886729e)
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_14.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/22a8720e-348a-4ade-b08e-45b8cb5e3e28)
 
 2. Fill the address of `Anyone-can-pay1` in [Nervos Testnet Faucet](https://faucet.nervos.org/) to claim CKBs on Testnet for `Anyone-can-pay1`.
 
-   ~~<img src={useBaseUrl("img/wallet/neuron_15.png")} width="70%"/>~~
+   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/435f680d-527b-431a-b3f9-8e0f6e5e1321)
 
 3. Transfer 1 CKB from `Anyone-can-pay1` to `Anyone-can-pay2`.
 
    1. Click Send on the `Anyone-can-pay1` card.
 
-      ~~<img src={useBaseUrl("img/wallet/neuron_16.png")} width="70%"/>~~
+      ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/5998d4b0-baf7-43b1-bfd2-6cf9186ec824)
 
    2. Fill the address of `Anyone-can-pay2`  and other required input on the `Send` page.
 
    3. Click `Submit`.
 
-      ~~<img src={useBaseUrl("img/wallet/neuron_17.png")} width="70%"/>~~
+      ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/55f46ec1-bed1-42ba-9be0-e3217859832a)
 
    4. Check the balance on the `Anyone-can-pay2` card.
 
-      ~~<img src={useBaseUrl("img/wallet/neuron_18.png")} width="70%"/>~~
+      ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/f77a2463-ec0a-46e0-bc74-5a3c121321d2)
+
 
 ## Sync Failure Troubleshooting
 
@@ -311,7 +310,7 @@ Open `bundled-ckb.log` and scroll down to the bottom. The error (if exists) is u
 
 Windows:
 
-~~<img src={useBaseUrl("img/wallet/neuron trouble remove windows.png")} width="70%"/>~~
+![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/a167796f-a501-42b8-942a-f50317c54ee3)
 
 MacOS:
 
