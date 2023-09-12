@@ -314,7 +314,7 @@ Windows:
 
 MacOS:
 
-~~<img src={useBaseUrl("img/wallet/neuron trouble remove macos.png")} width="70%"/>~~
+![new_page_1](https://github.com/Danie0918/docs.nervos.org/assets/122437870/4b89684c-46af-40b5-b61f-9fa57d200d00)
 
 - If you see text like `main INFO main ckb version:`, check if the version is up to date; If not, remove chain data and restart the synchronization by `tools -> clear all synchronized data`
 
