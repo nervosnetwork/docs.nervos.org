@@ -16,3 +16,5 @@ ckb-sdk is a collection of libraries which allow you to interact with a local or
     * ckb-sdk-swift is an SDK implemented in Swift and provides APIs for developers to send requests to the CKB blockchain. Testnet Faucet utilizes ckb-sdk-swift .
 * [ckb-sdk-go](https://github.com/ququzone/ckb-sdk-go)
     * ckb-sdk-go is an SDK implemented in Golang.
+* [ckb-sdk-rust](https://github.com/nervosnetwork/ckb-sdk-rust)
+    * ckb-sdk-rust is an SDK implemented in Rust.
