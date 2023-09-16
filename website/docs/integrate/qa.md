@@ -43,7 +43,7 @@ https://github.com/nervosnetwork/ckb-sdk-java/blob/develop/ckb/src/test/java/uti
 The most common basic cell is one that represent a CKB balance. Often this will use the default lock script, which is used for short CKB addresses supported by most wallets. A basic cell like this does not require a type script or any additional data. The fields of this cell are as follows:
 
 * The `capacity` field is used to hold the number of CKB balance in the cell. This is a u64, which takes 8 bytes.
-* The `lock script` field is `Script` type. This inclues a `code_hash` that is 32 bytes, a `hash_type` that is 1 byte, and an `args` field that is 20 bytes.
+* The `lock script` field is `Script` type. This includes a `code_hash` that is 32 bytes, a `hash_type` that is 1 byte, and an `args` field that is 20 bytes.
 * The `type script` field is optional and is not used for this cell.
 * The `data` field is optional and is not used for this cell.
 
@@ -59,7 +59,7 @@ While 61 CKB is the minimum, in many cases it is recommended that 62 CKB be sent
 
 The most simple method is to inform users that they have an insufficient balance, and prompt them to add more CKB as needed. This requires only basic processing logic to be implemented.
 
-A second option is to tranfer the entire balance of 100 CKB (minus tx fees) so that there is nothing left. If the balance is exactly 0 CKB, then the cell can be consumed and removed from the state completely. This works well if the user wants to withdraw their total balance.
+A second option is to transfer the entire balance of 100 CKB (minus tx fees) so that there is nothing left. If the balance is exactly 0 CKB, then the cell can be consumed and removed from the state completely. This works well if the user wants to withdraw their total balance.
 
 A third option is to use a more specialized lock script that supports the "Anyone Can Pay" (ACP) protocol. When both the sender and receiver are setup to use ACP, a balance of any size can be transferred between two parties without the sender having to include any CKB for the cell itself. For more information on ACP, please see the [Anyone Can Pay RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0026-anyone-can-pay/0026-anyone-can-pay.md).
 

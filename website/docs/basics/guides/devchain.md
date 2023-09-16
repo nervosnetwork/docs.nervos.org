@@ -102,7 +102,7 @@ For most development the default configuration should be sufficient, but sometim
 
 #### 4a. Change the Number of Blocks in an Epoch
 
-The default epoch length is `1000` blocks. Reducing this to `10` or `100` can help with testin Nervos DAO operations.
+The default epoch length is `1000` blocks. Reducing this to `10` or `100` can help with testing Nervos DAO operations.
 
 Modify the `genesis_epoch_length` parameter in the `specs/dev.toml` file under the `params` section:
 

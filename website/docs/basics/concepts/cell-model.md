@@ -45,7 +45,7 @@ Smart contract execution is parallel in the cell model. Each transaction runs in
 
 Transactions are very flexible in the cell model. Multiple smart contract operations can often be batched into a single transaction, eliminating the need to construct multiple distinct transactions. This decreases the overhead involved in transactions and simplifies the process by reducing the required processing and transaction fees.
 
-The unique structure of the cell model grants an inherent scalability. The conbination of these methods enables Nervos to achieve a greater level of smart contract scalability. A level that would not be possible in other ways.
+The unique structure of the cell model grants an inherent scalability. The combination of these methods enables Nervos to achieve a greater level of smart contract scalability. A level that would not be possible in other ways.
 
 ## Further Reading
 

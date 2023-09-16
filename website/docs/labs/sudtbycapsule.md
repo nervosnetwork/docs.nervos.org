@@ -284,7 +284,7 @@ Done
 
 </details>
 
-* Note: You might see some warning log like `<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)`, this isn't an abnormal behaviour, and won't make any trouble to us. It is caused by jemalloc under QEMU env, which is expected if you're running non-native docker containers under `aarch64` architechture(for example an x86-64 container).
+* Note: You might see some warning log like `<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)`, this isn't an abnormal behaviour, and won't make any trouble to us. It is caused by jemalloc under QEMU env, which is expected if you're running non-native docker containers under `aarch64` architecture(for example an x86-64 container).
 
 You will find a new generated contract binary in the `build/debug` directory:
 

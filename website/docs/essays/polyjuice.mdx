@@ -132,7 +132,7 @@ The contract-related witness is serialized as part of the `WitnessArgs` molecule
 
 In validator, the logs are just being ignored. When the generator generates the Polyjuice transaction, the logs are saved and returned as part of the transaction receipt. When the Indexer processes the Polyjuice transaction, the logs are saved to the database for users to query.
 
- In generator and Indexer the logs are trigged by LOG opcode, then:
+ In generator and Indexer the logs are triggered by LOG opcode, then:
 
 1. callback function `emit_log` is called
 2. emit_log invoke a log syscall with topics and data as arguments
