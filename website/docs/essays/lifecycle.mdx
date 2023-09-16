@@ -52,18 +52,27 @@ We gather the referenced data through the pointer prior to transaction execution
 The process of verification involves checking the following items:       
 
 1. version (currently must be 0) 
-2. serialized_size is less than limit 
-    1. pub fn serialized_size(&self) -> usize {
-            // the offset in TransactionVec header is u32
-            self.as_slice().len() + molecule::NUMBER_SIZE
-            // molecule::NUMBER_SIZE = `size_of::<u32>() 4`
+2. The serialized size of the transaction's data must be less than or equal to a specified limit.
+   ```rust
+    pub fn verify(&self) -> Result<(), Error> {
+        let size = self.transaction.data().serialized_size_in_block() as u64;
+        if size <= self.block_bytes_limit {
+            Ok(())
+        } else {
+            Err(TransactionError::ExceededMaximumBlockBytes {
+                actual: size,
+                limit: self.block_bytes_limit,
+            }
+            .into())
         }
-3. inputs are not empty
-    1. inputs().is_empty() || outputs().is_empty()
+    }
+   ```
+3. inputs and outputs are not empty
+    1. The transaction should not have empty inputs, and it should also not have empty outputs, except in the case of a cellbase transaction.
 4. inputs are mature
     1. For each input and dep, if the referenced output transaction is a cellbase, it must have at least 4 epoch confirmations
 5. capacity
-    1. sum of inputs’ capacity must less than or equal to outputs’ capacity
+    1. sum of inputs’ capacity must greater than or equal to sum of outputs’ capacity
 6. duplicate_deps
     1. deps should not be duplicated
 7. outputs_data_verifier
