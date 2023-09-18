@@ -19,7 +19,7 @@ For example, see the default lock script error codes: [secp256k1 error codes](ht
 
 ## Debug syscall
 
-When we want to output additional information from the script; we need use the [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug).
+When we want to output additional information from the script; we need to use the [debug syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug).
 
 By default, the CKB node does not output the debug syscall message, however `ckb.toml` can be configured to enable it.
 
