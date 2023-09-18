@@ -11,7 +11,7 @@ On CKB, any transaction must have at least one input and one output. To construc
 
 ## Cell Collect
 
-It is important to first understood that CKB’s [cell model](https://docs.nervos.org/basic-concepts/cell-model.html) is very similar to the UTXO model, which means that without any pre-caching it is not possible to know the current state of any address. The information that makes up the current state of an address may be scattered across different cells in many corners of the blockchain and a cell collection method is a prerequisite to properly using CKB. The cell model of CKB is described in detail in [Cell](reference/cell.md).
+It is important to first understand that CKB’s [cell model](https://docs.nervos.org/basic-concepts/cell-model.html) is very similar to the UTXO model, which means that without any pre-caching it is not possible to know the current state of any address. The information that makes up the current state of an address may be scattered across different cells in many corners of the blockchain and a cell collection method is a prerequisite to properly using CKB. The cell model of CKB is described in detail in [Cell](reference/cell.md).
 
 Let’s take a look at how to collect cells, as there are two ways to do this:
 
@@ -161,7 +161,7 @@ An input requires a witness for verification. However, including a witness for e
 
 This is equivalent to combining multiple script verifications into a single execution, reducing resource consumption and the size of witness data. This does however require the developer to be aware when writing the script that it should consider the case of validating multiple cells in this way.
 
-The witness is a signature on the blake2b-hash of the entire transaction, including `tx_hash`, length, and a zero-ed out placeholder for witness data (once the signature is generated it will be placed in this field). The specific signing process and the convention regading how the witnesses for different script groups are arranged can be found in this [wiki](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction).
+The witness is a signature on the blake2b-hash of the entire transaction, including `tx_hash`, length, and a zero-ed out placeholder for witness data (once the signature is generated it will be placed in this field). The specific signing process and the convention regarding how the witnesses for different script groups are arranged can be found in this [wiki](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction).
 
 ### Format and Fee
 
