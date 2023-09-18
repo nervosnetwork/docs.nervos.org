@@ -7,7 +7,7 @@ title: Tips for CKB Development
 
 ## Molecule
 
-We have developed a particular serialization format called **Molecule**.It is recommended to check the [molecule github repo](https://github.com/nervosnetwork/molecule) for more details.
+We have developed a particular serialization format called **Molecule**. It is recommended to check the [molecule github repo](https://github.com/nervosnetwork/molecule) for more details.
 
 ## Well-known Hashes
 
