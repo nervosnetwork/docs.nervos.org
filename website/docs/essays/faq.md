@@ -5,7 +5,7 @@ title: CKB FAQs
 
 ## How do you allocate transaction fees to the committer and proposer?
 
-one transaction fee is F Shannon, poposer will get
+one transaction fee is F Shannon, proposer will get
 
 ```
 floor(F * 4 / 10)
@@ -157,7 +157,7 @@ The CKB node supports to estimate transaction fee, you can open the `Experiment`
 
 It is similar to `nBits` of bitcoin, the original `nBits` implementation inherits properties from a signed data class,if the high bit of the effective number of bits is set, the target threshold will be negative. This is useless—the header hash is considered as an unsigned number, so it can never be equal to or lower than a negative target threshold.
 
-In CKB, the "compact" format is represented a whole number N using an unsigned 32bit number,which is similar to a floating-point format.
+In CKB, the "compact" format is represented a whole number N using an unsigned 32bit number, which is similar to a floating-point format.
 
 * The most significant 8 bits are the unsigned exponent of base 256.
 * The exponent can be considered as "number of bytes of N".
@@ -403,10 +403,10 @@ $ ckb-cli rpc get_live_cell --tx-hash 0x1850f997f867b6d3f1154444498a15e9fc4ce080
 
 ## How do you estimate the timestamp in CKB?
 
-In CKB, based on the deterministic state of the chain,there is no way to know which block a transaction will be packaged into, and there is no way to get an accurate time,so we can estimate the timestamp like this:
+In CKB, based on the deterministic state of the chain, there is no way to know which block a transaction will be packaged into, and there is no way to get an accurate time, so we can estimate the timestamp like this:
 
 ```
-median of previous 37 block timpstamp < timestamp <= local_time + 15s
+median of previous 37 block timestamp < timestamp <= local_time + 15s
 ```
 
 ---
