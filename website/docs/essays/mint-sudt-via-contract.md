@@ -50,7 +50,7 @@ If we want to mint token via contract, we should translate our contract logic in
 On CKB, contracts are scripts which will be run during the transaction.
 
 If our business is stateless, we can use a single lockscript to do this.
-For example, if you want to crate a new token, any one who provides the answer to life, the universe and everything can be the token owner.
+For example, if you want to create a new token, anyone who provides the answer to life, the universe and everything can be the token owner.
 We can use a lockscript like below as our token args:
 
 ```
@@ -130,7 +130,7 @@ The scripts verify logics below:
     - ensure the associated eth-bridge-typescript represents in outputs, then we know the typescript script will be run in the transaction, it makes the logic delegation work
 
 But we encountered a new problem.
-We need the eth-bridge-typescript hash as the eth-bridge-lockscript args, then the eth-bridge-lockscript hash as SUDT-typescript args, but we need to know the cETH token script to check the token amount in eth-bridge-typescript. It we locate cETH token typescript by it's script hash, there will be a cycle dependency.
+We need the eth-bridge-typescript hash as the eth-bridge-lockscript args, then the eth-bridge-lockscript hash as SUDT-typescript args, but we need to know the cETH token script to check the token amount in eth-bridge-typescript. If we locate cETH token typescript by it's script hash, there will be a cycle dependency.
 
 We can use `load_lockscript_hash` in eth-bridge-typescript and then check the entire script (which includes code_hash, args and type) part by part instead of cETH token script hash.
 
