@@ -23,7 +23,7 @@ This is Nervos CKB whitepaper, provides an overview of the Nervos Common Knowled
 
 ### [CKB-VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md)
 
-This RFC introduces CKB-VM (CKB-Virtual Machine)  which is a RISC-V instruction set based VM for executing smart contracts on Nervos CKB, written in Rust. There is a user defined token(UDT) issuing process used as an example to demenstrate the implementation of CKB-VM.
+This RFC introduces CKB-VM (CKB-Virtual Machine)  which is a RISC-V instruction set based VM for executing smart contracts on Nervos CKB, written in Rust. There is a user defined token(UDT) issuing process used as an example to demonstrate the implementation of CKB-VM.
 
 ### [Privileged architecture support for CKB VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0005-priviledged-mode/0005-priviledged-mode.md)
 
@@ -39,7 +39,7 @@ This RFC explains all the basic data structures used in CKB, includes [Cell](htt
 
 ### [CKB Consensus Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0020-ckb-consensus-protocol/0020-ckb-consensus-protocol.md)
 
-This is Nervos CKB consensue paper. The CKB consensus protocol is a variant of NC that raises its performance limit and selfish mining resistance while keeping its merits. 
+This is Nervos CKB consensus paper. The CKB consensus protocol is a variant of NC that raises its performance limit and selfish mining resistance while keeping its merits. 
 
 ### [CKB Transaction Structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 
@@ -77,7 +77,7 @@ Transaction filter protocol allows peers to reduce the amount of transaction dat
 
 ### [Node Discovery](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0012-node-discovery/0012-node-discovery.md)
 
-This RFC introduces the CKB Node Discovery.It mainly refers to [Satoshi Client Node Discovery](https://en.bitcoin.it/wiki/Satoshi_Client_Node_Discovery). The differences between them are summarized below:
+This RFC introduces the CKB Node Discovery. It mainly refers to [Satoshi Client Node Discovery](https://en.bitcoin.it/wiki/Satoshi_Client_Node_Discovery). The differences between them are summarized below:
 * The node version number is included in the `GetNodes` message.
 * The `Nodes` message is used to periodically broadcast all nodes currently connected.
 * We use `multiaddr` as the format of node addresses (It MUST NOT include `/p2p/` segment otherwise it's considered as *misbehavior* and a low score SHOULD be given.)
@@ -88,7 +88,7 @@ This RFC describes the decentralized CKB mining protocol which is to improve the
 
 ### [VM Cycle Limits](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
 
-This RFC describes cycle limits used to regulate VM scripts.CKB VM is a flexible VM that is free to implement many control flow constructs. We need to enforce certain rules in CKB VM to prevent malicious scripts, such as a script with infinite loops.
+This RFC describes cycle limits used to regulate VM scripts. CKB VM is a flexible VM that is free to implement many control flow constructs. We need to enforce certain rules in CKB VM to prevent malicious scripts, such as a script with infinite loops.
 
 ### [Transaction valid since](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md)
 
@@ -100,4 +100,4 @@ This RFC introduces how to implement CKB Address Format which is an application 
 
 ### [Deposit and Withdraw in Nervos DAO](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md)
 
-This RFC describes deposit and withdraw transaction in Nervos DAO. Nervos DAO is a smart contract and one function of Nervos DAO is to provide an dilution counter-measure for CKByte holders. Please pay attention to  [Common Gotchas](https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao) which including common and very important points you should be aware to use Nervos DAO well without losing CKBs.
+This RFC describes deposit and withdraw transaction in Nervos DAO. Nervos DAO is a smart contract and one function of Nervos DAO is to provide a dilution counter-measure for CKByte holders. Please pay attention to  [Common Gotchas](https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao) which includes common and very important points you should be aware to use Nervos DAO well without losing CKBs.
