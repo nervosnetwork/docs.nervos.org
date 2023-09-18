@@ -9,7 +9,7 @@ Since we are working with a virtualized mini computer in CKB VM, there’s nothi
 
 Through this method, we can have JavaScript on CKB via duktape, Ruby on CKB via mruby, we can even have Bitcoin Script or EVM on chain if we just compile those VMs and store them as scripts on CKB. This compatibility ensures CKB VM can both help to preserve legacy code and build a diversified ecosystem. 
 
-All languages should e treated equally on CKB, giving freedom to blockchain contract developers to build on top of CKB however they feel is best.
+All languages should be treated equally on CKB, giving freedom to blockchain contract developers to build on top of CKB however they feel is best.
 
 To use duktape on CKB, first you need to compile duktape itself into a RISC-V executable binary:
 
