@@ -3,7 +3,7 @@ id: tools
 title: Tools
 ---
 
-Nervos Community is a cohesive community that embraces the contributions of every member. We welcome everyone to provide passion, innovation and diversity of ideas to improve Nervos.If you are new here, there are three tools **Neuron Wallet**, **CKB-Explorer** and **Testnet Faucet**, hope it will be helpful for you.
+Nervos Community is a cohesive community that embraces the contributions of every member. We welcome everyone to provide passion, innovation and diversity of ideas to improve Nervos. If you are new here, there are three tools **Neuron Wallet**, **CKB-Explorer** and **Testnet Faucet**, hope it will be helpful for you.
 
 ## Neuron Wallet 
 [Github](https://github.com/nervosnetwork/neuron) | [Download](https://github.com/nervosnetwork/neuron/releases)
