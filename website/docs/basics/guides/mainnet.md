@@ -44,6 +44,8 @@ cd /Users/(NAME)/Documents/ckb_v0.32.1_x86_64-apple-darwin
 ./ckb-cli --version
 ```
 
+**Note**: If you encounter the error: `“ckb” cannot be opened because the developer cannot be verified.` You can temporarily [override](https://support.apple.com/en-us/HT202491) your Mac security settings to open it. Go to _System Settings_ and click on _Privacy & Security_.
+
 * Windows
 
 ```
