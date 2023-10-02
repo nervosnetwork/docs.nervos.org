@@ -17,7 +17,7 @@ Starting from the `v0.6` version, `ckb-std` introduces the [dynamic loading modu
 
 In this tutorial, we build an example shared library in C, and try to dynamically load the shared library from a contract written in Rust.
 
-If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/n6tx7uC). 
+If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/MWjqYpVbQR). 
 
 ## Setup the develop environment
 

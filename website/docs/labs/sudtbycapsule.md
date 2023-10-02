@@ -15,7 +15,7 @@ We expect that:
 * You are generally familiar with Nervos CKB and have completed the [How to use a development blockchain](basics/guides/devchain.md)
 * You are open to learning about the bleeding edge of blockchain development
 
-If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/n6tx7uC). 
+If you run into an issue on this tutorial you can [create a new issue](https://github.com/nervosnetwork/capsule) or contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/MWjqYpVbQR). 
 
 What you will be doing:
 
