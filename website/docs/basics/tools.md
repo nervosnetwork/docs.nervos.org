@@ -27,4 +27,4 @@ Please note that CKB-Explorer is not a wallet service provider. We do not store 
 ## Nervos Pudge Faucet  
 [Github](https://github.com/shaojunda/ckb-testnet-faucet) | [Link](https://faucet.nervos.org/)
 
-Nervos Pudge Faucet is where you can claim free **Testnet CKBytes** to use while developing and testing. You may claim 50,000 CKB from the faucet once every 24 hours on Testnet Pudge.
+Nervos Pudge Faucet is where you can claim free **Testnet CKBytes** to use while developing and testing. You may claim up to 300,000 CKB from the faucet every calendar month on Testnet Pudge.
