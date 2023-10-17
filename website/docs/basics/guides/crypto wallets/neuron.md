@@ -35,7 +35,7 @@ A new wallet seed consisting of 12 mnemonic words is generated.
 
 **Note**: Screenshots and copies of the mnemonic words may be read by third parties. Hand-copying is recommended for keeping the mnemonic words.
 
-![Create_wallet](https://github.com/nervosnetwork/docs.nervos.org/assets/122437870/bee6226e-4b03-4adb-b55e-756678de1f42)
+![Creat Wallet](/img/wallet/neuron_01.png)
 
 ### Import a Wallet Seed of a Backed Up Wallet
 
@@ -55,7 +55,7 @@ To import a keystore file:
 
 The **Block Number** can be cross-checked with the **Latest Block** on the [CKB Explorer](https://explorer.nervos.org/) page to ensure that the sync is completed.
 
-![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/8e108ffe-55fb-400f-bbd7-5c2176df1e53)
+![Sync](/img/wallet/neuron_02.png)
 
 After the Neuron wallet is synced, full access to the tokens of the wallet is available. Sending, receiving CKBs, and depositing CKBs to Nervos DAO is possible.
 
@@ -73,7 +73,7 @@ To transfer CKB:
 
 4. Input the password and click **Confirm** to complete the transfer.
 
-![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/7727fcfa-03fc-487f-b9b4-2cd03076e031)
+![Transfer CKB](/img/wallet/neuron_03.png)
 
 ## Deposit CKB into Nervos DAO
 
@@ -87,11 +87,11 @@ To deposit CKB into Nervos DAO:
 
 2. Input the amount of CKB tokens for the deposit and then click **Proceed**.
 
-![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/19f6f69c-fc3d-4410-8304-79ecff25e414)
+![Deposit CKB into Nervos DAO](/img/wallet/neuron_04.png)
  
 3. Input the password and click **Confirm** to submit the deposit transaction.
  
-![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/57d84b95-c877-4f37-80ee-c1930ea41662)
+![Deposit CKB into Nervos DAO](/img/wallet/neuron_05.png)
  
 
 ## Withdraw CKB from Nervos DAO
@@ -102,11 +102,11 @@ To withdraw CKB from Nervos DAO:
 
 1. Choose the deposit that you want to withdraw from the deposits list and click **Withdraw**.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/720ef824-2728-4b04-a960-8b58f480803b)
+   ![Withdraw CKB from Nervos DAO](/img/wallet/neuron_06.png)
 
 2. Click **Next** on the pop-up window and verify the password to complete the withdrawal operation.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/ecc843fa-2220-4f52-bc38-1835ebb3de64)
+   ![Withdraw CKB from Nervos DAO](/img/wallet/neuron_07.png)
 
 
 ## Claim Vested or Locked Tokens
@@ -119,11 +119,11 @@ To claim vested or locked tokens:
 
 1. View details of **Customized Assets**.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/74783d76-56a3-4f59-9dbd-47f006220951)
+   ![Customized Assets](/img/wallet/neuron_08.png)
 
 2. Click **Claim** when the lock time is expired, and enter the password for the wallet.
 
-   ![new_page_1](https://github.com/Danie0918/docs.nervos.org/assets/122437870/d78046c3-a825-4fea-82c3-05ee7d082c60)
+   ![Customized Assets](/img/wallet/neuron_09.png)
    
 
 ## Manage Asset Account
@@ -233,11 +233,11 @@ To add the SUDT account into Asset Accounts:
 
 1. Open the **Asset Account** page in Neuron Wallet, and click the **+** button to create an asset account.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/4777bfe2-e368-4434-a8e7-cf8287a4f300)
+   ![Asset Account](/img/wallet/neuron_10.png)
 
 2. Fill the `uuid` in the **Token ID** field.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/0cedbf6c-dc43-4be0-b80b-62cd4144341b)
+   ![Asset Account](/img/wallet/neuron_11.png)
 
 3. Fill in the other required fields and click **Confirm**.
 
@@ -250,29 +250,29 @@ CKB accounts can be used for anyone-can-pay cells and support any amount of paym
 1. Create two CKB accounts, `Anyone-can-pay1` and `Anyone-can-pay2`.
    The following figures show the steps of creating `Anyone-can-pay1`. The steps of creating `Anyone-can-pay2` are the same as creating `Anyone-can-pay1`.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/846cda7b-f34b-404c-ac52-21270886729e)
+   ![Manage CKB Accounts](/img/wallet/neuron_12.png)
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/22a8720e-348a-4ade-b08e-45b8cb5e3e28)
+   ![Manage CKB Accounts](/img/wallet/neuron_13.png)
 
 2. Fill the address of `Anyone-can-pay1` in [Nervos Testnet Faucet](https://faucet.nervos.org/) to claim CKBs on Testnet for `Anyone-can-pay1`.
 
-   ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/435f680d-527b-431a-b3f9-8e0f6e5e1321)
+   ![Manage CKB Accounts](/img/wallet/neuron_14.png)
 
 3. Transfer 1 CKB from `Anyone-can-pay1` to `Anyone-can-pay2`.
 
    1. Click Send on the `Anyone-can-pay1` card.
 
-      ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/5998d4b0-baf7-43b1-bfd2-6cf9186ec824)
+      ![Manage CKB Accounts](/img/wallet/neuron_15.png)
 
    2. Fill the address of `Anyone-can-pay2`  and other required input on the `Send` page.
 
    3. Click `Submit`.
 
-      ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/55f46ec1-bed1-42ba-9be0-e3217859832a)
+      ![Manage CKB Accounts](/img/wallet/neuron_16.png)
 
    4. Check the balance on the `Anyone-can-pay2` card.
 
-      ![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/f77a2463-ec0a-46e0-bc74-5a3c121321d2)
+      ![Manage CKB Accounts](/img/wallet/neuron_17.png)
 
 
 ## Sync Failure Troubleshooting
@@ -310,11 +310,11 @@ Open `bundled-ckb.log` and scroll down to the bottom. The error (if exists) is u
 
 Windows:
 
-![image](https://github.com/Danie0918/docs.nervos.org/assets/122437870/a167796f-a501-42b8-942a-f50317c54ee3)
+![Clear Synchronized Data](/img/wallet/neuron_18.png)
 
 MacOS:
 
-![new_page_1](https://github.com/Danie0918/docs.nervos.org/assets/122437870/4b89684c-46af-40b5-b61f-9fa57d200d00)
+![Clear Synchronized Data](/img/wallet/neuron_19.png)
 
 - If you see text like `main INFO main ckb version:`, check if the version is up to date; If not, remove chain data and restart the synchronization by `tools -> clear all synchronized data`
 
