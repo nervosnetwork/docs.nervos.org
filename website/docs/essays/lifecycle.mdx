@@ -9,15 +9,16 @@ Transactions are the most fundamental entities for interacting with Nervos CKB. 
 
 ##  Submit the transaction through RPC
 
-First, a sender constructs a transaction, then submits it through RPC. The transaction will be validated by the `outputs_validator`  (introduced in v0.27.0) which has been submitted. 
+First, a sender constructs a transaction, then submits it through RPC. The transaction will be validated by the `outputs_validator`  (introduced in v0.27.0) which has been submitted.
 
 The default validation logic involves checking various things:
 
-```
+```rust
 transaction.outputs.all{ |output|
     let script = output.script
     (script.code_hash == secp256k1_blake160_sighash_all && script.hash_type == "type" && script.args.size == 20) ||
-    (script.code_hash == secp256k1_blake160_multisig_all && script.hash_type == "type" && （script.args.size == 20 || (script.args.size == 28 && script.args[20..28].is_valid_since_format))
+    (script.code_hash == secp256k1_blake160_multisig_all && script.hash_type == "type" &&
+        (script.args.size == 20 || (script.args.size == 28 && script.args[20..28].is_valid_since_format)))
 }
 transaction.outputs.all{ |output|
     let script = output.type
@@ -26,7 +27,7 @@ transaction.outputs.all{ |output|
 }
 ```
 
-This validation is intended to prevent improperly constructed transactions, such as mentioned in *https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao* 
+This validation is intended to prevent improperly constructed transactions, such as mentioned in *[Common-Gotchas#nervos-dao](https://github.com/nervosnetwork/ckb/wiki/Common-Gotchas#nervos-dao)*
 
 Although the node can be configured to `passthrough` to skip this validation, once the transaction has been submitted to your local node, the node also exports the transaction id, which can then be used to track transaction status.
 
@@ -38,7 +39,7 @@ Before the transaction is broadcasted and enters into the mempool, it should be 
 
 Essentially, transaction inputs are just pointers, as shown here:
 
-```
+```rust
 struct OutPoint {
     tx_hash:        Byte32,
     index:          Uint32,
@@ -49,9 +50,9 @@ We gather the referenced data through the pointer prior to transaction execution
 
 ### STEP 2 — Verify
 
-The process of verification involves checking the following items:       
+The process of verification involves checking the following items:
 
-1. version (currently must be 0) 
+1. version (currently must be 0)
 2. The serialized size of the transaction's data must be less than or equal to a specified limit.
    ```rust
     pub fn verify(&self) -> Result<(), Error> {
@@ -77,14 +78,14 @@ The process of verification involves checking the following items:
     1. deps should not be duplicated
 7. outputs_data_verifier
     1. number of ‘output data' fields must equal number of outputs
-8. since     
-    1. ‘since’ value must follow the rules described in https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md
+8. since
+    1. `since` value must follow the rules described in [RFC0017](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md)
 
 Then CKB VM will execute the transaction script and output the number of cycles consumed.
 
 ## Broadcast to the network
 
-If the verification is successful, the current node broadcasts the transaction (with cycles value) to all of its connected peer nodes. 
+If the verification is successful, the current node broadcasts the transaction (with cycles value) to all of its connected peer nodes.
 
 If verification fails, the transaction is not broadcasted anymore. The transaction flows through various “full nodes”, which repeat the verification process described in the previous step, and check that the cycles value matches the actual cycles consumed when the transaction is verified.
 
