@@ -13,7 +13,7 @@ Neuron Wallet is bundled with a CKB Mainnet node and configured to connect to th
 
 ## Install Neuron Wallet
 
-Download and install the latest version of Neuron Wallet from the [Neuron Wallet releases page](https://github.com/nervosnetwork/neuron/releases) on Github. 
+Download and install the latest version of Neuron Wallet from the [Neuron Wallet releases page](https://github.com/nervosnetwork/neuron/releases/latest) on Github. 
 
 **Note**: For Windows versions before Windows 10, the latest [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) must be installed before installing Neuron Wallet.
 
@@ -35,7 +35,7 @@ A new wallet seed consisting of 12 mnemonic words is generated.
 
 **Note**: Screenshots and copies of the mnemonic words may be read by third parties. Hand-copying is recommended for keeping the mnemonic words.
 
-<img src={useBaseUrl("img/wallet/neuron_01.png")} width="80%"/>
+![Creat Wallet](/img/wallet/neuron_01.png)
 
 ### Import a Wallet Seed of a Backed Up Wallet
 
@@ -55,7 +55,7 @@ To import a keystore file:
 
 The **Block Number** can be cross-checked with the **Latest Block** on the [CKB Explorer](https://explorer.nervos.org/) page to ensure that the sync is completed.
 
-<img src={useBaseUrl("img/wallet/neuron_02.png")} width="70%"/>
+![Sync](/img/wallet/neuron_02.png)
 
 After the Neuron wallet is synced, full access to the tokens of the wallet is available. Sending, receiving CKBs, and depositing CKBs to Nervos DAO is possible.
 
@@ -73,7 +73,7 @@ To transfer CKB:
 
 4. Input the password and click **Confirm** to complete the transfer.
 
-   <img src={useBaseUrl("img/wallet/neuron_03.png")} width="70%"/>
+![Transfer CKB](/img/wallet/neuron_03.png)
 
 ## Deposit CKB into Nervos DAO
 
@@ -87,11 +87,12 @@ To deposit CKB into Nervos DAO:
 
 2. Input the amount of CKB tokens for the deposit and then click **Proceed**.
 
-   <img src={useBaseUrl("img/wallet/neuron_04.png")} width="70%"/>
-
+![Deposit CKB into Nervos DAO](/img/wallet/neuron_04.png)
+ 
 3. Input the password and click **Confirm** to submit the deposit transaction.
-
-   <img src={useBaseUrl("img/wallet/neuron_05.png")} width="70%"/>
+ 
+![Deposit CKB into Nervos DAO](/img/wallet/neuron_05.png)
+ 
 
 ## Withdraw CKB from Nervos DAO
 
@@ -101,11 +102,12 @@ To withdraw CKB from Nervos DAO:
 
 1. Choose the deposit that you want to withdraw from the deposits list and click **Withdraw**.
 
-   <img src={useBaseUrl("img/wallet/neuron_06.png")} width="70%"/>
+   ![Withdraw CKB from Nervos DAO](/img/wallet/neuron_06.png)
 
-2. Click **Proceed** on the pop-up window to complete the withdrawal operation.
+2. Click **Next** on the pop-up window and verify the password to complete the withdrawal operation.
 
-   <img src={useBaseUrl("img/wallet/neuron_07.png")} width="70%"/>
+   ![Withdraw CKB from Nervos DAO](/img/wallet/neuron_07.png)
+
 
 ## Claim Vested or Locked Tokens
 
@@ -117,13 +119,12 @@ To claim vested or locked tokens:
 
 1. View details of **Customized Assets**.
 
-   <img src={useBaseUrl("img/wallet/neuron_08.png")} width="70%"/>
+   ![Customized Assets](/img/wallet/neuron_08.png)
 
 2. Click **Claim** when the lock time is expired, and enter the password for the wallet.
 
-   <img src={useBaseUrl("img/wallet/neuron_09.png")} width="70%"/>
-
-   <img src={useBaseUrl("img/wallet/neuron_10.png")} width="70%"/>
+   ![Customized Assets](/img/wallet/neuron_09.png)
+   
 
 ## Manage Asset Account
 
@@ -232,11 +233,11 @@ To add the SUDT account into Asset Accounts:
 
 1. Open the **Asset Account** page in Neuron Wallet, and click the **+** button to create an asset account.
 
-   <img src={useBaseUrl("img/wallet/neuron_11.png")} width="70%"/>
+   ![Asset Account](/img/wallet/neuron_10.png)
 
 2. Fill the `uuid` in the **Token ID** field.
 
-   <img src={useBaseUrl("img/wallet/neuron_12.png")} width="70%"/>
+   ![Asset Account](/img/wallet/neuron_11.png)
 
 3. Fill in the other required fields and click **Confirm**.
 
@@ -249,29 +250,30 @@ CKB accounts can be used for anyone-can-pay cells and support any amount of paym
 1. Create two CKB accounts, `Anyone-can-pay1` and `Anyone-can-pay2`.
    The following figures show the steps of creating `Anyone-can-pay1`. The steps of creating `Anyone-can-pay2` are the same as creating `Anyone-can-pay1`.
 
-   <img src={useBaseUrl("img/wallet/neuron_13.png")} width="70%"/>
+   ![Manage CKB Accounts](/img/wallet/neuron_12.png)
 
-   <img src={useBaseUrl("img/wallet/neuron_14.png")} width="70%"/>
+   ![Manage CKB Accounts](/img/wallet/neuron_13.png)
 
 2. Fill the address of `Anyone-can-pay1` in [Nervos Testnet Faucet](https://faucet.nervos.org/) to claim CKBs on Testnet for `Anyone-can-pay1`.
 
-   <img src={useBaseUrl("img/wallet/neuron_15.png")} width="70%"/>
+   ![Manage CKB Accounts](/img/wallet/neuron_14.png)
 
 3. Transfer 1 CKB from `Anyone-can-pay1` to `Anyone-can-pay2`.
 
    1. Click Send on the `Anyone-can-pay1` card.
 
-      <img src={useBaseUrl("img/wallet/neuron_16.png")} width="70%"/>
+      ![Manage CKB Accounts](/img/wallet/neuron_15.png)
 
    2. Fill the address of `Anyone-can-pay2`  and other required input on the `Send` page.
 
    3. Click `Submit`.
 
-      <img src={useBaseUrl("img/wallet/neuron_17.png")} width="70%"/>
+      ![Manage CKB Accounts](/img/wallet/neuron_16.png)
 
    4. Check the balance on the `Anyone-can-pay2` card.
 
-      <img src={useBaseUrl("img/wallet/neuron_18.png")} width="70%"/>
+      ![Manage CKB Accounts](/img/wallet/neuron_17.png)
+
 
 ## Sync Failure Troubleshooting
 
@@ -308,11 +310,11 @@ Open `bundled-ckb.log` and scroll down to the bottom. The error (if exists) is u
 
 Windows:
 
-<img src={useBaseUrl("img/wallet/neuron trouble remove windows.png")} width="70%"/>
+![Clear Synchronized Data](/img/wallet/neuron_18.png)
 
 MacOS:
 
-<img src={useBaseUrl("img/wallet/neuron trouble remove macos.png")} width="70%"/>
+![Clear Synchronized Data](/img/wallet/neuron_19.png)
 
 - If you see text like `main INFO main ckb version:`, check if the version is up to date; If not, remove chain data and restart the synchronization by `tools -> clear all synchronized data`
 
