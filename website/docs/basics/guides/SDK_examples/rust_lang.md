@@ -28,11 +28,9 @@ import Link from "@docusaurus/Link";
 
 * [Chained transfer](https://github.com/nervosnetwork/ckb-sdk-rust/blob/master/examples/chain_transfer_sighash.rs)
 
-## Issue SUDT
+## Issue and send SUDT
 
 * [Issue](https://github.com/nervosnetwork/ckb-sdk-rust/blob/master/examples/sudt_issue.rs)
-
-## Send SUDT
 
 * [Send](https://github.com/nervosnetwork/ckb-sdk-rust/blob/master/examples/sudt_send.rs)
 
