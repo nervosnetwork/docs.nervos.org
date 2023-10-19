@@ -23,11 +23,9 @@ import Link from "@docusaurus/Link";
 
 - [Chained transfer](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/example/src/main/java/org/nervos/ckb/example/SendChainedTransactionExample.java)
 
-## Issue SUDT
+## Issue and send SUDT
 
 - [Issue](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/example/src/main/java/org/nervos/ckb/example/IssueSudtExample.java)
-
-## Send SUDT
 
 - [Send](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/example/src/main/java/org/nervos/ckb/example/SendSudtExample.java)
 
