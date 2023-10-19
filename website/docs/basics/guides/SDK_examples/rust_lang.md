@@ -1,4 +1,3 @@
-
 ---
 id: sdk_examples_rust
 title: Rust
