@@ -23,11 +23,9 @@ import Link from "@docusaurus/Link";
 
 - [Chained transfer](https://github.com/nervosnetwork/ckb-sdk-go/blob/4f43fd577e215b746e2c55b65fa7df2085e58c83/collector/example/example.go#L529)
 
-## Issue SUDT
+## Issue and send SUDT
 
 - [Issue](https://github.com/nervosnetwork/ckb-sdk-go/blob/4f43fd577e215b746e2c55b65fa7df2085e58c83/collector/example/example.go#L176)
-
-## Send SUDT
 
 - [Send](https://github.com/nervosnetwork/ckb-sdk-go/blob/4f43fd577e215b746e2c55b65fa7df2085e58c83/collector/example/example.go#L220)
 
