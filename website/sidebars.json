@@ -37,6 +37,17 @@
 			  "basics/guides/crypto wallets/bitpie"
 			]
 		}
+		{
+			"type": "category",
+			"label": "SDK Code Examples",
+			"items": [
+			  "basics/guides/SDK_examples/sdk_examples_overview",
+			  "basics/guides/SDK_examples/sdk_examples_rust",
+			  "basics/guides/SDK_examples/sdk_examples_go",
+			  "basics/guides/SDK_examples/sdk_examples_java",
+			  "basics/guides/SDK_examples/sdk_examples_lumos"
+			]
+		}
         ]
 		},
 		"basics/tools",
