@@ -59,7 +59,7 @@ The Block Assembler configuration specifies which address should be receive bloc
 
 #### 3a. Create a New Account
 
-An address to receive the block rewards must be created. We can do this using `ckb-cli`.
+To receive the block rewards, you'll need to generate an address. This can be accomplished using the `ckb-cli` tool.
 
 Note: Be sure to record the `lock_arg` value in the response which we will use in the next step.
 
@@ -71,7 +71,7 @@ ckb-cli account new
 <summary>(click here to view result)</summary>
 
 ```bash
-Your new account is locked with a password. Please give a password. Do not forget this password.
+Your newly generated account is locked with a password. Kindly provide a password and make sure to remember it.
 Password: 
 Repeat password: 
 address:
@@ -207,7 +207,7 @@ ckb-cli 0.32.0 (0fc435d 2020-05-22)
 
 </details>
 
-#### 2. Create a New Account
+### 2. Create a New Account
 
 An address to receive the block rewards must be created. We can do this using `ckb-cli`.
 
@@ -221,14 +221,18 @@ ckb-cli account new
 <summary>(click here to view result)</summary>
 
 ```bash
-Your new account is locked with a password. Please give a password. Do not forget this password.
+gitpod /workspace/forcerelay_deployment_playground (main) $ ckb-cli account new
+Your newly generated account is locked with a password. Kindly provide a password and make sure to remember it.
 Password: 
 Repeat password: 
 address:
-  mainnet: ckb1qyqyrm8w0w8uq7puwhdp7s6xqzdjuknhf2tqzdztph
-  testnet: ckt1qyqyrm8w0w8uq7puwhdp7s6xqzdjuknhf2tqlgu5dt
-lock_arg: 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96
-lock_hash: 0xeb31c5232b322905b9d52350c0d0cf55987f676d86704146ce67d92ddef05ed3
+  mainnet: ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq02up2hsfwp0wcrn5nh4j00gvk9lu3p3rs35k3y7
+  testnet: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq02up2hsfwp0wcrn5nh4j00gvk9lu3p3rslxa7wx
+address(deprecated):
+  mainnet: ckb1qyqw4cz40qjuz7as88f80ty77sevtlezrz8qvg5kuz
+  testnet: ckt1qyqw4cz40qjuz7as88f80ty77sevtlezrz8q3d2fs7
+lock_arg: 0xeae0557825c17bb039d277ac9ef432c5ff22188e
+lock_hash: 0x9d62f44d9b4d4597734ca3029ea46fbd47f8a09c552d3b6a3dbbb64d5877220c
 ```
 
 </details>
@@ -312,7 +316,7 @@ Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
 
 </details>
 
-## Transferring CKBytes Using `ckb-cli`
+## Transfer CKBytes Using `ckb-cli`
 
 Included in CKB releases is the `ckb-cli` command line tool. This is can be used to directly invoke RPC calls to perform actions such as managing accounts, transferring CKBytes, and checking account balances. We will demonstrate a CKBytes transfer below. Please refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli) for full instructions.
 
@@ -349,19 +353,23 @@ account new
 <summary>(click here to view result)</summary>
 
 ```bash
-Your new account is locked with a password. Please give a password. Do not forget this password.
-Password:
-Repeat password:
+$ ckb-cli account new
+Your newly generated account is locked with a password. Kindly provide a password and make sure to remember it.
+Password: 
+Repeat password: 
 address:
-mainnet: ckb1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqw4c8mg
-testnet: ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
-lock_arg: 0xf4143a99934c34913a771a0b38bd1257cbf4ef32
-lock_hash: 0xea4db70029dd393789a6be0e4137a3e95cd8d20b2b028a0fc0eab07622a894f4
+  mainnet: ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqfju59l9czv04h6pqzxkhze9pnrsudya5gffj4tj
+  testnet: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqfju59l9czv04h6pqzxkhze9pnrsudya5g8me6p2
+address(deprecated):
+  mainnet: ckb1qyqr9egt7tsyclt05zqyddw9j2rx8pc6fmgsslqdgd
+  testnet: ckt1qyqr9egt7tsyclt05zqyddw9j2rx8pc6fmgsd67jy3
+lock_arg: 0x32e50bf2e04c7d6fa08046b5c5928663871a4ed1
+lock_hash: 0x0e0e5a0c576acd9032bba997cdd518bf598d67c253b741d5b97c8cc5889d457b
 ```
 
 </details>
 
-3. Check the Balance of an Existing Account
+### 3. Check the Balance of an Existing Account
 
 In the previous sections you created a miner account that collects all mining rewards. Using the following command with the correct address will show you the current CKByte balance:
 
@@ -413,7 +421,7 @@ total: 10000.0 (CKB)
 
 The transfer is successful!
 
-## Adding the Genesis Issued Cells
+## Add the Genesis Issued Cells
 
 When the development blockchain configuration is generated with `ckb init --chain dev`, a few Cells are created with large amounts of capacity. These are specified in `specs/dev.toml` and exist only for your local development blockchain, and they can be useful for testing purposes.
 
@@ -475,16 +483,15 @@ CKB> account import --privkey-path pk2
 <summary>(click here to view result)</summary>
 
 ```
-Password:
+gitpod /workspace/forcerelay_deployment_playground (main) $ ckb-cli account import --privkey-path  pk1
+Password: 
 address:
-  mainnet: ckb1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts6f6daz
-  testnet: ckt1qyqvsv5240xeh85wvnau2eky8pwrhh4jr8ts8vyj37
-lock_arg: 0xc8328aabcd9b9e8e64fbc566c4385c3bdeb219d7
-Password:
-address:
-  mainnet: ckb1qyqywrwdchjyqeysjegpzw38fvandtktdhrsj8renf
-  testnet: ckt1qyqywrwdchjyqeysjegpzw38fvandtktdhrs0zaxl4
-lock_arg: 470dcdc5e44064909650113a274b3b36aecb6dc7
+  mainnet: ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvgswj39m3rs0qp2a9r9rmqamxtkntcysq007jd8
+  testnet: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvgswj39m3rs0qp2a9r9rmqamxtkntcysqpa4a8l
+address(deprecated):
+  mainnet: ckb1qyqg3qa9zthz8q7qz462x28kpmkvhdxhsfqqjavu23
+  testnet: ckt1qyqg3qa9zthz8q7qz462x28kpmkvhdxhsfqq0cjrxd
+lock_arg: 0x8883a512ee2383c01574a328f60eeccbb4d78240
 ```
 
 </details>
