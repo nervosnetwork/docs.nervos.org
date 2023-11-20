@@ -25,7 +25,7 @@ The following table details the schedule for several upcoming CKB halvings and t
 |Event              |Date                  |Epoch number      |Epoch reward     |Block reward(Calculated based on 1800 blocks per epoch)|Daily reward  |Total new CKB between events|
 |-------------------|----------------------|------------------|-----------------|------------------:|------------------:|---------------------------:|
 |Nervos launches    |16 Nov 2019           |0 (genesis epoch) |1,917,808 CKB    |1,065 CKB          |11,506,849 CKB     |16,800,000,000 CKB          |
-|**First halving**  |**Expected 19 Nov 2023**|**8,760**       |**958,904 CKB**  |**533 CKB**        |**5,753,424 CKB**  |**8,400,000,000 CKB**       |
+|**First halving**  |**19 Nov 2023**       |**8,760**         |**958,904 CKB**  |**533 CKB**        |**5,753,424 CKB**  |**8,400,000,000 CKB**       |
 |Second halving     |Expected November 2027|17,520            |479,452 CKB      |266 CKB            |2,876,712 CKB      |4,200,000,000 CKB           |
 |3rd halving        |Expected November 2031|26,280            |239,726 CKB      |133 CKB            |1,438,356 CKB      |2,100,000,000 CKB           |
 |4th halving        |Expected November 2035|35,040            |119,863 CKB      |67 CKB             |719,178 CKB        |1,050,000,000 CKB           |
