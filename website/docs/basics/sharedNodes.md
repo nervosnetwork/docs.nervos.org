@@ -25,7 +25,7 @@ clear_tx_pool
 
 Ankr is a decentralized Web3 infrastructure provider offering a distributed node infrastructure that supports a multi-chain network to help developers interact with multiple blockchains. CKB developers can now access the Ankr API and RPC to test or build their own DApps.
 
-<img src={useBaseUrl("img/ankr.png")}/>
+<img src={useBaseUrl("Nervos Ankr endpoint.png")}/>
 
 - [Nervos Ankr Endpoints](https://www.ankr.com/rpc/nervos?tab=infrastructure)
 - [Ankr Documentation on Nervos](https://www.ankr.com/docs/build/chains/nervos/)
