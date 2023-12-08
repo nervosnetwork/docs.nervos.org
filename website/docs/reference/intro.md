@@ -11,4 +11,4 @@ Right now, the following sections are available:
 * [Script](script.md): behaviors about the Script data structure, including how Script is executed by CKB VM.
 * [Transction](transaction.md): guide to the higher level transaction data structure.
 * [JSON-RPC](rpc.md): notes on how to use JSON RPC to talk to a CKB node.
-* [Halving](halving): introduces the principle of CKB halving and the halving window.
+* [Halving](halving.md): introduces the principle of CKB halving and the halving window.
