@@ -26,7 +26,7 @@ cargo run list-hashes -b > docs/hashes.toml
 
 Install dependencies
 
-```
+```bash
 rustup component add rustfmt
 rustup component add clippy
 ```

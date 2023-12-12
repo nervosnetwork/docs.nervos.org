@@ -13,18 +13,18 @@ In CKB, each transaction is executed separately, that is, each transaction runs 
 
 ### Execution unit
 
-When each individual transaction is verified, the scripts will first be separated into groups and then executed sequentially in units of script groups. Each group is created by grouping together transactions that have the same script hash. 
+When each individual transaction is verified, the scripts will first be separated into groups and then executed sequentially in units of script groups. Each group is created by grouping together transactions that have the same script hash.
 
 *Note that the lock scripts of transaction outputs are not executed during transaction verification.*
 
-No matter which script group is being executed, the entirety of transaction data can be accessed by scripts included in that transaction during execution. 
+No matter which script group is being executed, the entirety of transaction data can be accessed by scripts included in that transaction during execution.
 
 An advantage of this design is the group records the index of the cell(s) which belong to the current group. This is equivalent to combining multiple verifications that may exist into one verification. This reduces verification resource consumption and provides a public environment for the data set of the transaction. But this requires the developer to be aware when writing the script that it needs to consider the case of validating multiple cells.
 
 This is described here:
 
-```
-`class ScriptGroup:
+```python
+class ScriptGroup:
     def __init__(self, script):
         self.script = script
         self.input_indices = []
@@ -61,7 +61,6 @@ def run():
     for group in split_group(tx):
         if vm_run(group) != 0:
             return error()
-`
 ```
 
 When each script group is executed, the execution cost of the scripts is recorded and the sum of all resource consumption is compared with the `max_block_cycles` allowed upper limit.
@@ -69,26 +68,26 @@ When each script group is executed, the execution cost of the scripts is recorde
 Suppose there is a transaction as follows:
 
 ```
-`Transaction {
+Transaction {
     input: [cell_1 {lock: A, type: B}, cell _2 {lock: A, type: B}, cell_3 {lock: C, type: None}]
     output: [cell_4 {lock: D, type: B}, cell_5 {lock: C, type: B}, cell_6 {lock: G, type: None}, cell_7(lock: A, type: F)]
-}`
+}
 ```
 
 it will be grouped as such:
 
 ```
-`[
-    group(A, input:[0, 1], output:[]), 
-    group(C, input:[2], output:[]), 
+[
+    group(A, input:[0, 1], output:[]),
+    group(C, input:[2], output:[]),
     group(B, input:[0, 1], output:[0, 1]),
     group(F, input:[], output:[3])
-]`
+]
 ```
 
 The syscall of the VM can load these corresponding cells through `group(input/output index)` to complete one-time verification.
 
-CKB will execute all script groups, which are then verified based on return value. This follows the convention of process exit status in Unix-like systems: a return value of zero is a verification pass, while other return values are verification exceptions. 
+CKB will execute all script groups, which are then verified based on return value. This follows the convention of process exit status in Unix-like systems: a return value of zero is a verification pass, while other return values are verification exceptions.
 
 Note that when the script is executed, the script itself does not know if it is a type or lock script. The script will need to figure this out itself, by checking args or witness data.
 

@@ -77,4 +77,4 @@ The above is a brief description of the process of selecting a transaction for t
 
 In the case of a transaction sent with a small fee, it might be necessary to speed up the confirmation time for it to be considered settled. It is possible to create a new transaction that takes the unconfirmed transaction as its input, and spend it at a higher fee. Miners who want to benefit from this second, more profitable transaction will also need to confirm the first transaction. This is known as child-pays-for-parent (CPFP).
 
-Another way to speed up the confirmation time is to use the transaction pool API to replace the original transaction with a new transaction that pays a higher fee. This is known as [Replace-By-Fee (RBF)](/tx-pool-rbf).
+Another way to speed up the confirmation time is to use the transaction pool API to replace the original transaction with a new transaction that pays a higher fee. This is known as [Replace-By-Fee (RBF)](/docs/essays/tx-pool-rbf).
