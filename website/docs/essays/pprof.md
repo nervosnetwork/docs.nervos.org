@@ -3,6 +3,8 @@ id: pprof
 title: Tips for Profiling CKB Script
 ---
 
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
 Before starting, make sure you have understood the concept of [cycles](../basics/glossary#cycles).
 
 In the development phase of dapps, it is a wide range of needs to estimate how many cycles our dapp will consume.
@@ -89,7 +91,6 @@ Generate graphics for easy reading:
 ```sh
 $ cat flamegraph.txt | inferno-flamegraph > fib.svg
 ```
-
-![fib.svg](https://raw.githubusercontent.com/nervosnetwork/ckb-vm-pprof/master/res/fib.svg)
+<img src={useBaseUrl("img/fib.svg")}/>
 
 Please note that the function with too small proportion will not be displayed on the flamegraph by default.

@@ -136,7 +136,7 @@ We can use `load_lockscript_hash` in eth-bridge-typescript and then check the en
 
 The pseudocode is like below:
 
-```
+```rust
 let lockscript_hash = load_lockscript_hash(0, Source::Output);
 for script in load_output_typescripts {
     if script.args = lockscript_hash \
