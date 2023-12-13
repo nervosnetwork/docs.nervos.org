@@ -11,21 +11,29 @@ import Link from "@docusaurus/Link";
 
 When a transaction is broadcasted to the network, all nodes verify the transaction and add it to their transaction pool (tx-pool) if it is valid. The transaction will stay in the tx-pool until it is mined into a block.
 
-There is a scenario that a transaction maybe stuck in the tx-pool for a long time because the transaction fee is not high enough. In this case, the transaction can be replaced by a new transaction with a higher fee. This strategy is called Replace-By-Fee (RBF), RBF was first introduced by Bitcoin in [BIP: 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
+There is a scenario that a transaction maybe stuck in the tx-pool for a long time because the transaction fee is not high enough. In this case, the transaction can be replaced by a new transaction contains same inputs but with a higher fee. This strategy is called Replace-By-Fee (RBF), RBF was first introduced by Bitcoin in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
 
-In most cases, RBF is usefull for spenders to adjust their previously-sent transactions to deal with unexpected confirmation delays or to perform other useful replacements, such as merging multiple transactions into one.
-
-The new transaction must have the at least one same inputs as the old one(may includes other extra inputs), and the outputs can be different. The new transaction will replace the old one in the tx-pool, the old one will be removed from the tx-pool and with the status Rejected.
+The new transaction must have the at least one same inputs as the old one(may includes other extra inputs), and the outputs can be different. The new transaction will replace the old one in the tx-pool, the old one will be removed from tx-pool with status Rejected.
 
 <img src={useBaseUrl("img/rbf.png")} width="70%" height="70%"/>
 
 In the above example, the transaction `tx-a` is already in tx-pool and the new `tx-b` has a conflicted input `input1` with `tx-a`, so `tx-a` will be replaced by `tx-b` in the tx-pool if other RBF rules are satisfied.
 
+In most cases, RBF is usefull for spenders to adjust their previously-sent transactions to deal with unexpected confirmation delays or to perform other useful replacements, such as merging multiple transactions into one.
+
+<img src={useBaseUrl("img/rbf-merge.png")} width="70%" height="70%"/>
+
+For instance, the above transaction `tx-a`, `tx-b` and their descendants are already in the tx-pool, an new transaction `tx-e` has conflicted inputs with `tx-a` and `tx-b`, so `tx-a`,`tx-b`, `tx-c`, `tx-d` are all be replaced by `tx-e` when RBF happens.
+
 Another way to speed up the confirmation is creating a new transaction that takes the unconfirmed transaction as its input, and spend it at a higher fee. This is known as `child-pays-for-parent` (CPFP).
 
 ## Check rules for RBF
 
-There are several check rule for RBF:
+The general process of RBF is adding another extra checking, try to get the conflicted transactions in the `tx-pool` from a new transaction, then remove them before adding the new transaction into the `tx-pool`.
+
+<img src={useBaseUrl("img/rbf-process.png")} width="70%" height="70%"/>
+
+There are several check rule for RBF, mainly to prevent malicious users from abusing the RBF feature:
 
 1. The old transaction being replaced can not be confirmed, the new transaction is a valid transaction.
 
@@ -37,7 +45,7 @@ There are several check rule for RBF:
 
 5. The descendants of old transactions can not contains any transaction which is a ancestor of the new transaction.
 
-While the rules may seem complicated, they are designed to prevent malicious users from abusing the RBF feature, and implementated in a single function `check_rbf` in [pool.rs](https://github.com/nervosnetwork/ckb/blob/2f44fb0ca6a73ae77b4805b8f087a3b9913ac8f5/tx-pool/src/pool.rs#L527-L629).
+While the rules may seem complicated, it's implementated in a single function `check_rbf` in [pool.rs](https://github.com/nervosnetwork/ckb/blob/2f44fb0ca6a73ae77b4805b8f087a3b9913ac8f5/tx-pool/src/pool.rs#L527-L629).
 
 ## How to use RBF in CKB
 
