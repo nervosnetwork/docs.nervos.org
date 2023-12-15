@@ -1,6 +1,7 @@
 ---
 id: tx-pool-rbf
 title: Replace-By-Fee (RBF)
+
 ---
 
 import useBaseUrl from "@docusaurus/useBaseUrl";
