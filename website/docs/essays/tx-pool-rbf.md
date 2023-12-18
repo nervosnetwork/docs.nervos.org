@@ -13,13 +13,13 @@ When a transaction is broadcasted to the network, all nodes verify the transacti
 
 There is a scenario that a transaction maybe stuck in the tx-pool for a long time because the transaction fee is not high enough. In this case, the transaction can be replaced by a new transaction contains same inputs but with a higher fee. This strategy is called Replace-By-Fee (RBF), first introduced by Bitcoin in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
 
-The new transaction must have the at least one inputs that is the same as the old one (may include other extra inputs), while the outputs can be different. The new transaction will replace the old one in the tx-pool, and the old one will be removed from tx-pool with status "Rejected".
+The new transaction must have at least one same input with the old transaction (may include other extra inputs), while the outputs can be different. The new transaction will replace the old one in the tx-pool, and the old one will be removed from tx-pool with status "Rejected".
 
 <img src={useBaseUrl("img/rbf.png")} width="70%" height="70%"/>
 
-In the above example, the transaction `tx-a` is already in tx-pool and the new `tx-b` has a conflicted input `input1` with `tx-a`, so `tx-a` will be replaced by `tx-b` in the tx-pool if other RBF rules are satisfied.
+In the above example, the transaction `tx-a` is already in tx-pool and the new `tx-b` has a conflicted input `input1` with `tx-a`, so `tx-a` will be replaced by `tx-b` in the tx-pool if all RBF rules are satisfied.
 
-In most cases, RBF is usefull for spenders to adjust their previously-sent transactions to deal with unexpected confirmation delays or to perform other useful replacements, such as merging multiple transactions into one.
+In most cases, RBF is useful for spenders to adjust their previously-sent transactions to deal with unexpected confirmation delays or to perform other useful replacements, such as merging multiple transactions into one.
 
 <img src={useBaseUrl("img/rbf-merge.png")} width="70%" height="70%"/>
 
@@ -37,10 +37,12 @@ There are several check rules for RBF, mainly to prevent malicious users from ab
 
 1. The replaced old transaction must not be confirmed; the new transaction must be valid.
 
-2. The new transaction must not include new, unconfirmed inputs. Specifically, new transaction must not have any `cell_deps` inputs that are outputs of old transactions.
+2. The new transaction must not include new, unconfirmed inputs, or any `cell_deps` inputs that are outputs of old transactions.
 
 3. The transaction fee of the new transaction must surpass the old transaction fee, including an extra minimal replacement fee calculated based on the transaction size and a parameter configured by node.
+
 4. The number of sub-transactions for the transaction to be replaced must not exceed 100. In other words, all sub-transactions will be removed from the `tx-pool` when the transaction is replaced.
+
 5. The descendants of old transactions must not contain any transaction that is a ancestor of the new transaction.
 
 While the rules may seem complicated, they are implementated in a single function `check_rbf` in [pool.rs](https://github.com/nervosnetwork/ckb/blob/2f44fb0ca6a73ae77b4805b8f087a3b9913ac8f5/tx-pool/src/pool.rs#L527-L629).
@@ -49,7 +51,7 @@ While the rules may seem complicated, they are implementated in a single functio
 
 ### Enable/Disable RBF in ckb.toml
 
-CKB began to support RBF in [0.112.1](https://github.com/nervosnetwork/ckb/releases/tag/v0.112.1), and the RBF feature is disabled by default.
+CKB began to support RBF in [0.112.1](https://github.com/nervosnetwork/ckb/releases/tag/v0.112.1), it is enabled by default.
 
 The parameter for RBF in `ckb.toml` is `min_rbf_rate`, indicating the minimum extra fee rate for RBF. The unit is shannons/KB and default value is `1500`.
 
@@ -58,7 +60,7 @@ min_fee_rate = 1_000 # calculated directly using size in units of shannons/KB
 min_rbf_rate = 1_500 # calculated with the same way of min_fee_rate
 ```
 
-To disable RBF for a CKB node, set `min_rbf_rate` to a value less than `min_fee_rate`.
+To manually disable RBF for a CKB node, please set `min_rbf_rate` to a value less than `min_fee_rate`.
 
 ### Use RBF in RPC
 
@@ -117,7 +119,7 @@ The response will be:
 }
 ```
 
-The API for invoking RBF is `send_transaction`, the same as creating a new transaction:
+The API for invoking RBF is `send_transaction`, which is same as creating a new transaction:
 
 ```json
 {
@@ -149,7 +151,7 @@ The API for invoking RBF is `send_transaction`, the same as creating a new trans
 }
 ```
 
-RBF rules will be checked if the new transaction contains any conflicted inputs with an old transaction in the tx-pool. If RBF succeeds, the result will be:
+All RBF rules will be checked if the new transaction contains any conflicted inputs with an old transaction in the tx-pool. If RBF succeeds, the result will be:
 
 ```json
 {
