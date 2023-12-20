@@ -69,17 +69,17 @@ The process of verification involves checking the following items:
     }
    ```
 3. inputs and outputs are not empty
-    1. The transaction should not have empty inputs, and it should also not have empty outputs, except in the case of a cellbase transaction.
+    - The transaction should not have empty inputs, and it should also not have empty outputs, except in the case of a cellbase transaction.
 4. inputs are mature
-    1. For each input and dep, if the referenced output transaction is a cellbase, it must have at least 4 epoch confirmations
+    - For each input and dep, if the referenced output transaction is a cellbase, it must have at least 4 epoch confirmations
 5. capacity
-    1. sum of inputs’ capacity must be greater than or equal to sum of outputs’ capacity
+    - Sum of inputs’ capacity must be greater than or equal to sum of outputs’ capacity
 6. duplicate_deps
-    1. deps should not be duplicated
+    - deps should not be duplicated
 7. outputs_data_verifier
-    1. number of ‘output data' fields must equal number of outputs
+    - number of ‘output data' fields must equal number of outputs
 8. since
-    1. `since` value must follow the rules described in [RFC0017](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md)
+    - `since` value must follow the rules described in [RFC0017](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0017-tx-valid-since/0017-tx-valid-since.md)
 
 Then CKB VM will execute the transaction script and output the number of cycles consumed.
 
