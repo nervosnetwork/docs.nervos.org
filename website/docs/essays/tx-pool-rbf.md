@@ -60,7 +60,7 @@ min_fee_rate = 1_000 # calculated directly using size in units of shannons/KB
 min_rbf_rate = 1_500 # calculated with the same way of min_fee_rate
 ```
 
-To manually disable RBF for a CKB node, please set `min_rbf_rate` to a value less than `min_fee_rate`.
+To manually disable RBF for a CKB node, please set `min_rbf_rate` to a value less or equal with `min_fee_rate`.
 
 ### Use RBF in RPC
 
