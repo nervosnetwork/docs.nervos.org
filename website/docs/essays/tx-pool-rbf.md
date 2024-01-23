@@ -157,7 +157,7 @@ All RBF rules will be checked if the new transaction contains any conflicted inp
 {
   "id": 42,
   "jsonrpc": "2.0",
-  "result": "0x365698b50ca0da75dca2c87f9e7b563811d3b"
+  "result": "0xa0ef4eb5f4ceeb08a4c8524d84c5da95dce2f608e0ca2ec8091191b0f330c6e3"
 }
 ```
 
