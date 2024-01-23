@@ -147,8 +147,8 @@ An example response:
     },
     "cycles": "0x219",
     "time_added_to_pool" : "0x187b3d137a1",
-		"fee": "0x2710",
-		"min_replace_fee": "0x2af2",
+    "fee": "0xf752f",
+    "min_replace_fee": "0xfa31a",
     "tx_status": {
       "block_hash": null,
       "status": "pending",
