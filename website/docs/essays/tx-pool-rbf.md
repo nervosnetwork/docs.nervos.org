@@ -108,8 +108,8 @@ The response will be:
     },
     "cycles": "0x219",
     "time_added_to_pool" : "0x187b3d137a1",
-    "fee": "0xF752F",
-    "min_replace_fee": "0xFA31A",
+    "fee": "0x5f5e100",
+    "min_replace_fee": "0x5f5e26b",
     "tx_status": {
       "block_hash": null,
       "status": "pending",
