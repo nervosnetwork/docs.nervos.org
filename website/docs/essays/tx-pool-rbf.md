@@ -161,7 +161,7 @@ All RBF rules will be checked if the new transaction contains any conflicted inp
 }
 ```
 
-Otherwise, the result will be:
+Otherwise, the result will be like:
 
 ```json
 {
@@ -172,4 +172,11 @@ Otherwise, the result will be:
     "message": "RBFRjected: ....."
   }
 }
+```
+
+The `message` field contains the reason why RBF is rejected, for example if the transaction
+fee is not high enough, the message will be like:
+
+```json
+Tx's current fee is 1000000000, expect it to >= 2000000363 to replace old txs
 ```
