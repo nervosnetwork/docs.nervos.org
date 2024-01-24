@@ -214,3 +214,9 @@ If the RBF transaction fails the check, an error will be returned:
   }
 }
 ```
+
+The `message` field contains the reason why RBF is rejected. For example, if the transaction fee is not high enough, the message would be similar to this:
+
+```json
+Tx's current fee is 1000000000, expect it to >= 2000000363 to replace old txs.
+```
