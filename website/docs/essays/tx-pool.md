@@ -73,5 +73,8 @@ Next, after Ta1 and Ta2 are picked out, A's fee rate changes to 1 (10 / 10), exc
 
 The above is a brief description of the process of selecting a transaction for the block_template. The specific implementation of the algorithm also involves several other factors, such as size_limit, cycles_limit.
 
-## Child-Pays-For-Parent (CPFP) 
-In the case of a transaction sent with a small fee, it might be necessary to speed up the confirmation time for it to be considered settled. At this point, there is no way to directly increase the fee of the transaction itself. Instead, it is possible to create a new transaction that takes the unconfirmed transaction as its input, and spend it at a higher fee. Miners who want to benefit from this second, more profitable transaction will also need to confirm the first transaction. This is known as child-pays-for-parent (CPFP).
+## Child-Pays-For-Parent (CPFP)
+
+In the case of a transaction sent with a small fee, it might be necessary to speed up the confirmation time for it to be considered settled. It is possible to create a new transaction that takes the unconfirmed transaction as its input, and spend it at a higher fee. Miners who want to benefit from this second, more profitable transaction will also need to confirm the first transaction. This is known as child-pays-for-parent (CPFP).
+
+Another way to speed up the confirmation time is to use the transaction pool API to replace the original transaction with a new transaction that pays a higher fee. This is known as [Replace-By-Fee (RBF)](/docs/essays/tx-pool-rbf).

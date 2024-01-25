@@ -94,6 +94,7 @@
     "essays/mint-sudt-via-contract",
     "essays/pw-lock",
     "essays/tx-pool",
+    "essays/tx-pool-rbf",
     "essays/tx-confirmation",
     "essays/upgradability"
   ]
