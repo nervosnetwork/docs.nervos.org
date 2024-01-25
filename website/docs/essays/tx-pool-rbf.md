@@ -15,7 +15,7 @@ Under certain conditions, such as during a period of congestion, a transaction m
 
 There are two common resolutions for this issue. If the congestion resolves itself, all the transactions in the tx-pool may eventually go through. However, there is no guarantee this will happen or how long it will take. The second option is to initiate a new transaction with a fee that is high enough to prioritize it for faster inclusion.
 
-The strategy used to replace an existing transaction in the tx-pool with one with a higher fee is known as Replace-By-Fee (RBF). This was first introduced by Bitcoin in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
+The strategy used to replace an existing transaction in the tx-pool with a higher fee one is known as Replace-By-Fee (RBF). This was first introduced by Bitcoin in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
 
 To use RBF to replace an existing transaction in the tx-pool with a new one, the new transaction must share at least one input with the old transaction and include a sufficiently high RBF fee. (RBF fees are outlined below.) All other inputs and outputs in the transaction can be different. The new transaction will replace the old transaction in the tx-pool, and the old transaction will be removed from tx-pool with status "Rejected".
 
