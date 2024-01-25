@@ -60,8 +60,8 @@ RBF introduces extra procedures to validate incoming new transactions and remove
 RBF includes several check rules to safeguard the system by ensuring proper functionality and preventing malicious misuse of the feature:
 
 1. The old transaction to be replaced must still be in a pending status, meaning it is in the tx-pool but is not confirmed.
-2. The new transaction must not include any inputs that are still unconfirmed. 
-3. The new transaction must include a sufficiently high fee that is higher than the old transaction it is replacing, and also meets the RBF minimum replacement fee rate requirement. (RBF fees are outlined below.)
+2. The new transaction must not include any inputs that are still unconfirmed, unless the inputs on the new transaction match the inputs on the old transaction that is being replaced.
+3. The new transaction must include a sufficiently high fee that is higher than the old transaction it is replacing, meeting the RBF minimum replacement fee rate requirement. (RBF fees are outlined below.)
 4. The old transaction which will be replaced must not have more than 100 decendent transactions in the tx-pool.
 5. The new transaction must not include any inputs or cell_deps that are decendants (outputs) of the old transaction. This would be invalid because replacing the old transaction means its outputs will no longer exist, and therefore they cannot be included in any future transactions.
 
