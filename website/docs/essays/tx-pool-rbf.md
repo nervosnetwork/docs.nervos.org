@@ -17,7 +17,7 @@ There are two common resolutions for this issue. If the congestion resolves itse
 
 The strategy used to replace an existing transaction in the tx-pool with a higher fee one is known as Replace-By-Fee (RBF). This was first introduced by Bitcoin in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
 
-To use RBF to replace an existing transaction in the tx-pool with a new one, the new transaction must share at least one input with the old transaction and include a sufficiently high RBF fee. (RBF fees are outlined below.) All other inputs and outputs in the transaction can be different. The new transaction will replace the old transaction in the tx-pool, and the old transaction will be removed from tx-pool with status "Rejected".
+To use RBF to replace an existing transaction in the tx-pool with a new one, the new transaction must share at least one input with the old transaction and include a sufficiently high RBF fee. (RBF fees are outlined below.) All other inputs and outputs in the transaction can be different. The new transaction will replace the old transaction in the tx-pool, and the old transaction and its descendents will be removed from tx-pool with status "Rejected".
 
 ## Why Use RBF?
 
@@ -107,7 +107,7 @@ min_replace_fee = sum(replaced_tx_fee) + (min_rbf_rate * new_tx_size)
 
 ### Using RBF via the CKB RPC
 
-The `min_replace_fee` field has been added to the result of `get_transaction` as a simple way to get the required fees to replace a single transaction with one of am identical size.
+The `min_replace_fee` field has been added to the result of `get_transaction` as a simple way to get the required fees to replace a single transaction with one of an identical size.
 
 > Note: If your new transaction is a different size, or it is a more complicated replacement of multiple transactions in the tx-pool, you must use the formula above to properly calculate the RBF fees.
 
