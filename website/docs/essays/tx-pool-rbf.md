@@ -107,7 +107,9 @@ min_replace_fee = sum(replaced_tx_fee) + (min_rbf_rate * new_tx_size)
 
 ### Using RBF via the CKB RPC
 
-To simplify usage, the `min_replace_fee` field has been added to the result of `get_transaction`, as a convenient way to find the minimal fee to replace the transaction:
+The `min_replace_fee` field has been added to the result of `get_transaction` as a simple way to get the required fees to replace a single transaction with one of am identical size.
+
+> Note: If your new transaction is a different size, or it is a more complicated replacement of multiple transactions in the tx-pool, you must use the formula above to properly calculate the RBF fees.
 
 ```json
 {
