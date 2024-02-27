@@ -867,126 +867,71 @@ fn test_create_sudt_with_owner_mode() {
 
 You may refer to [my-sudt tests](https://github.com/jjyr/my-sudt/blob/master/tests/src/tests.rs) for the full tests. Run `capsule test`  all tests will be passed.
 
-## Deployment
+## Deploy a contract with ckb-cli
 
-### Run a dev chain and ckb-cli
+The recommended method is to deploy using ckb-cli.
 
-You should be running a dev chain and know about how to use `ckb-cli` to send transactions before deployment. 
-
-### Deploy
-
-1. Update the deployment configurations
-
-   Open  `deployment.toml` :
-
-     *  `cells`  describes which cells to be deployed.
-
-        * `name`: Define the reference name used in the deployment configuration.
-        * `enable_type_id` : If it is set to `true` means create a `type_id` for the cell.
-        * `location` :  Define the script binary path.
-
-     *  `dep_groups`  describes which dep_groups to be created. Dep Group is a cell which bundles several cells as its members. When a dep group cell is used in `cell_deps`, it has the same effect as adding all its members into `cell_deps`. In our case, we don’t need `dep_groups`.
-     * `lock`  describes the `lock` field of the new deployed cells.It is  recommended to set `lock` to the deployer's address(an address that you can unlock) in the dev chain and in the testnet, which is easier to update the script.
-
-2. Uncomment the configuration file and replace the cell name and location with `my-usdt`.
-
-```
-# [[cells]]
-# name = "my_cell"
-# enable_type_id = false
-# location = { file = "build/release/my_cell" }
-
-# # Dep group cells
-# [[dep_groups]]
-# name = "my_dep_group"
-# cells = [
-#   "my_cell",
-#   "secp256k1_data"
-# ]
-
-# # Replace with your own lock if you want to unlock deployed cells.
-# # The deployment code_hash is secp256k1 lock
-# [lock]
-# code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"
-# args = "0x0000000000000000000000000000000000000000"
-# hash_type = "type"
-```
-
-3. Build release version of the script
+### Initialize config
    
-  * The release version of script  doesn’t  include debug symbols which makes the size smaller.
+```
+ckb-cli deploy init-config --deployment-config deployment.toml
+```
+After executing the command, locate the `deployment.toml` file for further processing.
+
+### Edit `deployment.toml` and generate information
+
+Fill in the required items, such as:
 
 ```
-capsule build --release
+[[cells]]
+name = "compact_udt_lock"
+enable_type_id = false
+location = { file = "compact_udt_lock" }
+
+[[dep_groups]]
+name = "my_dep_group"
+cells = []
+
+[lock]
+code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"
+args = "0x6023b5ccbd0c60bb02f0fef669cc2ca7d39fdb11"
+hash_type = "type"
+```
+Note:
+* `cells`: call required for this transaction
+* `name`: marks the name of the cells for some future reference
+* `enable_type_id`: enables type id.
+* `location`: Specifies the field of this cell, either on-chain or uploaded locally.
+* * If on-chain, incoming tx_hash and index are needed;
+* * If local, an incoming file is needed, which can be a relative path.
+
+Then execute:
+```
+ckb-cli deploy gen-txs \
+    --deployment-config ./deployment.toml \
+    --migration-dir ./migrations \
+    --from-address ckt1qyqxqga4ej7scc9mqtc0aanfesk205ulmvgsl747l8 \
+    --sign-now \
+    --info-file info.json
+```
+Replace the parameter `--from-address` with the current miner's account. The same below.
+
+Note: 
+* `dep_groups`: Cells upon which the transaction relies. If unnecessary, retain it.
+* `cells`: Cells added above.
+* `lock`: The lock script information of the transaction. Substitute with your custom lock to unlock deployed cells. Default is secp256k1.
+
+### Generate a signature
+```
+ckb-cli deploy sign-txs \
+    --from-account ckt1qyqxqga4ej7scc9mqtc0aanfesk205ulmvgsl747l8 \
+    --add-signatures \
+    --info-file info.json
 ```
 
-4. Deploy the script 
-
+### Apply this transaction
 ```
-capsule deploy --address <ckt1....>
-```
-
-If the `ckb-cli` has been installed and dev-chain RPC is connectable, you will see the `deployment plan`:
-
-* `new_occupied_capacity` and `total_occupied_capacity`  refer how much CKB to store cells and data.
-* `txs_fee_capacity` refers how much CKB to pay the transaction fee.
-
-```
-Deployment plan:
----
-migrated_capacity: 0.0 (CKB)
-new_occupied_capacity: 33629.0 (CKB)
-txs_fee_capacity: 0.0001 (CKB)
-total_occupied_capacity: 33629.0 (CKB)
-recipe:
-  cells:
-    - name: my-sudt
-      index: 0
-      tx_hash: 0x8b496cb19018c475cdc4605ee9cef83cbfe578dce4f81f3367395906eba52c29
-      occupied_capacity: 33629.0 (CKB)
-      data_hash: 0xaa3d472025e6afefdf3f65c5f9beefd206b4283b30551baef83cbb4762e6d397
-      type_id: ~
-  dep_groups: []
-Confirm deployment? (Yes/No)
-```
-
-5. Type `yes` or `y`  and input the password to unlock the account.
-
-```
-send cell_tx 8b496cb19018c475cdc4605ee9cef83cbfe578dce4f81f3367395906eba52c29
-Deployment complete
-```
-
-Now the SUDT script has been deployed, you can refer to this script by using `tx_hash: 0xaa3d472025e6afefdf3f65c5f9beefd206b4283b30551baef83cbb4762e6d397 index: 0` as `out_point`(your `tx_hash` should be another value).
-
-### Migration
-
-If you want to update the script code and deploy again, you can simply run this command again:
-
-```
-capsule deploy --address ckt1qyq075y5ctzlgahu8pgsqxrqnglajgwa9zksmqdupd
-```
-
-The new script will be automatically migrated which means destroy the old script cells and create new cells.
-You will find  `new_occupied_capacity` is `0` because `capacity` is already covered by the old script cells.Please don’t forget the transaction fee you still need to pay it.
-
-```
-Deployment plan:
----
-migrated_capacity: 33629.0 (CKB)
-new_occupied_capacity: 0.0 (CKB)
-txs_fee_capacity: 0.0001 (CKB)
-total_occupied_capacity: 33629.0 (CKB)
-recipe:
-  cells:
-    - name: my-sudt
-      index: 0
-      tx_hash: 0x10d508a0b44d3c1e02982f85a3e9b5d23d3961fddbf554d20abb4bf54f61950a
-      occupied_capacity: 33629.0 (CKB)
-      data_hash: 0xaa3d472025e6afefdf3f65c5f9beefd206b4283b30551baef83cbb4762e6d397
-      type_id: ~
-  dep_groups: []
-Confirm deployment? (Yes/No)
+ckb-cli deploy apply-txs --migration-dir ./migrations --info-file info.json
 ```
 
 ## Next Steps
