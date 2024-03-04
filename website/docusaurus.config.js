@@ -1,8 +1,9 @@
-const path = require("path");
-const math = require("remark-math");
-const katex = require("rehype-katex");
+import path from "path";
+import math from "remark-math";
+import katex from "rehype-katex";
 
-module.exports = {
+/** @type {import('@docusaurus/types').Config} */
+const config = {
   title: "Nervos CKB",
   tagline: "Nervos CKB",
   url: "https://docs.nervos.org",
@@ -206,3 +207,5 @@ module.exports = {
     },
   },
 };
+
+export default config;
