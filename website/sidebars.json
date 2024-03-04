@@ -1,101 +1,19 @@
 {
-  "Basics": [
-    "basics/introduction",
-    {
-      "type": "category",
-      "label": "Concepts",
-      "items": [
-        "basics/concepts/nervos-blockchain",
-        "basics/concepts/cell-model",
-        "basics/concepts/consensus",
-        "basics/concepts/economics",
-        "basics/concepts/ckb-vm",
-        "basics/concepts/cryptowallet"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Guides",
-      "items": [
-        "basics/guides/devchain",
-        "basics/guides/mainnet",
-        "basics/guides/testnet",
-        "basics/guides/run-ckb-with-docker",
-        "basics/guides/monitor-nodes",
-        "basics/guides/get-ckb",
-        "basics/guides/ckb-on-windows",
-        "basics/guides/mining-ckb",
-        {
-          "type": "category",
-          "label": "Crypto Wallet",
-          "items": [
-            "basics/guides/crypto wallets/neuron",
-            "basics/guides/crypto wallets/imtoken",
-            "basics/guides/crypto wallets/safepal",
-            "basics/guides/crypto wallets/portalwallet",
-            "basics/guides/crypto wallets/bitpie"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "SDK Code Examples",
-          "items": [
-            "basics/guides/SDK_examples/sdk_examples_overview",
-            "basics/guides/SDK_examples/sdk_examples_rust",
-            "basics/guides/SDK_examples/sdk_examples_go",
-            "basics/guides/SDK_examples/sdk_examples_java",
-            "basics/guides/SDK_examples/sdk_examples_lumos"
-          ]
-        }
-      ]
-    },
-    "basics/tools",
-    "basics/communitynodes",
-    "basics/glossary",
-    {
-      "type": "category",
-      "label": "FAQ",
-      "items": ["basics/faq/general", "basics/faq/address"]
-    }
+  "Dapp": [
+    "dapp/view-and-transfer-balance",
+    "dapp/write-and-read-on-chain-message",
+    "dapp/create-custom-token",
+    "dapp/transfer-custom-token",
+    "dapp/create-nft",
+    "dapp/devtool"
   ],
-
-  "Reference": [
-    "reference/introduction",
-    "reference/cell",
-    "reference/script",
-    "reference/transaction",
-    "reference/rpc",
-    "reference/halving"
-  ],
-
-  "Labs": [
-    "labs/introduction",
-    "labs/sudtbycapsule",
-    "labs/lumos-nervosdao",
-    "labs/capsule-exec",
-    "labs/capsule-dynamic-loading-tutorial"
-  ],
-
-  "Integrate": ["integrate/introduction", "integrate/qa", "integrate/sdk"],
-
-  "Essays": [
-    "essays/introduction",
-    "essays/developer-materials-guide",
-    "essays/rfcs",
-    "essays/lifecycle",
-    "essays/debug",
-    "essays/pprof",
-    "essays/rules",
-    "essays/dependencies",
-    "essays/polyjuice",
-    "essays/faq",
-    "essays/ckb-core-dev",
-    "essays/integrity-check",
-    "essays/mint-sudt-via-contract",
-    "essays/pw-lock",
-    "essays/tx-pool",
-    "essays/tx-pool-rbf",
-    "essays/tx-confirmation",
-    "essays/upgradability"
+  "concepts": [
+    "concepts/nervos-blockchain",
+    "concepts/cell-model",
+    "concepts/consensus",
+    "concepts/economics",
+    "concepts/ckb-vm",
+    "concepts/cryptowallet",
+    "concepts/glossary"
   ]
 }
