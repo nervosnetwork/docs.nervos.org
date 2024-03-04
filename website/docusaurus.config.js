@@ -103,28 +103,33 @@ module.exports = {
       },
       items: [
         {
-          to: "docs/basics/introduction",
-          label: "Basics",
+          to: "docs/dapp/view-and-transfer-balance",
+          label: "Dapp",
           position: "left",
         },
         {
-          to: "docs/reference/introduction",
-          label: "Reference",
+          to: "docs/dev-environment",
+          label: "Dev Environment",
           position: "left",
         },
         {
-          to: "docs/labs/introduction",
-          label: "Labs",
+          to: "docs/ecosystem",
+          label: "Ecosystem",
           position: "left",
         },
         {
-          to: "docs/integrate/introduction",
-          label: "Integrate",
+          to: "docs/rpcs",
+          label: "RPCs",
           position: "left",
         },
         {
-          to: "docs/essays/introduction",
-          label: "Essays",
+          to: "docs/concepts/cell-model",
+          label: "Concepts",
+          position: "left",
+        },
+        {
+          to: "docs/contract/coming-soon",
+          label: "Contract",
           position: "left",
         },
       ],
