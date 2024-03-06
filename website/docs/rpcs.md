@@ -1,4 +1,0 @@
----
-id: rpcs
-title: RPCs
----

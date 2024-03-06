@@ -1,6 +1,7 @@
 ---
 id: cryptowallet
 title: Crypto Wallet
+sidebar_position: 6
 ---
 
 import useBaseUrl from "@docusaurus/useBaseUrl";

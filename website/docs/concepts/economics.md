@@ -1,6 +1,7 @@
 ---
 id: economics
-title: Economics
+title: Economic Model
+sidebar_position: 5
 ---
 
 import useBaseUrl from "@docusaurus/useBaseUrl";

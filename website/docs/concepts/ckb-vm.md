@@ -1,6 +1,7 @@
 ---
 id: ckb-vm
 title: CKB-VM
+sidebar_position: 3
 ---
 
 ## What is the CKB-VM?
