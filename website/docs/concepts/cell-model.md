@@ -1,6 +1,7 @@
 ---
 id: cell-model
 title: Cell Model
+sidebar_position: 2
 ---
 
 ## What is a Cell?

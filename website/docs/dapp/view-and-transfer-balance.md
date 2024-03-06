@@ -1,4 +1,5 @@
 ---
 id: view-and-transfer-balance
-title: View And Transfer Balance
+title: View & Transfer Balance
+sidebar_position: 2
 ---

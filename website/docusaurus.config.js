@@ -74,7 +74,10 @@ const config = {
         },
         docs: {
           path: "./docs",
-          sidebarPath: path.join(__dirname, "sidebars.json"),
+          breadcrumbs:false,
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: false,
+          sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [math],
           rehypePlugins: [katex],
           editUrl:
@@ -82,7 +85,7 @@ const config = {
         },
         blog: {},
         theme: {
-          customCss: [path.join(__dirname, "./static/css/custom.css")],
+          customCss: [path.join(__dirname, "./src/css/customTheme.css")],
         },
       },
     ],
@@ -95,48 +98,26 @@ const config = {
     colorMode: {
       defaultMode: "light",
       disableSwitch: false,
-      respectPrefersColorScheme: false,
+      respectPrefersColorScheme: true,
     },
     navbar: {
-      style: "dark",
       logo: {
         src: "img/logo.png",
+        srcDark:'img/logo-dark.png',
+        alt:'Nervos CKB Docs',
+        className:'navbar-logo',
       },
       items: [
         {
-          to: "docs/dapp/view-and-transfer-balance",
-          label: "Dapp",
-          position: "left",
+          type: 'search',
+          position: 'right',
+          className: 'navbar-search',
         },
-        {
-          to: "docs/dev-environment",
-          label: "Dev Environment",
-          position: "left",
-        },
-        {
-          to: "docs/ecosystem",
-          label: "Ecosystem",
-          position: "left",
-        },
-        {
-          to: "docs/rpcs",
-          label: "RPCs",
-          position: "left",
-        },
-        {
-          to: "docs/concepts/cell-model",
-          label: "Concepts",
-          position: "left",
-        },
-        {
-          to: "docs/contract/coming-soon",
-          label: "Contract",
-          position: "left",
-        },
-      ],
+      ]
     },
     image: "img/undraw_online.svg",
     footer: {
+      style: 'dark',
       links: [
         {
           title: "Foundation",
@@ -198,7 +179,7 @@ const config = {
           ],
         },
       ],
-      copyright: "Copyright © 2021  Nervos Foundation. All Rights Reserved.",
+      copyright: `Copyright © ${new Date().getFullYear()} Nervos Foundation. All Rights Reserved.`,
     },
     algolia: {
       appId: "LU9B8PQ7W5",

@@ -1,6 +1,7 @@
 ---
 id: consensus
-title: Consensus
+title: Consensus Mechanism
+sidebar_position: 4
 ---
 
 ## What is Consensus?

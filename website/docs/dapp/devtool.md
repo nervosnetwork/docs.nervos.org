@@ -1,4 +1,5 @@
 ---
 id: devtool
-title: Devtool
+title: Dev Tools
+sidebar_position: 7
 ---

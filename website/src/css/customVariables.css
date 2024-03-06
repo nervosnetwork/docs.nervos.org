@@ -1,0 +1,87 @@
+:root{
+    /* Text Variables*/
+    --text-primary: #262A2E;
+    --text-secondary: #363B45;
+    --text-tertiary: #858BA5;
+    --text-placeholder: #979EC4;
+    --text-inverse: #FFFFFF;
+    --text-link: #0C865C;
+
+    /* Surface Variables*/
+    --surface-01: #FFFFFF;
+    --surface-02: #F6F8FF;
+    --surface-03: #E5EBF6;
+    --surface-accent: #F2FFF7;
+
+    /* Border Variables*/
+    --border-subtle:#E6E8EF;
+    --border-accent: #0C865C;
+
+    /* Conditional Variables*/
+    --hover: rgba(38, 42, 46, 0.04);
+    --selected: rgba(38, 42, 46, 0.06);
+
+    /* Alert Variables */
+    --alert-success: #0C865C;
+    --alert-success-bg: rgba(12, 134, 92, 0.1);
+    --alert-secondary: #363B45;
+    --alert-secondary-bg: rgba(54, 59, 69, 0.1);
+    --alert-info: #2047D1;
+    --alert-info-bg: rgba(32, 71, 209, 0.1);
+    --alert-warning: #CBC125;
+    --alert-warning-bg: rgba(203, 193, 37, 0.1);
+    --alert-danger: #C51C1C;
+    --alert-danger-bg: rgba(197, 28, 28, 0.1);
+
+    /* Code Variables*/
+    --code-plain: #363B45;
+    --code-comment: #696F8C;
+    --code-function: #0C865C;
+    --code-keyword: #0184AD;
+    --code-string: #C1512E;
+    --code-classname: #BB15D6;
+    --code-builtin:#0184AD;
+    --code-property-access: #363B45;
+}
+
+/* Override values for dark theme */
+html[data-theme='dark'] {
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-tertiary: #727981;
+    --text-placeholder: #6A737D;
+    --text-inverse: #262A2E;
+    --text-link: #00CE88;
+  
+    --surface-01: #191A1B;
+    --surface-02: #202122;
+    --surface-03: #2F3138;
+    --surface-accent: #2F3138;
+  
+    --border-subtle:#3F4144;
+    --border-accent: #00CE88;
+
+    --hover:rgba(255, 255, 255, 0.06);
+    --selected: rgba(255, 255, 255, 0.12);
+
+    --alert-success: #00CE88;
+    --alert-success-bg: rgba(0, 206, 136, 0.1);
+    --alert-secondary: rgba(255, 255, 255, 0.85);
+    --alert-secondary-bg: rgba(255, 255, 255, 0.1);
+    --alert-info: #828EF9;
+    --alert-info-bg: rgba(130, 142, 249, 0.1);
+    --alert-warning: #FFF778;
+    --alert-warning-bg: rgba(255, 247, 120, 0.1);
+    --alert-danger: #FD7777;
+    --alert-danger-bg: rgba(253, 119, 119, 0.1);
+  
+    --code-plain:rgba(255, 255, 255, 0.9);
+    --code-comment: rgba(255, 255, 255, 0.5);
+    --code-function: #E4E0A5;
+    --code-keyword: #5BD8FF;
+    --code-string: #C7826D;
+    --code-classname: #BB15D6;
+    --code-builtin:#D2A8FF;
+    --code-property-access: #5BD8FF;
+}
+  
