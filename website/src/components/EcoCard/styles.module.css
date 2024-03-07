@@ -3,10 +3,11 @@
 .cardContainer {
   width: 100%;
   border-radius: 8px;
-  padding: 1.5em 1em;
   background-color: var(--surface-02);
-  border: 1px solid transparent;
+  border: 1px solid var(--border-subtle);
   display: flex;
+  flex-direction: column;
+  padding-bottom: 1.5em;
   cursor: pointer;
   text-decoration: none !important;
   color: var(--text-secondary) !important;
@@ -14,20 +15,25 @@
 .cardContainer:hover {
   border: 1px solid var(--border-accent);
 }
-.iconContainer {
-  width: 2em;
-  min-width: 2em;
-  height: 2em;
-  border-radius: 50%;
-  background-color: var(--surface-03);
+.bannerConatiner {
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
-.rightContainer {
+.banner {
+  width: 100%;
+  height: auto;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  object-fit: cover;
+}
+.bottomContainer {
   display: flex;
   flex-direction: column;
-  margin-left: 1.25em;
+  margin-top: 1em;
+  padding: 0 1em;
 }
 .title {
   margin-bottom: 0.5em;
