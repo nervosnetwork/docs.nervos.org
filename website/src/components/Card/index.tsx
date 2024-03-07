@@ -11,7 +11,7 @@ export interface CardProps {
     title: string;
     description: string;
     href: string;
-    type: 'tool' | 'tutorial' | 'lightbulb' | 'email' | 'discord';
+    type: 'tool' | 'tutorial' | 'concept';
     links?: CardLinks[];
     className?: string;
 }
