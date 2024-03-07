@@ -1,0 +1,48 @@
+@import '@css/customVariables.css';
+
+.cardContainer {
+  width: 100%;
+  border-radius: 8px;
+  padding: 24px 16px;
+  background-color: var(--surface-02);
+  border: 1px solid transparent;
+  display: flex;
+  cursor: pointer;
+  text-decoration: none !important;
+  color: var(--text-secondary) !important;
+}
+.cardContainer:hover {
+  border: 1px solid var(--border-accent);
+}
+.iconContainer {
+  width: 2em;
+  min-width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background-color: var(--surface-03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon {
+  fill: var(--border-accent);
+}
+.rightContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1.25em;
+}
+.title {
+  margin-bottom: 0.5em;
+}
+.description {
+  margin: 0;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5em;
+}
+.links > a:not(:last-child) {
+  margin-right: 1em;
+}

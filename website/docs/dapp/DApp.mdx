@@ -6,6 +6,9 @@ slug: /
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Card from '@components/Card';
+import CardLayout from '@components/CardLayout';
+import { tutorialCardContents, toolCardContents } from './CardsContents';
 
 # DApp Overview
 Welcome to the Nervos CKB developer hub—your go-to for all tools to build dApps on CKB. 
@@ -35,8 +38,32 @@ Welcome to the Nervos CKB developer hub—your go-to for all tools to build dApp
 </Tabs>
 ```
 
-## Smart Contracts Utilization in dApp
-Explore tutorials focused on integrating and utilizing smart contracts within your dApps. Understand the key concepts, protocols, and strategies to enhance your applications, without delving into contract creation or deployment. 
+## Smart Contracts Utilization in DApp
+Explore tutorials focused on integrating and utilizing smart contracts within your dApps. Understand the key concepts, protocols, and strategies to enhance your applications, without delving into contract creation or deployment.
+<CardLayout>
+  {tutorialCardContents.map(({ index, title, description, href, type }) => (
+    <Card
+      key={index}
+      title={title}
+      description={description}
+      href={href}
+      type={type}
+    />
+  ))}
+</CardLayout>
+
 
 ## Dev Tools
 Explore essential tools and resources tailored for dApp development on Nervos CKB, designed to streamline your workflow from concept to deployment.
+<CardLayout>
+  {toolCardContents.map(({ index, title, description, href, type, links }) => (
+    <Card
+      key={index}
+      title={title}
+      description={description}
+      href={href}
+      type={type}
+      links={links}
+    />
+  ))}
+</CardLayout>

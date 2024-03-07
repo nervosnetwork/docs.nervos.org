@@ -90,7 +90,23 @@ const config = {
       },
     ],
   ],
-  plugins: [],
+  plugins: [
+    function myPlugin() {
+      return {
+        name: 'custom-webpack-plugin',
+        configureWebpack() {
+          return {
+            resolve: {
+              alias: {
+                '@components': path.resolve(__dirname, 'src/components'),
+                '@css': path.resolve(__dirname, 'src/css'),
+              },
+            },
+          };
+        },
+      };
+    },
+  ],
   themeConfig: {
     prism: {
       additionalLanguages: ["rust"],

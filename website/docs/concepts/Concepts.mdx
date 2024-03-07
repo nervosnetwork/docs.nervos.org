@@ -3,8 +3,23 @@ id: concepts
 title: Concepts
 sidebar_position: 5
 ---
+import Card from '@components/Card';
+import CardLayout from '@components/CardLayout';
+import conceptCardContents from './CardContents';
+
 # Concepts Overview
 Dive deep into some foundational concepts of the Nervos network and read through a glossary to enrich your understanding of key blockchain terminologies.
+<CardLayout>
+  {conceptCardContents.map(({ index, title, description, href, type }) => (
+    <Card
+      key={index}
+      title={title}
+      description={description}
+      href={href}
+      type={type}
+    />
+  ))}
+</CardLayout>
 
 ## Glossary
 - [General Glossary](glossary/#general-glossary)
