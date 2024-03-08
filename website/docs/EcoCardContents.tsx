@@ -3,7 +3,7 @@ import { EcoCardProps } from "@site/src/components/EcoCard";
 const ecoCardContents: EcoCardProps[] = [
     {
         title: 'CKB Address',
-        description: 'Convert and decode CKB addresses to view the attributes',
+        description: 'Convert and decode CKB addresses and generate private keys for development',
         href: 'https://ckb.tools/address',
         type: 'address',
         links: [
@@ -13,7 +13,7 @@ const ecoCardContents: EcoCardProps[] = [
     },
     {
         title: 'Nervos Pudge Faucet',
-        description: 'Claim free Testnet CKBytes to use while developing and testing',
+        description: 'Claim CKBytes to use while developing and testing',
         href: 'https://faucet.nervos.org/',
         type: 'faucet',
         links: [

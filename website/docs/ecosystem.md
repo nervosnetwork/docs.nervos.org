@@ -10,7 +10,7 @@ import ecoCardContents from './EcoCardContents';
 
 # Ecosystem
 
-Discover the vibrant ecosystem of development tools, resources, and innovative projects built by the community.
+Discover our ecosystem of tools, resources, and projects that are essential for building your application
 
 <CardLayout topMargin={56}>
   {ecoCardContents.map(({ index, title, description, href, type, links }) => (
