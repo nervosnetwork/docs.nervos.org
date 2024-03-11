@@ -7,3 +7,8 @@ window.addEventListener("DOMContentLoaded", function () {
                 </div>`;
   document.querySelector("body").prepend(oldSiteLink);
 });
+
+/** Redirect users to /docs */
+if (window.location.pathname === '/') {
+  window.location.pathname = '/docs';
+}
