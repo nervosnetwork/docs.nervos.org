@@ -8,11 +8,12 @@ import { addCellDep, generateAccountFromPrivateKey } from './util';
 config.initializeConfig(lumosConfig);
 
 export async function issueToken(privKey: string, amount: string) {
-  const { lockScript } = generateAccountFromPrivateKey(privKey);
   const xudtDeps = lumosConfig.SCRIPTS.XUDT;
   const lockDeps = lumosConfig.SCRIPTS.SECP256K1_BLAKE160;
 
+  const { lockScript } = generateAccountFromPrivateKey(privKey);
   const xudtArgs = utils.computeScriptHash(lockScript) + '00000000';
+
   const typeScript = {
     codeHash: xudtDeps.CODE_HASH,
     hashType: xudtDeps.HASH_TYPE,
@@ -73,6 +74,7 @@ export async function issueToken(privKey: string, amount: string) {
 
   txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
   txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(targetOutput, changeOutput));
+  
   /* 65-byte zeros in hex */
   const lockWitness =
     '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
