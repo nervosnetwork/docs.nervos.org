@@ -37,11 +37,8 @@
     --code-plain: #363B45;
     --code-comment: #696F8C;
     --code-function: #0C865C;
-    --code-keyword: #0184AD;
-    --code-string: #C1512E;
-    --code-classname: #BB15D6;
-    --code-builtin:#0184AD;
-    --code-property-access: #363B45;
+    --code-constant: #BB15D6;
+
 }
 
 /* Override values for dark theme */
@@ -78,10 +75,6 @@ html[data-theme='dark'] {
     --code-plain:rgba(255, 255, 255, 0.9);
     --code-comment: rgba(255, 255, 255, 0.5);
     --code-function: #E4E0A5;
-    --code-keyword: #5BD8FF;
-    --code-string: #C7826D;
-    --code-classname: #BB15D6;
-    --code-builtin:#D2A8FF;
-    --code-property-access: #5BD8FF;
+    --code-constant: #D2A8FF;
 }
   
