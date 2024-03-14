@@ -26,13 +26,13 @@ A transaction in CKB works just like Bitcoin. Each transaction is consuming some
 
 1. To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
 
-```sh
+```bash
 npm install -g @offckb/cli
 ```
 
 2. Use Offckb to select the transfer template to init the project to your local environment
 
-```sh
+```bash
 offckb init <project-name>
 ? Select a dapp template (Use arrow keys)
 ❯ View and Transfer Balance
@@ -46,19 +46,19 @@ init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
 
 - Open one terminal and start the devnet:
 
-```sh
+```bash
 offckb node
 ```
 
 - Open another terminal and check some pre-funded accounts, copy some private keys for later usage:
 
-```sh
+```bash
 offckb accounts
 ```
 
 - Install node dependencies and start the example app:
 
-```sh
+```bash
 cd <project-name> && yarn && yarn start
 ```
 
@@ -274,3 +274,16 @@ const hash = await rpc.sendTransaction(tx, "passthrough");
 ```
 
 You can open the console on the browser to see the full transaction to confirm the process.
+
+## Congratulations!
+
+By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
+
+- Capacity of the cell means how much CKB balance you have and how much data can be stored in this cell at the same time
+- To build a CKB transaction is just to collecting some live cells and producing some new cells.
+- We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
+
+## Additional resources
+
+- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
