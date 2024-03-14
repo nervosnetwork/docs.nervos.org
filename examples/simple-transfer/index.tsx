@@ -7,13 +7,16 @@ const app = document.getElementById('root');
 ReactDOM.render(<App />, app);
 
 export function App() {
-  const [privKey, setPrivKey] = useState('');
+  // default value: first account privkey from offckb
+  const [privKey, setPrivKey] = useState('0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6');
   const [fromAddr, setFromAddr] = useState('');
   const [fromLock, setFromLock] = useState<Script>();
   const [balance, setBalance] = useState('0');
 
-  const [toAddr, setToAddr] = useState('');
-  const [amount, setAmount] = useState('');
+  // default value: second account address from offckb
+  const [toAddr, setToAddr] = useState('ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew');
+  // default value: 62 CKB
+  const [amount, setAmount] = useState('6200000000');
 
   useEffect(() => {
     const updateFromInfo = async () => {
@@ -57,7 +60,7 @@ export function App() {
     <div>
       <h1>View and Transfer Balance</h1>
       <label htmlFor="private-key">Private Key: </label>&nbsp;
-      <input id="private-key" type="text" onChange={onInputPrivKey} />
+      <input id="private-key" type="text" value={privKey} onChange={onInputPrivKey} />
       <ul>
         <li>CKB Address: {fromAddr}</li>
         <li>
@@ -68,11 +71,11 @@ export function App() {
         <li>Total capacity: {(+balance).toLocaleString()}</li>
       </ul>
       <label htmlFor="to-address">Transfer to Address: </label>&nbsp;
-      <input id="to-address" type="text" onChange={(e) => setToAddr(e.target.value)} />
+      <input id="to-address" type="text" value={toAddr} onChange={(e) => setToAddr(e.target.value)} />
       <br />
       <label htmlFor="amount">Amount</label>
       &nbsp;
-      <input id="amount" type="number" onChange={(e) => setAmount(e.target.value)} />
+      <input id="amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
       <small>Tx fee: 100,000 (0.001 CKB)</small>
       <br />
       <small style={{ color: 'red' }}>{amountTip}</small>

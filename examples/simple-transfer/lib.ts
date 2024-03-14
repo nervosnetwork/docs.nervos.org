@@ -142,11 +142,11 @@ export async function transfer(options: Options): Promise<string> {
   }
 
   txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get('signingEntries').get(0)?.message;
+  const message = txSkeleton.get('signingEntries').get(0)!.message;
   const Sig = hd.key.signRecoverable(message!, options.privKey);
   const tx = helpers.sealTransaction(txSkeleton, [Sig]);
   const hash = await rpc.sendTransaction(tx, 'passthrough');
-  console.log('The transaction hash is', hash);
+  console.log('Full transaction: ', JSON.stringify(tx, null, 2));
   alert(`The transaction hash is ${hash}`);
 
   return hash;

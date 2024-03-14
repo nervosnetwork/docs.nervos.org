@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["dom"],
+    "target": "ES2020",
     "jsx": "react",
     "module": "CommonJS",
     "skipLibCheck": true,
