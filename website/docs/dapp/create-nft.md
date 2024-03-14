@@ -4,10 +4,6 @@ title: Create an NFT
 sidebar_position: 6
 ---
 
----
-sidebar_position: 3
----
-
 # Explore the Code
 
 In the [previous section](./create-spore), you created your first spore on-chain by running the [`spore-first-example`](https://github.com/sporeprotocol/spore-first-example). In this section, we'll break down the code powering the example.
@@ -256,8 +252,6 @@ You can review this transaction on CKB Explorer by its hash as follows:
 ```
 https://pudge.explorer.nervos.org/transaction/{hash}
 ```
-
-![type-script.png](../../../static/img/tutorials/create-first-spore/explore-code/transaction.png)
 
 ## Recap
 
