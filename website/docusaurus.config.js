@@ -2,6 +2,9 @@ import path from "path";
 import math from "remark-math";
 import katex from "rehype-katex";
 
+const lightCodeTheme = require('./src/prism/light');
+const darkCodeTheme = require('./src/prism/dark');
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Nervos CKB",
@@ -110,6 +113,8 @@ const config = {
   themeConfig: {
     prism: {
       additionalLanguages: ["rust"],
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
     },
     colorMode: {
       defaultMode: "light",
