@@ -9,7 +9,7 @@ sidebar_position: 4
 ```md
 Estimated time: 2 – 5 min
 
-What you’ll learn?
+What you’ll learn:
 
 - How Custom Token Works On CKB
 - Issuing Your Own Token
@@ -23,11 +23,13 @@ Different from ERC20(Ethereum) and BRC20(Bitcoin), CKB uses a unique way to buil
 
 In CKB, custom tokens are called User-Defined-Token, aka UDT. The core team of CKB has proposed a minimal standard for UDT called xUDT(extensible UDT). In this tutorial, we will use the pre-deployed smart contracts `xUDT script` to issue custom tokens.
 
-The high-level workflow to issue a custom token with xUDT goes like this: when you issue a token, you just create a special cell that presents some balance of your token, like one piece of printed cash to the dollars.
+The high-level workflow to issue a custom token with xUDT goes like this: 
 
-For this special cell, its data field contains the amount number of the token and its type script is xUDT script where the args of that script will be the issuer's lock script hash.
+When you issue a token, you create a special cell that presents some balance of your token, like a piece of printed cash to the dollars.
 
-This issuer's lock script hash works like the unique ID for the custom token. Different lock script hash means a different kind of token. it is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
+For this special cell, its data field contains the amount of the token and its type script is xUDT script where the args of that script will be the issuer's lock script hash.
+
+This issuer's lock script hash works like the unique ID for the custom token. Different lock script hash means a different kind of token. It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
 
 In reality, xUDT is more complicated and powerful with many features but the idea is the same, you can check the [full specs here](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md).
 
@@ -41,7 +43,7 @@ In reality, xUDT is more complicated and powerful with many features but the ide
 npm install -g @offckb/cli
 ```
 
-2. Use Offckb to select the xUDT template to init the project to your local environment
+2. Use Offckb to select the xUDT template to init the project to your local environment.
 
 ```bash
 offckb init <project-name>
@@ -53,7 +55,7 @@ init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
 ✨  Done in 2.52s.
 ```
 
-3. Start devnet and run the app
+3. Start devnet and run the app.
 
 - Open one terminal and start the devnet:
 
@@ -75,7 +77,7 @@ cd <project-name> && yarn && yarn start
 
 Now, you can access the app via http://localhost:1234 to issue custom tokens.
 
-## Breakdown
+## Behind the Scene
 
 ### Issuing Custom Token
 
@@ -97,14 +99,14 @@ export async function issueToken(privKey: string, amount: string) {
 }
 ```
 
-This function accepts two parameters one is a private key of the issuer and one is the amount of token. Noticed that we are trying to create an output cell whose type script is an xUDT script, and the args of this xUDT script is the issuer's lock script hash, that's why we have the following lines of code:
+This function accepts two parameters, one private key of the issuer and the amount of token. Notice that we are trying to create an output cell whose type script is an xUDT script, and the args of this xUDT script is the issuer's lock script hash, that's why we have the following lines of code:
 
 ```ts
 const { lockScript } = generateAccountFromPrivateKey(privKey);
 const xudtArgs = utils.computeScriptHash(lockScript) + "00000000";
 ```
 
-Also noticed the `00000000` here is just a placeholder, to unleash more power of the xUDT script, this placeholder can contain some specific data, but now we don't need to worry about this part.
+Also notice the `00000000` here is just a placeholder, to unleash more power of the xUDT script, this placeholder can contain some specific data, but now we don't need to worry about this part.
 
 Further down the function, you can see that the full target output cell of our custom token looks like this:
 
@@ -119,7 +121,7 @@ const targetOutput: Cell = {
 };
 ```
 
-noticed that the `data` field is the amount of the custom token.
+Notice that the `data` field is the amount of the custom token.
 
 Next, to complete our `issueToken` function, we just use the `helpers.TransactionSkeleton` to build the transaction with our desired output cells.
 
@@ -162,7 +164,7 @@ const hash = await rpc.sendTransaction(tx, 'passthrough');
 console.log('The transaction hash is', hash);
 ```
 
-### View And Check Token Info & holders
+### View And Check Token Info & Holders
 
 Since we have issued a custom token, the next step will be checking out this token and viewing its holders. To do that, we write a `queryIssuedTokenCells` in the `lib.ts` file:
 
@@ -184,9 +186,9 @@ export async function queryIssuedTokenCells(xudtArgs: HexString) {
 }
 ```
 
-Noticed that to query a custom token cell, we have to know its xUDTArgs, as we explained in the high-level ideas for xUDT scripts, this xUDTArgs works like the unique ID for the token you issued.
+Notice that to query a custom token cell, we have to know its xUDTArgs, as we explained in the high-level ideas for xUDT scripts, this xUDTArgs works like the unique ID for the token you issued.
 
-So the `queryIssuedTokenCells` will accept only one parameter which is the xudtArgs. We then build a type script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the live cells that have such type script.
+So the `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then build a type script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the live cells that have such type script.
 
 By finding out the lock scripts of these live cells, we can tell that those custom tokens now belong to the one who can unlock this lock script, therefore we know who are the token holders.
 
