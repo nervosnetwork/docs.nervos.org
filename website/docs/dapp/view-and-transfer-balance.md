@@ -9,7 +9,7 @@ sidebar_position: 2
 ```md
 Estimated time: 2 – 5 min
 
-What you’ll learn?
+What you’ll learn:
 
 - How to transfer CKB from one account to another
 - Build a basic transaction
@@ -20,7 +20,7 @@ What you’ll learn?
 
 CKB is based on UTXO-like cell model. Every cell has a capacity limit which represents the CKB balance and how much data can be stored in this cell at the same time. Cell can store any type of data.
 
-A transaction in CKB works just like Bitcoin. Each transaction is consuming some input cells and producing some new output cells. Noticed that the output cells's total capacities can not be larger than the one from the input cells. Similar with how the UTXOs is transfer and converted in Bitcoin.
+A transaction in CKB works just like Bitcoin. Each transaction is consuming some input cells and producing some new output cells. Notice that the output cells's total capacities can not be larger than the one from the input cells. Similar with how the UTXOs is transfer and converted in Bitcoin.
 
 ### Setup the devnet & run the example project
 
@@ -30,7 +30,7 @@ A transaction in CKB works just like Bitcoin. Each transaction is consuming some
 npm install -g @offckb/cli
 ```
 
-2. Use Offckb to select the transfer template to init the project to your local environment
+2. Use Offckb to select the transfer template to init the project to your local environment.
 
 ```bash
 offckb init <project-name>
@@ -42,7 +42,7 @@ init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
 ✨  Done in 2.52s.
 ```
 
-3. Start devnet and run the app
+3. Start devnet and run the app.
 
 - Open one terminal and start the devnet:
 
@@ -64,7 +64,7 @@ cd <project-name> && yarn && yarn start
 
 Now, you can access the app via http://localhost:1234 to transfer balance.
 
-### Breakdown
+### Behind the Scene
 
 Open the `lib.ts` file in your project and check out the `generateAccountFromPrivateKey` function:
 
@@ -89,7 +89,7 @@ export const generateAccountFromPrivateKey = (privKey: string): Account => {
 
 What this function does is to generate the account's public key and address via a private key. Here, we need to construct and encode a lock script to get the corresponding address of this account. A lock script ensures that only the owner can consume their live cells.
 
-Here, we use the CKB standard lock script template combining the SECP256K1 signing algorithm with the BLAKE160 hashing algorithm to build such a lock script. Noticed that different templates will yield different addresses when encoding the address, corresponding to different type of guard for the assets.
+Here, we use the CKB standard lock script template combining the SECP256K1 signing algorithm with the BLAKE160 hashing algorithm to build such a lock script. Notice that different templates will yield different addresses when encoding the address, corresponding to different type of guard for the assets.
 
 Once we get the lock script of a account, we can know how much balance the account has. The calculation is very simple, we query and find all the cells that uses the same lock script and sum all these cells's capacity, the amount is the balance.
 
@@ -108,7 +108,7 @@ export async function capacityOf(address: string): Promise<BI> {
 }
 ```
 
-In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Noticed that in this tutorial we only use Shannon unit.
+In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Notice that in this tutorial we only use Shannon unit.
 
 Next, we can start transfer balance. Check out the `transfer` function in `lib.ts`:
 
@@ -199,7 +199,7 @@ txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
   );
 ```
 
-Next, update specific witness data in the transaction. The witness is a place to put data like signature for the transaction to be verified on blockchain. The witness can be used in whatever format you want, but here we follow a [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) spec for basic transaction structure, noticed that this spec can change to apply better practice.
+Next, update specific witness data in the transaction. The witness is a place to put data like signature for the transaction to be verified on blockchain. The witness can be used in whatever format you want, but here we follow a [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) spec for basic transaction structure, notice that this spec can change to apply better practice.
 
 The `witnessArgs` contains a 3 different parts, corresponding to different data needed for the specific scripts executions:
 
