@@ -52,7 +52,7 @@ init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
 ✨  Done in 2.52s.
 ```
 
-1. Start devnet and run the app
+3. Start devnet and run the app
 
 - Open one terminal and start the devnet:
 
@@ -136,7 +136,7 @@ txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
 ...
 ```
 
-Lastly, we do the signing and witness data part, just like what we mentioned in the previous tutorial in `transfer-balance` example:
+Lastly, we do the signing and witness data part, just like what we mentioned in the previous tutorial in the `transfer-balance` example:
 
 ```ts
 // prepare witness data
