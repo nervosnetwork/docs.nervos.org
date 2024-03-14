@@ -55,11 +55,14 @@ export async function capacityOf(address: string): Promise<BI> {
 export function utf8ToHex(utf8String: string): string {
   const encoder = new TextEncoder();
   const uint8Array = encoder.encode(utf8String);
-  return "0x" + Array.prototype.map
-    .call(uint8Array, (byte: number) => {
-      return ("0" + (byte & 0xff).toString(16)).slice(-2);
-    })
-    .join("");
+  return (
+    "0x" +
+    Array.prototype.map
+      .call(uint8Array, (byte: number) => {
+        return ("0" + (byte & 0xff).toString(16)).slice(-2);
+      })
+      .join("")
+  );
 }
 
 export function hexToUtf8(hexString: string): string {
@@ -70,15 +73,13 @@ export function hexToUtf8(hexString: string): string {
   return decoder.decode(uint8Array);
 }
 
-export async function buildHelloWorldTx(
+export async function buildMessageTx(
   onChainMemo: string,
   privateKey: string
 ): Promise<string> {
-  const onChainMemoHex: HexString = utf8ToHex(onChainMemo);
-  console.log(`onChainMemoHex: ${onChainMemoHex}`);
-
   let txSkeleton = helpers.TransactionSkeleton({});
   const fromAccount = generateAccountFromPrivateKey(privateKey);
+  const onChainMemoHex: HexString = utf8ToHex(onChainMemo);
 
   const messageOutput: Cell = {
     cellOutput: {
@@ -87,12 +88,12 @@ export async function buildHelloWorldTx(
     },
     data: onChainMemoHex,
   };
+  const minimalCapacity = helpers.minimalCellCapacity(messageOutput);
+  messageOutput.cellOutput.capacity = BI.from(minimalCapacity).toHexString();
 
   // additional 0.001 ckb for tx fee
   // the tx fee could calculated by tx size
   // this is just a simple example
-  const minimalCapacity = helpers.minimalCellCapacity(messageOutput);
-  messageOutput.cellOutput.capacity = "0x" + minimalCapacity.toString(16);
   const neededCapacity = BI.from(minimalCapacity).add(100000);
   let collectedSum = BI.from(0);
   const collected: Cell[] = [];
@@ -186,16 +187,17 @@ export async function buildHelloWorldTx(
   const message = txSkeleton.get("signingEntries").get(0)!.message;
   const Sig = hd.key.signRecoverable(message!, privateKey);
   const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-  const hash = await rpc.sendTransaction(tx, "passthrough");
-  console.log("Full transaction: ", JSON.stringify(tx, null, 2));
-  alert(`The transaction hash is ${hash}`);
 
-  return hash;
+  const txHash = await rpc.sendTransaction(tx, "passthrough");
+  console.log("Full transaction: ", JSON.stringify(tx, null, 2));
+  alert(`The transaction hash is ${txHash}`);
+
+  return txHash;
 }
 
 export async function readOnChainMessage(txHash: string, index = "0x0") {
-  const {cell, status} = await rpc.getLiveCell({ txHash, index }, true);
-  if(cell == null){
+  const { cell } = await rpc.getLiveCell({ txHash, index }, true);
+  if (cell == null) {
     return alert("cell not found, please retry later");
   }
   const data = cell.data.content;

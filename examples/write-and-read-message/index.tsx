@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Script } from "@ckb-lumos/lumos";
 import {
-  buildHelloWorldTx,
+  buildMessageTx,
   capacityOf,
   generateAccountFromPrivateKey,
   readOnChainMessage,
@@ -88,7 +88,7 @@ export function App() {
       <button
         disabled={!enabled}
         onClick={() => {
-          buildHelloWorldTx(message, privKey).then(txHash => setTxHash(txHash));
+          buildMessageTx(message, privKey).then(txHash => setTxHash(txHash));
         }}
       >
         Write
