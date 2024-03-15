@@ -43,7 +43,7 @@ export async function capacityOf(address: string): Promise<BI> {
   return balance;
 }
 
-export async function createSporeNFT(privkey: string, content: Uint8Array) {
+export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
   const wallet = createDefaultLockWallet(privkey);
 
   const { txSkeleton, outputIndex } = await createSpore({
@@ -66,6 +66,7 @@ export async function createSporeNFT(privkey: string, content: Uint8Array) {
   return { txHash, outputIndex };
 }
 
+// maybe change this to spore id
 export async function showSporeContent(txHash: string, index = 0) {
   const indexHex = "0x" + index.toString(16);
   const { cell } = await rpc.getLiveCell({ txHash, index: indexHex }, true);

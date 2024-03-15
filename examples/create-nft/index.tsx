@@ -8,7 +8,7 @@ import {
   showSporeContent,
 } from "./lib";
 import { hexStringToUint8Array } from "./helper";
-import { RawSporeData, bufferToRawString } from "@spore-sdk/core";
+import { RawSporeData } from "@spore-sdk/core";
 const app = document.getElementById("root");
 ReactDOM.render(<App />, app);
 
@@ -70,7 +70,6 @@ export function App() {
         if (content && content instanceof ArrayBuffer) {
           const uint8Array = new Uint8Array(content);
           setFileContent(uint8Array);
-          console.log("content: ", uint8Array);
         }
       };
 
