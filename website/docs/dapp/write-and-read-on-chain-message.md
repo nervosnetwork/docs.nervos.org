@@ -73,7 +73,7 @@ Open the `lib.ts` file in your project, it lists all the important functions tha
 
 ### Encoding & Decoding Message
 
-Since Cell's data field can store any type of data, we need to design our encoding and decoding method for the message we want to write on-chain.
+Since Cell's data field can store any type of data, we need to design our encoding and decoding method for the message we want to read and write on-chain.
 
 ```ts
 export function utf8ToHex(utf8String: string): string {
