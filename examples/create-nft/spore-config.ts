@@ -12,6 +12,7 @@ export const SPORE_CONFIG: SporeConfig<PredefinedDevnetSporeScriptName> = {
   lumos: lumosConfig,
   ckbNodeUrl: CKB_RPC_URL,
   ckbIndexerUrl: CKB_RPC_URL,
+  defaultTags: ["latest"],
   scripts: {
     Spore: {
       versions: [
@@ -27,6 +28,10 @@ export const SPORE_CONFIG: SporeConfig<PredefinedDevnetSporeScriptName> = {
               index: lumosConfig.SCRIPTS["SPORE"].INDEX,
             },
             depType: lumosConfig.SCRIPTS["SPORE"].DEP_TYPE,
+          },
+          behaviors: {
+            lockProxy: true,
+            cobuild: true,
           },
         },
       ],

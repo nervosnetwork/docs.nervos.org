@@ -1,20 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Script } from '@ckb-lumos/lumos';
-import { capacityOf, generateAccountFromPrivateKey, createSporeNFT } from './lib';
-
-const app = document.getElementById('root');
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import { Script } from "@ckb-lumos/lumos";
+import {
+  capacityOf,
+  generateAccountFromPrivateKey,
+  createSporeNFT,
+  showSporeContent,
+} from "./lib";
+import { hexStringToUint8Array } from "./helper";
+import { RawSporeData, bufferToRawString } from "@spore-sdk/core";
+const app = document.getElementById("root");
 ReactDOM.render(<App />, app);
 
 export function App() {
   // default value: first account privkey from offckb
-  const [privKey, setPrivKey] = useState('0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6');
-  const [fromAddr, setFromAddr] = useState('');
+  const [privKey, setPrivKey] = useState(
+    "0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6"
+  );
+  const [fromAddr, setFromAddr] = useState("");
   const [fromLock, setFromLock] = useState<Script>();
-  const [balance, setBalance] = useState('0');
+  const [balance, setBalance] = useState("0");
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileContent, setFileContent] = useState<Uint8Array | null>(null);
+
+  const [txHash, setTxHash] = useState<string>();
+  const [outputIndex, setOutputIndex] = useState<number>();
+  const [rawSporeData, setRawSporeData] = useState<RawSporeData>();
+  const [imageURL, setImageURL] = useState<string>();
 
   useEffect(() => {
     const updateFromInfo = async () => {
@@ -40,7 +53,7 @@ export function App() {
       setPrivKey(priv);
     } else {
       alert(
-        `Invalid private key: must start with 0x and 32 bytes length. Ensure you're using a valid private key from the offckb accounts list.`,
+        `Invalid private key: must start with 0x and 32 bytes length. Ensure you're using a valid private key from the offckb accounts list.`
       );
     }
   };
@@ -66,14 +79,37 @@ export function App() {
     }
   };
 
+  const createSpore = async () => {
+    const { txHash, outputIndex } = await createSporeNFT(privKey, fileContent);
+    setTxHash(txHash);
+    setOutputIndex(outputIndex);
+  };
+
+  const renderSpore = async () => {
+    const res = await showSporeContent(txHash, outputIndex);
+    if (!res) return;
+    setRawSporeData(res);
+
+    // Create Blob from binary data
+    const buffer = hexStringToUint8Array(res.content.toString().slice(2));
+    const blob = new Blob([buffer], { type: res.contentType });
+    const url = URL.createObjectURL(blob);
+    setImageURL(url);
+  };
 
   const enabled = +balance > 0 && !!fileContent;
+  const enabledRead = !!txHash && outputIndex != null;
 
   return (
     <div>
       <h1>View and Transfer Balance</h1>
       <label htmlFor="private-key">Private Key: </label>&nbsp;
-      <input id="private-key" type="text" value={privKey} onChange={onInputPrivKey} />
+      <input
+        id="private-key"
+        type="text"
+        value={privKey}
+        onChange={onInputPrivKey}
+      />
       <ul>
         <li>CKB Address: {fromAddr}</li>
         <li>
@@ -87,25 +123,30 @@ export function App() {
       <br />
       <br />
       <div>
-      <h4>Upload NFT Image File</h4>
-      <input
-        type="file"
-        onChange={handleFileChange}
-      />
-      {selectedFile && (
-        <div>
-          <p>File Size: {selectedFile.size} bytes</p>
-        </div>
-      )}
-    </div>
-    <br />
-    <br />
-      <button
-        disabled={!enabled}
-        onClick={() => createSporeNFT(privKey, fileContent)}
-      >
+        <h4>Upload NFT Image File</h4>
+        <input type="file" onChange={handleFileChange} />
+        {selectedFile && (
+          <div>
+            <p>File Size: {selectedFile.size} bytes</p>
+          </div>
+        )}
+      </div>
+      <br />
+      <br />
+      <button disabled={!enabled} onClick={createSpore}>
         Create NFT
       </button>
+      <hr />
+      {txHash && <li>tx Hash: {txHash}</li>}
+      <button disabled={!enabledRead} onClick={renderSpore}>
+        Check Spore Content
+      </button>
+      {rawSporeData && (
+        <div>
+          <p>contentType: {rawSporeData.contentType}</p>
+        </div>
+      )}
+      {imageURL && <img src={imageURL} />}
     </div>
   );
 }

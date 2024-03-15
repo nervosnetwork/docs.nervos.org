@@ -1,21 +1,9 @@
-import { bytes } from "@ckb-lumos/codec";
-import {
-  helpers,
-  Address,
-  Script,
-  hd,
-  config,
-  Cell,
-  commons,
-  WitnessArgs,
-  BI,
-} from "@ckb-lumos/lumos";
-import { values, blockchain } from "@ckb-lumos/base";
+import { helpers, Address, Script, hd, config, BI } from "@ckb-lumos/lumos";
 import { setSporeConfig, createSpore } from "@spore-sdk/core";
 import { indexer, lumosConfig, rpc } from "./ckb";
 import { SPORE_CONFIG } from "./spore-config";
-import{createDefaultLockWallet} from "./helper";
-const { ScriptValue } = values;
+import { createDefaultLockWallet } from "./helper";
+import { unpackToRawSporeData } from "@spore-sdk/core";
 
 config.initializeConfig(lumosConfig);
 setSporeConfig(SPORE_CONFIG);
@@ -60,16 +48,32 @@ export async function createSporeNFT(privkey: string, content: Uint8Array) {
 
   const { txSkeleton, outputIndex } = await createSpore({
     data: {
-      contentType: 'image/jpeg',
+      contentType: "image/jpeg",
       content,
     },
     toLock: wallet.lock,
     fromInfos: [wallet.address],
-    config: SPORE_CONFIG
+    config: SPORE_CONFIG,
   });
 
-  const hash = await wallet.signAndSendTransaction(txSkeleton);
-  console.log(`Spore created at transaction: ${hash}`);
-  console.log(`Spore ID: ${txSkeleton.get('outputs').get(outputIndex)!.cellOutput.type!.args}`);
-  return hash;
+  const txHash = await wallet.signAndSendTransaction(txSkeleton);
+  console.log(`Spore created at transaction: ${txHash}`);
+  console.log(
+    `Spore ID: ${
+      txSkeleton.get("outputs").get(outputIndex)!.cellOutput.type!.args
+    }`
+  );
+  return { txHash, outputIndex };
+}
+
+export async function showSporeContent(txHash: string, index = 0) {
+  const indexHex = "0x" + index.toString(16);
+  const { cell } = await rpc.getLiveCell({ txHash, index: indexHex }, true);
+  if (cell == null) {
+    return alert("cell not found, please retry later");
+  }
+  const data = cell.data.content;
+  const msg = unpackToRawSporeData(data);
+  console.log("spore data: ", msg);
+  return msg;
 }
