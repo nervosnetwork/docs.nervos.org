@@ -1,5 +1,5 @@
 import { lumosConfig, CKB_RPC_URL } from "./ckb";
-import { SporeConfig } from "@spore-sdk/core";
+import { SporeConfig, predefinedSporeConfigs } from "@spore-sdk/core";
 
 export type PredefinedDevnetSporeScriptName =
   | "Spore"
@@ -8,7 +8,8 @@ export type PredefinedDevnetSporeScriptName =
   | "ClusterAgent"
   | "Lua";
 
-export const SPORE_CONFIG: SporeConfig<PredefinedDevnetSporeScriptName> = {
+//@ts-ignore
+export const SPORE_CONFIG: SporeConfig<PredefinedDevnetSporeScriptName> = CKB_RPC_URL === "https://testnet.ckb.dev/rpc" ? predefinedSporeConfigs.Testnet :  {
   lumos: lumosConfig,
   ckbNodeUrl: CKB_RPC_URL,
   ckbIndexerUrl: CKB_RPC_URL,
