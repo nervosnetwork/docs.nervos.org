@@ -13,6 +13,9 @@ export function App() {
   const [fromLock, setFromLock] = useState<Script>();
   const [balance, setBalance] = useState('0');
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileContent, setFileContent] = useState<Uint8Array | null>(null);
+
   useEffect(() => {
     const updateFromInfo = async () => {
       const { lockScript, address } = generateAccountFromPrivateKey(privKey);
@@ -42,7 +45,29 @@ export function App() {
     }
   };
 
-  const enabled = +balance > 0;
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0]);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Access the file content here
+        const content = reader.result;
+        if (content && content instanceof ArrayBuffer) {
+          const uint8Array = new Uint8Array(content);
+          setFileContent(uint8Array);
+          console.log("content: ", uint8Array);
+        }
+      };
+
+      // Read the file as ArrayBuffer
+      reader.readAsArrayBuffer(files[0]);
+    }
+  };
+
+
+  const enabled = +balance > 0 && !!fileContent;
 
   return (
     <div>
@@ -61,9 +86,23 @@ export function App() {
       <small>Tx fee: 100,000 (0.001 CKB)</small>
       <br />
       <br />
+      <div>
+      <h4>Upload NFT Image File</h4>
+      <input
+        type="file"
+        onChange={handleFileChange}
+      />
+      {selectedFile && (
+        <div>
+          <p>File Size: {selectedFile.size} bytes</p>
+        </div>
+      )}
+    </div>
+    <br />
+    <br />
       <button
         disabled={!enabled}
-        onClick={() => createSporeNFT(privKey, "").catch(alert)}
+        onClick={() => createSporeNFT(privKey, fileContent)}
       >
         Create NFT
       </button>

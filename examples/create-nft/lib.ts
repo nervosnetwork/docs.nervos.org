@@ -55,7 +55,7 @@ export async function capacityOf(address: string): Promise<BI> {
   return balance;
 }
 
-export async function createSporeNFT(privkey: string, content: string) {
+export async function createSporeNFT(privkey: string, content: Uint8Array) {
   const wallet = createDefaultLockWallet(privkey);
 
   const { txSkeleton, outputIndex } = await createSpore({
@@ -65,6 +65,7 @@ export async function createSporeNFT(privkey: string, content: string) {
     },
     toLock: wallet.lock,
     fromInfos: [wallet.address],
+    config: SPORE_CONFIG
   });
 
   const hash = await wallet.signAndSendTransaction(txSkeleton);
