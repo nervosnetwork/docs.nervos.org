@@ -1,10 +1,10 @@
 ---
-id: create-custom-token
-title: Create Custom Token
+id: issue-custom-token
+title: Issue Custom Token
 sidebar_position: 4
 ---
 
-# Create Custom Token
+# Issue Custom Token
 
 ```md
 Estimated time: 2 – 5 min
@@ -14,6 +14,7 @@ What you’ll learn?
 - How Custom Token Works On CKB
 - Issuing Your Own Token
 - View And Check Your Token Info & holders
+- Transfer Custom Token
 ```
 
 ## How Custom Token Works On CKB
@@ -74,7 +75,9 @@ cd <project-name> && yarn && yarn start
 
 Now, you can access the app via http://localhost:1234 to issue custom tokens.
 
-### Breakdown: Issuing Custom Token
+## Breakdown
+
+### Issuing Custom Token
 
 Open the `lib.ts` file in your project and check out the `IssueToken` function:
 
@@ -187,6 +190,115 @@ So the `queryIssuedTokenCells` will accept only one parameter which is the xudtA
 
 By finding out the lock scripts of these live cells, we can tell that those custom tokens now belong to the one who can unlock this lock script, therefore we know who are the token holders.
 
+### Transfer Custom Token
+
+The next step you want to do is probably sending your tokens to someone else. To do that, you will replace the lock script of the custom token cell with the receiver's lock script. Therefore, the receiver can unlock the custom token cell. In this way, the token is transferred from you to other people.
+
+Check out the `transferTokenToAddress` function in `lib.ts` file.
+
+```ts
+export async function transferTokenToAddress(
+  udtIssuerArgs: string,
+  senderPrivKey: string,
+  amount: string,
+  receiverAddress: string,
+){
+  ...
+}
+```
+
+The function use `udtIssuerArgs` to build the type script from the custom token. It then collects live cells which match the type script and the lock script of the `senderLockScript`, this is like saying "giving me the custom token cells that belong to the sender (sender can unlock the lock script)".
+
+With all these live cells, we can build the transaction to produce custom token cells with the required amount and the receiver's lock scripts from the input cells.
+
+```ts
+let txSkeleton = helpers.TransactionSkeleton();
+  txSkeleton = addCellDep(txSkeleton, {
+    outPoint: {
+      txHash: lockDeps.TX_HASH,
+      index: lockDeps.INDEX,
+    },
+    depType: lockDeps.DEP_TYPE,
+  });
+  txSkeleton = addCellDep(txSkeleton, {
+    outPoint: {
+      txHash: xudtDeps.TX_HASH,
+      index: xudtDeps.INDEX,
+    },
+    depType: xudtDeps.DEP_TYPE,
+  });
+
+  const targetOutput: Cell = {
+    cellOutput: {
+      capacity: '0x0',
+      lock: receiverLockScript,
+      type: typeScript,
+    },
+    data: bytes.hexify(number.Uint128LE.pack(amount)),
+  };
+
+  const capacity = helpers.minimalCellCapacity(targetOutput);
+  targetOutput.cellOutput.capacity = '0x' + capacity.toString(16);
+```
+
+You may notice that the `transferTokenToAddress` function is pretty long, while the core transfer logic is quite simple above. The problem is that we need to handle the capacity change in the `changeOutputCell` and if the change capacity is less than 61CKB, we need to add another live cell in our inputs in order to build the `changeOutputCell`. Also, we need to handle the token amount changes. If we get some token amount left, we need to return the change amount with change capacities to the sender.
+
+```ts
+let changeOutputTokenAmount = BI.from(0);
+  if (collectedAmount.gt(BI.from(amount))) {
+    changeOutputTokenAmount = collectedAmount.sub(BI.from(amount));
+  }
+
+  const changeOutput: Cell = {
+    cellOutput: {
+      capacity: '0x0',
+      lock: senderLockScript,
+      type: typeScript,
+    },
+    data: bytes.hexify(number.Uint128LE.pack(changeOutputTokenAmount.toString(10))),
+  };
+
+  const changeOutputNeededCapacity = BI.from(helpers.minimalCellCapacity(changeOutput));
+
+  const extraNeededCapacity = collectedSum.lt(neededCapacity)
+    ? neededCapacity.sub(collectedSum).add(changeOutputNeededCapacity)
+    : collectedSum.sub(neededCapacity).add(changeOutputNeededCapacity);
+
+  if (extraNeededCapacity.gt(0)) {
+    let extraCollectedSum = BI.from(0);
+    const extraCollectedCells: Cell[] = [];
+    const collector = indexer.collector({ lock: senderLockScript, type: 'empty' });
+    for await (const cell of collector.collect()) {
+      extraCollectedSum = extraCollectedSum.add(cell.cellOutput.capacity);
+      extraCollectedCells.push(cell);
+      if (extraCollectedSum >= extraNeededCapacity) break;
+    }
+
+    if (extraCollectedSum.lt(extraNeededCapacity)) {
+      throw new Error(`Not enough CKB for change, ${extraCollectedSum} < ${extraNeededCapacity}`);
+    }
+
+    txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...extraCollectedCells));
+
+    const change2Capacity = extraCollectedSum.sub(changeOutputNeededCapacity);
+    if (change2Capacity.gt(61000000000)) {
+      changeOutput.cellOutput.capacity = changeOutputNeededCapacity.toHexString();
+      const changeOutput2: Cell = {
+        cellOutput: {
+          capacity: change2Capacity.toHexString(),
+          lock: senderLockScript,
+        },
+        data: '0x',
+      };
+      txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(changeOutput2));
+    } else {
+      changeOutput.cellOutput.capacity = extraCollectedSum.toHexString();
+    }
+  }
+```
+
+All the extra logic here can be a little confusing at first time. However, the overall high-level process is quite simple and straightforward. We are also looking forward to some tools like `Lumos` to automatically cover such works in the future.
+
 ## Congratulations!
 
 By following this tutorial this far, you have mastered how custom tokens work on CKB. Here's a quick recap:
@@ -194,6 +306,7 @@ By following this tutorial this far, you have mastered how custom tokens work on
 - Create a CKB transaction containing a xUDT Cell in the outputs
 - The data of the xUDT cell contains the amount number of the token
 - Query the custom token cell by passing the lock script hash of the token issuer
+- Transfer tokens to another account by replacing the lock script.
 
 ## Additional resources
 
