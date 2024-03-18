@@ -9,7 +9,7 @@ sidebar_position: 6
 ```md
 Estimated time: 2 – 5 min
 
-What you’ll learn?
+What you’ll learn:
 
 - How Spore protocol works on CKB 
 - Create a on-chain digital object with a picture via Spore-sdk
@@ -34,7 +34,7 @@ lock:
     <user_defined>
 ```
 
-Noticed that the data field of the spore cell contains `content-type` and `content`, which allow users to turn any content form into a digital object. All the fields in a Spore Cell are immutable once created.
+Notice that the data field of the spore cell contains `content-type` and `content`, which allow users to turn any content form into a digital object. All the fields in a Spore Cell are immutable once created.
 
 In this tutorial, we will build a simple Dapp to turn a picture on your computer into a digital object on the blockchain using the spore SDK.
 
@@ -96,7 +96,9 @@ Check out the `createSporeNFT` function:
 export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}>
 ```
 
-It accepts two parameters, one is the private key that is used to sign and create the digital object and one is the content of your picture that is stored in the digital object. 
+It accepts two parameters, 
+1. the private key that is used to sign and create the digital object 
+2. the content to be stored in the digital object. 
 
 The content can be any type of data that is serialized into a `Uint8Array`. Here we are dealing with images, so the content is the result of `FileReader.readAsArrayBuffer`. You can check out the following code recipe in `handleFileChange` function from the react frontend `index.tsx`:
 
@@ -141,7 +143,7 @@ export async function createSporeNFT(privkey: string, content: Uint8Array): Prom
 }
 ```
 
-Noticed that the `createDefaultLockWallet` and `const txHash = await wallet.signAndSendTransaction(txSkeleton);` are just some methods that helps us to keep the code clean, all it does is the same as the previous tutorials involving signing and sending transactions.
+Notice that the `createDefaultLockWallet` and `const txHash = await wallet.signAndSendTransaction(txSkeleton);` are just some methods that helps us to keep the code clean, all it does is the same as the previous tutorials involving signing and sending transactions.
 
 ### Render content from the digital object
 
