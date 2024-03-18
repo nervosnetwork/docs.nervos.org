@@ -4,50 +4,63 @@ title: Cell Model
 sidebar_position: 2
 ---
 
+> Nervos CKB inherits Bitcoin’s architecture and creates the Cell model, a generalized UTXO model as state storage.
+> This approach maintains Bitcoin's simplicity and consistency.
+> In CKB, all states are stored in Cells, computation is done off-chain, and nodes handle all verification.
+
+
 ## What is a Cell?
 
-Cell is the most basic structure for representing a single piece of data in Nervos. The data contained in a Cell can take many forms, including CKBytes, tokens, code in Javascript, or even serialized data like JSON strings. As there is no restriction on the type of data included, developers have full flexibility in their choices.
+A **Cell** represents the fundamental data storage unit in Nervos. It can encompass various data types, such as CKBytes, tokens, JavaScript code, or serialized data like JSON strings, offering extensive flexibility in data storage.
 
-Each Cell contains a small program called a **Lock Script** that defines who has permission to use it. In general, the Lock Script defines one user as the owner of a Cell, it can also do more complex operations such as having multiple owners (multi-sig) or conditional uses of time-locking within particular time-frames.
 
-A Cell can opt to include a second program, called a **Type Script**, to execute a set of rules on the usage of cell. As a result, developers are empowered to create complex smart contracts across a wide range of use cases, from CryptoKitties to tokens, DeFi, and everything in between.
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20data.png" alt="Cell Data" width="800" height="450">
+
+Each cell contains a small program known as a Lock Script that determines the owner of the cell. While typically assigning ownership to a single user, Lock Script can also handle complex operations, such as having multiple owners (multi-sig) or conditional usage within specific timeframes.
+
+A cell may include a **Type Script** to execute specific rules governing its usage. This empowers developers to customize smart contracts across diverse use-cases, such as issuing Non-Fungible Tokens, limiting the supply of fungible tokens, and implementing custom functionalities to suit unique requirements.
+
+The collection of cells constitutes the **state** of CKB. A state verified and held by CKB is any data considered valuable and universally recognized.
+
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20ckb-state.png" alt="CKB State" width="800" height="450">
+
 
 ## What is the Cell Model?
 
-The cell model defines how each cell in Nervos acts and interacts with each other, and the process must be followed for updating the data contained within the cells. People familiar with Bitcoin’s UTXO model may notice the similarities, because the cell model was inspired by it.
+Inspired by Bitcoin's UTXO model, cell model defines the behavior of individual cells within Nervos, as well as the process for updating their contained data.
 
-Cells are immutable. This means no changes can be made once cells have been added to the blockchain. For any data update, the containing cell must undergo a process called **consumption**. When a Cell is **consumed**, data gets extracted and the cell gets destroyed. The data can be updated as needed while being extracted. A new cell with updated data will then be created and added to the blockchain.
+Cells are immutable. No changes can be made once the cells have been added on-chain. Updating data within a cell requires a process called **consumption**. This involves consuming the existing cell, extracting and updating the data, followed by creating a new cell with the updated data, which is then added on-chain. 
 
-Each Cell can be consumed only once. A non-consumed cell is known as a **live cell**. A consumed cell is known as a **dead cell**. Once dead, the cell can no longer be used.
+Each cell can be consumed only once. A non-consumed cell is a **live cell**. A consumed cell is a **dead cell**. Once a cell is dead, it can no longer be used.
 
-Transactions serve to explain the changes in cell data. The transaction specifies a group of live cells to consume and a group of new cells to create by using the updated data. The network validates the transaction by executing all lock scripts and type scripts of each cell contained in the transaction. This ensures that all rules defined by the developers are being followed without any fraud.
+Transactions reflect the state change of cells, where a group of live cells are consumed and new cells are created. The network validates transactions by executing all associated Lock Scripts and Type Scripts. This ensures adherence to developer-defined rules and prevents fraudulent activities.
+
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20immutable.png" alt="Immutable Cell" width="800" height="450">
 
 ## First-Class Assets
 
-Nervos’ cell model treats all digital assets, such as CKBytes, tokens, and digital collectibles, as the exclusive property and responsibility of their owner. Assets must adhere to smart contract rules when being included in transactions, but the asset inherently belongs to the user instead of the smart contract. The difference is subtle but critical. 
+In cell model, all digital assets (e.g., CKBytes, tokens, collectibles) are considered first-class, exclusively owned by their respective owners. While assets must comply with smart contracts rules during transactions, they are inherently owned by the user, not the smart contracts. This ownership structure ensures that only the owner has permission to use the assets, regardless of how the smart contract defines the token. If a contract exploit, attackers would be unable to access the asset, as it remains under the user's control, effectively mitigating the negative impact.
 
-When a user owns an asset, then only that user has permission to use the asset. Even the smart contract that defines the token has no permission to the asset. This means that even if an attacker found an exploit in the contract code, he or she would remain locked out of the asset because the asset is under user control. The impact of the attack is fully mitigated.
+This ownership structure also defines the responsibility for asset upkeep. As assets occupy space on Nervos, the owner are subject to a small recurring upkeep fee, known as **state rent,** which is elaborated in the [Tokenomics](https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/docs/concepts/economics.md) section.
 
-Having a defined ownership of the asset also clarifies who is responsible for its upkeep. As assets take up space on Nervos, there will be a small recurring upkeep fee, commonly known as **state rent**. User is the owner and is responsible as such, not the smart contract. More about state rent will be covered in the [Economics](economics) section.
+## Flexible Transaction Fee Coverage
 
-## Transaction Fees Paid by Anyone
+When transferring tokens, typically, those who initiate the transaction or execute smart contracts must cover the transaction fees. This poses a usability challenge in adoption. 
 
-In most cases, people who send funds or execute smart contracts pay the transaction fees. However, to have a different party cover the associated fees can be beneficial in some cases.
-
-A common scenario is the transfer of tokens from one party to another. The sender must own the tokens wanted to be transferred and sufficient CKBytes to cover the transaction cost. This creates an usability problem to users.
-
-The flexibility of the cell model allows any party to pay the transaction fees. This can significantly improve the user experience since owning CKBytes is no longer an absolute requirement. The receiver or a third-party can pay the fee, easing the process for users.
+Cell model provides the flexibility by allowing any party to cover the transaction fees, eliminating the need for the sender to possess CKBytes (transaction fee in Nervos). Instead, either the receiver or a third-party can cover the fee, significantly enhancing user experience.
 
 ## Scalability
 
-The cell model separates the concepts of computation and validation for smart contract execution. Computation is the process of generating new data, which is done off-chain before the transaction gets sent to the network. Validation ensures that the data conforms to the rules set by the developers, which is done on-chain by full nodes after being received by the network. Offloading computation reduces the burden on full nodes and improves the total processing capacity of the network.
+Cell model’s unique structure inherently grants scalability, reflected in the three perspectives below.
 
-Smart contract execution is parallel in the cell model. Each transaction runs independently in its own virtual machine. And, multiple virtual machines run simultaneously rather than sequentially. This gives the cell model dramatic scaling improvements on modern computers - computers that increase the number of CPU cores with each generation.
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20scalability.png" alt="Scalability Cell" width="800" height="450">
 
-Transactions are very flexible in the cell model. Multiple smart contract operations can often be batched into a single transaction, eliminating the need to construct multiple distinct transactions. This decreases the overhead involved in transactions and simplifies the process by reducing the required processing and transaction fees.
+Cell model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensures compliance with developer-set rules.
 
-The unique structure of the cell model grants an inherent scalability. The combination of these methods enables Nervos to achieve a greater level of smart contract scalability. A level that would not be possible in other ways.
+In cell model, smart contract execution is parallel. Each transaction runs independently in its own virtual machine; multiple virtual machines run simultaneously. This gives the cell model dramatic scaling improvements on modern computers with increasing CPU cores.
 
-## Further Reading
+Transactions are highly flexible and effective in cell model. Multiple smart contract operations can be batched into a single transaction, thereby minimizing transactions overhead and processing fees.
 
-* For more information, please see Nervos Network’s blog post on the [Cell Model](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571). 
+***
+
+For more details and the rationale behind the cell model, refer to [this post](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571).
