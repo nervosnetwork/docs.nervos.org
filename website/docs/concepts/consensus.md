@@ -34,6 +34,7 @@ Shorter block intervals in blockchain networks can increase transaction throughp
 
 Selfish mining practices undermine network security by allowing miners to gain a disproportionate share of rewards while contributing less hash power. NC-MAX confronts this challenge by accurately measuring the network's computing power and mitigating known selfish mining attacks. By considering both external and internal factors, NC-MAX makes selfish mining strategies unprofitable, enhancing overall network security.
 
+***
 
 For a comprehensive understanding of NC-MAX, refer to [NC-Max: Breaking the Security-Performance Tradeoff in Nakamoto Consensus](https://eprint.iacr.org/2020/1101) and [RFC Consensus Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0020-ckb-consensus-protocol/0020-ckb-consensus-protocol.md).
 
@@ -42,6 +43,8 @@ For a comprehensive understanding of NC-MAX, refer to [NC-Max: Breaking the Secu
 Bitcoin’s Nakamoto Consensus utilizes the widely-used SHA256 hash function. Any new cryptocurrency, as long as based on SHA256, can make benefits by leveraging the existing mining infrastructure. The substantial amount of infrastructure available for Bitcoin can be used maliciously, making it susceptible to potential attacks.
 
 To address this vulnerability, Nervos developed Eaglesong, a novel cryptographic hash function tailored for its ecosystem. Eaglesong offers a balance of novelty, simplicity, and security, ensuring easy implementation in both software and hardware. This innovation enhances Nervos' security and ensures complete hardware sovereignty, providing a secure alternative to SHA256.
+
+***
 
 For more information on Eaglesong, refer to [RFC Eaglesong](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0010-eaglesong/0010-eaglesong.md).
 
