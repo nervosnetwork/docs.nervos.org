@@ -58,6 +58,7 @@ Unlike Base Issuance, Secondary Issuance only targets at users occupying Nervos 
 
 CKBytes holders can earn interest by locking tokens in Nervos DAO, similar to staking. Interest accrues proportionally to Secondary Issuance, offsetting the long-term inflationary effects of the latter, thus maintaining value. Users occupying space in Nervos have their CKBytes locked, making them ineligible to be placed in Nervos DAO. Once the space-occupying cells are consumed and the CKBytes are released, they can be placed in Nervos DAO. This mechanism incentivizes the removal of unnecessary data, ensuring long-term manageability of the blockchain.
 
+***
 
 For more information, refer to the [Crypto-Economics RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md).
 
