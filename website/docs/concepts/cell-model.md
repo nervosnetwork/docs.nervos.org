@@ -14,7 +14,7 @@ sidebar_position: 2
 A **Cell** represents the fundamental data storage unit in Nervos. It can encompass various data types, such as CKBytes, tokens, JavaScript code, or serialized data like JSON strings, offering extensive flexibility in data storage.
 
 
-<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20data.png" alt="Cell Data" width="800" height="450">
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20data.png" alt="Cell Data" width="800" height="450" />
 
 Each cell contains a small program known as a Lock Script that determines the owner of the cell. While typically assigning ownership to a single user, Lock Script can also handle complex operations, such as having multiple owners (multi-sig) or conditional usage within specific timeframes.
 
@@ -22,7 +22,7 @@ A cell may include a **Type Script** to execute specific rules governing its usa
 
 The collection of cells constitutes the **state** of CKB. A state verified and held by CKB is any data considered valuable and universally recognized.
 
-<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20ckb-state.png" alt="CKB State" width="800" height="450">
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20ckb-state.png" alt="CKB State" width="800" height="450" />
 
 
 ## Cell Model
@@ -35,7 +35,7 @@ Each cell can be consumed only once. A non-consumed cell is a **live cell**. A c
 
 Transactions reflect the state change of cells, where a group of live cells are consumed and new cells are created. The network validates transactions by executing all associated Lock Scripts and Type Scripts. This ensures adherence to developer-defined rules and prevents fraudulent activities.
 
-<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20immutable.png" alt="Immutable Cell" width="800" height="450">
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20immutable.png" alt="Immutable Cell" width="800" height="450" />
 
 ## First-Class Assets
 
@@ -53,7 +53,7 @@ Cell model provides the flexibility by allowing any party to cover the transacti
 
 Cell model’s unique structure inherently grants scalability, reflected in the three perspectives below.
 
-<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20scalability.png" alt="Scalability Cell" width="800" height="450">
+<img src="https://github.com/linnnsss/docs.nervos.org/blob/concepts-v2/website/static/img/Cell%20-%20scalability.png" alt="Scalability Cell" width="800" height="450" />
 
 Cell model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensures compliance with developer-set rules.
 
