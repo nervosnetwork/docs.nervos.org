@@ -9,7 +9,7 @@ sidebar_position: 3
 ```md
 Estimated time: 2 – 5 min
 
-What you’ll learn?
+What you’ll learn:
 
 - How to store data on cell 
 - Write a text message on a cell
@@ -131,7 +131,7 @@ const minimalCapacity = helpers.minimalCellCapacity(messageOutput);
 messageOutput.cellOutput.capacity = BI.from(minimalCapacity).toHexString();
 ```
 
-Noticed that we need to make sure the data stored in the cell won't overflow the total size of the cell's capacity. That's why we construct the content of the cell and then use `helpers.minimalCellCapacity` to determine how much space we need for this cell.
+Notice that we need to make sure the data stored in the cell won't overflow the total size of the cell's capacity. That's why we construct the content of the cell and then use `helpers.minimalCellCapacity` to determine how much space we need for this cell.
 
 
 Next, we add some transaction fees and calculate the total capacities we need and start collecting the input cells:
