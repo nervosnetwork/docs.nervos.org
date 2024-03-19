@@ -22,40 +22,60 @@ const tutorialCardContents: CardProps[] = [
     },
 ];
 
-// TODO: fill out hrefs 
-// Tool Cards
 const toolCardContents: CardProps[] = [
-    {
-        title: 'CKB SDKs',
-        description: 'Necessary functions available in various programming languages',
-        href: './',
-        type: 'tool',
-        links: [
-        { label: 'JavaScript', href: './' },
-        { label: 'Ruby', href: './' },
-        { label: 'Python', href: './' },
-        ],
-    },
     {
         title: 'Lumos',
         description: 'A JavaScript/TypeScript framework to simplify the development of dApp',
-        href: './',
+        href: 'https://github.com/ckb-js/lumos',
         type: 'tool',
         links: [
-        { label: 'Github', href: './' },
-        { label: 'Docs', href: './' },
+        { label: 'Github', href: 'https://github.com/ckb-js/lumos' },
+        { label: 'Docs', href: 'https://lumos-website.vercel.app/' },
         ],
     },
     {
-        title: 'PW SDK',
-        description: 'A simple and powerful SDK for building CKB dApps',
-        href: './',
+        title: 'CKB SDKs',
+        description: 'Necessary functions available in various programming languages',
+        href: 'https://github.com/nervosnetwork/ckb-sdk-rust',
         type: 'tool',
         links: [
-        { label: 'Github', href: './' },
-        { label: 'Docs', href: './' },
+        { label: 'Rust', href: 'https://github.com/nervosnetwork/ckb-sdk-rust' },
+        { label: 'Go', href: 'https://github.com/nervosnetwork/ckb-sdk-go' },
+        { label: 'Java', href: 'https://github.com/nervosnetwork/ckb-sdk-java' },
         ],
     },
-];
+    {
+        title: 'CKB-CLI',
+        description: 'The command-line tool for direct interaction with the Nervos network',
+        href: 'https://github.com/nervosnetwork/ckb-cli',
+        type: 'tool',
+        links: [
+        { label: 'Github', href: 'https://github.com/nervosnetwork/ckb-cli' },
+        { label: 'Wiki', href: 'https://github.com/nervosnetwork/ckb-cli/wiki/Tutorials' },
+        ],
+    },
+    {
+        title: 'OffCKB',
+        description: 'CKB local development network for your first try',
+        href: 'https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae',
+        type: 'tool',
+        links: [
+        { label: 'Github', href: 'https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae' },
+        ],
+    },
+    {
+        title: 'CKB Address',
+        description: 'Convert and decode CKB addresses and generate private keys for development',
+        href: 'https://ckb.tools/address',
+        type: 'tool',
+        links: [
+        { label: 'Website', href: 'https://ckb.tools/address' },
+        { label: 'Github', href: 'https://github.com/jordanmack/ckb-tools' },
+        ],
+    },
 
-export { tutorialCardContents, toolCardContents };
+];
+const MORETOOLCARDTITLE = 'More Dev Tools →';
+const MORETOOLCARDHREF= './DApp/devtool';
+
+export { tutorialCardContents, toolCardContents, MORETOOLCARDTITLE, MORETOOLCARDHREF };

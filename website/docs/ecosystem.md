@@ -1,7 +1,7 @@
 ---
 id: ecosystem
 title: Ecosystem
-sidebar_position: 3
+sidebar_position: 5
 ---
 
 import EcoCard from '@components/EcoCard';

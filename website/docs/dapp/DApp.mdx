@@ -8,7 +8,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Card from '@components/Card';
 import CardLayout from '@components/CardLayout';
-import { tutorialCardContents, toolCardContents } from './CardsContents';
+import MoreCard from '@components/MoreCard';
+import { tutorialCardContents, toolCardContents, MORETOOLCARDTITLE, MORETOOLCARDHREF } from './CardsContents';
 
 # DApp Overview
 Welcome to the Nervos CKB developer hub—your go-to for all tools to build dApps on CKB. 
@@ -16,11 +17,13 @@ Welcome to the Nervos CKB developer hub—your go-to for all tools to build dApp
 ## Try out Examples
 ```mdx-code-block
 <Tabs>
-  <TabItem value="view-and-transfer-balance" label="View & Transfer Balance" default>
+  <TabItem value="view-and-transfer-balance" label="Transfer Balance" default>
 ```
 <div>
-  Master viewing and transferring CKB on the Nervos Network
-  <a>Full Tutorial</a>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <p>Master viewing and transferring CKB on the Nervos Network</p>
+    <a href="./DApp/view-and-transfer-balance">Full Tutorial →</a>
+  </div>
 
   <iframe
   width="100%"
@@ -39,12 +42,14 @@ Remember: NEVER share your private key publicly for production.
 
 ```mdx-code-block
   </TabItem>
-  <TabItem value="write-and-read-on-chain-message" label="Write & Read On-Chain Message">
+  <TabItem value="write-and-read-on-chain-message" label="Write Message">
 ```
 
 <div>
-  Embed a nifty message - 'Hello CKB!' - into a cell on the CKB Testnet.
-  <a>Full Tutorial</a>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <p>Embed a nifty message - 'Hello CKB!' - into a cell on the CKB Testnet.</p>
+    <a href="./DApp/write-and-read-on-chain-message">Full Tutorial →</a>
+  </div>
 
   <iframe
   width="100%"
@@ -63,12 +68,14 @@ Remember: NEVER share your private key publicly for production.
 
 ```mdx-code-block
   </TabItem>
-  <TabItem value="issue-custom-token" label="Issue Custom Token">
+  <TabItem value="issue-custom-token" label="Issue Token">
 ```
 
 <div>
-  Issue a custom token on the CKB Testnet.
-  <a>Full Tutorial</a>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <p>Issue a custom token on the CKB Testnet.</p>
+    <a href="./DApp/issue-custom-token">Full Tutorial →</a>
+  </div>
 
   <iframe
   width="100%"
@@ -87,12 +94,14 @@ Remember: NEVER share your private key publicly for production.
 
 ```mdx-code-block
   </TabItem>
-  <TabItem value="create-nft" label="Create On-chain Digital Object">
+  <TabItem value="create-nft" label="Create DOB">
 ```
 
 <div>
-  Create a on-chain digital object with Spore protocol on the CKB Testnet.
-  <a>Full Tutorial</a>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <p>Create a on-chain digital object with Spore protocol on the CKB Testnet.</p>
+    <a href="./DApp/create-nft">Full Tutorial →</a>
+  </div>
 
   <iframe
   width="100%"
@@ -114,8 +123,8 @@ Remember: NEVER share your private key publicly for production.
 </Tabs>
 ```
 
-## Smart Contracts Utilization in DApp
-Explore tutorials focused on integrating and utilizing smart contracts within your dApps. Understand the key concepts, protocols, and strategies to enhance your applications, without delving into contract creation or deployment.
+## Other DApp Tutorials
+Dive into comprehensive tutorials emphasizing practical strategies and essential protocols pivotal for advancing your dApp projects.
 <CardLayout>
   {tutorialCardContents.map(({ index, title, description, href, type }) => (
     <Card
@@ -132,7 +141,7 @@ Explore tutorials focused on integrating and utilizing smart contracts within yo
 ## Dev Tools
 Explore essential tools and resources tailored for dApp development on Nervos CKB, designed to streamline your workflow from concept to deployment.
 <CardLayout>
-  {toolCardContents.map(({ index, title, description, href, type, links }) => (
+  {toolCardContents.slice(0, 3).map(({ index, title, description, href, type, links }) => (
     <Card
       key={index}
       title={title}
@@ -142,4 +151,5 @@ Explore essential tools and resources tailored for dApp development on Nervos CK
       links={links}
     />
   ))}
+  <MoreCard title={MORETOOLCARDTITLE} href={MORETOOLCARDHREF} />
 </CardLayout>
