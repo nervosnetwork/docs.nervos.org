@@ -1,0 +1,19 @@
+
+@import '@css/customVariables.css';
+
+.colorToggle, .colorToggle:hover {
+  background: none;
+}
+.colorToggleWrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+}
+.colorToggleWrapper:hover {
+  background-color: var(--hover);
+}

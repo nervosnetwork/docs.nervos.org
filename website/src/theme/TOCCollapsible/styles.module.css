@@ -1,0 +1,25 @@
+@import '@css/customVariables.css';
+
+.tocCollapsible {
+  background-color: var(--surface-02);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.tocCollapsibleContent > ul {
+  border-left: none;
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.2rem 0;
+}
+
+.tocCollapsibleContent ul li {
+  margin: 0.4rem 0.8rem;
+}
+
+.tocCollapsibleContent a {
+  display: block;
+}
+
+.tocCollapsibleExpanded {
+  transform: none;
+}

@@ -122,23 +122,48 @@ const config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
+      hideOnScroll: true,
       logo: {
         src: "img/logo.png",
         srcDark:'img/logo-dark.png',
         alt:'Nervos CKB Docs',
         className:'navbar-logo',
+        href: '/docs/',
       },
       items: [
         {
           type: 'search',
-          position: 'right',
+          position: 'left',
           className: 'navbar-search',
         },
-      ]
+        {
+          type: 'dropdown',
+          position: 'right',
+          icon: 'question',
+          label: 'Get Help',
+          className: 'navbar-help',
+          items: [
+            {
+              label: 'Email',
+              // TODO: Add email address here
+              to: './',
+            },
+            {
+              label: 'Discord',
+              to: 'https://discord.gg/Y94ptA39',
+            },
+          ],
+        },
+      ],
     },
-    image: "img/undraw_online.svg",
     footer: {
-      style: 'dark',
+      logo: {
+        src: "img/logo.png",
+        srcDark:'img/logo-dark.png',
+        alt:'Nervos CKB Docs',
+        className:'navbar-logo',
+        href: '/docs/',
+      },
       links: [
         {
           title: "Foundation",

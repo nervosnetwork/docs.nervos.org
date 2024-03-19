@@ -1,4 +1,4 @@
-@import url('./customVariables.css');
+@import '@css/customVariables.css';
 
 :root{
   /* Override the default with our brand color */
@@ -12,8 +12,6 @@
   --ifm-font-family-base: 'Lato', sans-serif;
   --ifm-font-color-base: var(--text-secondary);
   --ifm-font-family-monospace:'Space Mono', monospace;
-
-  --ifm-container-width-xl: 1022px;
 
   /* Navbar */
   --ifm-navbar-background-color: var(--surface-02);
@@ -52,6 +50,8 @@
   --ifm-toc-border-color: var(--border-subtle);
   --ifm-toc-link-color: var(--text-tertiary);
   --ifm-link-color: var(--text-link);
+  --ifm-menu-color-background-active: var(--surface-02);
+  --ifm-hr-background-color: var(--border-subtle);
   
 }
 
@@ -59,7 +59,57 @@
 .navbar {
   align-items: center;
   border-bottom: 1px solid var(--border-subtle);
-  padding: 0 1.5rem;
+  padding: 0 var(--ifm-spacing-horizontal);
+}
+.navbar-logo {
+  height: 32px;
+  width: 89px;
+  aspect-ratio: 89 / 32;
+}
+.navbar__brand {
+  display: none;
+}
+.navbar-help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0em 1em;
+}
+.navbar-help:hover {
+  background-color: var(--hover);
+}
+
+.navbar [class^=toggleButton]:hover {
+  background: none !important;
+}
+#__docusaurus .theme-doc-sidebar-container {
+  background-color: var(--surface-02);
+}
+#__docusaurus .theme-doc-sidebar-container [class^=sidebarViewport]>a {
+  align-items: center;
+  display: flex;
+  height: var(--ifm-navbar-height);
+  padding-inline-end: 1.5em;
+  padding-inline-start: 1.5em;
+}
+.theme-doc-sidebar-container [class^=sidebar]{
+  padding-top: 0;
+}
+.theme-doc-sidebar-container [class^=sidebarLogo]{
+  display: none;
+}
+#__docusaurus [class^=docMainContainer] {
+  width: 100%;
+  max-width: 100%;
+}
+#__docusaurus [class^=docMainContainer] > .container > .row {
+  justify-content: center;
+}
+#__docusaurus [class^=docMainContainer] > .container > .row > .col:first-child {
+  max-width: 796px !important;
 }
 
 /*Search bar*/
@@ -67,14 +117,18 @@
   background-color: var(--surface-02);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  width: 280px;
+  width: 320px;
   height: 48px;
   padding: 0 1rem;
-  margin-right: 0.5rem;
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
   color: var(--text-placeholder) !important;
+}
+.DocSearch-Button:hover{
+  background: var(--hover) !important;
+  box-shadow: none !important;
+  border-color: var(--border-accent);
 }
 
 .DocSearch-Button-Placeholder {
@@ -107,7 +161,6 @@
   padding: 0;
   padding-left: 1rem;
   font-size: 0.875rem;
-  margin-top: 3rem;
 }
 
 /* Containers */
@@ -212,7 +265,7 @@ pre > code {
 
 /* Admonitions */
 .alert {
-  border: 1px solid var(--border-accent);
+  border: 1px solid var(--ifm-alert-border-color);
 }
 .alert--secondary {
   --ifm-alert-background-color: var(--alert-secondary-bg);
@@ -237,9 +290,28 @@ pre > code {
 
 /* Footer */
 .footer {
-  --ifm-footer-background-color: #202122;
-  --ifm-footer-title-color: #FFFFFF;
-  --ifm-footer-link-color: rgba(255, 255, 255, 0.9);
+  --ifm-footer-background-color: var(--surface-02);
+  --ifm-footer-title-color: var(--text-primary);
+  --ifm-footer-link-color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+}
+.footer-leftContainer {
+  display:flex;
+  flex-direction: column;
+}
+.footer-logo > a {
+  opacity: 1;
+}
+.footer__logo {
+  width: 164px !important;
+  height: 58px !important;
+  margin-bottom: 1em;
+}
+.footer-copyright {
+  font-size: 12px;
 }
 
 /* Banner link to legacy doc site */
@@ -257,49 +329,29 @@ pre > code {
 
 
 /* Responsive */
-
-@media only screen and (min-width: 1024px) {
-  .navigationSlider {
-    margin-left: 0;
+@media (max-width: 1314px) {
+  .footer {
+    flex-direction: column;
   }
-
-  .reactNavSearchWrapper input#search_input_react {
-    width: 360px;
-  }
-
-  .navPusher {
-    padding-top: 90px; /* Normal is 50, plus old site link banner */
-  }
-
-  .onPageNav > .toc-headings {
-    padding-top: 50px; /* Normal is 10, plus old site link banner */
+  .footer-leftContainer {
+    align-items: center;
+    margin-bottom: 2em;
   }
 }
-
-
-@media only screen and (max-width: 1023px) {
-  .reactNavSearchWrapper input#search_input_react:focus, .reactNavSearchWrapper input#search_input_react:active {
-    background: white;
-    color: black;
+@media (min-width: 997px) and (max-width: 1314px) {
+  .footer__links > .footer__col:first-child {
+    padding-left: 1em;
   }
 }
-
-@media only screen and (max-width: 736px) {
-  #oldSiteLink {
-    height: 60px;
+@media (max-width: 996px) {
+  .navbar-search .DocSearch-Button {
+    width: 56px;
   }
-
-  #oldSiteLink span {
-    display: block;
-    text-align: center;
+  .DocSearch-Button-Placeholder, .DocSearch-Button-Keys {
+    display: none !important;
   }
-
-  .fixedHeaderContainer {
-    margin-top: 60px;
-  }
-
-  .docMainWrapper .wrapper {
-    padding-top: 50px;
+  #__docusaurus [class^=docMainContainer] > .container > .row > .col:first-child {
+    padding: 0 1em;
   }
 }
 
