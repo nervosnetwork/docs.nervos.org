@@ -8,7 +8,7 @@ Nervos introduces CKB-VM, a virtual machine powered by the RISC-V instruction se
 
 ## RISC-V
 
-[RISC-V](https://riscv.org/) is an instruction set architecture that serves as the foundation for processor design. As the lowest level of the software stack, it directly provides raw instructions to the CPU. RISC-V standard is mature, established, and built for modern hardware development. Supported by industry leaders, RISC-V offers a modular, backward-compatible design ideal for blockchain development.
+[RISC-V](https://riscv.org/) is an instruction set architecture that serves as the foundation for processor design. As the lowest level of the software stack, it directly provides raw instructions to the CPU. RISC-V standard is mature, established, and built for modern hardware development. Underscored by widespread recognition, RISC-V offers a modular, backward-compatible design ideal for blockchain development.
 
 ## Enhanced Flexibility and Simplified Development Experience
 
