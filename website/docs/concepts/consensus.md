@@ -4,7 +4,7 @@ title: Consensus
 sidebar_position: 4
 ---
 
-Consensus in a decentralized network refers to a state of agreement among participants on the blockchain’s history and current state. The state encompasses data such as each user's CKBytes holdings and their respective digital assets.
+Consensus in Nervos refers to a state of agreement among participants on the blockchain’s history and current state. The state encompasses data such as each user's CKBytes holdings and their respective digital assets.
 
 Nervos Network, comprising thousands of computers and millions of transactions, constantly requires consensus on valid transactions and their order. Achieving consensus poses challenges due to the global distribution of nodes and the imperfect reliability of internet transmission. Nodes exchange messages to share transaction and block information, but these messages may arrive out of order, late, or not at all. Additionally, node functionality and honesty cannot be guaranteed. Given the substantial value involved, robust solutions for achieving consensus are crucial.
 
