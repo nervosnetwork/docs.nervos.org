@@ -127,6 +127,7 @@ const config = {
         srcDark:'img/logo-dark.png',
         alt:'Nervos CKB Docs',
         className:'navbar-logo',
+        href:'/docs/'
       },
       items: [
         {
@@ -134,6 +135,12 @@ const config = {
           position: 'right',
           className: 'navbar-search',
         },
+        {
+          type: 'html',
+          position: 'right',
+          value: '<a class="help-flex" href="https://discord.gg/dTZaGEs4" target="__blank"><img src="/svg/icon-discord.svg"><p class="help-text">Get Help</p></a>',
+          className: 'navbar-help'
+        }
       ]
     },
     image: "img/undraw_online.svg",

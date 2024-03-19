@@ -72,6 +72,11 @@
   padding: 0 1rem;
   margin-right: 0.5rem;
 }
+.navbar-search .DocSearch-Button:hover {
+  background-color: var(--hover) !important;
+  border: 1px solid var(--border-accent);
+  box-shadow: none !important;
+}
 
 .DocSearch-Button .DocSearch-Search-Icon {
   color: var(--text-placeholder) !important;
@@ -90,16 +95,61 @@
   padding: 0 !important;
   font-size: 0.75rem !important;
 }
+.navbar-help {
+  height: 48px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none !important;
+  padding: 0 1em 0 0.75em;
+  margin-right: 1em;
+}
+.navbar-help:hover {
+  background-color: var(--hover);
+}
+.help-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-primary);
+  text-decoration: none !important;
+}
+.help-text {
+  margin: 0 0 0 0.5em;
+}
+
+/* ColorModeToggle */
+.navbar__items--right > :last-child {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+}
+.navbar__items--right > :last-child:hover {
+  background-color: var(--hover);
+}
+.navbar__items--right > :last-child > button:hover {
+  background:none;
+}
 
 /* Sidebar Menu */
 .menu__link {
   height: 40px;
 }
-.menu__list {
-  cursor:pointer;
-}
+
 .menu__link--active {
   font-weight: 700;
+}
+
+.disabled-menu-link {
+  cursor: none;
+  pointer-events: none;
+}
+
+.disabled-menu-link > .menu__link {
+  color: var(--text-tertiary) !important;
 }
 
 /* Table of Contents */
@@ -185,14 +235,15 @@ pre > code {
   font-weight: 400;
   color: var(--text-tertiary);
 }
+
 .tabs__item {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0.5em;
   border-radius: 4px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  margin-right: 40px;
+  margin-right: 2em;
 }
+
 .tabs__item--active {
   font-weight: 700;
 }
@@ -212,7 +263,7 @@ pre > code {
 
 /* Admonitions */
 .alert {
-  border: 1px solid var(--border-accent);
+  border: 1px solid var(--ifm-alert-border-color);
 }
 .alert--secondary {
   --ifm-alert-background-color: var(--alert-secondary-bg);
