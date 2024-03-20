@@ -5,19 +5,19 @@ const tutorialCardContents: CardProps[] = [
     {
         title: 'Create Custom Token',
         description: 'Create user-defined tokens using xUDT',
-        href: './docs/dapp/create-custom-token',
+        href: './dapp/issue-custom-token',
         type: 'tutorial',
     },
     {
         title: 'Transfer Custom Token',
         description: 'Transfer user-defined tokens using xUDT',
-        href: './docs/dapp/transfer-custom-token',
+        href: './dapp/view-and-transfer-balance',
         type: 'tutorial',
     },
     {
-        title: 'Create an NFT',
+        title: 'Create an DOB',
         description: 'Create NFT using Spore Protocol',
-        href: './docs/dapp/create-dob',
+        href: './dapp/create-dob',
         type: 'tutorial',
     },
 ];
