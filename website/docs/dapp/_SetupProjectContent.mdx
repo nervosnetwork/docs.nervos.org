@@ -1,5 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
 
@@ -78,7 +79,7 @@ Server running at http://localhost:1234
 
 Now, the app is running in http://localhost:1234
 
-<img src={props.imageSrc} />
+<img src={useBaseUrl(props.imageSrc)} />
 
 ### Start the devnet
 
