@@ -3,7 +3,6 @@
 .layoutContainer {
   display: grid;
   width: 100%; 
-  grid-template-columns: repeat(2, 1fr); 
   column-gap: 1.25em;
   row-gap: 1.25em;
 }
