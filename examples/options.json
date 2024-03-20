@@ -16,7 +16,7 @@
   },
   {
     "name": "Create Digital Object With Spore scripts",
-    "value": "create-nft",
+    "value": "create-dob",
     "description": "a simple Dapp to create on-chain digital object with spore scripts"
   }
 ]

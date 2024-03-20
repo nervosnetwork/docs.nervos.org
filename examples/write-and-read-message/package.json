@@ -1,5 +1,5 @@
 {
-  "name": "write-and-read-onchain-message",
+  "name": "@offckb/write-and-read-message",
   "version": "0.1.0",
   "description": "",
   "scripts": {

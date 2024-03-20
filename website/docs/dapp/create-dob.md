@@ -1,6 +1,6 @@
 ---
-id: create-nft
-title: Create an NFT
+id: create-dob
+title: Create an DOB
 sidebar_position: 6
 ---
 
