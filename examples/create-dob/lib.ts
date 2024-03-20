@@ -43,7 +43,7 @@ export async function capacityOf(address: string): Promise<BI> {
   return balance;
 }
 
-export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
+export async function createSporeDOB(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
   const wallet = createDefaultLockWallet(privkey);
 
   const { txSkeleton, outputIndex } = await createSpore({

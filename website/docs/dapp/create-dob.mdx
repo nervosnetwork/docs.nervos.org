@@ -43,16 +43,17 @@ In this tutorial, we will build a simple Dapp to turn a picture on your computer
 
 <SetupProject templateName='create-dob' />
 
-## Breakdown
+## Behind the Scene
 
 Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
 
 ### Create a digital object
 
-Check out the `createSporeNFT` function:
+Check out the `createSporeDOB` function:
 
 ```ts
-export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}>
+export async function createSporeDOB(privkey: string, content: Uint8Array): 
+Promise<{txHash: string, outputIndex: number}>
 ```
 
 It accepts two parameters, 
@@ -78,7 +79,7 @@ reader.readAsArrayBuffer(files[0]);
 Once we have the picture content and the private key, we will build a transaction that produces a spore output cell, aka the digital object cell. We can handle all the logic with Lumos.js, but with the help of Spore-SDK, it becomes very simple to do:
 
 ```ts
-export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
+export async function createSporeDOB(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
   const wallet = createDefaultLockWallet(privkey);
 
   const { txSkeleton, outputIndex } = await createSpore({

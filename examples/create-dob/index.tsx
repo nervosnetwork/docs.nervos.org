@@ -4,7 +4,7 @@ import { Script } from "@ckb-lumos/lumos";
 import {
   capacityOf,
   generateAccountFromPrivateKey,
-  createSporeNFT,
+  createSporeDOB,
   showSporeContent,
 } from "./lib";
 import { hexStringToUint8Array } from "./helper";
@@ -79,7 +79,7 @@ export function App() {
   };
 
   const createSpore = async () => {
-    const { txHash, outputIndex } = await createSporeNFT(privKey, fileContent);
+    const { txHash, outputIndex } = await createSporeDOB(privKey, fileContent);
     setTxHash(txHash);
     setOutputIndex(outputIndex);
   };
