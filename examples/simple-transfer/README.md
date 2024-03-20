@@ -1,8 +1,6 @@
-# Write & Read On-chain Message
+# View & Transfer Balance
 
-This is a simple Dapp example to show how to write and read data on the CKB blockchain. Read the step-by-step [tutorial](https://nervos-ckb-docs-git-develop-v2-cryptape.vercel.app/docs/dapp/view-and-transfer-balance) to understand how it works.
-
-This example is originally modified from [hello, CKB](https://github.com/cryptape/ckb-tutorial) by [@Flouse](https://github.com/Flouse).
+This is a simple Dapp example to show how to view and transfer balance on the CKB blockchain. Read the step-by-step [tutorial](https://nervos-ckb-docs-git-develop-v2-cryptape.vercel.app/docs/dapp/view-and-transfer-balance) to understand how it works.
 
 ## How to run
 
@@ -12,7 +10,7 @@ By default, this example can be cloned and directly run on the [CKB Testnet](htt
 
 ```sh
 git clone https://github.com/nervosnetwork/docs.nervos.org.git
-cd docs.nervos.org.git/examples/write-and-read-message
+cd docs.nervos.org.git/examples/simple-transfer
 yarn && yarn start
 ```
 
@@ -27,11 +25,11 @@ npm install -g offckb
 offckb node 
 
 # init project
-offckb init my-write-and-read-message
-# select the templates for write-and-read-message to get initialized
+offckb init my-simple-transfer
+# select the templates for view-&-transfer-balance to get initialized
 # ...
 
 # start the app
-cd my-write-and-read-message
+cd my-simple-transfer
 yarn && yarn start
 ```
