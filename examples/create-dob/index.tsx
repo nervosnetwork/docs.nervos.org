@@ -122,7 +122,7 @@ export function App() {
       <br />
       <br />
       <div>
-        <h4>Upload NFT Image File</h4>
+        <h4>Upload DOB Image File</h4>
         <input type="file" onChange={handleFileChange} />
         {selectedFile && (
           <div>
@@ -133,7 +133,7 @@ export function App() {
       <br />
       <br />
       <button disabled={!enabled} onClick={createSpore}>
-        Create NFT
+        Create DOB
       </button>
       <hr />
       {txHash && <li>tx Hash: {txHash}</li>}
