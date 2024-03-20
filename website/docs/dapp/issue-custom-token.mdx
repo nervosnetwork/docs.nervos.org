@@ -4,6 +4,7 @@ title: Issue Custom Token
 sidebar_position: 4
 ---
 import TutorialHeader from '@components/TutorialHeader';
+import SetupProject from './SetupProject.tsx';
 
 # Issue Custom Token
 
@@ -34,47 +35,11 @@ In reality, xUDT is more complicated and powerful with many features but the ide
 
 ## How To Issue Token
 
-### Setup the devnet & run the example project
+## Setup the devnet & run the example project
 
-1. To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
+<SetupProject templateName='issue-custom-token' />
 
-```bash
-npm install -g @offckb/cli
-```
-
-2. Use Offckb to select the xUDT template to init the project to your local environment.
-
-```bash
-offckb init <project-name>
-? Select a dapp template (Use arrow keys)
-  View and Transfer Balance
-❯ Issue Token via XUDT scripts
-a simple dapp to issue your own token via XUDT scripts
-init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-
-3. Start devnet and run the app.
-
-- Open one terminal and start the devnet:
-
-```bash
-offckb node
-```
-
-- Open another terminal and check some pre-funded accounts, copy some private keys for later usage:
-
-```bash
-offckb accounts
-```
-
-- Install node dependencies and start the example app:
-
-```bash
-cd <project-name> && yarn && yarn start
-```
-
-Now, you can access the app via http://localhost:1234 to issue custom tokens.
+---
 
 ## Behind the Scene
 

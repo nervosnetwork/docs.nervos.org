@@ -112,7 +112,7 @@ const config = {
   ],
   themeConfig: {
     prism: {
-      additionalLanguages: ["rust"],
+      additionalLanguages: ["bash", "powershell", "rust"],
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
     },
