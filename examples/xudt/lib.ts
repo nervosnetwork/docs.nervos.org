@@ -14,6 +14,7 @@ export async function issueToken(privKey: string, amount: string) {
   const { lockScript } = generateAccountFromPrivateKey(privKey);
   const xudtArgs = utils.computeScriptHash(lockScript) + '00000000';
 
+  console.log(lumosConfig, xudtDeps);
   const typeScript = {
     codeHash: xudtDeps.CODE_HASH,
     hashType: xudtDeps.HASH_TYPE,
