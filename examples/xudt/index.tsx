@@ -8,10 +8,14 @@ const app = document.getElementById('root');
 ReactDOM.render(<App />, app);
 
 function IssuedToken() {
-  const [privKey, setPrivKey] = useState('');
+  // default value: first account privkey from offckb
+  const [privKey, setPrivKey] = useState('0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6');
   const [lockScript, setLockScript] = useState<Script>();
   const [balance, setBalance] = useState('0');
-  const [amount, setAmount] = useState('');
+
+  // default token amount: 42
+  const [amount, setAmount] = useState('42');
+
   const [issuedTokenCell, setIssuedTokenCell] = useState<Cell>();
   const [txHash, setTxHash] = useState<string>();
 
@@ -45,10 +49,10 @@ function IssuedToken() {
 
   return (
     <>
-      <h2>Issue Custom Token</h2>
+      <h2>Step 1: Issue Custom Token</h2>
       <p></p>
       <label htmlFor="private-key">Private Key: </label>&nbsp;
-      <input id="private-key" type="text" onChange={onInputPrivKey} />
+      <input id="private-key" type="text" value={privKey} onChange={onInputPrivKey} />
       <ul>
         <li>Balance(Total Capacity): {(+balance).toLocaleString()}</li>
         <li>
@@ -60,7 +64,7 @@ function IssuedToken() {
       <br />
       <label htmlFor="amount">Token Amount: </label>
       &nbsp;
-      <input id="amount" type="number" onChange={(e) => setAmount(e.target.value)} />
+      <input id="amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
       <br />
       <button
         disabled={!enabledIssue}
@@ -101,15 +105,24 @@ function IssuedToken() {
 function ViewIssuedToken() {
   const [xudtArgs, setXudtArgs] = useState<string>();
   const [cells, setCells] = useState<Cell[]>([]);
+
+  const onQuery = async () => {
+    const cells = await queryIssuedTokenCells(xudtArgs).catch(alert);
+    if(cells && cells.length > 0){
+      setCells(cells);
+    }else{
+      alert("not found, wait for new blocks and try again.");
+    }
+  }
   return (
     <>
-      <h2>View Custom Token</h2>
+      <h2>Step 2: View Custom Token</h2>
       <div>
         <label htmlFor="xudt-args">xDUT args: </label>&nbsp;
         <input id="xudt-args" type="text" onChange={(e) => setXudtArgs(e.target.value)} />
       </div>
 
-      <button disabled={!xudtArgs} onClick={() => queryIssuedTokenCells(xudtArgs).then(setCells).catch(alert)}>
+      <button disabled={!xudtArgs} onClick={onQuery}>
         Query Issued Token
       </button>
       {cells.length > 0 && <h3>Result: all the cells which hosted this issued token</h3>}
@@ -151,7 +164,7 @@ function TransferIssuedToken() {
 
   return (
     <>
-      <h2>Transfer Custom Token</h2>
+      <h2>Step 3: Transfer Custom Token</h2>
       <label htmlFor="sender-private-key">Private Key: </label>&nbsp;
       <input id="sender-private-key" type="text" onChange={onInputSenderPrivKey} />
       <br />

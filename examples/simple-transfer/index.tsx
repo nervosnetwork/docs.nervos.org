@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Script } from '@ckb-lumos/lumos';
 import { capacityOf, generateAccountFromPrivateKey, transfer } from './lib';
+import { indexer } from './ckb';
 
 const app = document.getElementById('root');
 ReactDOM.render(<App />, app);
@@ -18,19 +19,22 @@ export function App() {
   // default value: 62 CKB
   const [amount, setAmount] = useState('6200000000');
 
-  useEffect(() => {
-    const updateFromInfo = async () => {
-      const { lockScript, address } = generateAccountFromPrivateKey(privKey);
-      const capacity = await capacityOf(address);
-      setFromAddr(address);
-      setFromLock(lockScript);
-      setBalance(capacity.toString());
-    };
+  const [isTransferring, setIsTransferring] = useState(false);
+  const [txHash, setTxHash] = useState<string>();
 
+  useEffect(() => {
     if (privKey) {
       updateFromInfo();
     }
   }, [privKey]);
+
+  const updateFromInfo = async () => {
+    const { lockScript, address } = generateAccountFromPrivateKey(privKey);
+    const capacity = await capacityOf(address);
+    setFromAddr(address);
+    setFromLock(lockScript);
+    setBalance(capacity.toString());
+  };
 
   const onInputPrivKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Regular expression to match a valid private key with "0x" prefix
@@ -47,12 +51,28 @@ export function App() {
     }
   };
 
-  const enabled = +amount > 6100000000 && +balance > +amount && toAddr.length > 0;
+  const onTransfer = async () => {
+    setIsTransferring(true);
+    const txHash = await transfer({ amount, from: fromAddr, to: toAddr, privKey }).catch(alert);
+
+    // We can wait for this txHash to be on-chain so that we can trigger the UI/UX updates including balance.
+    if(txHash){
+      setTxHash(txHash);
+      // Note: indexer.waitForSync has a bug, we use negative number to workaround. 
+      // the negative number presents the block difference from current tip to wait
+      await indexer.waitForSync(-1);
+      await updateFromInfo();
+    }
+    
+   setIsTransferring(false);
+  }
+
+  const enabled = +amount > 6100000000 && +balance > +amount && toAddr.length > 0 && !isTransferring;
   const amountTip =
     amount.length > 0 && +amount < 6100000000 ? (
       <span>
         amount must larger than 6,100,000,000(61 CKB), see{' '}
-        <a href="https://medium.com/nervosnetwork/understanding-the-nervos-dao-and-cell-model-d68f38272c24">why</a>
+        <a href="https://nervos-ckb-docs-git-develop-v2-cryptape.vercel.app/docs/concepts/cryptowallet#requirements-for-ckb-transfers">why</a>
       </span>
     ) : null;
 
@@ -83,10 +103,11 @@ export function App() {
       <br />
       <button
         disabled={!enabled}
-        onClick={() => transfer({ amount, from: fromAddr, to: toAddr, privKey }).catch(alert)}
+        onClick={onTransfer}
       >
         Transfer
       </button>
+      {txHash && <div>tx hash: {txHash}</div>}
     </div>
   );
 }
