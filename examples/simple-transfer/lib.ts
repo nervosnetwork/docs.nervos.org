@@ -147,7 +147,6 @@ export async function transfer(options: Options): Promise<string> {
   const tx = helpers.sealTransaction(txSkeleton, [Sig]);
   const hash = await rpc.sendTransaction(tx, 'passthrough');
   console.log('Full transaction: ', JSON.stringify(tx, null, 2));
-  alert(`The transaction hash is ${hash}`);
 
   return hash;
 }

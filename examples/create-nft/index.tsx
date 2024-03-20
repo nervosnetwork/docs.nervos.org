@@ -101,7 +101,7 @@ export function App() {
 
   return (
     <div>
-      <h1>View and Transfer Balance</h1>
+      <h1>Create on-chain digital objects</h1>
       <label htmlFor="private-key">Private Key: </label>&nbsp;
       <input
         id="private-key"

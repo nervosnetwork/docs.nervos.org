@@ -64,3 +64,23 @@ export function addCellDep(txSkeleton: TransactionSkeletonType, newCellDep: Cell
 export function readTokenAmount(amount: string) {
   return number.Uint128LE.unpack(amount);
 }
+
+export function deepCopy<T>(obj: T): T {
+  if (typeof obj !== 'object' || obj === null) {
+      return obj; // If obj is not an object, return it as it is (primitive type or null)
+  }
+
+  if (Array.isArray(obj)) {
+      // If obj is an array, deep copy each element of the array
+      return obj.map(item => deepCopy(item)) as any;
+  }
+
+  // If obj is an object, deep copy each property of the object
+  const copiedObj: any = {};
+  for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          copiedObj[key] = deepCopy(obj[key]);
+      }
+  }
+  return copiedObj as T;
+}

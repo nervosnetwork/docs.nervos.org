@@ -14,6 +14,7 @@ export async function issueToken(privKey: string, amount: string) {
   const { lockScript } = generateAccountFromPrivateKey(privKey);
   const xudtArgs = utils.computeScriptHash(lockScript) + '00000000';
 
+  console.log(lumosConfig, xudtDeps);
   const typeScript = {
     codeHash: xudtDeps.CODE_HASH,
     hashType: xudtDeps.HASH_TYPE,
@@ -85,7 +86,7 @@ export async function issueToken(privKey: string, amount: string) {
 
   // signing
   txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get('signingEntries').get(0)?.message;
+  const message = txSkeleton.get('signingEntries').get(0)!.message;
   const Sig = hd.key.signRecoverable(message!, privKey);
   const tx = helpers.sealTransaction(txSkeleton, [Sig]);
   console.log(tx);
@@ -243,7 +244,7 @@ export async function transferTokenToAddress(
 
   // signing
   txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get('signingEntries').get(0)?.message;
+  const message = txSkeleton.get('signingEntries').get(0)!.message;
   const Sig = hd.key.signRecoverable(message!, senderPrivKey);
   const tx = helpers.sealTransaction(txSkeleton, [Sig]);
   console.log('tx: ', tx);
