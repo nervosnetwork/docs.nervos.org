@@ -5,6 +5,7 @@ sidebar_position: 3
 ---
 import TutorialHeader from '@components/TutorialHeader';
 import SetupProject from './SetupProject.tsx';
+import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
 # Write & Read On-Chain Message
 
@@ -219,6 +220,10 @@ By following this tutorial this far, you have mastered how storing data on cells
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
 - To read the storing data, we need to locate the live cell that we put our data in. This can be done by querying cells meets our requirement or by getting the cell directly with a known `OutPoint` through RPC.
+
+## Next step
+
+<SwitchToTestnet />
 
 ## Additional resources
 
