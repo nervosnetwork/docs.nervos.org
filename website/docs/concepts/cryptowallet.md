@@ -7,6 +7,9 @@ sidebar_position: 6
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 import Link from "@docusaurus/Link";
+import WalletCard from '@components/WalletCard';
+import CardLayout from '@components/CardLayout';
+import { walletCardContents } from './CardContents';
 
 ## CKB Address
 
@@ -32,6 +35,8 @@ We encourage the adoption of the new full address format. Below are tools for ad
 
 For more information, refer to [RFC0021: CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md).
 
+---
+
 ## Wallets
 
 Crypto wallets store private keys to access cryptos. They come in two types: hot wallets (online) and cold wallets (offline). Hot wallets, such as web-based, desktop, and mobile wallets, offer convenience but pose higher risk. Cold wallets, including paper and hardware wallets, provide enhanced security by keeping keys offline.
@@ -40,15 +45,17 @@ When it comes to storing and securing CKB assets, users have various options, in
 
 These wallets listed below offer custody and security services tailored to CKB. For more information, refer to the respective guides for each wallet.
 
-- [Neuron](https://neuron.magickbase.com/) (Window, MacOS, Linux)
-- [JoyID](https://joy.id/) (Web-based)
-- [Portal Wallet](https://ckb.pw/#/) (Web-based)
-- [imToken](https://token.im/ckb-wallet) (Andriod, IOS)
-- [CKBull](https://ckbull.app/#download) (Andriod, IOS)
-- [Opera Wallet](https://www.opera.com/download) (Andriod)
-- [SafePal](https://blog.safepal.com/ckb/) (Andriod, IOS, Hardware)
-- [Ledger](https://www.ledger.com/) (Hardware)
-- [OneKey](https://onekey.so/) (Hardware) - Coming Soon
+<CardLayout colNum={3}> 
+{walletCardContents.map(({ index, title, href, description }) => (
+    <WalletCard
+      key={index}
+      title={title}
+      href={href}
+      description={description}
+    />
+  ))}
+</CardLayout>
+---
 
 ## Requirements for CKB Transfers
 
