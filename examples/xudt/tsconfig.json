@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["dom"],
+    "lib": ["dom", "ES2015"],
     "jsx": "react",
     "module": "CommonJS",
     "skipLibCheck": true,
