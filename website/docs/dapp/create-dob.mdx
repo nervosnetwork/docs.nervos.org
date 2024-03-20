@@ -3,18 +3,19 @@ id: create-dob
 title: Create an DOB
 sidebar_position: 6
 ---
+import TutorialHeader from '@components/TutorialHeader';
+import SetupProject from './SetupProject.tsx';
+import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
 # Create an on-chain digital object via Spore protocol
 
-```md
-Estimated time: 2 – 5 min
-
-What you’ll learn:
-
-- How Spore protocol works on CKB 
-- Create a on-chain digital object with a picture via Spore-sdk
-- Render the picture in browser from your digital object
-```
+<TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
+  [
+    "How Spore protocol works on CKB",
+    "Create a on-chain digital object with a picture via Spore-sdk",
+    "Render the picture in browser from your digital object",
+  ]
+}/>
 
 ## How Spore protocol works on CKB
 
@@ -40,60 +41,19 @@ In this tutorial, we will build a simple Dapp to turn a picture on your computer
 
 ## Setup the devnet & run the example project
 
-1. To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
+<SetupProject templateName='create-dob' imageSrc='img/dapps/create-dob-dapp.jpg' />
 
-```bash
-npm install -g @offckb/cli
-```
-
-2. Use Offckb to select the `write-and-read-on-chain-message` template to init the project to your local environment
-
-```bash
-offckb init <project-name>
-? Select a dapp template (Use arrow keys)
-  View and Transfer Balance
-  Issue Token via xUDT scripts
-  Write and Read On-Chain Message
-❯ Create an on-chain digital object via Spore scripts
-a simple dapp to create an on-chain digital object with your picture via Spore protocol
-init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-
-3. Start devnet and run the app
-
-- Open one terminal and start the devnet:
-
-```bash
-offckb node
-```
-
-- Open another terminal and check some pre-funded accounts, copy some private keys for later usage:
-
-```bash
-offckb accounts
-```
-
-- Install node dependencies and start the example app:
-
-```bash
-cd <project-name> && yarn && yarn start
-```
-
-Now, you can access the app via http://localhost:1234 to create on-chain digital object.
-
----
-
-## Breakdown
+## Behind the Scene
 
 Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
 
 ### Create a digital object
 
-Check out the `createSporeNFT` function:
+Check out the `createSporeDOB` function:
 
 ```ts
-export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}>
+export async function createSporeDOB(privkey: string, content: Uint8Array): 
+Promise<{txHash: string, outputIndex: number}>
 ```
 
 It accepts two parameters, 
@@ -119,7 +79,7 @@ reader.readAsArrayBuffer(files[0]);
 Once we have the picture content and the private key, we will build a transaction that produces a spore output cell, aka the digital object cell. We can handle all the logic with Lumos.js, but with the help of Spore-SDK, it becomes very simple to do:
 
 ```ts
-export async function createSporeNFT(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
+export async function createSporeDOB(privkey: string, content: Uint8Array): Promise<{txHash: string, outputIndex: number}> {
   const wallet = createDefaultLockWallet(privkey);
 
   const { txSkeleton, outputIndex } = await createSpore({
@@ -197,6 +157,10 @@ By following this tutorial this far, you have mastered how digital-object works 
 - How Spore protocol works on CKB
 - Create an on-chain digital object with a picture via Spore-sdk
 - Render the picture in the browser from your digital object
+
+## Next step
+
+<SwitchToTestnet />
 
 ## Additional resources
 

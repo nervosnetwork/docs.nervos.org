@@ -3,18 +3,19 @@ id: write-and-read-on-chain-message
 title: Write & Read On-Chain Message
 sidebar_position: 3
 ---
+import TutorialHeader from '@components/TutorialHeader';
+import SetupProject from './SetupProject.tsx';
+import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
 # Write & Read On-Chain Message
 
-```md
-Estimated time: 2 – 5 min
-
-What you’ll learn:
-
-- How to store data on cell 
-- Write a text message on a cell
-- Read the text message from cell
-```
+<TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
+  [
+    "How to store data on cell",
+    "Write a text message on a cell",
+    "Read the text message from cell",
+  ]
+}/>
 
 ## How to store & retrieve data from a Cell
 
@@ -24,48 +25,7 @@ As you have learned from the first tutorial [view and transfer balance](/view-an
 
 ## Setup the devnet & run the example project
 
-1. To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
-
-```bash
-npm install -g @offckb/cli
-```
-
-2. Use Offckb to select the `write-and-read-on-chain-message` template to init the project to your local environment
-
-```bash
-offckb init <project-name>
-? Select a dapp template (Use arrow keys)
-  View and Transfer Balance
-  Issue Token via xUDT scripts
-❯ Write and Read On-Chain Message
-a simple dapp to write and read text message from blockchain via storing it in cells
-init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-
-3. Start devnet and run the app
-
-- Open one terminal and start the devnet:
-
-```bash
-offckb node
-```
-
-- Open another terminal and check some pre-funded accounts, copy some private keys for later usage:
-
-```bash
-offckb accounts
-```
-
-- Install node dependencies and start the example app:
-
-```bash
-cd <project-name> && yarn && yarn start
-```
-
-Now, you can access the app via http://localhost:1234 to write and read the on-chain message.
-
----
+<SetupProject templateName='write-and-read-message' imageSrc='img/dapps/write-message-dapp.jpg' />
 
 ## Breakdown
 
@@ -260,6 +220,10 @@ By following this tutorial this far, you have mastered how storing data on cells
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
 - To read the storing data, we need to locate the live cell that we put our data in. This can be done by querying cells meets our requirement or by getting the cell directly with a known `OutPoint` through RPC.
+
+## Next step
+
+<SwitchToTestnet />
 
 ## Additional resources
 

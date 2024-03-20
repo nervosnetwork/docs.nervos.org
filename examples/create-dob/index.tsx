@@ -4,7 +4,7 @@ import { Script } from "@ckb-lumos/lumos";
 import {
   capacityOf,
   generateAccountFromPrivateKey,
-  createSporeNFT,
+  createSporeDOB,
   showSporeContent,
 } from "./lib";
 import { hexStringToUint8Array } from "./helper";
@@ -79,7 +79,7 @@ export function App() {
   };
 
   const createSpore = async () => {
-    const { txHash, outputIndex } = await createSporeNFT(privKey, fileContent);
+    const { txHash, outputIndex } = await createSporeDOB(privKey, fileContent);
     setTxHash(txHash);
     setOutputIndex(outputIndex);
   };
@@ -122,7 +122,7 @@ export function App() {
       <br />
       <br />
       <div>
-        <h4>Upload NFT Image File</h4>
+        <h4>Upload DOB Image File</h4>
         <input type="file" onChange={handleFileChange} />
         {selectedFile && (
           <div>
@@ -133,7 +133,7 @@ export function App() {
       <br />
       <br />
       <button disabled={!enabled} onClick={createSpore}>
-        Create NFT
+        Create DOB
       </button>
       <hr />
       {txHash && <li>tx Hash: {txHash}</li>}

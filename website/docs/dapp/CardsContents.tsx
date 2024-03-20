@@ -16,7 +16,7 @@ const tutorialCardContents: CardProps[] = [
     },
     {
         title: 'Create an DOB',
-        description: 'Create NFT using Spore Protocol',
+        description: 'Create DOB using Spore Protocol',
         href: './dapp/create-dob',
         type: 'tutorial',
     },

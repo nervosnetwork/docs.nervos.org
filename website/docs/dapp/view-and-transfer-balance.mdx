@@ -3,68 +3,31 @@ id: view-and-transfer-balance
 title: View & Transfer Balance
 sidebar_position: 2
 ---
+import TutorialHeader from '@components/TutorialHeader';
+import SetupProject from './SetupProject.tsx';
+import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
 # View And Transfer Balance
 
-```md
-Estimated time: 2 – 5 min
+<TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
+  [
+    "How to transfer CKB from one account to another",
+    "Build a basic transaction",
+    "How to sign a transaction" 
+  ]
+}/>
 
-What you’ll learn:
-
-- How to transfer CKB from one account to another
-- Build a basic transaction
-- How to sign a transaction
-```
-
-## How to transfer CKB from one account to another
+## How transaction works 
 
 CKB is based on UTXO-like cell model. Every cell has a capacity limit which represents the CKB balance and how much data can be stored in this cell at the same time. Cell can store any type of data.
 
 A transaction in CKB works just like Bitcoin. Each transaction is consuming some input cells and producing some new output cells. Notice that the output cells's total capacities can not be larger than the one from the input cells. Similar with how the UTXOs is transfer and converted in Bitcoin.
 
-### Setup the devnet & run the example project
+## Setup the devnet & run the example project
 
-1. To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
+<SetupProject templateName='view-and-transfer-balance' imageSrc='img/dapps/transfer-dapp.jpg'/>
 
-```bash
-npm install -g @offckb/cli
-```
-
-2. Use Offckb to select the transfer template to init the project to your local environment.
-
-```bash
-offckb init <project-name>
-? Select a dapp template (Use arrow keys)
-❯ View and Transfer Balance
-  Issue Token via XUDT scripts
-a simple dapp to issue your own token via XUDT scripts
-init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-
-3. Start devnet and run the app.
-
-- Open one terminal and start the devnet:
-
-```bash
-offckb node
-```
-
-- Open another terminal and check some pre-funded accounts, copy some private keys for later usage:
-
-```bash
-offckb accounts
-```
-
-- Install node dependencies and start the example app:
-
-```bash
-cd <project-name> && yarn && yarn start
-```
-
-Now, you can access the app via http://localhost:1234 to transfer balance.
-
-### Behind the Scene
+## Behind the Scene
 
 Open the `lib.ts` file in your project and check out the `generateAccountFromPrivateKey` function:
 
@@ -283,7 +246,11 @@ By following this tutorial this far, you have mastered how transfer balance work
 - To build a CKB transaction is just to collecting some live cells and producing some new cells.
 - We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
 
+## Next step
+
+<SwitchToTestnet />
+
 ## Additional resources
 
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
-- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)./SetupProjectContent.mdx
