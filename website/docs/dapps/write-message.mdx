@@ -3,19 +3,21 @@ id: write-message
 title: Write Message
 sidebar_position: 3
 ---
-import TutorialHeader from '@components/TutorialHeader';
-import SetupProject from './SetupProject.tsx';
-import SwitchToTestnet from './_SwitchToTestnet.mdx';
+
+import TutorialHeader from "@components/TutorialHeader";
+import SetupProject from "./SetupProject.tsx";
+import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 # Write & Read On-Chain Message
 
-<TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
-  [
+<TutorialHeader
+  estimateTime="2 – 5 min"
+  whatYouWillLearn={[
     "How to store data on cell",
     "Write a text message on a cell",
     "Read the text message from cell",
-  ]
-}/>
+  ]}
+/>
 
 ## How to Store & Retrieve Data from a Cell
 
@@ -25,8 +27,10 @@ As you have learned from the first tutorial [view and transfer balance](/view-an
 
 ## Setup the Devnet & Run the Example Project
 
-<SetupProject templateName='write-and-read-message' imageSrc='img/dapps/write-message-dapp.jpg' />
-
+<SetupProject
+  templateName="write-and-read-message"
+  imageSrc="img/dapps/write-message-dapp.jpg"
+/>
 
 ## Behind the Scene
 
@@ -40,11 +44,14 @@ Since Cell's data field can store any type of data, we need to design our encodi
 export function utf8ToHex(utf8String: string): string {
   const encoder = new TextEncoder();
   const uint8Array = encoder.encode(utf8String);
-  return "0x" + Array.prototype.map
-    .call(uint8Array, (byte: number) => {
-      return ("0" + (byte & 0xff).toString(16)).slice(-2);
-    })
-    .join("");
+  return (
+    "0x" +
+    Array.prototype.map
+      .call(uint8Array, (byte: number) => {
+        return ("0" + (byte & 0xff).toString(16)).slice(-2);
+      })
+      .join("")
+  );
 }
 
 export function hexToUtf8(hexString: string): string {
@@ -94,7 +101,6 @@ messageOutput.cellOutput.capacity = BI.from(minimalCapacity).toHexString();
 
 Notice that we need to make sure the data stored in the cell won't overflow the total size of the cell's capacity. That's why we construct the content of the cell and then use `helpers.minimalCellCapacity` to determine how much space we need for this cell.
 
-
 Next, we add some transaction fees and calculate the total capacities we need and start collecting the input cells:
 
 ```ts
@@ -133,54 +139,54 @@ const changeOutput: Cell = {
 The next steps are just similar with the `view-and-transfer-balance` example. We build the `witnessArgs` for the transaction's witness and putting the signature in the witnessArgs:
 
 ```ts
-  const firstIndex = txSkeleton
-    .get("inputs")
-    .findIndex((input) =>
-      new ScriptValue(input.cellOutput.lock, { validate: false }).equals(
-        new ScriptValue(fromAccount.lockScript, { validate: false })
-      )
-    );
-  if (firstIndex !== -1) {
-    while (firstIndex >= txSkeleton.get("witnesses").size) {
-      txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-        witnesses.push("0x")
-      );
-    }
-    let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
-    const newWitnessArgs: WitnessArgs = {
-      /* 65-byte zeros in hex */
-      lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    };
-    if (witness !== "0x") {
-      const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
-      const lock = witnessArgs.lock;
-      if (
-        !!lock &&
-        !!newWitnessArgs.lock &&
-        !bytes.equal(lock, newWitnessArgs.lock)
-      ) {
-        throw new Error(
-          "Lock field in first witness is set aside for signature!"
-        );
-      }
-      const inputType = witnessArgs.inputType;
-      if (inputType) {
-        newWitnessArgs.inputType = inputType;
-      }
-      const outputType = witnessArgs.outputType;
-      if (outputType) {
-        newWitnessArgs.outputType = outputType;
-      }
-    }
-    witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
+const firstIndex = txSkeleton
+  .get("inputs")
+  .findIndex((input) =>
+    new ScriptValue(input.cellOutput.lock, { validate: false }).equals(
+      new ScriptValue(fromAccount.lockScript, { validate: false })
+    )
+  );
+if (firstIndex !== -1) {
+  while (firstIndex >= txSkeleton.get("witnesses").size) {
     txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-      witnesses.set(firstIndex, witness)
+      witnesses.push("0x")
     );
   }
-  txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get("signingEntries").get(0)!.message;
-  const Sig = hd.key.signRecoverable(message!, privateKey);
-  const tx = helpers.sealTransaction(txSkeleton, [Sig]);
+  let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
+  const newWitnessArgs: WitnessArgs = {
+    /* 65-byte zeros in hex */
+    lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  };
+  if (witness !== "0x") {
+    const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
+    const lock = witnessArgs.lock;
+    if (
+      !!lock &&
+      !!newWitnessArgs.lock &&
+      !bytes.equal(lock, newWitnessArgs.lock)
+    ) {
+      throw new Error(
+        "Lock field in first witness is set aside for signature!"
+      );
+    }
+    const inputType = witnessArgs.inputType;
+    if (inputType) {
+      newWitnessArgs.inputType = inputType;
+    }
+    const outputType = witnessArgs.outputType;
+    if (outputType) {
+      newWitnessArgs.outputType = outputType;
+    }
+  }
+  witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
+  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+    witnesses.set(firstIndex, witness)
+  );
+}
+txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
+const message = txSkeleton.get("signingEntries").get(0)!.message;
+const Sig = hd.key.signRecoverable(message!, privateKey);
+const tx = helpers.sealTransaction(txSkeleton, [Sig]);
 ```
 
 Lastly, we broadcast the transaction to the blockchain network through rpc:
@@ -230,3 +236,6 @@ By following this tutorial this far, you have mastered how storing data on cells
 
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
+  ./SetupProject.js
+  ./SetupProject.js
+  ./SetupProject.js

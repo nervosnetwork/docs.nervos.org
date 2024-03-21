@@ -5,19 +5,19 @@ const tutorialCardContents: CardProps[] = [
   {
     title: "Create Custom Token",
     description: "Create user-defined tokens using xUDT",
-    href: "./dapp/issue-custom-token",
+    href: "./dapps/issue-custom-token",
     type: "tutorial",
   },
   {
     title: "Transfer Custom Token",
     description: "Transfer user-defined tokens using xUDT",
-    href: "./dapp/view-and-transfer-balance",
+    href: "./dapps/view-and-transfer-balance",
     type: "tutorial",
   },
   {
     title: "Create an DOB",
     description: "Create DOB using Spore Protocol",
-    href: "./dapp/create-dob",
+    href: "./dapps/create-dob",
     type: "tutorial",
   },
 ];
@@ -90,7 +90,7 @@ const tutorialFrameContent = [
     tabValue: "transfer-balance",
     label: "Transfer Balance",
     tutorialTitle: "View and transfer CKB from one address to another.",
-    tutorialLink: "/docs/dapp/transfer-balance",
+    tutorialLink: "/docs/dapps/transfer-balance",
     iframeSrc:
       "https://codesandbox.io/embed/58n9pq?view=preview&module=%2Flib.ts",
   },
@@ -98,7 +98,7 @@ const tutorialFrameContent = [
     tabValue: "write-message",
     label: "Write Message",
     tutorialTitle: "Write 'Hello CKB!' to a CKB cell and then retrieve it.",
-    tutorialLink: "/docs/dapp/write-message",
+    tutorialLink: "/docs/dapps/write-message",
     iframeSrc:
       "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
@@ -106,7 +106,7 @@ const tutorialFrameContent = [
     tabValue: "issue-token",
     label: "Issue Token",
     tutorialTitle: "Issue, view and transfer a custom token.",
-    tutorialLink: "/docs/dapp/issue-token",
+    tutorialLink: "/docs/dapps/issue-token",
     iframeSrc:
       "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
@@ -114,14 +114,14 @@ const tutorialFrameContent = [
     tabValue: "create-dob",
     label: "Create an DOB",
     tutorialTitle: "Create an on-chain digital object with Spore protocol.",
-    tutorialLink: "/docs/dapp/create-dob",
+    tutorialLink: "/docs/dapps/create-dob",
     iframeSrc:
       "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
 ];
 
 const MORETOOLCARDTITLE = "More Dev Tools →";
-const MORETOOLCARDHREF = "./DApp/devtool";
+const MORETOOLCARDHREF = "./dapps/devtool";
 
 export {
   tutorialCardContents,

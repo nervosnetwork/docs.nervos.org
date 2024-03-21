@@ -3,20 +3,22 @@ id: issue-token
 title: Issue Token
 sidebar_position: 4
 ---
-import TutorialHeader from '@components/TutorialHeader';
-import SetupProject from './SetupProject.tsx';
-import SwitchToTestnet from './_SwitchToTestnet.mdx';
+
+import TutorialHeader from "@components/TutorialHeader";
+import SetupProject from "./SetupProject.tsx";
+import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 # Issue Custom Token
 
-<TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
-  [
+<TutorialHeader
+  estimateTime="2 – 5 min"
+  whatYouWillLearn={[
     "How Custom Token Works On CKB",
     "Issuing Your Own Token",
     "View And Check Your Token Info & holders",
-    "Transfer Custom Token" 
-  ]
-}/>
+    "Transfer Custom Token",
+  ]}
+/>
 
 ## How Custom Token Works on CKB
 
@@ -24,7 +26,7 @@ Different from ERC20(Ethereum) and BRC20(Bitcoin), CKB uses a unique way to buil
 
 In CKB, custom tokens are called User-Defined-Token, aka UDT. The core team of CKB has proposed a minimal standard for UDT called xUDT(extensible UDT). In this tutorial, we will use the pre-deployed smart contracts `xUDT script` to issue custom tokens.
 
-The high-level workflow to issue a custom token with xUDT goes like this: 
+The high-level workflow to issue a custom token with xUDT goes like this:
 
 When you issue a token, you create a special cell that presents some balance of your token, like a piece of printed cash to the dollars.
 
@@ -36,7 +38,10 @@ In reality, xUDT is more complicated and powerful with many features but the ide
 
 ## Setup the Devnet & Run the Example Project
 
-<SetupProject templateName='issue-custom-token' imageSrc='img/dapps/issue-token-dapp.jpg' />
+<SetupProject
+  templateName="issue-custom-token"
+  imageSrc="img/dapps/issue-token-dapp.jpg"
+/>
 
 ## Behind the Scene
 
@@ -107,22 +112,27 @@ Lastly, we do the signing and witness data part, just like what we mentioned in 
 ```ts
 // prepare witness data
 /* 65-byte zeros in hex */
-  const lockWitness =
-    '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-  const outputTypeWitness = xudtWitnessType.pack({ extension_data: [] });
-  const witnessArgs = blockchain.WitnessArgs.pack({ lock: lockWitness, outputType: outputTypeWitness });
-  const witness = bytes.hexify(witnessArgs);
-  txSkeleton = txSkeleton.update('witnesses', (witnesses) => witnesses.set(0, witness));
+const lockWitness =
+  "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+const outputTypeWitness = xudtWitnessType.pack({ extension_data: [] });
+const witnessArgs = blockchain.WitnessArgs.pack({
+  lock: lockWitness,
+  outputType: outputTypeWitness,
+});
+const witness = bytes.hexify(witnessArgs);
+txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+  witnesses.set(0, witness)
+);
 
 // signing
 txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-const message = txSkeleton.get('signingEntries').get(0)?.message;
+const message = txSkeleton.get("signingEntries").get(0)?.message;
 const Sig = hd.key.signRecoverable(message!, privKey);
 const tx = helpers.sealTransaction(txSkeleton, [Sig]);
 
 // submit transaction
-const hash = await rpc.sendTransaction(tx, 'passthrough');
-console.log('The transaction hash is', hash);
+const hash = await rpc.sendTransaction(tx, "passthrough");
+console.log("The transaction hash is", hash);
 ```
 
 ### View and Check Token Info & Holders
@@ -176,88 +186,101 @@ With all these live cells, we can build the transaction to produce custom token 
 
 ```ts
 let txSkeleton = helpers.TransactionSkeleton();
-  txSkeleton = addCellDep(txSkeleton, {
-    outPoint: {
-      txHash: lockDeps.TX_HASH,
-      index: lockDeps.INDEX,
-    },
-    depType: lockDeps.DEP_TYPE,
-  });
-  txSkeleton = addCellDep(txSkeleton, {
-    outPoint: {
-      txHash: xudtDeps.TX_HASH,
-      index: xudtDeps.INDEX,
-    },
-    depType: xudtDeps.DEP_TYPE,
-  });
+txSkeleton = addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: lockDeps.TX_HASH,
+    index: lockDeps.INDEX,
+  },
+  depType: lockDeps.DEP_TYPE,
+});
+txSkeleton = addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: xudtDeps.TX_HASH,
+    index: xudtDeps.INDEX,
+  },
+  depType: xudtDeps.DEP_TYPE,
+});
 
-  const targetOutput: Cell = {
-    cellOutput: {
-      capacity: '0x0',
-      lock: receiverLockScript,
-      type: typeScript,
-    },
-    data: bytes.hexify(number.Uint128LE.pack(amount)),
-  };
+const targetOutput: Cell = {
+  cellOutput: {
+    capacity: "0x0",
+    lock: receiverLockScript,
+    type: typeScript,
+  },
+  data: bytes.hexify(number.Uint128LE.pack(amount)),
+};
 
-  const capacity = helpers.minimalCellCapacity(targetOutput);
-  targetOutput.cellOutput.capacity = '0x' + capacity.toString(16);
+const capacity = helpers.minimalCellCapacity(targetOutput);
+targetOutput.cellOutput.capacity = "0x" + capacity.toString(16);
 ```
 
 You may notice that the `transferTokenToAddress` function is pretty long, while the core transfer logic is quite simple above. The problem is that we need to handle the capacity change in the `changeOutputCell` and if the change capacity is less than 61CKB, we need to add another live cell in our inputs in order to build the `changeOutputCell`. Also, we need to handle the token amount changes. If we get some token amount left, we need to return the change amount with change capacities to the sender.
 
 ```ts
 let changeOutputTokenAmount = BI.from(0);
-  if (collectedAmount.gt(BI.from(amount))) {
-    changeOutputTokenAmount = collectedAmount.sub(BI.from(amount));
+if (collectedAmount.gt(BI.from(amount))) {
+  changeOutputTokenAmount = collectedAmount.sub(BI.from(amount));
+}
+
+const changeOutput: Cell = {
+  cellOutput: {
+    capacity: "0x0",
+    lock: senderLockScript,
+    type: typeScript,
+  },
+  data: bytes.hexify(
+    number.Uint128LE.pack(changeOutputTokenAmount.toString(10))
+  ),
+};
+
+const changeOutputNeededCapacity = BI.from(
+  helpers.minimalCellCapacity(changeOutput)
+);
+
+const extraNeededCapacity = collectedSum.lt(neededCapacity)
+  ? neededCapacity.sub(collectedSum).add(changeOutputNeededCapacity)
+  : collectedSum.sub(neededCapacity).add(changeOutputNeededCapacity);
+
+if (extraNeededCapacity.gt(0)) {
+  let extraCollectedSum = BI.from(0);
+  const extraCollectedCells: Cell[] = [];
+  const collector = indexer.collector({
+    lock: senderLockScript,
+    type: "empty",
+  });
+  for await (const cell of collector.collect()) {
+    extraCollectedSum = extraCollectedSum.add(cell.cellOutput.capacity);
+    extraCollectedCells.push(cell);
+    if (extraCollectedSum >= extraNeededCapacity) break;
   }
 
-  const changeOutput: Cell = {
-    cellOutput: {
-      capacity: '0x0',
-      lock: senderLockScript,
-      type: typeScript,
-    },
-    data: bytes.hexify(number.Uint128LE.pack(changeOutputTokenAmount.toString(10))),
-  };
-
-  const changeOutputNeededCapacity = BI.from(helpers.minimalCellCapacity(changeOutput));
-
-  const extraNeededCapacity = collectedSum.lt(neededCapacity)
-    ? neededCapacity.sub(collectedSum).add(changeOutputNeededCapacity)
-    : collectedSum.sub(neededCapacity).add(changeOutputNeededCapacity);
-
-  if (extraNeededCapacity.gt(0)) {
-    let extraCollectedSum = BI.from(0);
-    const extraCollectedCells: Cell[] = [];
-    const collector = indexer.collector({ lock: senderLockScript, type: 'empty' });
-    for await (const cell of collector.collect()) {
-      extraCollectedSum = extraCollectedSum.add(cell.cellOutput.capacity);
-      extraCollectedCells.push(cell);
-      if (extraCollectedSum >= extraNeededCapacity) break;
-    }
-
-    if (extraCollectedSum.lt(extraNeededCapacity)) {
-      throw new Error(`Not enough CKB for change, ${extraCollectedSum} < ${extraNeededCapacity}`);
-    }
-
-    txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...extraCollectedCells));
-
-    const change2Capacity = extraCollectedSum.sub(changeOutputNeededCapacity);
-    if (change2Capacity.gt(61000000000)) {
-      changeOutput.cellOutput.capacity = changeOutputNeededCapacity.toHexString();
-      const changeOutput2: Cell = {
-        cellOutput: {
-          capacity: change2Capacity.toHexString(),
-          lock: senderLockScript,
-        },
-        data: '0x',
-      };
-      txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(changeOutput2));
-    } else {
-      changeOutput.cellOutput.capacity = extraCollectedSum.toHexString();
-    }
+  if (extraCollectedSum.lt(extraNeededCapacity)) {
+    throw new Error(
+      `Not enough CKB for change, ${extraCollectedSum} < ${extraNeededCapacity}`
+    );
   }
+
+  txSkeleton = txSkeleton.update("inputs", (inputs) =>
+    inputs.push(...extraCollectedCells)
+  );
+
+  const change2Capacity = extraCollectedSum.sub(changeOutputNeededCapacity);
+  if (change2Capacity.gt(61000000000)) {
+    changeOutput.cellOutput.capacity = changeOutputNeededCapacity.toHexString();
+    const changeOutput2: Cell = {
+      cellOutput: {
+        capacity: change2Capacity.toHexString(),
+        lock: senderLockScript,
+      },
+      data: "0x",
+    };
+    txSkeleton = txSkeleton.update("outputs", (outputs) =>
+      outputs.push(changeOutput2)
+    );
+  } else {
+    changeOutput.cellOutput.capacity = extraCollectedSum.toHexString();
+  }
+}
 ```
 
 All the extra logic here can be a little confusing at first time. However, the overall high-level process is quite simple and straightforward. We are also looking forward to some tools like `Lumos` to automatically cover such works in the future.
@@ -283,3 +306,6 @@ By following this tutorial this far, you have mastered how custom tokens work on
 - sUDT specs: [RFC-0025-simple-udt](https://github.com/nervosnetwork/rfcs/blob/xudt/rfcs/0025-simple-udt/0025-simple-udt.md)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
+  ./SetupProject.js
+  ./SetupProject.js
+  ./SetupProject.js
