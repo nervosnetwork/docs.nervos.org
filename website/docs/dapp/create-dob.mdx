@@ -7,7 +7,7 @@ import TutorialHeader from '@components/TutorialHeader';
 import SetupProject from './SetupProject.tsx';
 import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
-# Create an on-chain digital object via Spore protocol
+# Create an On-Chain Digital Object via Spore Protocol
 
 <TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
   [
@@ -17,7 +17,7 @@ import SwitchToTestnet from './_SwitchToTestnet.mdx';
   ]
 }/>
 
-## How Spore protocol works on CKB
+## How Spore Protocol Works on CKB
 
 Spore is an on-chain digital object(DOB) protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A spore cell can hold any type of assets users want to store on-chain, the following data structure is used in the spore cell:
 
@@ -39,7 +39,7 @@ Notice that the data field of the spore cell contains `content-type` and `conten
 
 In this tutorial, we will build a simple Dapp to turn a picture on your computer into a digital object on the blockchain using the spore SDK.
 
-## Setup the devnet & run the example project
+## Setup the Devnet & Run the Example Project
 
 <SetupProject templateName='create-dob' imageSrc='img/dapps/create-dob-dapp.jpg' />
 
@@ -47,7 +47,7 @@ In this tutorial, we will build a simple Dapp to turn a picture on your computer
 
 Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
 
-### Create a digital object
+### Create a Digital Object
 
 Check out the `createSporeDOB` function:
 
@@ -105,7 +105,7 @@ export async function createSporeDOB(privkey: string, content: Uint8Array): Prom
 
 Notice that the `createDefaultLockWallet` and `const txHash = await wallet.signAndSendTransaction(txSkeleton);` are just some methods that helps us to keep the code clean, all it does is the same as the previous tutorials involving signing and sending transactions.
 
-### Render content from the digital object
+### Render Content from the Digital Object
 
 Once we created our digital object on-chain, what we love to do is to render and show this digital object. To do this, we need to first find the spore cell of our digital object and extract the data from the spore cell and decode the content from the data to render it in the browser.
 
@@ -149,6 +149,7 @@ const renderSpore = async () => {
 ...
 {imageURL && <img src={imageURL} />}
 ```
+---
 
 ## Congratulations!
 
@@ -158,11 +159,11 @@ By following this tutorial this far, you have mastered how digital-object works 
 - Create an on-chain digital object with a picture via Spore-sdk
 - Render the picture in the browser from your digital object
 
-## Next step
+## Next Step
 
 <SwitchToTestnet />
 
-## Additional resources
+## Additional Resources
 
 - Spore protocol: [docs.spore.pro](https://docs.spore.pro/)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)

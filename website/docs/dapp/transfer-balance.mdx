@@ -1,13 +1,13 @@
 ---
-id: view-and-transfer-balance
-title: View & Transfer Balance
+id: transfer-balance
+title: Transfer Balance
 sidebar_position: 2
 ---
 import TutorialHeader from '@components/TutorialHeader';
 import SetupProject from './SetupProject.tsx';
 import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
-# View And Transfer Balance
+# View and Transfer Balance
 
 <TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
   [
@@ -17,13 +17,13 @@ import SwitchToTestnet from './_SwitchToTestnet.mdx';
   ]
 }/>
 
-## How transaction works 
+## How Transaction Works 
 
 CKB is based on UTXO-like cell model. Every cell has a capacity limit which represents the CKB balance and how much data can be stored in this cell at the same time. Cell can store any type of data.
 
 A transaction in CKB works just like Bitcoin. Each transaction is consuming some input cells and producing some new output cells. Notice that the output cells's total capacities can not be larger than the one from the input cells. Similar with how the UTXOs is transfer and converted in Bitcoin.
 
-## Setup the devnet & run the example project
+## Setup the Devnet & Run the Example Project
 
 <SetupProject templateName='view-and-transfer-balance' imageSrc='img/dapps/transfer-dapp.jpg'/>
 
@@ -238,6 +238,8 @@ const hash = await rpc.sendTransaction(tx, "passthrough");
 
 You can open the console on the browser to see the full transaction to confirm the process.
 
+---
+
 ## Congratulations!
 
 By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
@@ -246,11 +248,11 @@ By following this tutorial this far, you have mastered how transfer balance work
 - To build a CKB transaction is just to collecting some live cells and producing some new cells.
 - We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
 
-## Next step
+## Next Step
 
 <SwitchToTestnet />
 
-## Additional resources
+## Additional Resources
 
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)./SetupProjectContent.mdx

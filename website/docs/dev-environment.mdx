@@ -9,7 +9,7 @@ For developers, a dev environment is the most important place to start their lit
 
 Here we have provide differnt ways to setup your CKB dev environment to start your journey.
 
-## One line command
+## One Line Command
 
 You can set up your development environment by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides one-line command to start a devnet, packed with pre-funded test accounts
 and the most useful scripts like Omnilock and Spore-contract.
@@ -30,13 +30,15 @@ offckb accounts # list 20 accounts info with prefund CKB tokens
 offckb list-hashes # list built-in scripts hashes, equals `ckb list-hashes`
 ```
 
-## More flexiable way
+## More Flexible Way
 
 `offckb` serves as a black box, abstracting away the intricacies of running a local blockchain, allowing you to concentrate on developing your Dapp. Nonetheless, such a tool may sometimes prove unsatisfactory, especially if you require more flexible configuration and usage of this local chain.
 
 In that case, you can start running your local blockchain using `CKB` binary on your computer.
 
-### Run a CKB Dev Blockchain
+---
+
+## Run a CKB Dev Blockchain
 
 Nervos CKB supports a special development mode that is particularly useful for building and testing applications. This mode of operation is highly configurable, and allows the developer to speed up the block interval, adjust epochs lengths, create blocks without having to do Proof-of-Work (PoW) mining.
 
@@ -356,6 +358,8 @@ Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
 
 </details>
 
+---
+
 ## Transfer CKBytes Using `ckb-cli`
 
 Included in CKB releases is the `ckb-cli` command line tool. This is can be used to directly invoke RPC calls to perform actions such as managing accounts, transferring CKBytes, and checking account balances. We will demonstrate a CKBytes transfer below. Please refer to [ckb-cli](https://github.com/nervosnetwork/ckb-cli) for full instructions.
@@ -462,6 +466,8 @@ total: 10000.0 (CKB)
 </details>
 
 The transfer is successful!
+
+---
 
 ## Add the Genesis Issued Cells
 

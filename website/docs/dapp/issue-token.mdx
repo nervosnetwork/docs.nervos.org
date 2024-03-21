@@ -1,6 +1,6 @@
 ---
-id: issue-custom-token
-title: Issue Custom Token
+id: issue-token
+title: Issue Token
 sidebar_position: 4
 ---
 import TutorialHeader from '@components/TutorialHeader';
@@ -18,7 +18,7 @@ import SwitchToTestnet from './_SwitchToTestnet.mdx';
   ]
 }/>
 
-## How Custom Token Works On CKB
+## How Custom Token Works on CKB
 
 Different from ERC20(Ethereum) and BRC20(Bitcoin), CKB uses a unique way to build custom tokens based on the UTXO-like Cell model.
 
@@ -34,11 +34,9 @@ This issuer's lock script hash works like the unique ID for the custom token. Di
 
 In reality, xUDT is more complicated and powerful with many features but the idea is the same, you can check the [full specs here](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md).
 
-## Setup the devnet & run the example project
+## Setup the Devnet & Run the Example Project
 
 <SetupProject templateName='issue-custom-token' imageSrc='img/dapps/issue-token-dapp.jpg' />
-
----
 
 ## Behind the Scene
 
@@ -127,7 +125,7 @@ const hash = await rpc.sendTransaction(tx, 'passthrough');
 console.log('The transaction hash is', hash);
 ```
 
-### View And Check Token Info & Holders
+### View and Check Token Info & Holders
 
 Since we have issued a custom token, the next step will be checking out this token and viewing its holders. To do that, we write a `queryIssuedTokenCells` in the `lib.ts` file:
 
@@ -264,6 +262,8 @@ let changeOutputTokenAmount = BI.from(0);
 
 All the extra logic here can be a little confusing at first time. However, the overall high-level process is quite simple and straightforward. We are also looking forward to some tools like `Lumos` to automatically cover such works in the future.
 
+---
+
 ## Congratulations!
 
 By following this tutorial this far, you have mastered how custom tokens work on CKB. Here's a quick recap:
@@ -273,11 +273,11 @@ By following this tutorial this far, you have mastered how custom tokens work on
 - Query the custom token cell by passing the lock script hash of the token issuer
 - Transfer tokens to another account by replacing the lock script.
 
-## Next step
+## Next Step
 
 <SwitchToTestnet />
 
-## Additional resources
+## Additional Resources
 
 - xUDT specs: [RFC-0052-extensible-udt](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md)
 - sUDT specs: [RFC-0025-simple-udt](https://github.com/nervosnetwork/rfcs/blob/xudt/rfcs/0025-simple-udt/0025-simple-udt.md)
