@@ -54,13 +54,14 @@
   --ifm-toc-border-color: var(--border-subtle);
   --ifm-toc-link-color: var(--text-tertiary);
   --ifm-link-color: var(--text-link);
-  
+
+  /* Table */
+  --ifm-table-border-color: var(--border-subtle);
 }
 
 /* Navbar */
 .navbar {
   align-items: center;
-  border-bottom: 1px solid var(--border-subtle);
   padding: 0 1.5rem;
 }
 
@@ -158,6 +159,15 @@
   background-color: transparent;
 }
 
+/* Footer */
+.footer > .container {
+  padding-top: 2em !important;
+  padding-bottom: 2em !important;
+}
+.footer__copyright {
+  font-size: 0.875em;
+}
+
 /* Table of Contents */
 .table-of-contents {
   padding: 0;
@@ -206,31 +216,37 @@ h4 {
   font-weight: 700;
   line-height: 1.4;
 }
+
 p, blockquote, ul, ol {
   font-weight: 400;
   line-height: 1.7;
   font-size: 1rem;
   margin: 1rem 0 1rem;
 }
-h1 {
-  font-size: 3rem;
+
+.markdown > h1, h1 {
+  font-size: 2.5rem;
   margin: 3rem 0 2rem;
 }
-h2 {
+.markdown > h2, h2 {
   font-size: 1.75rem;
   margin: 3.5rem 0 1.5rem;
 }
-h3 {
+
+.markdown > h3, h3 {
   font-size: 1.5rem;
   margin: 2rem 0 1.5rem;
 }
-h4 {
+
+.markdown > h4, h4 {
   font-size: 1.25rem;
   margin-bottom: 1rem; 
 }
+
 pre > code {
   box-shadow: none;
   border: 1px solid var(--border-subtle);
+  border-radius: 8px;
   line-height: 1.7 !important;
 }
 .markdown video {
@@ -292,6 +308,12 @@ pre > code {
 .alert--danger {
   --ifm-alert-background-color: var(--alert-danger-bg);
   --ifm-alert-border-color: var(--alert-danger);
+}
+
+/*Details*/
+details {
+  --ifm-alert-border-color: var(--alert-success) !important;
+  --ifm-alert-background-color: var(--alert-success-bg) !important;
 }
 
 /* Footer */

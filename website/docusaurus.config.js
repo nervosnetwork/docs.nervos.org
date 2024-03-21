@@ -84,7 +84,7 @@ const config = {
           remarkPlugins: [math],
           rehypePlugins: [katex],
           editUrl:
-            "https://github.com/nervosnetwork/docs-new/tree/develop/website",
+            "https://github.com/nervosnetwork/docs-new/tree/develop-v2/website",
         },
         blog: {},
         theme: {
@@ -172,7 +172,7 @@ const config = {
           items: [
             {
               label: "Discord",
-              to: "https://discord.gg/AqGTUE9",
+              to: "https://discord.gg/dTZaGEs4",
             },
 
             {

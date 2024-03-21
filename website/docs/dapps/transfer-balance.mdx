@@ -1,31 +1,36 @@
 ---
-id: view-and-transfer-balance
-title: View & Transfer Balance
+id: transfer-balance
+title: Transfer Balance
 sidebar_position: 2
 ---
-import TutorialHeader from '@components/TutorialHeader';
-import SetupProject from './SetupProject.tsx';
-import SwitchToTestnet from './_SwitchToTestnet.mdx';
 
-# View And Transfer Balance
+import TutorialHeader from "@components/TutorialHeader";
+import SetupProject from "./SetupProject.tsx";
+import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
-<TutorialHeader estimateTime="2 – 5 min" whatYouWillLearn={
-  [
+# View and Transfer Balance
+
+<TutorialHeader
+  estimateTime="2 – 5 min"
+  whatYouWillLearn={[
     "How to transfer CKB from one account to another",
     "Build a basic transaction",
-    "How to sign a transaction" 
-  ]
-}/>
+    "How to sign a transaction",
+  ]}
+/>
 
-## How transaction works 
+## How Transaction Works
 
 CKB is based on UTXO-like cell model. Every cell has a capacity limit which represents the CKB balance and how much data can be stored in this cell at the same time. Cell can store any type of data.
 
 A transaction in CKB works just like Bitcoin. Each transaction is consuming some input cells and producing some new output cells. Notice that the output cells's total capacities can not be larger than the one from the input cells. Similar with how the UTXOs is transfer and converted in Bitcoin.
 
-## Setup the devnet & run the example project
+## Setup the Devnet & Run the Example Project
 
-<SetupProject templateName='view-and-transfer-balance' imageSrc='img/dapps/transfer-dapp.jpg'/>
+<SetupProject
+  templateName="view-and-transfer-balance"
+  imageSrc="img/dapps/transfer-dapp.jpg"
+/>
 
 ## Behind the Scene
 
@@ -35,7 +40,7 @@ Open the `lib.ts` file in your project and check out the `generateAccountFromPri
 export const generateAccountFromPrivateKey = (privKey: string): Account => {
   const pubKey = hd.key.privateToPublic(privKey);
   const args = hd.key.publicKeyToBlake160(pubKey);
-  const template = lumosConfig.SCRIPTS['SECP256K1_BLAKE160']!;
+  const template = lumosConfig.SCRIPTS["SECP256K1_BLAKE160"]!;
   const lockScript = {
     codeHash: template.CODE_HASH,
     hashType: template.HASH_TYPE,
@@ -84,7 +89,7 @@ interface Options {
   privKey: string;
 }
 
-export async function transfer(options: Options): Promise<string>
+export async function transfer(options: Options): Promise<string>;
 ```
 
 The `transfer` function accepts a `Option` parameter which includes necessary info about the transfer such as fromAddress/toAddress/amount and the private key to sign the transfer transaction.
@@ -107,16 +112,16 @@ Then we retrieve the sender account's assets from blockchain RPC with the help o
 
 ```ts
 const fromScript = helpers.parseAddress(options.from, {
-    config: lumosConfig,
-  });
+  config: lumosConfig,
+});
 
 let collectedSum = BI.from(0);
 const collected: Cell[] = [];
 const collector = indexer.collector({ lock: fromScript, type: "empty" });
 for await (const cell of collector.collect()) {
-    collectedSum = collectedSum.add(cell.cellOutput.capacity);
-    collected.push(cell);
-    if (collectedSum >= neededCapacity) break;
+  collectedSum = collectedSum.add(cell.cellOutput.capacity);
+  collected.push(cell);
+  if (collectedSum >= neededCapacity) break;
 }
 
 if (collectedSum.lt(neededCapacity)) {
@@ -130,36 +135,38 @@ Now lets create the transaction's output cells. `transferOutput` is generated ba
 const toScript = helpers.parseAddress(options.to, { config: lumosConfig });
 
 const transferOutput: Cell = {
-    cellOutput: {
-        capacity: BI.from(options.amount).toHexString(),
-        lock: toScript,
-    },
-    data: "0x",
+  cellOutput: {
+    capacity: BI.from(options.amount).toHexString(),
+    lock: toScript,
+  },
+  data: "0x",
 };
 
 const changeOutput: Cell = {
-    cellOutput: {
-        capacity: collectedSum.sub(neededCapacity).toHexString(),
-        lock: fromScript,
-    },
-    data: "0x",
+  cellOutput: {
+    capacity: collectedSum.sub(neededCapacity).toHexString(),
+    lock: fromScript,
+  },
+  data: "0x",
 };
 ```
 
-Then, we need to add Inputs and Outputs to the created `txSkeleton`. Also added are `Cell Deps`, which contain an `OutPoint` pointing to some specific lived cells, these  cells are related to the transaction and can be used like dependencies to place code that will be loaded and executed by the `CKB-VM` or to place data that can be used for on-chain script execution. [Detailed explanation](https://something)
+Then, we need to add Inputs and Outputs to the created `txSkeleton`. Also added are `Cell Deps`, which contain an `OutPoint` pointing to some specific lived cells, these cells are related to the transaction and can be used like dependencies to place code that will be loaded and executed by the `CKB-VM` or to place data that can be used for on-chain script execution. [Detailed explanation](https://something)
 
 ```ts
-txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
-  txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(transferOutput, changeOutput));
-  txSkeleton = txSkeleton.update('cellDeps', (cellDeps) =>
-    cellDeps.push({
-      outPoint: {
-        txHash: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.TX_HASH,
-        index: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.INDEX,
-      },
-      depType: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.DEP_TYPE,
-    }),
-  );
+txSkeleton = txSkeleton.update("inputs", (inputs) => inputs.push(...collected));
+txSkeleton = txSkeleton.update("outputs", (outputs) =>
+  outputs.push(transferOutput, changeOutput)
+);
+txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
+  cellDeps.push({
+    outPoint: {
+      txHash: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.TX_HASH,
+      index: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.INDEX,
+    },
+    depType: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.DEP_TYPE,
+  })
+);
 ```
 
 Next, update specific witness data in the transaction. The witness is a place to put data like signature for the transaction to be verified on blockchain. The witness can be used in whatever format you want, but here we follow a [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) spec for basic transaction structure, notice that this spec can change to apply better practice.
@@ -178,36 +185,49 @@ We update the witness part according to the transaction structure.
 
 ```ts
 const firstIndex = txSkeleton
-.get("inputs")
-.findIndex((input) =>
-    bytes.equal(blockchain.Script.pack(input.cellOutput.lock), blockchain.Script.pack(fromScript))
-);
+  .get("inputs")
+  .findIndex((input) =>
+    bytes.equal(
+      blockchain.Script.pack(input.cellOutput.lock),
+      blockchain.Script.pack(fromScript)
+    )
+  );
 if (firstIndex !== -1) {
-    while (firstIndex >= txSkeleton.get("witnesses").size) {
-        txSkeleton = txSkeleton.update("witnesses", (witnesses) => witnesses.push("0x"));
+  while (firstIndex >= txSkeleton.get("witnesses").size) {
+    txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+      witnesses.push("0x")
+    );
+  }
+  let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
+  const newWitnessArgs: WitnessArgs = {
+    /* 65-byte zeros in hex */
+    lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  };
+  if (witness !== "0x") {
+    const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
+    const lock = witnessArgs.lock;
+    if (
+      !!lock &&
+      !!newWitnessArgs.lock &&
+      !bytes.equal(lock, newWitnessArgs.lock)
+    ) {
+      throw new Error(
+        "Lock field in first witness is set aside for signature!"
+      );
     }
-    let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
-    const newWitnessArgs: WitnessArgs = {
-        /* 65-byte zeros in hex */
-        lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    };
-    if (witness !== "0x") {
-        const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
-        const lock = witnessArgs.lock;
-        if (!!lock && !!newWitnessArgs.lock && !bytes.equal(lock, newWitnessArgs.lock)) {
-        throw new Error("Lock field in first witness is set aside for signature!");
-        }
-        const inputType = witnessArgs.inputType;
-        if (!!inputType) {
-        newWitnessArgs.inputType = inputType;
-        }
-        const outputType = witnessArgs.outputType;
-        if (!!outputType) {
-        newWitnessArgs.outputType = outputType;
-        }
+    const inputType = witnessArgs.inputType;
+    if (!!inputType) {
+      newWitnessArgs.inputType = inputType;
     }
-    witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-    txSkeleton = txSkeleton.update("witnesses", (witnesses) => witnesses.set(firstIndex, witness));
+    const outputType = witnessArgs.outputType;
+    if (!!outputType) {
+      newWitnessArgs.outputType = outputType;
+    }
+  }
+  witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
+  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+    witnesses.set(firstIndex, witness)
+  );
 }
 ```
 
@@ -221,7 +241,6 @@ Next, we need to sign the transaction. But before that we will create a signing 
 txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
 const message = txSkeleton.get("signingEntries").get(0)?.message;
 const Sig = hd.key.signRecoverable(message!, options.privKey);
-
 ```
 
 Now let's seal our transaction with the `txSkeleton` and the just-generated signature
@@ -238,6 +257,8 @@ const hash = await rpc.sendTransaction(tx, "passthrough");
 
 You can open the console on the browser to see the full transaction to confirm the process.
 
+---
+
 ## Congratulations!
 
 By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
@@ -246,11 +267,14 @@ By following this tutorial this far, you have mastered how transfer balance work
 - To build a CKB transaction is just to collecting some live cells and producing some new cells.
 - We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
 
-## Next step
+## Next Step
 
 <SwitchToTestnet />
 
-## Additional resources
+## Additional Resources
 
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)./SetupProjectContent.mdx
+  ./SetupProject.js
+  ./SetupProject.js
+  ./SetupProject.js
