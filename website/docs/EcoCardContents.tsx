@@ -9,8 +9,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: '.bit',
         tags: ['DID', 'L1'],
         links: [
-        { label: 'Website', href: 'https://did.id/' },
-        { label: 'Github', href: 'https://github.com/dotbitHQ' },
+        { label: 'website', href: 'https://did.id/' },
+        { label: 'github', href: 'https://github.com/dotbitHQ' },
         { label: 'Doc', href: 'https://www.notion.so/bit-Previously-DAS-5cea5b425b204679b8ef2855ed94b04d'},
         ],
     },
@@ -21,8 +21,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'joyid',
         tags: ['L1', 'Wallet'],
         links: [
-        { label: 'Website', href: 'https://joy.id/' },
-        { label: 'Github', href: 'https://github.com/nervina-labs?q=joyid' },
+        { label: 'website', href: 'https://joy.id/' },
+        { label: 'github', href: 'https://github.com/nervina-labs?q=joyid' },
         ],
     },
     {
@@ -32,7 +32,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'omiga',
         tags: ['L1', 'Inscription'],
         links: [
-        { label: 'Website', href: 'https://omiga.io/' },
+        { label: 'website', href: 'https://omiga.io/' },
         { label: 'Doc', href: 'https://docs.omiga.io/' },
         ],
     },
@@ -43,7 +43,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'spore',
         tags: ['L1', 'DOB/NFT'],
         links: [
-        { label: 'Website', href: 'https://spore.pro/' },
+        { label: 'website', href: 'https://spore.pro/' },
         { label: 'Doc', href: 'https://docs.spore.pro/' },
         ],
     },
@@ -54,8 +54,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'nervape',
         tags: ['L1', 'DOB/NFT'],
         links: [
-        { label: 'Website', href: 'https://nervape.com/' },
-        { label: 'Github', href: 'https://github.com/nervape' },
+        { label: 'website', href: 'https://nervape.com/' },
+        { label: 'github', href: 'https://github.com/nervape' },
         { label: 'Doc', href: 'https://tourmaline-elderberry-f93.notion.site/Nervape-Community-Wiki-e46261f411ed42e19b859f48da06fe63' },
         ],
     },
@@ -66,7 +66,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'joygift',
         tags: ['L1'],
         links: [
-        { label: 'Website', href: 'https://joygift.cc/' },
+        { label: 'website', href: 'https://joygift.cc/' },
         ],
     },
     {
@@ -76,8 +76,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'philosopherstone',
         tags: ['L1', 'DOB/NFT'],
         links: [
-        { label: 'Website', href: 'https://philosopherstone.xyz/' },
-        { label: 'Github', href: 'https://github.com/SpectreMercury/PhilosopherStone' },
+        { label: 'website', href: 'https://philosopherstone.xyz/' },
+        { label: 'github', href: 'https://github.com/SpectreMercury/PhilosopherStone' },
         ],
     },
     {
@@ -87,7 +87,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'nftnation',
         tags: ['L1', 'DOB/NFT'],
         links: [
-        { label: 'Website', href: 'https://nft-nation.live/' },
+        { label: 'website', href: 'https://nft-nation.live/' },
         { label: 'Doc', href: 'https://nftnation.gitbook.io/nftnation-explained' },
         ],
     },
@@ -98,8 +98,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'explorer',
         tags: ['Explorer'],
         links: [
-        { label: 'Website', href: 'https://explorer.nervos.org/' },
-        { label: 'Github', href: 'https://github.com/nervosnetwork/ckb-explorer' },
+        { label: 'website', href: 'https://explorer.nervos.org/' },
+        { label: 'github', href: 'https://github.com/nervosnetwork/ckb-explorer' },
         ],
     },
     {
@@ -109,7 +109,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'nervosscan',
         tags: ['Explorer'],
         links: [
-        { label: 'Website', href: 'https://nervosscan.com/' },
+        { label: 'website', href: 'https://nervosscan.com/' },
         ],
     },
     {
@@ -119,7 +119,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'neuron',
         tags: ['Wallet'],
         links: [
-        { label: 'Website', href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.112.0' },
+        { label: 'website', href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.112.0' },
         ],
     },
     {
@@ -129,8 +129,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'portalwallet',
         tags: ['Wallet'],
         links: [
-        { label: 'Website', href: 'https://ckb.pw/' },
-        { label: 'Github', href: 'https://github.com/lay2dev' },
+        { label: 'website', href: 'https://ckb.pw/' },
+        { label: 'github', href: 'https://github.com/lay2dev' },
         { label: 'Doc', href: 'https://lay2.notion.site/User-Manual-5dcdf86af6e140fab9ee68f73bed8935' },
         ],
     },
@@ -141,8 +141,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'imtoken',
         tags: ['Wallet'],
         links: [
-        { label: 'Website', href: 'https://token.im/' },
-        { label: 'Github', href: 'https://github.com/consenlabs' },
+        { label: 'website', href: 'https://token.im/' },
+        { label: 'github', href: 'https://github.com/consenlabs' },
         { label: 'Doc', href: 'https://medium.com/imtoken/imtoken-2-5-0-now-with-nervos-tron-bch-ltc-support-14d7171ccf4' },
         ],
     },
@@ -153,7 +153,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'ckbull',
         tags: ['Wallet'],
         links: [
-        { label: 'Website', href: 'https://ckbull.app/' },
+        { label: 'website', href: 'https://ckbull.app/' },
         { label: 'Doc', href: 'https://www.notion.so/How-to-use-CKBull-wallet-89153cac673447b0bf827d1f6f7d151c?pvs=4'},
         ],
     },
@@ -164,7 +164,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'operawallet',
         tags: ['Wallet'],
         links: [
-        { label: 'Website', href: 'https://www.opera.com/download' },
+        { label: 'website', href: 'https://www.opera.com/download' },
         { label: 'Doc', href: 'https://jackylhh.notion.site/How-to-send-receive-Nervos-CKB-with-your-Opera-built-in-wallet-on-Android-eb75113cc4e04e50b99f5e75abab2599'},
         ],
     },
@@ -175,7 +175,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'safepal',
         tags: ['Wallet'],
         links: [
-        { label: 'Website', href: 'https://www.safepal.com/' },
+        { label: 'website', href: 'https://www.safepal.com/' },
         { label: 'Doc', href: 'https://www.notion.so/How-to-add-send-Nervos-Chain-CKB-coin-with-SafePal-Hardware-Wallet-40da32d8f7074563859e9d08b585768e'},
         ],
     },
@@ -186,8 +186,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'forcebridge',
         tags: ['Bridge'],
         links: [
-        { label: 'Website', href: 'https://forcebridge.com/' },
-        { label: 'Github', href: 'https://github.com/nervosnetwork/force-bridge'},
+        { label: 'website', href: 'https://forcebridge.com/' },
+        { label: 'github', href: 'https://github.com/nervosnetwork/force-bridge'},
         { label: 'Doc', href: 'https://github.com/nervosnetwork/force-bridge/blob/main/docs/dapp-user-guide.md'},
         ],
     },
@@ -198,7 +198,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'hadouken',
         tags: ['Bridge'],
         links: [
-        { label: 'Website', href: 'https://app.hadouken.finance/bridge/?action=deposit' },
+        { label: 'website', href: 'https://app.hadouken.finance/bridge/?action=deposit' },
         ],
     },
     {
@@ -208,7 +208,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'ankr',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://www.ankr.com/' },
+        { label: 'website', href: 'https://www.ankr.com/' },
         { label: 'Doc', href: 'https://archive.nervos.org/blog/ankr-integrates-support-for-nervos-nodes' },
         ],
     },
@@ -219,8 +219,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'axon',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://axonweb3.io/' },
-        { label: 'Github', href: 'https://github.com/axonweb3/axon' },
+        { label: 'website', href: 'https://axonweb3.io/' },
+        { label: 'github', href: 'https://github.com/axonweb3/axon' },
         { label: 'Doc', href: 'https://docs.axonweb3.io/' },
         ],
     },
@@ -231,8 +231,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'bandprotocol',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://www.bandprotocol.com/' },
-        { label: 'Github', href: 'https://github.com/bandprotocol' },
+        { label: 'website', href: 'https://www.bandprotocol.com/' },
+        { label: 'github', href: 'https://github.com/bandprotocol' },
         { label: 'Doc', href: 'https://medium.com/bandprotocol/band-protocol-integrates-with-nervos-godwoken-361546e1091d' },
         ],
     },
@@ -243,7 +243,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'covalent',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://www.covalenthq.com/' },
+        { label: 'website', href: 'https://www.covalenthq.com/' },
         { label: 'Doc', href: 'https://archive.nervos.org/blog/nervos-and-covalent-integration' },
         ],
     },
@@ -254,7 +254,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'dia',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://www.diadata.org/' },
+        { label: 'website', href: 'https://www.diadata.org/' },
         { label: 'Doc', href: 'https://archive.nervos.org/blog/dia-deploys-oracles-onto-layer-2-bolstering-dev-resources' },
         ],
     },
@@ -265,7 +265,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'getblock',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://getblock.io/' },
+        { label: 'website', href: 'https://getblock.io/' },
         { label: 'Doc', href: 'https://www.youtube.com/watch?v=yUzwq177a98&feature=youtu.be' },
         ],
     },
@@ -276,8 +276,8 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'godwoken',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://www.godwoken.com/' },
-        { label: 'Github', href: 'https://github.com/godwokenrises' },
+        { label: 'website', href: 'https://www.godwoken.com/' },
+        { label: 'github', href: 'https://github.com/godwokenrises' },
         { label: 'Doc', href: 'https://docs.godwoken.io/' },
         ],
     },
@@ -288,7 +288,7 @@ const ecoCardContents: EcoCardProps[] = [
         bannerSrc: 'unifra',
         tags: ['Tools & Infra'],
         links: [
-        { label: 'Website', href: 'https://unifra.io/' },
+        { label: 'website', href: 'https://unifra.io/' },
         ],
     },
 ];
