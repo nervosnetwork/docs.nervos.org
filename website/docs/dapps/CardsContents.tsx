@@ -83,6 +83,17 @@ const toolCardContents: CardProps[] = [
       { label: "Github", href: "https://github.com/jordanmack/ckb-tools" },
     ],
   },
+  {
+    title: "Nervos Pudge Faucet",
+    description:
+      "Claim CKBytes to use while developing and testing",
+    href: "https://faucet.nervos.org/",
+    type: "tool",
+    links: [
+      { label: "Website", href: "https://faucet.nervos.org/" },
+      { label: "Github", href: "https://github.com/Magickbase/ckb-testnet-faucet" },
+    ],
+  },
 ];
 
 const tutorialFrameContent = [

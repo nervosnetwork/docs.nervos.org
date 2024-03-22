@@ -19,6 +19,7 @@
 
     /* Conditional Variables*/
     --hover: rgba(38, 42, 46, 0.04);
+    --surface-03-hover: #DDE3EE;
     --selected: rgba(38, 42, 46, 0.06);
 
     /* Alert Variables */
@@ -59,6 +60,7 @@ html[data-theme='dark'] {
     --border-accent: #00CE88;
 
     --hover:rgba(255, 255, 255, 0.06);
+    --surface-03-hover: #3B3D44;
     --selected: rgba(255, 255, 255, 0.12);
 
     --alert-success: #00CE88;
