@@ -138,7 +138,7 @@ const config = {
         {
           type: 'html',
           position: 'right',
-          value: '<a class="help-flex" href="https://discord.gg/dTZaGEs4" target="__blank"><img src="/svg/icon-discord.svg"><p class="help-text">Get Help</p></a>',
+          value: '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img src="/svg/icon-discord.svg"><p class="help-text">Get Help</p></a>',
           className: 'navbar-help'
         }
       ]
@@ -172,7 +172,7 @@ const config = {
           items: [
             {
               label: "Discord",
-              to: "https://discord.gg/dTZaGEs4",
+              to: "https://discord.gg/nervosnetwork ",
             },
 
             {

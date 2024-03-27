@@ -1,6 +1,6 @@
 ---
 id: create-dob
-title: Create an DOB
+title: Create a DOB
 sidebar_position: 6
 ---
 
@@ -19,7 +19,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
   ]}
 />
 
-## How Spore Protocol Works on CKB
+## Spore Protocol on CKB
 
 Spore is an on-chain digital object(DOB) protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A spore cell can hold any type of assets users want to store on-chain, the following data structure is used in the spore cell:
 
@@ -41,7 +41,7 @@ Notice that the data field of the spore cell contains `content-type` and `conten
 
 In this tutorial, we will build a simple Dapp to turn a picture on your computer into a digital object on the blockchain using the spore SDK.
 
-## Setup the Devnet & Run the Example Project
+## Setup Devnet & Run Example
 
 <SetupProject
   templateName="create-dob"
@@ -52,7 +52,7 @@ In this tutorial, we will build a simple Dapp to turn a picture on your computer
 
 Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
 
-### Create a Digital Object
+### Create Digital Object
 
 Check out the `createSporeDOB` function:
 
@@ -116,7 +116,7 @@ export async function createSporeDOB(
 
 Notice that the `createDefaultLockWallet` and `const txHash = await wallet.signAndSendTransaction(txSkeleton);` are just some methods that helps us to keep the code clean, all it does is the same as the previous tutorials involving signing and sending transactions.
 
-### Render Content from the Digital Object
+### Render Content from Digital Object
 
 Once we created our digital object on-chain, what we love to do is to render and show this digital object. To do this, we need to first find the spore cell of our digital object and extract the data from the spore cell and decode the content from the data to render it in the browser.
 
