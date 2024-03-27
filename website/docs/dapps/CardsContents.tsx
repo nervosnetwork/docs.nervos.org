@@ -1,23 +1,37 @@
 import { CardProps } from "@site/src/components/Card";
 
+// Tutorial links
+const TUTORIALS_LINKS = {
+  transferBalance: "/docs/dapps/transfer-balance",
+  writeMessage: "/docs/dapps/write-message",
+  issueToken: "/docs/dapps/issue-token",
+  createDOB: "/docs/dapps/create-dob",
+};
+
 // Tutorial Cards
 const tutorialCardContents: CardProps[] = [
   {
-    title: "Create Custom Token",
+    title: "Issue Token",
     description: "Create user-defined tokens using xUDT",
-    href: "./dapps/issue-custom-token",
+    href: TUTORIALS_LINKS.issueToken,
     type: "tutorial",
   },
   {
-    title: "Transfer Custom Token",
+    title: "Transfer Balance",
     description: "Transfer user-defined tokens using xUDT",
-    href: "./dapps/view-and-transfer-balance",
+    href: TUTORIALS_LINKS.transferBalance,
     type: "tutorial",
   },
   {
-    title: "Create an DOB",
+    title: "Create a DOB",
     description: "Create DOB using Spore Protocol",
-    href: "./dapps/create-dob",
+    href: TUTORIALS_LINKS.createDOB,
+    type: "tutorial",
+  },
+  {
+    title: "Write Message",
+    description: "Write and retrieve 'Hello CKB!' from a CKB.",
+    href: TUTORIALS_LINKS.writeMessage,
     type: "tutorial",
   },
 ];
@@ -85,13 +99,15 @@ const toolCardContents: CardProps[] = [
   },
   {
     title: "Nervos Pudge Faucet",
-    description:
-      "Claim CKBytes to use while developing and testing",
+    description: "Claim CKBytes to use while developing and testing",
     href: "https://faucet.nervos.org/",
     type: "tool",
     links: [
       { label: "Website", href: "https://faucet.nervos.org/" },
-      { label: "Github", href: "https://github.com/Magickbase/ckb-testnet-faucet" },
+      {
+        label: "Github",
+        href: "https://github.com/Magickbase/ckb-testnet-faucet",
+      },
     ],
   },
 ];
@@ -101,7 +117,7 @@ const tutorialFrameContent = [
     tabValue: "transfer-balance",
     label: "Transfer Balance",
     tutorialTitle: "View and transfer CKB from one address to another.",
-    tutorialLink: "/docs/dapps/transfer-balance",
+    tutorialLink: TUTORIALS_LINKS.transferBalance,
     iframeSrc:
       "https://codesandbox.io/embed/58n9pq?view=preview&module=%2Flib.ts",
   },
@@ -109,7 +125,7 @@ const tutorialFrameContent = [
     tabValue: "write-message",
     label: "Write Message",
     tutorialTitle: "Write 'Hello CKB!' to a CKB cell and then retrieve it.",
-    tutorialLink: "/docs/dapps/write-message",
+    tutorialLink: TUTORIALS_LINKS.writeMessage,
     iframeSrc:
       "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
@@ -117,15 +133,15 @@ const tutorialFrameContent = [
     tabValue: "issue-token",
     label: "Issue Token",
     tutorialTitle: "Issue, view and transfer a custom token.",
-    tutorialLink: "/docs/dapps/issue-token",
+    tutorialLink: TUTORIALS_LINKS.issueToken,
     iframeSrc:
       "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
   {
     tabValue: "create-dob",
-    label: "Create an DOB",
+    label: "Create a DOB",
     tutorialTitle: "Create an on-chain digital object with Spore protocol.",
-    tutorialLink: "/docs/dapps/create-dob",
+    tutorialLink: TUTORIALS_LINKS.createDOB,
     iframeSrc:
       "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
