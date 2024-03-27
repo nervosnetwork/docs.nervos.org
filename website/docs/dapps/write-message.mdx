@@ -19,13 +19,13 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
   ]}
 />
 
-## How to Store & Retrieve Data from a Cell
+## Store & Retrieve Cell Data
 
 In this tutorial, you'll learn how to tuck a nifty message - "**Hello CKB!**" - into a [cell](https://docs.nervos.org/docs/reference/cell/) on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB cell!
 
 As you have learned from the first tutorial [view and transfer balance](/view-and-transfer-balance), the cell can store any type of data in the data field of Cell structure. Here we will put a text message encoding in hex string format and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll then get the hex string from the same cell back and then decode them to the original text message. the method of encoding and decoding is totally up to your favorite, we use the `TextDecoder` for simplicity through the tutorial.
 
-## Setup the Devnet & Run the Example Project
+## Setup Devnet & Run Example
 
 <SetupProject
   templateName="write-and-read-message"
@@ -36,7 +36,7 @@ As you have learned from the first tutorial [view and transfer balance](/view-an
 
 Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
 
-### Encoding & Decoding Message
+### Encode & Decode Message
 
 Since Cell's data field can store any type of data, we need to design our encoding and decoding method for the message we want to read and write on-chain.
 
@@ -63,7 +63,7 @@ export function hexToUtf8(hexString: string): string {
 }
 ```
 
-### Build the Transaction
+### Build Transaction
 
 Now check out the core function `buildMessageTx`. It accepts two parameters, one is your private key. One is the message you want to write into the cell, then it builds the transaction to get us a new cell that includes the message written in the data field.
 
@@ -197,7 +197,7 @@ const txHash = await rpc.sendTransaction(tx, "passthrough");
 
 Therefore, the message is successfully stored on a cell and lives in the blockchain.
 
-### Read the Message from the Specific Cell
+### Read Cell Messages
 
 To read the message we stored on-chain, we need to retrieve the live cell we just produced, read the data field from the cell and decode the message back to the text format.
 

@@ -20,7 +20,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
   ]}
 />
 
-## How Custom Token Works on CKB
+## Custom Token on CKB
 
 Different from ERC20(Ethereum) and BRC20(Bitcoin), CKB uses a unique way to build custom tokens based on the UTXO-like Cell model.
 
@@ -36,7 +36,7 @@ This issuer's lock script hash works like the unique ID for the custom token. Di
 
 In reality, xUDT is more complicated and powerful with many features but the idea is the same, you can check the [full specs here](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md).
 
-## Setup the Devnet & Run the Example Project
+## Setup Devnet & Run Example
 
 <SetupProject
   templateName="issue-custom-token"
@@ -135,7 +135,7 @@ const hash = await rpc.sendTransaction(tx, "passthrough");
 console.log("The transaction hash is", hash);
 ```
 
-### View and Check Token Info & Holders
+### Token Info & Holders
 
 Since we have issued a custom token, the next step will be checking out this token and viewing its holders. To do that, we write a `queryIssuedTokenCells` in the `lib.ts` file:
 
