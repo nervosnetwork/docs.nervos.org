@@ -32,17 +32,7 @@ The examples below show in code how dApps interact with CKB TestNet contracts, a
 
 <Tabs>
   {tutorialFrameContent.map(
-    (
-      {
-        tabValue,
-        label,
-        tutorialTitle,
-        tutorialLink,
-        iframeSrc,
-        cautionMessage,
-      },
-      index
-    ) => (
+    ({ tabValue, label, tutorialTitle, tutorialLink, iframeSrc }, index) => (
       <TabItem value={tabValue} label={label} default={index === 0}>
         <TutorialFrame
           tutorialTitle={tutorialTitle}
