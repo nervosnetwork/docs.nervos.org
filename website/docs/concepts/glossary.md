@@ -2346,12 +2346,10 @@ A cryptographic signature scheme for signing and verification.
 ---
 
 ### Script
-A program that executes on the CKB-VM. A Script can be one of two types:
+A script in Nervos CKB is a binary executable on the CKB-VM. Compared to Bitcoin script, CKB script is Turing-complete, equivalent to smart contract. A Script can be one of two types:
 
 - Lock Script - Used to control ownership and access to a Cell.
 - Type Script - Used to control how a Cell is used in a transaction.
-
-A script is a binary executable in the ELF format for the RISC-V architecture, a program that runs on the CKB-VM.
 
 #### See Also
 - [CKB-VM](#risc-v)
@@ -2710,6 +2708,17 @@ A set of cryptographic proof containing the data required to prove authorization
 
 #### See Also
 - [Transaction](#transaction)
+
+---
+
+### XUDT
+An extended UDT standard upon sUDT (Simple UDT) to accommodate additional functionalities, including regulatory compliance. Also written as Extensible UDT.
+
+#### See Also
+
+- [User-Defined Token](#user-defined-token)
+- [Simple UDT](#simple-udt)
+- [UDT](#udt)
 
 ---
 
