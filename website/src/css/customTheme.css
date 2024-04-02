@@ -108,6 +108,29 @@
   font-size: 0.75rem !important;
   margin-right: -0.6em !important;
 }
+
+/* @cmfcmf/docusaurus-search-local search  */
+.navbar-search .aa-DetachedSearchButton {
+  background-color: var(--surface-02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  width: 280px;
+  height: 48px;
+  padding: 0 1rem;
+  margin-right: 0.5rem;
+}
+.navbar-search .aa-DetachedSearchButton:hover {
+  background-color: var(--hover) !important;
+  border: 1px solid var(--border-accent);
+  box-shadow: none !important;
+}
+.aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
+  color: var(--text-placeholder) !important;
+}
+.aa-DetachedSearchButtonPlaceholder {
+  color: var(--text-placeholder);
+}
+
 .navbar-help {
   height: 48px;
   border: 1px solid var(--border-subtle);

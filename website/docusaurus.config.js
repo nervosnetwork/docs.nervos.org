@@ -90,6 +90,12 @@ const config = {
     ],
   ],
   plugins: [
+    [
+      require.resolve("@cmfcmf/docusaurus-search-local"),
+      {
+        style: undefined,
+      },
+    ],
     function myPlugin() {
       return {
         name: 'custom-webpack-plugin',
