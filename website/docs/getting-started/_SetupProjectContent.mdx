@@ -1,5 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import ImgContainer from '@components/ImgContainer';
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
@@ -41,12 +42,12 @@ offckb init <project-name>
   <TabItem value="offckb-init-result" label="Response">
 ```
 ```bash
-? Select a dapp template (Use arrow keys)
-  View and Transfer Balance
-  Issue Token via xUDT scripts
-❯ Write and Read On-Chain Message
-a simple dapp to write and read text message from blockchain via storing it in cells
-init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
+? Select a dApp template (Use arrow keys)
+  Transfer CKB
+  Create a Fungible Token
+❯ Write an On-Chain Message
+a simple dApp to write and read text message from blockchain via storing it in cells
+init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
 ✨  Done in 2.52s.
 ```
 ```mdx-code-block
@@ -79,11 +80,11 @@ Server running at http://localhost:1234
 
 Now, the app is running in http://localhost:1234
 
-<img src={useBaseUrl(props.imageSrc)} />
+<ImgContainer src={useBaseUrl(props.imageSrc)} />
 
 ### Start the Devnet
 
-In order to interact with the app, you need to start the devnet and check some accounts to use.
+In order to interact with the app, you need to start the Devnet and check some accounts to use.
 
 Open one terminal and start the devnet:
 
@@ -102,7 +103,7 @@ offckb node
 /bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
 /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
 CKB installed successfully.
-init devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
+init Devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
 modified  /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet/ckb-miner.toml
 CKB output: 2024-03-20 07:56:44.765 +00:00 main INFO sentry  sentry is disabled
 

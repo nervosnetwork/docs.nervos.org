@@ -18,7 +18,7 @@ CKByte is the native token of Nervos, covering three types of fees: Cycles (comp
 
 Cycles and transaction fees are one-time payments required to process the transaction and add it on the blockchain. State Rent is continuously paid for data persistence.
 
-Ownership of CKByte grants the holder to one byte of data storage on Nervos. To create a new cell, users must possess CKBytes equivalent to the space the cell occupies. These CKBytes remain locked for the cell’s duration. When the cell is consumed, the CKBytes are released and can be reused. State Rent is automatically paid during the lock period of CKBytes.
+Ownership of CKByte grants the holder to one byte of data storage on Nervos. To create a new cell, users must possess CKBytes equivalent to the space the Cell occupies. These CKBytes remain locked for the cell’s duration. When the Cell is consumed, the CKBytes are released and can be reused. State Rent is automatically paid during the lock period of CKBytes.
 
 All assets on Nervos require data storage, making them subject to State Rent. This creates direct value alignment because CKBytes are indispensable for asset maintenance on Nervos.
 

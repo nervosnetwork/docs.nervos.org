@@ -141,7 +141,7 @@ Blocks are sent to all nodes in a blockchain network.
 ---
 
 ### Capacity
-The maximum space (in bytes) that a cell can occupy on the Nervos CKB.
+The maximum space (in bytes) that a Cell can occupy on the Nervos CKB.
 
 #### Synonyms
 - [CKByte](#ckbyte)
@@ -157,7 +157,7 @@ The maximum space (in bytes) that a cell can occupy on the Nervos CKB.
 ### Cell
 All data on Nervos CKB is stored in cells. Cells are the primary state units in CKB, within them users can include arbitrary states. 
 
-A cell has 4 fields: `capacity`, `data`, `type` and `lock`.
+A Cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 
 #### Synonyms
 - [Micro-State](#micro-state)
@@ -175,9 +175,9 @@ A cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 ---
 
 ### Cell Model
-A representation of how state is managed on Nervos CKB. The cell model is a more generic state model than either Bitcoin's UTXO or Ethereum's account model. 
+A representation of how state is managed on Nervos CKB. The Cell model is a more generic state model than either Bitcoin's UTXO or Ethereum's account model. 
 
-The cell model is a new construction that combines many of the advantages of Ethereum's account model with the asset ownership and proof-based verification properties of Bitcoin's UTXO model.
+The Cell model is a new construction that combines many of the advantages of Ethereum's account model with the asset ownership and proof-based verification properties of Bitcoin's UTXO model.
 
 #### See Also
 - [Lock Script](#lock-script)
@@ -240,7 +240,7 @@ CKB VM is a crypto-agnostic virtual machine, a RISC-V instruction set based VM f
 ---
 
 ### Code Hash
-A field in a cell which contains a hash value that can refer to a specific piece of data, or a specific cell referenced by Type ID.
+A field in a Cell which contains a hash value that can refer to a specific piece of data, or a specific Cell referenced by Type ID.
 
 #### See Also
 
@@ -339,7 +339,7 @@ An algorithm executed among a number of distributed participants, ensuring that 
 
 
 ### Consume
-The process of using a live cell as an input to a transaction. The consumption processes indicate that live cell turns into a dead cell.
+The process of using a live Cell as an input to a transaction. The consumption processes indicate that live Cell turns into a dead cell.
 
 ---
 
@@ -406,7 +406,7 @@ Decentralized application. At a minimum, it is a smart contract and a web user i
 ---
 
 ### Data
-In cell model, `data` is a field in a cell which can store arbitrary bytes.
+In Cell model, `data` is a field in a Cell which can store arbitrary bytes.
 
 #### See Also
 - [Cell](#cell)
@@ -451,6 +451,14 @@ A system where components are spread across multiple nodes to parallelize worklo
 
 #### See Also
 - [Decentralization](#decentralization)
+
+---
+
+### Digital Object (DOB)
+A non-fungible encrypted asset with its content fully stored on-chain, establishing an intrinsic link between content and value.
+
+#### See Also
+- [Non-Fungible-Token] (#non-fungible-token)
 
 ---
 
@@ -511,7 +519,7 @@ A change in protocol causing the creation of an alternative chain, or a temporal
 A full node is an essential component of the CKB network. It stores and syncs the entire blockchain, verifies the validity of blocks and transactions, and enforces the network's consensus rules.
 
 ```
-ckb init --chain mainnet && ckb run
+ckb init --chain Mainnet && ckb run
 ```
 
 #### See Also
@@ -620,7 +628,7 @@ Short for "memory pool". A waiting area on full nodes for transactions that have
 ---
 
 ### Metadata
-Metadata is data that provides information about other data. `capacity`, `type` and `lock` in cells are metadata, they occupy cell capacity and incur a state cost as well.
+Metadata is data that provides information about other data. `capacity`, `type` and `lock` in cells are metadata, they occupy Cell capacity and incur a state cost as well.
 
 #### See Also
 - [Capacity](#capacity)
@@ -674,7 +682,7 @@ Mining is the process by which a blockchain node get new token reward by verifyi
 Mining nodes create new blocks by solving computational puzzles. They contribute to the network's security and consensus by actively validating and adding blocks to the blockchain.
 
 ```
-ckb init --chain mainnet && ckb miner
+ckb init --chain Mainnet && ckb miner
 ```
 
 #### See Also
@@ -786,6 +794,7 @@ In cryptography, a value that can only be used once. Nonce can refer to two thin
 Non-fungible tokens or NFTs are cryptographic assets on a blockchain with unique identification codes and metadata that distinguish them from each other.
 
 #### See Also
+- [DOB](#digital-object-dob)
 - [Fungible Token](#fungible-token)
 - [Token](#token)
 - [User-Defined Token](#user-defined-token)
@@ -820,7 +829,7 @@ A form of storing a recovery phrase or private keys offline by printing them on 
 ### Payment Address
 A string of letters and numbers that cryptocurrency and assets can be sent to and from. 
 
-Nervos CKB mainnet addresses always begin with the prefix "ckb".
+Nervos CKB Mainnet addresses always begin with the prefix "ckb".
 
 #### Synonyms
 - [Address](#address)
@@ -969,7 +978,7 @@ The most recent block to be confirmed in a blockchain. The tip block has the hig
 ---
 
 ### Transaction
-Transaction is the basic object created and signed by users to interact with distributed ledger. Transactions update ledger state at users requests. A CKB transaction destroys some outputs created in previous transactions and creates some new outputs. We call the transaction output a cell in CKB.
+Transaction is the basic object created and signed by users to interact with distributed ledger. Transactions update ledger state at users requests. A CKB transaction destroys some outputs created in previous transactions and creates some new outputs. We call the transaction output a Cell in CKB.
 
 #### See Also
 - [Blockchain](#blockchain)
@@ -1054,7 +1063,7 @@ A User-Defined Token is usually referred to by its abbreviation, UDT.
 ---
 
 ### Wallet
-User-facing software used to interact with on-chain entities such as assets, smart contracts and dapps. A wallet can include key management itself or delegate key management to external hardware for improved security.
+User-facing software used to interact with on-chain entities such as assets, smart contracts and dApps. A wallet can include key management itself or delegate key management to external hardware for improved security.
 
 #### See Also
 - [Paper Wallet](#paper-wallet)
@@ -1275,7 +1284,7 @@ A situation that can emerge on incentivized blockchain platforms where mining re
 ## Technical Glossary
 
 ### Active Cell
-Or live cell, a cell exists in the current CKB state. Only active cells can be used as inputs to new transactions.
+Or live cell, a Cell exists in the current CKB state. Only active cells can be used as inputs to new transactions.
 
 #### Synonyms
 - [Live Cell](#live-cell)
@@ -1288,7 +1297,7 @@ Or live cell, a cell exists in the current CKB state. Only active cells can be u
 ---
 
 ### Aggron
-The first Nervos CKB testnet corresponding to mainnet Lina.
+The first Nervos CKB Testnet corresponding to Mainnet Lina.
 
 - **CKB version**: >= v0.101.0 (latest stable is recommended)
 - **Genesis hash**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
@@ -1306,7 +1315,7 @@ The first Nervos CKB testnet corresponding to mainnet Lina.
 ---
 
 ### Animagus
-A framework layer that runs on top of Nervos CKB which provides an easy way to query for account balances without having to go through the cell collection process.
+A framework layer that runs on top of Nervos CKB which provides an easy way to query for account balances without having to go through the Cell collection process.
 
 #### See Also
 - [Cell Collection](#cell-collection)
@@ -1473,7 +1482,7 @@ ckbhash(left || right)
 ---
 
 ### Code Hash
-A field in a Cell that contains a hash value which could refer to a specific piece of data, or a specific cell referenced by Type ID.
+A field in a Cell that contains a hash value which could refer to a specific piece of data, or a specific Cell referenced by Type ID.
 
 #### See Also
 - [Cell](#cell)
@@ -1549,11 +1558,11 @@ In more general contexts, data may refer to any form of information.
 ---
 
 ### Dead Cell
-A cell that has been used as an input to a previous transaction and is consumed. 
+A Cell that has been used as an input to a previous transaction and is consumed. 
 
-A dead cell cannot be used as an input to a new transaction, nor can it be used as a dependency. It is effectively destroyed and removed from the active state of the network.
+A dead Cell cannot be used as an input to a new transaction, nor can it be used as a dependency. It is effectively destroyed and removed from the active state of the network.
 
-A dead cell is the equivalent of a "spent UTXO" in Bitcoin.
+A dead Cell is the equivalent of a "spent UTXO" in Bitcoin.
 
 #### Synonyms
 - [Historical Cell](#historical-cell)
@@ -1664,7 +1673,7 @@ pub(crate) const DEFAULT_EPOCH_DURATION_TARGET: u64 = 4 * 60 * 60; // 4 hours, u
 ### ERC20
 An Ethereum token standard for basic fungible tokens.
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
 #### See Also
 - [ERC777](#erc777)
@@ -1688,7 +1697,7 @@ An Ethereum token standard for non-fungible tokens.
 ### ERC777
 An updated Ethereum token standard for basic fungible tokens that is backwards compatible with ERC20.
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
 #### See Also
 - [ERC20](#erc20)
@@ -1842,7 +1851,7 @@ pub(crate) const INITIAL_PRIMARY_EPOCH_REWARD: Capacity = Capacity::shannons(1_9
 
 ### Input
 
-A live cell that is used in a transaction. If the transaction is accepted by the network, the live cell gets consumed as input and labeled as a dead cell.
+A live Cell that is used in a transaction. If the transaction is accepted by the network, the live Cell gets consumed as input and labeled as a dead cell.
 
 #### See Also
 
@@ -1897,7 +1906,7 @@ The main goal of these protocols is to solve the transaction speed and scaling d
 ---
 
 ### Lina
-The name of public mainnet of the Nervos CKB.
+The name of public Mainnet of the Nervos CKB.
 
 - **CKB version**: >= v0.25.2 (latest stable is recommended)
 - **Genesis hash**: 0x92b197aa1fba0f63633922c61c92375c9c074a93e85963554f5499fe1450d0e5
@@ -1917,7 +1926,7 @@ The name of public mainnet of the Nervos CKB.
 ---
 
 ### Live Cell
-A cell that has not been consumed and is available for use.
+A Cell that has not been consumed and is available for use.
 
 This is similar to an unspent transaction output (UTXO) in Bitcoin.
 
@@ -1932,13 +1941,13 @@ This is similar to an unspent transaction output (UTXO) in Bitcoin.
 ---
 
 ### Lock
-A script that represents the ownership of a cell. A user successfully unlocks a cell and is able to consume it if the cell's lock script exits normally. 
+A script that represents the ownership of a cell. A user successfully unlocks a Cell and is able to consume it if the cell's lock script exits normally. 
 
 #### See Also
 - [Lock Script](#lock-script)
 
 ### Lock Script
-A script that enforces access and ownership of a cell. This script controls who has permission to use the cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
+A script that enforces access and ownership of a cell. This script controls who has permission to use the Cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
 
 #### See Also
 - [Cell](#cell)
@@ -2234,7 +2243,7 @@ A particular output Cell in a transaction.
 ---
 
 ### Output
-A live cell that is created in a transaction.
+A live Cell that is created in a transaction.
 
 #### See Also
 - [Cell](#cell)
@@ -2433,7 +2442,7 @@ The short address format is the most common address format used, and is often re
 ### Simple UDT
 A standard that defines a the most basic implementation of a UDT fungible token on Nervos. 
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
 #### Synonyms
 - [SUDT](#sudt)
@@ -2613,7 +2622,7 @@ The `code_hash` of `type_id`. In view of the specificity of `type_id`, `type_id_
 
 
 ### Type Script
-A script that enforces the rules that must be followed in a transaction for a cell to be consumed as an input or for a cell to be created as an output.
+A script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output.
 
 #### See Also
 - [Cell](#cell)
@@ -2627,7 +2636,7 @@ A script that enforces the rules that must be followed in a transaction for a ce
 
 Or `type_hash`, a Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
 
-The two entities in the data structure of CKB’s cell are `lock` and `type`. Type scripts can capture any validation logic needed in the cell transformation.
+The two entities in the data structure of CKB’s Cell are `lock` and `type`. Type scripts can capture any validation logic needed in the Offtransformation.
 
 Type scripts can implement economic constructs as well. NervosDAO is completely implemented as a type script with minimal support from the consensus layer.
 

@@ -1,27 +1,25 @@
 ---
 id: create-dob
-title: Create a DOB
+title: "Tutorial: Create a DOB"
 sidebar_position: 6
 ---
 
 import TutorialHeader from "@components/TutorialHeader";
+import { DOBOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
-# Create an On-Chain Digital Object via Spore Protocol
+# Create a Digital Object Using Spore Protocol
 
 <TutorialHeader
-  estimateTime="2 – 5 min"
-  whatYouWillLearn={[
-    "How Spore protocol works on CKB",
-    "Create a on-chain digital object with a picture via Spore-sdk",
-    "Render the picture in browser from your digital object",
-  ]}
+  time={DOBOVERVIEW.time}
+  topics={DOBOVERVIEW.topics}
+  tools={DOBOVERVIEW.tools}
 />
 
 ## Spore Protocol on CKB
 
-Spore is an on-chain digital object(DOB) protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A spore cell can hold any type of assets users want to store on-chain, the following data structure is used in the spore cell:
+Spore is an on-chain [digital object (DOB)](/docs/concepts/glossary#digital-object-dob) protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A Spore Cell can hold any type of assets users want to store on-chain, the following data structure is used in the Spore Cell:
 
 ```js
 data:
@@ -37,9 +35,9 @@ lock:
     <user_defined>
 ```
 
-Notice that the data field of the spore cell contains `content-type` and `content`, which allow users to turn any content form into a digital object. All the fields in a Spore Cell are immutable once created.
+Notice that the data field of the Spore Cell contains `content-type` and `content`, which allow users to turn any content form into a digital object. All the fields in a Spore Cell are immutable once created.
 
-In this tutorial, we will build a simple Dapp to turn a picture on your computer into a digital object on the blockchain using the spore SDK.
+In this tutorial, we will build a simple dApp to turn a picture on your computer into a digital object on the blockchain using the Spore SDK.
 
 ## Setup Devnet & Run Example
 
@@ -84,7 +82,7 @@ reader.onload = () => {
 reader.readAsArrayBuffer(files[0]);
 ```
 
-Once we have the picture content and the private key, we will build a transaction that produces a spore output cell, aka the digital object cell. We can handle all the logic with Lumos.js, but with the help of Spore-SDK, it becomes very simple to do:
+Once we have the picture content and the private key, we will build a transaction that produces a Spore output Cell, aka the digital object Cell. We can handle all the logic with Lumos.js, but with the help of Spore-SDK, it becomes very simple to do:
 
 ```ts
 export async function createSporeDOB(
@@ -118,7 +116,7 @@ Notice that the `createDefaultLockWallet` and `const txHash = await wallet.signA
 
 ### Render Content from Digital Object
 
-Once we created our digital object on-chain, what we love to do is to render and show this digital object. To do this, we need to first find the spore cell of our digital object and extract the data from the spore cell and decode the content from the data to render it in the browser.
+Once we created our digital object on-chain, what we love to do is to render and show this digital object. To do this, we need to first find the Spore Cell of our digital object and extract the data from the Spore Cell and decode the content from the data to render it in the browser.
 
 Check out the `showSporeContent` function:
 
@@ -127,16 +125,16 @@ export async function showSporeContent(txHash: string, index = 0) {
   const indexHex = "0x" + index.toString(16);
   const { cell } = await rpc.getLiveCell({ txHash, index: indexHex }, true);
   if (cell == null) {
-    return alert("cell not found, please retry later");
+    return alert("Cell not found, please retry later");
   }
   const data = cell.data.content;
   const msg = unpackToRawSporeData(data);
-  console.log("spore data: ", msg);
+  console.log("Spore data: ", msg);
   return msg;
 }
 ```
 
-We locate the spore cell by accepting a outpoint parameter(`txHash` and `outputIndex`), and use `rpc.getLiveCell` to get the live cell. Then we unpack the data content from this cell:
+We locate the Spore Cell by accepting a outpoint parameter(`txHash` and `outputIndex`), and use `rpc.getLiveCell` to get the live cell. Then we unpack the data content from this Cell:
 
 ```ts
 const data = cell.data.content;
@@ -168,7 +166,7 @@ const renderSpore = async () => {
 By following this tutorial this far, you have mastered how digital-object works on CKB. Here's a quick recap:
 
 - How Spore protocol works on CKB
-- Create an on-chain digital object with a picture via Spore-sdk
+- Create an on-chain digital object with a picture via Spore-SDK
 - Render the picture in the browser from your digital object
 
 ## Next Step
@@ -180,6 +178,3 @@ By following this tutorial this far, you have mastered how digital-object works 
 - Spore protocol: [docs.spore.pro](https://docs.spore.pro/)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
-  ./SetupProject.js
-  ./SetupProject.js
-  ./SetupProject.js

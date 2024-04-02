@@ -1,29 +1,27 @@
 ---
-id: transfer-balance
-title: Transfer Balance
+id: transfer-ckb
+title: "Tutorial: Transfer CKB"
 sidebar_position: 2
 ---
 
 import TutorialHeader from "@components/TutorialHeader";
+import { TRANSFEROVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
-# View and Transfer Balance
+# View and Transfer a CKB Balance
 
 <TutorialHeader
-  estimateTime="2 – 5 min"
-  whatYouWillLearn={[
-    "How to transfer CKB from one account to another",
-    "Build a basic transaction",
-    "How to sign a transaction",
-  ]}
+  time={TRANSFEROVERVIEW.time}
+  topics={TRANSFEROVERVIEW.topics}
+  tools={TRANSFEROVERVIEW.tools}
 />
 
 ## How Transaction Works
 
-CKB is based on UTXO-like cell model. Every cell has a capacity limit which represents the CKB balance and how much data can be stored in this cell at the same time. Cell can store any type of data.
+CKB is based on a UTXO-like [Cell Model](/docs/concepts/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously. A Cell can store any type of data.
 
-A transaction in CKB works just like Bitcoin. Each transaction is consuming some input cells and producing some new output cells. Notice that the output cells's total capacities can not be larger than the one from the input cells. Similar with how the UTXOs is transfer and converted in Bitcoin.
+A transaction in CKB works similarly to Bitcoin. Each transaction consumes some input cells and produces new output cells. Note that the total capacities of the output cells cannot be larger than those of the input cells, similar to how UTXOs are transferred and converted in Bitcoin.
 
 ## Setup Devnet & Run Example
 
@@ -55,11 +53,11 @@ export const generateAccountFromPrivateKey = (privKey: string): Account => {
 };
 ```
 
-What this function does is to generate the account's public key and address via a private key. Here, we need to construct and encode a lock script to get the corresponding address of this account. A lock script ensures that only the owner can consume their live cells.
+What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [lock script](docs/concepts/glossary#lock-script) to obtain the corresponding address of this account. A lock script ensures that only the owner can consume their live cells.
 
-Here, we use the CKB standard lock script template combining the SECP256K1 signing algorithm with the BLAKE160 hashing algorithm to build such a lock script. Notice that different templates will yield different addresses when encoding the address, corresponding to different type of guard for the assets.
+Here, we use the CKB standard lock script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a lock script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
 
-Once we get the lock script of a account, we can know how much balance the account has. The calculation is very simple, we query and find all the cells that uses the same lock script and sum all these cells's capacity, the amount is the balance.
+Once we have the lock script of an account, we can determine how much balance the account has. The calculation is straightforward; we query and find all the cells that use the same lock script and sum all these cells' capacities; the sum is the balance.
 
 ```ts
 export async function capacityOf(address: string): Promise<BI> {
@@ -76,9 +74,9 @@ export async function capacityOf(address: string): Promise<BI> {
 }
 ```
 
-In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Notice that in this tutorial we only use Shannon unit.
+In Nervos CKB, [Shannon](/docs/concepts/glossary#shannon) is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Note that in this tutorial, we use only the Shannon unit.
 
-Next, we can start transfer balance. Check out the `transfer` function in `lib.ts`:
+Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:
 
 ```ts
 //CKB To Shannon
@@ -92,11 +90,11 @@ interface Options {
 export async function transfer(options: Options): Promise<string>;
 ```
 
-The `transfer` function accepts a `Option` parameter which includes necessary info about the transfer such as fromAddress/toAddress/amount and the private key to sign the transfer transaction.
+The `transfer` function accepts an `Option` parameter, which includes necessary information about the transfer such as `fromAddress`, `toAddress`, `amount`, and the `privateKey` to sign the transfer transaction.
 
-What this transfer transaction will do is that it collects and consumes as much as the amount capacities needed with some live cells as the input cells and produce some new output cells where the lock script of all these new cells are set to the new owner's lock script for other account. In this way, the CKB balance are transferred from one account to another with the dying and the birthing of cells.
+What this transfer transaction does is collect and consume as many capacities as needed with some [live cells](/docs/concepts/glossary#live-cell) as the input cells and produce some new output cells. The lock script of all these new cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of cells from old to new.
 
-Next, let's build the transaction for transferring balance. The first step is to create an empty `txSkeleton`
+Next, let's build the transaction for transferring the balance. The first step is to create an empty `txSkeleton`.
 
 ```ts
 let txSkeleton = helpers.TransactionSkeleton({});
@@ -129,7 +127,9 @@ if (collectedSum.lt(neededCapacity)) {
 }
 ```
 
-Now lets create the transaction's output cells. `transferOutput` is generated based on the amount the user wishes to transfer, and `changeOutput` is the left change after the transaction.
+Now, let's create the transaction's output cells:
+- `transferOutput`: Generated based on the desired transfer amount by the user.
+- `changeOutput`: Represents the remaining balance after completing the transaction.
 
 ```ts
 const toScript = helpers.parseAddress(options.to, { config: lumosConfig });
@@ -150,8 +150,7 @@ const changeOutput: Cell = {
   data: "0x",
 };
 ```
-
-Then, we need to add Inputs and Outputs to the created `txSkeleton`. Also added are `Cell Deps`, which contain an `OutPoint` pointing to some specific lived cells, these cells are related to the transaction and can be used like dependencies to place code that will be loaded and executed by the `CKB-VM` or to place data that can be used for on-chain script execution. [Detailed explanation](https://something)
+Then, we need to add Inputs and Outputs to the created `txSkeleton`. Additionally, we add `Cell Deps`, which contain an `OutPoint` pointing to some specific live cells. These cells are related to the transaction and can be used as dependencies to place code that will be loaded and executed by the `ckb-vm` or to place data that can be used for on-chain script execution.
 
 ```ts
 txSkeleton = txSkeleton.update("inputs", (inputs) => inputs.push(...collected));
@@ -169,9 +168,10 @@ txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
 );
 ```
 
-Next, update specific witness data in the transaction. The witness is a place to put data like signature for the transaction to be verified on blockchain. The witness can be used in whatever format you want, but here we follow a [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) spec for basic transaction structure, notice that this spec can change to apply better practice.
+Next, update specific [witness](/docs/concepts/glossary#witness) data in the transaction. The witness serves as a place to input data such as signatures for the transaction to be verified on the blockchain. The format of the witness data is flexible; however, in this instance, we adhere to the [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) specification for basic transaction structure. It is important to note that this specification may evolve to reflect best practices.
 
-The `witnessArgs` contains a 3 different parts, corresponding to different data needed for the specific scripts executions:
+The `witnessArgs` consists of 3 distinct parts, each corresponding to the different data required for the execution of specific scripts:
+
 
 ```ts
 export interface WitnessArgs {
@@ -263,7 +263,7 @@ You can open the console on the browser to see the full transaction to confirm t
 
 By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
 
-- Capacity of the cell means how much CKB balance you have and how much data can be stored in this cell at the same time
+- Capacity of the Cell means how much CKB balance you have and how much data can be stored in this Cell at the same time
 - To build a CKB transaction is just to collecting some live cells and producing some new cells.
 - We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
 
@@ -274,7 +274,4 @@ By following this tutorial this far, you have mastered how transfer balance work
 ## Additional Resources
 
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
-- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)./SetupProjectContent.mdx
-  ./SetupProject.js
-  ./SetupProject.js
-  ./SetupProject.js
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
