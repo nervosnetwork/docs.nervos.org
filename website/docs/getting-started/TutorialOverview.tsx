@@ -12,7 +12,7 @@ const TRANSFEROVERVIEW: TutorialHeaderProps =
     tools: [
         <div>An IDE/Editor that supports TypeScript</div>,
         <div><a href={"https://nodejs.org/en"}>Node.js</a>{' and '} <a href={"https://yarnpkg.com/"}>Yarn</a></div>,
-        <div>CKB dev environment: <a href={"/doc/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
+        <div>CKB dev environment: <a href={"/docs/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
     ],
 }
 const WRITEOVERVIEW: TutorialHeaderProps = 
@@ -26,7 +26,7 @@ const WRITEOVERVIEW: TutorialHeaderProps =
     tools: [
         <div>An IDE/Editor that supports TypeScript</div>,
         <div><a href={"https://nodejs.org/en"}>Node.js</a>{' and '} <a href={"https://yarnpkg.com/"}>Yarn</a></div>,
-        <div>CKB dev environment: <a href={"/doc/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
+        <div>CKB dev environment: <a href={"/docs/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
     ],
 }
 const TOKENOVERVIEW: TutorialHeaderProps = 
@@ -40,7 +40,7 @@ const TOKENOVERVIEW: TutorialHeaderProps =
     tools: [
         <div>An IDE/Editor that supports TypeScript</div>,
         <div><a href={"https://nodejs.org/en"}>Node.js</a>{' and '} <a href={"https://yarnpkg.com/"}>Yarn</a></div>,
-        <div>CKB dev environment: <a href={"/doc/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
+        <div>CKB dev environment: <a href={"/docs/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
     ],
 }
 const DOBOVERVIEW: TutorialHeaderProps = 
@@ -54,7 +54,7 @@ const DOBOVERVIEW: TutorialHeaderProps =
     tools: [
         <div>An IDE/Editor that supports TypeScript</div>,
         <div><a href={"https://nodejs.org/en"}>Node.js</a>{' and '} <a href={"https://yarnpkg.com/"}>Yarn</a></div>,
-        <div>CKB dev environment: <a href={"/doc/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
+        <div>CKB dev environment: <a href={"/docs/getting-started/dev-environment#quick-setup-with-offckb"}>OffCKB</a></div>
     ],
 }
   

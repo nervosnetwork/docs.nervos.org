@@ -72,7 +72,7 @@ const ecoCardContents: EcoCardProps[] = [
     {
         title: 'Philosopher\'s Stone',
         description: 'On-Chain Gifting Platform powered by the Spore Protocol',
-        href: 'https://spore.pro/',
+        href: 'https://philosopherstone.xyz/',
         bannerSrc: 'philosopherstone',
         tags: ['L1', 'DOB'],
         links: [
@@ -93,7 +93,7 @@ const ecoCardContents: EcoCardProps[] = [
     },
     {
         title: 'CKB Explorer',
-        description: 'A CKB Explorer produced by the Nervos Foundation',
+        description: 'A CKB Explorer built with React and Ruby on Rails',
         href: 'https://explorer.nervos.org/',
         bannerSrc: 'explorer',
         tags: ['Explorer'],
@@ -115,11 +115,11 @@ const ecoCardContents: EcoCardProps[] = [
     {
         title: 'Neuron',
         description: 'A CKB wallet that holds your keys and can create & broadcast your transactions',
-        href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.112.0',
+        href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.114.2',
         bannerSrc: 'neuron',
         tags: ['Wallet'],
         links: [
-        { label: 'website', href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.112.0' },
+        { label: 'website', href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.114.2' },
         ],
     },
     {
