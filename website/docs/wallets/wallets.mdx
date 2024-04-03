@@ -14,7 +14,7 @@ import { walletCardContents } from './CardContents';
 Essential insights for CKB dApp developers, covering JoyID integration, wallet choices, address specifics, and CKB transfer guidelines
 
 ## Integrate Wallet (JoyID)
-For developers looking to integrate wallets into their DApps, we currently recommend using JoyID, the most popular wallet in our ecosystem. JoyID offers a seamless experience for users, enabling secure and efficient interactions with your DApp. 
+For developers looking to integrate wallets into their dApps, we currently recommend using JoyID, the most popular wallet in our ecosystem. JoyID offers a seamless experience for users, enabling secure and efficient interactions with your dApp. 
 
 For a comprehensive guide on integrating JoyID, please visit [JoyID-Connect](https://docs.joyid.dev/guide/evm/connect). Stay tuned for future integration guides for additional wallets as our ecosystem continues to grow.
 
@@ -54,10 +54,10 @@ For detailed specifications, refer to [RFC0021: CKB Address Format](https://gith
 
 ## Requirements for CKB Transfers
 
-To initiate a transfer, you need at least one cell. Each Cell comprises the essential data fields: `capacity`, `lock`, `args`, and `hash_type`, with storage sizes as follows:
+To initiate a transfer, you need at least one Cell. Each Cell comprises the essential data fields: `capacity`, `lock`, `args`, and `hash_type`, with storage sizes as follows:
 - `capacity`: 8 bytes
 - `lock`: 32 bytes
 - `args`: 20 bytes
 - `hash_type`: 1 byte
 
-Thus, a single cell requires at least 61 bytes of storage, equivalent to 61 CKBytes (CKB). **Allocating 62 CKB is recommended to cover additional fees.**
+Thus, a single Cell requires at least 61 bytes of storage, equivalent to 61 CKBytes (CKB). **Allocating 62 CKB is recommended to cover additional fees.**

@@ -3,7 +3,8 @@ id: create-dob
 title: "Tutorial: Create a DOB"
 sidebar_position: 6
 ---
-
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import TutorialHeader from "@components/TutorialHeader";
 import { DOBOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
@@ -41,10 +42,44 @@ In this tutorial, we will build a simple dApp to turn a picture on your computer
 
 ## Setup Devnet & Run Example
 
-<SetupProject
-  templateName="create-dob"
-  imageSrc="img/dapps/create-dob-dapp.jpg"
-/>
+### Step 1: Initialize
+
+After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), run the following command to initlize a project with our built-in templates. 
+
+```bash
+offckb init <project-name>
+```
+
+When prompted to select a dApp template, use your arrow keys to select **Create a Digital Object Using Spore Protocol** for this tutorial.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-init" label="Command">
+```
+```bash {5}
+? Select a dApp template (Use arrow keys)
+  View and Transfer a CKB Balance
+  Write an On-Chain Message
+  Create a Fungible Token
+> Create a Digital Object Using Spore Protocol
+a simple dApp to create on-chain digital object with spore scripts
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-init-result" label="Response">
+```
+```bash
+init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
+✨  Done in 2.52s.
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+### Step 2: Start the Devnet
+
+<SetupProject imageSrc="img/dapps/create-dob-dapp.jpg" />
 
 ## Behind the Scene
 
@@ -134,7 +169,7 @@ export async function showSporeContent(txHash: string, index = 0) {
 }
 ```
 
-We locate the Spore Cell by accepting a outpoint parameter(`txHash` and `outputIndex`), and use `rpc.getLiveCell` to get the live cell. Then we unpack the data content from this Cell:
+We locate the Spore Cell by accepting a outpoint parameter(`txHash` and `outputIndex`), and use `rpc.getLiveCell` to get the Live Cell. Then we unpack the data content from this Cell:
 
 ```ts
 const data = cell.data.content;

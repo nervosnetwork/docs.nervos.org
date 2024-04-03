@@ -19,7 +19,7 @@
     /* Conditional Variables*/
     --hover: rgba(0, 224, 211, 0.04);
     --surface-03-hover: #DEF0F2;
-    --selected: rgba(0, 224, 211, 0.06);
+    --selected: rgba(0, 224, 211, 0.08);
 
     /* Alert Variables */
     --alert-success: #0C865C;

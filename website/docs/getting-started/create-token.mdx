@@ -3,7 +3,8 @@ id: create-token
 title: "Tutorial: Create a Fungible Token"
 sidebar_position: 4
 ---
-
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import TutorialHeader from "@components/TutorialHeader";
 import { TOKENOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
@@ -19,7 +20,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 ## Custom Token on CKB
 
-Different from [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on the UTXO-like [Cell model](/docs/concepts/cell-model).
+Different from [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on the UTXO-like [Cell Model](/docs/concepts/cell-model).
 
 In CKB, custom tokens are called User-Defined-Token, aka UDT. The core team of CKB has proposed a minimal standard for UDT called xUDT(extensible UDT). In this tutorial, we will use the pre-deployed smart contracts `xUDT script` to issue custom tokens.
 
@@ -27,18 +28,51 @@ The high-level workflow to issue a custom token with xUDT goes like this:
 
 When you issue a token, you create a special Cell that presents some balance of your token, like a piece of printed cash to the dollars.
 
-For this special cell, its data field contains the amount of the token and its type script is xUDT script where the args of that script will be the issuer's [lock script hash](/docs/concepts/glossary#lock-script-hash).
+For this special Cell, its data field contains the amount of the token and its type script is xUDT script where the args of that Script will be the issuer's [lock script hash](/docs/concepts/glossary#lock-script-hash).
 
-This issuer's lock script hash works like the unique ID for the custom token. Different lock script hash means a different kind of token. It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
+This issuer's lock script hash works like the unique ID for the custom token. Different lock script Hash means a different kind of token. It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
 
 In reality, xUDT is more complicated and powerful with many features but the idea is the same, you can check the [full specs here](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md).
 
 ## Setup Devnet & Run Example
 
-<SetupProject
-  templateName="issue-custom-token"
-  imageSrc="img/dapps/issue-token-dapp.jpg"
-/>
+### Step 1: Initialize
+
+After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), run the following command to initlize a project with our built-in templates. 
+
+```bash
+offckb init <project-name>
+```
+
+When prompted to select a dApp template, use your arrow keys to select **Create a Fungible Token** for this tutorial.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-init" label="Command">
+```
+```bash {4}
+? Select a dApp template (Use arrow keys)
+  View and Transfer a CKB Balance
+  Write an On-Chain Message
+> Create a Fungible Token
+  Create a Digital Object Using Spore Protocol
+a simple dApp to issue your own token via xUDT scripts
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-init-result" label="Response">
+```
+```bash
+init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
+✨  Done in 2.52s.
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+### Step 2: Start the Devnet
+
+<SetupProject imageSrc="img/dapps/issue-token-dapp.jpg"/>
 
 ## Behind the Scene
 
@@ -90,7 +124,7 @@ const targetOutput: Cell = {
 
 Note that the `data` field is the amount of the custom token.
 
-Next, to complete our `issueToken` function, we just use the `helpers.TransactionSkeleton` to build the transaction with our desired output cells.
+Next, to complete our `issueToken` function, we just use the `helpers.TransactionSkeleton` to build the transaction with our desired output Cells.
 
 ```ts
 let txSkeleton = helpers.TransactionSkeleton();
@@ -158,15 +192,15 @@ export async function queryIssuedTokenCells(xudtArgs: HexString) {
 }
 ```
 
-Note that to query a custom token cell, we must know its xUDTArgs. As explained in the high-level ideas for xUDT scripts, this xUDTArgs functions like the unique ID for the token you issued.
+Note that to query a custom token Cell, we must know its xUDTArgs. As explained in the high-level ideas for xUDT scripts, this xUDTArgs functions like the unique ID for the token you issued.
 
-Thus, `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then construct a type script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the live cells that possess such a type script.
+Thus, `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then construct a type script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the Live Cells that possess such a type script.
 
-By identifying the lock scripts of these live cells, we can determine that those custom tokens now belong to the individual who can unlock this lock script. Consequently, we know who the token holders are.
+By identifying the lock scripts of these Live Cells, we can determine that those custom tokens now belong to the individual who can unlock this lock script. Consequently, we know who the token holders are.
 
 ### Transfer Custom Token
 
-The next step you want to do is probably sending your tokens to someone else. To do that, you will replace the lock script of the custom token Cell with the receiver's lock script. Therefore, the receiver can unlock the custom token cell. In this way, the token is transferred from you to other people.
+The next step you want to do is probably sending your tokens to someone else. To do that, you will replace the lock script of the custom token Cell with the receiver's lock script. Therefore, the receiver can unlock the custom token Cell. In this way, the token is transferred from you to other people.
 
 Check out the `transferTokenToAddress` function in `lib.ts` file.
 
@@ -181,9 +215,9 @@ export async function transferTokenToAddress(
 }
 ```
 
-The function use `udtIssuerArgs` to build the type script from the custom token. It then collects live cells which match the type script and the lock script of the `senderLockScript`, effectively saying, "give me the custom token cells that belong to the sender (the sender can unlock the lock script).".
+The function use `udtIssuerArgs` to build the type script from the custom token. It then collects Live Cells which match the type script and the lock script of the `senderLockScript`, effectively saying, "give me the custom token Cells that belong to the sender (the sender can unlock the lock script).".
 
-With all these live cells, we can build the transaction to produce custom token cells with the required amount and the receiver's lock scripts from the input cells.
+With all these Live Cells, we can build the transaction to produce custom token Cells with the required amount and the receiver's lock scripts from the input Cells.
 
 ```ts
 let txSkeleton = helpers.TransactionSkeleton();
@@ -215,7 +249,7 @@ const capacity = helpers.minimalCellCapacity(targetOutput);
 targetOutput.cellOutput.capacity = "0x" + capacity.toString(16);
 ```
 
-You may notice that the `transferTokenToAddress` function is pretty long, while the core transfer logic above is quite simple. The problem is that we need to handle the capacity change in the `changeOutputCell`. If the change capacity is less than 61CKB, we need to add another live Cell in our inputs to build the `changeOutputCell`. Also, we need to handle the changes in the token amount. If there is any token amount remaining, we need to return the change amount along with change capacities to the sender.
+You may notice that the `transferTokenToAddress` function is pretty long, while the core transfer logic above is quite simple. The problem is that we need to handle the capacity change in the `changeOutputCell`. If the change capacity is less than 61CKB, we need to add another Live Cell in our inputs to build the `changeOutputCell`. Also, we need to handle the changes in the token amount. If there is any token amount remaining, we need to return the change amount along with change capacities to the sender.
 
 ```ts
 let changeOutputTokenAmount = BI.from(0);

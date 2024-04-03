@@ -18,7 +18,7 @@ CKByte is the native token of Nervos, covering three types of fees: Cycles (comp
 
 Cycles and transaction fees are one-time payments required to process the transaction and add it on the blockchain. State Rent is continuously paid for data persistence.
 
-Ownership of CKByte grants the holder to one byte of data storage on Nervos. To create a new cell, users must possess CKBytes equivalent to the space the Cell occupies. These CKBytes remain locked for the cell’s duration. When the Cell is consumed, the CKBytes are released and can be reused. State Rent is automatically paid during the lock period of CKBytes.
+Ownership of CKByte grants the holder to one byte of data storage on Nervos. To create a new Cell, users must possess CKBytes equivalent to the space the Cell occupies. These CKBytes remain locked for the Cell’s duration. When the Cell is consumed, the CKBytes are released and can be reused. State Rent is automatically paid during the lock period of CKBytes.
 
 All assets on Nervos require data storage, making them subject to State Rent. This creates direct value alignment because CKBytes are indispensable for asset maintenance on Nervos.
 
@@ -42,7 +42,7 @@ The inflation funding State Rent comes from a process known as Secondary Issuanc
 
 At the network’s initial launch, CKBytes had lower value, indicating lower security. To boost Nervos’ appeal for asset storage, security is temporarily subsidized through Base Issuance, similar to Bitcoin's mining process. Miners receive fixed CKBytes rewards for processing transactions. Over time, the subsidies diminishes as stored assets gain value.
 
-Base Issuance follows a transparent, predictable inflation schedule, <Link to={useBaseUrl('/docs/reference/halving')}>halving</Link> about every four years until reaching the caps at 33.6 billion CKBytes.
+Base Issuance follows a transparent, predictable inflation schedule, [halving](https://ckbdapps.com/halving) about every four years until reaching the caps at 33.6 billion CKBytes.
 
 ## Secondary Issuance
 
@@ -56,7 +56,7 @@ Unlike Base Issuance, Secondary Issuance only targets at users occupying Nervos 
 
 ## Nervos DAO
 
-CKBytes holders can earn interest by locking tokens in Nervos DAO, similar to staking. Interest accrues proportionally to Secondary Issuance, offsetting the long-term inflationary effects of the latter, thus maintaining value. Users occupying space in Nervos have their CKBytes locked, making them ineligible to be placed in Nervos DAO. Once the space-occupying cells are consumed and the CKBytes are released, they can be placed in Nervos DAO. This mechanism incentivizes the removal of unnecessary data, ensuring long-term manageability of the blockchain.
+CKBytes holders can earn interest by locking tokens in Nervos DAO, similar to staking. Interest accrues proportionally to Secondary Issuance, offsetting the long-term inflationary effects of the latter, thus maintaining value. Users occupying space in Nervos have their CKBytes locked, making them ineligible to be placed in Nervos DAO. Once the space-occupying Cells are consumed and the CKBytes are released, they can be placed in Nervos DAO. This mechanism incentivizes the removal of unnecessary data, ensuring long-term manageability of the blockchain.
 
 ***
 

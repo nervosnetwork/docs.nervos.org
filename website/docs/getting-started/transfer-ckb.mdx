@@ -3,7 +3,8 @@ id: transfer-ckb
 title: "Tutorial: Transfer CKB"
 sidebar_position: 2
 ---
-
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import TutorialHeader from "@components/TutorialHeader";
 import { TRANSFEROVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
@@ -21,14 +22,47 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 CKB is based on a UTXO-like [Cell Model](/docs/concepts/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously. A Cell can store any type of data.
 
-A transaction in CKB works similarly to Bitcoin. Each transaction consumes some input cells and produces new output cells. Note that the total capacities of the output cells cannot be larger than those of the input cells, similar to how UTXOs are transferred and converted in Bitcoin.
+A transaction in CKB works similarly to Bitcoin. Each transaction consumes some input Cells and produces new output Cells. Note that the total capacities of the output Cells cannot be larger than those of the input Cells, similar to how UTXOs are transferred and converted in Bitcoin.
 
 ## Setup Devnet & Run Example
 
-<SetupProject
-  templateName="view-and-transfer-balance"
-  imageSrc="img/dapps/transfer-dapp.jpg"
-/>
+### Step 1: Initialize
+
+After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), run the following command to initlize a project with our built-in templates. 
+
+```bash
+offckb init <project-name>
+```
+
+When prompted to select a dApp template, use your arrow keys to select **View and Transfer a CKB Balance** for this tutorial.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-init" label="Command">
+```
+```bash {2}
+? Select a dApp template (Use arrow keys)
+> View and Transfer a CKB Balance
+  Write an On-Chain Message
+  Create a Fungible Token
+  Create a Digital Object Using Spore Protocol
+A simple dApp to check CKB balance and transfer CKB
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-init-result" label="Response">
+```
+```bash
+init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
+✨  Done in 2.52s.
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+### Step 2: Start the Devnet
+
+<SetupProject imageSrc="img/dapps/transfer-dapp.jpg"/>
 
 ## Behind the Scene
 
@@ -53,11 +87,11 @@ export const generateAccountFromPrivateKey = (privKey: string): Account => {
 };
 ```
 
-What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [lock script](docs/concepts/glossary#lock-script) to obtain the corresponding address of this account. A lock script ensures that only the owner can consume their live cells.
+What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [lock script](/docs/concepts/glossary#lock-script) to obtain the corresponding address of this account. A lock script ensures that only the owner can consume their Live Cells.
 
 Here, we use the CKB standard lock script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a lock script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
 
-Once we have the lock script of an account, we can determine how much balance the account has. The calculation is straightforward; we query and find all the cells that use the same lock script and sum all these cells' capacities; the sum is the balance.
+Once we have the lock script of an account, we can determine how much balance the account has. The calculation is straightforward; we query and find all the Cells that use the same lock script and sum all these Cells' capacities; the sum is the balance.
 
 ```ts
 export async function capacityOf(address: string): Promise<BI> {
@@ -92,7 +126,7 @@ export async function transfer(options: Options): Promise<string>;
 
 The `transfer` function accepts an `Option` parameter, which includes necessary information about the transfer such as `fromAddress`, `toAddress`, `amount`, and the `privateKey` to sign the transfer transaction.
 
-What this transfer transaction does is collect and consume as many capacities as needed with some [live cells](/docs/concepts/glossary#live-cell) as the input cells and produce some new output cells. The lock script of all these new cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of cells from old to new.
+What this transfer transaction does is collect and consume as many capacities as needed with some [Live Cells](/docs/concepts/glossary#live-cell) as the input Cells and produce some new output Cells. The lock script of all these new Cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
 
 Next, let's build the transaction for transferring the balance. The first step is to create an empty `txSkeleton`.
 
@@ -106,7 +140,7 @@ Then we determine the total capacities required for our transaction including `T
 const neededCapacity = BI.from(options.amount).add(100000);
 ```
 
-Then we retrieve the sender account's assets from blockchain RPC with the help of `indexer` and collect the transaction's inputs cells
+Then we retrieve the sender account's assets from blockchain RPC with the help of `indexer` and collect the transaction's inputs Cells
 
 ```ts
 const fromScript = helpers.parseAddress(options.from, {
@@ -127,7 +161,7 @@ if (collectedSum.lt(neededCapacity)) {
 }
 ```
 
-Now, let's create the transaction's output cells:
+Now, let's create the transaction's output Cells:
 - `transferOutput`: Generated based on the desired transfer amount by the user.
 - `changeOutput`: Represents the remaining balance after completing the transaction.
 
@@ -150,7 +184,7 @@ const changeOutput: Cell = {
   data: "0x",
 };
 ```
-Then, we need to add Inputs and Outputs to the created `txSkeleton`. Additionally, we add `Cell Deps`, which contain an `OutPoint` pointing to some specific live cells. These cells are related to the transaction and can be used as dependencies to place code that will be loaded and executed by the `ckb-vm` or to place data that can be used for on-chain script execution.
+Then, we need to add Inputs and Outputs to the created `txSkeleton`. Additionally, we add `Cell Deps`, which contain an `OutPoint` pointing to some specific Live Cells. These Cells are related to the transaction and can be used as dependencies to place code that will be loaded and executed by the `ckb-vm` or to place data that can be used for on-chain script execution.
 
 ```ts
 txSkeleton = txSkeleton.update("inputs", (inputs) => inputs.push(...collected));
@@ -175,9 +209,9 @@ The `witnessArgs` consists of 3 distinct parts, each corresponding to the differ
 
 ```ts
 export interface WitnessArgs {
-  lock?: HexString; // lock scripts of the input cells
-  inputType?: HexString; // type scripts of the input cells
-  outputType?: HexString; // type scripts of the output cells
+  lock?: HexString; // lock scripts of the input Cells
+  inputType?: HexString; // type scripts of the input Cells
+  outputType?: HexString; // type scripts of the output Cells
 }
 ```
 
@@ -264,7 +298,7 @@ You can open the console on the browser to see the full transaction to confirm t
 By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
 
 - Capacity of the Cell means how much CKB balance you have and how much data can be stored in this Cell at the same time
-- To build a CKB transaction is just to collecting some live cells and producing some new cells.
+- To build a CKB transaction is just to collecting some Live Cells and producing some new Cells.
 - We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
 
 ## Next Step

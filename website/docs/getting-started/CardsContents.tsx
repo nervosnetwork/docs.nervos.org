@@ -116,7 +116,7 @@ const tutorialFrameContent = [
   {
     tabValue: "create-token",
     label: "Create a Fungible Token",
-    tutorialTitle: "Create, view and transfer a custom token.",
+    tutorialTitle: "Create, view, and transfer a custom token.",
     tutorialLink: TUTORIALS_LINKS.issueToken,
     iframeSrc:
       "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
@@ -124,7 +124,7 @@ const tutorialFrameContent = [
   {
     tabValue: "create-dob",
     label: "Create a DOB",
-    tutorialTitle: "Create a DOB",
+    tutorialTitle: "Create a digital object using spore protocol.",
     tutorialLink: TUTORIALS_LINKS.createDOB,
     iframeSrc:
       "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
@@ -132,7 +132,7 @@ const tutorialFrameContent = [
 ];
 
 const MORETOOLCARDTITLE = "More Dev Tools →";
-const MORETOOLCARDHREF = "./getting-started/devtool";
+const MORETOOLCARDHREF = "/docs/getting-started/devtool";
 
 export {
   toolCardContents,
