@@ -1,0 +1,28 @@
+os: linux
+dist: bionic
+
+language: node_js
+node_js:
+  - lts/*
+
+cache:
+  yarn: true
+
+before_install:
+  - cd website
+  - node -v
+  - npm -v
+  - npm -g install now
+  - npm -g install yarn
+  - now -v
+  - yarn -v
+
+install:
+  - yarn
+
+script:
+  - yarn build
+  - if [ "$TRAVIS_BRANCH" = "develop" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then git config --global user.name "${GH_NAME}"; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then git config --global user.email "${GH_EMAIL}"; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then GIT_USER="${GH_NAME}" yarn run publish-gh-pages; fi
