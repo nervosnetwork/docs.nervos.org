@@ -80,7 +80,7 @@ const config = {
           remarkPlugins: [math],
           rehypePlugins: [katex],
           editUrl:
-            "https://github.com/nervosnetwork/docs-new/tree/develop-v2/website",
+            "https://github.com/nervosnetwork/docs-new/tree/develop/website",
         },
         blog: {},
         theme: {
