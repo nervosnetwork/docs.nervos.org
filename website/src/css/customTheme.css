@@ -111,9 +111,9 @@
 
 /* @cmfcmf/docusaurus-search-local search  */
 .navbar-search .aa-DetachedSearchButton {
-  background-color: var(--surface-02);
+  background-color: transparent;
   border: 1px solid var(--border-subtle);
-  border-radius: 8px;
+  border-radius: 40px;
   width: 280px;
   height: 48px;
   padding: 0 1rem;
@@ -125,10 +125,10 @@
   box-shadow: none !important;
 }
 .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
-  color: var(--text-placeholder) !important;
+  color: var(--text-tertiary) !important;
 }
 .aa-DetachedSearchButtonPlaceholder {
-  color: var(--text-placeholder);
+  color: var(--text-tertiary);
 }
 
 .navbar-help {
