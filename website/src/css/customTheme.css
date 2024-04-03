@@ -1,5 +1,14 @@
 @import '@css/customVariables.css';
 
+@font-face {
+  font-family: 'Poppins-Bold';
+  src: url('../../static/fonts/Poppins-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  src: url('../../static/fonts/Lato-Regular.ttf') format('truetype');
+}
+
 :root{
   /* Override the default with our brand color */
   --ifm-color-primary: var(--text-link);
@@ -7,7 +16,7 @@
   --ifm-hover-overlay: var(--hover);
 
   /* Fonts */
-  --ifm-heading-font-family: 'Inter', sans-serif;
+  --ifm-heading-font-family: 'Poppins-Bold', sans-serif;
   --ifm-heading-color: var(--text-primary);
   --ifm-font-family-base: 'Lato', sans-serif;
   --ifm-font-color-base: var(--text-secondary);
