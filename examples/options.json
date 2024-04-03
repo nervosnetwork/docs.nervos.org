@@ -1,21 +1,21 @@
 [
   {
-    "name": "View and Transfer Balance",
+    "name": "View and Transfer a CKB Balance",
     "value": "simple-transfer",
     "description": "a simple Dapp to check CKB balance and transfer CKB"
   },
   {
-    "name": "Issue Token via XUDT scripts",
-    "value": "xudt",
-    "description": "a simple Dapp to issue your own token via XUDT scripts"
-  },
-  {
-    "name": "Write & Read Onchain Message",
+    "name": "Write an On-Chain Message",
     "value": "write-and-read-message",
     "description": "a simple Dapp to store & retrieve data from a Cell"
   },
   {
-    "name": "Create Digital Object With Spore scripts",
+    "name": "Create a Fungible Token",
+    "value": "xudt",
+    "description": "a simple Dapp to issue your own token via XUDT scripts"
+  },
+  {
+    "name": "Create a Digital Object Using Spore Protocol",
     "value": "create-dob",
     "description": "a simple Dapp to create on-chain digital object with spore scripts"
   }
