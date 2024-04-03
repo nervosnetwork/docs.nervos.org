@@ -1,6 +1,6 @@
 # View & Transfer Balance
 
-This is a simple Dapp example to show how to create and view digital objects on the CKB blockchain. Read the step-by-step [tutorial](https://nervos-ckb-docs-git-develop-v2-cryptape.vercel.app/docs/dapp/create-dob) to understand how it works.
+This is a simple Dapp example to show how to create and view digital objects on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/getting-started/create-dob) to understand how it works.
 
 ## How to run
 
