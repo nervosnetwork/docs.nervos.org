@@ -1,13 +1,22 @@
 @import '@css/customVariables.css';
 
+@font-face {
+  font-family: 'Poppins-Bold';
+  src: url('../../static/fonts/Poppins-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Lato';
+  src: url('../../static/fonts/Lato-Regular.ttf') format('truetype');
+}
+
 :root{
   /* Override the default with our brand color */
   --ifm-color-primary: var(--text-link);
-  --ifm-background-color: var(--surface-01);
+  --ifm-background-color: var(--surface-01) !important;
   --ifm-hover-overlay: var(--hover);
 
   /* Fonts */
-  --ifm-heading-font-family: 'Inter', sans-serif;
+  --ifm-heading-font-family: 'Poppins-Bold', sans-serif;
   --ifm-heading-color: var(--text-primary);
   --ifm-font-family-base: 'Lato', sans-serif;
   --ifm-font-color-base: var(--text-secondary);
@@ -18,7 +27,7 @@
   --ifm-hr-margin-vertical: 4em;
 
   /* Navbar */
-  --ifm-navbar-background-color: var(--surface-02);
+  --ifm-navbar-background-color: var(--surface-03);
   --ifm-navbar-height: 64px;
 
   /* Sidebar */
@@ -29,7 +38,7 @@
   --docsearch-modal-background: var(--surface-03);
   --docsearch-footer-background: var(--surface-02);
   --docsearch-border-color: var(--border-subtle);
-  --docsearch-placeholder-color: var(--text-placeholder);
+  --docsearch-placeholder-color: var(--text-tertiary);
   --docsearch-muted-color: var(--text-tertiary);
 
   /* Sidebar menu */
@@ -51,7 +60,7 @@
   --ifm-blockquote-border-width: 2px;
 
   /* Table of content */
-  --ifm-toc-border-color: var(--border-subtle);
+  --ifm-toc-border-color: var(--border-subtle) !important;
   --ifm-toc-link-color: var(--text-tertiary);
   --ifm-link-color: var(--text-link);
 
@@ -67,9 +76,9 @@
 
 /*Search bar*/
 .navbar-search .DocSearch-Button {
-  background-color: var(--surface-02);
+  background-color: transparent;
   border: 1px solid var(--border-subtle);
-  border-radius: 8px;
+  border-radius: 40px;
   width: 280px;
   height: 48px;
   padding: 0 1rem;
@@ -82,26 +91,27 @@
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
-  color: var(--text-placeholder) !important;
+  color: var(--text-tertiary) !important;
 }
 
 .DocSearch-Button-Placeholder {
-  color: var(--text-placeholder);
+  color: var(--text-tertiary);
 }
 
 .DocSearch-Button-Key {
-  background: var(--surface-03) !important;
+  background: var(--surface-02) !important;
   color: var(--text-secondary) !important;
   box-shadow: none !important;
   height: 24px !important;
   width: 24px !important;
   padding: 0 !important;
   font-size: 0.75rem !important;
+  margin-right: -0.6em !important;
 }
 .navbar-help {
   height: 48px;
   border: 1px solid var(--border-subtle);
-  border-radius: 8px;
+  border-radius: 40px;
   cursor: pointer;
   text-decoration: none !important;
   padding: 0 1em 0 0.75em;
@@ -126,7 +136,7 @@
 .navbar__items--right > :last-child {
   width: 48px;
   height: 48px;
-  border-radius: 8px;
+  border-radius: 50%;
   border: 1px solid var(--border-subtle);
   cursor: pointer;
 }
@@ -138,8 +148,12 @@
 }
 
 /* Sidebar Menu */
-.menu__link {
+.menu {
+  padding: 0.5em !important;
+}
+.menu__link, .menu__list-item-collapsible {
   height: 40px;
+  border-radius: 20px !important;
 }
 
 .menu__link--active {
@@ -157,6 +171,39 @@
 
 .disabled-menu-link > .menu__link--active {
   background-color: transparent;
+}
+.menu__list .menu__list {
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) + 1.25em);
+}
+
+/* Add icon next to the menus */
+.theme-doc-sidebar-menu > li:first-child > div > a:before {
+  content:url('/svg/icon-sidebar-rocket.svg');
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+.theme-doc-sidebar-menu > li:nth-child(2) > a:before {
+  content:url('/svg/icon-sidebar-wallet.svg');
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+.theme-doc-sidebar-menu > li:nth-child(3) > a:before {
+  content:url('/svg/icon-sidebar-rpc.svg');
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+.theme-doc-sidebar-menu > li:nth-child(4) > div > a:before {
+  content:url('/svg/icon-sidebar-concept.svg');
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+.theme-doc-sidebar-menu > li:nth-child(5) > a:before {
+  content:url('/svg/icon-sidebar-ecosystem.svg');
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+.menu__caret {
+  border-radius: 50%;
 }
 
 /* Footer */
@@ -246,7 +293,6 @@ p, blockquote, ul, ol {
 pre > code {
   box-shadow: none;
   border: 1px solid var(--border-subtle);
-  border-radius: 8px;
   line-height: 1.7 !important;
 }
 .markdown video {
@@ -318,9 +364,9 @@ details {
 
 /* Footer */
 .footer {
-  --ifm-footer-background-color: #202122;
-  --ifm-footer-title-color: #FFFFFF;
-  --ifm-footer-link-color: rgba(255, 255, 255, 0.9);
+  --ifm-footer-background-color: var(--surface-03);
+  --ifm-footer-title-color: var(--text-primary);
+  --ifm-footer-link-color: var(--text-secondary);
 }
 
 /* Banner link to legacy doc site */
@@ -332,8 +378,8 @@ details {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #333;
-  color: rgba(255, 255, 255, 0.8);
+  background-color: var(--surface-02);
+  color:var(--text-secondary);
 }
 
 

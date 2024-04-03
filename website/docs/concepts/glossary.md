@@ -141,7 +141,7 @@ Blocks are sent to all nodes in a blockchain network.
 ---
 
 ### Capacity
-The maximum space (in bytes) that a cell can occupy on the Nervos CKB.
+The maximum space (in bytes) that a Cell can occupy on the Nervos CKB.
 
 #### Synonyms
 - [CKByte](#ckbyte)
@@ -155,9 +155,9 @@ The maximum space (in bytes) that a cell can occupy on the Nervos CKB.
 ---
 
 ### Cell
-All data on Nervos CKB is stored in cells. Cells are the primary state units in CKB, within them users can include arbitrary states. 
+All data on Nervos CKB is stored in Cells. Cells are the primary state units in CKB, within them users can include arbitrary states. 
 
-A cell has 4 fields: `capacity`, `data`, `type` and `lock`.
+A Cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 
 #### Synonyms
 - [Micro-State](#micro-state)
@@ -169,20 +169,20 @@ A cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 - [Type Script](#type-script)
 - [Dead Cell](#dead-cell)
 - [Live Cell](#live-cell)
-- <Link to={useBaseUrl('/docs/basics/concepts/cell-model')}>Cell Model in Key Concepts</Link>
+- [Cell Model](/docs/concepts/cell-model)
 - [UTXO on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
 
 ---
 
 ### Cell Model
-A representation of how state is managed on Nervos CKB. The cell model is a more generic state model than either Bitcoin's UTXO or Ethereum's account model. 
+A representation of how state is managed on Nervos CKB. The Cell Model is a more generic state model than either Bitcoin's UTXO or Ethereum's account model. 
 
-The cell model is a new construction that combines many of the advantages of Ethereum's account model with the asset ownership and proof-based verification properties of Bitcoin's UTXO model.
+The Cell Model is a new construction that combines many of the advantages of Ethereum's account model with the asset ownership and proof-based verification properties of Bitcoin's UTXO model.
 
 #### See Also
 - [Lock Script](#lock-script)
 - [Type Script](#type-script)
-- <Link to={useBaseUrl('/docs/basics/concepts/cell-model')}>Cell Model in Key Concepts</Link>
+- [Cell Model](/docs/concepts/cell-model)
 - [Cell Model on the Nervos Blog](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571)
 - [UTXO on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
 
@@ -240,12 +240,12 @@ CKB VM is a crypto-agnostic virtual machine, a RISC-V instruction set based VM f
 ---
 
 ### Code Hash
-A field in a cell which contains a hash value that can refer to a specific piece of data, or a specific cell referenced by Type ID.
+A field in a Cell which contains a hash value that can refer to a specific piece of data, or a specific Cell referenced by Type ID.
 
 #### See Also
 
 - [Cell](#cell)
-- [Type ID](#type-id)
+- [Type ID](#type_id)
 
 ---
 
@@ -339,7 +339,7 @@ An algorithm executed among a number of distributed participants, ensuring that 
 
 
 ### Consume
-The process of using a live cell as an input to a transaction. The consumption processes indicate that live cell turns into a dead cell.
+The process of using a Live Cell as an input to a transaction. The consumption processes indicate that Live Cell turns into a Dead Cell.
 
 ---
 
@@ -383,7 +383,7 @@ The number of RISC-V computational cycles required by a script to execute. It's 
 This is a similar concept to Ethereum's Gas, we set cycles to ensure optimal performance and security. Scripts must stay within cycle limits, otherwise the block will be rejected by CKB nodes.
 
 #### See Also
-- [Estimate cycles](https://docs.nervos.org/docs/essays/faq/#estimate-cycles)
+- [Estimate cycles](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/faq/#estimate-cycles)
 - [Max_block_cycles](#max_block_cycles)
 - [Rules for calculating cycles in RFC on Nervos Network Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md )
 - [Script](#script)
@@ -401,12 +401,12 @@ A decentralized autonomous organization (DAO) is an organization represented by 
 ---
 
 ### DApp
-Decentralized application. At a minimum, it is a smart contract and a web user interface. In a broader sense, DApps are web applications that are built on top of open, decentralized, peer-to-peer infrastructure services. Additionally, many DApps include decentralized storage and/or a message protocol and platform.
+Decentralized application. At a minimum, it is a smart contract and a web user interface. In a broader sense, dApps are web applications that are built on top of open, decentralized, peer-to-peer infrastructure services. Additionally, many dApps include decentralized storage and/or a message protocol and platform.
 
 ---
 
 ### Data
-In cell model, `data` is a field in a cell which can store arbitrary bytes.
+In Cell Model, `data` is a field in a Cell which can store arbitrary bytes.
 
 #### See Also
 - [Cell](#cell)
@@ -423,7 +423,7 @@ In blockchain, decentralization refers to the transfer of control and decision-m
 ---
 
 ### DeFi
-Short for "decentralized finance", a broad category of DApps aiming to provide financial services backed by the blockchain, without any intermediaries, so anyone with an internet connection can participate.
+Short for "decentralized finance", a broad category of dApps aiming to provide financial services backed by the blockchain, without any intermediaries, so anyone with an internet connection can participate.
 
 ---
 
@@ -451,6 +451,14 @@ A system where components are spread across multiple nodes to parallelize worklo
 
 #### See Also
 - [Decentralization](#decentralization)
+
+---
+
+### Digital Object (DOB)
+A non-fungible encrypted asset with its content fully stored on-chain, establishing an intrinsic link between content and value.
+
+#### See Also
+- [Non-Fungible-Token](#non-fungible-token)
 
 ---
 
@@ -511,7 +519,7 @@ A change in protocol causing the creation of an alternative chain, or a temporal
 A full node is an essential component of the CKB network. It stores and syncs the entire blockchain, verifies the validity of blocks and transactions, and enforces the network's consensus rules.
 
 ```
-ckb init --chain mainnet && ckb run
+ckb init --chain Mainnet && ckb run
 ```
 
 #### See Also
@@ -620,7 +628,7 @@ Short for "memory pool". A waiting area on full nodes for transactions that have
 ---
 
 ### Metadata
-Metadata is data that provides information about other data. `capacity`, `type` and `lock` in cells are metadata, they occupy cell capacity and incur a state cost as well.
+Metadata is data that provides information about other data. `capacity`, `type` and `lock` in Cells are metadata, they occupy Cell capacity and incur a state cost as well.
 
 #### See Also
 - [Capacity](#capacity)
@@ -674,7 +682,7 @@ Mining is the process by which a blockchain node get new token reward by verifyi
 Mining nodes create new blocks by solving computational puzzles. They contribute to the network's security and consensus by actively validating and adding blocks to the blockchain.
 
 ```
-ckb init --chain mainnet && ckb miner
+ckb init --chain Mainnet && ckb miner
 ```
 
 #### See Also
@@ -786,6 +794,7 @@ In cryptography, a value that can only be used once. Nonce can refer to two thin
 Non-fungible tokens or NFTs are cryptographic assets on a blockchain with unique identification codes and metadata that distinguish them from each other.
 
 #### See Also
+- [DOB](#digital-object-dob)
 - [Fungible Token](#fungible-token)
 - [Token](#token)
 - [User-Defined Token](#user-defined-token)
@@ -820,7 +829,7 @@ A form of storing a recovery phrase or private keys offline by printing them on 
 ### Payment Address
 A string of letters and numbers that cryptocurrency and assets can be sent to and from. 
 
-Nervos CKB mainnet addresses always begin with the prefix "ckb".
+Nervos CKB Mainnet addresses always begin with the prefix "ckb".
 
 #### Synonyms
 - [Address](#address)
@@ -943,7 +952,7 @@ The unlimited increase of state data in Ethereum. State bloat slows down node sy
 ---
 
 ### State Channel 
-A layer 2 solution where a channel is set up between participants, where they can transact freely and cheaply. Only a transaction to set up the channel and close the channel is sent to mainnet. This allows for very high transaction throughput, but does rely on knowing number of participants up front and locking up of funds.
+A layer 2 solution where a channel is set up between participants, where they can transact freely and cheaply. Only a transaction to set up the channel and close the channel is sent to Mainnet. This allows for very high transaction throughput, but does rely on knowing number of participants up front and locking up of funds.
 
 ---
 
@@ -969,7 +978,7 @@ The most recent block to be confirmed in a blockchain. The tip block has the hig
 ---
 
 ### Transaction
-Transaction is the basic object created and signed by users to interact with distributed ledger. Transactions update ledger state at users requests. A CKB transaction destroys some outputs created in previous transactions and creates some new outputs. We call the transaction output a cell in CKB.
+Transaction is the basic object created and signed by users to interact with distributed ledger. Transactions update ledger state at users requests. A CKB transaction destroys some outputs created in previous transactions and creates some new outputs. We call the transaction output a Cell in CKB.
 
 #### See Also
 - [Blockchain](#blockchain)
@@ -1054,7 +1063,7 @@ A User-Defined Token is usually referred to by its abbreviation, UDT.
 ---
 
 ### Wallet
-User-facing software used to interact with on-chain entities such as assets, smart contracts and dapps. A wallet can include key management itself or delegate key management to external hardware for improved security.
+User-facing software used to interact with on-chain entities such as assets, smart contracts and dApps. A wallet can include key management itself or delegate key management to external hardware for improved security.
 
 #### See Also
 - [Paper Wallet](#paper-wallet)
@@ -1275,7 +1284,7 @@ A situation that can emerge on incentivized blockchain platforms where mining re
 ## Technical Glossary
 
 ### Active Cell
-Or live cell, a cell exists in the current CKB state. Only active cells can be used as inputs to new transactions.
+Or Live Cell, a Cell exists in the current CKB state. Only active Cells can be used as inputs to new transactions.
 
 #### Synonyms
 - [Live Cell](#live-cell)
@@ -1288,7 +1297,7 @@ Or live cell, a cell exists in the current CKB state. Only active cells can be u
 ---
 
 ### Aggron
-The first Nervos CKB testnet corresponding to mainnet Lina.
+The first Nervos CKB Testnet corresponding to Mainnet Lina.
 
 - **CKB version**: >= v0.101.0 (latest stable is recommended)
 - **Genesis hash**: 0x10639e0895502b5688a6be8cf69460d76541bfa4821629d86d62ba0aae3f9606
@@ -1306,7 +1315,7 @@ The first Nervos CKB testnet corresponding to mainnet Lina.
 ---
 
 ### Animagus
-A framework layer that runs on top of Nervos CKB which provides an easy way to query for account balances without having to go through the cell collection process.
+A framework layer that runs on top of Nervos CKB which provides an easy way to query for account balances without having to go through the Cell collection process.
 
 #### See Also
 - [Cell Collection](#cell-collection)
@@ -1316,7 +1325,7 @@ A framework layer that runs on top of Nervos CKB which provides an easy way to q
 ---
 
 ### Args
-Args is short for arguments. Arguments are data provided to the lock script or type script of a cell, similar to args provided to a function or method call.
+Args is short for arguments. Arguments are data provided to the lock script or type script of a Cell, similar to args provided to a function or method call.
 
 Arguments are stored as part of the Cell when it is created.
 
@@ -1379,9 +1388,9 @@ pub const BLOCK_VERSION: Version = 0;
 ---
 
 ### Cell Collection
-The process of gathering cells that meet certain criteria.
+The process of gathering Cells that meet certain criteria.
 
-For example: To find the balance of a particular account, all active cells for the address would need to be collected.
+For example: To find the balance of a particular account, all active Cells for the address would need to be collected.
 
 #### See Also
 - [Cell](#cell)
@@ -1415,9 +1424,9 @@ EpochNumberWithFraction::new_unchecked(4, 0, 1);
 
 ### `cell_deps`
 
-Pointers to live cells on the chain that allow scripts in the transaction to access (read-only) referenced live cells.
+Pointers to Live Cells on the chain that allow scripts in the transaction to access (read-only) referenced Live Cells.
 
-Find more in the essay [Script dependencies](https://docs.nervos.org/docs/essays/dependencies/#how-dependencies-work).
+Find more in the essay [Script dependencies](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/dependencies/#how-dependencies-work).
 
 #### See Also
 
@@ -1473,12 +1482,12 @@ ckbhash(left || right)
 ---
 
 ### Code Hash
-A field in a Cell that contains a hash value which could refer to a specific piece of data, or a specific cell referenced by Type ID.
+A field in a Cell that contains a hash value which could refer to a specific piece of data, or a specific Cell referenced by Type ID.
 
 #### See Also
 - [Cell](#cell)
 - [Data](#data)
-- [Type ID](#type-id)
+- [Type ID](#type_id)
 
 ---
 
@@ -1533,7 +1542,7 @@ NervosDAO’s `type_hash`.
 Find more in [CKB Genesis Script List](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#ckb-genesis-script-list).
 
 #### See Also
-- [`type_hash`](#`type_hash`)
+- [`type_hash`](#type_hash)
 
 ---
 
@@ -1549,11 +1558,11 @@ In more general contexts, data may refer to any form of information.
 ---
 
 ### Dead Cell
-A cell that has been used as an input to a previous transaction and is consumed. 
+A Cell that has been used as an input to a previous transaction and is consumed. 
 
-A dead cell cannot be used as an input to a new transaction, nor can it be used as a dependency. It is effectively destroyed and removed from the active state of the network.
+A Dead Cell cannot be used as an input to a new transaction, nor can it be used as a dependency. It is effectively destroyed and removed from the active state of the network.
 
-A dead cell is the equivalent of a "spent UTXO" in Bitcoin.
+A Dead Cell is the equivalent of a "spent UTXO" in Bitcoin.
 
 #### Synonyms
 - [Historical Cell](#historical-cell)
@@ -1596,7 +1605,7 @@ A shorthand name for dependencies.
 ---
 
 ### Dependencies
-Dependencies are commonly referred to as deps. Dependencies are cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any scripts executing within the transaction. Dependencies, or deps, are not consumed. 
+Dependencies are commonly referred to as deps. Dependencies are Cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any scripts executing within the transaction. Dependencies, or deps, are not consumed. 
 
 #### Synonyms
 - [Deps](#deps)
@@ -1664,7 +1673,7 @@ pub(crate) const DEFAULT_EPOCH_DURATION_TARGET: u64 = 4 * 60 * 60; // 4 hours, u
 ### ERC20
 An Ethereum token standard for basic fungible tokens.
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
 #### See Also
 - [ERC777](#erc777)
@@ -1688,7 +1697,7 @@ An Ethereum token standard for non-fungible tokens.
 ### ERC777
 An updated Ethereum token standard for basic fungible tokens that is backwards compatible with ERC20.
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
 #### See Also
 - [ERC20](#erc20)
@@ -1726,7 +1735,7 @@ An address format used on Nervos that includes the full code hash of the lock sc
 
 A program used to create transactions that can be broadcast to the Nervos CKB network. 
 
-Generators run locally on the client side (off-chain). They utilize user input and existing cells as program inputs, to create new cells with new states as output.
+Generators run locally on the client side (off-chain). They utilize user input and existing Cells as program inputs, to create new Cells with new states as output.
 
 ---
 
@@ -1776,7 +1785,7 @@ A type script which defines the monetary policy of a User Defined Token (UDT).
 ---
 
 ### Governance Script Hash
-A Blake2b hash of a type script which is used as an identifier for the script when referenced by a cell.
+A Blake2b hash of a type script which is used as an identifier for the script when referenced by a Cell.
 
 #### Synonyms
 - [Type Script Hash](#type-script-hash)
@@ -1811,7 +1820,7 @@ Inbound connection means it is initiated by the remote peer; and the connection 
 
 ### Indexer
 
-An application or library to trace live cells that comply with criteria specified by the developer or user.
+An application or library to trace Live Cells that comply with criteria specified by the developer or user.
 
 #### See Also
 
@@ -1826,7 +1835,7 @@ Incentives paid to miners in CKBytes by epoch in CKB base issuance. Under CKB's 
 
 The initial base issuance is 4.2 billion CKBytes per year. Similar to Bitcoin, the base issuance halves approximately every 4 years until it stops.
 
-To calculate, [block reward](https://docs.nervos.org/docs/basics/glossary/#block-reward) = `initial_primary_epoch_reward` / epoch_length (the number of blocks in the epoch).
+To calculate, [block reward](/docs/concepts/glossary#block-reward) = `initial_primary_epoch_reward` / epoch_length (the number of blocks in the epoch).
 
 ```
 pub(crate) const INITIAL_PRIMARY_EPOCH_REWARD: Capacity = Capacity::shannons(1_917_808_21917808);
@@ -1835,14 +1844,14 @@ pub(crate) const INITIAL_PRIMARY_EPOCH_REWARD: Capacity = Capacity::shannons(1_9
 #### See Also
 - [Block Reward](#block-reward)
 - [Epoch](#epoch)
-- [`secondary_epoch_reward`](#`secondary_epoch_reward`)
-- [`primary_epoch_reward_havling_interval`](#`primary_epoch_reward_havling_interval`)
+- [`secondary_epoch_reward`](#secondary_epoch_reward)
+- [`primary_epoch_reward_havling_interval`](#primary_epoch_reward_havling_interval)
 
 ---
 
 ### Input
 
-A live cell that is used in a transaction. If the transaction is accepted by the network, the live cell gets consumed as input and labeled as a dead cell.
+A Live Cell that is used in a transaction. If the transaction is accepted by the network, the Live Cell gets consumed as input and labeled as a Dead Cell.
 
 #### See Also
 
@@ -1897,7 +1906,7 @@ The main goal of these protocols is to solve the transaction speed and scaling d
 ---
 
 ### Lina
-The name of public mainnet of the Nervos CKB.
+The name of public Mainnet of the Nervos CKB.
 
 - **CKB version**: >= v0.25.2 (latest stable is recommended)
 - **Genesis hash**: 0x92b197aa1fba0f63633922c61c92375c9c074a93e85963554f5499fe1450d0e5
@@ -1917,7 +1926,7 @@ The name of public mainnet of the Nervos CKB.
 ---
 
 ### Live Cell
-A cell that has not been consumed and is available for use.
+A Cell that has not been consumed and is available for use.
 
 This is similar to an unspent transaction output (UTXO) in Bitcoin.
 
@@ -1932,13 +1941,13 @@ This is similar to an unspent transaction output (UTXO) in Bitcoin.
 ---
 
 ### Lock
-A script that represents the ownership of a cell. A user successfully unlocks a cell and is able to consume it if the cell's lock script exits normally. 
+A script that represents the ownership of a Cell. A user successfully unlocks a Cell and is able to consume it if the Cell's lock script exits normally. 
 
 #### See Also
 - [Lock Script](#lock-script)
 
 ### Lock Script
-A script that enforces access and ownership of a cell. This script controls who has permission to use the cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
+A script that enforces access and ownership of a Cell. This script controls who has permission to use the Cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
 
 #### See Also
 - [Cell](#cell)
@@ -1948,7 +1957,7 @@ A script that enforces access and ownership of a cell. This script controls who 
 ---
 
 ### Lock Script Hash
-A [Blake2b](#blake2b) hash of a lock script which is used as an identifier for the script when referenced by a cell.
+A [Blake2b](#blake2b) hash of a lock script which is used as an identifier for the script when referenced by a Cell.
 
 #### See Also
 - [Cell](#cell)
@@ -2046,7 +2055,6 @@ A serialization framework for encoding data widely used on the Nervos Network.
 #### See Also
 - [Molecule Specification](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md)
 - [Molecule on Github](https://github.com/nervosnetwork/molecule)
-- [Molecule Schema used in CKB](https://github.com/nervosnetwork/ckb/tree/develop/util/types/schemas)
 
 ---
 
@@ -2187,7 +2195,7 @@ A measure of the speed at which Orphan blocks occur within the blockchain networ
 
 #### See Also
 - [Orphan Block](#orphan-block)
-- [`orphan_rate_target`](#`orphan_rate_target`)
+- [`orphan_rate_target`](#orphan_rate_target)
 
 ---
 
@@ -2234,7 +2242,7 @@ A particular output Cell in a transaction.
 ---
 
 ### Output
-A live cell that is created in a transaction.
+A Live Cell that is created in a transaction.
 
 #### See Also
 - [Cell](#cell)
@@ -2284,7 +2292,7 @@ pub(crate) const DEFAULT_PRIMARY_EPOCH_REWARD_HALVING_INTERVAL: EpochNumber =
 ```
 
 #### See Also
-- [`initial_primary_epoch_reward`](#`initial_primary_epoch_reward`)
+- [`initial_primary_epoch_reward`](#initial_primary_epoch_reward)
 
 ---
 
@@ -2371,7 +2379,7 @@ Secondary issuance has two parts. One is a fixed amount of base incentive (appro
 pub(crate) const DEFAULT_SECONDARY_EPOCH_REWARD: Capacity = Capacity::shannons(613_698_63013698);
 ```
 #### See also
-- [`initial_primary_epoch_reward`](#`initial_primary_epoch_reward`)
+- [`initial_primary_epoch_reward`](#initial_primary_epoch_reward)
 - [Secondary Reward](#secondary-reward)
 - [Secondary Issuance](#secondary-issuance)
 
@@ -2431,7 +2439,7 @@ The short address format is the most common address format used, and is often re
 ### Simple UDT
 A standard that defines a the most basic implementation of a UDT fungible token on Nervos. 
 
-An SUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
+An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
 #### Synonyms
 - [SUDT](#sudt)
@@ -2494,7 +2502,7 @@ Short for “test network,” a network used to simulate the behavior of the [Ma
 ### Transaction Confirmation Number
 The number of confirmations required for a transaction to be added to a block. 
 
-As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation [here](https://docs.nervos.org/docs/essays/tx-confirmation/)).
+As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation [here](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/tx-confirmation/)).
 
 In blockchain settlement assurance, transaction confirmation is one of the variables that cannot be easily quantified (See Nic Carter’s [article](https://medium.com/@nic__carter/its-the-settlement-assurances-stupid-5dcd1c3f4e41)). The exact number is open to adjustment depending on the security level that users desire. Nervos CKB sets a minimum of 15 confirmations, which should be considered conservative.
 
@@ -2605,13 +2613,13 @@ The `code_hash` of `type_id`. In view of the specificity of `type_id`, `type_id_
 
 #### See Also
 
-- [`type_id`](#`type_id`)
+- [`type_id`](#type_id)
 
 ---
 
 
 ### Type Script
-A script that enforces the rules that must be followed in a transaction for a cell to be consumed as an input or for a cell to be created as an output.
+A script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output.
 
 #### See Also
 - [Cell](#cell)
@@ -2625,7 +2633,7 @@ A script that enforces the rules that must be followed in a transaction for a ce
 
 Or `type_hash`, a Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
 
-The two entities in the data structure of CKB’s cell are `lock` and `type`. Type scripts can capture any validation logic needed in the cell transformation.
+The two entities in the data structure of CKB’s Cell are `lock` and `type`. Type scripts can capture any validation logic needed in the Offtransformation.
 
 Type scripts can implement economic constructs as well. NervosDAO is completely implemented as a type script with minimal support from the consensus layer.
 
@@ -2671,7 +2679,7 @@ Similarly, B4 can be the uncle of A5 (be included by A5). Although B4‘s parent
 C2 and C3 cannot be linked to the main chain as their parent is unknown, therefore, they cannot be uncles.
 
 #### See Also
-- [`max_uncles_num`](#`max_uncles_num`)
+- [`max_uncles_num`](#max_uncles_num)
 
 
 #### Synonyms

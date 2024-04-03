@@ -2,9 +2,8 @@
 
 .cardContainer {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 20px;
   padding: 1.5em 1em;
-  background-color: var(--surface-02);
   border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
@@ -15,4 +14,5 @@
 }
 .cardContainer:hover {
   border: 1px solid var(--border-accent);
+  background-color: var(--hover);
 }

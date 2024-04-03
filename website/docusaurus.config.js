@@ -15,7 +15,6 @@ const config = {
   projectName: "docs-new",
   scripts: ["/js/extra.js"],
   stylesheets: [
-    "https://fonts.googleapis.com/css2?family=Lato&display=swap",
     {
       href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
       type: "text/css",
@@ -29,9 +28,6 @@ const config = {
     oldDocSiteUrl: "https://docs-old.nervos.org",
     gaGtag: true,
     disableHeaderTitle: true,
-    fonts: {
-      lato: ["Lato", "sans-serif"],
-    },
     socialLinks: [
       {
         label: "Twitter",

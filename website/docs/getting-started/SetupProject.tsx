@@ -2,7 +2,6 @@ import { createElement } from "react";
 import Content from "./_SetupProjectContent.mdx";
 
 export interface SetupProjectProp {
-  templateName: string;
   imageSrc: string;
 }
 

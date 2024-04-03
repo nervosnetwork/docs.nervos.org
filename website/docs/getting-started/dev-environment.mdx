@@ -1,7 +1,7 @@
 ---
 id: dev-environment
 title: Dev Environment
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 import Tabs from '@theme/Tabs';
@@ -11,12 +11,12 @@ import TabItem from '@theme/TabItem';
 
 For developers, a dev environment is the most important place to start their little side projects with blockchain on weekends. 
 
-Here we have provide differnt ways to setup your CKB dev environment to start your journey.
+Here we have provide different ways to setup your CKB dev environment to start your journey.
 
 ## Quick Setup with `offckb`
 
-You can set up your development environment by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides one-line command to start a devnet, packed with pre-funded test accounts
-and the most useful scripts like Omnilock and Spore-contract.
+You can set up your local development environment by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides a one-line command to start a Devnet, pre-funded test accounts
+and useful [Scripts](/docs/concepts/glossary#script) like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
 
 ### Install
 
@@ -27,9 +27,9 @@ npm install -g @offckb/cli
 ### Usage
 
 ```bash
-offckb node # start the devnet of CKB, `ctrl-c` to stop running the chain 
-offckb clean # clean the devnet data, needs to stop running the chain first  
-offckb init <project-name> # init a CKB Dapp typescript boilerplate from multiple templates  
+offckb node # start the Devnet of CKB, `ctrl-c` to stop running the chain 
+offckb clean # clean the Devnet data, needs to stop running the chain first  
+offckb init <project-name> # init a CKB dApp typescript boilerplate from multiple templates  
 offckb accounts # list 20 accounts info with prefund CKB tokens 
 offckb list-hashes # list built-in scripts hashes, equals `ckb list-hashes`
 ```
@@ -38,7 +38,7 @@ offckb list-hashes # list built-in scripts hashes, equals `ckb list-hashes`
 
 ## Custom Devnet Setup
 
-While `OffCKB` offers a streamlined, one-line command to quickly start a devnet, you may find the need for a more nuanced configuration.
+While `OffCKB` offers a streamlined, one-line command to quickly start a Devnet, you may find the need for a more nuanced configuration.
 
 For those requiring deeper customization, Nervos CKB's development mode is highly configurable, supporting both `Dummy-Worker` for constant block intervals without Proof-of-Work (PoW) and `Eaglesong-Worker` for real PoW block production. This flexibility allows you to tailor the local blockchain setup using CKB binary on your computer, speeding up block intervals, adjusting epoch lengths, and creating blocks to suit your testing and development needs.
 
@@ -252,7 +252,7 @@ Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
 
 ## Eaglesong-Worker Setup
 
-### 1. Create New Account
+### 1. Create Account
 
 An address to receive the block rewards must be created using `ckb-cli`.
 
@@ -529,7 +529,7 @@ The transfer is successful!
 
 ## Add the Genesis Issued Cells
 
-When the development blockchain configuration is generated with `ckb init --chain dev`, a few cells are created with large capacities. These are specified in `specs/dev.toml` and exist only on your local development blockchain, making them useful for testing purposes.
+When the development blockchain configuration is generated with `ckb init --chain dev`, a few Cells are created with large capacities. These are specified in `specs/dev.toml` and exist only on your local development blockchain, making them useful for testing purposes.
 
 <table>
   <tr>

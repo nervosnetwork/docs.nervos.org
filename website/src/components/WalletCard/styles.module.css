@@ -2,9 +2,8 @@
 
 .cardContainer {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 0.5em 1em 0.5em 0.75em;
-  background-color: var(--surface-02);
   border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
@@ -14,6 +13,7 @@
 }
 .cardContainer:hover {
   border: 1px solid var(--border-accent);
+  background-color: var(--hover);
 }
 .iconContainer {
   width: 3em;
@@ -30,7 +30,9 @@
   margin-left: 8px;
 }
 .title {
-  margin-bottom: 8px;
+  margin-bottom: 0.25em;
+  font-size: 1em;
+  font-weight: bold;
 }
 .description {
   font-size: 12px;

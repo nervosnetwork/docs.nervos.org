@@ -1,91 +1,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import ImgContainer from '@components/ImgContainer';
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-To begin, you'll need to install `@offckb/cli` to establish a local dev environment and initialize the project.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="offckb-install" label="Command">
-```
-```bash
-npm install -g @offckb/cli
-```
-```mdx-code-block
-  </TabItem>
-  <TabItem value="offckb-install-result" label="Response">
-```
-```bash
-changed 106 packages in 17s
-
-11 packages are looking for funding
-run `npm fund` for details
-```
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-Use `offckb` to select the <code>{props.templateName}</code> template to init the project to your local environment
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="offckb-init" label="Command">
-```
-```bash
-offckb init <project-name>
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="offckb-init-result" label="Response">
-```
-```bash
-? Select a dapp template (Use arrow keys)
-  View and Transfer Balance
-  Issue Token via xUDT scripts
-❯ Write and Read On-Chain Message
-a simple dapp to write and read text message from blockchain via storing it in cells
-init CKB dapp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-Install node dependencies and start the example app:
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="offckb-yarn-start" label="Command">
-```
-```bash
-cd <project-name> && yarn && yarn start
-```
-```mdx-code-block
-  </TabItem>
-  <TabItem value="offckb-yarn-start-result" label="Response">
-```
-```bash
-$ parcel index.html
-Server running at http://localhost:1234
-✨ Built in 66ms
-```
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-Now, the app is running in http://localhost:1234
-
-<img src={useBaseUrl(props.imageSrc)} />
-
-### Start the Devnet
-
-In order to interact with the app, you need to start the devnet and check some accounts to use.
-
-Open one terminal and start the devnet:
+To interact with the dApp, you need to have your Devnet running. Open one terminal and start the Devnet:
 
 ```mdx-code-block
 <Tabs>
@@ -102,7 +20,7 @@ offckb node
 /bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
 /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
 CKB installed successfully.
-init devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
+init Devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
 modified  /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet/ckb-miner.toml
 CKB output: 2024-03-20 07:56:44.765 +00:00 main INFO sentry  sentry is disabled
 
@@ -119,7 +37,7 @@ CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain s
 </Tabs>
 ```
 
-Open another terminal and check some pre-funded accounts, copy some private keys for later usage:
+You might want to check pre-funded accounts and copy private keys for later use. Open another terminal and execute:
 
 ```mdx-code-block
 <Tabs>
@@ -164,4 +82,34 @@ Print account list, each account is funded with 42_000_000_00000000 capacity in 
   </TabItem>
 </Tabs>
 ```
+
+### Step 3: Run the Example
+
+Navigate to your project, install the node dependencies, and start running the example:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-yarn-start" label="Command">
+```
+```bash
+cd <project-name> && yarn && yarn start
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-yarn-start-result" label="Response">
+```
+```bash
+$ parcel index.html
+Server running at http://localhost:1234
+✨ Built in 66ms
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Now, the app is running in http://localhost:1234
+
+<ImgContainer src={useBaseUrl(props.imageSrc)} />
+
 ---

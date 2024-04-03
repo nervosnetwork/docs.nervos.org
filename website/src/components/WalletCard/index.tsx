@@ -20,7 +20,7 @@ export default function WalletCard({ title, href, description, className }: Wall
                 />
             </div>
             <div className={styles.rightContainer}>
-                <h4 className={styles.title}>{title}</h4>
+                <div className={styles.title}>{title}</div>
                 <p className={styles.description}>{description}</p>
             </div>
        </Link>

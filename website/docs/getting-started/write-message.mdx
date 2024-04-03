@@ -1,36 +1,68 @@
 ---
 id: write-message
-title: Write Message
+title: "Tutorial: Write a Message"
 sidebar_position: 3
 ---
-
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import TutorialHeader from "@components/TutorialHeader";
+import { WRITEOVERVIEW } from "./TutorialOverview.tsx"; 
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
-# Write & Read On-Chain Message
+# Write an On-Chain Message
 
 <TutorialHeader
-  estimateTime="2 – 5 min"
-  whatYouWillLearn={[
-    "How to store data on cell",
-    "Write a text message on a cell",
-    "Read the text message from cell",
-  ]}
+  time={WRITEOVERVIEW.time}
+  topics={WRITEOVERVIEW.topics}
+  tools={WRITEOVERVIEW.tools}
 />
 
 ## Store & Retrieve Cell Data
 
-In this tutorial, you'll learn how to tuck a nifty message - "**Hello CKB!**" - into a [cell](https://docs.nervos.org/docs/reference/cell/) on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB cell!
+In this tutorial, you'll learn how to tuck a nifty message - "**Hello CKB!**" - into a [Cell](/docs/concepts/cell-model#cell) on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
-As you have learned from the first tutorial [view and transfer balance](/view-and-transfer-balance), the cell can store any type of data in the data field of Cell structure. Here we will put a text message encoding in hex string format and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll then get the hex string from the same cell back and then decode them to the original text message. the method of encoding and decoding is totally up to your favorite, we use the `TextDecoder` for simplicity through the tutorial.
+As you have learned from the first tutorial [Transfer CKB](/docs/getting-started/transfer-ckb), the Cell can store any type of data in the data field of Cell structure. Here we will put a text message encoding in hex string format and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll then get the hex string from the same Cell back and then decode them to the original text message. the method of encoding and decoding is totally up to your favorite, we use the `TextDecoder` for simplicity through the tutorial.
 
 ## Setup Devnet & Run Example
 
-<SetupProject
-  templateName="write-and-read-message"
-  imageSrc="img/dapps/write-message-dapp.jpg"
-/>
+### Step 1: Initialize
+
+After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), run the following command to initlize a project with our built-in templates. 
+
+```bash
+offckb init <project-name>
+```
+
+When prompted to select a dApp template, use your arrow keys to select **Write an On-Chain Message** for this tutorial.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-init" label="Command">
+```
+```bash {3}
+? Select a dApp template (Use arrow keys)
+  View and Transfer a CKB Balance
+> Write an On-Chain Message
+  Create a Fungible Token
+  Create a Digital Object Using Spore Protocol
+A simple dApp to store & retrieve data from a Cell
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-init-result" label="Response">
+```
+```bash
+init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
+✨  Done in 2.52s.
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+### Step 2: Start the Devnet
+
+<SetupProject imageSrc="img/dapps/write-message-dapp.jpg"/>
 
 ## Behind the Scene
 
@@ -65,7 +97,12 @@ export function hexToUtf8(hexString: string): string {
 
 ### Build Transaction
 
-Now check out the core function `buildMessageTx`. It accepts two parameters, one is your private key. One is the message you want to write into the cell, then it builds the transaction to get us a new cell that includes the message written in the data field.
+Now, check out the core function `buildMessageTx`. It requires two parameters:
+
+- **Private Key**: Your private key, used for transaction authorization.
+- **Message**: The message you want to write into the Cell.
+
+The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field
 
 ```ts
 export async function buildMessageTx(
@@ -82,7 +119,7 @@ As always, we first create a transaction skeleton:
 let txSkeleton = helpers.TransactionSkeleton({});
 ```
 
-Then we build the output cell to store the message data by putting the hex format of the text message into the data field of the output cell:
+Then we build the output Cell to store the message data by putting the hex format of the text message into the data field of the output Cell:
 
 ```ts
 const fromAccount = generateAccountFromPrivateKey(privateKey);
@@ -99,9 +136,9 @@ const minimalCapacity = helpers.minimalCellCapacity(messageOutput);
 messageOutput.cellOutput.capacity = BI.from(minimalCapacity).toHexString();
 ```
 
-Notice that we need to make sure the data stored in the cell won't overflow the total size of the cell's capacity. That's why we construct the content of the cell and then use `helpers.minimalCellCapacity` to determine how much space we need for this cell.
+Notice that we need to make sure the data stored in the Cell won't overflow the total size of the Cell's capacity. That's why we construct the content of the Cell and then use `helpers.minimalCellCapacity` to determine how much space we need for this Cell.
 
-Next, we add some transaction fees and calculate the total capacities we need and start collecting the input cells:
+Next, we add some transaction fees and calculate the total capacities we need and start collecting the input Cells:
 
 ```ts
 const neededCapacity = BI.from(minimalCapacity).add(100000);
@@ -110,7 +147,7 @@ const collected: Cell[] = [];
 const collector = indexer.collector({
   lock: fromAccount.lockScript,
   type: "empty",
-  // filter cells by output data len range, [inclusive, exclusive)
+  // filter Cells by output data len range, [inclusive, exclusive)
   // data length range: [0, 1), which means the data length is 0
   outputDataLenRange: ["0x0", "0x1"],
 });
@@ -124,7 +161,7 @@ if (collectedSum.lt(neededCapacity)) {
 }
 ```
 
-Remember to build the change output cell to save our capacities:
+Remember to build the change output Cell to save our capacities:
 
 ```ts
 const changeOutput: Cell = {
@@ -195,21 +232,26 @@ Lastly, we broadcast the transaction to the blockchain network through rpc:
 const txHash = await rpc.sendTransaction(tx, "passthrough");
 ```
 
-Therefore, the message is successfully stored on a cell and lives in the blockchain.
+Therefore, the message is successfully stored on a Cell and lives in the blockchain.
 
 ### Read Cell Messages
 
-To read the message we stored on-chain, we need to retrieve the live cell we just produced, read the data field from the cell and decode the message back to the text format.
+To read the message we stored on-chain, we need to retrieve the [Live Cell](/docs/concepts/glossary#live-cell) we just produced, read the data field from the Cell and decode the message back to the text format.
 
-To retrieve a specific live cell, we use the RPC method `getLiveCell` with `OutPoint` parameters, which are the `txHash` and the `output cell index`. Given a specific transaction hash, we can locate the output cells of the transaction. By knowing the position index of the cell, we can find out the specific one.
+To retrieve a specific Live Cell, we use the RPC method `getLiveCell` with `OutPoint` parameters:
 
-For the way we built the transaction, we know that the live cell that carries the message is always the first one of the output cells. So we set `index = "0x0"`
+- **txHash**: The transaction hash from which the Cell originated.
+- **output Cell index**: The position index of the Cell within the transaction's outputs.
+
+Given a specific transaction hash, we can locate the output Cells of the transaction. By knowing the position index of the Cell, we can find out the specific one.
+
+For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`
 
 ```ts
 export async function readOnChainMessage(txHash: string, index = "0x0") {
   const { cell } = await rpc.getLiveCell({ txHash, index }, true);
   if (cell == null) {
-    return alert("cell not found, please retry later");
+    return alert("Cell not found, please retry later");
   }
   const data = cell.data.content;
   const msg = hexToUtf8(data);
@@ -222,11 +264,11 @@ export async function readOnChainMessage(txHash: string, index = "0x0") {
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how storing data on cells works on CKB. Here's a quick recap:
+By following this tutorial this far, you have mastered how storing data on Cells works on CKB. Here's a quick recap:
 
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
-- To read the storing data, we need to locate the live cell that we put our data in. This can be done by querying cells meets our requirement or by getting the cell directly with a known `OutPoint` through RPC.
+- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells meets our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
 
 ## Next Step
 
@@ -236,6 +278,3 @@ By following this tutorial this far, you have mastered how storing data on cells
 
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
-  ./SetupProject.js
-  ./SetupProject.js
-  ./SetupProject.js

@@ -9,7 +9,7 @@ export default {
     {
       type: "doc",
       id: "concepts/cell-model",
-      label: "Contracts (coming soon...)",
+      label: "Scripts (coming soon...)",
       className: "disabled-menu-link",
     },
     {

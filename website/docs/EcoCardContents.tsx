@@ -38,10 +38,10 @@ const ecoCardContents: EcoCardProps[] = [
     },
     {
         title: 'Spore',
-        description: 'Craft, Secure, Distribute, and Monetize DOB/NFT',
+        description: 'Craft, Secure, Distribute, and Monetize DOB',
         href: 'https://spore.pro/',
         bannerSrc: 'spore',
-        tags: ['L1', 'DOB/NFT'],
+        tags: ['L1', 'DOB'],
         links: [
         { label: 'website', href: 'https://spore.pro/' },
         { label: 'doc', href: 'https://docs.spore.pro/' },
@@ -52,7 +52,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'A Metaverse with an ongoing Story and NFTs Shaped by the Community',
         href: 'https://nervape.com/',
         bannerSrc: 'nervape',
-        tags: ['L1', 'DOB/NFT'],
+        tags: ['L1', 'DOB'],
         links: [
         { label: 'website', href: 'https://nervape.com/' },
         { label: 'github', href: 'https://github.com/nervape' },
@@ -74,7 +74,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'On-Chain Gifting Platform powered by the Spore Protocol',
         href: 'https://spore.pro/',
         bannerSrc: 'philosopherstone',
-        tags: ['L1', 'DOB/NFT'],
+        tags: ['L1', 'DOB'],
         links: [
         { label: 'website', href: 'https://philosopherstone.xyz/' },
         { label: 'github', href: 'https://github.com/SpectreMercury/PhilosopherStone' },
@@ -85,7 +85,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'Explore, buy and sell NFTs. By the community, for the community',
         href: 'https://nft-nation.live/',
         bannerSrc: 'nftnation',
-        tags: ['L1', 'DOB/NFT'],
+        tags: ['L1', 'DOB'],
         links: [
         { label: 'website', href: 'https://nft-nation.live/' },
         { label: 'doc', href: 'https://nftnation.gitbook.io/nftnation-explained' },

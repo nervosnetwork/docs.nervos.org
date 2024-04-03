@@ -2,39 +2,11 @@ import { CardProps } from "@site/src/components/Card";
 
 // Tutorial links
 const TUTORIALS_LINKS = {
-  transferBalance: "/docs/dapps/transfer-balance",
-  writeMessage: "/docs/dapps/write-message",
-  issueToken: "/docs/dapps/issue-token",
-  createDOB: "/docs/dapps/create-dob",
+  transferBalance: "/docs/getting-started/transfer-ckb",
+  writeMessage: "/docs/getting-started/write-message",
+  issueToken: "/docs/getting-started/create-token",
+  createDOB: "/docs/getting-started/create-dob",
 };
-
-// Tutorial Cards
-const tutorialCardContents: CardProps[] = [
-  {
-    title: "Issue Token",
-    description: "Create user-defined tokens using xUDT",
-    href: TUTORIALS_LINKS.issueToken,
-    type: "tutorial",
-  },
-  {
-    title: "Transfer Balance",
-    description: "Transfer user-defined tokens using xUDT",
-    href: TUTORIALS_LINKS.transferBalance,
-    type: "tutorial",
-  },
-  {
-    title: "Create a DOB",
-    description: "Create DOB using Spore Protocol",
-    href: TUTORIALS_LINKS.createDOB,
-    type: "tutorial",
-  },
-  {
-    title: "Write Message",
-    description: "Write and retrieve 'Hello CKB!' from a CKB.",
-    href: TUTORIALS_LINKS.writeMessage,
-    type: "tutorial",
-  },
-];
 
 const toolCardContents: CardProps[] = [
   {
@@ -87,6 +59,18 @@ const toolCardContents: CardProps[] = [
     ],
   },
   {
+    title: "CKB-Debugger",
+    description: "A standalone debugger enabling off-chain contract development",
+    href: "https://github.com/nervosnetwork/ckb-standalone-debugger",
+    type: "tool",
+    links: [
+      {
+        label: "Github",
+        href: "https://github.com/nervosnetwork/ckb-standalone-debugger",
+      },
+    ],
+  },
+  {
     title: "CKB Address",
     description:
       "Convert and decode CKB addresses and generate private keys for development",
@@ -114,8 +98,8 @@ const toolCardContents: CardProps[] = [
 
 const tutorialFrameContent = [
   {
-    tabValue: "transfer-balance",
-    label: "Transfer Balance",
+    tabValue: "transfer-ckb",
+    label: "Transfer CKB",
     tutorialTitle: "View and transfer CKB from one address to another.",
     tutorialLink: TUTORIALS_LINKS.transferBalance,
     iframeSrc:
@@ -123,16 +107,16 @@ const tutorialFrameContent = [
   },
   {
     tabValue: "write-message",
-    label: "Write Message",
-    tutorialTitle: "Write 'Hello CKB!' to a CKB cell and then retrieve it.",
+    label: "Write a Message",
+    tutorialTitle: "Write 'Hello CKB!' to a CKB Cell and then retrieve it.",
     tutorialLink: TUTORIALS_LINKS.writeMessage,
     iframeSrc:
       "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
   },
   {
-    tabValue: "issue-token",
-    label: "Issue Token",
-    tutorialTitle: "Issue, view and transfer a custom token.",
+    tabValue: "create-token",
+    label: "Create a Fungible Token",
+    tutorialTitle: "Create, view, and transfer a custom token.",
     tutorialLink: TUTORIALS_LINKS.issueToken,
     iframeSrc:
       "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
@@ -140,7 +124,7 @@ const tutorialFrameContent = [
   {
     tabValue: "create-dob",
     label: "Create a DOB",
-    tutorialTitle: "Create an on-chain digital object with Spore protocol.",
+    tutorialTitle: "Create a digital object using spore protocol.",
     tutorialLink: TUTORIALS_LINKS.createDOB,
     iframeSrc:
       "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
@@ -148,10 +132,9 @@ const tutorialFrameContent = [
 ];
 
 const MORETOOLCARDTITLE = "More Dev Tools →";
-const MORETOOLCARDHREF = "./dapps/devtool";
+const MORETOOLCARDHREF = "/docs/getting-started/devtool";
 
 export {
-  tutorialCardContents,
   toolCardContents,
   tutorialFrameContent,
   MORETOOLCARDTITLE,
