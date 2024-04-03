@@ -72,7 +72,7 @@ export function App() {
     amount.length > 0 && +amount < 6100000000 ? (
       <span>
         amount must larger than 6,100,000,000(61 CKB), see{' '}
-        <a href="https://nervos-ckb-docs-git-develop-v2-cryptape.vercel.app/docs/concepts/cryptowallet#requirements-for-ckb-transfers">why</a>
+        <a href="https://docs.nervos.org/docs/wallets/#requirements-for-ckb-transfers">why</a>
       </span>
     ) : null;
 
