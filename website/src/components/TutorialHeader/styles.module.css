@@ -1,0 +1,19 @@
+@import '@css/customVariables.css';
+
+.box{
+  border-radius: 20px;
+  padding: 1.5em;
+  text-decoration: none !important;
+  background-color: var(--surface-accent);
+  color: var(--text-secondary) !important;
+  box-shadow: none;
+  line-height: 1.7 !important;
+}
+
+.subsection {
+  margin-bottom: 0.5em;
+}
+.toolList {
+  margin: 0;
+  padding-left: 2.6em;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@offckb/simple-transfer",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel index.html",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@ckb-lumos/base": "0.21.1",
+    "@ckb-lumos/codec": "0.21.1",
+    "@ckb-lumos/lumos": "0.21.1",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "crypto-browserify": "^3.12.0",
+    "parcel": "^2.9.3",
+    "path-browserify": "^1.0.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0"
+  }
+}

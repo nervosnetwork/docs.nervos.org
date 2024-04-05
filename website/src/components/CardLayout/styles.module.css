@@ -1,0 +1,25 @@
+
+/* Create two columns, each taking equal space */
+.layoutContainer {
+  display: grid;
+  width: 100%; 
+  column-gap: 1.25em;
+  row-gap: 1.25em;
+}
+
+/* Display in 1 column for the following screen sizes */
+@media (max-width: 767px) {
+  .layoutContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+  }
+}
+@media (min-width: 996px) and (max-width: 1120px) {
+  .layoutContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+  }
+}
+  
