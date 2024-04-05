@@ -5,6 +5,12 @@ on:
     branches: [develop]
     paths: [website/**]
 
+permissions: # Define the permissions for the GITHUB_TOKEN
+  contents: write
+  actions: write
+  deployments: write
+  pages: write
+
 jobs:
   deploy:
     name: Deploy to GitHub Pages
