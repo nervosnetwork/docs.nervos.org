@@ -24,7 +24,7 @@
   },
   {
     "name": "Full-Stack Dapp Template With Remix-vite and CKB Scripts",
-    "value": "offckb-template",
+    "value": "bare-template",
     "description": "a bare full-stack template with CKB smart contract and frontend developments, power by ckb-script-templates and Remix-vite",
     "type": "template"
   }
