@@ -11,6 +11,17 @@ Offckb does not do the magic. It just wraps the new CKB smart contract template 
 
 By default, this template comes with a single simple smart contract `always-success`: `contracts/always-success/src/main.rs`.
 
+The smart contract is written in Rust lang. In order to develop, the following dependencies are required:
+
+- `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities.
+- `Rust` with `riscv64 target`: `rustup target add riscv64imac-unknown-none-elf`
+- `Clang 16+`
+- `cargo-generate`
+
+Check out the ckb-script-templates for more [detail](https://github.com/cryptape/ckb-script-templates/blob/main/README.md#dependencies)
+
+### Usage
+
 add a new smart-contract:
 
 ```sh
@@ -29,7 +40,7 @@ run test:
 make test
 ```
 
-For more detail, check [ckb-script-templates]: https://github.com/cryptape/ckb-script-templates
+For more detail, check out [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
 
 ## Dapp frontend development
 
