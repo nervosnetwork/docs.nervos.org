@@ -178,7 +178,7 @@ module.exports = {
           title: "More",
           items: [
             {
-              label: "Twitter",
+              label: "Twitter/X",
               to: "https://twitter.com/nervosnetwork",
             },
             {
