@@ -37,6 +37,7 @@
 
 .tag {
   background-color: var(--text-link);
+  font-size: 0.75em;
   color: var(--text-inverse);
   height: 24px;
   margin-right: 0.5em;
