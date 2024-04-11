@@ -34,12 +34,12 @@
   --doc-sidebar-width: 322px !important;
   --ifm-sidebar-border-color: var(--border-subtle);
 
-  /* DocSearch */
-  --docsearch-modal-background: var(--surface-03);
-  --docsearch-footer-background: var(--surface-02);
-  --docsearch-border-color: var(--border-subtle);
-  --docsearch-placeholder-color: var(--text-tertiary);
-  --docsearch-muted-color: var(--text-tertiary);
+  /* DocSearch for algolia*/
+  --docsearch-modal-background: var(--surface-03) !important;
+  --docsearch-footer-background: var(--surface-02) !important;
+  --docsearch-border-color: var(--border-subtle) !important;
+  --docsearch-placeholder-color: var(--text-tertiary) !important;
+  --docsearch-muted-color: var(--text-tertiary) !important;
 
   /* Sidebar menu */
   --ifm-menu-color: var(--text-secondary);
@@ -129,6 +129,35 @@
 }
 .aa-DetachedSearchButtonPlaceholder {
   color: var(--text-tertiary);
+}
+
+.aa-DetachedFormContainer {
+  background-color: var(--surface-02) !important;
+  border-bottom: var(--border-subtle);
+}
+.aa-DetachedContainer, .aa-DetachedContainer .aa-Panel {
+  background-color: var(--surface-02) !important;
+  background: var(--surface-02) !important;
+}
+.aa-Form {
+  background-color: transparent !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+.aa-Label svg, .aa-ClearButton {
+  color: var(--text-tertiary) !important;
+}
+.aa-Form:hover {
+  background-color: var(--hover) !important;
+}
+.aa-Form:focus, .aa-Form:focus-within {
+  border: 1px solid var(--border-accent) !important;
+  box-shadow: none !important;
+}
+.aa-Input {
+  color: var(--text-primary) !important;
+}
+.aa-Input::-webkit-input-placeholder {
+  color: var(--text-tertiary) !important;
 }
 
 .navbar-help {
@@ -407,49 +436,50 @@ details {
 
 
 /* Responsive */
-
 @media only screen and (min-width: 1024px) {
   .navigationSlider {
     margin-left: 0;
   }
-
-  .reactNavSearchWrapper input#search_input_react {
-    width: 360px;
-  }
-
   .navPusher {
     padding-top: 90px; /* Normal is 50, plus old site link banner */
   }
-
   .onPageNav > .toc-headings {
     padding-top: 50px; /* Normal is 10, plus old site link banner */
   }
 }
 
-
-@media only screen and (max-width: 1023px) {
-  .reactNavSearchWrapper input#search_input_react:focus, .reactNavSearchWrapper input#search_input_react:active {
-    background: white;
-    color: black;
+@media only screen and (max-width: 996px) {
+  .table-of-contents {
+    margin-top: 0;
+  }
+  a.table-of-contents__link {
+    color: var(--text-secondary);
   }
 }
 
-@media only screen and (max-width: 736px) {
+@media only screen and (max-width: 767px) {
   #oldSiteLink {
     height: 60px;
   }
-
   #oldSiteLink span {
     display: block;
     text-align: center;
   }
-
   .fixedHeaderContainer {
     margin-top: 60px;
   }
-
-  .docMainWrapper .wrapper {
-    padding-top: 50px;
+  /* Pagination layout */
+  .pagination-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  /* Search on navbar */
+  .navbar-search .aa-DetachedSearchButton {
+    width: 72px;
+    margin-right: 0px;
+  }
+  .aa-DetachedSearchButtonPlaceholder {
+    display: none;  
   }
 }
 

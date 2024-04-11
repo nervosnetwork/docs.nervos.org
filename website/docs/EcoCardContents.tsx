@@ -7,7 +7,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'Cross-chain Web3 identities for you and your community',
         href: 'https://did.id/',
         bannerSrc: '.bit',
-        tags: ['DID', 'L1'],
+        tags: ['DID'],
         links: [
         { label: 'website', href: 'https://did.id/' },
         { label: 'github', href: 'https://github.com/dotbitHQ' },
@@ -15,33 +15,44 @@ const ecoCardContents: EcoCardProps[] = [
         ],
     },
     {
-        title: 'JoyID',
-        description: 'Passwordless and mnemonic-free wallet solution',
-        href: 'https://joy.id/',
-        bannerSrc: 'joyid',
-        tags: ['L1', 'Wallet'],
-        links: [
-        { label: 'website', href: 'https://joy.id/' },
-        { label: 'github', href: 'https://github.com/nervina-labs?q=joyid' },
-        ],
-    },
-    {
         title: 'Omiga',
-        description: 'The 1st inscription protocol established on Nervos $CKB blockchain.',
+        description: 'The 1st inscription protocol established on Nervos $CKB blockchain',
         href: 'https://omiga.io/',
         bannerSrc: 'omiga',
-        tags: ['L1', 'Inscription'],
+        tags: ['Protocol', 'DApp'],
         links: [
         { label: 'website', href: 'https://omiga.io/' },
         { label: 'doc', href: 'https://docs.omiga.io/' },
         ],
     },
     {
+        title: 'CoTA',
+        description: 'A layer-1.5 account based token protocol on Nervos CKB',
+        href: 'https://www.cotadev.io/',
+        bannerSrc: 'cota',
+        tags: ['Protocol', 'NFT'],
+        links: [
+        { label: 'website', href: 'https://www.cotadev.io/' },
+        { label: 'doc', href: 'https://www.cotadev.io/docs/getting-started/overview' },
+        ],
+    },
+    {
+        title: 'RGB++',
+        description: 'An extended RGB protocol to manage state changes and transaction verification',
+        href: 'https://github.com/ckb-cell/RGBPlusPlus-design',
+        bannerSrc: 'rgb++',
+        tags: ['Protocol'],
+        links: [
+        { label: 'github', href: 'https://github.com/ckb-cell/RGBPlusPlus-design' },
+        { label: 'doc', href: 'https://github.com/ckb-cell/RGBPlusPlus-design/blob/main/docs/light-paper-en.md' },
+        ],
+    },
+    {
         title: 'Spore',
-        description: 'Craft, Secure, Distribute, and Monetize DOB',
+        description: 'Craft, Secure, Distribute, and Monetize DOBs',
         href: 'https://spore.pro/',
         bannerSrc: 'spore',
-        tags: ['L1', 'DOB'],
+        tags: ['Protocol', 'DOB'],
         links: [
         { label: 'website', href: 'https://spore.pro/' },
         { label: 'doc', href: 'https://docs.spore.pro/' },
@@ -52,7 +63,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'A Metaverse with an ongoing Story and NFTs Shaped by the Community',
         href: 'https://nervape.com/',
         bannerSrc: 'nervape',
-        tags: ['L1', 'DOB'],
+        tags: ['NFT'],
         links: [
         { label: 'website', href: 'https://nervape.com/' },
         { label: 'github', href: 'https://github.com/nervape' },
@@ -64,7 +75,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'Sending crypto assets as gifts to your friends, communities, or users',
         href: 'https://joygift.cc/',
         bannerSrc: 'joygift',
-        tags: ['L1'],
+        tags: ['DApp'],
         links: [
         { label: 'website', href: 'https://joygift.cc/' },
         ],
@@ -74,7 +85,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'On-Chain Gifting Platform powered by the Spore Protocol',
         href: 'https://philosopherstone.xyz/',
         bannerSrc: 'philosopherstone',
-        tags: ['L1', 'DOB'],
+        tags: ['DApp', 'DOB'],
         links: [
         { label: 'website', href: 'https://philosopherstone.xyz/' },
         { label: 'github', href: 'https://github.com/SpectreMercury/PhilosopherStone' },
@@ -85,7 +96,7 @@ const ecoCardContents: EcoCardProps[] = [
         description: 'Explore, buy and sell NFTs. By the community, for the community',
         href: 'https://nft-nation.live/',
         bannerSrc: 'nftnation',
-        tags: ['L1', 'DOB'],
+        tags: ['NFT'],
         links: [
         { label: 'website', href: 'https://nft-nation.live/' },
         { label: 'doc', href: 'https://nftnation.gitbook.io/nftnation-explained' },
@@ -114,7 +125,7 @@ const ecoCardContents: EcoCardProps[] = [
     },
     {
         title: 'Neuron',
-        description: 'A CKB wallet that holds your keys and can create & broadcast your transactions',
+        description: 'A versatile desktop wallet designed for securely managing CKB assets',
         href: 'https://github.com/nervosnetwork/neuron/releases/tag/v0.114.2',
         bannerSrc: 'neuron',
         tags: ['Wallet'],
@@ -123,27 +134,14 @@ const ecoCardContents: EcoCardProps[] = [
         ],
     },
     {
-        title: 'Portal Wallet',
-        description: 'The 1st web-based CKB wallet that supports Nervos DAO',
-        href: 'https://ckb.pw/',
-        bannerSrc: 'portalwallet',
+        title: 'JoyID',
+        description: 'A web-based passwordless and mnemonic-free wallet solution',
+        href: 'https://joy.id/',
+        bannerSrc: 'joyid',
         tags: ['Wallet'],
         links: [
-        { label: 'website', href: 'https://ckb.pw/' },
-        { label: 'github', href: 'https://github.com/lay2dev' },
-        { label: 'doc', href: 'https://lay2.notion.site/User-Manual-5dcdf86af6e140fab9ee68f73bed8935' },
-        ],
-    },
-    {
-        title: 'imToken',
-        description: 'A built-in CKB wallet that enables users to safely send, receive and store CKB',
-        href: 'https://token.im/',
-        bannerSrc: 'imtoken',
-        tags: ['Wallet'],
-        links: [
-        { label: 'website', href: 'https://token.im/' },
-        { label: 'github', href: 'https://github.com/consenlabs' },
-        { label: 'doc', href: 'https://medium.com/imtoken/imtoken-2-5-0-now-with-nervos-tron-bch-ltc-support-14d7171ccf4' },
+        { label: 'website', href: 'https://joy.id/' },
+        { label: 'github', href: 'https://github.com/nervina-labs?q=joyid' },
         ],
     },
     {
@@ -158,25 +156,59 @@ const ecoCardContents: EcoCardProps[] = [
         ],
     },
     {
-        title: 'Opera Wallet',
-        description: 'Crypto wallet that built into the Opera browser on Android',
-        href: 'https://www.opera.com/download',
-        bannerSrc: 'operawallet',
+        title: 'imToken',
+        description: 'A built-in CKB wallet on mobile that enables users to safely send, receive and store CKB',
+        href: 'https://token.im/',
+        bannerSrc: 'imtoken',
         tags: ['Wallet'],
         links: [
-        { label: 'website', href: 'https://www.opera.com/download' },
-        { label: 'doc', href: 'https://jackylhh.notion.site/How-to-send-receive-Nervos-CKB-with-your-Opera-built-in-wallet-on-Android-eb75113cc4e04e50b99f5e75abab2599'},
+        { label: 'website', href: 'https://token.im/' },
+        { label: 'github', href: 'https://github.com/consenlabs' },
+        { label: 'doc', href: 'https://medium.com/imtoken/imtoken-2-5-0-now-with-nervos-tron-bch-ltc-support-14d7171ccf4' },
         ],
     },
     {
         title: 'SafePal',
-        description: 'Wallet that supports both Nervos L1 CKB and L2 Godwoken',
+        description: 'A hardware wallet that supports both Nervos L1 CKB and L2 Godwoken',
         href: 'https://www.safepal.com/',
         bannerSrc: 'safepal',
         tags: ['Wallet'],
         links: [
         { label: 'website', href: 'https://www.safepal.com/' },
         { label: 'doc', href: 'https://www.notion.so/How-to-add-send-Nervos-Chain-CKB-coin-with-SafePal-Hardware-Wallet-40da32d8f7074563859e9d08b585768e'},
+        ],
+    },
+    {
+        title: 'Ledger',
+        description: 'Provide secure hardware wallets for cryptocurrency storage and management',
+        href: 'https://www.ledger.com/',
+        bannerSrc: 'ledger',
+        tags: ['Wallet'],
+        links: [
+        { label: 'website', href: 'https://www.ledger.com/' },
+        { label: 'doc', href: 'https://developers.ledger.com/docs/sections'},
+        ],
+    },
+    {
+        title: 'imKey',
+        description: 'Offer secure, user-friendly hardware wallets for digital asset protection',
+        href: 'https://imkey.im/',
+        bannerSrc: 'imkey',
+        tags: ['Wallet'],
+        links: [
+        { label: 'website', href: 'https://imkey.im/' },
+        ],
+    },
+    {
+        title: 'oneKey',
+        description: 'Offer secure hardware wallets with cross-platform apps for digital asset management',
+        href: 'https://onekey.so/',
+        bannerSrc: 'onekey',
+        tags: ['Wallet'],
+        links: [
+        { label: 'website', href: 'https://onekey.so/' },
+        { label: 'github', href: 'https://github.com/OneKeyHQ/'},
+        { label: 'doc', href: 'https://developer.onekey.so/'},
         ],
     },
     {
@@ -192,13 +224,26 @@ const ecoCardContents: EcoCardProps[] = [
         ],
     },
     {
-        title: 'Hadouken',
-        description: 'Enjoy the Best of DeFi with Unparalleled Capital Efficiency',
-        href: 'https://app.hadouken.finance/bridge/?action=deposit',
-        bannerSrc: 'hadouken',
+        title: 'Godwoken Bridge',
+        description: 'A token bridge between CKB and Godwoken',
+        href: 'https://bridge.godwoken.io/',
+        bannerSrc: 'godwokenbridge',
         tags: ['Bridge'],
         links: [
-        { label: 'website', href: 'https://app.hadouken.finance/bridge/?action=deposit' },
+        { label: 'website', href: 'https://bridge.godwoken.io/' },
+        { label: 'github', href: 'https://github.com/godwokenrises/light-godwoken/tree/develop/apps/godwoken-bridge'},
+        { label: 'doc', href: 'https://docs.godwoken.io/'},
+        ],
+    },
+    {
+        title: 'Yokaiswap Bridge',
+        description: 'A cross-chain interoperability bridge b/w Nervos and other blockchains',
+        href: 'https://www.yokaiswap.com/bridge/',
+        bannerSrc: 'yokaiswap',
+        tags: ['Bridge'],
+        links: [
+        { label: 'website', href: 'https://www.yokaiswap.com/bridge/' },
+        { label: 'github', href: 'https://github.com/yokaiswap'},
         ],
     },
     {
@@ -237,17 +282,6 @@ const ecoCardContents: EcoCardProps[] = [
         ],
     },
     {
-        title: 'Covalent',
-        description: 'Provides a unified API bringing visiblity to billions of Web3 data points',
-        href: 'https://www.covalenthq.com/',
-        bannerSrc: 'covalent',
-        tags: ['Tools & Infra'],
-        links: [
-        { label: 'website', href: 'https://www.covalenthq.com/' },
-        { label: 'doc', href: 'https://archive.nervos.org/blog/nervos-and-covalent-integration' },
-        ],
-    },
-    {
         title: 'DIA',
         description: 'Provides fully customizable and transparent data feeds for smart contracts',
         href: 'https://www.diadata.org/',
@@ -256,17 +290,6 @@ const ecoCardContents: EcoCardProps[] = [
         links: [
         { label: 'website', href: 'https://www.diadata.org/' },
         { label: 'doc', href: 'https://archive.nervos.org/blog/dia-deploys-oracles-onto-layer-2-bolstering-dev-resources' },
-        ],
-    },
-    {
-        title: 'GetBlock',
-        description: 'A simple and reliable API access to multiple blockchains',
-        href: 'https://getblock.io/',
-        bannerSrc: 'getblock',
-        tags: ['Tools & Infra'],
-        links: [
-        { label: 'website', href: 'https://getblock.io/' },
-        { label: 'doc', href: 'https://www.youtube.com/watch?v=yUzwq177a98&feature=youtu.be' },
         ],
     },
     {
@@ -279,6 +302,28 @@ const ecoCardContents: EcoCardProps[] = [
         { label: 'website', href: 'https://www.godwoken.com/' },
         { label: 'github', href: 'https://github.com/godwokenrises' },
         { label: 'doc', href: 'https://docs.godwoken.io/' },
+        ],
+    },
+    {
+        title: 'Khalani',
+        description: 'A decentralized infrastructure for collaborative solving in intent-driven applications',
+        href: 'https://khalani.network/',
+        bannerSrc: 'khalani',
+        tags: ['Tools & Infra'],
+        links: [
+        { label: 'website', href: 'https://khalani.network/' },
+        { label: 'doc', href: 'https://blog.khalani.network/' },
+        ],
+    },
+    {
+        title: 'Perun',
+        description: 'A L2 solution enhancing efficiency with off-chain transaction capabilities',
+        href: 'https://perun.network/',
+        bannerSrc: 'perun',
+        tags: ['Tools & Infra'],
+        links: [
+        { label: 'website', href: 'https://perun.network/' },
+        { label: 'github', href: 'https://github.com/perun-network/go-perun' },
         ],
     },
     {
