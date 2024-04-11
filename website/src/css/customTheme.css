@@ -166,7 +166,7 @@
   border-radius: 40px;
   cursor: pointer;
   text-decoration: none !important;
-  padding: 0 1rem 0 0.75rem;
+  padding: 0 1rem 0 0.75rem !important;
   margin-right: 1rem;
 }
 .navbar-help:hover {
@@ -182,21 +182,6 @@
 }
 .help-text {
   margin: 0 0 0 0.5rem;
-}
-
-/* ColorModeToggle */
-.navbar__items--right > :last-child {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  border: 1px solid var(--border-subtle);
-  cursor: pointer;
-}
-.navbar__items--right > :last-child:hover {
-  background-color: var(--hover);
-}
-.navbar__items--right > :last-child > button:hover {
-  background:none;
 }
 
 /* Sidebar Menu */
@@ -464,6 +449,9 @@ details {
   }
   a.table-of-contents__link {
     color: var(--text-secondary);
+  }
+  .col {
+    --ifm-spacing-horizontal: 1rem;
   }
 }
 

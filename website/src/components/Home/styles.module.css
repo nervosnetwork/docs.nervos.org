@@ -6,9 +6,6 @@
     border-radius: 40px;
     box-shadow: var(--dark-card-shadow);
     padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
     z-index: 1;
     width: 100%;
 }
@@ -16,6 +13,9 @@
     display:flex;
     flex-direction: column;
     gap: 2.5rem;
+}
+.noGap {
+    gap: 0;
 }
 .flexCenter {
     display: flex;
@@ -45,9 +45,12 @@
 .iconContainer img {
     max-width: fit-content;
 }
-.section h3, .section h2, .section h1 {
+.section h3, .section h2, .section h1{
     margin: 0;
     color: var(--dark-text-primary);
+}
+.section a  {
+    margin: 0;
 }
 .solidBtn {
     display: flex;
@@ -70,6 +73,18 @@
 .solidBtn:hover {
     background-color: var(--dark-btn-hover);
 }
+@media (max-width: 768px) {
+    .section {
+        padding: 2.5rem 1.25rem;
+        border-radius: 20px;
+    }
+    .flexCol {
+        gap: 1.25rem;
+    }
+    .solidBtn {
+        width: 100%;
+    }
+}
 
 /* Home card used in header section */
 .homeCard {
@@ -84,7 +99,6 @@
     top: 1.25rem;
 }
 .homeCard:hover {
-    background: var(--dark-card-bg-hover);
     transition: 0.2s;
 }
 .homeCard:hover .sparkles {
@@ -121,6 +135,7 @@
     width: 100%;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 }
 .tag {
     display: flex;
@@ -135,13 +150,12 @@
     border: 1px solid var(--dark-border-subtle);
     box-shadow: none;
     cursor: pointer;
-    margin-right: 1rem;
+    margin: 0 1rem 1rem 0;
     padding: 0 0.75rem;
 }
 .tag:hover {
     background-color: var(--dark-surface-03-hover);
 }
-
 .activeTag {
     background-color: var(--dark-alert-success-bg) !important;
     border: 1px solid var(--dark-alert-success);
@@ -188,15 +202,6 @@
 .carouselContainer {
     width: 100%;
 }
-.cardsContainer {
-    display: flex;
-    gap: 1.25rem;
-    overflow: hidden;
-    transition: transform 0.5s ease;
-}
-.ecoCard {
-    max-width: calc((100% - 2.5rem) / 3);
-}
 .carouselController {
     margin-top: 1.25rem;
 }
@@ -216,24 +221,28 @@
 .arrowLeft {
     transform: scaleX(-1);
 }
-.page {
-    width: 1rem;
-    height: 0.25rem;
-    border-radius: 2px;
-    cursor: pointer;
-    border: none;
-    background-color: var(--dark-text-tertiary);
-}
-.activePage {
-    background-color: var(--dark-text-primary);
-}
 
 /* Dev Log specific */
+.illusContainer {
+    width: 418px;
+}
 .leftContainer {
-    max-width: 662px;
+    max-width: 50%;
 }
 .description {
     color: var(--dark-text-secondary);
+}
+@media (max-width: 996px) {
+    .illusContainer {
+        width: 100%;
+    }
+    .devlogSection {
+        flex-direction: column-reverse;
+        align-items: start;
+    }
+    .leftContainer {
+        max-width: 100%;
+    }
 }
 
 
@@ -245,6 +254,10 @@
 }
 .contactTitle {
     color: var(--dark-text-inverse) !important;
+}
+.icons {
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .iconBG {
     display: flex;
@@ -258,6 +271,12 @@
 }
 .iconBG:hover {
     background-color: #EEFCFD;
+}
+@media (max-width: 996px) {
+    .contactSection {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
 }
 
 

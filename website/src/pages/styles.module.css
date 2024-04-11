@@ -12,15 +12,19 @@
 .header1 {
     font-size: 3.5em;
     margin: 7.5rem 0 1.25rem;
-    color: var(--dark-text-primary);
 }
 .header2 {
     font-size: 3em;
-    margin: 8.75rem 0 1.25rem;
+    margin: 8.75rem 0 1.25rem;  
+}
+.header1, .header2 {
+    text-align: center;
     color: var(--dark-text-primary);
 }
 .description {
     margin-bottom: 4rem;
+    text-align: center;
+    color: var(--dark-text-secondary);
 }
 .titleBtm {
     margin-bottom: 2rem;
@@ -50,4 +54,18 @@
 }
 .updateBG {
     background: url('/svg/bg-update-header.svg') no-repeat top center;
+}
+
+@media (max-width: 768px) {
+    .header1 {
+        font-size: 2.5rem;
+        margin: 3rem 0 1.25rem;
+    }
+    .header2 {
+        font-size: 2em;
+        margin: 8rem 0 1.25rem;  
+    }
+    .sectionContainer {
+        padding: 0 1rem;
+    }
 }

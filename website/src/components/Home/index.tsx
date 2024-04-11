@@ -3,7 +3,6 @@ import styles from "./styles.module.css";
 import WalletCard, { WalletCardProps } from "../WalletCard";
 import { useEffect, useState } from "react";
 import CardLayout from "../CardLayout";
-import useBaseUrl from "@docusaurus/useBaseUrl";
 import Link from "@docusaurus/Link";
 import { contactUsContents, devToolSectionContents, homeCardContents } from "@site/src/pages/homeContents";
 import { walletCardContents } from "@site/docs/wallets/CardContents";
@@ -21,9 +20,9 @@ interface EcoSectionProps {
 // Card componnet at the top of the home page
 function HomeCardSection() {
     return (
-        <CardLayout colNum={3} gap={40}>
+        <CardLayout colNum={[3, 1, 1, 1]} gap={40}>
           {homeCardContents.map((card, index)=> 
-            <div key={index} className={clsx(styles.homeCard, styles.section)}>
+            <div key={index} className={clsx(styles.homeCard, styles.flexCol, styles.section)}>
                 <div className={styles.sparkles}>
                     <img src={'/svg/sparkles.svg'} />
                 </div>
@@ -34,7 +33,7 @@ function HomeCardSection() {
                 <div className={styles.cardLinks}>
                     {card.links.map((link, index) => (
                         <div key={index} className={clsx(styles.flexBetween, styles.line, styles.borderBtm)}>
-                            <Link className={styles.link} href={link.href}>{link.label}</Link>
+                            <Link className={styles.link} to={link.link}>{link.label}</Link>
                             <img src={'/svg/icon-circle-arrow.svg'} />
                         </div> 
                     ))}
@@ -42,14 +41,13 @@ function HomeCardSection() {
             </div>
           )}
         </CardLayout>
-      
     );
 }
 
-// General Component in Ecosytem section
+// General Component for Ecosytem section
 function EcoSection({title, icon, topMargin = 0, children}: EcoSectionProps): JSX.Element {
     return (
-        <div className={styles.section} style={{ marginTop: topMargin }}>
+        <div className={clsx(styles.section, styles.flexCol)} style={{ marginTop: topMargin }}>
           <div className={styles.flexCenter}>
             <div className={styles.iconContainer}>
               <img src={`/svg/polygon-${icon}.svg`} />
@@ -88,35 +86,37 @@ function WalletDisplay(): JSX.Element {
   // Render filters and cards
   return (
       <EcoSection title={'Wallets'} icon={'wallet'}>
-        <div className={styles.filters}>
-            <button 
-                className={clsx(styles.tag, { [styles.activeTag]: currentTag === 'All' })}
-                onClick={() => setCurrentTag('All')}
-            >
-                All Wallets
-            </button>
-            {tags.map((tag, index) => (
+        <div className={clsx(styles.flexCol, styles.noGap)}>
+            <div className={styles.filters}>
                 <button 
-                    className={clsx(styles.tag, { [styles.activeTag]: currentTag === tag })}
-                    key={index}
-                    onClick={() => setCurrentTag(tag)}
+                    className={clsx(styles.tag, { [styles.activeTag]: currentTag === 'All' })}
+                    onClick={() => setCurrentTag('All')}
                 >
-                    {tag}
+                    All Wallets
                 </button>
-            ))}
+                {tags.map((tag, index) => (
+                    <button 
+                        className={clsx(styles.tag, { [styles.activeTag]: currentTag === tag })}
+                        key={index}
+                        onClick={() => setCurrentTag(tag)}
+                    >
+                        {tag}
+                    </button>
+                ))}
+            </div>
+            <CardLayout topMargin={0} colNum={[4, 2, 2, 2]} gap={20}>
+                {filteredCards.map((card, index) => (
+                    <WalletCard
+                        key={index}
+                        title={card.title}
+                        href={card.href}
+                        tags={card.tags}
+                        size={'small'}
+                    />
+                ))}
+            </CardLayout>
         </div>
-        <CardLayout colNum={4} gap={20}>
-            {filteredCards.map((card, index) => (
-                <WalletCard
-                    key={index}
-                    title={card.title}
-                    href={card.href}
-                    tags={card.tags}
-                    size={'small'}
-                />
-            ))}
-        </CardLayout>
-        <Link style={{ marginTop: 20 }} href={useBaseUrl("docs/wallets")}>View wallets →</Link>
+        <Link to={"/docs/wallets"}>View wallets →</Link>
     </EcoSection>
   );
 }
@@ -126,14 +126,14 @@ function ToolDisplay(): JSX.Element {
     // Render filters and cards
     return (
         <EcoSection title={'Dev Tools'} icon={'tool'}>
-            <div className={styles.tableContainer}>
+            <CardLayout topMargin={0} gap={0} colNum={[2, 1, 1, 1]}>
               <div className={styles.column}>
               <div className={clsx(styles.columnHeader, styles.cell)}>Development & Deployment</div>
                 <div className={styles.flexWrap}>
                   {devToolSectionContents
                   .filter(tool => tool.category === 'Development & Deployment')
                   .map((tool, index) => (
-                      <Link key={index} href={tool.href} className={styles.cell}>{tool.title}</Link>
+                      <Link key={index} href={tool.href} target="_blank" rel="noopener noreferrer" className={styles.cell}>{tool.title}</Link>
                   ))}
                 </div>
               </div>
@@ -143,12 +143,12 @@ function ToolDisplay(): JSX.Element {
                         {devToolSectionContents
                         .filter(tool => tool.category === 'Utilities & Testing')
                         .map((tool, index) => (
-                            <Link key={index} href={tool.href} className={styles.cell}>{tool.title}</Link>
+                            <Link key={index} href={tool.href} target="_blank" rel="noopener noreferrer" className={styles.cell}>{tool.title}</Link>
                         ))}
                     </div>
               </div>
-          </div>
-            <Link style={{ marginTop: 20 }} href={useBaseUrl("docs/getting-started/dev-tools")}>View dev tools →</Link>
+            </CardLayout>
+            <Link to={"/docs/getting-started/devtool"}>View dev tools →</Link>
         </EcoSection>
     );
 }
@@ -156,69 +156,97 @@ function ToolDisplay(): JSX.Element {
 function ProjectDisplay(): JSX.Element {
     const [filteredContent, setFilteredContent] = useState<EcoCardProps[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const cardsToShow = 3;
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    const updateDimensions = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    useEffect(() => {
+      window.addEventListener('resize', updateDimensions);
+      return () => window.removeEventListener('resize', updateDimensions);
+    }, []);
+
+    const getCardsToShow = (): number => {
+      if (windowWidth >= 996) {
+        return 3;  // for >=996px
+      } else if (windowWidth >= 769) {
+        return 2;  // for 768px to 996px
+      }
+      return 1;
+    };
+
+    const cardsToShow = getCardsToShow();
+
     const goToPrevious = () => {
-        setCurrentIndex((prevIndex) =>
-          prevIndex > 0 ? prevIndex - 1 : filteredContent.length - cardsToShow
-        );
+      setCurrentIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : filteredContent.length - 1
+      );
     };
-    
+
     const goToNext = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex < filteredContent.length - cardsToShow ? prevIndex + 1 : 0
-        );
+      setCurrentIndex((prevIndex) =>
+        prevIndex + 1 < filteredContent.length ? prevIndex + 1 : 0
+      );
     };
-  
+
     useEffect(() => {
         const filtered = ecoCardContents.filter(
             (content) => !content.tags.includes('Wallet')
         );
         setFilteredContent(filtered);
     }, []);
+
+    // Creating a looped set of cards
+    const items = [];
+    if (filteredContent && filteredContent.length > 0) {
+        for (let i = 0; i < cardsToShow; i++) {
+            items.push(filteredContent[(currentIndex + i) % filteredContent.length]);
+        }
+    }
+
     return (
         <EcoSection topMargin={40} title={'Projects'} icon={'project'}>
             <div className={styles.carouselContainer}>
-                <div className={styles.cardsContainer}>
-                    {filteredContent.slice(currentIndex, currentIndex + cardsToShow).map((card, index) => (
+                <CardLayout topMargin={0} colNum={[3, 3, 2, 1]}>
+                    {items?.map((card, index) => (
                         <EcoCard key={index} className={styles.ecoCard} {...card} />
                     ))}
-                </div>
+                </CardLayout>
                 <div className={clsx(styles.carouselController, styles.flexBetween)}>
                     <button onClick={goToPrevious} className={styles.arrowLeft}>
-                        <img src={useBaseUrl('svg/icon-chevron-right.svg')}/>
+                        <img src={'/svg/icon-chevron-right.svg'} alt="Previous"/>
                     </button>
-                    <div className={styles.flexCenter}>
-                        {Array.from({ length: Math.ceil(filteredContent.length / cardsToShow) }, (_, idx) => (
-                            <button
-                                key={idx}
-                                className={clsx(styles.page, {[styles.activePage]: currentIndex / cardsToShow === idx})}
-                                onClick={() => setCurrentIndex(idx * cardsToShow)}
-                            />
-                        ))}
-                    </div>
                     <button onClick={goToNext} className={styles.arrowRight}>
-                        <img src={useBaseUrl('svg/icon-chevron-right.svg')}/>
+                        <img src={'/svg/icon-chevron-right.svg'} alt="Next"/>
                     </button>
                 </div>
             </div>
             <div className={clsx(styles.flexCenter, styles.alignMiddle)}>
-                <Link className={styles.solidBtn} href={useBaseUrl('docs/ecosystem')}>Explore all projects</Link>
+                <Link className={styles.solidBtn} to={'/docs/ecosystem'}>Explore all projects</Link>
             </div>
         </EcoSection>
-    )
+    );
 }
 
 function DevLogSection(): JSX.Element {
     return (
         <div className={styles.section}>
-            <div className={styles.flexBetween}>
+            <div className={clsx(styles.flexBetween, styles.devlogSection)}>
                 <div className={clsx(styles.flexCol, styles.leftContainer)}>
                     <h1>Discover Dev Log</h1>
                     <div className={styles.description}>Dive into the continuous evolution of the Nervos CKB through our Dev Log, where we document the journey of innovation, feature enhancements, and the collaborative efforts that drive the ecosystem forward.</div>
-                    <Link href={'https://github.com/nervosnetwork/ckb/discussions/categories/dev-log'}className={styles.solidBtn}>Explore Dev Log</Link>
+                    <Link 
+                        href={'https://github.com/nervosnetwork/ckb/discussions/categories/dev-log'} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className={styles.solidBtn}
+                    >
+                        Explore Dev Log
+                    </Link>
                 </div>
                 <div className={styles.illusContainer}>
-                    <img width={418} src={'/svg/illus-dev-log.svg'} />
+                    <img alt={'dev log'} src={'/svg/illus-dev-log.svg'} />
                 </div>
             </div>
         </div>
@@ -227,16 +255,14 @@ function DevLogSection(): JSX.Element {
 
 function ContactUsSection(): JSX.Element {
     return (
-        <div className={clsx(styles.section, styles.contactSection)}>
-            <div className={styles.flexBetween}>
-                <h2 className={styles.contactTitle}>Contact us: </h2>
-                <div className={styles.flexCenter}>
-                    {contactUsContents.map((media, index) => (
-                        <Link key={index} href={media.href} target="_blank" className={styles.iconBG}>
-                            <img width={36} height={36} src={useBaseUrl(`svg/logo-media-${media.label}.svg`)} />
-                        </Link>
-                    ))}
-                </div>
+        <div className={clsx(styles.section, styles.contactSection, styles.flexBetween)}>
+            <h2 className={styles.contactTitle}>Contact us: </h2>
+            <div className={clsx(styles.flexCenter, styles.icons)}>
+                {contactUsContents.map((media, index) => (
+                    <Link key={index} href={media.link} target="_blank" rel="noopener noreferrer" className={styles.iconBG}>
+                        <img width={36} height={36} src={`svg/logo-media-${media.label}.svg`} />
+                    </Link>
+                ))}
             </div>
         </div>
     )

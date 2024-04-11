@@ -1,15 +1,11 @@
 import React from "react";
 import styles from "./styles.module.css";
-import clsx from "clsx";
-
-interface topicProps {
-  label: string;
-  href: string;
-}
+import Link from "@docusaurus/Link";
+import { CardLinks } from "@site/src/pages/homeContents";
 
 export interface TutorialHeaderProps {
   time: string;
-  topics?: topicProps[];
+  topics?: CardLinks[];
   tools: JSX.Element[];
 }
 
@@ -28,7 +24,7 @@ export default function TutorialHeader({
           {topics.map((topic, index) => (
             <React.Fragment key={index}>
               {index > 0 && ", "}
-              <a href={topic.href}>{topic.label}</a>
+              <Link href={topic.link}>{topic.label}</Link>
             </React.Fragment>
           ))}
         </div>
