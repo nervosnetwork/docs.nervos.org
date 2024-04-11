@@ -60,6 +60,12 @@
 }
 .description {
   margin: 0;
+  height: 3.5rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .title, .description, .tagList {
   margin-bottom: 0.5rem;

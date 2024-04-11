@@ -2,11 +2,8 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import ThemedImage from '@theme/ThemedImage';
 import styles from "./styles.module.css";
+import { CardLinks } from "@site/src/pages/homeContents";
 
-interface CardLinks {
-    label: string;
-    href: string;
-}
 export interface EcoCardProps {
     title: string;
     description: string;
@@ -19,7 +16,7 @@ export interface EcoCardProps {
 
 export default function EcoCard({ title, description, href, bannerSrc, tags, links, className }: EcoCardProps): JSX.Element {
     return (
-       <Link href={href} className={clsx(styles.cardContainer, className)}>
+       <Link href={href} target="_blank" rel="noopener noreferrer" className={clsx(styles.cardContainer, className)}>
            <div className={styles.topContainer}>
                 <img className={styles.banner} alt={bannerSrc} src={`/svg/banner-${bannerSrc}.svg`} />
             </div>
@@ -33,14 +30,14 @@ export default function EcoCard({ title, description, href, bannerSrc, tags, lin
                 <p className={styles.description}>{description}</p>
                 <div className={styles.links}>
                     {links.map((link, index) => (
-                        <a className={styles.iconContainer} key={index} href={link.href} target="_blank" rel="noopener noreferrer">
+                        <Link className={styles.iconContainer} key={index} href={link.link} target="_blank" rel="noopener noreferrer">
                             <ThemedImage 
                                 alt={link.label}
                                 sources={{
                                     light: `/svg/icon-${link.label}-light.svg`,
                                     dark: `/svg/icon-${link.label}-dark.svg`
                                 }}/>
-                        </a>
+                        </Link>
                     ))}
                 </div>
             </div>

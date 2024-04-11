@@ -10,12 +10,12 @@ import { conceptCardContents } from './CardContents';
 # Concepts Overview
 Dive deep into some foundational concepts of the Nervos network and read through a glossary to enrich your understanding of key blockchain terminologies.
 <CardLayout topMargin={56}>
-  {conceptCardContents.map(({ index, title, description, href, type }) => (
+  {conceptCardContents.map(({ index, title, description, link, type }) => (
     <Card
       key={index}
       title={title}
       description={description}
-      href={href}
+      link={link}
       type={type}
     />
   ))}

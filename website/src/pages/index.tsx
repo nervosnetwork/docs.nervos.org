@@ -22,7 +22,7 @@ export default function Home() {
           <h1 className={styles.header2}>Explore <span className={styles.textHighlight}>Ecosystem</span></h1>
           <div className={styles.titleBtm}>Explore our curated selection of featured tools and resources designed to empower your development on Nervos CKB</div>
         </div>
-        <CardLayout gap={40}>
+        <CardLayout gap={40} colNum={[2, 1, 1, 1]}>
           <WalletDisplay />
           <ToolDisplay />
         </CardLayout>

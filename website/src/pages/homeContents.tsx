@@ -1,8 +1,6 @@
-import useBaseUrl from "@docusaurus/useBaseUrl";
-
-interface CardLinks {
+export interface CardLinks {
     label: string;
-    href: string;
+    link: string;
 }
 export interface DevToolProps {
     title: string;
@@ -18,27 +16,27 @@ const homeCardContents: HomeCardProps[] = [
     {
         title: 'Getting Started',
         links: [
-            { label: "Dev Environment", href: '/docs/getting-started/dev-environment'},
-            { label: "DApp Tutorials", href: '/docs/#tutorials'},
-            { label: "Scripts Tutorials", href: '/docs/getting-started/dev-environment'},
+            { label: "Dev Environment", link: "/docs/getting-started/dev-environment"},
+            { label: "DApp Tutorials", link: "/docs/getting-started#tutorials"},
+            { label: "Scripts Tutorials", link: "/docs/getting-started/dev-environment"},
         ],
         icon: 'rocket',
     },
     {
         title: 'Run a Node',
         links: [
-            { label: "Run a Mainnet Node", href: "./"},
-            { label: "Run a Testnet Node", href: "./"},
-            { label: "Run a Public RPC Node", href: "./"},
+            { label: "Run a Mainnet Node", link: "./"},
+            { label: "Run a Testnet Node", link: "./"},
+            { label: "Run a Public RPC Node", link: "./"},
         ],
         icon: 'node',
     },
     {
         title: 'Concepts',
         links: [
-            { label: "Nervos BLockchain", href: "/docs/concepts/nervos-blockchain"},
-            { label: "Cell Model", href: "/docs/concepts/cell-model"},
-            { label: "Tokenomics", href: "/docs/concepts/economics"},
+            { label: "Nervos Blockchain", link: "/docs/concepts/nervos-blockchain"},
+            { label: "Cell Model", link: "/docs/concepts/cell-model"},
+            { label: "Tokenomics", link: "/docs/concepts/economics"},
         ],
         icon: 'concept',
     },
@@ -55,14 +53,14 @@ const devToolSectionContents: DevToolProps[] = [
 ];
 
 const contactUsContents: CardLinks[]= [
-    { label: 'github', href: 'https://github.com/nervosnetwork'},
-    { label: 'discord', href: 'https://discord.gg/nervosnetwork'},
-    { label: 'reddit', href: 'https://www.reddit.com/r/NervosNetwork/'},
-    { label: 'nervostalk', href: 'https://talk.nervos.org/'},
-    { label: 'telegram', href: 'https://t.me/nervosnetwork'},
-    { label: 'twitter', href: 'https://twitter.com/nervosnetwork'},
-    { label: 'medium', href: 'https://medium.com/nervosnetwork'},
-    { label: 'youtube', href: 'https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A'},
+    { label: 'github', link: 'https://github.com/nervosnetwork'},
+    { label: 'discord', link: 'https://discord.gg/nervosnetwork'},
+    { label: 'reddit', link: 'https://www.reddit.com/r/NervosNetwork/'},
+    { label: 'nervostalk', link: 'https://talk.nervos.org/'},
+    { label: 'telegram', link: 'https://t.me/nervosnetwork'},
+    { label: 'twitter', link: 'https://twitter.com/nervosnetwork'},
+    { label: 'medium', link: 'https://medium.com/nervosnetwork'},
+    { label: 'youtube', link: 'https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A'},
 ]
 
 

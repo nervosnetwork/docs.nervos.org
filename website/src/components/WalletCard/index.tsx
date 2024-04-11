@@ -14,7 +14,12 @@ export default function WalletCard({ title, href, tags, size = 'default', classN
     const logoSrc = title.toLowerCase().replace(/\s+/g, '');
     const logoSize = size === 'default' ? 48 : 32;
     return (
-       <Link href={href} className={clsx(styles.cardContainer, {[styles.smallCard]: size === 'small' }, className)}>
+       <Link 
+            href={href} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className={clsx(styles.cardContainer, {[styles.smallCard]: size === 'small' }, className)}
+        >
             <div style={{width: logoSize , height: logoSize, minWidth: logoSize}} className={styles.iconContainer}>
                 <img 
                     alt={`logo of ${title}`}
