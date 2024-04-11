@@ -24,7 +24,7 @@
 
   --ifm-container-width-xl: 1022px;
   --ifm-hr-background-color: var(--border-subtle);
-  --ifm-hr-margin-vertical: 4em;
+  --ifm-hr-margin-vertical: 4rem;
 
   /* Navbar */
   --ifm-navbar-background-color: var(--surface-03);
@@ -46,13 +46,13 @@
   --ifm-menu-color-active: var(--text-link);
   --ifm-menu-color-background-active: var(--selected);
   --ifm-menu-color-background-hover: var(--hover);
-  --ifm-menu-link-padding-horizontal: 1em;
-  --ifm-menu-link-padding-vertical: 0.4em;
+  --ifm-menu-link-padding-horizontal: 1rem;
+  --ifm-menu-link-padding-vertical: 0.4rem;
 
   /* Code Block */
   --ifm-code-background: var(--surface-02);
   --ifm-code-border-radius: 4px;
-  --ifm-code-font-size: 0.875em;
+  --ifm-code-font-size: 0.875rem;
   --docusaurus-highlighted-code-line-bg: var(--surface-03);
 
   /* Blockquote */
@@ -80,7 +80,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: 40px;
   width: 280px;
-  height: 48px;
+  height: 3rem;
   padding: 0 1rem;
   margin-right: 0.5rem;
 }
@@ -102,11 +102,11 @@
   background: var(--surface-02) !important;
   color: var(--text-secondary) !important;
   box-shadow: none !important;
-  height: 24px !important;
-  width: 24px !important;
+  height: 1.5rem !important;
+  width: 1.5rem !important;
   padding: 0 !important;
   font-size: 0.75rem !important;
-  margin-right: -0.6em !important;
+  margin-right: -0.5rem !important;
 }
 
 /* @cmfcmf/docusaurus-search-local search  */
@@ -115,7 +115,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: 40px;
   width: 280px;
-  height: 48px;
+  height: 3rem;
   padding: 0 1rem;
   margin-right: 0.5rem;
 }
@@ -161,13 +161,13 @@
 }
 
 .navbar-help {
-  height: 48px;
+  height: 3rem;
   border: 1px solid var(--border-subtle);
   border-radius: 40px;
   cursor: pointer;
   text-decoration: none !important;
-  padding: 0 1em 0 0.75em;
-  margin-right: 1em;
+  padding: 0 1rem 0 0.75rem;
+  margin-right: 1rem;
 }
 .navbar-help:hover {
   background-color: var(--hover);
@@ -181,13 +181,13 @@
   text-decoration: none !important;
 }
 .help-text {
-  margin: 0 0 0 0.5em;
+  margin: 0 0 0 0.5rem;
 }
 
 /* ColorModeToggle */
 .navbar__items--right > :last-child {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   border: 1px solid var(--border-subtle);
   cursor: pointer;
@@ -201,10 +201,10 @@
 
 /* Sidebar Menu */
 .menu {
-  padding: 0.5em !important;
+  padding: 0.5rem !important;
 }
 .menu__link, .menu__list-item-collapsible {
-  height: 40px;
+  height: 2.5rem;
   border-radius: 20px !important;
 }
 
@@ -231,8 +231,8 @@
 /* Add icon next to the menus */
 .theme-doc-sidebar-menu > li:first-child > div > a:before {
   content:url('/svg/icon-sidebar-rocket.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .theme-doc-sidebar-menu > li:nth-child(2) > div > a:before {
   content:url('/svg/icon-sidebar-script.svg');
@@ -246,18 +246,18 @@
 }
 .theme-doc-sidebar-menu > li:nth-child(4) > a:before {
   content:url('/svg/icon-sidebar-rpc.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .theme-doc-sidebar-menu > li:nth-child(5) > div > a:before {
   content:url('/svg/icon-sidebar-concept.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .theme-doc-sidebar-menu > li:nth-child(6) > a:before {
   content:url('/svg/icon-sidebar-ecosystem.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .menu__caret {
   border-radius: 50%;
@@ -265,8 +265,8 @@
 
 /* Footer */
 .footer > .container {
-  padding-top: 2em !important;
-  padding-bottom: 2em !important;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
 .footer__copyright {
   font-size: 0.875em;
@@ -279,7 +279,7 @@
   margin-top: 3rem;
 }
 .table-of-contents__link {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 /* Containers */
@@ -319,6 +319,11 @@ h4 {
   font-family: 'Lato', sans-serif;
   font-weight: 700;
   line-height: 1.4;
+}
+
+button {
+  font-family: 'Lato', sans-serif;
+  line-height: 1.2;
 }
 
 p, blockquote, ul, ol {
@@ -364,11 +369,11 @@ pre > code {
 }
 
 .tabs__item {
-  padding: 0.5em;
+  padding: 0.5rem;
   border-radius: 4px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  margin-right: 2em;
+  margin-right: 2rem;
 }
 
 .tabs__item--active {
@@ -429,7 +434,7 @@ details {
 /* Banner link to legacy doc site */
 
 #oldSiteLink {
-  height: 40px;
+  height: 2.5rem;
   width: 100%;
   z-index: 9999;
   display: flex;
