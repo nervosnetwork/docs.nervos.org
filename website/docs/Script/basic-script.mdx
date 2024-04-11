@@ -1,0 +1,149 @@
+---
+id: basic-script
+title: Basic Script
+sidebar_position: 6
+---
+
+Before we continue, let’s distinguish between 2 terms: script, and script code.
+
+In this post and hopefully the whole series, we will distinguish between script, and script code. Script code actually refers to the program you write and compile to use on CKB. Script, on the other hand, actually refers to the script data structure used in CKB, which is a little more than just the script code:
+
+pub struct Script {
+    pub code_hash: H256,
+    pub hash_type: ScriptHashType,
+    pub args: JsonBytes,
+}
+We can ignore hash_type for now, a future post will explain what it is and it’s interesting usage. Later in this post, we will show that code_hash actually just identifies a script code, so for now we can just think of it as script code. What script also includes, is the args part, which distinguishes script from script code. args can be used here to provide additional arguments for a CKB script, for example, while people might all be using the same default lock script code, each of them might have their own pubkey hash, args is exact the place to hold pubkey hash. This way each user of CKB can have different lock script, while sharing the same lock script code.
+
+Note that in most cases, script and script code can be used interchangably, but if you are confused at some places, it might be worthwhile to think of the difference between the 2.
+
+A Minimal CKB Script Code
+As you might have already heard, CKB is based on the open source RISC-V ISA. But what does that even mean? In my words, it means we are (sort of) embedding a real mini computer in CKB, instead of a virtual machine. The benefit of a real computer, is that you can write any logic you want in any language you want. The first few examples we show here will be written in C for simplicity(well I mean simplicity in the toolchain, not the language), but later we will switch to JavaScript based script code, and hopefully show more languages in the series. On CKB there’s endless possibilities.
+
+As we mentioned about, CKB VM is more like a real mini computer. CKB script code also looks like a normal Unix style executable program we run on a computer:
+-
+When compiled via a C compiler, this will become a script code that is runnable on CKB. In other words, CKB just take plain old Unix style executables(but in RISC-V architecture instead of the popular x86 architecture), and run it in a virtual machine environment. If the program returns with 0 as the return code, we consider the script succeeds, all non-zero return codes will be considered script faliures.
+
+In the example above, we are showing a script code that always succeeds, since the return code will always be zero. Please don’t use this as your lock script code, otherwise your token can be taken away by anyone.
+
+But the example above won’t be interesting, here we will start with an interesting idea: personally I dislike carrot. I do know that carrot is great from a nutritional point of view, but I still want to avoid it due to the taste. Now what if I want to set a rule, that none of my cells on CKB has data that begin with carrot? Let’s write a script code to ensure this.
+
+In order to ensure none of the cells can have carrot in cell data, we need a way to first read cell data in the script. CKB provides syscalls to help with this.
+
+To ensure the security of CKB script, each script has to run in an isolated environment that is totally separated from the main computer you are running CKB. This way it won’t be able to access data it doesn’t need, such as your private keys or passwords. However, for a script to be useful, there must be certain data it want to access, such as the cell a script guards, or a transaction a script validates. CKB provides syscalls to ensure this, syscalls are defined in RISC-V standard, they provide a way to access certain resources provided by the environment. In a normal situation, the environment here means the operating system, but in the case of CKB VM, the environment refers to the actual CKB process. With syscalls, a CKB script can access the whole transaction containing itself, including inputs, outputs, witnesses, and deps.
+
+The good news, is that we have encapsulated syscalls in an easy to use header file, you are very welcome to poke around this file to see how syscalls are implemented. The bottomline is you can just grab this header file and use the wrapped functions to make syscalls as you want.
+
+Now with the syscalls at hand, we can start with our carrot-forbidden script:
+
+#include <memory.h>
+#include "ckb_syscalls.h"
+
+int main(int argc, char* argv[]) {
+  int ret;
+  size_t index = 0;
+  uint64_t len = 0; /* (1) */
+  unsigned char buffer[6];
+
+  while (1) {
+    len = 6;
+    memset(buffer, 0, 6);
+    ret = ckb_load_cell_data(buffer, &len, 0, index, CKB_SOURCE_OUTPUT); /* (2) */
+    if (ret == CKB_INDEX_OUT_OF_BOUND) {               /* (3) */
+      break;
+    }
+
+    if (memcmp(buffer, "carrot", 6) == 0) {
+      return -1;
+    }
+
+    index++;
+  }
+
+  return 0;
+}
+Several points worth explaining here:
+
+We will use len field both as an input and output parameter, hence it is passed as a pointer here.
+When making a syscall, we need to provide the following: a buffer to hold the data provided by the syscall; a len field denoting both the buffer length, and available data length returned by the syscall; an offset into the input data buffer, and several parameters denoting the exact field we are fetching in the transaction. For more details, please refer to our RFC.
+For maximum flexibility, CKB uses the return value of the syscall to represent data fetching status: 0(or CKB_SUCCESS) means success, 1(or CKB_INDEX_OUT_OF_BOUND) means you have finished fetching all indices in a kind, 2(or CKB_ITEM_MISSING) means an entity is not present, such as fetching a type script from a cell that doesn’t have one.
+So to recap, this script would loop through all output cells in the transaction, load the first 6 bytes of each cell data and test if those bytes match carrot. If we found a match, the script would return -1, denoting an error status, if no match is found, the script exits with 0, meaning execution success.
+
+To perform the loop, the script would keep an index variable, in each loop iteration, it would tries to make the syscall to fetch the cell denoted by current index value, if the syscall returns CKB_INDEX_OUT_OF_BOUND, it means the script has iterated through all the cells, hence it just exits the loop, otherwise, the loop would continue, the cell data is tested, then index variable is incremented for the next iteration.
+
+This concludes your first useful CKB script code! In the next section, we will see how we can deploy it to CKB and run it.
+
+Deploying a Script to CKB
+First, we need to compile the carrot source code written above. Since GCC already has upstream RISC-V support, you can of course use the official GCC to build your script code. Or you can use the docker image we have prepared to save the trouble of compiling GCC:
+
+$ ls
+carrot.c  ckb_consts.h  ckb_syscalls.h
+$ sudo docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
+root@dc2c0c209dcd:/# cd /code
+root@dc2c0c209dcd:/code# riscv64-unknown-elf-gcc -Os carrot.c -o carrot
+root@dc2c0c209dcd:/code# exit
+exit
+$ ls
+carrot*  carrot.c  ckb_consts.h  ckb_syscalls.h
+And that’s it, CKB can use the compiled executable from GCC directly as scripts on chain, there’s no way for further processing. We can now deploy it on chain. Note that I will use CKB’s Ruby SDK since I used to be a Ruby programmer, and Ruby feels the most natural one(but not necessarily the best one) to me. Please refer to the official README for how to set it up.
+
+To deploy the script to CKB, we can just create a new cell, with the script code as cell data part:
+
+pry(main)> data = File.read("carrot")
+pry(main)> data.bytesize
+=> 6864
+pry(main)> carrot_tx_hash = wallet.send_capacity(wallet.address, CKB::Utils.byte_to_shannon(8000), CKB::Utils.bin_to_hex(data))
+Here I simply create a new cell with enough capacity by sending tokens to myself. Now we can create the type script containing the carrot script code:
+
+pry(main)> carrot_data_hash = CKB::Blake2b.hexdigest(data)
+pry(main)> carrot_type_script = CKB::Types::Script.new(code_hash: carrot_data_hash, args: "0x")
+Recall the Script data structure:
+
+pub struct Script {
+    pub code_hash: H256,
+    pub hash_type: ScriptHashType,
+    pub args: JsonBytes,
+}
+We can see that instead of embedding the script code directly in the script data structure, we are only including the code hash, which is a Blake2b hash of the actual script binary code. Since carrot script doesn’t use an argument, we can use empty bytes for args part.
+
+Note I’m still ignoring hash_type here, we will leave to a future post to see a different way of specifying code hash. For now, let’s keep it simple here.
+
+To run the carrot script, we need to create a new transaction, and set carrot type script as the type script of one of the output cells:
+
+pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(100), fee: 5000)
+pry(main)> tx.outputs[0].type = carrot_type_script.dup
+There’s one more step needed: in order for CKB to locate the carrot script, we need to reference the cell containing carrot script in one of transaction deps:
+
+pry(main)> carrot_cell_dep = CKB::Types::CellDep.new(out_point: CKB::Types::OutPoint.new(tx_hash: carrot_tx_hash, index: 0))
+pry(main)> tx.cell_deps << carrot_cell_dep.dup
+Now we are ready to sign and send the transaction:
+
+[46] pry(main)> tx = tx.sign(wallet.key, api.compute_transaction_hash(tx))
+[19] pry(main)> api.send_transaction(tx)
+=> "0xd7b0fea7c1527cde27cc4e7a2e055e494690a384db14cc35cd2e51ec6f078163"
+Since this transaction does not have any cell containing carrot in the cell data, the type script validates successfully. Now let’s try a different transaction that does have a cell that begins with carrot:
+
+pry(main)> tx2 = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(400), fee: 5000)
+pry(main)> tx2.cell_deps.push(carrot_cell_dep.dup)
+pry(main)> tx2.outputs[0].type = carrot_type_script.dup
+pry(main)> tx2.outputs_data[0] = CKB::Utils.bin_to_hex("carrot123")
+pry(main)> tx2 = tx2.sign(wallet.key)
+pry(main)> api.send_transaction(tx2)
+CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"InvalidTx(ScriptFailure(ValidationFailure(-1)))"}
+from /home/ubuntu/code/ckb-sdk-ruby/lib/ckb/rpc.rb:164:in `rpc_request'
+We can see our carrot script rejects a transaction that generates a cell with carrot. Now I can use this script to make sure all my cells are free from carrots!
+
+So to recap, to deploy and run a script as type script, what we need to do is:
+
+Compile the script to RISC-V executable binary
+Deploy the binary in a cell’s data part
+Create a type script data structure with the blake2b hash of the binary as code hash, any required arguments of the script code in the args part
+Create a new transaction with the type script set in one of the generated cells
+Include the outpoint to the cell containing the script code as one of the transaction deps
+That’s really all you need! If your script has run into problems, those are the points you need to check.
+
+Although we only talk about type scripts here, lock script works exactly the same way. The only quirk you need to keep in mind, is that when you create a cell with a specificed lock script, the lock script won’t run here. It only runs when you are consuming the cell. So while type script can be used to create the logic that runs when you create the cell, lock script is used to create the logic that runs when you consume the cell. Given this consideration, please make sure your lock script is correct, otherwise you might be losing the tokens in the following scenarios:
+
+Your lock script has a bug that someone else can unlock your cell.
+Your lock script has a bug that no one(including you) can unlock your cell.
+One tip we can provide here, is always test your script as a type script attached to an output cell in your transaction, this way when error happens, you will know immediately, your tokens can stay safe.
