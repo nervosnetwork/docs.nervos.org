@@ -119,9 +119,9 @@ const config = {
       darkTheme: darkCodeTheme,
     },
     colorMode: {
-      defaultMode: "light",
+      defaultMode: "dark",
       disableSwitch: false,
-      respectPrefersColorScheme: true,
+      respectPrefersColorScheme: false,
     },
     navbar: {
       logo: {
@@ -129,7 +129,7 @@ const config = {
         srcDark:'img/logo-dark.png',
         alt:'Nervos CKB Docs',
         className:'navbar-logo',
-        href:'/docs/'
+        href:'/'
       },
       items: [
         {

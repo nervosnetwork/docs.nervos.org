@@ -3,8 +3,8 @@
 .layoutContainer {
   display: grid;
   width: 100%; 
-  column-gap: 1.25em;
-  row-gap: 1.25em;
+  column-gap: 1.25rem;
+  row-gap: 1.25rem;
 }
 
 /* Display in 1 column for the following screen sizes */
@@ -12,14 +12,14 @@
   .layoutContainer {
     display: flex;
     flex-direction: column;
-    gap: 1.25em;
+    gap: 1.25rem;
   }
 }
 @media (min-width: 996px) and (max-width: 1120px) {
   .layoutContainer {
     display: flex;
     flex-direction: column;
-    gap: 1.25em;
+    gap: 1.25rem;
   }
 }
   

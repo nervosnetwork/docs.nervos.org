@@ -3,7 +3,7 @@
 .cardContainer {
   width: 100%;
   border-radius: 20px;
-  padding: 1.5em 1em;
+  padding: 1.5rem 1rem;
   border: 1px solid var(--border-subtle);
   display: flex;
   cursor: pointer;
@@ -15,9 +15,9 @@
   background-color: var(--hover);
 }
 .iconContainer {
-  width: 2em;
-  min-width: 2em;
-  height: 2em;
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   background-color: var(--surface-02);
   display: flex;
@@ -27,10 +27,10 @@
 .rightContainer {
   display: flex;
   flex-direction: column;
-  margin-left: 1em;
+  margin-left: 1rem;
 }
 .title {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 .description {
   margin: 0;
@@ -38,8 +38,8 @@
 .links {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 .links > a:not(:last-child) {
-  margin-right: 1em;
+  margin-right: 1rem;
 }
