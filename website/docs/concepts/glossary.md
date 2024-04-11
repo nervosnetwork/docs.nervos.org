@@ -1126,7 +1126,7 @@ Fiat currencies are a medium of exchange established as money, often by governme
 ---
 
 ### Heavy Asset Problem
-A common problem found in multi-asset blockchain platforms where the value of the assets stored on the chain gains significant value but the native token of the chain does not. This raises the incentive to attack the the network, but does not increase the security because the value of the native token is what is used to secure the network.
+A common problem found in multi-asset blockchain platforms where the value of the assets stored on the chain gains significant value but the native token of the chain does not. This raises the incentive to attack the network, but does not increase the security because the value of the native token is what is used to secure the network.
 
 #### See Also
 - [Asset](#asset)
@@ -1357,7 +1357,7 @@ A cryptographic hash function. BLAKE2b (or BLAKE2) is optimized for 64-bit platf
 ---
 
 ### Block Subsidy
-A payment that is made in the native currency of the blockchain that is paid to to miners for providing the computational resources create a block and secure the blockchain.
+A payment that is made in the native currency of the blockchain that is paid to miners for providing the computational resources create a block and secure the blockchain.
 
 The subsidy consists is the portion of the total block reward that is issued out of inflation for creating the block, but does not include any additional transaction fees that may be paid on top.
 
