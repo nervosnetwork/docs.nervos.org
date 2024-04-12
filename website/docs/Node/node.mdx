@@ -1,9 +1,11 @@
 ---
 id: run-node
 title: Run a CKB Node
-sidebar_position: 7
+sidebar_position: 5
 ---
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 Running a CKB node boosts network robustness and decentralization while enhancing data access security. 
 
@@ -15,93 +17,154 @@ Select the CKB Node that suits your needs and circumstances:
 
 ## Run a Mainnet Node
 
-### Steps
+### Step 1: Download CKB Binary
 
-1. **Download CKB Binary** 
+Get the latest CKB binary from [GitHub releases](https://github.com/nervosnetwork/ckb/releases). (The version used in this document is **ckb_v0.115.0**.)
 
-    Get the latest CKB binary from [GitHub releases](https://github.com/nervosnetwork/ckb/releases). (The version used in this document is ckb_v0.115.0.)
 
-2. **Extract Files** 
+### Step 2: Navigate to CKB Directory
 
-    Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac.
-
-3. **Open Terminal (Mac)/Command Prompt(Windows)**
-
-4. **Navigate to CKB Directory**
-  - **Mac:**
-
-  ```
+Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac. Open your terminal/command line and navigate to your CKB directory using the following command:
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+```bash
   cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
-  ckb --version
-  ckb-cli --version
-  ```
-
-  - **Windows:**
-
-  ```
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+```bash
   cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+### Step 3: Verify versions
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="check-version" label="Command">
+```
+```bash
   ckb --version
   ckb-cli --version
-  ```
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="verify-version" label="Result">
+```
+```bash
+  ckb 0.115.0 (d845cbf 2024-04-01)
+  ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
 
-5. **Initialize Node**
+### Step 4: Initialize Node
 
-  ```
+```bash
   ckb init --chain mainnet
-  ```
+```
 
-6. **Start Node**
+### Step 5: Start the CKB Mainnet Node
 
-  ```
+```bash
   ckb run
-  ```
+```
 
 ## Run a Testnet Node
 
 Nervos has introduced the Pudge Testnet for developers to experiment with integration and smart contracts. Due to hash rate fluctuations, expect periodic resets.
 
-### Steps
+### Step 1: Download CKB Binary
 
-1. **Download CKB Binary**
+Get the latest CKB binary from [GitHub releases](https://github.com/nervosnetwork/ckb/releases). (The version used in this document is **ckb_v0.115.0**.)
 
-    Download the latest CKB Binary from the [GitHub release page](https://github.com/nervosnetwork/ckb/releases) and verify the version.
 
+### Step 2: Navigate to CKB Directory
+
+Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac. Open your terminal/command line and navigate to your CKB directory using the following command:
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
 ```
-ckb --version
-ckb-cli --version
+```bash
+  cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+```bash
+  cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+### Step 3: Verify versions
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="check-version" label="Command">
+```
+```bash
+  ckb --version
+  ckb-cli --version
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="verify-version" label="Result">
+```
+```bash
+  ckb 0.115.0 (d845cbf 2024-04-01)
+  ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
 ```
 
-  Result
+### Step 4: Connect to Pudge Testnet
 
+Initialize your CKB node:
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
 ```
-ckb 0.115.0 (d845cbf 2024-04-01)
-ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```bash
+  ckb init --chain testnet
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="result" label="Result">
+```
+```bash
+  WARN: Mining feature is disabled because of lacking the block assembler config options.
+  Initialized CKB directory in /PATH/0.115.0
+  create ckb.toml
+  create ckb-miner.toml
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
 ```
 
-2. **Connect to Pudge Testnet**
-
-    Initialize your CKB node:
-    
-```
-ckb init --chain testnet
-```
-    
-  Result
-    
-```
-WARN: Mining feature is disabled because of lacking the block assembler config options.
-Initialized CKB directory in /PATH/0.115.0
-create ckb.toml
-create ckb-miner.toml
-```
-
-3. **Start the CKB Testnet Node**
+### Step 5: Start the CKB Testnet Node
     
 ```
 ckb run
 ``` 
 
 After these steps, your CKB Testnet node will be up and running, allowing you to experiment and develop with the Nervos blockchain.
+
 
 ## Run a Public RPC Node
 
@@ -123,31 +186,29 @@ Here is an example using Nginx API Gateway to configure the RPC access control.
 
 Explore more solutions or submit new ones using the GitHub tag [ckb-rpc-proxy](https://github.com/topics/ckb-rpc-proxy).
 
-**Steps**
+### Step 1: Install Docker-Compose and Docker
 
-1. **Install Docker-Compose and Docker**
-
-```
+```bash
 apt install docker-compose
 apt install docker
 ```
 
-2. **Clone Code**
+### Step 2: Clone Code
 
-```
+```bash
 git clone https://github.com/cryptape/ckb-nginx-proxy.git
 ```
 
-3. **Replace Default RPC Address**
+### Step 3: Replace Default RPC Address
 
-```
+```bash
 cd ckb-nginx-proxy
 sed -i "s/YOUR_CKR_RPC_IP:8114/192.168.1.100:8114/" nginx.conf
 ```
 
-4. **Run Proxy**
+### Step 4: Run Proxy
 
-```
+```bash
 docker-compose up -d
 ```
 
@@ -155,7 +216,11 @@ docker-compose up -d
 
 **Get tip block hash and number:**
 
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
 ```
+```json
 echo '{
     "id": 2,
     "jsonrpc": "2.0",
@@ -168,10 +233,11 @@ http://192.168.1.100:80
 
 // Note that http://192.168.1.100:80 needs to be changed to your proxy IP.
 ```
-
-  Result:
-
+```mdx-code-block
+  </TabItem>
+  <TabItem value="result" label="Result">
 ```
+```json
 {
     "jsonrpc": "2.0",
     "result": {
@@ -191,23 +257,9 @@ http://192.168.1.100:80
     "id": 2
 }
 ```
-
-**Execute `clear_tx_pool`**
-
-```
-echo '{
-    "id": 2,
-    "jsonrpc": "2.0",
-    "method": "clear_tx_pool",
-    "params": []
-}' | tr -d '\n' | curl -H 'content-type: application/json' -d @- \
-http://192.168.1.100:80
-```
-
-  Result:
-
-```
-This method has been banned.
+```mdx-code-block
+  </TabItem>
+</Tabs>
 ```
 
 ### Restricted Methods
@@ -219,3 +271,30 @@ This method has been banned.
 - `remove_node`
 - `remove_transaction`
 - `clear_tx_pool`
+
+If you try to execute a restricted method (`clear_tx_pool`):
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
+```json
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "clear_tx_pool",
+    "params": []
+}' | tr -d '\n' | curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="result" label="Result">
+```
+```
+  This method has been banned.
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```

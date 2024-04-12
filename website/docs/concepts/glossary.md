@@ -1542,7 +1542,7 @@ NervosDAO’s `type_hash`.
 Find more in [CKB Genesis Script List](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#ckb-genesis-script-list).
 
 #### See Also
-- [`type_hash`](#type_hash)
+- [Type Script Hash](#type-script-hash)
 
 ---
 
@@ -1845,7 +1845,6 @@ pub(crate) const INITIAL_PRIMARY_EPOCH_REWARD: Capacity = Capacity::shannons(1_9
 - [Block Reward](#block-reward)
 - [Epoch](#epoch)
 - [`secondary_epoch_reward`](#secondary_epoch_reward)
-- [`primary_epoch_reward_havling_interval`](#primary_epoch_reward_havling_interval)
 
 ---
 

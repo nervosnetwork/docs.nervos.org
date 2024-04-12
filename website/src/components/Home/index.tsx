@@ -157,15 +157,15 @@ function ToolDisplay(): JSX.Element {
 function ProjectDisplay(): JSX.Element {
     const [filteredContent, setFilteredContent] = useState<EcoCardProps[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-    const updateDimensions = () => {
-      setWindowWidth(window.innerWidth);
-    };
+    const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {
-      window.addEventListener('resize', updateDimensions);
-      return () => window.removeEventListener('resize', updateDimensions);
+        function updateDimensions() {
+            setWindowWidth(window.innerWidth);
+        }
+        updateDimensions(); // Set initial size at client-side
+        window.addEventListener('resize', updateDimensions);
+        return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
     const getCardsToShow = (): number => {

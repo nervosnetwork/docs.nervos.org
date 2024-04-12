@@ -12,22 +12,23 @@ export interface HomeCardProps {
     links: CardLinks[];
     icon: string;
 }
+
 const homeCardContents: HomeCardProps[] = [
     {
         title: 'Getting Started',
         links: [
             { label: "Dev Environment", link: "/docs/getting-started/dev-environment"},
-            { label: "DApp Tutorials", link: "/docs/getting-started#tutorials"},
-            { label: "Scripts Tutorials", link: "/docs/getting-started/dev-environment"},
+            { label: "DApp Tutorials", link: "/docs/getting-started/transfer-ckb"},
+            { label: "Scripts Tutorials", link: "/docs/Script/basic-script"},
         ],
         icon: 'rocket',
     },
     {
         title: 'Run a Node',
         links: [
-            { label: "Run a Mainnet Node", link: "./"},
-            { label: "Run a Testnet Node", link: "./"},
-            { label: "Run a Public RPC Node", link: "./"},
+            { label: "Run a Mainnet Node", link: "/docs/Node/#run-a-mainnet-node"},
+            { label: "Run a Testnet Node", link: "/docs/Node/#run-a-testnet-node"},
+            { label: "Run a Public RPC Node", link: "/docs/Node/#run-a-public-rpc-node"},
         ],
         icon: 'node',
     },
@@ -63,5 +64,10 @@ const contactUsContents: CardLinks[]= [
     { label: 'youtube', link: 'https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A'},
 ]
 
+// Just to include a default export
+const HomeContentsPage: React.FC = () => {
+    return null;
+};
+export default HomeContentsPage;
 
 export { homeCardContents, devToolSectionContents, contactUsContents } ;
