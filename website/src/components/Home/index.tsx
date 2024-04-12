@@ -8,6 +8,7 @@ import { contactUsContents, devToolSectionContents, homeCardContents } from "@si
 import { walletCardContents } from "@site/docs/wallets/CardContents";
 import ecoCardContents from "@site/docs/EcoCardContents";
 import EcoCard, { EcoCardProps } from "../EcoCard";
+import Button from "../Button";
 
 
 interface EcoSectionProps {
@@ -52,7 +53,7 @@ function EcoSection({title, icon, topMargin = 0, children}: EcoSectionProps): JS
             <div className={styles.iconContainer}>
               <img src={`/svg/polygon-${icon}.svg`} />
             </div>
-            <h3>{title}</h3>
+            <h2>{title}</h2>
           </div>
           {children}
         </div>
@@ -86,7 +87,7 @@ function WalletDisplay(): JSX.Element {
   // Render filters and cards
   return (
       <EcoSection title={'Wallets'} icon={'wallet'}>
-        <div className={clsx(styles.flexCol, styles.noGap)}>
+        <div style={{minHeight: 170 }} className={clsx(styles.flexCol, styles.noGap)}>
             <div className={styles.filters}>
                 <button 
                     className={clsx(styles.tag, { [styles.activeTag]: currentTag === 'All' })}
@@ -213,17 +214,15 @@ function ProjectDisplay(): JSX.Element {
                         <EcoCard key={index} className={styles.ecoCard} {...card} />
                     ))}
                 </CardLayout>
-                <div className={clsx(styles.carouselController, styles.flexBetween)}>
-                    <button onClick={goToPrevious} className={styles.arrowLeft}>
-                        <img src={'/svg/icon-chevron-right.svg'} alt="Previous"/>
-                    </button>
-                    <button onClick={goToNext} className={styles.arrowRight}>
-                        <img src={'/svg/icon-chevron-right.svg'} alt="Next"/>
-                    </button>
-                </div>
             </div>
-            <div className={clsx(styles.flexCenter, styles.alignMiddle)}>
-                <Link className={styles.solidBtn} to={'/docs/ecosystem'}>Explore all projects</Link>
+            <div className={clsx(styles.carouselController, styles.flexBetween)}>
+                <button onClick={goToPrevious} className={styles.arrowLeft}>
+                    <img src={'/svg/icon-chevron-right.svg'} alt="Previous"/>
+                </button>
+                <Button link={'/docs/ecosystem'}>Explore all projects</Button>
+                <button onClick={goToNext} className={styles.arrowRight}>
+                    <img src={'/svg/icon-chevron-right.svg'} alt="Next"/>
+                </button>
             </div>
         </EcoSection>
     );
@@ -236,14 +235,9 @@ function DevLogSection(): JSX.Element {
                 <div className={clsx(styles.flexCol, styles.leftContainer)}>
                     <h1>Discover Dev Log</h1>
                     <div className={styles.description}>Dive into the continuous evolution of the Nervos CKB through our Dev Log, where we document the journey of innovation, feature enhancements, and the collaborative efforts that drive the ecosystem forward.</div>
-                    <Link 
-                        href={'https://github.com/nervosnetwork/ckb/discussions/categories/dev-log'} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className={styles.solidBtn}
-                    >
+                    <Button link={'https://github.com/nervosnetwork/ckb/discussions/categories/dev-log'} internal={false}>
                         Explore Dev Log
-                    </Link>
+                    </Button>
                 </div>
                 <div className={styles.illusContainer}>
                     <img alt={'dev log'} src={'/svg/illus-dev-log.svg'} />
