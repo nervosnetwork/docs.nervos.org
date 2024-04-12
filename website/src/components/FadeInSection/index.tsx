@@ -16,6 +16,7 @@ const FadeInSection: React.FC<FadeInSectionProps> = ({ children, transformY = 16
 
   useEffect(() => {
     if (!isBrowser) {
+      setVisible(true); // prevents invisibility
       return;
     }
     const handleScroll = () => {
