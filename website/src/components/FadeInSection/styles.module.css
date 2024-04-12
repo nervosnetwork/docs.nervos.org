@@ -1,6 +1,6 @@
 .fadeInSection {
     opacity: 0;
-    transition: opacity 1s ease-out, transform 1s ease-out;
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
 }
 
 .isVisible {

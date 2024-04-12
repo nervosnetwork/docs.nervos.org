@@ -18,7 +18,7 @@ export default function Home() {
 
       <FadeInSection className={clsx(styles.sectionContainer, styles.relative, styles.ecoBG)}>
           <div className={styles.header2}>Explore <span className={styles.textHighlight}>Ecosystem</span></div>
-          <div className={styles.description}>Explore our curated selection of featured tools and resources designed to empower your development on Nervos CKB</div>
+          <div className={clsx(styles.description, styles.titleBtm)}>Explore our curated selection of featured tools and resources designed to empower your development on Nervos CKB</div>
         <CardLayout gap={40} colNum={[2, 1, 1, 1]}>
           <WalletDisplay />
           <ToolDisplay />
