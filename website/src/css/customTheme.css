@@ -479,5 +479,9 @@ details {
   .aa-DetachedSearchButtonPlaceholder {
     display: none;  
   }
+  .markdown > h1, h1 {
+    font-size: 2rem;
+    margin: 3rem 0 2rem;
+  }
 }
 

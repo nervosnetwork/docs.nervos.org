@@ -1,0 +1,55 @@
+@import '@css/customVariables.css';
+
+.solidBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.5rem;
+    color: var(--dark-text-inverse) !important;
+    text-decoration: none !important;
+    border-radius: 80px;
+    font-weight: bold;
+    font-size: 1em;
+    line-height: 3em;
+    border: none;
+    box-shadow: var(--dark-btn-shadow);
+    backdrop-filter: blur(15px);
+    cursor: pointer;
+    width: fit-content;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.solidBtn:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-text-link);
+    border-radius: 80px;
+    z-index: -2;
+}
+.solidBtn:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #5DF6C2;
+    transition: all 0.25s;
+    border-radius: 80px;
+    z-index: -1;
+}
+.solidBtn:hover:before {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .solidBtn {
+        line-height: 2.5rem;
+        width: 100%;
+    }
+}

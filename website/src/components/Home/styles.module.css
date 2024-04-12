@@ -52,44 +52,11 @@
 .section a  {
     margin: 0;
 }
-.solidBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1.5rem;
-    background-color: var(--dark-text-link);
-    color: var(--dark-text-inverse) !important;
-    text-decoration: none !important;
-    border-radius: 80px;
-    font-weight: bold;
-    font-size: 1em;
-    line-height: 3em;
-    border: none;
-    box-shadow: var(--dark-btn-shadow);
-    backdrop-filter: blur(15px);
-    cursor: pointer;
-    width: fit-content;
-}
-.solidBtn:hover {
-    background-color: var(--dark-btn-hover);
-}
-@media (max-width: 768px) {
-    .section {
-        padding: 2.5rem 1.25rem;
-        border-radius: 20px;
-    }
-    .flexCol {
-        gap: 1.25rem;
-    }
-    .solidBtn {
-        width: 100%;
-    }
-}
+
 
 /* Home card used in header section */
 .homeCard {
     color: var(--dark-text-primary);
-    cursor: pointer;
     position: relative;
 }
 .sparkles {
@@ -203,20 +170,23 @@
     width: 100%;
 }
 .carouselController {
-    margin-top: 1.25rem;
+    gap: 0.5rem;
 }
 .arrowLeft, .arrowRight {
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
+    width: 3rem;
+    min-width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     cursor: pointer;
     color: var(--dark-text-primary);
-    background: none;
+    background: var(--dark-surface-03);
     border-radius: 50%;
 }
 .arrowLeft:hover, .arrowRight:hover{
-    background: var(--dark-hover);
+    background: var(--dark-surface-03-hover);
 }
 .arrowLeft {
     transform: scaleX(-1);
@@ -232,19 +202,6 @@
 .description {
     color: var(--dark-text-secondary);
 }
-@media (max-width: 996px) {
-    .illusContainer {
-        width: 100%;
-    }
-    .devlogSection {
-        flex-direction: column-reverse;
-        align-items: start;
-    }
-    .leftContainer {
-        max-width: 100%;
-    }
-}
-
 
 /* contact section specific */
 .contactSection {
@@ -272,10 +229,40 @@
 .iconBG:hover {
     background-color: #EEFCFD;
 }
+
+/* Responsiveness */
 @media (max-width: 996px) {
+    .illusContainer {
+        width: 100%;
+    }
+    .devlogSection {
+        flex-direction: column-reverse;
+        align-items: start;
+    }
+    .leftContainer {
+        max-width: 100%;
+    }
     .contactSection {
         flex-direction: column;
         gap: 1.25rem;
+    }
+}
+@media (max-width: 768px) {
+    .section {
+        padding: 2.5rem 1.25rem;
+        border-radius: 20px;
+    }
+    .flexCol {
+        gap: 1.25rem;
+    }
+    .solidBtn {
+        line-height: 2.5rem;
+        width: 100%;
+    }
+    .arrowLeft, .arrowRight {
+        width: 2.5rem;
+        min-width: 2.5rem;
+        height: 2.5rem;
     }
 }
 
