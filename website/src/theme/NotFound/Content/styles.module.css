@@ -1,0 +1,9 @@
+@import '@css/customVariables.css';
+
+.notFoundContainer {
+  width: auto;
+  margin: 0 auto;
+  padding: 1.5em 1em;
+  color: var(--text-secondary) !important;
+  text-align: center;
+}
