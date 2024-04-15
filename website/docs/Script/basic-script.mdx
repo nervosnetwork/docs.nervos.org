@@ -1,7 +1,7 @@
 ---
 id: basic-script
 title: "Basic Script Example"
-sidebar_position: 6
+sidebar_position: 3 
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -16,49 +16,9 @@ import TutorialHeader from "@components/TutorialHeader";
   tools={ScriptHeaders.basic.tools}
 />
 
-## What is Script
-
-A [script](/docs/concepts/glossary#script) in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitray logic to guard and protect your on-chain assets. You can think of it as smart contract.
-
-### How does Script works
-
-When executing a script, CKB just take the executables and run it in a virtual machine environment called [CKB-VM](/docs/concepts/ckb-vm). After the execution, if the program returns with 0 as the return code, we consider the script succeeds, all non-zero return codes will be considered script faliures. 
-
-When you submit a transaction to CKB, CKB will execute all the scripts from the transaction to ensure that all scripts succeeds, otherwiese the transaction will fail to be included on-chain.
-
-
-### Script structure
-
-A Script can be one of two types:
-
-- Lock Script - Used to control ownership and access to a Cell.
-- Type Script - Used to control how a Cell is used in a transaction.
-
-Script has the following structure:
-
-```rust
-pub struct Script {
-    pub code_hash: H256,
-    pub hash_type: ScriptHashType,
-    pub args: JsonBytes,
-}
-```
-
-The `code_hash` actually just identifies a script code so that `CKB-VM` knows how to load the binary code of the script. 
-
-What script also includes, is the `args` part, which distinguishes script from script code. args can be used here to provide additional arguments for a CKB script, for example, while people might all be using the same default lock script code, each of them might have their own pubkey hash, args is exact the place to hold pubkey hash. This way each user of CKB can have different lock script, while sharing the same lock script code.
-
-`hash_type` denotes different ways for `CKB-VM` to locate the script code for a script. Possible values include `type`, `data`, `data1` and `data2`.
-
 ## A Minimal Script
 
-How do we write a script then? 
-
-Different from other blockchains, the CKB-VM is more like a real mini computer. CKB script code also looks like a normal Unix style executable program we run on a computer. 
-
-You can acutlly write scripts in any program language you want as long as you have the proper toolchain. But in this website, we will use `Rust` as the program language to show how to write a script.
-
-As we have mentioned before, a script returns 0 means it succeeds. A simplest CKB script code looks like this:
+As we have learned before, a script returns 0 means it succeeds. A simplest CKB script code looks like this:
 
 ```rust
 pub fn program_entry() -> i8 {
@@ -76,7 +36,9 @@ Here we will start with an interesting idea:
 
 > personally I dislike carrot. I do know that carrot is great from a nutritional point of view, but I still want to avoid it due to the taste. Now what if I want to set a rule, that none of my cells on CKB has data that begin with the word `carrot`? 
 
-Let’s write a script code to ensure this. Below is a step by step guide, you can also clone the full code example from github [carrot-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/carrot-script)
+Let’s write a script code to ensure this. 
+
+Below is a step by step guide, you can also clone the full code example from github [carrot-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/carrot-script).
 
 ### Carrot-forbidden Script
 
@@ -194,7 +156,7 @@ tree .
 
 A litter introduce here: `contracts/carrot/src/main.rs` contains our source code of the carrot script. the `tests/tests.rs` provide unit test for our scripts. We will introduce tests after we write the script.
 
-### Use CKB syscall with ckb-std
+### Use CKB syscall with ckb-std library
 
 To ensure the security of CKB script, each script has to run in an isolated environment that is totally separated from the main computer you are running CKB. This way it won’t be able to access data it doesn’t need, such as your private keys or passwords. 
 

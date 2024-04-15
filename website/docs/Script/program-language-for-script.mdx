@@ -1,0 +1,39 @@
+---
+id: program-language-for-script
+title: "Program Languages For Script"
+sidebar_position: 2
+---
+
+# Program Languages For Script
+
+We have learned that what is Script and how does Script works. So how do we write a script then? What kinds of program language do I need to write it?
+
+Well, different from other blockchains, the CKB-VM is more like a real mini computer based on [RISC-V](https://riscv.org/), so the CKB script code also looks like a normal Unix style executable program we run on a computer. 
+
+You can acutlly write scripts in any program language you want as long as you have the proper toolchain. 
+
+But in the current stage, we recommand you to use [Rust](https://www.rust-lang.org/) to write CKB script since it has complete toolchain to work with CKB. 
+
+We will also use `Rust` as the program language across the tutorials in this website.
+
+## Rust
+
+Rust can easily compile the source code to riscv target so that the code can be executed on CKB-VM. 
+
+We have also build some useful Rust libaries and template tool to help developers to build Script:
+
+- ckb-std: [https://github.com/nervosnetwork/ckb-std](https://github.com/nervosnetwork/ckb-std)
+- ckb_testtools: [https://docs.rs/ckb-testtool/latest/ckb_testtool](https://docs.rs/ckb-testtool/latest/ckb_testtool)
+- cargo-generate script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+
+## C
+
+You can also use [C](https://en.wikipedia.org/wiki/C_(programming_language)) language and [GCC](https://gcc.gnu.org/) to write and compile the CKB Script to riscv target. 
+
+Some of our guys have use this way to build Scripts like [sUDT] and [xUDT]. You can check [ckb-production-scripts](https://github.com/nervosnetwork/ckb-production-scripts/tree/master/c) for Reference.
+
+## Script-dedicated language?
+
+If you come from Ethereum community, you might have used to use a dedicated program language to write smart contracts, like [solidity]. 
+
+You might ask the same thing for CKB Script. There indeed is a CKB Script dedicated program language build by CKB community called [Cell-Script](https://github.com/cell-labs/cell-script). It is still in the early stage, but feel free to try it and give feedback to the community. 
