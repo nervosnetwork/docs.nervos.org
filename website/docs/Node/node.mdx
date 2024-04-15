@@ -1,0 +1,221 @@
+---
+id: run-node
+title: Run a CKB Node
+sidebar_position: 7
+---
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+Running a CKB node boosts network robustness and decentralization while enhancing data access security. 
+
+Select the CKB Node that suits your needs and circumstances:
+
+- **Mainnet Node**: Optimal for active involvement in the live network. We advise a minimum of 100GB of local storage for this purpose.
+- **Testnet Node**: Ideal for exploring functionalities in a risk-free environment.  We suggest allocating 200GB for experimenting.
+- **RPC Node**: Set up a Nervos API endpoint for your project without running any CKB nodes yourself.
+
+## Run a Mainnet Node
+
+### Steps
+
+1. **Download CKB Binary** 
+
+    Get the latest CKB binary from [GitHub releases](https://github.com/nervosnetwork/ckb/releases). (The version used in this document is ckb_v0.115.0.)
+
+2. **Extract Files** 
+
+    Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac.
+
+3. **Open Terminal (Mac)/Command Prompt(Windows)**
+
+4. **Navigate to CKB Directory**
+  - **Mac:**
+
+  ```
+  cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
+  ckb --version
+  ckb-cli --version
+  ```
+
+  - **Windows:**
+
+  ```
+  cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+  ckb --version
+  ckb-cli --version
+  ```
+
+5. **Initialize Node**
+
+  ```
+  ckb init --chain mainnet
+  ```
+
+6. **Start Node**
+
+  ```
+  ckb run
+  ```
+
+## Run a Testnet Node
+
+Nervos has introduced the Pudge Testnet for developers to experiment with integration and smart contracts. Due to hash rate fluctuations, expect periodic resets.
+
+### Steps
+
+1. **Download CKB Binary**
+
+    Download the latest CKB Binary from the [GitHub release page](https://github.com/nervosnetwork/ckb/releases) and verify the version.
+
+```
+ckb --version
+ckb-cli --version
+```
+
+  Result
+
+```
+ckb 0.115.0 (d845cbf 2024-04-01)
+ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+
+2. **Connect to Pudge Testnet**
+
+    Initialize your CKB node:
+    
+```
+ckb init --chain testnet
+```
+    
+  Result
+    
+```
+WARN: Mining feature is disabled because of lacking the block assembler config options.
+Initialized CKB directory in /PATH/0.115.0
+create ckb.toml
+create ckb-miner.toml
+```
+
+3. **Start the CKB Testnet Node**
+    
+```
+ckb run
+``` 
+
+After these steps, your CKB Testnet node will be up and running, allowing you to experiment and develop with the Nervos blockchain.
+
+## Run a Public RPC Node
+
+CKB nodes activate built-in RPC functionality upon startup. RPC access is by default private.
+
+:::warning
+
+Exposing RPC can pose significant security risks.
+
+:::
+
+Enabling RPC through the `rpc.listen_address` configuration can open the JSON-RPC port to arbitrary machines, increasing vulnerability. It's strongly advised against enabling RPC unless absolutely necessary.
+
+If unavoidable, ensure access is restricted solely to trusted machines, following the provided guidelines.
+
+### RPC Access Control
+
+Here is an example using Nginx API Gateway to configure the RPC access control.
+
+Explore more solutions or submit new ones using the GitHub tag [ckb-rpc-proxy](https://github.com/topics/ckb-rpc-proxy).
+
+**Steps**
+
+1. **Install Docker-Compose and Docker**
+
+```
+apt install docker-compose
+apt install docker
+```
+
+2. **Clone Code**
+
+```
+git clone https://github.com/cryptape/ckb-nginx-proxy.git
+```
+
+3. **Replace Default RPC Address**
+
+```
+cd ckb-nginx-proxy
+sed -i "s/YOUR_CKR_RPC_IP:8114/192.168.1.100:8114/" nginx.conf
+```
+
+4. **Run Proxy**
+
+```
+docker-compose up -d
+```
+
+### Examples
+
+**Get tip block hash and number:**
+
+```
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "get_tip_header",
+    "params": []
+}' \
+| tr -d '\n' \
+| curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+
+// Note that http://192.168.1.100:80 needs to be changed to your proxy IP.
+```
+
+  Result:
+
+```
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "compact_target": "0x1d090fbe",
+        "dao": "0xba17553fab3db84154bc4aa9f09b2600e826a2b0df99010400ed51b4686b5808",
+        "epoch": "0x7080687001539",
+        "extra_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "0x7a46e779a3fc2d5b55c82aad852e721b0097bf873927b9751409b1d185599ce4",
+        "nonce": "0xd265e70dfd205dbbed33b29294121856",
+        "number": "0x7037f2",
+        "parent_hash": "0x3d105fe9ec60f138baa6623abd16af70ba1be90ad23d1943bcaa55d5f14fcb6f",
+        "proposals_hash": "0x2581d1769886226a8c90ee99baf2d8696e24c7f6bb6751748ff8b4452f8006e5",
+        "timestamp": "0x1847a2bfad2",
+        "transactions_root": "0x28157a5962c4ae1d3e153b1d8d331e5fd3c158866287f5398ab7f7d38210dfb0",
+        "version": "0x0"
+    },
+    "id": 2
+}
+```
+
+**Execute `clear_tx_pool`**
+
+```
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "clear_tx_pool",
+    "params": []
+}' | tr -d '\n' | curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+```
+
+  Result:
+
+```
+This method has been banned.
+```
+
+### Restricted Methods
+
+- `clear_banned_addresses`
+- `set_ban`
+- `set_network_active`
+- `add_node`
+- `remove_node`
+- `remove_transaction`
+- `clear_tx_pool`
