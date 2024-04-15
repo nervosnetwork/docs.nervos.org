@@ -19,7 +19,7 @@ const homeCardContents: HomeCardProps[] = [
         links: [
             { label: "Dev Environment", link: "/docs/getting-started/dev-environment"},
             { label: "DApp Tutorials", link: "/docs/getting-started/transfer-ckb"},
-            { label: "Scripts Tutorials", link: "/docs/Script/basic-script"},
+            { label: "Scripts Tutorials", link: "/docs/Script/write-script"},
         ],
         icon: 'rocket',
     },
