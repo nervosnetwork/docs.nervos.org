@@ -24,6 +24,8 @@ export default function WalletCard({ title, href, tags, size = 'default', classN
                 <img 
                     alt={`logo of ${title}`}
                     src={`/svg/logo-${logoSrc}.svg`}
+                    width={logoSize}
+                    height={logoSize}
                 />
             </div>
             <div className={styles.rightContainer}>
