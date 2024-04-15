@@ -25,17 +25,17 @@ function HomeCardSection() {
           {homeCardContents.map((card, index)=> 
             <div key={index} className={clsx(styles.homeCard, styles.flexCol, styles.section)}>
                 <div className={styles.sparkles}>
-                    <img src={'/svg/sparkles.svg'} />
+                    <img src={'/svg/sparkles.svg'} width={128} height={"auto"} alt="sparkles decoration"/>
                 </div>
                 <div className={styles.iconContainer}>
-                    <img src={`/svg/polygon-${card.icon}.svg`} />
+                    <img src={`/svg/polygon-${card.icon}.svg`} width={160} height={160} alt={card.icon}/>
                 </div>
                 <h2 className={styles.cardTitle}>{card.title}</h2>
                 <div className={styles.cardLinks}>
                     {card.links.map((link, index) => (
                         <div key={index} className={clsx(styles.flexBetween, styles.line, styles.borderBtm)}>
                             <Link className={styles.link} to={link.link}>{link.label}</Link>
-                            <img src={'/svg/icon-circle-arrow.svg'} />
+                            <img src={'/svg/icon-circle-arrow.svg'} width={32} height={32} alt={"Navigate to"} />
                         </div> 
                     ))}
                 </div>
@@ -51,7 +51,7 @@ function EcoSection({title, icon, topMargin = 0, children}: EcoSectionProps): JS
         <div className={clsx(styles.section, styles.flexCol)} style={{ marginTop: topMargin }}>
           <div className={styles.flexCenter}>
             <div className={styles.iconContainer}>
-              <img src={`/svg/polygon-${icon}.svg`} />
+              <img src={`/svg/polygon-${icon}.svg`} width={160} height={160} alt={icon} />
             </div>
             <h2>{title}</h2>
           </div>
@@ -254,7 +254,7 @@ function ContactUsSection(): JSX.Element {
             <div className={clsx(styles.flexCenter, styles.icons)}>
                 {contactUsContents.map((media, index) => (
                     <Link key={index} href={media.link} target="_blank" rel="noopener noreferrer" className={styles.iconBG}>
-                        <img width={36} height={36} src={`svg/logo-media-${media.label}.svg`} />
+                        <img width={36} height={36} src={`svg/logo-media-${media.label}.svg`} alt={media.label} />
                     </Link>
                 ))}
             </div>

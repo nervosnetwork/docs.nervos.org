@@ -16,7 +16,7 @@ export default function Home() {
         <HomeCardSection />
       </FadeInSection>
 
-      <FadeInSection className={clsx(styles.sectionContainer, styles.relative, styles.ecoBG)}>
+      <div className={clsx(styles.sectionContainer, styles.relative, styles.ecoBG)}>
           <div className={styles.header2}>Explore <span className={styles.textHighlight}>Ecosystem</span></div>
           <div className={clsx(styles.description, styles.titleBtm)}>Explore our curated selection of featured tools and resources designed to empower your development on Nervos CKB</div>
         <CardLayout gap={40} colNum={[2, 1, 1, 1]}>
@@ -24,16 +24,16 @@ export default function Home() {
           <ToolDisplay />
         </CardLayout>
         <ProjectDisplay />
-      </FadeInSection>
+      </div>
 
-      <FadeInSection className={clsx(styles.sectionContainer, styles.relative, styles.updateBG)}>
+      <div className={clsx(styles.sectionContainer, styles.relative, styles.updateBG)}>
         <div className={clsx(styles.header2, styles.titleBtm)}>Unveil <span className={styles.textHighlight}>Latest Update</span></div>
         <DevLogSection />
-      </FadeInSection>
+      </div>
 
-      <FadeInSection className={styles.sectionContainer}>
+      <div className={styles.sectionContainer}>
         <ContactUsSection />
-      </FadeInSection>
+      </div>
     </Layout>
   );
 }
