@@ -10,11 +10,11 @@ import FadeInSection from "../components/FadeInSection";
 export default function Home() {
   return (
     <Layout wrapperClassName={clsx(styles.homeLayout, styles.relative)} title="Home" description="Docs for Nervos CKB Blockchain dApp and smart contract development">
-      <FadeInSection transformY={40} className={clsx(styles.sectionContainer)}>
+      <div className={clsx(styles.sectionContainer)}>
           <div className={styles.header1}>Nervos CKB Documentation</div>
           <h4 className={clsx(styles.description, styles.titleBtm)}>Discover the power of Nervos CKB through tutorials, guides, and concepts</h4>
         <HomeCardSection />
-      </FadeInSection>
+      </div>
 
       <div className={clsx(styles.sectionContainer, styles.relative, styles.ecoBG)}>
           <div className={styles.header2}>Explore <span className={styles.textHighlight}>Ecosystem</span></div>

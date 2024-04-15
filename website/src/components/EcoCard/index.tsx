@@ -33,6 +33,8 @@ export default function EcoCard({ title, description, href, bannerSrc, tags, lin
                         <Link className={styles.iconContainer} key={index} href={link.link} target="_blank" rel="noopener noreferrer">
                             <ThemedImage 
                                 alt={link.label}
+                                width={24}
+                                height={24}
                                 sources={{
                                     light: `/svg/icon-${link.label}-light.svg`,
                                     dark: `/svg/icon-${link.label}-dark.svg`

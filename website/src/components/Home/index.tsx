@@ -217,11 +217,11 @@ function ProjectDisplay(): JSX.Element {
             </div>
             <div className={clsx(styles.carouselController, styles.flexBetween)}>
                 <button onClick={goToPrevious} className={styles.arrowLeft}>
-                    <img src={'/svg/icon-chevron-right.svg'} alt="Previous"/>
+                    <img src={'/svg/icon-chevron-right.svg'} width={24} height={24} alt="Previous"/>
                 </button>
                 <Button link={'/docs/ecosystem'}>Explore all projects</Button>
                 <button onClick={goToNext} className={styles.arrowRight}>
-                    <img src={'/svg/icon-chevron-right.svg'} alt="Next"/>
+                    <img src={'/svg/icon-chevron-right.svg'} width={24} height={24} alt="Next"/>
                 </button>
             </div>
         </EcoSection>
@@ -240,7 +240,7 @@ function DevLogSection(): JSX.Element {
                     </Button>
                 </div>
                 <div className={styles.illusContainer}>
-                    <img alt={'dev log'} src={'/svg/illus-dev-log.svg'} />
+                    <img alt={'dev log'} loading="lazy" src={'/svg/illus-dev-log.svg'} />
                 </div>
             </div>
         </div>
@@ -254,7 +254,7 @@ function ContactUsSection(): JSX.Element {
             <div className={clsx(styles.flexCenter, styles.icons)}>
                 {contactUsContents.map((media, index) => (
                     <Link key={index} href={media.link} target="_blank" rel="noopener noreferrer" className={styles.iconBG}>
-                        <img width={36} height={36} src={`svg/logo-media-${media.label}.svg`} alt={media.label} />
+                        <img loading="lazy" width={36} height={36} src={`svg/logo-media-${media.label}.svg`} alt={media.label} />
                     </Link>
                 ))}
             </div>
