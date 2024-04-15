@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
-import useIsBrowser from '@docusaurus/useIsBrowser';
 
 interface FadeInSectionProps {
   children: React.ReactNode;
@@ -9,31 +8,13 @@ interface FadeInSectionProps {
   className?: string;
 }
 
-const FadeInSection: React.FC<FadeInSectionProps> = ({ children, transformY = 160, className }) => {
+const FadeInSection: React.FC<FadeInSectionProps> = ({ children, transformY = 40, className }) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
-  const isBrowser = useIsBrowser(); 
 
   useEffect(() => {
-    if (!isBrowser) {
-      setVisible(true); // prevents invisibility
-      return;
-    }
-    const handleScroll = () => {
-      if (domRef.current) {
-        const { top } = domRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        if (top <= windowHeight * 0.9) {  // Trigger when element comes within 90% of the viewport
-          setVisible(true);
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isBrowser]);
+    setVisible(true);
+  }, []);
 
   return (
     <div
