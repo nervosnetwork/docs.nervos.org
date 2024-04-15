@@ -48,7 +48,7 @@ The `code_hash` actually just identifies a script code so that `CKB-VM` knows ho
 
 What script also includes, is the `args` part, which distinguishes script from script code. args can be used here to provide additional arguments for a CKB script, for example, while people might all be using the same default lock script code, each of them might have their own pubkey hash, args is exact the place to hold pubkey hash. This way each user of CKB can have different lock script, while sharing the same lock script code.
 
-We can ignore `hash_type` for now, a future post will explain what it is and it’s interesting usage.
+`hash_type` denotes different ways for `CKB-VM` to locate the script code for a script. Possible values include `type`, `data`, `data1` and `data2`.
 
 ## A Minimal Script
 
@@ -291,7 +291,7 @@ impl From<SysError> for Error {
 
 Several points worth explaining here:
 
-To load cell data, we use `load_cell_data` syscall from `ckb-std` library. the function takes two arguments, one is the index number, and one is source type flag that denoting the source of cells to locate. Different source type and index number will point to different cell. For example, `load_cell_data(0, Source::GroupOutput)` means load the first cell from the output cells group with the same running script as current script.
+To load cell data, we use `load_cell_data` syscall from `ckb-std` library. the function takes two arguments, one is the index number, and one is source type flag that denoting the source of cells to locate. Different source type and index number will point to different cell. For example, `load_cell_data(0, Source::GroupOutput)` means load the first cell from the output cells group with the same running script as current script. You can check [rfc](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0046-syscalls-summary/0046-syscalls-summary.md#source) for more details.
 
 The workflow of our script goes like this: 
 
@@ -301,10 +301,10 @@ To perform the loop, the script would keep an index variable, in each loop itera
 
 Besides the main logic in `main.rs` file, we also write a `error.rs` to define our custom error code for the carrot script. CKB defines some basic error code like:
 
-- 1(or CKB_INDEX_OUT_OF_BOUND) means you have finished fetching all indices in a kind
-- 2(or CKB_ITEM_MISSING) means an entity is not present, such as fetching a type script from a cell that doesn’t have one.
-- 3(or CKB_LENGTH_NOT_ENOUGH) means some data length is wrong such as invalid script args or signature length.
-- 4(or CKB_ENCODING) means there is something wrong with the molecule serialization.
+- 1(CKB_INDEX_OUT_OF_BOUND) means you have finished fetching all indices in a kind
+- 2(CKB_ITEM_MISSING) means an entity is not present, such as fetching a type script from a cell that doesn’t have one.
+- 3(CKB_LENGTH_NOT_ENOUGH) means some data length is wrong such as invalid script args or signature length.
+- 4(CKB_INVALID_DATA) means there is something wrong with the [molecule serialization](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md).
 
 We define error code 5 to be the custom `CarrotAttack` error. So everytime the script throws out error code 5, we know that means the script have found a cell data starts with the `carrot` word so it fails.
 
@@ -502,6 +502,7 @@ By following this tutorial this far, you have mastered how to write a basic scri
 
 ## Additional Resources
 
+- This tutorial is originally taken and adapt from the amazing blog post by [xuejie.space](https://xuejie.space/2019_07_13_introduction_to_ckb_script_programming_script_basics/)
 - CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
 - script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
