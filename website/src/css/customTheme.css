@@ -235,7 +235,7 @@
   margin-top: 0.25em;
 }
 .theme-doc-sidebar-menu > li:nth-child(2) > div > a:before {
-  content:url('/svg/icon-sidebar-wallet.svg');
+  content:url('/svg/icon-sidebar-script.svg');
   margin-right: 0.5em;
   margin-top: 0.25em;
 }
