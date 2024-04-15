@@ -1,0 +1,478 @@
+---
+id: basic-script
+title: "Basic Script Example"
+sidebar_position: 3 
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ScriptHeaders from "./ScriptHeaders.tsx";
+import TutorialHeader from "@components/TutorialHeader";
+
+# Basic Script Example
+
+<TutorialHeader
+  time={ScriptHeaders.basic.time}
+  topics={ScriptHeaders.basic.topics}
+  tools={ScriptHeaders.basic.tools}
+/>
+
+## A Minimal Script
+
+As we have learned before, a script returns 0 means it succeeds. A simplest CKB script code looks like this in Rust:
+
+```rust
+pub fn program_entry() -> i8 {
+    0
+}
+```
+
+This simplest script code is called `always-success` since it always return 0 as its return code. You might think this simplest script code is also the dumplest one, because if you use this as your lock script code, your token can be taken away by anyone. 
+
+But such simpleset script code turns out to be useful under development environment. When you are testing some scripts on local blockchain for your dApp, you might let the testing cells to have `always-success` lock script to simplify your testing work flow.
+
+But the `always-success` won’t be interesting since it is too simple. 
+
+Here we will start with an interesting idea: 
+
+> personally I dislike carrot. I do know that carrot is great from a nutritional point of view, but I still want to avoid it due to the taste. Now what if I want to set a rule, that none of my cells on CKB has data that begin with the word `carrot`? 
+
+Let’s write a script code to ensure this. 
+
+Below is a step by step guide, you can also clone the full code example from github [carrot-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/carrot-script).
+
+### Carrot-forbidden Script
+
+The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) to do that. You need the following dependencies:
+
+* `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
+* `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
+* `Clang 16+`
+* `cargo-generate`: You can install this via `cargo install cargo-generate`
+
+If you got any problems for these dependencies, refer to [readme](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for install details.
+
+### Init a Script project
+
+Now let's run the command to generate a new Script project called `my-first-contract-workspace`:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+```bash {5}
+alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
+create-ckb-scripts
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+```bash
+⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
+🤷   Project Name: my-first-contract-workspace
+🔧   Destination: /tmp/my-first-contract-workspace ...
+🔧   project-name: my-first-contract-workspace ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/my-first-contract-workspace`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/my-first-contract-workspace
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+### Create a new Script
+
+Let’s create a new script called `carrot`.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-a-new-script" label="Command">
+```
+```bash {5}
+cd my-first-contract-workspace
+make generate
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="create-a-new-script-result" label="Response">
+```
+```bash
+🤷   Project Name: carrot
+🔧   Destination: /tmp/my-first-contract-workspace/contracts/carrot ...
+🔧   project-name: carrot ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/my-first-contract-workspace/contracts/carrot`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/my-first-contract-workspace/contracts/carrot
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Our project is successfully setup! You can run `tree .` to show the project structure:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="script-project-structure" label="Command">
+```
+```bash {5}
+cd my-first-contract-workspace
+tree .
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="script-project-structure-result" label="Response">
+```
+```bash
+.
+├── Cargo.lock
+├── Cargo.toml
+├── Makefile
+├── README.md
+├── contracts
+│   └── carrot
+│       ├── Cargo.toml
+│       ├── Makefile
+│       ├── README.md
+│       └── src
+│           └── main.rs
+├── scripts
+│   └── find_clang
+└── tests
+    ├── Cargo.toml
+    └── src
+        ├── lib.rs
+        └── tests.rs
+
+7 directories, 13 files
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+A litter introduce here: `contracts/carrot/src/main.rs` contains our source code of the carrot script. the `tests/tests.rs` provide unit test for our scripts. We will introduce tests after we write the script.
+
+### Use CKB syscall with ckb-std library
+
+To ensure the security of CKB script, each script has to run in an isolated environment that is totally separated from the main computer you are running CKB. This way it won’t be able to access data it doesn’t need, such as your private keys or passwords. 
+
+However, for a script to be useful, there must be certain data it want to access, such as the cell a script guards, or a transaction a script validates. CKB provides [syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md) to ensure this, syscalls are defined in RISC-V standard, they provide a way to access certain resources provided by the environment. In a normal situation, the environment here means the operating system, but in the case of CKB VM, the environment refers to the actual CKB process. With syscalls, a CKB script can access the whole transaction containing itself, including inputs, outputs, witnesses, and deps.
+
+The good news, is that we have encapsulated syscalls in an easy to use library called [ckb-std](https://docs.rs/ckb-std/latest/ckb_std/) in Rust, you are very welcome to poke around the [source code](https://github.com/nervosnetwork/ckb-std) of this library to see how syscalls are implemented. The bottomline is you can just grab this library and use the wrapped functions to make syscalls as you want.
+
+For our carrot-forbidden script to ensure none of the cells can have carrot in cell data, we will use CKB syscall to read cell data in the script.
+
+Open `my-first-contract-workspace/contracts/carrot/src/main.rs` and change it to the following:
+
+```rust title="my-first-contract-workspace/contracts/carrot/src/main.rs"
+#![no_std]
+#![cfg_attr(not(test), no_main)]
+
+#[cfg(test)]
+extern crate alloc;
+
+mod error;
+
+use ckb_std::{ckb_constants::Source, debug, error::SysError, high_level::load_cell_data};
+
+#[cfg(not(test))]
+use ckb_std::default_alloc;
+use error::Error;
+#[cfg(not(test))]
+ckb_std::entry!(program_entry);
+#[cfg(not(test))]
+default_alloc!();
+
+pub fn program_entry() -> i8 {    
+    match carrot_forbidden() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
+}
+
+fn carrot_forbidden() -> Result<(), Error> {
+    let mut index = 0;
+    loop {
+        match load_cell_data(index, Source::GroupOutput) {
+            Ok(data) => {
+                if data.starts_with("carrot".as_bytes()) {
+                    return Err(Error::CarrotAttack);
+                }else{
+                    debug!("output #{:} has no carrot! Hooray!", index);
+                }
+            },
+            Err(err) => {
+                match err {
+                    // we loop out all the output cell
+                    SysError::IndexOutOfBound => break,
+                    _ => return Err(Error::from(err)),
+                }
+            }
+        }
+        // Increment index to process next cell
+        index += 1;
+    }
+    Ok(())
+}
+```
+
+We also need to a `Error` module to define the error code when carrot script fails. Create a new file named `error.rs` in `my-first-contract-workspace/contracts/carrot/src/error.rs`:
+
+```rs title="my-first-contract-workspace/contracts/carrot/src/error.rs"
+use ckb_std::error::SysError;
+
+#[cfg(test)]
+extern crate alloc;
+
+#[repr(i8)]
+pub enum Error {
+    IndexOutOfBound = 1,
+    ItemMissing,
+    LengthNotEnough,
+    Encoding,
+    // Add customized errors here...
+    CarrotAttack,
+}
+
+impl From<SysError> for Error {
+    fn from(err: SysError) -> Self {
+        match err {
+            SysError::IndexOutOfBound => Self::IndexOutOfBound,
+            SysError::ItemMissing => Self::ItemMissing,
+            SysError::LengthNotEnough(_) => Self::LengthNotEnough,
+            SysError::Encoding => Self::Encoding,
+            SysError::Unknown(err_code) => panic!("unexpected sys error {}", err_code),
+        }
+    }
+}
+```
+
+Several points worth explaining here:
+
+To load cell data, we use `load_cell_data` syscall from `ckb-std` library. the function takes two arguments, one is the index number, and one is source type flag that denoting the source of cells to locate. Different source type and index number will point to different cell. For example, `load_cell_data(0, Source::GroupOutput)` means load the first cell from the output cells group with the same running script as current script. You can check [rfc](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0046-syscalls-summary/0046-syscalls-summary.md#source) for more details.
+
+The workflow of our script goes like this: 
+
+First, it loops through all output cells in the transaction, load each cell data and test if those bytes match the word `carrot`. If we found a match, the script would return -1, denoting an error status, if no match is found, the script exits with 0, meaning execution success.
+
+To perform the loop, the script would keep an index variable, in each loop iteration, it would tries to make the syscall to fetch the cell denoted by current index value, if the syscall returns CKB_INDEX_OUT_OF_BOUND, it means the script has iterated through all the cells, hence it just exits the loop, otherwise, the loop would continue, the cell data is tested, then index variable is incremented for the next iteration.
+
+Besides the main logic in `main.rs` file, we also write a `error.rs` to define our custom error code for the carrot script. 
+
+CKB defines some basic error code like:
+
+- 1(CKB_INDEX_OUT_OF_BOUND) means you have finished fetching all indices in a kind
+- 2(CKB_ITEM_MISSING) means an entity is not present, such as fetching a type script from a cell that doesn’t have one.
+- 3(CKB_LENGTH_NOT_ENOUGH) means some data length is wrong such as invalid script args or signature length.
+- 4(CKB_INVALID_DATA) means there is something wrong with the [molecule serialization](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md).
+
+We define error code 5 to be the custom `CarrotAttack` error. So everytime the script throws out error code 5, we know that means the script have found a cell data starts with the `carrot` word so it fails.
+
+So that's all! This concludes your first useful CKB script code! 
+
+In the next section, we will see how we can test and deploy it to CKB and run it.
+
+### Testing your script
+
+`ckb-script-templates` packs the unit test section that we can use to quickly test our script without deploying the script to blockchains.
+
+All test case goes into the `my-first-contract-workspace/tests/src/tests.rs` file. The way tests works is to leverage a library called [ckb_testtool](https://docs.rs/ckb-testtool/latest/ckb_testtool/) to simulate the execution of the script.
+
+```rust title="my-first-contract-workspace/tests/src/tests.rs"
+// Include your tests here
+// See https://github.com/xxuejie/ckb-native-build-sample/blob/main/tests/src/tests.rs for examples
+
+use super::*;
+use ckb_testtool::{
+    builtin::ALWAYS_SUCCESS,
+    ckb_types::{bytes::Bytes, core::TransactionBuilder, packed::*, prelude::*},
+    context::Context,
+};
+
+const MAX_CYCLES: u64 = 10_000_000;
+
+#[test]
+fn test_no_carrot() {
+    // deploy contract
+    let mut context = Context::default();
+    let loader = Loader::default();
+    let carrot_bin = loader.load_binary("carrot");
+    let carrot_out_point = context.deploy_cell(carrot_bin);
+    let carrot_cell_dep = CellDep::new_builder()
+        .out_point(carrot_out_point.clone())
+        .build();
+
+    // prepare scripts
+    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
+    let lock_script = context
+        .build_script(&always_success_out_point.clone(), Default::default())
+        .expect("script");
+    let lock_script_dep = CellDep::new_builder()
+        .out_point(always_success_out_point)
+        .build();
+
+    // prepare cell deps
+    let cell_deps: Vec<CellDep> = vec![lock_script_dep, carrot_cell_dep];
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point.clone())
+        .build();
+
+    let type_script = context
+        .build_script(&carrot_out_point, Bytes::new())
+        .expect("script");
+
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    // prepare output cell data
+    let outputs_data = vec![Bytes::from("apple"), Bytes::from("tomato")];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, MAX_CYCLES)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+
+As you can see, we wrote the first test case named `test_no_carrot` to simulate a transaction that use our carrot-forbidden script in one of the output cell, and we build all the output cell without `carrot` in their cell data. To make the test pass, the transaction should be valid and verified by CKB successfully.
+
+We can also write another test that simulates if the transaction does contains output cell that its data starts with the word `carrot`:
+
+```rust title=""
+#[test]
+fn test_carrot_attack() {
+    // deploy contract
+    let mut context = Context::default();
+    let loader = Loader::default();
+    let carrot_bin = loader.load_binary("carrot");
+    let carrot_out_point = context.deploy_cell(carrot_bin);
+    let carrot_cell_dep = CellDep::new_builder()
+        .out_point(carrot_out_point.clone())
+        .build();
+
+    // prepare scripts
+    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
+    let lock_script = context
+        .build_script(&always_success_out_point.clone(), Default::default())
+        .expect("script");
+    let lock_script_dep = CellDep::new_builder()
+        .out_point(always_success_out_point)
+        .build();
+
+    // prepare cell deps
+    let cell_deps: Vec<CellDep> = vec![lock_script_dep, carrot_cell_dep];
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point.clone())
+        .build();
+
+    let type_script = context
+        .build_script(&carrot_out_point, Bytes::new())
+        .expect("script");
+
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    // prepare output cell data
+    let outputs_data = vec![Bytes::from("carrot"), Bytes::from("tomato")];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();
+    assert_script_error(err, 5);
+}
+
+fn assert_script_error(err: Error, err_code: i8) {
+    let error_string = err.to_string();
+    assert!(
+        error_string.contains(format!("error code {} ", err_code).as_str()),
+        "error_string: {}, expected_error_code: {}",
+        error_string,
+        err_code
+    );
+}
+```
+
+In this test, we check if the error code throws by our script is matched with the error code 5 in `assert_script_error(err, 5);`.
+
+## Deploy script to blockchains?
+
+We will introduce this part in another tutorial soon. stay tuned!
+
+---
+
+## Congratulations!
+
+By following this tutorial this far, you have mastered how to write a basic script on CKB. Here's a quick recap:
+
+- Use `ckb-script-templates` to init a script project
+- Use `ckb-std` to leverage CKB syscalls to read all kinds of data from transaction.
+- Use unit tests without deploying the script to blockchains to quickly test the script.
+
+## Additional Resources
+
+- This tutorial is originally taken and adapt from the amazing blog post by [xuejie.space](https://xuejie.space/2019_07_13_introduction_to_ckb_script_programming_script_basics/)
+- Full source code of this tutorial: [carrot-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/carrot-script)
+- CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
+- script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)

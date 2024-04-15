@@ -1,0 +1,46 @@
+---
+id: what-is-script
+title: "What is Script"
+sidebar_position: 1
+---
+
+# What is Script
+
+A [script](/docs/concepts/glossary#script) in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitray logic to guard and protect your on-chain assets. You can think of it as smart contract.
+
+## How does Script works
+
+When executing a script, CKB just take the executables and run it in a virtual machine environment called [CKB-VM](/docs/concepts/ckb-vm). After the execution, if the program returns with 0 as the return code, we consider the script succeeds, all non-zero return codes will be considered script faliures. 
+
+When you submit a transaction to CKB, CKB will execute all the scripts from the transaction to ensure that all scripts succeeds, otherwiese the transaction will fail to be included on-chain.
+
+In this way, we can let the cell carry different scripts to perform all kinds of validation for the current transaction, similar to how smart contract works in other blockchains.
+
+## Script types
+
+A Script can be one of two types:
+
+- Lock Script - Used to control ownership and access to a Cell.
+- Type Script - Used to control how a Cell is used in a transaction.
+
+In most cases, Lock Script works the same with Type Script. The difference is that, only the lock script from the input cells will be exeuted in the transaction, while the type script from both the input cells and output cells will be executed in the transaction. 
+
+This difference has lead to the different usecases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control owener ship of a cell while Type Script defines what kinds of changes of a cell is valid for the transaction.
+
+## Script structure
+
+Script has the following structure:
+
+```rust
+pub struct Script {
+    pub code_hash: H256,
+    pub hash_type: ScriptHashType,
+    pub args: JsonBytes,
+}
+```
+
+The `code_hash` actually just identifies a script code so that `CKB-VM` knows how to load the binary code of the script. 
+
+What script also includes, is the `args` part, which distinguishes script from script code. args can be used here to provide additional arguments for a CKB script, for example, while people might all be using the same default lock script code, each of them might have their own pubkey hash, args is exact the place to hold pubkey hash. This way each user of CKB can have different lock script, while sharing the same lock script code.
+
+`hash_type` denotes different ways for `CKB-VM` to locate the script code for a script. Possible values include `type`, `data`, `data1` and `data2`.

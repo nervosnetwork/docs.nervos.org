@@ -234,22 +234,27 @@
   margin-right: 0.5em;
   margin-top: 0.25em;
 }
-.theme-doc-sidebar-menu > li:nth-child(2) > a:before {
-  content:url('/svg/icon-sidebar-wallet.svg');
+.theme-doc-sidebar-menu > li:nth-child(2) > div > a:before {
+  content:url('/svg/icon-sidebar-script.svg');
   margin-right: 0.5em;
   margin-top: 0.25em;
 }
 .theme-doc-sidebar-menu > li:nth-child(3) > a:before {
+  content:url('/svg/icon-sidebar-wallet.svg');
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+}
+.theme-doc-sidebar-menu > li:nth-child(4) > a:before {
   content:url('/svg/icon-sidebar-rpc.svg');
   margin-right: 0.5em;
   margin-top: 0.25em;
 }
-.theme-doc-sidebar-menu > li:nth-child(4) > div > a:before {
+.theme-doc-sidebar-menu > li:nth-child(5) > div > a:before {
   content:url('/svg/icon-sidebar-concept.svg');
   margin-right: 0.5em;
   margin-top: 0.25em;
 }
-.theme-doc-sidebar-menu > li:nth-child(5) > a:before {
+.theme-doc-sidebar-menu > li:nth-child(6) > a:before {
   content:url('/svg/icon-sidebar-ecosystem.svg');
   margin-right: 0.5em;
   margin-top: 0.25em;
