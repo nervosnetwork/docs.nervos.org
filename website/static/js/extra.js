@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", function () {
   document.querySelector("body").prepend(oldSiteLink);
 });
 
-/** Redirect users to /docs */
-if (window.location.pathname === '/') {
-  window.location.pathname = '/docs';
+/** Redirect users to /docs/getting-started */
+if (window.location.pathname === '/docs') {
+  window.location.pathname = '/docs/getting-started';
 }

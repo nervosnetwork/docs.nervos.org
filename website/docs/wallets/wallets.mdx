@@ -26,13 +26,13 @@ When it comes to storing and securing CKB assets, users have various options, in
 
 These wallets listed below offer custody and security services tailored to CKB. For more information, refer to the respective guides for each wallet.
 
-<CardLayout colNum={3}> 
-{walletCardContents.map(({ index, title, href, description }) => (
+<CardLayout colNum={[2, 2, 2, 2]}> 
+{walletCardContents.map(({ index, title, href, tags }) => (
     <WalletCard
       key={index}
       title={title}
       href={href}
-      description={description}
+      tags={tags}
     />
   ))}
 </CardLayout>

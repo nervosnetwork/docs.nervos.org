@@ -14,12 +14,13 @@ Explore essential tools and resources tailored for development on Nervos CKB, de
 ## Development & Deployment
 
 <CardLayout>
-  {toolCardContents.slice(0, 4).map(({ index, title, description, href, type, links }) => (
+  {toolCardContents.slice(0, 4).map(({ index, title, description, link, type, links }) => (
     <Card
       key={index}
       title={title}
       description={description}
-      href={href}
+      link={link}
+      internal={false}
       type={type}
       links={links}
     />
@@ -29,12 +30,13 @@ Explore essential tools and resources tailored for development on Nervos CKB, de
 ## Utilities & Testing
 
 <CardLayout>
-  {toolCardContents.slice(4, 7).map(({ index, title, description, href, type, links }) => (
+  {toolCardContents.slice(4, 7).map(({ index, title, description, link, type, links }) => (
     <Card
       key={index}
       title={title}
       description={description}
-      href={href}
+      link={link}
+      internal={false}
       type={type}
       links={links}
     />

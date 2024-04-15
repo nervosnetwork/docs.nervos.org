@@ -2,7 +2,6 @@
 id: getting-started
 title: Getting Started
 sidebar_position: 1
-slug: /
 ---
 
 import Tabs from "@theme/Tabs";
@@ -24,7 +23,7 @@ import {
 
 #### Your go-to resources for dApp development on CKB.
 
-## Quick Setup with `offckb`
+## Quick Setup with OffCKB
 
 You can set up your local development environment by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides a one-line command to start a Devnet, pre-funded test accounts
 and useful [Scripts (Smart Contracts)](/docs/concepts/glossary#script) like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
@@ -97,15 +96,16 @@ Tools tailored for dApp development to deployment on CKB.
 <CardLayout>
   {toolCardContents
     .slice(0, 3)
-    .map(({ index, title, description, href, type, links }) => (
+    .map(({ index, title, description, link, type, links }) => (
       <Card
         key={index}
         title={title}
         description={description}
-        href={href}
+        link={link}
+        internal={false}
         type={type}
         links={links}
       />
     ))}
-  <MoreCard title={MORETOOLCARDTITLE} href={MORETOOLCARDHREF} />
+  <MoreCard title={MORETOOLCARDTITLE} to={MORETOOLCARDHREF} />
 </CardLayout>

@@ -24,10 +24,10 @@
 
   --ifm-container-width-xl: 1022px;
   --ifm-hr-background-color: var(--border-subtle);
-  --ifm-hr-margin-vertical: 4em;
+  --ifm-hr-margin-vertical: 4rem;
 
   /* Navbar */
-  --ifm-navbar-background-color: var(--surface-03);
+  --ifm-navbar-background-color: var(--dark-surface-03);
   --ifm-navbar-height: 64px;
 
   /* Sidebar */
@@ -46,13 +46,13 @@
   --ifm-menu-color-active: var(--text-link);
   --ifm-menu-color-background-active: var(--selected);
   --ifm-menu-color-background-hover: var(--hover);
-  --ifm-menu-link-padding-horizontal: 1em;
-  --ifm-menu-link-padding-vertical: 0.4em;
+  --ifm-menu-link-padding-horizontal: 1rem;
+  --ifm-menu-link-padding-vertical: 0.4rem;
 
   /* Code Block */
   --ifm-code-background: var(--surface-02);
   --ifm-code-border-radius: 4px;
-  --ifm-code-font-size: 0.875em;
+  --ifm-code-font-size: 0.875rem;
   --docusaurus-highlighted-code-line-bg: var(--surface-03);
 
   /* Blockquote */
@@ -77,58 +77,58 @@
 /*Search bar*/
 .navbar-search .DocSearch-Button {
   background-color: transparent;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   width: 280px;
-  height: 48px;
+  height: 3rem;
   padding: 0 1rem;
   margin-right: 0.5rem;
 }
 .navbar-search .DocSearch-Button:hover {
-  background-color: var(--hover) !important;
-  border: 1px solid var(--border-accent);
+  background-color: var(--dark-hover) !important;
+  border: 1px solid var(--dark-border-accent);
   box-shadow: none !important;
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
-  color: var(--text-tertiary) !important;
+  color: var(--dark-text-tertiary) !important;
 }
 
 .DocSearch-Button-Placeholder {
-  color: var(--text-tertiary);
+  color: var(--dark-text-tertiary);
 }
 
 .DocSearch-Button-Key {
-  background: var(--surface-02) !important;
-  color: var(--text-secondary) !important;
+  background: var(--dark-surface-02) !important;
+  color: var(--dark-text-secondary) !important;
   box-shadow: none !important;
-  height: 24px !important;
-  width: 24px !important;
+  height: 1.5rem !important;
+  width: 1.5rem !important;
   padding: 0 !important;
   font-size: 0.75rem !important;
-  margin-right: -0.6em !important;
+  margin-right: -0.5rem !important;
 }
 
 /* @cmfcmf/docusaurus-search-local search  */
 .navbar-search .aa-DetachedSearchButton {
   background-color: transparent;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   width: 280px;
-  height: 48px;
+  height: 3rem;
   padding: 0 1rem;
   margin-right: 0.5rem;
 }
 .navbar-search .aa-DetachedSearchButton:hover {
-  background-color: var(--hover) !important;
-  border: 1px solid var(--border-accent);
+  background-color: var(--dark-hover) !important;
+  border: 1px solid var(--dark-border-accent);
   box-shadow: none !important;
 }
 .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
-  color: var(--text-tertiary) !important;
+  color: var(--dark-text-tertiary) !important;
 }
 .aa-DetachedSearchButtonPlaceholder {
-  color: var(--text-tertiary);
+  color: var(--dark-text-tertiary);
 }
 
 .aa-DetachedFormContainer {
@@ -161,50 +161,35 @@
 }
 
 .navbar-help {
-  height: 48px;
-  border: 1px solid var(--border-subtle);
+  height: 3rem;
+  border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   cursor: pointer;
   text-decoration: none !important;
-  padding: 0 1em 0 0.75em;
-  margin-right: 1em;
+  padding: 0 1rem 0 0.75rem !important;
+  margin-right: 1rem;
 }
 .navbar-help:hover {
-  background-color: var(--hover);
+  background-color: var(--dark-hover);
 }
 .help-flex {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: var(--text-primary);
+  color: var(--dark-text-primary);
   text-decoration: none !important;
 }
 .help-text {
-  margin: 0 0 0 0.5em;
-}
-
-/* ColorModeToggle */
-.navbar__items--right > :last-child {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid var(--border-subtle);
-  cursor: pointer;
-}
-.navbar__items--right > :last-child:hover {
-  background-color: var(--hover);
-}
-.navbar__items--right > :last-child > button:hover {
-  background:none;
+  margin: 0 0 0 0.5rem;
 }
 
 /* Sidebar Menu */
 .menu {
-  padding: 0.5em !important;
+  padding: 0.5rem !important;
 }
 .menu__link, .menu__list-item-collapsible {
-  height: 40px;
+  height: 2.5rem;
   border-radius: 20px !important;
 }
 
@@ -231,8 +216,8 @@
 /* Add icon next to the menus */
 .theme-doc-sidebar-menu > li:first-child > div > a:before {
   content:url('/svg/icon-sidebar-rocket.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .theme-doc-sidebar-menu > li:nth-child(2) > div > a:before {
   content:url('/svg/icon-sidebar-script.svg');
@@ -246,18 +231,23 @@
 }
 .theme-doc-sidebar-menu > li:nth-child(4) > a:before {
   content:url('/svg/icon-sidebar-rpc.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(5) > div > a:before {
+.theme-doc-sidebar-menu > li:nth-child(5) > a:before {
+  content:url('/svg/icon-sidebar-node.svg');
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.theme-doc-sidebar-menu > li:nth-child(6) > div > a:before {
   content:url('/svg/icon-sidebar-concept.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(6) > a:before {
+.theme-doc-sidebar-menu > li:nth-child(7) > a:before {
   content:url('/svg/icon-sidebar-ecosystem.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
 }
 .menu__caret {
   border-radius: 50%;
@@ -265,8 +255,8 @@
 
 /* Footer */
 .footer > .container {
-  padding-top: 2em !important;
-  padding-bottom: 2em !important;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
 .footer__copyright {
   font-size: 0.875em;
@@ -279,7 +269,7 @@
   margin-top: 3rem;
 }
 .table-of-contents__link {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 /* Containers */
@@ -319,6 +309,11 @@ h4 {
   font-family: 'Lato', sans-serif;
   font-weight: 700;
   line-height: 1.4;
+}
+
+button {
+  font-family: 'Lato', sans-serif;
+  line-height: 1.2;
 }
 
 p, blockquote, ul, ol {
@@ -364,11 +359,11 @@ pre > code {
 }
 
 .tabs__item {
-  padding: 0.5em;
+  padding: 0.5rem;
   border-radius: 4px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  margin-right: 2em;
+  margin-right: 2rem;
 }
 
 .tabs__item--active {
@@ -421,22 +416,25 @@ details {
 
 /* Footer */
 .footer {
-  --ifm-footer-background-color: var(--surface-03);
-  --ifm-footer-title-color: var(--text-primary);
-  --ifm-footer-link-color: var(--text-secondary);
+  --ifm-footer-background-color: var(--dark-surface-03);
+  --ifm-footer-title-color: var(--dark-text-primary);
+  --ifm-footer-link-color: var(--dark-text-secondary);
 }
 
 /* Banner link to legacy doc site */
 
 #oldSiteLink {
-  height: 40px;
+  height: 2.5rem;
   width: 100%;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--surface-02);
-  color:var(--text-secondary);
+  background-color: var(--dark-surface-02);
+  color:var(--dark-text-secondary);
+}
+#oldSiteLink a {
+  color: var(--dark-text-link);
 }
 
 
@@ -459,6 +457,9 @@ details {
   }
   a.table-of-contents__link {
     color: var(--text-secondary);
+  }
+  .col {
+    --ifm-spacing-horizontal: 1rem;
   }
 }
 
@@ -485,6 +486,10 @@ details {
   }
   .aa-DetachedSearchButtonPlaceholder {
     display: none;  
+  }
+  .markdown > h1, h1 {
+    font-size: 2rem;
+    margin: 3rem 0 2rem;
   }
 }
 

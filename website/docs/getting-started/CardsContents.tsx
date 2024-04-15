@@ -13,60 +13,60 @@ const toolCardContents: CardProps[] = [
     title: "Lumos",
     description:
       "A JavaScript/TypeScript framework to simplify the development of dApp",
-    href: "https://github.com/ckb-js/lumos",
+    link: "https://github.com/ckb-js/lumos",
     type: "tool",
     links: [
-      { label: "Github", href: "https://github.com/ckb-js/lumos" },
-      { label: "Docs", href: "https://lumos-website.vercel.app/" },
+      { label: "Github", link: "https://github.com/ckb-js/lumos" },
+      { label: "Docs", link: "https://lumos-website.vercel.app/" },
     ],
   },
   {
     title: "CKB SDKs",
     description:
       "Necessary functions available in various programming languages",
-    href: "https://github.com/nervosnetwork/ckb-sdk-rust",
+    link: "https://github.com/nervosnetwork/ckb-sdk-rust",
     type: "tool",
     links: [
-      { label: "Rust", href: "https://github.com/nervosnetwork/ckb-sdk-rust" },
-      { label: "Go", href: "https://github.com/nervosnetwork/ckb-sdk-go" },
-      { label: "Java", href: "https://github.com/nervosnetwork/ckb-sdk-java" },
+      { label: "Rust", link: "https://github.com/nervosnetwork/ckb-sdk-rust" },
+      { label: "Go", link: "https://github.com/nervosnetwork/ckb-sdk-go" },
+      { label: "Java", link: "https://github.com/nervosnetwork/ckb-sdk-java" },
     ],
   },
   {
     title: "CKB-CLI",
     description:
       "The command-line tool for direct interaction with the Nervos network",
-    href: "https://github.com/nervosnetwork/ckb-cli",
+    link: "https://github.com/nervosnetwork/ckb-cli",
     type: "tool",
     links: [
-      { label: "Github", href: "https://github.com/nervosnetwork/ckb-cli" },
+      { label: "Github", link: "https://github.com/nervosnetwork/ckb-cli" },
       {
         label: "Wiki",
-        href: "https://github.com/nervosnetwork/ckb-cli/wiki/Tutorials",
+        link: "https://github.com/nervosnetwork/ckb-cli/wiki/Tutorials",
       },
     ],
   },
   {
     title: "OffCKB",
     description: "CKB local development network for your first try",
-    href: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
+    link: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
     type: "tool",
     links: [
       {
         label: "Github",
-        href: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
+        link: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
       },
     ],
   },
   {
     title: "CKB-Debugger",
     description: "A standalone debugger enabling off-chain contract development",
-    href: "https://github.com/nervosnetwork/ckb-standalone-debugger",
+    link: "https://github.com/nervosnetwork/ckb-standalone-debugger",
     type: "tool",
     links: [
       {
         label: "Github",
-        href: "https://github.com/nervosnetwork/ckb-standalone-debugger",
+        link: "https://github.com/nervosnetwork/ckb-standalone-debugger",
       },
     ],
   },
@@ -74,23 +74,23 @@ const toolCardContents: CardProps[] = [
     title: "CKB Address",
     description:
       "Convert and decode CKB addresses and generate private keys for development",
-    href: "https://ckb.tools/address",
+    link: "https://ckb.tools/address",
     type: "tool",
     links: [
-      { label: "Website", href: "https://ckb.tools/address" },
-      { label: "Github", href: "https://github.com/jordanmack/ckb-tools" },
+      { label: "Website", link: "https://ckb.tools/address" },
+      { label: "Github", link: "https://github.com/jordanmack/ckb-tools" },
     ],
   },
   {
     title: "Nervos Pudge Faucet",
     description: "Claim CKBytes to use while developing and testing",
-    href: "https://faucet.nervos.org/",
+    link: "https://faucet.nervos.org/",
     type: "tool",
     links: [
-      { label: "Website", href: "https://faucet.nervos.org/" },
+      { label: "Website", link: "https://faucet.nervos.org/" },
       {
         label: "Github",
-        href: "https://github.com/Magickbase/ckb-testnet-faucet",
+        link: "https://github.com/Magickbase/ckb-testnet-faucet",
       },
     ],
   },

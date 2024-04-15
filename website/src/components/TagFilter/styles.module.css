@@ -18,8 +18,8 @@
     border: none;
     box-shadow: none;
     cursor: pointer;
-    margin: 0 1em 1em 0;
-    padding: 0.3em 0.6em;
+    margin: 0 1rem 1rem 0;
+    padding: 0.25rem 0.5rem;
 }
 .tag:hover {
     background-color: var(--surface-03-hover);

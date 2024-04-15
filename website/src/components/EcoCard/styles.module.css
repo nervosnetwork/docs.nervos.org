@@ -7,7 +7,7 @@
   border: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
-  padding-bottom: 1em;
+  padding-bottom: 1rem;
   cursor: pointer;
   text-decoration: none !important;
   color: var(--text-secondary) !important;
@@ -39,9 +39,9 @@
   background-color: var(--text-link);
   font-size: 0.75em;
   color: var(--text-inverse);
-  height: 24px;
-  margin-right: 0.5em;
-  padding: 0.25em 0.5em;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -55,26 +55,32 @@
 .bottomContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 1em;
-  padding: 0 1em;
+  margin-top: 1rem;
+  padding: 0 1rem;
 }
 .description {
   margin: 0;
+  height: 3.5rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .title, .description, .tagList {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 .links {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 .links > a:not(:last-child) {
-  margin-right: 0.5em;
+  margin-right: 0.5rem;
 }
 .iconContainer {
-  width: 2em;
-  height: 2em;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   background-color: var(--surface-03);
   display: flex;
