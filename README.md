@@ -2,7 +2,6 @@
 
 - [Nervos CKB Documentation Website](#nervos-ckb-documentation-website)
 	- [What is CKB](#what-is-ckb)
-	- [How to build on top of it](#how-to-build-on-top-of-it)
 	- [Contributing](#contributing)
 		- [Branches](#branches)
 		- [Code structure](#code-structure)
@@ -14,11 +13,11 @@
 
 ## What is CKB
 
-*TODO: write some words to introduce CKB*
+Nervos CKB is a public permissionless blockchain and the layer 1 of Nervos.
 
-## How to build on top of it
+CKB generates trust and extends this trust to upper layers, making Nervos a trust network. It's also the value store of the Nervos network, providing public, secure and censorship-resistant custody services for assets, identities and other common knowledge created in the network. We will also vigorously develop the developer community and aim to offer blockchain developers exciting new capabilities.
 
-*TODO: write some words to introduce how to use doc sites*
+If you run into an issue on our documentation website you can contact us on [Nervos talk](https://talk.nervos.org/) or [Discord](https://discord.gg/AqGTUE9).
 
 ## Contributing
 
