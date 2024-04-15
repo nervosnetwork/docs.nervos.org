@@ -27,7 +27,7 @@
   --ifm-hr-margin-vertical: 4rem;
 
   /* Navbar */
-  --ifm-navbar-background-color: var(--surface-03);
+  --ifm-navbar-background-color: var(--dark-surface-03);
   --ifm-navbar-height: 64px;
 
   /* Sidebar */
@@ -77,7 +77,7 @@
 /*Search bar*/
 .navbar-search .DocSearch-Button {
   background-color: transparent;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   width: 280px;
   height: 3rem;
@@ -85,22 +85,22 @@
   margin-right: 0.5rem;
 }
 .navbar-search .DocSearch-Button:hover {
-  background-color: var(--hover) !important;
-  border: 1px solid var(--border-accent);
+  background-color: var(--dark-hover) !important;
+  border: 1px solid var(--dark-border-accent);
   box-shadow: none !important;
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
-  color: var(--text-tertiary) !important;
+  color: var(--dark-text-tertiary) !important;
 }
 
 .DocSearch-Button-Placeholder {
-  color: var(--text-tertiary);
+  color: var(--dark-text-tertiary);
 }
 
 .DocSearch-Button-Key {
-  background: var(--surface-02) !important;
-  color: var(--text-secondary) !important;
+  background: var(--dark-surface-02) !important;
+  color: var(--dark-text-secondary) !important;
   box-shadow: none !important;
   height: 1.5rem !important;
   width: 1.5rem !important;
@@ -112,7 +112,7 @@
 /* @cmfcmf/docusaurus-search-local search  */
 .navbar-search .aa-DetachedSearchButton {
   background-color: transparent;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   width: 280px;
   height: 3rem;
@@ -120,15 +120,15 @@
   margin-right: 0.5rem;
 }
 .navbar-search .aa-DetachedSearchButton:hover {
-  background-color: var(--hover) !important;
-  border: 1px solid var(--border-accent);
+  background-color: var(--dark-hover) !important;
+  border: 1px solid var(--dark-border-accent);
   box-shadow: none !important;
 }
 .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon {
-  color: var(--text-tertiary) !important;
+  color: var(--dark-text-tertiary) !important;
 }
 .aa-DetachedSearchButtonPlaceholder {
-  color: var(--text-tertiary);
+  color: var(--dark-text-tertiary);
 }
 
 .aa-DetachedFormContainer {
@@ -162,7 +162,7 @@
 
 .navbar-help {
   height: 3rem;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   cursor: pointer;
   text-decoration: none !important;
@@ -170,14 +170,14 @@
   margin-right: 1rem;
 }
 .navbar-help:hover {
-  background-color: var(--hover);
+  background-color: var(--dark-hover);
 }
 .help-flex {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: var(--text-primary);
+  color: var(--dark-text-primary);
   text-decoration: none !important;
 }
 .help-text {
@@ -416,9 +416,9 @@ details {
 
 /* Footer */
 .footer {
-  --ifm-footer-background-color: var(--surface-03);
-  --ifm-footer-title-color: var(--text-primary);
-  --ifm-footer-link-color: var(--text-secondary);
+  --ifm-footer-background-color: var(--dark-surface-03);
+  --ifm-footer-title-color: var(--dark-text-primary);
+  --ifm-footer-link-color: var(--dark-text-secondary);
 }
 
 /* Banner link to legacy doc site */
@@ -430,8 +430,11 @@ details {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--surface-02);
-  color:var(--text-secondary);
+  background-color: var(--dark-surface-02);
+  color:var(--dark-text-secondary);
+}
+#oldSiteLink a {
+  color: var(--dark-text-link);
 }
 
 

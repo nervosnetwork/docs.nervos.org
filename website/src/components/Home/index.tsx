@@ -33,10 +33,10 @@ function HomeCardSection() {
                 <h2 className={styles.cardTitle}>{card.title}</h2>
                 <div className={styles.cardLinks}>
                     {card.links.map((link, index) => (
-                        <div key={index} className={clsx(styles.flexBetween, styles.line, styles.borderBtm)}>
-                            <Link className={styles.link} to={link.link}>{link.label}</Link>
+                        <Link key={index} to={link.link} className={clsx(styles.flexBetween, styles.link, styles.line, styles.borderBtm)}>
+                            {link.label}
                             <img src={'/svg/icon-circle-arrow.svg'} width={32} height={32} alt={"Navigate to"} />
-                        </div> 
+                        </Link> 
                     ))}
                 </div>
             </div>

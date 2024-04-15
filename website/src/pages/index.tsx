@@ -1,15 +1,16 @@
-import React from "react";
+import { useEffect } from "react";
 import Layout from "@theme/Layout";
 import styles from "./styles.module.css";
 import CardLayout from "../components/CardLayout";
 import clsx from "clsx";
 import { HomeCardSection, WalletDisplay, ToolDisplay, DevLogSection, ContactUsSection, ProjectDisplay } from "../components/Home";
-import FadeInSection from "../components/FadeInSection";
+import { useColorMode } from '@docusaurus/theme-common'; 
 
 
 export default function Home() {
   return (
     <Layout wrapperClassName={clsx(styles.homeLayout, styles.relative)} title="Home" description="Docs for Nervos CKB Blockchain dApp and smart contract development">
+      <SwtichToDark />
       <div className={clsx(styles.sectionContainer)}>
           <div className={styles.header1}>Nervos CKB Documentation</div>
           <h4 className={clsx(styles.description, styles.titleBtm)}>Discover the power of Nervos CKB through tutorials, guides, and concepts</h4>
@@ -36,6 +37,15 @@ export default function Home() {
       </div>
     </Layout>
   );
+}
+
+function SwtichToDark() {
+  const { setColorMode } = useColorMode();
+
+  useEffect(() => {
+    setColorMode('dark');
+  }, []);
+  return null;
 }
 
 

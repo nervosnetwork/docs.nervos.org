@@ -125,8 +125,7 @@ const config = {
     },
     navbar: {
       logo: {
-        src: "img/logo.png",
-        srcDark:'img/logo-dark.png',
+        src: "img/logo-dark.png",
         width: 89,
         height: 32,
         alt:'Nervos CKB Docs',
