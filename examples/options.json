@@ -2,14 +2,12 @@
   {
     "name": "View and Transfer a CKB Balance",
     "value": "simple-transfer",
-    "description": "a simple Dapp to check CKB balance and transfer CKB",
-    "type": "tutorial"
+    "description": "a simple Dapp to check CKB balance and transfer CKB"
   },
   {
     "name": "Write an On-Chain Message",
     "value": "write-and-read-message",
-    "description": "a simple Dapp to issue your own token via XUDT scripts",
-    "type": "tutorial"
+    "description": "a simple Dapp to store & retrieve data from a Cell"
   },
   {
     "name": "Create a Fungible Token",
@@ -19,13 +17,6 @@
   {
     "name": "Create a Digital Object Using Spore Protocol",
     "value": "create-dob",
-    "description": "a simple Dapp to create on-chain digital object with spore scripts",
-    "type": "tutorial"
-  },
-  {
-    "name": "Full-Stack Dapp Template With Remix-vite and CKB Scripts",
-    "value": "bare-template",
-    "description": "a bare full-stack template with CKB smart contract and frontend developments, power by ckb-script-templates and Remix-vite",
-    "type": "template"
+    "description": "a simple Dapp to create on-chain digital object with spore scripts"
   }
 ]
