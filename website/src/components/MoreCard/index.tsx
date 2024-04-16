@@ -4,13 +4,13 @@ import styles from "./styles.module.css";
 
 export interface MoreCardProps {
     title: string;
-    href: string;
+    to: string;
     className?: string;
 }
 
-export default function MoreCard({ title, href, className }: MoreCardProps): JSX.Element {
+export default function MoreCard({ title, to, className }: MoreCardProps): JSX.Element {
     return (
-       <Link href={href} className={clsx(styles.cardContainer, className)}>
+       <Link to={to} className={clsx(styles.cardContainer, className)}>
          <p className={styles.description}>{title}</p>
        </Link>
     );

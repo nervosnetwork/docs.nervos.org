@@ -3,7 +3,7 @@
 .cardContainer {
   width: 100%;
   border-radius: 20px;
-  padding: 1.5em 1em;
+  padding: 1.5rem 1rem;
   border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;

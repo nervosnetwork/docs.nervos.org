@@ -119,17 +119,17 @@ const config = {
       darkTheme: darkCodeTheme,
     },
     colorMode: {
-      defaultMode: "light",
+      defaultMode: "dark",
       disableSwitch: false,
-      respectPrefersColorScheme: true,
+      respectPrefersColorScheme: false,
     },
     navbar: {
       logo: {
-        src: "img/logo.png",
-        srcDark:'img/logo-dark.png',
+        src: "img/logo-dark.png",
+        width: 89,
+        height: 32,
         alt:'Nervos CKB Docs',
-        className:'navbar-logo',
-        href:'/docs/'
+        href:'/'
       },
       items: [
         {
@@ -140,7 +140,7 @@ const config = {
         {
           type: 'html',
           position: 'right',
-          value: '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img src="/svg/icon-discord.svg"><p class="help-text">Get Help</p></a>',
+          value: '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
           className: 'navbar-help'
         }
       ]

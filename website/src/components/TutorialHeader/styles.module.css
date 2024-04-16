@@ -2,7 +2,7 @@
 
 .box{
   border-radius: 20px;
-  padding: 1.5em;
+  padding: 1.5rem;
   text-decoration: none !important;
   background-color: var(--surface-accent);
   color: var(--text-secondary) !important;
@@ -15,5 +15,5 @@
 }
 .toolList {
   margin: 0;
-  padding-left: 2.6em;
+  padding-left: 2.5rem;
 }

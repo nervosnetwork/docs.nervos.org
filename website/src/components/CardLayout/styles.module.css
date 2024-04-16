@@ -1,25 +1,24 @@
-
-/* Create two columns, each taking equal space */
 .layoutContainer {
   display: grid;
-  width: 100%; 
-  column-gap: 1.25em;
-  row-gap: 1.25em;
+  width: 100%;
+  grid-gap: var(--gap);
+  grid-template-columns: repeat(var(--columnL), minmax(0, calc((100% - (var(--columnL) - 1) * var(--gap)) / var(--columnL))));
 }
 
-/* Display in 1 column for the following screen sizes */
-@media (max-width: 767px) {
+@media (min-width: 997px) and (max-width: 1439px) {
   .layoutContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25em;
+    grid-template-columns: repeat(var(--columnM), minmax(0, calc((100% - (var(--columnM) - 1) * var(--gap)) / var(--columnM))));
   }
 }
-@media (min-width: 996px) and (max-width: 1120px) {
+
+@media (min-width: 769px) and (max-width: 996px) {
   .layoutContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25em;
+    grid-template-columns: repeat(var(--columnS), minmax(0, calc((100% - (var(--columnS) - 1) * var(--gap)) / var(--columnS))));
   }
 }
-  
+
+@media (max-width: 768px) {
+  .layoutContainer {
+    grid-template-columns: repeat(var(--columnXS), minmax(0, calc((100% - (var(--columnXS) - 1) * var(--gap)) / var(--columnXS))));
+  }
+}

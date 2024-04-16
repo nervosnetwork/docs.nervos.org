@@ -39,38 +39,72 @@
     --code-function: #0C865C;
     --code-constant: #BB15D6;
 
+    --dark-text-primary: #E4F7FF;
+    --dark-text-secondary: rgba(228, 247, 255, 0.85);
+    --dark-text-tertiary: #637F8A;
+    --dark-text-inverse: #003247;
+    --dark-text-link: #00CE88;
+
+    --dark-surface-01: #071C27;
+    --dark-surface-02: #132831;
+    --dark-surface-03: #18323B;
+    --dark-surface-accent: #18323B;
+
+    --dark-border-subtle:#3D535B;
+    --dark-border-accent: #00CE88;
+
+    --dark-hover:rgba(228, 247, 255, 0.06);
+    --dark-surface-03-hover: #243E47;
+    --dark-selected: rgba(228, 247, 255, 0.12);
+
+    --dark-alert-success: #00CE88;
+    --dark-alert-success-bg: rgba(0, 206, 136, 0.1);
+    --dark-alert-secondary: rgba(228, 247, 255, 0.85);
+    --dark-alert-secondary-bg: rgba(228, 247, 255, 0.1);
+    --dark-alert-info: #828EF9;
+    --dark-alert-info-bg: rgba(130, 142, 249, 0.1);
+    --dark-alert-warning: #FFF778;
+    --dark-alert-warning-bg: rgba(255, 247, 120, 0.1);
+    --dark-alert-danger: #FD7777;
+    --dark-alert-danger-bg: rgba(253, 119, 119, 0.1);
+
+    --dark-btn-shadow:  -2px -2px 4px 0px rgba(228, 247, 255, 0.10), 4px 4px 11px 0px rgba(7, 28, 39, 0.16);
+    --dark-btn-hover: #00C584;
+    --dark-card-shadow: 0px 10px 10px -5px rgba(7, 28, 39, 0.80), 0px 20px 25px -5px rgba(7, 28, 39, 0.80), 0px 1px 2px 0px #3D535B inset;
+    --dark-card-bg: linear-gradient(180deg, #132831 0%, #071C27 123.46%);
+    --dark-card-bg-hover: linear-gradient(0deg, var(--hover, rgba(228, 247, 255, 0.06)) 0%, var(--hover, rgba(228, 247, 255, 0.06)) 100%), linear-gradient(180deg, #132831 0%, #071C27 119.54%);
 }
 
 /* Override values for dark theme */
 html[data-theme='dark'] {
-    --text-primary: #E4F7FF;
-    --text-secondary: rgba(228, 247, 255, 0.85);
-    --text-tertiary: #637F8A;
-    --text-inverse: #003247;
-    --text-link: #00CE88;
+    --text-primary: var(--dark-text-primary);
+    --text-secondary: var(--dark-text-secondary);
+    --text-tertiary: var(--dark-text-tertiary);
+    --text-inverse: var(--dark-text-inverse);
+    --text-link: var(--dark-text-link);
   
-    --surface-01: #071C27;
-    --surface-02: #132831;
-    --surface-03: #18323B;
-    --surface-accent: #18323B;
+    --surface-01: var(--dark-surface-01);
+    --surface-02: var(--dark-surface-02);
+    --surface-03: var(--dark-surface-03);
+    --surface-accent: var(--dark-surface-accent);
   
-    --border-subtle:#3D535B;
-    --border-accent: #00CE88;
+    --border-subtle: var(--dark-border-subtle);
+    --border-accent: var(--dark-border-accent);
 
-    --hover:rgba(228, 247, 255, 0.06);
-    --surface-03-hover: #243E47;
-    --selected: rgba(228, 247, 255, 0.12);
+    --hover: var(--dark-hover);
+    --surface-03-hover: var(--dark-surface-03-hover);
+    --selected: var(--dark-selected);
 
-    --alert-success: #00CE88;
-    --alert-success-bg: rgba(0, 206, 136, 0.1);
-    --alert-secondary: rgba(228, 247, 255, 0.85);
-    --alert-secondary-bg: rgba(228, 247, 255, 0.1);
-    --alert-info: #828EF9;
-    --alert-info-bg: rgba(130, 142, 249, 0.1);
-    --alert-warning: #FFF778;
-    --alert-warning-bg: rgba(255, 247, 120, 0.1);
-    --alert-danger: #FD7777;
-    --alert-danger-bg: rgba(253, 119, 119, 0.1);
+    --alert-success: var(--dark-alert-success);
+    --alert-success-bg: var(--dark-alert-success-bg);
+    --alert-secondary: var(--dark-alert-secondary);
+    --alert-secondary-bg: var(--dark-alert-secondary-bg);
+    --alert-info: var(--dark-alert-info);
+    --alert-info-bg: var(--dark-alert-info-bg);
+    --alert-warning: var(--dark-alert-warning);
+    --alert-warning-bg: var(--dark-alert-warning-bg);
+    --alert-danger: var(--dark-alert-danger);
+    --alert-danger-bg: var(--dark-alert-danger-bg);
   
     --code-plain:#E4F7FF;
     --code-comment: rgba(228, 247, 255, 0.5);

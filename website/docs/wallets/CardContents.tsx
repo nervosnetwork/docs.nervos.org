@@ -4,47 +4,42 @@ const walletCardContents: WalletCardProps[] = [
     {
       title: 'Neuron',
       href: 'https://neuron.magickbase.com/',
-      description: 'Window, MacOS, Linux',
+      tags: ['Desktop'],
     },
     {
       title: 'JoyID',
       href: 'https://joy.id/',
-      description: 'Web-based',
-    },
-    {
-      title: 'Portal Wallet',
-      href: 'https://ckb.pw/#/',
-      description: 'Web-based',
+      tags: ['Web-based'],
     },
     {
       title: 'imToken',
       href: 'https://token.im/ckb-wallet',
-      description: 'Android, IOS',
+      tags: ['Mobile'],
     },
     {
       title: 'CKBull',
       href: 'https://ckbull.app/#download',
-      description: 'Android, IOS',
-    },
-    {
-      title: 'Opera Wallet',
-      href: 'https://www.opera.com/download',
-      description: 'Android',
+      tags: ['Mobile'],
     },
     {
       title: 'SafePal',
       href: 'https://blog.safepal.com/ckb/',
-      description: 'Android, IOS, Hardware',
+      tags: ['Mobile', 'Hardware'],
     },
     {
       title: 'Ledger',
       href: 'https://www.ledger.com/',
-      description: 'Hardware',
+      tags: ['Hardware'],
+    },
+    {
+      title: 'imKey',
+      href: 'https://imkey.im/',
+      tags: ['Hardware'],
     },
     {
       title: 'OneKey',
       href: 'https://onekey.so/',
-      description: 'Hardware',
+      tags: ['Mobile', 'Desktop', 'Hardware'],
     },
   ];
   
