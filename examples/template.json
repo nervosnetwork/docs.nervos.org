@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Remix-Vite Bare Templates",
+    "value": "remix-vite-template",
+    "description": "A full-stack template with Remix-vite and ckb-script-templates",
+    "tag": ["remix", "vite", "ckb-script-templates", "typescript", "rust"],
+    "author": "retric@cryptape.com"
+  }
+]
