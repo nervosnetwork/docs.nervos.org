@@ -1,0 +1,3 @@
+[submodule "examples/duktape-script/deps/ckb-c-stdlib"]
+	path = examples/duktape-script/deps/ckb-c-stdlib
+	url = https://github.com/nervosnetwork/ckb-c-stdlib
