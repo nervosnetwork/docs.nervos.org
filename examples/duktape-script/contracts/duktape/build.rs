@@ -1,3 +1,5 @@
+use std::fs;
+
 fn main() {
     println!("cargo:rerun-if-changed=c.c");
 
@@ -13,8 +15,21 @@ fn main() {
             build.get_compiler().is_like_clang(),
             "Clang must be used as the compiler!"
         );
+
+        // Path to the folder containing your C files
+        let c_files_dir = "./duktape";
+
+        // Retrieve a list of files in the specified directory
+        let c_files = fs::read_dir(c_files_dir)
+            .expect("Failed to read directory")
+            .filter_map(Result::ok)
+            .filter(|entry| entry.path().extension().map_or(false, |ext| ext == "c"))
+            .map(|entry| entry.path())
+            .collect::<Vec<_>>();
+
         build
             .file("c.c")
+            .files(c_files)
             .static_flag(true)
             .include(format!("{}/deps/ckb-c-stdlib", top))
             .include(format!("{}/deps/ckb-c-stdlib/libc", top))
