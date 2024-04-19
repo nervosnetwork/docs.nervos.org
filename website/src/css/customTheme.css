@@ -21,6 +21,7 @@
   --ifm-font-family-base: 'Lato', sans-serif;
   --ifm-font-color-base: var(--text-secondary);
   --ifm-font-family-monospace:'Space Mono', monospace;
+  --ifm-blockquote-color: var(--text-secondary);
 
   --ifm-container-width-xl: 1022px;
   --ifm-hr-background-color: var(--border-subtle);
@@ -51,9 +52,7 @@
 
   /* Code Block */
   --ifm-code-background: var(--surface-02);
-  --ifm-code-border-radius: 4px;
   --ifm-code-font-size: 0.875rem;
-  --docusaurus-highlighted-code-line-bg: var(--surface-03);
 
   /* Blockquote */
   --ifm-blockquote-border-color: var(--border-accent);
@@ -65,7 +64,7 @@
   --ifm-link-color: var(--text-link);
 
   /* Table */
-  --ifm-table-border-color: var(--border-subtle);
+  --ifm-table-border-color: var(--border-invisible);
 }
 
 /* Navbar */
@@ -197,18 +196,6 @@
   font-weight: 700;
 }
 
-.disabled-menu-link {
-  cursor: none;
-  pointer-events: none;
-}
-
-.disabled-menu-link > .menu__link {
-  color: var(--text-tertiary) !important;
-}
-
-.disabled-menu-link > .menu__link--active {
-  background-color: transparent;
-}
 .menu__list .menu__list {
   padding-left: calc(var(--ifm-menu-link-padding-horizontal) + 1.25em);
 }
@@ -234,7 +221,7 @@
   margin-right: 0.5rem;
   margin-top: 0.25rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(5) > a:before {
+.theme-doc-sidebar-menu > li:nth-child(5) > div > a:before {
   content:url('/svg/icon-sidebar-node.svg');
   margin-right: 0.5rem;
   margin-top: 0.25rem;
@@ -249,6 +236,12 @@
   margin-right: 0.5rem;
   margin-top: 0.25rem;
 }
+.category-resource > div > a:before {
+  content:url('/svg/icon-sidebar-resource.svg');
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+
 .menu__caret {
   border-radius: 50%;
 }
@@ -341,10 +334,20 @@ p, blockquote, ul, ol {
   font-size: 1.25rem;
   margin-bottom: 1rem; 
 }
+.markdown li::marker {
+  color: var(--text-link);
+}
 
+code {
+  border-radius: 4px;
+}
+
+pre {
+  border-radius: 8px;
+}
 pre > code {
   box-shadow: none;
-  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
   line-height: 1.7 !important;
 }
 .markdown video {

@@ -223,7 +223,7 @@ fn carrot_forbidden() -> Result<(), Error> {
 
 We also need to a `Error` module to define the error code when carrot Script fails. Create a new file named `error.rs` in `my-first-contract-workspace/contracts/carrot/src/error.rs`:
 
-```rs title="my-first-contract-workspace/contracts/carrot/src/error.rs"
+```rust title="my-first-contract-workspace/contracts/carrot/src/error.rs"
 use ckb_std::error::SysError;
 
 #[cfg(test)]
