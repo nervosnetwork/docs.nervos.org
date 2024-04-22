@@ -60,6 +60,11 @@ run:
 test:
 	cargo test $(CARGO_ARGS)
 
+compile-js:
+	@read -p "Enter file name without .js: " js_file; \
+	echo "compiling js/$$js_file.js"; \
+	ckb-debugger --read-file "js/$$js_file.js" --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{{exit}} {{print}}' | xxd -r -p > js/build/$$js_file.bc
+
 check:
 	cargo check $(CARGO_ARGS)
 
@@ -112,4 +117,4 @@ CHECKSUM_FILE := build/checksums-$(MODE).txt
 checksum: build
 	sha256sum build/$(MODE)/* > $(CHECKSUM_FILE)
 
-.PHONY: build test check clippy fmt cargo clean prepare checksum
+.PHONY: build test compile-js check clippy fmt cargo clean prepare checksum
