@@ -11,10 +11,12 @@ ckb_std::entry!(program_entry);
 #[cfg(not(test))]
 default_alloc!();
 
-use duktape::value;
+include!(concat!(env!("OUT_DIR"), "/ckb_js_vm.rs"));
 
 pub fn program_entry() -> i8 {
-    ckb_std::debug!("This is a sample contract, c func value: {:?}", value());
+    ckb_std::debug!("This is a sample contract!");
     
+    let args = [0u8;32];
+    ckb_std::high_level::exec_cell(&CKB_JS_VM_CODE_HASH, ckb_std::ckb_types::core::ScriptHashType::Data1, args);    
     0
 }

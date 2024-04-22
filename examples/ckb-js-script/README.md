@@ -1,4 +1,4 @@
-# duktape-script
+# ckb-js-script
 
 TODO: Write this readme
 
