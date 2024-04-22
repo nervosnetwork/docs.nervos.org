@@ -4,4 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ckb-std = "0.15.1"
+ckb-std = {version = "0.15.1", features = ["ckb2023"]}
+
+[build-dependencies]
+ckb-gen-types = "0.114.0"
