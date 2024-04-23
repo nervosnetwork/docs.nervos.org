@@ -252,7 +252,6 @@ fn sudt_script() {
     type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
     type_script_args[35..].copy_from_slice(owner_lock_script_hash.as_slice());
 
-    println!("owner_lock_script_hash: {:?}, {:?}", owner_lock_script_hash, lock_script.code_hash());
     let type_script = context
         .build_script(&run_js_out_point, type_script_args.to_vec().into())
         .expect("script");

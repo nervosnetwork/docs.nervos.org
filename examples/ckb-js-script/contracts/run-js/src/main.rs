@@ -4,10 +4,9 @@
 #[cfg(test)]
 extern crate alloc;
 
-use alloc::ffi::CString;
 #[cfg(not(test))]
 use ckb_std::default_alloc;
-use ckb_std::syscalls::{self, SpawnArgs};
+use ckb_std::syscalls::{self};
 #[cfg(not(test))]
 ckb_std::entry!(program_entry);
 #[cfg(not(test))]
@@ -31,13 +30,8 @@ pub fn program_entry() -> i8 {
 
     // we supposed the first cell in cellDeps is the ckb-js-vm cell
     // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
-    let result = ckb_std::syscalls::spawn(
-        0,
-        ckb_std::ckb_constants::Source::CellDep,
-        0,
-        &[],
-        &spgs,
-    );
+    let result =
+        ckb_std::syscalls::spawn(0, ckb_std::ckb_constants::Source::CellDep, 0, &[], &spgs);
     ckb_std::debug!("spawn result: {:?}", result);
 
     if result != 0 {
