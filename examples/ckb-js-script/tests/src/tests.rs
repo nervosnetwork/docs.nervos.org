@@ -79,7 +79,7 @@ fn hello_script() {
     ];
 
     // prepare output cell data
-    let outputs_data = vec![Bytes::from("apple"), Bytes::from("tomato")];
+    let outputs_data = vec![Bytes::new(), Bytes::new()];
 
     // build transaction
     let tx = TransactionBuilder::default()
@@ -197,7 +197,13 @@ fn sudt_script() {
         .out_point(js_vm_out_point.clone())
         .build();
 
-    let js_script_bin = loader.load_binary("../../js/build/sudt.bc");
+    let run_js_bin = loader.load_binary("run-js");
+    let run_js_out_point = context.deploy_cell(run_js_bin);
+    let run_js_cell_dep = CellDep::new_builder()
+        .out_point(run_js_out_point.clone())
+        .build();
+
+    let js_script_bin = loader.load_binary("../../js/build/hello.bc");
     let js_script_out_point = context.deploy_cell(js_script_bin.clone());
     let js_script_cell_dep = CellDep::new_builder()
         .out_point(js_script_out_point.clone())
@@ -213,7 +219,12 @@ fn sudt_script() {
         .build();
 
     // prepare cell deps
-    let cell_deps: Vec<CellDep> = vec![lock_script_dep, js_vm_cell_dep, js_script_cell_dep];
+    let cell_deps: Vec<CellDep> = vec![
+        lock_script_dep,
+        run_js_cell_dep,
+        js_vm_cell_dep,
+        js_script_cell_dep,
+    ];
 
     // prepare cells
     let input_out_point = context.create_cell(
@@ -228,18 +239,21 @@ fn sudt_script() {
         .build();
 
     // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
-    let mut type_script_args: [u8; 35] = [0u8; 35];
+    let mut type_script_args: [u8; 67] = [0u8; 67];
     let reserved = [0u8; 2];
     let (js_cell, _) = context.get_cell(&js_script_out_point.clone()).unwrap();
     let js_type_script = js_cell.type_().to_opt().unwrap();
     let code_hash = js_type_script.calc_script_hash();
     let hash_type = js_type_script.hash_type();
+    let owner_lock_script_hash = lock_script.clone().calc_script_hash();
+
     type_script_args[..2].copy_from_slice(&reserved);
     type_script_args[2..34].copy_from_slice(code_hash.as_slice());
     type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
+    type_script_args[35..].copy_from_slice(owner_lock_script_hash.as_slice());
 
     let type_script = context
-        .build_script(&js_vm_out_point, type_script_args.to_vec().into())
+        .build_script(&run_js_out_point, type_script_args.to_vec().into())
         .expect("script");
 
     let outputs = vec![
@@ -255,7 +269,11 @@ fn sudt_script() {
     ];
 
     // prepare output cell data
-    let outputs_data = vec![Bytes::new(), Bytes::new()];
+    let sudt_amount: u128 = 10; // issue 10 tokens
+    let outputs_data = vec![
+        Bytes::from(sudt_amount.to_be_bytes().to_vec()),
+        Bytes::new(),
+    ];
 
     // build transaction
     let tx = TransactionBuilder::default()

@@ -16,7 +16,7 @@ default_alloc!();
 include!(concat!(env!("OUT_DIR"), "/ckb_js_vm_code_hash.rs"));
 
 pub fn program_entry() -> i8 {
-    ckb_std::debug!("This is a sample contract!");
+    ckb_std::debug!("This is a sample run js code contract!");
 
     let args: CString = CString::new("-f").unwrap();
 
@@ -38,6 +38,8 @@ pub fn program_entry() -> i8 {
         content_length,
     };
 
+    // we supposed the first cell in cellDeps is the ckb-js-vm cell
+    // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
     let result = ckb_std::syscalls::spawn(
         0,
         ckb_std::ckb_constants::Source::CellDep,
