@@ -203,7 +203,7 @@ fn sudt_script() {
         .out_point(run_js_out_point.clone())
         .build();
 
-    let js_script_bin = loader.load_binary("../../js/build/hello.bc");
+    let js_script_bin = loader.load_binary("../../js/build/sudt.bc");
     let js_script_out_point = context.deploy_cell(js_script_bin.clone());
     let js_script_cell_dep = CellDep::new_builder()
         .out_point(js_script_out_point.clone())
@@ -220,9 +220,9 @@ fn sudt_script() {
 
     // prepare cell deps
     let cell_deps: Vec<CellDep> = vec![
-        lock_script_dep,
-        run_js_cell_dep,
         js_vm_cell_dep,
+        run_js_cell_dep,
+        lock_script_dep,
         js_script_cell_dep,
     ];
 
@@ -271,7 +271,7 @@ fn sudt_script() {
     // prepare output cell data
     let sudt_amount: u128 = 10; // issue 10 tokens
     let outputs_data = vec![
-        Bytes::from(sudt_amount.to_be_bytes().to_vec()),
+        Bytes::from(sudt_amount.to_le_bytes().to_vec()),
         Bytes::new(),
     ];
 

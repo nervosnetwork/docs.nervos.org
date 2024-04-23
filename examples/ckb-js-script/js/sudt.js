@@ -76,7 +76,7 @@ function main() {
     let owner_mode = false;
     // ckb-js-vm has leading 35 bytes args
     let real_args = script.args.slice(35);
-    for (let lock_hash of iterate_field(ckb.SOURCE_INPUT, ckb.CKB_CELL_FIELD_LOCK_HASH)) {
+    for (let lock_hash of iterate_field(ckb.SOURCE_INPUT, ckb.CELL_FIELD_LOCK_HASH)) {
         if (compare_array(lock_hash, real_args)) {
             owner_mode = true;
         }
