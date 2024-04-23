@@ -1,6 +1,6 @@
 ---
 id: js-script
-title: "Tutorial: Run javscripts code on CKB"
+title: "Tutorial: Run js on CKB"
 sidebar_position: 4 
 ---
 import Tabs from '@theme/Tabs';
@@ -33,7 +33,7 @@ the ckb-js-vm and put it on chain before we run our javscript smart contracts.
 
 Below is a step-by-step guide, and you can also clone the full code example from the Github at [js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script).
 
-## Get `ckb-js-vm` binary
+## Get ckb-js-vm binary
 
 `ckb-js-vm` is a binary that can be both used in CLI and in the on-chain CKB-VM. Let's first build the
 binary and give it a first try to see if it works expectedly.
@@ -769,7 +769,7 @@ let exit_code = main();
 if (exit_code != 0) {
     ckb.exit(exit_code);
 }
-``
+```
 
 Compile this `sudt.js` into binary with ckb-debugger:
 
@@ -897,7 +897,7 @@ the type script args so that our `sudt.js` code can read its own arguments and g
 expected. The arguments for `sudt.js` is a lock script hash which use to determine if it is under
 `owner_mode` to perform different validations.
 
-```rs
+```rust
   // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
     let mut type_script_args: [u8; 67] = [0u8; 67];
     let reserved = [0u8; 2];
@@ -944,11 +944,19 @@ assemble the transaction to submit on-chain:
 #### Run test for `sudt.js`
 
 ```sh
+make build
 cargo test -- --nocapture sudt_script
 ```
 
 You can see the output contains the spawn result and other informations.
 
+```sh
+running 1 test
+[contract debug] This is a sample run js code contract!
+[contract debug] spawn result: 0
+consume cycles: 185365
+test tests::sudt_script ... ok
+```
 ---
 
 ## Congratulations!
