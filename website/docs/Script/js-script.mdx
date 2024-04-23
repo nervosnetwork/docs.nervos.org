@@ -1,0 +1,985 @@
+---
+id: js-script
+title: "Tutorial: Run js on CKB"
+sidebar_position: 4 
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ScriptHeaders from "./ScriptHeaders.tsx";
+import TutorialHeader from "@components/TutorialHeader";
+
+# Tutorial: Run javscript code on CKB
+
+<TutorialHeader
+  time={ScriptHeaders.basic.time}
+  topics={ScriptHeaders.basic.topics}
+  tools={ScriptHeaders.basic.tools}
+/>
+
+## The high-level idea
+
+As we have learned before, you can use any program language to write Script(smart contract) for CKB.
+But does it really work in reality? This tutorial will show a full example to use javascript to
+write scripts and execute them in CKB-VM.
+
+The idea goes like this: we first port a javascript engine as a base script to CKB, then we write
+a smart contract in javascript for business logic, and run this js-powered smart contract inside the js-engine base script
+on top of CKB-VM.
+
+It sounds like a of work. But thanks to the CKB VM team, we already have a full runnable javscript
+engine called [ckb-js-vm](https://githunb.com/nervosnetwork/ckb-js-vm). It is ported from
+[quick.js](https://quick.js.org) so that it is compatible to run on CKB-VM. We just need to take
+the ckb-js-vm and put it on chain before we run our javscript smart contracts.
+
+Below is a step-by-step guide, and you can also clone the full code example from the Github at [js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script).
+
+## Get ckb-js-vm binary
+
+`ckb-js-vm` is a binary that can be both used in CLI and in the on-chain CKB-VM. Let's first build the
+binary and give it a first try to see if it works expectedly.
+
+You will need `clang 16+` to build the `ckb-js-vm` binary:
+
+```sh
+git clone https://github.com/nervosnetwork/ckb-js-vm
+cd ckb-js-vm
+git submodule update --init
+make all
+```
+
+Now The binary is in the `build/` folder. Without writting any codes, we can use
+[CKB-standalone-deugger](https://github.com/nervosnetwork/ckb-standalone-debugger)(another Cli tool that
+enable off-chain contract development, the name explains itself) to run the `ckb-js-vm` binary for a
+quick test.
+
+### Install ckb-debugger
+
+To install, you need [Rust](https://www.rust-lang.org) and
+[cargo](https://doc.rust-lang.org/cargo):
+
+```sh
+cargo install --git https://github.com/nervosnetwork/ckb-standalone-debuggger ckb-debugger
+```
+
+### Use ckb-debugger for quick test
+
+Now let's run the `ckb-js-vm` with some js test codes. 
+
+Make sure you are in the root of `CKB-vm-js`project folder:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="ckb-debugger-run" label="Command">
+```
+```bash
+ckb-debugger --read-file tests/examples/hello.js --bin build/ckb-js-vm -- -r
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="ckb-debugger-run-result" label="Response">
+```
+```bash
+Run from file, local access enabled. For testing only.
+hello, world
+Run result: 0
+Total cycles consumed: 30081070(2.9m)
+Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+with the `-r` option, `ckb-js-vm` will read a local js file via ckb-debugger, this function is
+intended for testing purpose, it doesn't function in a production enviroment. But we can see the
+running output that it does prints out a `hello, world` message and the run result is 0 so it means
+the `hello.js` script executes successfully. Also, you can see the how many `cycles`(the overhead for
+executing a script) it need to run the js script in the output too.
+
+## Integrate ckb-js-vm
+
+`ckb-js-vm` provides different ways to be integrated in your own scripts. In the next step, we will set
+up a project and writing codes to integrate `ckb-js-vm` with javascript code to gain a deeper
+understanding.
+
+The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
+
+* `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
+* `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
+* `Clang 16+`
+* `cargo-generate`: You can install this via `cargo install cargo-generate`
+
+If you got any problems for these dependencies, refer to [readme](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for install details.
+
+### Init a Script Project
+
+Now let's run the command to generate a new Script project called `my-first-contract-workspace`:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+```bash
+alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
+create-ckb-scripts
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+```bash
+⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
+🤷   Project Name: my-first-contract-workspace
+🔧   Destination: /tmp/my-first-contract-workspace ...
+🔧   project-name: my-first-contract-workspace ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/my-first-contract-workspace`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/my-first-contract-workspace
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+### Create a New Script
+
+Let’s create a new Script called `run-js`.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-a-new-script" label="Command">
+```
+```bash
+cd my-first-contract-workspace
+make generate
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="create-a-new-script-result" label="Response">
+```
+```bash
+🤷   Project Name: run-js
+🔧   Destination: /tmp/my-first-contract-workspace/contracts/run-js ...
+🔧   project-name: carrot ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/my-first-contract-workspace/contracts/run-js`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/my-first-contract-workspace/contracts/run-js
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Our project relies on `ckb-js-vm` so we need to add it in the project. Create a new folder named
+`deps` in the root of our contract workspace:
+
+```sh
+cd my-first-contract-workspace
+mkdir deps
+```
+
+Copy the `ckb-js-vm` binary we built before into the `deps` folder so it looks like this:
+
+```sh
+--build
+--contracts
+--deps
+    --ckb-js-vm
+...
+```
+
+Everything looks good now! 
+
+### Integrate via Script
+
+The most simple way to use `ckb-js-vm` to run js code is via Script. A `ckb-js-vm` script contains the
+following structure:
+
+```sh
+code_hash: <code_hash to ckb-js-vm cell>
+hash_type: <hash_type>
+args: <ckb-js-vm args, 2 bytes> <code_hash to javascript code cell, 32 bytes> <hash_type to
+javscript code cell, 1 byte> <javscript code args, variable length>
+```
+
+Note: 2 bytes ckb-js-vm args are reserved for further use.
+
+Now let's get our hands dirty to integrate `ckb-js-vm` in this way.
+
+#### Write a simple `hello.js` smart contract
+
+```js
+cd my-first-contract-workspace
+mkdir js/build
+touch js/hello.js
+```
+
+Fill the `hello.js` with the following code:
+
+```js title='my-first-contract-workspace/js/hello.js'
+console.log("hello, ckb-js-script!");
+```
+
+#### Compile the `hello.js` into binary with ckb-debugger
+
+```sh
+ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/hello.bc 
+```
+
+#### Write tests for the `hello.js` smart contract
+
+Now let's assemble all the scripts and run it in one CKB transaction. We will use the built-in test module
+from `ckb-script-templates` so that we don't need to actually run a blockchain.
+
+```rust title="my-first-contract-workspace/tests/src/tests.rs"
+use super::*;
+use ckb_testtool::{
+    builtin::ALWAYS_SUCCESS,
+    ckb_types::{bytes::Bytes, core::TransactionBuilder, packed::*, prelude::*},
+    context::Context,
+};
+
+const MAX_CYCLES: u64 = 10_000_000;
+
+#[test]
+fn hello_script() {
+    // deploy contract
+    let mut context = Context::default();
+    let loader = Loader::default();
+    let js_vm_bin = loader.load_binary("../../deps/ckb-js-vm");
+    let js_vm_out_point = context.deploy_cell(js_vm_bin);
+    let js_vm_cell_dep = CellDep::new_builder()
+        .out_point(js_vm_out_point.clone())
+        .build();
+
+    let js_script_bin = loader.load_binary("../../js/build/hello.bc");
+    let js_script_out_point = context.deploy_cell(js_script_bin.clone());
+    let js_script_cell_dep = CellDep::new_builder()
+        .out_point(js_script_out_point.clone())
+        .build();
+
+    // prepare scripts
+    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
+    let lock_script = context
+        .build_script(&always_success_out_point.clone(), Default::default())
+        .expect("script");
+    let lock_script_dep = CellDep::new_builder()
+        .out_point(always_success_out_point)
+        .build();
+
+    // prepare cell deps
+    let cell_deps: Vec<CellDep> = vec![lock_script_dep, js_vm_cell_dep, js_script_cell_dep];
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point.clone())
+        .build();
+
+    // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
+    let mut type_script_args: [u8; 35] = [0u8; 35];
+    let reserved = [0u8; 2];
+    let (js_cell, _) = context.get_cell(&js_script_out_point.clone()).unwrap();
+    let js_type_script = js_cell.type_().to_opt().unwrap();
+    let code_hash = js_type_script.calc_script_hash();
+    let hash_type = js_type_script.hash_type();
+    type_script_args[..2].copy_from_slice(&reserved);
+    type_script_args[2..34].copy_from_slice(code_hash.as_slice());
+    type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
+
+    let type_script = context
+        .build_script(&js_vm_out_point, type_script_args.to_vec().into())
+        .expect("script");
+
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    // prepare output cell data
+    let outputs_data = vec![Bytes::new()), Bytes::new()];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, MAX_CYCLES)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+
+```
+
+Let's give the above code some explanation:
+
+We first deploy the `ckb-js-vm`, `hello.bc` and `ALWAYS_SUCCESS` binaries to the blockchain so we
+have 3 smart contracts in live cells. The `ALWAYS_SUCCESS` is only used to simplify the
+lock script in our test flow.
+
+Then we builds a output cell that carries a special type script to execute the `hello.js` codes.
+The `code_hash` and `hash_type` in the type script is referecing to the `ckb-js-vm` script cell. It
+is automattically done by this line of code:
+
+```rust
+    let type_script = context
+        .build_script(&js_vm_out_point, type_script_args.to_vec().into())
+        .expect("script");
+```
+
+The key here is the args of the type script. We find the cell that carries our `hello.js` codes and
+put the refference infomation(which is `code_hash` and `hash_type`) of that cell into the args
+following the `ckb-js-vm` args structure:
+
+```rust
+  // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
+    let mut type_script_args: [u8; 35] = [0u8; 35];
+    let reserved = [0u8; 2];
+    let (js_cell, _) = context.get_cell(&js_script_out_point.clone()).unwrap();
+    let js_type_script = js_cell.type_().to_opt().unwrap();
+    let code_hash = js_type_script.calc_script_hash();
+    let hash_type = js_type_script.hash_type();
+    type_script_args[..2].copy_from_slice(&reserved);
+    type_script_args[2..34].copy_from_slice(code_hash.as_slice());
+    type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
+```
+
+Finally, don't forget to add all the live cells of the related scripts into the cellDeps in the transaction:
+
+```rust
+  // prepare cell deps
+    let cell_deps: Vec<CellDep> = vec![lock_script_dep, js_vm_cell_dep, js_script_cell_dep];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, MAX_CYCLES)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+```
+
+#### Run the test to see if it gets pass
+
+```sh
+make build
+make test
+```
+
+By default the test output will not display the executing logs of the scripts. You can use the
+alternative command to see it:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="run-hello-test" label="Command">
+```
+```sh
+cargo test -- --nocapture
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="run-hello-test-result" label="Response">
+```
+```sh
+running 1 test
+[contract debug] hello, ckb-js-script!
+consume cycles: 3070458
+test tests::hello_script ... ok
+```
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+The logs show `hello, ckb-js-script!` so we know our javscript code got executed well.
+
+#### Write a `fib.js` smart contract
+
+We can try a different javscript example. Let's write a `fib.js` in the `js` folder:
+
+```js title='my-first-contract-workspace/js/fib.js'
+console.log("testing fib");
+function fib(n) {
+    if (n <= 0)
+        return 0;
+    else if (n == 1)
+        return 1;
+    else
+        return fib(n - 1) + fib(n - 2);
+};
+var value = fib(10);
+console.assert(value == 55, 'fib(10) = 55');
+```
+
+#### Compile the `fib.js` into binary with ckb-debugger
+
+```sh
+ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
+```
+
+#### Add a new test for the `fib.js` smart contract
+
+```rust title='my-first-contract-workspace/tests/src/tests.rs'
+#[test]
+fn fib_script() {
+    // deploy contract
+    let mut context = Context::default();
+    let loader = Loader::default();
+    let js_vm_bin = loader.load_binary("../../deps/ckb-js-vm");
+    let js_vm_out_point = context.deploy_cell(js_vm_bin);
+    let js_vm_cell_dep = CellDep::new_builder()
+        .out_point(js_vm_out_point.clone())
+        .build();
+
+    let js_script_bin = loader.load_binary("../../js/build/fib.bc");
+    let js_script_out_point = context.deploy_cell(js_script_bin.clone());
+    let js_script_cell_dep = CellDep::new_builder()
+        .out_point(js_script_out_point.clone())
+        .build();
+
+    // prepare scripts
+    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
+    let lock_script = context
+        .build_script(&always_success_out_point.clone(), Default::default())
+        .expect("script");
+    let lock_script_dep = CellDep::new_builder()
+        .out_point(always_success_out_point)
+        .build();
+
+    // prepare cell deps
+    let cell_deps: Vec<CellDep> = vec![lock_script_dep, js_vm_cell_dep, js_script_cell_dep];
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point.clone())
+        .build();
+
+    // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
+    let mut type_script_args: [u8; 35] = [0u8; 35];
+    let reserved = [0u8; 2];
+    let (js_cell, _) = context.get_cell(&js_script_out_point.clone()).unwrap();
+    let js_type_script = js_cell.type_().to_opt().unwrap();
+    let code_hash = js_type_script.calc_script_hash();
+    let hash_type = js_type_script.hash_type();
+    type_script_args[..2].copy_from_slice(&reserved);
+    type_script_args[2..34].copy_from_slice(code_hash.as_slice());
+    type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
+
+    let type_script = context
+        .build_script(&js_vm_out_point, type_script_args.to_vec().into())
+        .expect("script");
+
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    // prepare output cell data
+    let outputs_data = vec![Bytes::new(), Bytes::new()];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, MAX_CYCLES)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+
+#### Run the test for `fib.js` smart contract 
+
+```sh
+make build
+make test
+```
+
+### Integrate via Spawn syscall
+
+Another way to integrate `ckb-js-vm` is by calling it from your own scripts. This is useful when you
+have more custom logics to deal with and still wants to execute some js codes. In this example, we
+use `ckb_spwan` syscall to call script from another script. `ckb_spawn` is the recomamnd way to
+call `ckb-js-vm`, here is
+[why](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/intro.md#integration).
+
+We will use rust to write a new script called `run-js`. In this script, you can add custom logics and
+validations before calling the `ckb-js-vm` script to execute js codes.
+
+#### Write `run-js` script
+
+```rust title='my-first-contract-workspace/contracts/run-js/src/main.rs'
+#![no_std]
+#![cfg_attr(not(test), no_main)]
+
+#[cfg(test)]
+extern crate alloc;
+
+use alloc::ffi::CString;
+#[cfg(not(test))]
+use ckb_std::default_alloc;
+use ckb_std::syscalls::SpawnArgs;
+#[cfg(not(test))]
+ckb_std::entry!(program_entry);
+#[cfg(not(test))]
+default_alloc!();
+
+pub fn program_entry() -> i8 {
+    ckb_std::debug!("This is a sample run js code contract!");
+
+    let args: CString = CString::new("-f").unwrap();
+
+    let mut spawn_exit_code_value: i8 = -1;
+    let spawn_exit_code: *mut i8 = &mut spawn_exit_code_value as *mut i8;
+
+    let mut value: u8 = 0;
+    let content: *mut u8 = &mut value as *mut u8;
+
+    let mut content_length_value: u64 = 0;
+    let content_length: *mut u64 = &mut content_length_value as *mut u64;
+
+    let spawn_args = SpawnArgs {
+        memory_limit: 8,
+        exit_code: spawn_exit_code,
+        content,
+        // Before calling spawn, content_length should be the length of content;
+        // After calling spawn, content_length will be the real size of the returned data.
+        content_length,
+    };
+
+    // we supposed the first cell in cellDeps is the ckb-js-vm cell
+    // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
+    let result = ckb_std::syscalls::spawn(
+        0,
+        ckb_std::ckb_constants::Source::CellDep,
+        0,
+        &[&args],
+        &spawn_args,
+    );
+    ckb_std::debug!("spawn result: {:?}", result);
+
+    if result != 0 {
+        return 1;
+    }
+
+    unsafe {
+        if *spawn_exit_code != 0 {
+            return 1;
+        }
+    }
+
+    0
+}
+```
+The most important code in the script is the use `ckb_std` library to perform the `spawn` syscall
+to call the `ckb-js-vm`:
+
+```rust
+    // we supposed the first cell in cellDeps is the ckb-js-vm cell
+    // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
+    let result = ckb_std::syscalls::spawn(
+        0,
+        ckb_std::ckb_constants::Source::CellDep,
+        0,
+        &[&args],
+        &spawn_args,
+    );
+```
+
+In order to use `ckb_std::syscalls::spawn`, you need to enable the `ckb2023` feature in `ckb-std` deps:
+
+```toml title="my-first-contract-workspace/contracts/run-js/Cargo.toml"
+[dependencies]
+ckb-std = {version = "0.15.1", features = ["ckb2023"]}
+```
+
+For simplicity, we supposed the `ckb-js-vm` script is in the first position of the cell deps in the
+transaction.
+
+We can check the return result from the `spawn` syscall to check if the code executes successfully.
+
+#### Write test for run-js script
+
+We have our custom script `run-js` that can execute js codes and do custom validations. Now let's
+write some tests for our script.
+
+This time, let's use a more real javscript smart contrac to test. We use [ckb-syscall js binding](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/syscalls.md) to write a
+[sudt](/docs/concepts/glossary#simple-udt) example in
+javscript and check it can be execute successfully in our `run-js` scripts.
+
+```javascript title='my-first-contract-workspace/js/sudt.js'
+const CKB_INDEX_OUT_OF_BOUND = 1;
+const ERROR_AMOUNT = -52;
+
+function assert(cond, obj1) {
+    if (!cond) {
+        throw Error(obj1);
+    }
+}
+
+function compare_array(a, b) {
+    if (a.byteLength != b.byteLength) {
+        return false;
+    }
+    for (let i = 0; i < a.byteLength; i++) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function unpack_script(buf) {
+    let script = new Uint32Array(buf);
+    let raw_data = new Uint8Array(buf);
+
+    let full_size = script[0];
+    assert(full_size == buf.byteLength, 'full_size == buf.byteLength');
+    let code_hash_offset = script[1];
+    let code_hash = buf.slice(code_hash_offset, code_hash_offset + 32);
+    let hash_type_offset = script[2];
+    let hash_type = raw_data[hash_type_offset];
+    let args_offset = script[3];
+    let args = buf.slice(args_offset + 4);
+    return {'code_hash': code_hash, 'hash_type': hash_type, 'args': args};
+}
+
+function* iterate_field(source, field) {
+    let index = 0;
+    while (true) {
+        try {
+            let ret = ckb.load_cell_by_field(index, source, field);
+            yield ret;
+            index++;
+        } catch (e) {
+            if (e.error_code == CKB_INDEX_OUT_OF_BOUND) {
+                break;
+            } else {
+                throw e;
+            }
+        }
+    }
+}
+
+function* iterate_cell_data(source) {
+    let index = 0;
+    while (true) {
+        try {
+            let ret = ckb.load_cell_data(index, source);
+            yield ret;
+            index++;
+        } catch (e) {
+            if (e.error_code == CKB_INDEX_OUT_OF_BOUND) {
+                break;
+            } else {
+                throw e;
+            }
+        }
+    }
+}
+
+function main() {
+    console.log('simple UDT ...');
+    let buf = ckb.load_script();
+    let script = unpack_script(buf);
+    let owner_mode = false;
+    // ckb-js-vm has leading 35 bytes args
+    let real_args = script.args.slice(35);
+    for (let lock_hash of iterate_field(ckb.SOURCE_INPUT, ckb.CKB_CELL_FIELD_LOCK_HASH)) {
+        if (compare_array(lock_hash, real_args)) {
+            owner_mode = true;
+        }
+    }
+    if (owner_mode) {
+        return 0;
+    }
+    let input_amount = 0n;
+
+    for (let data of iterate_cell_data(ckb.SOURCE_GROUP_INPUT)) {
+        if (data.byteLength != 16) {
+            throw `Invalid data length: ${data.byteLength}`;
+        }
+        let n = new BigUint64Array(data);
+        let current_amount = n[0] | (n[1] << 64n);
+        input_amount += current_amount;
+    }
+    let output_amount = 0n;
+    for (let data of iterate_cell_data(ckb.SOURCE_GROUP_OUTPUT)) {
+        if (data.byteLength != 16) {
+            throw `Invalid data length: ${data.byteLength}`;
+        }
+        let n = new BigUint64Array(data);
+        let current_amount = n[0] | (n[1] << 64n);
+        output_amount += current_amount;
+    }
+    console.log(`verifying amount: ${input_amount} and ${output_amount}`);
+    if (input_amount < output_amount) {
+        return ERROR_AMOUNT;
+    }
+    console.log('Simple UDT quit successfully');
+    return 0;
+}
+
+let exit_code = main();
+if (exit_code != 0) {
+    ckb.exit(exit_code);
+}
+```
+
+Compile this `sudt.js` into binary with ckb-debugger:
+
+```sh
+ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
+```
+
+Add a new test to the tests file:
+
+```rust title='my-first-contract-workspace/tests/src/tests.rs'
+#[test]
+fn sudt_script() {
+    // deploy contract
+    let mut context = Context::default();
+    let loader = Loader::default();
+    let js_vm_bin = loader.load_binary("../../deps/ckb-js-vm");
+    let js_vm_out_point = context.deploy_cell(js_vm_bin);
+    let js_vm_cell_dep = CellDep::new_builder()
+        .out_point(js_vm_out_point.clone())
+        .build();
+
+    let run_js_bin = loader.load_binary("run-js");
+    let run_js_out_point = context.deploy_cell(run_js_bin);
+    let run_js_cell_dep = CellDep::new_builder()
+        .out_point(run_js_out_point.clone())
+        .build();
+
+    let js_script_bin = loader.load_binary("../../js/build/hello.bc");
+    let js_script_out_point = context.deploy_cell(js_script_bin.clone());
+    let js_script_cell_dep = CellDep::new_builder()
+        .out_point(js_script_out_point.clone())
+        .build();
+
+    // prepare scripts
+    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
+    let lock_script = context
+        .build_script(&always_success_out_point.clone(), Default::default())
+        .expect("script");
+    let lock_script_dep = CellDep::new_builder()
+        .out_point(always_success_out_point)
+        .build();
+
+    // prepare cell deps
+    let cell_deps: Vec<CellDep> = vec![
+        lock_script_dep,
+        run_js_cell_dep,
+        js_vm_cell_dep,
+        js_script_cell_dep,
+    ];
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point.clone())
+        .build();
+
+    // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
+    let mut type_script_args: [u8; 67] = [0u8; 67];
+    let reserved = [0u8; 2];
+    let (js_cell, _) = context.get_cell(&js_script_out_point.clone()).unwrap();
+    let js_type_script = js_cell.type_().to_opt().unwrap();
+    let code_hash = js_type_script.calc_script_hash();
+    let hash_type = js_type_script.hash_type();
+    let owner_lock_script_hash = lock_script.clone().calc_script_hash();
+
+    type_script_args[..2].copy_from_slice(&reserved);
+    type_script_args[2..34].copy_from_slice(code_hash.as_slice());
+    type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
+    type_script_args[35..].copy_from_slice(owner_lock_script_hash.as_slice());
+
+    let type_script = context
+        .build_script(&run_js_out_point, type_script_args.to_vec().into())
+        .expect("script");
+
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    // prepare output cell data
+    let sudt_amount: u128 = 10; // issue 10 tokens
+    let outputs_data = vec![
+        Bytes::from(sudt_amount.to_be_bytes().to_vec()),
+        Bytes::new(),
+    ];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, MAX_CYCLES)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+Some explanation for this test:
+
+Just like the previous tests, we deploy all the scripts we need, including `ckb-js-vm`, `run-js`,
+`sudt.js` and so on. We then assemble a transaction that produce a output cell that carries our
+`run-js` script as its type script. In the args of its type script, we follow the `ckb-js-vm` args
+data structure, the difference this time is that we also attach the arguments for the `sudt.js` in
+the type script args so that our `sudt.js` code can read its own arguments and get exected as
+expected. The arguments for `sudt.js` is a lock script hash which use to determine if it is under
+`owner_mode` to perform different validations.
+
+```rust
+  // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
+    let mut type_script_args: [u8; 67] = [0u8; 67];
+    let reserved = [0u8; 2];
+    let (js_cell, _) = context.get_cell(&js_script_out_point.clone()).unwrap();
+    let js_type_script = js_cell.type_().to_opt().unwrap();
+    let code_hash = js_type_script.calc_script_hash();
+    let hash_type = js_type_script.hash_type();
+    let owner_lock_script_hash = lock_script.clone().calc_script_hash();
+
+    type_script_args[..2].copy_from_slice(&reserved);
+    type_script_args[2..34].copy_from_slice(code_hash.as_slice());
+    type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
+    type_script_args[35..].copy_from_slice(owner_lock_script_hash.as_slice());
+```
+
+lastly, we put the token amount in the data field of the output cell carried our `run-js` script and
+assemble the transaction to submit on-chain:
+
+```rust
+    // prepare output cell data
+    let sudt_amount: u128 = 10; // issue 10 tokens
+    let outputs_data = vec![
+        Bytes::from(sudt_amount.to_be_bytes().to_vec()),
+        Bytes::new(),
+    ];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .cell_deps(cell_deps)
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+
+    let tx = tx.as_advanced_builder().build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, MAX_CYCLES)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+#### Run test for `sudt.js`
+
+```sh
+make build
+cargo test -- --nocapture sudt_script
+```
+
+You can see the output contains the spawn result and other informations.
+
+```sh
+running 1 test
+[contract debug] This is a sample run js code contract!
+[contract debug] spawn result: 0
+consume cycles: 185365
+test tests::sudt_script ... ok
+```
+---
+
+## Congratulations!
+
+By following this tutorial this far, you have mastered how to write scripts that integrated with
+`ckb-js-vm` to execute javscript codes on CKB. Here's a quick recap:
+
+- Use `ckb-script-templates` to init a Script project
+- Use `ckb_std` to leverage CKB syscalls to perform `ckb_spawn` syscall to call `ckb-js-vm`.
+- Build args for the script to carry the refference info to the javscript code cell and its
+  arguments.
+
+## Additional Resources
+
+- Full source code of this tutorial:
+  [js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script)
+- More about `ckb-js-vm`: [ckb-js-vm docs](https://nervosnetwork/ckb-js-vm/blob/main/docs)  
+- CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
+- script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
