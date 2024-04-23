@@ -12,8 +12,6 @@ ckb_std::entry!(program_entry);
 #[cfg(not(test))]
 default_alloc!();
 
-include!(concat!(env!("OUT_DIR"), "/ckb_js_vm_code_hash.rs"));
-
 pub fn program_entry() -> i8 {
     ckb_std::debug!("This is a sample run js code contract!");
 
