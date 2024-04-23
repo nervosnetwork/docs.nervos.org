@@ -387,7 +387,6 @@ Finally, don't forget to add all the live cells of the related scripts into the 
         .verify_tx(&tx, MAX_CYCLES)
         .expect("pass verification");
     println!("consume cycles: {}", cycles);
-}
 ```
 
 #### Run the test to see if it gets pass
@@ -412,7 +411,10 @@ cargo test -- --nocapture
   <TabItem value="run-hello-test-result" label="Response">
 ```
 ```sh
-//todo
+running 1 test
+[contract debug] hello, ckb-js-script!
+consume cycles: 3070458
+test tests::hello_script ... ok
 ```
 ```mdx-code-block
   </TabItem>
@@ -656,7 +658,7 @@ This time, let's use a more real javscript smart contrac to test. We use [ckb-sy
 [sudt](/docs/concepts/glossary#simple-udt) example in
 javscript and check it can be execute successfully in our `run-js` scripts.
 
-```javscript title='my-first-contract-workspace/js/sudt.js'
+```javascript title='my-first-contract-workspace/js/sudt.js'
 const CKB_INDEX_OUT_OF_BOUND = 1;
 const ERROR_AMOUNT = -52;
 
