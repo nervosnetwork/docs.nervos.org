@@ -26,9 +26,9 @@ const homeCardContents: HomeCardProps[] = [
     {
         title: 'Run a Node',
         links: [
-            { label: "Run a Mainnet Node", link: "/docs/Node/#run-a-mainnet-node"},
-            { label: "Run a Testnet Node", link: "/docs/Node/#run-a-testnet-node"},
-            { label: "Run a Public RPC Node", link: "/docs/Node/#run-a-public-rpc-node"},
+            { label: "Run a Mainnet Node", link: "/docs/node/run-mainnet-node"},
+            { label: "Run a Testnet Node", link: "/docs/node/run-testnet-node"},
+            { label: "Run a Public RPC Node", link: "/docs/node/run-public-rpc-node"},
         ],
         icon: 'node',
     },
