@@ -225,8 +225,7 @@ console.log("hello, ckb-js-script!");
 #### Compile the `hello.js` into binary with ckb-debugger
 
 ```sh
-ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit}
-{print}' | xxd -r -p > js/build/hello.bc 
+ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/hello.bc 
 ```
 
 #### Write tests for the `hello.js` smart contract
@@ -365,7 +364,6 @@ following the `ckb-js-vm` args structure:
     type_script_args[..2].copy_from_slice(&reserved);
     type_script_args[2..34].copy_from_slice(code_hash.as_slice());
     type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
-
 ```
 
 Finally, don't forget to add all the live cells of the related scripts into the cellDeps in the transaction:
@@ -444,8 +442,7 @@ console.assert(value == 55, 'fib(10) = 55');
 #### Compile the `fib.js` into binary with ckb-debugger
 
 ```sh
-ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit}
-{print}' | xxd -r -p > js/build/fib.bc
+ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
 ```
 
 #### Add a new test for the `fib.js` smart contract
@@ -626,7 +623,7 @@ pub fn program_entry() -> i8 {
 The most important code in the script is the use `ckb_std` library to perform the `spawn` syscall
 to call the `ckb-js-vm`:
 
-```rus
+```rust
     // we supposed the first cell in cellDeps is the ckb-js-vm cell
     // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
     let result = ckb_std::syscalls::spawn(
@@ -636,19 +633,26 @@ to call the `ckb-js-vm`:
         &[&args],
         &spawn_args,
     );
- 
 ```
+
+In order to use `ckb_std::syscalls::spawn`, you need to enable the `ckb2023` feature in `ckb-std` deps:
+
+```toml title="my-first-contract-workspace/contracts/run-js/Cargo.toml"
+[dependencies]
+ckb-std = {version = "0.15.1", features = ["ckb2023"]}
+```
+
 For simplicity, we supposed the `ckb-js-vm` script is in the first position of the cell deps in the
 transaction.
 
 We can check the return result from the `spawn` syscall to check if the code executes successfully.
 
-#### Write test for `run-js` script
+#### Write test for run-js script
 
 We have our custom script `run-js` that can execute js codes and do custom validations. Now let's
 write some tests for our script.
 
-This time, let's use a more real javscript smart contrac to test. We write a
+This time, let's use a more real javscript smart contrac to test. We use [ckb-syscall js binding](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/syscalls.md) to write a
 [sudt](/docs/concepts/glossary#simple-udt) example in
 javscript and check it can be execute successfully in our `run-js` scripts.
 
@@ -774,8 +778,7 @@ if (exit_code != 0) {
 Compile this `sudt.js` into binary with ckb-debugger:
 
 ```sh
-ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit}
-{print}' | xxd -r -p > js/build/fib.bc
+ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
 ```
 
 Add a new test to the tests file:
