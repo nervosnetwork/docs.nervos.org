@@ -6,7 +6,7 @@ extern crate alloc;
 
 #[cfg(not(test))]
 use ckb_std::default_alloc;
-use ckb_std::syscalls::{self};
+use ckb_std::syscalls;
 #[cfg(not(test))]
 ckb_std::entry!(program_entry);
 #[cfg(not(test))]
