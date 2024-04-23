@@ -218,7 +218,7 @@ touch js/hello.js
 
 Fill the `hello.js` with the following code:
 
-```js title='js/hello.js'
+```js title='my-first-contract-workspace/js/hello.js'
 console.log("hello, ckb-js-script!");
 ```
 
@@ -427,7 +427,7 @@ The logs show `hello, ckb-js-script!` so we know our javscript code got executed
 
 We can try a different javscript example. Let's write a `fib.js` in the `js` folder:
 
-```js title='js/fib.js'
+```js title='my-first-contract-workspace/js/fib.js'
 console.log("testing fib");
 function fib(n) {
     if (n <= 0)
@@ -449,7 +449,7 @@ ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result
 
 #### Add a new test for the `fib.js` smart contract
 
-```rust title='tests/src/tests.rs'
+```rust title='my-first-contract-workspace/tests/src/tests.rs'
 #[test]
 fn fib_script() {
     // deploy contract
@@ -559,7 +559,7 @@ validations before calling the `ckb-js-vm` script to execute js codes.
 
 #### Write `run-js` script
 
-```rust title='contracts/run-js/src/main.rs'
+```rust title='my-first-contract-workspace/contracts/run-js/src/main.rs'
 #![no_std]
 #![cfg_attr(not(test), no_main)]
 
