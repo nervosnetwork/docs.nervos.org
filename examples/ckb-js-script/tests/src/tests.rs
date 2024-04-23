@@ -274,8 +274,7 @@ fn sudt_script() {
     println!("consume cycles: {}", cycles);
 }
 
-
-fn assert_script_error(err: Error, err_code: i8) {
+fn _assert_script_error(err: Error, err_code: i8) {
     let error_string = err.to_string();
     assert!(
         error_string.contains(format!("error code {} ", err_code).as_str()),
