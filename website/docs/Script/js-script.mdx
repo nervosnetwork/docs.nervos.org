@@ -31,9 +31,9 @@ engine called [ckb-js-vm](https://githunb.com/nervosnetwork/ckb-js-vm). It is po
 [quick.js](https://quick.js.org) so that it is compatible to run on CKB-VM. We just need to take
 the ckb-js-vm and put it on chain before we run our javscript smart contracts.
 
-Below is a step-by-step guide, and you can also clone the full code example from the Github at[js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script).
+Below is a step-by-step guide, and you can also clone the full code example from the Github at [js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script).
 
-## Get ckb-js-vm binary
+## Get `ckb-js-vm` binary
 
 `ckb-js-vm` is a binary that can be both used in CLI and in the on-chain CKB-VM. Let's first build the
 binary and give it a first try to see if it works expectedly.
@@ -48,7 +48,7 @@ make all
 ```
 
 Now The binary is in the `build/` folder. Without writting any codes, we can use
-[CKB-standalone-deugger](https://github.com/nervosnetwork/ckb-standalone-debugger)(a Cli that
+[CKB-standalone-deugger](https://github.com/nervosnetwork/ckb-standalone-debugger)(another Cli tool that
 enable off-chain contract development, the name explains itself) to run the `ckb-js-vm` binary for a
 quick test.
 
@@ -234,7 +234,7 @@ ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run resu
 Now let's assemble all the scripts and run it in one CKB transaction. We will use the built-in test module
 from `ckb-script-templates` so that we don't need to actually run a blockchain.
 
-```rust title='my-first-contract-workspace/tests/src/tests.rs'
+```rust title="my-first-contract-workspace/tests/src/tests.rs"
 use super::*;
 use ckb_testtool::{
     builtin::ALWAYS_SUCCESS,
@@ -443,7 +443,7 @@ console.assert(value == 55, 'fib(10) = 55');
 
 #### Compile the `fib.js` into binary with ckb-debugger
 
-````sh
+```sh
 ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit}
 {print}' | xxd -r -p > js/build/fib.bc
 ```
@@ -652,7 +652,7 @@ This time, let's use a more real javscript smart contrac to test. We write a
 [sudt](/docs/concepts/glossary#simple-udt) example in
 javscript and check it can be execute successfully in our `run-js` scripts.
 
-```javscript title='my-first-script-workspace/js/sudt.js'
+```javscript title='my-first-contract-workspace/js/sudt.js'
 const CKB_INDEX_OUT_OF_BOUND = 1;
 const ERROR_AMOUNT = -52;
 
@@ -780,7 +780,7 @@ ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result
 
 Add a new test to the tests file:
 
-```rust title='my-first-script-workspace/tests/src/tests.rs'
+```rust title='my-first-contract-workspace/tests/src/tests.rs'
 #[test]
 fn sudt_script() {
     // deploy contract
