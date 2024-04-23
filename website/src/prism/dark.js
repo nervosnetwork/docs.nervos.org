@@ -20,10 +20,16 @@ module.exports = {
         },
     },
     {
-        types: ['function'],
-        style: {
-            color: 'var(--code-function)',
-        },
+      types: ['function', 'attr-name'],
+      style: {
+          color: 'var(--code-function)',
+      },
+    },
+    {
+      types: ['keyword', 'attr-value'],
+      style: {
+          color: 'var(--code-keyword)',
+      },
     },
 ],
 };

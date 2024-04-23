@@ -19,16 +19,16 @@ const homeCardContents: HomeCardProps[] = [
         links: [
             { label: "Dev Environment", link: "/docs/getting-started/dev-environment"},
             { label: "DApp Tutorials", link: "/docs/getting-started/transfer-ckb"},
-            { label: "Scripts Tutorials", link: "/docs/Script/write-script"},
+            { label: "Scripts Tutorials", link: "/docs/Script/minimal-script"},
         ],
         icon: 'rocket',
     },
     {
         title: 'Run a Node',
         links: [
-            { label: "Run a Mainnet Node", link: "/docs/Node/#run-a-mainnet-node"},
-            { label: "Run a Testnet Node", link: "/docs/Node/#run-a-testnet-node"},
-            { label: "Run a Public RPC Node", link: "/docs/Node/#run-a-public-rpc-node"},
+            { label: "Run a Mainnet Node", link: "/docs/node/run-mainnet-node"},
+            { label: "Run a Testnet Node", link: "/docs/node/run-testnet-node"},
+            { label: "Run a Public RPC Node", link: "/docs/node/run-public-rpc-node"},
         ],
         icon: 'node',
     },
