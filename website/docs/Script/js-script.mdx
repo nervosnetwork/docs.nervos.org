@@ -1,6 +1,6 @@
 ---
 id: js-script
-title: "Tutorial: Run js on CKB"
+title: "Tutorial: Run JS on CKB"
 sidebar_position: 4 
 ---
 import Tabs from '@theme/Tabs';
@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 import ScriptHeaders from "./ScriptHeaders.tsx";
 import TutorialHeader from "@components/TutorialHeader";
 
-# Tutorial: Run javscript code on CKB
+# Tutorial: Run JavaScript Code on CKB
 
 <TutorialHeader
   time={ScriptHeaders.basic.time}
@@ -16,29 +16,30 @@ import TutorialHeader from "@components/TutorialHeader";
   tools={ScriptHeaders.basic.tools}
 />
 
-## The high-level idea
+## The High-Level Idea
 
-As we have learned before, you can use any program language to write Script(smart contract) for CKB.
-But does it really work in reality? This tutorial will show a full example to use javascript to
-write scripts and execute them in CKB-VM.
+As we have learned before, you can use any programming language to write a Script (Smart contract) for CKB.
+But does it really work in reality? This tutorial will show a full example of using JavaScript to
+write Scripts and execute them in the [CKB-VM](/docs/concepts/ckb-vm).
 
-The idea goes like this: we first port a javascript engine as a base script to CKB, then we write
-a smart contract in javascript for business logic, and run this js-powered smart contract inside the js-engine base script
-on top of CKB-VM.
+The process is as follows: first we port a JavaScript engine as a base Script to CKB. Then, we write
+the business logic in JavaScript and execute this JS-powered Script within the base Script on top of CKB-VM.
 
-It sounds like a of work. But thanks to the CKB VM team, we already have a full runnable javscript
-engine called [ckb-js-vm](https://githunb.com/nervosnetwork/ckb-js-vm). It is ported from
-[quick.js](https://quick.js.org) so that it is compatible to run on CKB-VM. We just need to take
-the ckb-js-vm and put it on chain before we run our javscript smart contracts.
+It sounds like a of work. But thanks to the CKB VM team, we already have a fully runnable JavaScript
+engine called [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm). It is ported from
+[quick.js](https://quick.js.org) so that it is compatible with running on CKB-VM. We just need to take
+the ckb-js-vm and deploy it on-chain before we can run our JS Script.
 
-Below is a step-by-step guide, and you can also clone the full code example from the Github at [js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script).
+Below is a step-by-step guide, and you can also clone the full code example from the [Github repo](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script).
 
-## Get ckb-js-vm binary
+## Get ckb-js-vm Binary
 
-`ckb-js-vm` is a binary that can be both used in CLI and in the on-chain CKB-VM. Let's first build the
-binary and give it a first try to see if it works expectedly.
+The `ckb-js-vm` is a binary that can be used both in the CLI and in the on-chain CKB-VM. Let's first build the
+binary and give it a try to see if it works as expected.
 
+:::info
 You will need `clang 16+` to build the `ckb-js-vm` binary:
+:::
 
 ```sh
 git clone https://github.com/nervosnetwork/ckb-js-vm
@@ -47,25 +48,27 @@ git submodule update --init
 make all
 ```
 
-Now The binary is in the `build/` folder. Without writting any codes, we can use
-[CKB-standalone-deugger](https://github.com/nervosnetwork/ckb-standalone-debugger)(another Cli tool that
-enable off-chain contract development, the name explains itself) to run the `ckb-js-vm` binary for a
+Now, the binary is in the `build/` folder. Without writing any codes, we can use the
+[CKB-Debugger](https://github.com/nervosnetwork/ckb-standalone-debugger)(another CLI tool that
+enables off-chain Script development, as the name suggests) to run the `ckb-js-vm` binary for a
 quick test.
 
-### Install ckb-debugger
+### Install CKB-Debugger
 
+:::info
 To install, you need [Rust](https://www.rust-lang.org) and
-[cargo](https://doc.rust-lang.org/cargo):
+[cargo](https://doc.rust-lang.org/cargo)
+:::
 
 ```sh
 cargo install --git https://github.com/nervosnetwork/ckb-standalone-debuggger ckb-debugger
 ```
 
-### Use ckb-debugger for quick test
+### Quick Test with CKB-Debugger
 
-Now let's run the `ckb-js-vm` with some js test codes. 
+Now let's run the `ckb-js-vm` with some JS test codes. 
 
-Make sure you are in the root of `CKB-vm-js`project folder:
+Make sure you are in the root of the `ckb-vm-js` project folder:
 
 ```mdx-code-block
 <Tabs>
@@ -90,16 +93,15 @@ Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
 </Tabs>
 ```
 
-with the `-r` option, `ckb-js-vm` will read a local js file via ckb-debugger, this function is
-intended for testing purpose, it doesn't function in a production enviroment. But we can see the
-running output that it does prints out a `hello, world` message and the run result is 0 so it means
-the `hello.js` script executes successfully. Also, you can see the how many `cycles`(the overhead for
-executing a script) it need to run the js script in the output too.
+with the `-r` option, `ckb-js-vm` will read a local JS file via CKB-Debugger. This function is
+intended for testing purposes and does not function in a production environment. However, we can see the
+running output, which includes a `hello, world` message. The run result is 0, indicating that the `hellow.js` Script executes successfully. 
+Also, you can see how many `cycles`(the overhead required to execute a Script) are needed to run the JS Script in the output as well.
 
 ## Integrate ckb-js-vm
 
-`ckb-js-vm` provides different ways to be integrated in your own scripts. In the next step, we will set
-up a project and writing codes to integrate `ckb-js-vm` with javascript code to gain a deeper
+`ckb-js-vm` offers different ways to be integrated into your own Scripts. In the next step, we will set
+up a project and writing codes to integrate `ckb-js-vm` with JavaScript code to gain a deeper
 understanding.
 
 The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
@@ -109,11 +111,11 @@ The first step is to create a new Script project. We use [ckb-script-templates](
 * `Clang 16+`
 * `cargo-generate`: You can install this via `cargo install cargo-generate`
 
-If you got any problems for these dependencies, refer to [readme](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for install details.
+If you encounter any problems with these dependencies, refer to the [ReadMe](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for installation details.
 
 ### Init a Script Project
 
-Now let's run the command to generate a new Script project called `my-first-contract-workspace`:
+Now let's run the command to generate a new Script project called `my-first-script-workspace`:
 
 ```mdx-code-block
 <Tabs>
@@ -129,13 +131,13 @@ create-ckb-scripts
 ```
 ```bash
 ⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
-🤷   Project Name: my-first-contract-workspace
-🔧   Destination: /tmp/my-first-contract-workspace ...
-🔧   project-name: my-first-contract-workspace ...
+🤷   Project Name: my-first-script-workspace
+🔧   Destination: /tmp/my-first-script-workspace ...
+🔧   project-name: my-first-script-workspace ...
 🔧   Generating template ...
-🔧   Moving generated files into: `/tmp/my-first-contract-workspace`...
+🔧   Moving generated files into: `/tmp/my-first-script-workspace`...
 🔧   Initializing a fresh Git repository
-✨   Done! New project created /tmp/my-first-contract-workspace
+✨   Done! New project created /tmp/my-first-script-workspace
 ```
 ```mdx-code-block
   </TabItem>
@@ -151,7 +153,7 @@ Let’s create a new Script called `run-js`.
   <TabItem value="create-a-new-script" label="Command">
 ```
 ```bash
-cd my-first-contract-workspace
+cd my-first-script-workspace
 make generate
 ```
 ```mdx-code-block
@@ -160,27 +162,27 @@ make generate
 ```
 ```bash
 🤷   Project Name: run-js
-🔧   Destination: /tmp/my-first-contract-workspace/contracts/run-js ...
+🔧   Destination: /tmp/my-first-script-workspace/contracts/run-js ...
 🔧   project-name: carrot ...
 🔧   Generating template ...
-🔧   Moving generated files into: `/tmp/my-first-contract-workspace/contracts/run-js`...
+🔧   Moving generated files into: `/tmp/my-first-script-workspace/contracts/run-js`...
 🔧   Initializing a fresh Git repository
-✨   Done! New project created /tmp/my-first-contract-workspace/contracts/run-js
+✨   Done! New project created /tmp/my-first-script-workspace/contracts/run-js
 ```
 ```mdx-code-block
   </TabItem>
 </Tabs>
 ```
 
-Our project relies on `ckb-js-vm` so we need to add it in the project. Create a new folder named
-`deps` in the root of our contract workspace:
+Our project relies on `ckb-js-vm`, so we need to include it in the project. Create a new folder named
+`deps` in the root of our Script workspace:
 
 ```sh
-cd my-first-contract-workspace
+cd my-first-script-workspace
 mkdir deps
 ```
 
-Copy the `ckb-js-vm` binary we built before into the `deps` folder so it looks like this:
+Copy the `ckb-js-vm` binary we built before into the `deps` folder. When you're done, it should look like this:
 
 ```sh
 --build
@@ -194,46 +196,47 @@ Everything looks good now!
 
 ### Integrate via Script
 
-The most simple way to use `ckb-js-vm` to run js code is via Script. A `ckb-js-vm` script contains the
+The simplest way to run JavaScript code using `ckb-js-vm` is via a Script. A `ckb-js-vm` Script has the
 following structure:
 
 ```sh
 code_hash: <code_hash to ckb-js-vm cell>
 hash_type: <hash_type>
-args: <ckb-js-vm args, 2 bytes> <code_hash to javascript code cell, 32 bytes> <hash_type to
+args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to
 javscript code cell, 1 byte> <javscript code args, variable length>
 ```
-
-Note: 2 bytes ckb-js-vm args are reserved for further use.
+:::note
+2 bytes ckb-js-vm args are reserved for further use
+:::
 
 Now let's get our hands dirty to integrate `ckb-js-vm` in this way.
 
-#### Write a simple `hello.js` smart contract
+#### Write a simple `hello.js` Script
 
-```js
-cd my-first-contract-workspace
+```bash
+cd my-first-script-workspace
 mkdir js/build
 touch js/hello.js
 ```
 
 Fill the `hello.js` with the following code:
 
-```js title='my-first-contract-workspace/js/hello.js'
+```js title='my-first-script-workspace/js/hello.js'
 console.log("hello, ckb-js-script!");
 ```
 
-#### Compile the `hello.js` into binary with ckb-debugger
+#### Compile the `hello.js` into binary with CKB-Debugger
 
 ```sh
 ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/hello.bc 
 ```
 
-#### Write tests for the `hello.js` smart contract
+#### Write tests for the `hello.js` Script
 
-Now let's assemble all the scripts and run it in one CKB transaction. We will use the built-in test module
-from `ckb-script-templates` so that we don't need to actually run a blockchain.
+Now let's assemble all the Scripts and run them in a single CKB transaction. We will use the built-in test module
+from `ckb-script-templates`, which allows us to test without actually running a blockchain.
 
-```rust title="my-first-contract-workspace/tests/src/tests.rs"
+```rust title="my-first-script-workspace/tests/src/tests.rs"
 use super::*;
 use ckb_testtool::{
     builtin::ALWAYS_SUCCESS,
@@ -333,15 +336,15 @@ fn hello_script() {
 
 ```
 
-Let's give the above code some explanation:
+Let's break down the code provided:
 
-We first deploy the `ckb-js-vm`, `hello.bc` and `ALWAYS_SUCCESS` binaries to the blockchain so we
-have 3 smart contracts in live cells. The `ALWAYS_SUCCESS` is only used to simplify the
-lock script in our test flow.
+First, We deploy the `ckb-js-vm`, `hello.bc` and `ALWAYS_SUCCESS` binaries to the blockchain, resulting in
+3 Scripts in Live Cells. The `ALWAYS_SUCCESS` is used solely to simplify the
+Lock Script in our test flow.
 
-Then we builds a output cell that carries a special type script to execute the `hello.js` codes.
-The `code_hash` and `hash_type` in the type script is referecing to the `ckb-js-vm` script cell. It
-is automattically done by this line of code:
+Then, we build an output Cell that carries a special Type Script to execute the `hello.js` codes.
+The `code_hash` and `hash_type` in the Type Script referece the `ckb-js-vm` Script Cell. It
+is automatically done by this line of code:
 
 ```rust
     let type_script = context
@@ -349,9 +352,9 @@ is automattically done by this line of code:
         .expect("script");
 ```
 
-The key here is the args of the type script. We find the cell that carries our `hello.js` codes and
-put the refference infomation(which is `code_hash` and `hash_type`) of that cell into the args
-following the `ckb-js-vm` args structure:
+The key here is the args of the Type Script. We locate the Cell that carries our `hello.js` codes and
+insert the reference information—which includes `code_hash` and `hash_type`–of that Cell into the args,
+following the args structure of `ckb-js-vm`.
 
 ```rust
   // args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to JavaScript code cell, 1 byte> <JavaScript code args, variable length>
@@ -366,7 +369,7 @@ following the `ckb-js-vm` args structure:
     type_script_args[34..35].copy_from_slice(&hash_type.as_slice());
 ```
 
-Finally, don't forget to add all the live cells of the related scripts into the cellDeps in the transaction:
+Finally, don't forget to add all the Live Cells containing the related Scripts in the `cellDeps` in the transaction:
 
 ```rust
   // prepare cell deps
@@ -389,15 +392,15 @@ Finally, don't forget to add all the live cells of the related scripts into the 
     println!("consume cycles: {}", cycles);
 ```
 
-#### Run the test to see if it gets pass
+#### Run the Test to See If It Passes
 
 ```sh
 make build
 make test
 ```
 
-By default the test output will not display the executing logs of the scripts. You can use the
-alternative command to see it:
+By default, the test output does not display the executing logs of the Scripts. To view them, you can use the following
+alternative command:
 
 ```mdx-code-block
 <Tabs>
@@ -421,13 +424,13 @@ test tests::hello_script ... ok
 </Tabs>
 ```
 
-The logs show `hello, ckb-js-script!` so we know our javscript code got executed well.
+The logs show `hello, ckb-js-script!`, indicating our JavaScript code executed successfully.
 
-#### Write a `fib.js` smart contract
+#### Write a `fib.js` Script
 
-We can try a different javscript example. Let's write a `fib.js` in the `js` folder:
+We can try a different JavaScript example. Let's write a `fib.js` in the `js` folder:
 
-```js title='my-first-contract-workspace/js/fib.js'
+```js title='my-first-script-workspace/js/fib.js'
 console.log("testing fib");
 function fib(n) {
     if (n <= 0)
@@ -441,15 +444,15 @@ var value = fib(10);
 console.assert(value == 55, 'fib(10) = 55');
 ```
 
-#### Compile the `fib.js` into binary with ckb-debugger
+#### Compile the `fib.js` into Binary with CKB-Debugger
 
 ```sh
 ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
 ```
 
-#### Add a new test for the `fib.js` smart contract
+#### Add a New Test for The `fib.js` Script
 
-```rust title='my-first-contract-workspace/tests/src/tests.rs'
+```rust title='my-first-script-workspace/tests/src/tests.rs'
 #[test]
 fn fib_script() {
     // deploy contract
@@ -546,20 +549,20 @@ make build
 make test
 ```
 
-### Integrate via Spawn syscall
+### Integrate via Spawn Syscall
 
-Another way to integrate `ckb-js-vm` is by calling it from your own scripts. This is useful when you
-have more custom logics to deal with and still wants to execute some js codes. In this example, we
-use `ckb_spwan` syscall to call script from another script. `ckb_spawn` is the recomamnd way to
+Another way to integrate `ckb-js-vm` is by calling it from your own Scripts. This approach is useful when you have
+more complex custom logic to handle and still want to execute some JavaScript code. In this example, we
+use `ckb_spawn` syscall to call Script from another Script. `ckb_spawn` is the recommended way to
 call `ckb-js-vm`, here is
 [why](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/intro.md#integration).
 
-We will use rust to write a new script called `run-js`. In this script, you can add custom logics and
-validations before calling the `ckb-js-vm` script to execute js codes.
+We will use Rust to write a new Script called `run-js`. In this Script, you can add custom logics and
+validations before calling the `ckb-js-vm` Script to execute JS codes.
 
-#### Write `run-js` script
+#### Write `run-js` Script
 
-```rust title='my-first-contract-workspace/contracts/run-js/src/main.rs'
+```rust title='my-first-script-workspace/contracts/run-js/src/main.rs'
 #![no_std]
 #![cfg_attr(not(test), no_main)]
 
@@ -576,7 +579,7 @@ ckb_std::entry!(program_entry);
 default_alloc!();
 
 pub fn program_entry() -> i8 {
-    ckb_std::debug!("This is a sample run js code contract!");
+    ckb_std::debug!("This is a sample run JS code contract!");
 
     let args: CString = CString::new("-f").unwrap();
 
@@ -599,7 +602,7 @@ pub fn program_entry() -> i8 {
     };
 
     // we supposed the first cell in cellDeps is the ckb-js-vm cell
-    // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
+    // we then call ckb-js-vm script using spawn syscall to execute the JS code in the script args
     let result = ckb_std::syscalls::spawn(
         0,
         ckb_std::ckb_constants::Source::CellDep,
@@ -622,12 +625,12 @@ pub fn program_entry() -> i8 {
     0
 }
 ```
-The most important code in the script is the use `ckb_std` library to perform the `spawn` syscall
+The most important code in the Script is the usage of `ckb_std` library to perform the `spawn` syscall
 to call the `ckb-js-vm`:
 
 ```rust
     // we supposed the first cell in cellDeps is the ckb-js-vm cell
-    // we then call ckb-js-vm script using spawn syscall to execute the js code in the script args
+    // we then call ckb-js-vm script using spawn syscall to execute the JS code in the script args
     let result = ckb_std::syscalls::spawn(
         0,
         ckb_std::ckb_constants::Source::CellDep,
@@ -637,28 +640,28 @@ to call the `ckb-js-vm`:
     );
 ```
 
-In order to use `ckb_std::syscalls::spawn`, you need to enable the `ckb2023` feature in `ckb-std` deps:
+In order to use `ckb_std::syscalls::spawn`, you need to enable the `ckb2023` feature in the `ckb-std` deps:
 
-```toml title="my-first-contract-workspace/contracts/run-js/Cargo.toml"
+```toml title="my-first-script-workspace/contracts/run-js/Cargo.toml"
 [dependencies]
 ckb-std = {version = "0.15.1", features = ["ckb2023"]}
 ```
 
-For simplicity, we supposed the `ckb-js-vm` script is in the first position of the cell deps in the
+For simplicity, we supposed the `ckb-js-vm` Script is in the first position of the cell deps in the
 transaction.
 
-We can check the return result from the `spawn` syscall to check if the code executes successfully.
+We can check the return result from the `spawn` syscall to see if the code executes successfully.
 
-#### Write test for run-js script
+#### Write Test for Run-JS Script
 
-We have our custom script `run-js` that can execute js codes and do custom validations. Now let's
-write some tests for our script.
+We have our custom Script `run-js` that can execute JS codes and customize validations. Now let's
+write some tests for our Script.
 
-This time, let's use a more real javscript smart contrac to test. We use [ckb-syscall js binding](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/syscalls.md) to write a
+This time, let's use a more realistic JS Script to test. We will utilize the [ckb-syscall JS binding](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/syscalls.md) to write a
 [sudt](/docs/concepts/glossary#simple-udt) example in
-javscript and check it can be execute successfully in our `run-js` scripts.
+JavaScript and verify that it executes successfully in our `run-js` Scripts.
 
-```javascript title='my-first-contract-workspace/js/sudt.js'
+```js title='my-first-script-workspace/js/sudt.js'
 const CKB_INDEX_OUT_OF_BOUND = 1;
 const ERROR_AMOUNT = -52;
 
@@ -777,15 +780,15 @@ if (exit_code != 0) {
 }
 ```
 
-Compile this `sudt.js` into binary with ckb-debugger:
+Compile this `sudt.js` into binaries with CKB-Debugger:
 
 ```sh
 ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
 ```
 
-Add a new test to the tests file:
+Add a new test to the `tests` file:
 
-```rust title='my-first-contract-workspace/tests/src/tests.rs'
+```rust title='my-first-script-workspace/tests/src/tests.rs'
 #[test]
 fn sudt_script() {
     // deploy contract
@@ -894,12 +897,12 @@ fn sudt_script() {
 ```
 Some explanation for this test:
 
-Just like the previous tests, we deploy all the scripts we need, including `ckb-js-vm`, `run-js`,
-`sudt.js` and so on. We then assemble a transaction that produce a output cell that carries our
-`run-js` script as its type script. In the args of its type script, we follow the `ckb-js-vm` args
-data structure, the difference this time is that we also attach the arguments for the `sudt.js` in
-the type script args so that our `sudt.js` code can read its own arguments and get exected as
-expected. The arguments for `sudt.js` is a lock script hash which use to determine if it is under
+Just like the previous tests, we deploy all the Scripts we need, including `ckb-js-vm`, `run-js`,
+`sudt.js` and so on. We then assemble a transaction that produce an output Cell that carries our
+`run-js` Script as its Type Script. In the args of this Type Script, we follow the `ckb-js-vm` args
+data structure. The difference this time is that we also include the arguments for the `sudt.js` within
+the Type Script args. This allows our `sudt.js` code can read its own arguments and get exected as
+expected. The arguments for `sudt.js` include a Lock Script hash, which is used to determine if it is under
 `owner_mode` to perform different validations.
 
 ```rust
@@ -918,8 +921,8 @@ expected. The arguments for `sudt.js` is a lock script hash which use to determi
     type_script_args[35..].copy_from_slice(owner_lock_script_hash.as_slice());
 ```
 
-lastly, we put the token amount in the data field of the output cell carried our `run-js` script and
-assemble the transaction to submit on-chain:
+Lastly, we put the token amount in the data field of the output Cell containing our `run-js` Script and then
+assemble the transaction for submmision on-chain:
 
 ```rust
     // prepare output cell data
@@ -953,11 +956,11 @@ make build
 cargo test -- --nocapture sudt_script
 ```
 
-You can see the output contains the spawn result and other informations.
+You can see the output contains the spawn result and other information:
 
 ```sh
 running 1 test
-[contract debug] This is a sample run js code contract!
+[contract debug] This is a sample run JS code contract!
 [contract debug] spawn result: 0
 consume cycles: 185365
 test tests::sudt_script ... ok
@@ -966,12 +969,12 @@ test tests::sudt_script ... ok
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how to write scripts that integrated with
-`ckb-js-vm` to execute javscript codes on CKB. Here's a quick recap:
+By following this tutorial this far, you have mastered how to write Scripts that integrates
+`ckb-js-vm` to execute JavaScript codes on CKB. Here's a quick recap:
 
 - Use `ckb-script-templates` to init a Script project
-- Use `ckb_std` to leverage CKB syscalls to perform `ckb_spawn` syscall to call `ckb-js-vm`.
-- Build args for the script to carry the refference info to the javscript code cell and its
+- Use `ckb_std` to leverage CKB syscalls for performing `ckb_spawn` syscall to call `ckb-js-vm`.
+- Build args for the Script to carry the reference info to the JavaScript code Cell and its
   arguments.
 
 ## Additional Resources
@@ -980,6 +983,6 @@ By following this tutorial this far, you have mastered how to write scripts that
   [js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/js-script)
 - More about `ckb-js-vm`: [ckb-js-vm docs](https://nervosnetwork/ckb-js-vm/blob/main/docs)  
 - CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
-- script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+- Script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)

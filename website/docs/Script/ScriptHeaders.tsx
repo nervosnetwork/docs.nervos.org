@@ -8,13 +8,13 @@ export const ScriptHeaders: ScriptHeadersType = {
   basic: {
     time: "5 - 7 min",
     topics: [
-      { label: "Script", href: "/docs/concepts/glossary#script" },
+      { label: "Script", link: "/docs/concepts/glossary#script" },
       {
         label: "CKB-VM",
-        href: "/docs/concepts/glossary#ckb-vm",
+        link: "/docs/concepts/glossary#ckb-vm",
       },
-      { label: "Cell Model", href: "/docs/concepts/cell-model" },
-      { label: "Transaction", href: "/docs/concepts/glossary#transaction" },
+      { label: "Cell Model", link: "/docs/concepts/cell-model" },
+      { label: "Transaction", link: "/docs/concepts/glossary#transaction" },
     ],
     tools: [
       <div>
