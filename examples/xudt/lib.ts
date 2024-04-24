@@ -209,7 +209,7 @@ export async function transferTokenToAddress(
 
     txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...extraCollectedCells));
 
-    const change2Capacity = extraCollectedSum.sub(changeOutputNeededCapacity);
+    const change2Capacity = extraCollectedSum.sub(extraNeededCapacity);
     if (change2Capacity.gt(61000000000)) {
       changeOutput.cellOutput.capacity = changeOutputNeededCapacity.toHexString();
       const changeOutput2: Cell = {
