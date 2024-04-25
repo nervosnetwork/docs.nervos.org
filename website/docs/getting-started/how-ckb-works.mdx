@@ -4,41 +4,50 @@ title: How CKB works
 sidebar_position: 2
 ---
 
-To understand CKB, we must leave behind all the complex concepts and capture the very essence: it's all about cells and the transformation of cells.
+# How CKB Works
 
-Cell is the basic unit of CKB, similar to a cell in the human body. All the cells constitute the general state of the entire CKB blockchain. When we initiate a transaction on the blockchain, thus making a state change, in the end, for CKB, it is nothing more than spending some cells while creating some new ones, no matter how complicated the transaction and the state change are. This process is the same as the Bitcoin UTXO.
+In order to understand CKB, you need to understand BTC first. And BTC works just
+like cash. To tell how much money you have, you simply count how much cash are in your pocket. In
+BTC world, such a cash is called [UTXO](/docs/concentps/UTXO). It looks more like an magic box
+instead of a piece of paper. Each box(UTXO) can carry a piece
+of codes that can only be unlocked by some pre-defined conditions. You can image this piece of codes as a lock
+hanging on the box. If you have the keys to unlock the lock, then the box is yours and you own the
+boxs. And just like the piece paper of cash, each box is recored the money
+denomination on its surface so you can know how much money the box(UTXO) represents. There can be
+small money box and large money box. You can exchange the boxes just like exchange the cash.
 
-Unspent cells are live cells; spent cells are dead cells. So, a CKB chain keeps on spending and creating cells through transactions, just like the renewal and division of cells throughout the body.
+Now you understand the 80% of CKB too, since CKB inhrerints most of its desgin and
+ideas from BTC. The difference is that CKB uses generalized UTXOs called
+[Cell](/docs/concepts/cell-model). Cell is the basic
+unit of CKB, like UTXOs to BTC. 
 
-Unlike traditional UTXO, a cell can store any type of data. Each cell has a field called data, where you can put an unformatted string. The string can be in whatever format you want, as long as you can interpret it.
+## What does generalized UTXOs mean? 
 
-For example, the string can be a hash, a text, a date, or even a piece of binary code that can be referenced by other cells and run on-chain through the CKB virtual machine, CKB-VM.
+Let's go back to the little box analogy. UTXOs are boxes
+that carry a lock made up by codes with money denomination recorded on its surface. The cells are
+boxes too. The differnce is that Cell is a more powerful box:
 
-As simple as that, this is the so-called smart contract on CKB.
+1. You can't do much things with the BTC boxes(UTXOs) since each box have limited space and it can only
+use to record number data that presents the denomination of money. However,
+the boxes of CKB(Cells) have dynamic spaces, the large denomination the box is, the large space of
+box has. 1 CKB equals 1 Byte of storage. If your 50k CKB, then you got 50k bytes of on-chain storage
+space. You can put anything you want into the box as long as you can
+understand and interpret those data. The data type is not limited.
 
-Cells are obtained by the verification of the global consensus on the chain. Owning cells entails costs, since their storage space is limited.
+2. The lock of BTC boxes(UTXOs) can only use very simple and limited codes. You can only do certain
+things with the codes so you end up with certain types of locks in BTC. In the other hand, The lock of CKB
+boxes(Cells) can use complex codes just like the codes running in your computer. It is
+the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [turing-complete
+scripts](/docs/concepts/script).
 
-This leads us to the function of CKB's native tokens.
+3. BTC only have one lock to guard the ownership of the box(UTXO) while CKB can have two locks for
+one box(Cell). The first lock is called [lock script](/docs/concepts/lock-script), used to guard ownership just like BTC, the
+second lock is called [type script](/docs/concepts/type-script), used to determine how boxes can be
+spent and updated.
 
-Imagine a cell as a small box that can carry objects. The box itself is created by tokens. A box's size is determined by how many tokens the box has.
+We have master the most important ideas of CKB. Now let's get to meet its real face.
 
-A box (cell) can also be divided into multiple boxes, as long as the total space of the boxes is equal to the number of tokens you have.
-
-In Nervos CKB, 1 CKB is equal to 1 byte of storage space.
-
-For example, if you have 100 CKBs, you will have 100 bytes of on-chain space, so you can create a box with 100 bytes of space.
-
-The box can store data. The data size must be smaller than the space of the box, because the box contains other components which also occupy some space.
-
-For instance, one Chinese character accounts for 2 bytes (GBK encoding). If you have 100 CKBs in a cell, you can probably save less than 50 Chinese characters in it.
-
-In the case of Dream of the Red Chamber, this novel is approximately 780,000 words in total, so if you want to upload the whole chunk on-chain, you'll need approximately 1.56 million native CKB tokens.
-
-As you can see, on-chain storage is a precious asset.
-
-CKB stores consensus data on-chain, enabling anyone to upload valuable and necessary data to the consensus. It is comparable to a knowledge base owned by all of humanity.
-
-This is how CKB got its name, Common Knowledge Base.
+## Data structure of CKB
 
 The entire cell data structure looks like this:
 
@@ -52,68 +61,19 @@ Cell: {
 ```
 
 The four fields are defined as follows:
-capacity: the space size of the cell, i.e. the integer number of native tokens represented by this cell, usually expressed in hexadecimal. The basic unit for capacity is shannon, 1 CKB equals 10**8 shannon.
-lock: a script, which is essentially the equivalent of a lock. We'll show you more details later.
-type: a script, same as the lock but for a different purpose.
-data: this field can store arbitrary bytes, which means any type of data
-More detailed descriptions of data structures can be found here: Cell data structure
+
+- capacity: the space size of the cell, i.e. the integer number of native tokens represented by this cell, usually expressed in hexadecimal. The basic unit for capacity is shannon, 1 CKB equals 10**8 shannon.
+- lock: a script, which is essentially the equivalent of a lock that made up by codes with
+  predefined rules.
+- type: a script, same as the lock but for a different purpose.
+- data: this field can store arbitrary bytes, which means any type of data
 
 Note：A cell's total size for all four fields above must be less than or equal to the capacity of the cell. As shown below
 
+```sh
 capacity  = Cell's total space
          >= Sum of the 4 fields' byte length
-
-
-How to tell that you own a cell?
-The only way you can possess cells is by owning native tokens, so how do we know which one you own?
-
-Do you remember the lock and type scripts we mentioned above?
-
-If the cell is a box, the lock and type scripts are the two locks on the box.
-
-The lock script is the default lock, and the type script is an optional lock.
-
-In essence, the scripts are a piece of code and parameters. When we try to consume a cell, the scripts run automatically and take the parameters and proof we submit (such as the signature) to determine if the locks of the cell can be unlocked. Once unlocked, it proves that we own and control the cell.
-
-The script structure looks like this:
-
-```sh 
-Script: {
-  code_hash: HexString
-  args: HexString
-  hash_type: Uint8, there are three allowed values: {0: "data", 1: "type", 2: "data1"}
-}
 ```
-
-In these three fields, hash_type will be explained later, the other two are:
-
-code_hash: the hash of a certain piece of code
-args: the arguments that will be transferred to the code
-More details can be found here: Script Data Structure
-
-The code_hash and args jointly constitute a full lock: we locate the code to be executed by using the code_hash field and then send the argument args to this code. The code will then be executed by the CKB virtual machine (CKB-VM). Additional args may be read during the process, such as the proof attached to the transaction.
-
-If the code is executed successfully, a “0” will be returned indicating that the lock can be opened; if not, other error codes will be returned indicating that the unlocking failed.
-
-With this principle, CKB identifies the owner of a cell, i.e. who can open the lock attached to the cell. The same principle applies to Bitcoin.
-
-We could introduce an asymmetric encryption algorithm via code_hash and place our own public key on the args as an argument. When we need to spend the cell, to initiate a transaction, we could use the private key to sign the transaction so that the cryptographic algorithm could input the public key and signature to figure out whether the corresponding private key initiated the transaction, thus identifying whether it was the real cell owner.
-
-If, on the other hand, you create a cell with a lock that can be unlocked by anyone, meaning anyone can spend the cell, that is spending your money! This is dangerous. Locks are vital to the cell.
-
-
-Summary 1
-Congratulations! Now you are prepared for the tutorial!
-
-CKB is essentially a chain of cells that are constantly being created and destroyed.
-A cell is a box that can be used to store all types of data.
-To own a cell and store data on-chain, you need tokens: 1 CKB = 1 Byte.
-The byte size of the entire cell cannot exceed the value of the capacity field.
-To protect your cell, you must put a lock on the cell so that only you or someone you authorize can open it.
-It seems that we've got a pretty good grasp of how CKB works. Great! Trust me, you've got most of it figured out. Now, let's get into a bit more detail.
-
-Where is the code actually located?
-We have learned that the lock and type fields of the cell are used to lock the box and to guarantee its ownership and control.
 
 A script‘s structure looks like this:
 
@@ -128,74 +88,40 @@ You may notice that the code_hash is not the actual code, but some kind of index
 
 The answer is simple: the code is stored in another cell!
 
-We know that the data field of a cell can contain arbitrary data, so we can put the real code in the data field of another cell and implement this cell as a dependency to a transaction. This dependency cell is called CellDep (dep cell).
+We know that the data field of a cell can contain arbitrary data, so we can put the real code in
+the data field of another cell and implement this cell as a dependency to a transaction. This
+dependency cell is called [CellDep](/docs/concepts/celldep).
 
 Depending on the value of hash_type, code_hash has different interpretations:
 
-If hash_type is "data" or "data1", code_hash should match blake2b_ckbhash(data) of a dep cell;
-If hash_type is "type", code_hash should instead match blake2b_ckbhash(type script) of a dep cell.
-The code locating workflow
+- If hash_type is "data" or "data1", code_hash should match blake2b_ckbhash(data) of a dep cell;
+- If hash_type is "type", code_hash should instead match blake2b_ckbhash(type script) of a dep cell.
+
+// todo: The code locating workflow
+
 Please keep in mind that the code_hash and hash_type fields are used to locate the code. When unlocking a cell, a transaction simply imports the dep cell, and CKB will follow the rules above to find and execute the corresponding code.
 
 When hash_type is "data" or "data1"
-code-locating-via-data-hash
+
+//todo: code-locating-via-data-hash
 
 When hash_type is "type"
+
 code-locating-via-type-hash
 
 So why not just put in the real code, but use this indexing approach?
 
 One of the major advantages of this design is that if everyone needs the same type of lock, the lock code will be identical, and so will the code_hash value. Then it is just a matter of introducing the same dep cell rather than deploying the same code all over again for each case.
 
-Here's a real example
-Simple User Defined Token (Simple UDT or SUDT) provides a way for dapp developers to issue custom tokens on Nervos CKB. It's a widely used type script.
+## What is a transaction?
 
-Let's try to find the real code of SUDT type script on CKB testnet:
-
-parameter	value
-code_hash	0xc5e5dcf215925f7ef4dfaf5f4b4f105bc321c02776d6e7d52a1db3fcd9d011a4
-hash_type	type
-tx_hash	0xe12877ebd2c3c364dc46c5c992bcfaf4fee33fa13eebdf82c591fc9825aab769
-index	0x0
-dep_type	code
-Click the link of tx_hash and jump to the transaction view of CKB testnet explorer;
-Click the Cell Info button of #0 Output.
-the real code of SUDT type script
-
-Look! You found it!
-
-That is to say, if a cell's type script code_hash is set to 0xc5e5dcf215925f7ef4dfaf5f4b4f105bc321c02776d6e7d52a1db3fcd9d011a4, then that cell will follow the logic of the above code bytes compiled from simple_udt.c.
-
-But at this point, another question may come to your mind.
-
-
-What if the lock code is lost?
-So, we know that a lock's code is usually kept in another cell. What happens if someone destroys that cell? If that cell is spent, the dep cell of a transaction becomes dead, and the lock's code will be gone. Does this mean that the cell using that lock can no longer be unlocked?
-
-Theoretically, this is true. Technically, the cell that contains the code of a lock should last as long as the chain, and no one can access this cell.
-
-For CKB's built-in scripts, things are simple. Because the cells containing the code of all CKB's built-in lock scripts are inherently inaccessible by anyone.
-
-The lock field of each built-in script code cell is
-
-```sh 
-Never unlockable lock: {
-  code_hash: 0x0000000000000000000000000000000000000000000000000000000000000000
-  hash_type: data
-  args: 0x
-}
-```
-which means that no one will ever be able to unlock it, and the code will always be there.
-
-For other scripts, we can still unlock our own cell if the dep cell was destroyed, because actually we can just redeploy the same lock code to a new cell and then reference the new cell as a dep cell so that you can retrieve the lock code.
-
-What is a transaction?
 Constructing a transaction is to destroy some cells and create some more
 The essence of a transaction in CKB, excluding the less important details, is as follows:
 
 transaction: inputs -> outputs
 The essence of inputs and outputs are still some cells：
 
+```sh
 inputs:
     some cells...
 ｜
@@ -204,19 +130,28 @@ inputs:
 \/
 outputs:
     some new cells...
+```
 
 The cells in the inputs must all be live cells. The input cells will be spent and become dead cells after a transaction is committed. The newly created output cells will become new live cells.
 
-Transaction Rules
+### Transaction Rules
+
 The capacity summary of all the output cells must be less than the capacity summary of all the input cells:
+
+```sh
   sum(cell's capacity for each cell in inputs)
 > sum(cell's capacity for each cell in outputs)
+```
+
 which means that a transaction cannot mint capacities from the air.
 
+```sh
 The difference in capacity between inputs and outputs, is the fee that the miner earns:
   sum(cell's capacity for each cell in inputs)
 - sum(cell's capacity for each cell in outputs)
 = fee
+```
+
 You know, miners won't work for nothing. So they collect the difference as a fee.
 
 Note: In practice, for storage optimization reasons, we do not put the complete cell in an input; instead, we just put the cell's index that leads us to the real input cell. This index structure is called OutPoint, which points to a particular cell.
@@ -228,7 +163,8 @@ OutPoint: {
 }
 ```
 
-Difference between lock and type script
+## Difference between lock and type script
+
 Every cell has a lock script. The lock script must run when the cell is used as an input in a transaction. In addition to the lock script, a cell can also have an optional lock, type script.
 
 These two locks are fundamentally the same, but they are given different names because of their different uses.
@@ -254,23 +190,22 @@ Note: CKB does not run the script one by one. It first groups the inputs or outp
 Due to the variations in execution mechanisms, different suitable uses are derived. Essentially these are just the recommended official usages. Of course, you are perfectly free to have your own ideas.
 
 
-Summary 2
-Congratulations! Now you are prepared for the practical tutorial!
+## Congratulations!
 
 Let's review all the concepts we have learned:
 
-CKB is essentially a chain of cells which are being created and destroyed over and over again.
-A cell is a box that can be used to store any type of data.
-To own a cell and store data on-chain, you need tokens: 1 CKB = 1 Byte.
-The byte size of the entire cell cannot exceed the value of the capacity field.
-To protect your cell, you must put a lock on the cell so that only you or someone you authorize can open it.
-A lock is essentially a piece of code that checks if the cell can be unlocked using arguments and user-provided signatures or proofs.
-The return value of 0 means that the lock was unlocked successfully, while any other value means the unlock attempt failed.
-The lock's code_hash and hash_type fields are used to locate code, which is stored in the data field of a dep cell.
-Each cell can carry two scripts, one is called lock script (default) and the other, type script (optional).
-In one transaction, the lock scripts run for all inputs by group, while the type scripts run for all inputs and outputs by group.
-The differences in the execution mechanism result in different uses for the two types of locks. Lock scripts are often used to protect the ownership of the cell. Type scripts often used to handle the cell transformation rules.
-Constructing a transaction is fundamentally about destroying some cells and creating some new ones.
+- CKB is essentially a chain of cells which are being created and destroyed over and over again.
+- A cell is a box that can be used to store any type of data.
+- To own a cell and store data on-chain, you need tokens: 1 CKB = 1 Byte.
+- The byte size of the entire cell cannot exceed the value of the capacity field.
+- To protect your cell, you must put a lock on the cell so that only you or someone you authorize can open it.
+- A lock is essentially a piece of code that checks if the cell can be unlocked using arguments and user-provided signatures or proofs.
+- The return value of 0 means that the lock was unlocked successfully, while any other value means the unlock attempt failed.
+- The lock's code_hash and hash_type fields are used to locate code, which is stored in the data field of a dep cell.
+- Each cell can carry two scripts, one is called lock script (default) and the other, type script (optional).
+- In one transaction, the lock scripts run for all inputs by group, while the type scripts run for all inputs and outputs by group.
+- The differences in the execution mechanism result in different uses for the two types of locks. Lock scripts are often used to protect the ownership of the cell. Type scripts often used to handle the cell transformation rules.
+- Constructing a transaction is fundamentally about destroying some cells and creating some new ones.
+
 That's right, with the above theoretical knowledge, you're ready to hit the road.
 
-Afterward, we'll have a hands-on experience with CKB!
