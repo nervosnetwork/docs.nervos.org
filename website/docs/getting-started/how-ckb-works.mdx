@@ -32,19 +32,17 @@ But what does generalized UTXOs mean?
 
 ## Generalized UTXOs
 
-Let's go back to the little box analogy. UTXOs are boxes that carry a lock made up by codes with money denomination recorded on its surface. 
+Let's go back to the little box analogy. 
+
+UTXOs are boxes that carry a lock made up by codes with money denomination recorded on its surface. 
 
 The cells are boxes too, but more powerful ones:
 
-No.1 difference:
+### No.1 difference
 
 You can't do much things with the BTC boxes(UTXOs) since each box have limited space and it can only use to record number data that presents the denomination of money. 
 
-However, the boxes of CKB(Cells) have dynamic spaces and the large denomination the box is, the large space of box has. 
-
-1 CKB equals 1 Byte of storage.
-
-If your 50k CKB, then you got 50k bytes of on-chain storage space. 
+However, the boxes of CKB(Cells) have dynamic spaces and the large denomination the box is, the large space of box has. 1 CKB equals 1 Byte of storage. If your 50k CKB, then you got 50k bytes of on-chain storage space. 
 
 You can put anything you want into the box as long as you have the space to hold it. 
 
@@ -52,7 +50,7 @@ You can put any type of data into the box as long as you can understand and inte
 
 There is no limit.
 
-No.2 difference:
+### No.2 difference
 
 The lock of BTC boxes(UTXOs) can only use very simple and limited codes
 
@@ -60,7 +58,7 @@ You can only do certain things with the codes so you end up with certain types o
 
 In the other hand, The lock of CKB boxes(Cells) can use complex codes just like the codes running in your computer. It is the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [turing-complete scripts](/docs/concepts/script).
 
-No.3 difference:
+### No.3 difference
 
 BTC only have one lock to guard the ownership of the box(UTXO) while CKB can have two locks for one box(Cell). 
 
@@ -68,7 +66,9 @@ The first lock is called [lock script](/docs/concepts/lock-script), used to guar
 
 The second lock is called [type script](/docs/concepts/type-script), used to determine how boxes can be spent and updated.
 
-Good! We have master the most important ideas of CKB. Now let's get to meet its real face.
+Good! We have master the most important ideas of CKB. 
+
+Now let's get to meet its real face.
 
 ## Data structure of CKB
 
@@ -76,25 +76,17 @@ The entire cell data structure looks like this:
 
 ```sh
 Cell: {
-  capacity: HexString;
-  lock: Script;
-  type: Script;
-  data: HexString;
+  capacity: HexString; # represent the total storage space size of the cell. The basic unit for capcaity is shannon, 1 CKB equals 10**8 shannon.
+  lock: Script; // a piece of codes 
+  type: Script; // a piece of codes
+  data: HexString; // this field can store arbitrary bytes, which means any type of data 
 }
 ```
-
-The four fields are defined as follows:
-
-- capacity: the space size of the cell, i.e. the integer number of native tokens represented by this cell, usually expressed in hexadecimal. The basic unit for capacity is shannon, 1 CKB equals 10**8 shannon.
-- lock: a script, which is essentially the equivalent of a lock that made up by codes with predefined rules.
-- type: a script, same as the lock but for a different purpose.
-- data: this field can store arbitrary bytes, which means any type of data
 
 Note：A cell's total size for all four fields above must be less than or equal to the capacity of the cell. As shown below
 
 ```sh
-capacity  = Cell's total space
-         >= Sum of the 4 fields' byte length
+capacity = Cell's total space >= Sum of the 4 fields' byte length
 ```
 
 A script‘s structure looks like this:
@@ -103,7 +95,7 @@ A script‘s structure looks like this:
 Script: {
   code_hash: HexString
   args: HexString
-  hash_type: Uint8, there are three allowed values: {0: "data", 1: "type", 2: "data1"}
+  hash_type: Uint8, there are 4 allowed values: {0: "data", 1: "type", 2: "data1"i, 3: "data2"}
 }
 ```
 You may notice that the code_hash is not the actual code, but some kind of index of the code. This index allows us to retrieve the code. So, where is the code anyway?
@@ -114,7 +106,7 @@ We know that the data field of a cell can contain arbitrary data, so we can put 
 
 Depending on the value of hash_type, code_hash has different interpretations:
 
-- If hash_type is "data" or "data1", code_hash should match blake2b_ckbhash(data) of a dep cell;
+- If hash_type is "data", "data1" or "data2", code_hash should match blake2b_ckbhash(data) of a dep cell;
 - If hash_type is "type", code_hash should instead match blake2b_ckbhash(type script) of a dep cell.
 
 Please keep in mind that the code_hash and hash_type fields are used to locate the code. When unlocking a cell, a transaction simply imports the dep cell, and CKB will follow the rules above to find and execute the corresponding code.
@@ -123,11 +115,9 @@ So why not just put in the real code, but use this indexing approach?
 
 One of the major advantages of this design is that if everyone needs the same type of lock, the lock code will be identical, and so will the code_hash value. Then it is just a matter of introducing the same dep cell rather than deploying the same code all over again for each case.
 
-## What is a transaction?
+## What Is A Transaction?
 
 A transaction in CKB is just an action to destroy some cells and create some more.
-
-The essence of a transaction in CKB, excluding the less important details, is as follows:
 
 ```sh
 inputs:
@@ -142,23 +132,9 @@ outputs:
 
 The cells in the inputs must all be live cells. The input cells will be spent and become dead cells after a transaction is committed. The newly created output cells will become new live cells.
 
-### Transaction Rules
+When the transaction is submit on-chain, CKB will run all the scripts in the cells of that transaction to see if the script runs successfully.
 
-The capacity summary of all the output cells must be less than the capacity summary of all the input cells:
-
-```sh
-  sum(cell's capacity for each cell in inputs) > sum(cell's capacity for each cell in outputs)
-```
-
-which means that a transaction cannot mint capacities from the air.
-
-The difference between the output capacities and input capacities is the transaction fee for miners.
-
-```sh
-  sum(cell's capacity for each cell in inputs) - sum(cell's capacity for each cell in outputs) = fee
-```
-
-You know, miners won't work for nothing. So they collect the difference as a fee.
+CKB will also ensure that the capacity summary of all the output cells must be less than the capacity summary of all the input cells, which means that a transaction cannot mint capacities from the air. The difference between the output capacities and input capacities is the transaction fee for miners.
 
 Note: In practice, for storage optimization reasons, we do not put the complete cell in an input; instead, we just put the cell's index that leads us to the real input cell. This index structure is called OutPoint, which points to a particular cell.
 
@@ -171,23 +147,16 @@ OutPoint: {
 
 ## Difference between lock and type script
 
-These two locks are fundamentally the same, but they are given different names because of their different uses.
+These two locks are fundamentally the same, but they are given different names because of their different usages.
 
-Lock script: use to guard the ownership of a Cell. In a transaction, the lock scripts run for all inputs by group.
-Type script: use to guard the transformation of cells. In a transaction, the type scripts run for all inputs and outputs by group.
-
-Note: CKB does not run the script one by one. It first groups the inputs or outputs by script and runs the same script only once.
-
-Due to the variations in execution mechanisms, different suitable uses are derived. Essentially these are just the recommended official usages. Of course, you are perfectly free to have your own ideas.
+- Lock script: use to guard the ownership of a Cell. In a transaction, the lock scripts run for all inputs by group.
+- Type script: use to guard the transformation of cells. In a transaction, the type scripts run for all inputs and outputs by group.
 
 ## Congratulations!
 
 Let's review all the concepts we have learned:
 
-- CKB is essentially a chain of cells which are being created and destroyed over and over again.
-- A cell is a box that can be used to store any type of data.
-- 1 CKB = 1 Byte storage.
-- The byte size of the entire cell cannot exceed the value of the capacity field.
+- A cell is a box that can be used to store any type of data. 1 CKB = 1 Byte storage.
 - The lock's code_hash and hash_type fields are used to locate code, which is stored in the data field of a dep cell.
 - Each cell can carry two scripts, one is called lock script (default) and the other, type script (optional).
 - Lock scripts are often used to protect the ownership of the cell. Type scripts often used to handle the cell transformation rules.
