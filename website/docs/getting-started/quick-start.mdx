@@ -1,0 +1,170 @@
+---
+id: qucik-start
+title: Quick Start(5m)
+sidebar_position: 2 
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Quick Start(5m)
+
+To quickly setup a local dev environment with a full-stack dApp boilerplate, we recommand you to use a CLI tool called [@offckb/cli](https://www.npmjs.com/package/@offckb/cli).
+
+`@offckb/cli` provides a one-line command to start a Devnet with pre-funded test accounts, dApp templates and built-in [Scripts](/docs/concepts/glossary#script) like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
+
+## Install
+
+```bash
+npm install -g @offckb/cli
+```
+
+## Create A New Project
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-project" label="Command">
+```
+```bash
+offckb create <your-project-name> 
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-create-project" label="Response">
+```
+```bash
+//todo
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+## Start the Devnet
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="start-devnet" label="Command">
+```
+```bash
+offckb node 
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-start-devnet" label="Response">
+```
+```bash
+//todo
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+## Running the dApp
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="run-dapp" label="Command">
+```
+```bash
+cd <your-project-name>
+cd frontend
+yarn && yarn dev
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-run-dapp" label="Response">
+```
+```bash
+//todo
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+Now you can access the `https://localhost:3000` to check your dApp.
+
+## Boilerplate Structure
+
+The boilerplate constructs two parts of a full stack CKB dApp: 
+
+One is the frontend part based on the CKB Javascript framework [Lumos](https://github.com/ckb-js/lumos). 
+
+One is the scripts(smart-contract) part based on the [ckb-script-templates](https://github.com/nervosnetwork/ckb-script-templates).
+
+## Auto Update Deployed Script Infos
+
+After building your scripts, you can deploy it with `offckb` and the scripts deploy info will automatically get updated in the `frontend` project so you don't need to worried about it.
+
+Below is a simple example:
+
+//todo
+
+## Easy Switch Between Different Networks
+
+One of the things you might want to do is to swtich different blockchain networks across the development of your dapps. This can be done by applying different environment variables in the `offckb` boilerplate.
+
+//todo
+
+## Use A Different Frontend Framework?
+
+The frontend world is filled with many(maybe too many) frameworks. New framework comes out everyday.
+Different develops has different favors over all these frameworks. So if you don't use the framework
+in the pre-defined boilerplate, don't worry! You can still use `offckb` with the `inject-config`
+command.
+
+First, just init your dApp project with your favorite framework, say [next.js](https://nextjs.org):
+
+```bash
+npx create-next-app@latest my-nextjs-dapp --use-npm --example "https://github.com/vercel/next-learn/tree/main/basics/learn-starter"
+```
+
+Second, init the `offckb` config in your framework:
+
+```bash
+cd my-nextjs-dapp
+offckb inject-config
+```
+
+Now, when you deploy your scripts with `offckb deploy --network devent --target <your-folder-to-your-script-binaries>`. After the deployment, you can run `offckb update-config` in your frontend root path where the `offckb.config.ts` lies in to update the deployed scripts infos for your frontend.
+
+Note: Another way to do the config is that you can change the default `contractBinFolder` with your scripts binary location in the `offckb.config.ts`. Under your frontend root dir, you can do `offckb deploy --network devnet` to deploy your target scripts to devnet and the deployed scripts infos will get auto update for your frontend too.
+
+For switching different networks, you might need to update the `readEnvNetwork` method in `offckb.config.ts` accroding to your framework.
+
+```sh
+function readEnvNetwork(): 'devnet' | 'testnet' | 'mainnet' {
+  // you may need to update the env method
+  // accroding to your frontend framework
+  const network = process.env.NETWORK;
+  const defaultNetwork = 'devnet';
+  if (!network)return defaultNetwork;
+  if(!['devnet', 'testnet', 'mainnet'].includes(network)){
+    return defaultNetwork;
+  }
+
+  return network as 'devnet' | 'testnet' | 'mainnet';
+}
+
+```
+
+## Only scripts?
+
+If you only want to create and devleop a script project without any frontends, you can use the following commands:
+
+```bash
+offckb create --script <my-first-script-workspace>
+```
+
+`offckb` doesn't do much things for you. It simply calls the underlying script developing tools called [ckb-script-templates](https://nervosnetwork/ckb-script-templates) and do the jobs for you. 
+
+You can of course dirrectly use the `ckb-script-templates` to init script project directly. Check the [script tutorial](/docs/script/minimal-script) for more details.
+
+## About offckb.config.ts 
+
+`offckb.config.ts` is a very simple typescript code that wrap some basic info and configs for lumos framework. Everything is plain and exlicity so it is easy to modify. In this way, we hope `offckb` is doing a very thin wrapping and is not limited to the tech selections and different ways of building proecess from developers. 
+
+If you have any feedback you would like to share with us, feel free to contact us at [github](https://github.com/nervosnetwork/docs.nervos.org) or [discord]().
+
