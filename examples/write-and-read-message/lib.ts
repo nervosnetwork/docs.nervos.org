@@ -107,7 +107,7 @@ export async function buildMessageTx(
   for await (const cell of collector.collect()) {
     collectedSum = collectedSum.add(cell.cellOutput.capacity);
     collected.push(cell);
-    if (collectedSum >= neededCapacity) break;
+    if (collectedSum.gte(neededCapacity)) break;
   }
 
   if (collectedSum.lt(neededCapacity)) {
