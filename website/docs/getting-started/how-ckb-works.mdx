@@ -1,7 +1,7 @@
 ---
 id: how-ckb-works
 title: How CKB works
-sidebar_position: 2
+sidebar_position: 1 
 ---
 
 # How CKB Works
@@ -10,9 +10,7 @@ To understand CKB, you need to understand BTC first.
 
 BTC works just like cash. To tell how much money you have, you simply count how much cash are in your pocket. 
 
-In BTC world, such a cash is called [UTXO](/docs/concentps/UTXO). 
-
-It looks more like an magic box instead of a piece of paper. Each box(UTXO) can carry a piece of codes that can only be unlocked by some pre-defined conditions. 
+In BTC world, such a cash is called [UTXO](/docs/concentps/UTXO). It looks more like an magic box instead of a piece of paper. Each box(UTXO) can carry a piece of codes that can only be unlocked by some pre-defined conditions. 
 
 You can image this piece of codes as a lock hanging on the box. If you have the keys to unlock the lock, then the box is yours and you own the boxs. 
 
@@ -38,27 +36,25 @@ UTXOs are boxes that carry a lock made up by codes with money denomination recor
 
 The cells are boxes too, but more powerful ones:
 
-### No.1 difference
+### The box has storage space 
 
-You can't do much things with the BTC boxes(UTXOs) since each box have limited space and it can only use to record number data that presents the denomination of money. 
+You can't do much things with the BTC boxes(UTXOs) since each box have no extra space and it can only use to record number data that presents the denomination of money. 
 
-However, the boxes of CKB(Cells) have dynamic spaces and the large denomination the box is, the large space of box has. 1 CKB equals 1 Byte of storage. If your 50k CKB, then you got 50k bytes of on-chain storage space. 
+However, the boxes of CKB(Cells) have dynamic storage spaces and the large denomination the box is, the large space of the box has. 1 CKB equals 1 Byte of storage. If you have 50k CKB tokens, then you got 50k bytes of on-chain storage space. 
 
-You can put anything you want into the box as long as you have the space to hold it. 
+You can put anything you want into the box as long as you have the space to hold it.
 
 You can put any type of data into the box as long as you can understand and interpret those data. 
 
 There is no limit.
 
-### No.2 difference
+### The box can carry powerful codes
 
-The lock of BTC boxes(UTXOs) can only use very simple and limited codes
-
-You can only do certain things with the codes so you end up with certain types of locks in BTC. 
+The lock of BTC boxes(UTXOs) can only use very simple and limited codes. You can only do certain things with the codes so you end up with certain types of locks in BTC. 
 
 In the other hand, The lock of CKB boxes(Cells) can use complex codes just like the codes running in your computer. It is the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [turing-complete scripts](/docs/concepts/script).
 
-### No.3 difference
+### The box have two locks
 
 BTC only have one lock to guard the ownership of the box(UTXO) while CKB can have two locks for one box(Cell). 
 
@@ -106,8 +102,8 @@ We know that the data field of a cell can contain arbitrary data, so we can put 
 
 Depending on the value of hash_type, code_hash has different interpretations:
 
-- If hash_type is "data", "data1" or "data2", code_hash should match blake2b_ckbhash(data) of a dep cell;
-- If hash_type is "type", code_hash should instead match blake2b_ckbhash(type script) of a dep cell.
+- If hash_type is "data", "data1" or "data2", code_hash should match `blake2b_ckbhash(data)` of a dep cell;
+- If hash_type is "type", code_hash should instead match `blake2b_ckbhash(type script)` of a dep cell.
 
 Please keep in mind that the code_hash and hash_type fields are used to locate the code. When unlocking a cell, a transaction simply imports the dep cell, and CKB will follow the rules above to find and execute the corresponding code.
 
@@ -132,7 +128,7 @@ outputs:
 
 The cells in the inputs must all be live cells. The input cells will be spent and become dead cells after a transaction is committed. The newly created output cells will become new live cells.
 
-When the transaction is submit on-chain, CKB will run all the scripts in the cells of that transaction to see if the script runs successfully.
+When the transaction is submit on-chain, CKB will run all the scripts in the cells of that transaction to see if all the script runs successfully.
 
 CKB will also ensure that the capacity summary of all the output cells must be less than the capacity summary of all the input cells, which means that a transaction cannot mint capacities from the air. The difference between the output capacities and input capacities is the transaction fee for miners.
 
