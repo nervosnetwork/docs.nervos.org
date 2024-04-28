@@ -6,59 +6,56 @@ sidebar_position: 2
 
 # How CKB Works
 
-To understand CKB, you need to understand BTC first. If you understand BTC, you already get 80% knowledge about CKB since CKB inhrerintes most of its design and philosiphy from Bitcoin. In that case, you can jump direct to the [rest 20% difference](#Generalized-utxos). 
-
-If you don't, just keep reading and take 1 minute to understand the UTXO, the essentials of Bitcoin.
+To understand CKB, you need to understand BTC first. If you understand BTC, you already get 80% knowledge about CKB since CKB inhrerintes most of its design and philosiphy from Bitcoin. In that case, you can jump direct to the [rest 20% difference](#generalized-utxos). If you don't, just keep reading and take 1 minute to understand the UTXO, the essentials of Bitcoin.
 
 ## Understand UTXO
 
-BTC works just like cash. To tell how much money you have, you simply count how much cash are in your pocket. 
-
-In BTC world, such a cash is called [UTXO](/docs/concentps/UTXO). It looks more like an magic box instead of a piece of paper. Each box(UTXO) can carry a piece of codes that can only be unlocked by some pre-defined conditions. 
-
-You can image this piece of codes as a lock hanging on the box. If you have the keys to unlock the lock, then the box is yours and you own the boxs. And just like the piece paper of cash, each box records the money denomination on its surface so you can know how much money the box(UTXO) represents. 
-
-There can be small money box and large money box. You can take some large boxes and break it into multiple small boxes, just like exchange the cash.
+BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/concentps/UTXO). 
 
 // picture of utxo boxes
 
-Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/concepts/cell-model). Cell is the basic unit of CKB, like UTXOs to BTC. 
+- **Code as a lock:** Unlike a piece of paper, a UTXO is more like a locked box. Each box carries a code that can only be unlocked by some predefined conditions. If you have the right keys, you can unlock the box and claim the ownership. 
+- **Monetary value display:** Each UTXO box records the monetary value on its surface much like the denomination on the cash. 
+- **Divisibility of value:** The value of UTXO boxes can be small or large. Larger value boxes can be split into multiple smaller one, allowing for precise value transactions similar to making change in cash dealings.
 
-But what does generalized UTXOs really mean?
+Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/concepts/cell-model).  A Cell is the basic unit of CKB, just like UTXOs to BTC.
 
-## Generalized UTXOs
+But what exactly are generalized UTXOs?
 
-Let's go back to the little box analogy. 
+## Generalized UTXOs: Understand CKB’s Cells
 
-UTXOs are boxes that carry a lock made up by codes with money denomination recorded on its surface. 
+UTXOs are like boxes that carry a lock made up of codes, with the monetary value clearly marked on the surface; Cells are boxes too, but much more versatile and powerful.
 
-The cells are boxes too, but more powerful ones:
+### Dynamic Storage 
 
-### The box has storage space 
+UTXO boxes represent a specific amount of BTC and that's all it can hold—just the cryptocurrency value. UTXO boxes cannot expand and do not have the capacity to store additional data.
 
-You can't do much things with the BTC boxes(UTXOs) since each box have no extra space and it can only use to record number data that presents the denomination of money. 
+On the other hand, Cell boxes are different. Each Cell box not only holds a cryptocurrency value but also has storage capacity that can be used to hold arbitrary data. The larger the denomination, the more storage space available. 1 CKB = 1 byte of storage. Thus, if you have 50,000 CKB tokens, you get 50,000 bytes of on-chain storage space as well. 
 
-However, the boxes of CKB(Cells) have dynamic storage spaces and the large denomination the box is, the large space of the box has. 1 CKB equals 1 Byte of storage. If you have 50k CKB tokens, then you got 50k bytes of on-chain storage space. 
+// here goes another picture
 
-You can put anything you want into the box as long as you have the space to hold it. The data type is also not limited, any type of data works, as long as you can understand and interpret those data by yourself. 
+### Versatility of Content
 
-### The box can carry powerful codes
+Cell boxes can store any data types, as long as there is enough space to fit them. This feature makes CKB highly flexible, allowing you to store any kinds of information beyond just cryptocurrency value. This is also why CKB is called [common knowledage base](docs/concepts/glossary#common-knowledge-base).
 
-The lock of BTC boxes(UTXOs) can only use very simple and limited codes. You can only do certain things with the codes so you end up with certain types of locks in BTC. 
+### Advanced Coding Capabilities
 
-On the other hand, The lock of CKB boxes(Cells) can use complex codes just like the codes running in your computer. It is the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [turing-complete scripts](/docs0/concepts/script).
+Unlike the simple and limited code that UTXOs can carry, Cells can use complex, Turing-complete codes akin to the normal software runing on your computer. You can learn the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [Turing-complete scripts](docs/concepts/glossary#script) further. 
 
-### The box has two locks
+### Dual Lock System
 
-BTC only have one lock to guard the ownership of the box(UTXO) while CKB can have two locks for one box(Cell). The first lock is called [lock script](/docs/concepts/lock-script), used to guard ownership just like BTC. The second lock is called [type script](/docs/concepts/type-script), used to determine how boxes can be spent and updated in the future.
+BTC only has one lock to guard the ownership of the UTXO box while CKB can have two locks for one Cell box.
+
+- The first required lock is called [Lock Script](docs/concepts/glossary#lock-script), which is used to safeguard ownership, similar to BTC’s system.
+- The second optional lock is called [Type Script](docs/concepts/glossary#type-script), which determines how the boxes can be spent and updated in the future.
 
 Some people are trying to do things like type script to give BTC the ability to limit and determine how the UTXO can be spent and updated in the future transaction, it is called [covenant](https://cointelegraph.com/explained/what-are-bitcoin-covenants-and-how-do-they-work). However, CKB has such ability from the very first beginning due to the design of it. This also makes CKB the ideal layer 2 for Bitcoin since they share the same ideololegy but CKB has more powerful programability.
 
-Good! We have master the most important ideas of CKB. 
+Good! We have master the most important ideas of CKB. Now let's get to meet its real face.
 
-Now let's get to meet its real face.
+---
 
-## Data structure of CKB
+## Data Structure of CKB
 
 The entire cell data structure looks like this:
 
@@ -86,6 +83,7 @@ Script: {
   hash_type: Uint8, there are 4 allowed values: {0: "data", 1: "type", 2: "data1"i, 3: "data2"}
 }
 ```
+
 You may notice that the code_hash is not the actual code, but some kind of index of the code. This index allows us to retrieve the code. So, where is the code anyway?
 
 The answer is simple: the code is stored in another cell!
@@ -135,7 +133,7 @@ OutPoint: {
 
 ## Difference between lock and type script
 
-These two locks are fundamentally the same, but they are given different names because of their different usages.
+These two locks are fundamentally the same, but they are given different names because of their different executing mechanism and usages.
 
 - Lock script: use to guard the ownership of a Cell. In a transaction, the lock scripts run for all inputs by group.
 - Type script: use to guard the transformation of cells. In a transaction, the type scripts run for all inputs and outputs by group.
@@ -149,5 +147,9 @@ Let's review all the concepts we have learned:
 - Each cell can carry two scripts, one is called lock script (default) and the other, type script (optional).
 - Lock scripts are often used to protect the ownership of the cell. Type scripts often used to handle the cell transformation rules.
 
-That's right, with the above theoretical knowledge, you're ready to hit the road.
+## Next Steps
 
+With the above theoretical knowledge, you're ready to hit the road.
+
+- Continue with the [Dev Environment](/docs/getting-started/dev-environment) to setup and run your first CKB project.
+- Jump directly to our [dApp Tutorials](/docs/getting-started/transfer-ckb) to gain practical knowledge and skills for building on CKB right away.
