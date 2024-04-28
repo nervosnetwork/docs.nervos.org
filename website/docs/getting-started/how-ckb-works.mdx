@@ -8,7 +8,7 @@ sidebar_position: 2
 
 To understand CKB, you need to understand BTC first. If you understand BTC, you already get 80% knowledge about CKB since CKB inhrerintes most of its design and philosiphy from Bitcoin. In that case, you can jump direct to the [rest 20% difference](#generalized-utxos). If you don't, just keep reading and take 1 minute to understand the UTXO, the essentials of Bitcoin.
 
-## Understand UTXO
+## BTC’s UTXO vs. Cash
 
 BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/concentps/UTXO). 
 
@@ -130,13 +130,6 @@ OutPoint: {
   index: The cell position in the transaction to which the target cell belongs
 }
 ```
-
-## Difference between lock and type script
-
-These two locks are fundamentally the same, but they are given different names because of their different executing mechanism and usages.
-
-- Lock script: use to guard the ownership of a Cell. In a transaction, the lock scripts run for all inputs by group.
-- Type script: use to guard the transformation of cells. In a transaction, the type scripts run for all inputs and outputs by group.
 
 ## Congratulations!
 
