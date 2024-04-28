@@ -1,0 +1,148 @@
+---
+id: how-ckb-works
+title: How CKB works
+sidebar_position: 2 
+---
+
+# How CKB Works
+
+To understand CKB, you need to understand BTC first. If you understand BTC, you already get 80% knowledge about CKB since CKB inhrerintes most of its design and philosiphy from Bitcoin. In that case, you can jump direct to the [rest 20% difference](#generalized-utxos). If you don't, just keep reading and take 1 minute to understand the UTXO, the essentials of Bitcoin.
+
+## BTC’s UTXO vs. Cash
+
+BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/concentps/UTXO). 
+
+// picture of utxo boxes
+
+- **Code as a lock:** Unlike a piece of paper, a UTXO is more like a locked box. Each box carries a code that can only be unlocked by some predefined conditions. If you have the right keys, you can unlock the box and claim the ownership. 
+- **Monetary value display:** Each UTXO box records the monetary value on its surface much like the denomination on the cash. 
+- **Divisibility of value:** The value of UTXO boxes can be small or large. Larger value boxes can be split into multiple smaller one, allowing for precise value transactions similar to making change in cash dealings.
+
+Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/concepts/cell-model).  A Cell is the basic unit of CKB, just like UTXOs to BTC.
+
+But what exactly are generalized UTXOs?
+
+## Generalized UTXOs: Understand CKB’s Cells
+
+UTXOs are like boxes that carry a lock made up of codes, with the monetary value clearly marked on the surface; Cells are boxes too, but much more versatile and powerful.
+
+### Dynamic Storage 
+
+UTXO boxes represent a specific amount of BTC and that's all it can hold—just the cryptocurrency value. UTXO boxes cannot expand and do not have the capacity to store additional data.
+
+On the other hand, Cell boxes are different. Each Cell box not only holds a cryptocurrency value but also has storage capacity that can be used to hold arbitrary data. The larger the denomination, the more storage space available. 1 CKB = 1 byte of storage. Thus, if you have 50,000 CKB tokens, you get 50,000 bytes of on-chain storage space as well. 
+
+// here goes another picture
+
+### Versatility of Content
+
+Cell boxes can store any data types, as long as there is enough space to fit them. This feature makes CKB highly flexible, allowing you to store any kinds of information beyond just cryptocurrency value. This is also why CKB is called [common knowledage base](docs/concepts/glossary#common-knowledge-base).
+
+### Advanced Coding Capabilities
+
+Unlike the simple and limited code that UTXOs can carry, Cells can use complex, Turing-complete codes akin to the normal software runing on your computer. You can learn the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [Turing-complete scripts](docs/concepts/glossary#script) further. 
+
+### Dual Lock System
+
+BTC only has one lock to guard the ownership of the UTXO box while CKB can have two locks for one Cell box.
+
+- The first required lock is called [Lock Script](docs/concepts/glossary#lock-script), which is used to safeguard ownership, similar to BTC’s system.
+- The second optional lock is called [Type Script](docs/concepts/glossary#type-script), which determines how the boxes can be spent and updated in the future.
+
+Some people are trying to do things like type script to give BTC the ability to limit and determine how the UTXO can be spent and updated in the future transaction, it is called [covenant](https://cointelegraph.com/explained/what-are-bitcoin-covenants-and-how-do-they-work). However, CKB has such ability from the very first beginning due to the design of it. This also makes CKB the ideal layer 2 for Bitcoin since they share the same ideololegy but CKB has more powerful programability.
+
+Good! We have master the most important ideas of CKB. Now let's get to meet its real face.
+
+---
+
+## Data Structure of CKB
+
+The entire cell data structure looks like this:
+
+```sh
+Cell: {
+  capacity: HexString; # represent the total storage space size of the cell. The basic unit for capcaity is shannon, 1 CKB equals 10**8 shannon.
+  lock: Script; // a piece of codes 
+  type: Script; // a piece of codes
+  data: HexString; // this field can store arbitrary bytes, which means any type of data 
+}
+```
+
+Note：A cell's total size for all four fields above must be less than or equal to the capacity of the cell. As shown below
+
+```sh
+capacity = Cell's total space >= Sum of the 4 fields' byte length
+```
+
+A script‘s structure looks like this:
+
+```sh 
+Script: {
+  code_hash: HexString
+  args: HexString
+  hash_type: Uint8, there are 4 allowed values: {0: "data", 1: "type", 2: "data1"i, 3: "data2"}
+}
+```
+
+You may notice that the code_hash is not the actual code, but some kind of index of the code. This index allows us to retrieve the code. So, where is the code anyway?
+
+The answer is simple: the code is stored in another cell!
+
+We know that the data field of a cell can contain arbitrary data, so we can put the real code in the data field of another cell and implement this cell as a dependency to a transaction. This dependency cell is called [CellDep](/docs/concepts/celldep).
+
+Depending on the value of hash_type, code_hash has different interpretations:
+
+- If hash_type is "data", "data1" or "data2", code_hash should match `blake2b_ckbhash(data)` of a dep cell;
+- If hash_type is "type", code_hash should instead match `blake2b_ckbhash(type script)` of a dep cell.
+
+Please keep in mind that the code_hash and hash_type fields are used to locate the code. When unlocking a cell, a transaction simply imports the dep cell, and CKB will follow the rules above to find and execute the corresponding code.
+
+So why not just put in the real code, but use this indexing approach?
+
+One of the major advantages of this design is that if everyone needs the same type of lock, the lock code will be identical, and so will the code_hash value. Then it is just a matter of introducing the same dep cell rather than deploying the same code all over again for each case.
+
+## What Is A Transaction?
+
+A transaction in CKB is just an action to destroy some cells and create some more.
+
+```sh
+inputs:
+    some cells...
+｜
+｜
+｜
+\/
+outputs:
+    some new cells...
+```
+
+The cells in the inputs must all be live cells. The input cells will be spent and become dead cells after a transaction is committed. The newly created output cells will become new live cells.
+
+When the transaction is submit on-chain, CKB will run all the scripts in the cells of that transaction to see if all the script runs successfully.
+
+CKB will also ensure that the capacity summary of all the output cells must be less than the capacity summary of all the input cells, which means that a transaction cannot mint capacities from the air. The difference between the output capacities and input capacities is the transaction fee for miners.
+
+Note: In practice, for storage optimization reasons, we do not put the complete cell in an input; instead, we just put the cell's index that leads us to the real input cell. This index structure is called OutPoint, which points to a particular cell.
+
+```sh 
+OutPoint: {
+  tx_hash: The hash value of the transaction to which the target cell belongs
+  index: The cell position in the transaction to which the target cell belongs
+}
+```
+
+## Congratulations!
+
+Let's review all the concepts we have learned:
+
+- A cell is a box that can be used to store any type of data. 1 CKB = 1 Byte storage.
+- The lock's code_hash and hash_type fields are used to locate code, which is stored in the data field of a dep cell.
+- Each cell can carry two scripts, one is called lock script (default) and the other, type script (optional).
+- Lock scripts are often used to protect the ownership of the cell. Type scripts often used to handle the cell transformation rules.
+
+## Next Steps
+
+With the above theoretical knowledge, you're ready to hit the road.
+
+- Continue with the [Dev Environment](/docs/getting-started/dev-environment) to setup and run your first CKB project.
+- Jump directly to our [dApp Tutorials](/docs/getting-started/transfer-ckb) to gain practical knowledge and skills for building on CKB right away.
