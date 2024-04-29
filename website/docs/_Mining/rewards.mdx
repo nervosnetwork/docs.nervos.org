@@ -16,9 +16,9 @@ CKB block rewards comprise base reward, secondary reward, proposal reward, and c
 
 ## Base reward
 
-CKB's base reward, similar to Bitcoin's issuance, has a fixed upper limit and undergoes halving approximately every four years. Unlike Bitcoin, which employs fixed block rewards and difficulty adjustment of every 2016 blocks, CKB uses the NC-Max consensus, adjusting difficulty based on orphan block rates. The orphan block rate of the previous Cycle is calculated, and then the difficulty adjustment is calculated based on a series of parameter adjustments to maintain a relatively constant orphan block rate for the entire network. During each difficulty adjustment, the block count for the next Cycle is calculated. Therefore, the number of blocks mined within each Cycle vary. 
+CKB's base reward, similar to Bitcoin's issuance, has a fixed upper limit and undergoes halving approximately every four years. Unlike Bitcoin, which employs fixed block rewards and difficulty adjustment of every 2016 blocks, CKB uses the NC-Max consensus, adjusting difficulty based on the [orphan rate](https://docs-old.nervos.org/docs/basics/glossary#orphan-rate). The orphan rate of the previous [Cycle](https://docs.nervos.org/docs/concepts/glossary#cycles) is calculated, and then the difficulty adjustment is calculated based on a series of parameter adjustments to maintain a relatively constant orphan block rate for the entire network. During each difficulty adjustment, the block count for the next Cycle is calculated. Therefore, the number of blocks mined within each Cycle vary. 
 
-CKB's adjustments are made based on [Cycles](https://docs.nervos.org/docs/concepts/glossary#cycles). The total block reward within each Cycle is a fixed value, with a target Cycle time of 4 hours. That is to say, when the block interval of a Cycle becomes longer and the number of blocks decreases, the block reward per block will increase accordingly, and vice versa. Through this method, CKB ensures that a fixed total block reward is always distributed over an integer number of Cycles every 4 hours, ensuring that the system's [halving schedule](https://explorer.nervos.org/halving) is maintained. 
+CKB's adjustments are made based on Cycles. The total block reward within each Cycle is a fixed value, with a target Cycle time of 4 hours. That is to say, when the block interval of a Cycle becomes longer and the number of blocks decreases, the block reward per block will increase accordingly, and vice versa. Through this method, CKB ensures that a fixed total block reward is always distributed over an integer number of Cycles every 4 hours, ensuring that the system's [halving schedule](https://explorer.nervos.org/halving) is maintained. 
 
 The total amount of base reward is 33.6 billion CKB, halving every 4 years. The [first halving](https://www.youtube.com/watch?v=kZ6v0pqv1w4) took place on November 19, 2023.
 
@@ -49,7 +49,7 @@ Miners who mine block N will receive:
 
 The amount of CKBytes mined annually can be calculated by the formula below:
 
-> Annual Quantity of CKBytes Mined  = Base Reward + Secondary Reward - CKBytes burned in Secondary Issuance
+> Annual Quantity of CKBytes Mined  = Base Reward + Secondary Reward - CKBytes Burned in Secondary Issuance
 > 
 
 Where:
