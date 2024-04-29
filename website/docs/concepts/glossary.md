@@ -983,6 +983,7 @@ Transaction is the basic object created and signed by users to interact with dis
 #### See Also
 - [Blockchain](#blockchain)
 - [Nervos Blockchain](#nervos-blockchain)
+- [UTXO](#utxo)
 
 ---
 
@@ -1059,6 +1060,15 @@ A User-Defined Token is usually referred to by its abbreviation, UDT.
 - [ERC20 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-20)
 - [ERC777 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-777)
 - [Simple UDT Draft Spec on Nervos Talk](https://talk.nervos.org/t/rfc-simple-udt-draft-spec/4333)
+
+---
+
+### UTXO
+Abbreviated from Unspent Transaction Output, UTXO denotes the remaining amount of tokens after a transaction, available for future use. Transactions consume existing UTXOs as inputs and generate new ones as outputs, where each UTXO is spent only once.
+
+#### See Also
+- [Transaction](#transaction)
+- [The UTXO Model Explained](https://www.nervos.org/knowledge-base/utxo_model_explained)
 
 ---
 
