@@ -17,11 +17,20 @@ const homeCardContents: HomeCardProps[] = [
     {
         title: 'Getting Started',
         links: [
+            { label: "How CKB Works", link: "/docs/getting-started/how-ckb-works"},
             { label: "Dev Environment", link: "/docs/getting-started/dev-environment"},
-            { label: "DApp Tutorials", link: "/docs/getting-started/transfer-ckb"},
-            { label: "Scripts Tutorials", link: "/docs/Script/minimal-script"},
+            { label: "DApp Tutorial: Transfer CKB", link: "/docs/getting-started/transfer-ckb"},
         ],
         icon: 'rocket',
+    },
+    {
+        title: 'Scripts',
+        links: [
+            { label: "Intro to Script", link: "/docs/Script/intro-to-script"},
+            { label: "Script Tutorial: A Minimal Script", link: "/docs/Script/minimal-script"},
+            { label: "Script Tutorial: Run JS on CKB", link: "/docs/Script/js-script"},
+        ],
+        icon: 'script',
     },
     {
         title: 'Run a Node',
@@ -33,6 +42,15 @@ const homeCardContents: HomeCardProps[] = [
         icon: 'node',
     },
     {
+        title: 'Mining',
+        links: [
+            { label: "Rewards", link: "/docs/mining/rewards"},
+            { label: "Cost and Profit", link: "/docs/mining/cost-and-profit"},
+            { label: "Guide", link: "/docs/mining/guide"},
+        ],
+        icon: 'mining',
+    },
+    {
         title: 'Concepts',
         links: [
             { label: "Nervos Blockchain", link: "/docs/concepts/nervos-blockchain"},
@@ -40,6 +58,15 @@ const homeCardContents: HomeCardProps[] = [
             { label: "Tokenomics", link: "/docs/concepts/economics"},
         ],
         icon: 'concept',
+    },
+    {
+        title: 'Resources',
+        links: [
+            { label: "Positioning Paper", link: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md"},
+            { label: "CKB RFCs", link: "https://github.com/nervosnetwork/rfcs"},
+            { label: "CKB Dev Log", link: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log"},
+        ],
+        icon: 'resource',
     },
 ];
 
