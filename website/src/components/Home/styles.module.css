@@ -8,6 +8,21 @@
     padding: 2.5rem;
     z-index: 1;
     width: 100%;
+    position: relative;
+}
+.section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/img/bg-noise.webp');
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+    opacity: 0.5; 
+    z-index: -1; 
 }
 .flexCol {
     display:flex;
