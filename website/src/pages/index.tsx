@@ -1,16 +1,23 @@
 import { useEffect } from "react";
+import LogRocket from 'logrocket';
 import Layout from "@theme/Layout";
 import styles from "./styles.module.css";
 import CardLayout from "../components/CardLayout";
 import clsx from "clsx";
 import { HomeCardSection, WalletDisplay, ToolDisplay, DevLogSection, ContactUsSection, ProjectDisplay } from "../components/Home";
 import { useColorMode } from '@docusaurus/theme-common'; 
+import CookieConsent from "../components/CookieConsent";
 
 
 export default function Home() {
+  useEffect(() => {
+    // Initialize LogRocket
+    LogRocket.init('ghkibu/nervos-doc');
+  }, []);
   return (
     <Layout wrapperClassName={clsx(styles.homeLayout, styles.relative)} title="Home" description="Docs for Nervos CKB Blockchain dApp and smart contract development">
       <SwtichToDark />
+      <CookieConsent />
       <div className={clsx(styles.sectionContainer)}>
           <div className={styles.header1}>Nervos CKB Documentation</div>
           <h4 className={clsx(styles.description, styles.titleBtm)}>Discover the power of Nervos CKB through tutorials, guides, and concepts</h4>
