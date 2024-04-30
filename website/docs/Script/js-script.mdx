@@ -93,9 +93,9 @@ Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
 </Tabs>
 ```
 
-with the `-r` option, `ckb-js-vm` will read a local JS file via CKB-Debugger. This function is
+With the `-r` option, `ckb-js-vm` will read a local JS file via CKB-Debugger. This function is
 intended for testing purposes and does not function in a production environment. However, we can see the
-running output, which includes a `hello, world` message. The run result is 0, indicating that the `hellow.js` Script executes successfully. 
+running output, which includes a `hello, world` message. The run result is 0, indicating that the `hello.js` Script executes successfully. 
 Also, you can see how many `cycles`(the overhead required to execute a Script) are needed to run the JS Script in the output as well.
 
 ## Integrate ckb-js-vm
@@ -203,7 +203,7 @@ following structure:
 code_hash: <code_hash to ckb-js-vm cell>
 hash_type: <hash_type>
 args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to
-javscript code cell, 1 byte> <javscript code args, variable length>
+javascript code cell, 1 byte> <javascript code args, variable length>
 ```
 :::note
 2 bytes ckb-js-vm args are reserved for further use
@@ -343,7 +343,7 @@ First, We deploy the `ckb-js-vm`, `hello.bc` and `ALWAYS_SUCCESS` binaries to th
 Lock Script in our test flow.
 
 Then, we build an output Cell that carries a special Type Script to execute the `hello.js` codes.
-The `code_hash` and `hash_type` in the Type Script referece the `ckb-js-vm` Script Cell. It
+The `code_hash` and `hash_type` in the Type Script reference the `ckb-js-vm` Script Cell. It
 is automatically done by this line of code:
 
 ```rust
@@ -879,7 +879,7 @@ Just like the previous tests, we deploy all the Scripts we need, including `ckb-
 `sudt.js` and so on. We then assemble a transaction that produce an output Cell that carries our
 `run-js` Script as its Type Script. In the args of this Type Script, we follow the `ckb-js-vm` args
 data structure. The difference this time is that we also include the arguments for the `sudt.js` within
-the Type Script args. This allows our `sudt.js` code can read its own arguments and get exected as
+the Type Script args. This allows our `sudt.js` code can read its own arguments and get executed as
 expected. The arguments for `sudt.js` include a Lock Script hash, which is used to determine if it is under
 `owner_mode` to perform different validations.
 
@@ -900,7 +900,7 @@ expected. The arguments for `sudt.js` include a Lock Script hash, which is used 
 ```
 
 Lastly, we put the token amount in the data field of the output Cell containing our `run-js` Script and then
-assemble the transaction for submmision on-chain:
+assemble the transaction for submission on-chain:
 
 ```rust
     // prepare output cell data
@@ -950,7 +950,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; fini
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how to write Scripts that integrates
+By following this tutorial so far, you have mastered how to write Scripts that integrates
 `ckb-js-vm` to execute JavaScript codes on CKB. Here's a quick recap:
 
 - Use `ckb-script-templates` to init a Script project

@@ -227,11 +227,16 @@
   margin-top: 0.25rem;
 }
 .theme-doc-sidebar-menu > li:nth-child(6) > div > a:before {
+  content:url('/svg/icon-sidebar-mining.svg');
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+}
+.theme-doc-sidebar-menu > li:nth-child(7) > div > a:before {
   content:url('/svg/icon-sidebar-concept.svg');
   margin-right: 0.5rem;
   margin-top: 0.25rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(7) > a:before {
+.theme-doc-sidebar-menu > li:nth-child(8) > a:before {
   content:url('/svg/icon-sidebar-ecosystem.svg');
   margin-right: 0.5rem;
   margin-top: 0.25rem;
