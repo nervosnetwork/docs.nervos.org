@@ -131,12 +131,7 @@ const tutorialFrameContent = [
   },
 ];
 
-const MORETOOLCARDTITLE = "More Dev Tools →";
-const MORETOOLCARDHREF = "/docs/getting-started/devtool";
-
 export {
   toolCardContents,
   tutorialFrameContent,
-  MORETOOLCARDTITLE,
-  MORETOOLCARDHREF,
 };

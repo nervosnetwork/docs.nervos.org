@@ -4,11 +4,11 @@ import WalletCard, { WalletCardProps } from "../WalletCard";
 import { useEffect, useState } from "react";
 import CardLayout from "../CardLayout";
 import Link from "@docusaurus/Link";
-import { contactUsContents, devToolSectionContents, homeCardContents } from "@site/src/pages/homeContents";
-import { walletCardContents } from "@site/docs/wallets/CardContents";
-import ecoCardContents from "@site/docs/EcoCardContents";
 import EcoCard, { EcoCardProps } from "../EcoCard";
 import Button from "../Button";
+import { contactUsContents, devToolSectionContents, homeCardContents } from "../../pages/homeContents";
+import { walletCardContents } from "../../../docs/integrate-wallets/CardContents";
+import ecoCardContents from "../../../docs/ecosystem/EcoCardContents";
 
 
 interface EcoSectionProps {

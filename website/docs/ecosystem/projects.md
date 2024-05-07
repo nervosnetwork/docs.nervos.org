@@ -1,6 +1,6 @@
 ---
-id: ecosystem
-title: Ecosystem
+id: projects
+title: Projects
 sidebar_position: 8
 ---
 
@@ -9,7 +9,7 @@ import CardLayout from '@components/CardLayout';
 import TagFilter from '@components/TagFilter';
 import ecoCardContents from './EcoCardContents';
 
-# Ecosystem
+# Projects
 
 Discover our ecosystem of tools, resources, and projects that are essential for building your application
 

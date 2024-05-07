@@ -185,70 +185,95 @@
 
 /* Sidebar Menu */
 .menu {
-  padding: 0.5rem !important;
+  padding: 1rem 1rem 3rem 1rem!important;
+}
+.theme-doc-sidebar-item-category:not(:first-child) {
+  margin-top: 1rem;
 }
 .menu__link, .menu__list-item-collapsible {
+  padding-left: 0;
+  padding-right: 0;
+}
+.menu__link {
   height: 2.5rem;
   border-radius: 20px !important;
+}
+.menu__list-item-collapsible {
+  height: 3rem;
+  cursor: default;
+  background-color: transparent !important;
+}
+.menu__list-item-collapsible > .menu__link {
+  font-weight: bold;
+  color: var(--text-tertiary);
 }
 
 .menu__link--active {
   font-weight: 700;
 }
-
 .menu__list .menu__list {
-  padding-left: calc(var(--ifm-menu-link-padding-horizontal) + 1.25em);
+  margin-top: 0;
+  padding-left: 0;
+}
+.menu__list .menu__list > .menu__list-item > .menu__link {
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) + 1rem);
+  padding-right: 1rem;
 }
 
 /* Add icon next to the menus */
-.theme-doc-sidebar-menu > li:first-child > div > a:before {
+.category-getting-started > div > a:before {
   content:url('/svg/icon-sidebar-rocket.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(2) > div > a:before {
-  content:url('/svg/icon-sidebar-script.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
-}
-.theme-doc-sidebar-menu > li:nth-child(3) > a:before {
-  content:url('/svg/icon-sidebar-wallet.svg');
-  margin-right: 0.5em;
-  margin-top: 0.25em;
-}
-.theme-doc-sidebar-menu > li:nth-child(4) > a:before {
-  content:url('/svg/icon-sidebar-rpc.svg');
+.category-dapp-tutorials > div > a:before {
+  content:url('/svg/icon-sidebar-tutorial.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(5) > div > a:before {
+.category-scripts > div > a:before {
+  content:url('/svg/icon-sidebar-script.svg');
+  margin-right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.category-integrate-wallets > div > a:before {
+  content:url('/svg/icon-sidebar-wallet.svg');
+  margin-right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.category-network-and-nodes > div > a:before {
   content:url('/svg/icon-sidebar-node.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(6) > div > a:before {
+.category-mining > div > a:before {
   content:url('/svg/icon-sidebar-mining.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(7) > div > a:before {
+.category-tech-explanation > div > a:before {
   content:url('/svg/icon-sidebar-concept.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.theme-doc-sidebar-menu > li:nth-child(8) > a:before {
+.category-ecosystem > div > a:before {
   content:url('/svg/icon-sidebar-ecosystem.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
-.category-resource > div > a:before {
+.category-resources > div > a:before {
   content:url('/svg/icon-sidebar-resource.svg');
   margin-right: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.menu__caret {
-  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 /* Footer */
