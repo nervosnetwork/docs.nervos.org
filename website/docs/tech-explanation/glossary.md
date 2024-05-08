@@ -1,7 +1,6 @@
 ---
 id: glossary
 title: Glossary
-sidebar_position: 7
 ---
 
 import useBaseUrl from "@docusaurus/useBaseUrl";
@@ -169,7 +168,7 @@ A Cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 - [Type Script](#type-script)
 - [Dead Cell](#dead-cell)
 - [Live Cell](#live-cell)
-- [Cell Model](/docs/concepts/cell-model)
+- [Cell Model](/docs/tech-explanation/cell-model)
 - [UTXO on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
 
 ---
@@ -182,7 +181,7 @@ The Cell Model is a new construction that combines many of the advantages of Eth
 #### See Also
 - [Lock Script](#lock-script)
 - [Type Script](#type-script)
-- [Cell Model](/docs/concepts/cell-model)
+- [Cell Model](/docs/tech-explanation/cell-model)
 - [Cell Model on the Nervos Blog](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571)
 - [UTXO on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
 
@@ -1845,7 +1844,7 @@ Incentives paid to miners in CKBytes by epoch in CKB base issuance. Under CKB's 
 
 The initial base issuance is 4.2 billion CKBytes per year. Similar to Bitcoin, the base issuance halves approximately every 4 years until it stops.
 
-To calculate, [block reward](/docs/concepts/glossary#block-reward) = `initial_primary_epoch_reward` / epoch_length (the number of blocks in the epoch).
+To calculate, [block reward](/docs/tech-explanation/glossary#block-reward) = `initial_primary_epoch_reward` / epoch_length (the number of blocks in the epoch).
 
 ```
 pub(crate) const INITIAL_PRIMARY_EPOCH_REWARD: Capacity = Capacity::shannons(1_917_808_21917808);

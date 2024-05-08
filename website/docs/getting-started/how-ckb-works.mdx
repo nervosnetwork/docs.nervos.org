@@ -9,7 +9,7 @@ To understand CKB, you first need to understand BTC. If you're familiar with BTC
 
 ## BTC’s UTXO vs. Cash
 
-BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/concepts/glossary/#utxo). 
+BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/tech-explanation/glossary/#utxo). 
 
 <img src="/img/how-ckb-works/utxo-box.png" alt="Features of UTXO" width="688" height="387" />
 
@@ -17,7 +17,7 @@ BTC works just like cash. To know how much money you have, you simply count the 
 - **Monetary value display:** Each UTXO box records the monetary value on its surface much like the denomination on the cash. 
 - **Divisibility of value:** The value of UTXO boxes can be small or large. Larger value boxes can be split into multiple smaller one, allowing for precise value transactions similar to making change in cash dealings.
 
-Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/concepts/cell-model).  A Cell is the basic unit of CKB, just like UTXOs to BTC.
+Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/tech-explanation/cell-model).  A Cell is the basic unit of CKB, just like UTXOs to BTC.
 
 But what exactly are generalized UTXOs?
 
@@ -33,18 +33,18 @@ On the other hand, Cell boxes are different. Each Cell box not only holds a cryp
 
 ### Versatility of Content
 
-Cell boxes can store any data types, as long as there is enough space to fit them. This feature makes CKB highly flexible, allowing you to store any kinds of information beyond just cryptocurrency value. This is also why CKB is called [common knowledge base](/docs/concepts/glossary/#common-knowledge-base).
+Cell boxes can store any data types, as long as there is enough space to fit them. This feature makes CKB highly flexible, allowing you to store any kinds of information beyond just cryptocurrency value. This is also why CKB is called [common knowledge base](/docs/tech-explanation/glossary/#common-knowledge-base).
 
 ### Advanced Coding Capabilities
 
-Unlike the simple and limited code that UTXOs can carry, Cells can use complex, Turing-complete codes akin to the normal software runing on your computer. You can learn the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [Turing-complete scripts](/docs/concepts/glossary/#script) further. 
+Unlike the simple and limited code that UTXOs can carry, Cells can use complex, Turing-complete codes akin to the normal software runing on your computer. You can learn the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [Turing-complete scripts](/docs/tech-explanation/glossary/#script) further. 
 
 ### Dual Lock System
 
 BTC only has one lock to guard the ownership of the UTXO box while CKB can have two locks for one Cell box.
 
-- The first required lock is called [Lock Script](/docs/concepts/glossary/#lock-script), which is used to safeguard ownership, similar to BTC’s system.
-- The second optional lock is called [Type Script](/docs/concepts/glossary/#type-script), which determines how the boxes can be spent and updated in the future.
+- The first required lock is called [Lock Script](/docs/tech-explanation/glossary/#lock-script), which is used to safeguard ownership, similar to BTC’s system.
+- The second optional lock is called [Type Script](/docs/tech-explanation/glossary/#type-script), which determines how the boxes can be spent and updated in the future.
 
 Some people are trying to do things like type script to give BTC the ability to limit and determine how the UTXO can be spent and updated in the future transaction, it is called [covenant](https://cointelegraph.com/explained/what-are-bitcoin-covenants-and-how-do-they-work). However, CKB has such ability from the very first beginning due to the design of it. This also makes CKB the ideal layer 2 for Bitcoin since they share the same ideololegy but CKB has more powerful programability.
 
@@ -133,5 +133,5 @@ Let's review all the concepts we have learned:
 
 With the above theoretical knowledge, you're ready to hit the road.
 
-- Continue with the [Dev Environment](/docs/getting-started/dev-environment) to setup and run your first CKB project.
-- Jump directly to our [dApp Tutorials](/docs/getting-started/transfer-ckb) to gain practical knowledge and skills for building on CKB right away.
+- Continue with the [Dev Environment](/docs/getting-started/quick-start) to setup and run your first CKB project.
+- Jump directly to our [dApp Tutorials](/docs/dapp-tutorials/transfer-ckb) to gain practical knowledge and skills for building on CKB right away.

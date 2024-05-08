@@ -1,7 +1,6 @@
 ---
 id: consensus
 title: Consensus
-sidebar_position: 4
 ---
 
 Consensus in Nervos refers to a state of agreement among participants on the blockchain’s history and current state. The state encompasses data such as each user's CKBytes holdings and their respective digital assets.

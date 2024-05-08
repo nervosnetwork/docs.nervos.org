@@ -18,26 +18,26 @@ const homeCardContents: HomeCardProps[] = [
         title: 'Getting Started',
         links: [
             { label: "How CKB Works", link: "/docs/getting-started/how-ckb-works"},
-            { label: "Dev Environment", link: "/docs/getting-started/dev-environment"},
-            { label: "DApp Tutorial: Transfer CKB", link: "/docs/getting-started/transfer-ckb"},
+            { label: "Quick Start (5 min)", link: "/docs/getting-started/quick-start"},
+            { label: "DApp Tutorial: Transfer CKB", link: "/docs/dapp-tutorials/transfer-ckb"},
         ],
         icon: 'rocket',
     },
     {
         title: 'Scripts',
         links: [
-            { label: "Intro to Script", link: "/docs/Script/intro-to-script"},
-            { label: "Script Tutorial: A Minimal Script", link: "/docs/Script/minimal-script"},
-            { label: "Script Tutorial: Run JS on CKB", link: "/docs/Script/js-script"},
+            { label: "Intro to Script", link: "/docs/scripts/intro-to-script"},
+            { label: "Script Tutorial: A Minimal Script", link: "/docs/scripts/minimal-script"},
+            { label: "Script Tutorial: Run JS on CKB", link: "/docs/scripts/js-script"},
         ],
         icon: 'script',
     },
     {
         title: 'Run a Node',
         links: [
-            { label: "Run a Mainnet Node", link: "/docs/node/run-mainnet-node"},
-            { label: "Run a Testnet Node", link: "/docs/node/run-testnet-node"},
-            { label: "Run a Public RPC Node", link: "/docs/node/run-public-rpc-node"},
+            { label: "Run a Mainnet Node", link: "/docs/network-and-nodes/run-mainnet-node"},
+            { label: "Run a Testnet Node", link: "/docs/network-and-nodes/run-testnet-node"},
+            { label: "Run a Public RPC Node", link: "/docs/network-and-nodes/run-public-rpc-node"},
         ],
         icon: 'node',
     },
@@ -53,9 +53,9 @@ const homeCardContents: HomeCardProps[] = [
     {
         title: 'Concepts',
         links: [
-            { label: "Nervos Blockchain", link: "/docs/concepts/nervos-blockchain"},
-            { label: "Cell Model", link: "/docs/concepts/cell-model"},
-            { label: "Tokenomics", link: "/docs/concepts/economics"},
+            { label: "Nervos Blockchain", link: "/docs/tech-explanation/nervos-blockchain"},
+            { label: "Cell Model", link: "/docs/tech-explanation/cell-model"},
+            { label: "Tokenomics", link: "/docs/tech-explanation/economics"},
         ],
         icon: 'concept',
     },

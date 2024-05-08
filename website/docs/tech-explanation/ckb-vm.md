@@ -1,7 +1,6 @@
 ---
 id: ckb-vm
 title: CKB-VM
-sidebar_position: 3
 ---
 
 Nervos introduces CKB-VM, a virtual machine powered by the RISC-V instruction set, further leveraging Turing-complete programmability, transforming smart contract execution on the Nervos blockchain. It provides considerable amount of power and flexibility while maintaining a secure and high-performance environment.

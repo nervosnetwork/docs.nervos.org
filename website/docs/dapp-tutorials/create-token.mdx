@@ -19,7 +19,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 ## Custom Token on CKB
 
-Different from [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on the UTXO-like [Cell Model](/docs/concepts/cell-model).
+Different from [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on the UTXO-like [Cell Model](/docs/tech-explanation/cell-model).
 
 In CKB, custom tokens are called User-Defined-Token, aka UDT. The core team of CKB has proposed a minimal standard for UDT called xUDT(extensible UDT). In this tutorial, we will use the pre-deployed smart contracts `xUDT script` to issue custom tokens.
 
@@ -27,7 +27,7 @@ The high-level workflow to issue a custom token with xUDT goes like this:
 
 When you issue a token, you create a special Cell that presents some balance of your token, like a piece of printed cash to the dollars.
 
-For this special Cell, its data field contains the amount of the token and its type script is xUDT script where the args of that Script will be the issuer's [lock script hash](/docs/concepts/glossary#lock-script-hash).
+For this special Cell, its data field contains the amount of the token and its type script is xUDT script where the args of that Script will be the issuer's [lock script hash](/docs/tech-explanation/glossary#lock-script-hash).
 
 This issuer's lock script hash works like the unique ID for the custom token. Different lock script Hash means a different kind of token. It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
 
@@ -99,7 +99,7 @@ This function accepts two parameters:
 - `privKey`: The private key of the issuer 
 - `amount`: The amount of token
 
-Note that we aim to create an output Cell whose [type script](/docs/concepts/glossary#type-script) is an xUDT script. The args of this xUDT script are the issuer's lock script hash, which is why we include the following lines of code:
+Note that we aim to create an output Cell whose [type script](/docs/tech-explanation/glossary#type-script) is an xUDT script. The args of this xUDT script are the issuer's lock script hash, which is why we include the following lines of code:
 
 ```ts
 const { lockScript } = generateAccountFromPrivateKey(privKey);
@@ -141,7 +141,7 @@ txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
 ...
 ```
 
-Lastly, we do the signing and witness data part, just like what we mentioned in the previous tutorial in the [Transfer CKB](/docs/getting-started/transfer-ckb) example:
+Lastly, we do the signing and witness data part, just like what we mentioned in the previous tutorial in the [Transfer CKB](/docs/dapp-tutorials/transfer-ckb) example:
 
 ```ts
 // prepare witness data

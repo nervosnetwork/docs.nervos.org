@@ -1,15 +1,14 @@
 ---
 id: intro-to-script
 title: "Intro to Script"
-sidebar_position: 1
 ---
 
 # Intro to Script
 
-A [Script](/docs/concepts/glossary#script) in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitray logic to guard and protect your on-chain assets. You can think of it as smart contract.
+A [Script](/docs/tech-explanation/glossary#script) in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitray logic to guard and protect your on-chain assets. You can think of it as smart contract.
 
 ## How a Script Work
-When executing a Script, CKB takes the executables and runs them in a virtual machine environment called [CKB-VM](/docs/concepts/ckb-vm). After the execution, if the program returns a code of 0, we consider the Script successful; any non-zero return codes will be considered Script failures.
+When executing a Script, CKB takes the executables and runs them in a virtual machine environment called [CKB-VM](/docs/tech-explanation/ckb-vm). After the execution, if the program returns a code of 0, we consider the Script successful; any non-zero return codes will be considered Script failures.
 
 When you submit a transaction to CKB, it executes all the Scripts from the transaction to ensure that each Script succeeds. If any Script fails, the transaction will not be included on-chain.
 

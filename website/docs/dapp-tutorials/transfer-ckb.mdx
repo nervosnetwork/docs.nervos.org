@@ -19,7 +19,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 ## How Transaction Works
 
-CKB is based on a UTXO-like [Cell Model](/docs/concepts/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously. A Cell can store any type of data.
+CKB is based on a UTXO-like [Cell Model](/docs/tech-explanation/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously. A Cell can store any type of data.
 
 A transaction in CKB works similarly to Bitcoin. Each transaction consumes some input Cells and produces new output Cells. Note that the total capacities of the output Cells cannot be larger than those of the input Cells, similar to how UTXOs are transferred and converted in Bitcoin.
 
@@ -86,7 +86,7 @@ export const generateAccountFromPrivateKey = (privKey: string): Account => {
 };
 ```
 
-What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [lock script](/docs/concepts/glossary#lock-script) to obtain the corresponding address of this account. A lock script ensures that only the owner can consume their Live Cells.
+What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [lock script](/docs/tech-explanation/glossary#lock-script) to obtain the corresponding address of this account. A lock script ensures that only the owner can consume their Live Cells.
 
 Here, we use the CKB standard lock script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a lock script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
 
@@ -107,7 +107,7 @@ export async function capacityOf(address: string): Promise<BI> {
 }
 ```
 
-In Nervos CKB, [Shannon](/docs/concepts/glossary#shannon) is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Note that in this tutorial, we use only the Shannon unit.
+In Nervos CKB, [Shannon](/docs/tech-explanation/glossary#shannon) is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Note that in this tutorial, we use only the Shannon unit.
 
 Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:
 
@@ -125,7 +125,7 @@ export async function transfer(options: Options): Promise<string>;
 
 The `transfer` function accepts an `Option` parameter, which includes necessary information about the transfer such as `fromAddress`, `toAddress`, `amount`, and the `privateKey` to sign the transfer transaction.
 
-What this transfer transaction does is collect and consume as many capacities as needed with some [Live Cells](/docs/concepts/glossary#live-cell) as the input Cells and produce some new output Cells. The lock script of all these new Cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
+What this transfer transaction does is collect and consume as many capacities as needed with some [Live Cells](/docs/tech-explanation/glossary#live-cell) as the input Cells and produce some new output Cells. The lock script of all these new Cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
 
 Next, let's build the transaction for transferring the balance. The first step is to create an empty `txSkeleton`.
 
@@ -201,7 +201,7 @@ txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
 );
 ```
 
-Next, update specific [witness](/docs/concepts/glossary#witness) data in the transaction. The witness serves as a place to input data such as signatures for the transaction to be verified on the blockchain. The format of the witness data is flexible; however, in this instance, we adhere to the [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) specification for basic transaction structure. It is important to note that this specification may evolve to reflect best practices.
+Next, update specific [witness](/docs/tech-explanation/glossary#witness) data in the transaction. The witness serves as a place to input data such as signatures for the transaction to be verified on the blockchain. The format of the witness data is flexible; however, in this instance, we adhere to the [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) specification for basic transaction structure. It is important to note that this specification may evolve to reflect best practices.
 
 The `witnessArgs` consists of 3 distinct parts, each corresponding to the different data required for the execution of specific scripts:
 

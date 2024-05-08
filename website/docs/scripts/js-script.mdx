@@ -1,7 +1,6 @@
 ---
 id: js-script
 title: "Tutorial: Run JS on CKB"
-sidebar_position: 4 
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -20,7 +19,7 @@ import TutorialHeader from "@components/TutorialHeader";
 
 As we have learned before, you can use any programming language to write a Script (Smart contract) for CKB.
 But does it really work in reality? This tutorial will show a full example of using JavaScript to
-write Scripts and execute them in the [CKB-VM](/docs/concepts/ckb-vm).
+write Scripts and execute them in the [CKB-VM](/docs/tech-explanation/ckb-vm).
 
 The process is as follows: first we port a JavaScript engine as a base Script to CKB. Then, we write
 the business logic in JavaScript and execute this JS-powered Script within the base Script on top of CKB-VM.
@@ -636,7 +635,7 @@ We have our custom Script `run-js` that can execute JS codes and customize valid
 write some tests for our Script.
 
 This time, let's use a more realistic JS Script to test. We will utilize the [ckb-syscall JS binding](https://github.com/nervosnetwork/ckb-js-vm/blob/main/docs/syscalls.md) to write a
-[sudt](/docs/concepts/glossary#simple-udt) example in
+[sudt](/docs/tech-explanation/glossary#simple-udt) example in
 JavaScript and verify that it executes successfully in our `run-js` Scripts.
 
 ```js title='my-first-script-workspace/js/sudt.js'

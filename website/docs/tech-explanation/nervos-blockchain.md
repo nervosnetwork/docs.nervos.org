@@ -1,7 +1,6 @@
 ---
 id: nervos-blockchain
 title: Nervos Blockchain
-sidebar_position: 1
 ---
 
 ## What is the Nervos Blockchain?

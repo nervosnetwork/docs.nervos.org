@@ -1,7 +1,6 @@
 ---
 id: projects
 title: Projects
-sidebar_position: 8
 ---
 
 import EcoCard from '@components/EcoCard';

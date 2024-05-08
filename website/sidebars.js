@@ -7,7 +7,7 @@ export default {
       collapsible: false,
       items: [
         "getting-started/how-ckb-works",
-        "getting-started/how-ckb-works", // TODO: Replace this with quick-start
+        "getting-started/quick-start",
         "getting-started/devtool",
       ]
     },
@@ -42,7 +42,7 @@ export default {
       className: "category-integrate-wallets",
       collapsible: false,
       items: [
-        "integrate-wallets/intro-to-wallet",
+        "integrate-wallets/intro-to-wallets",
         "integrate-wallets/joyid",   
       ]
     },
@@ -55,6 +55,7 @@ export default {
           "network-and-nodes/rpcs",
           "network-and-nodes/run-mainnet-node",
           "network-and-nodes/run-testnet-node",
+          "network-and-nodes/run-devnet-node",
           "network-and-nodes/run-public-rpc-node",
       ]
     },
