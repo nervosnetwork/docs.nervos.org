@@ -4,11 +4,11 @@ import WalletCard, { WalletCardProps } from "../WalletCard";
 import { useEffect, useState } from "react";
 import CardLayout from "../CardLayout";
 import Link from "@docusaurus/Link";
-import { contactUsContents, devToolSectionContents, homeCardContents } from "@site/src/pages/homeContents";
-import { walletCardContents } from "@site/docs/wallets/CardContents";
-import ecoCardContents from "@site/docs/EcoCardContents";
 import EcoCard, { EcoCardProps } from "../EcoCard";
 import Button from "../Button";
+import { contactUsContents, devToolSectionContents, homeCardContents } from "../../pages/homeContents";
+import { walletCardContents } from "../../../docs/integrate-wallets/CardContents";
+import ecoCardContents from "../../../docs/ecosystem/EcoCardContents";
 
 
 interface EcoSectionProps {
@@ -117,7 +117,7 @@ function WalletDisplay(): JSX.Element {
                 ))}
             </CardLayout>
         </div>
-        <Link to={"/docs/wallets"}>View wallets →</Link>
+        <Link to={"/docs/integrate-wallets/intro-to-wallets"}>View wallets →</Link>
     </EcoSection>
   );
 }
@@ -219,7 +219,7 @@ function ProjectDisplay(): JSX.Element {
                 <button onClick={goToPrevious} className={styles.arrowLeft}>
                     <img src={'/svg/icon-chevron-right.svg'} width={24} height={24} alt="Previous"/>
                 </button>
-                <Button link={'/docs/ecosystem'}>Explore all projects</Button>
+                <Button link={'/docs/ecosystem/projects'}>Explore all projects</Button>
                 <button onClick={goToNext} className={styles.arrowRight}>
                     <img src={'/svg/icon-chevron-right.svg'} width={24} height={24} alt="Next"/>
                 </button>

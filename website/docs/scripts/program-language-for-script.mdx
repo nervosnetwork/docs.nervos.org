@@ -1,0 +1,63 @@
+---
+id: program-language-for-script
+title: "Program Languages for Script"
+---
+
+# Program Languages for Script
+
+We have learned what a Script is and how a Script works. So, how do we write a Script then? What kind of programming language do I need to use?
+
+Unlike other blockchains, the CKB-VM resembles a real mini-computer based on [RISC-V](https://riscv.org/), so the CKB Script code also looks like a normal Unix-style executable program that we run on a computer.
+
+You can actually write Scripts in any programming language you want, as long as you have the proper toolchain.
+
+However, at the current stage, we recommend that you use [Rust](https://www.rust-lang.org/) to write CKB Scripts since it has a complete toolchain to work with CKB.
+
+:::info
+We will use `Rust` as the programming language across the tutorials on this website.
+:::
+
+## Rust
+f
+Rust can easily compile the source code to a RISC-V target, allowing the code to be executed on CKB-VM. 
+
+We have also built some useful Rust libraries and template tools to help developers build Script:
+
+- CKB-STD: [https://github.com/nervosnetwork/ckb-std](https://github.com/nervosnetwork/ckb-std)
+- CKB_Testtools: [https://docs.rs/ckb-testtool/latest/ckb_testtool](https://docs.rs/ckb-testtool/latest/ckb_testtool)
+- Cargo-Generate Script Templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+
+## C
+
+You can also use [C](https://en.wikipedia.org/wiki/C_(programming_language)) language and [GCC](https://gcc.gnu.org/) to write and compile CKB Scripts to RISC-V binaries. 
+
+Some of our developers have used this way to build Scripts like [sUDT](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md) and [xUDT](https://github.com/nervosnetwork/rfcs/pull/428). You can check [ckb-production-scripts](https://github.com/nervosnetwork/ckb-production-scripts/tree/master/c) for reference.
+
+- [ckb-c-stdlib](https://github.com/nervosnetwork/ckb-c-stdlib)
+
+## JavaScript, Golang, Ruby, Lua, Python...Too?
+
+Since the CKB-VM is akin to a real mini-computer, there's no reason you can't run different programming languages on this mini-computer, right?
+
+The answer is yes, you can run code written in any programming language on CKB. The way it works is that you first deploy a language-specific dependency as a Script on CKB, then run your code on top of this Script, and boom, it just works!
+
+Take JavaScript, for example. All we need to do is take a JavaScript implementation for the embedded system, e.g., [duktape](https://github.com/svaarala/duktape), compile it from C to RISC-V binary, put it on-chain, and then boom, we can run JavaScript in CKB! Since we are working with a real mini-computer here, there’s no stopping us from embedding another VM as a CKB Script to the CKB VM, and exploring this VM on top of VM path.
+
+Expanding from this path, we can also have Ruby on CKB via [mruby](https://github.com/mruby/mruby), and we could even have Bitcoin Script or EVM on-chain if we just compile their VMs and put them on-chain.
+
+If you would like to explore such paths, you can check the following two examples:
+
+- [duktape on CKB](https://xuejie.space/2019_07_13_introduction_to_ckb_script_programming_script_basics)
+- [Godwoken-Polyjuice](https://github.com/godwokenrises/godwoken/tree/develop/gwos-evm): implementation of EVM on CKB
+
+### Yes, I Know This Is Possible, But Won’t a VM on Top of a VM Be Slow?
+
+The answer really depends on your use case. Saying whether this will be slow isn't possible without actual benchmarks, which themselves are not meaningful unless applied to a real use case with standard hardware requirements. So, we'll need to wait and see if this really becomes an issue.
+
+Besides, we are actively working in this field to optimize both the CKB VM and the VMs running on top of the CKB VM to make them faster and more efficient :P
+
+### But What If I Still Want to Use a Script-Dedicated Language?
+
+If you come from the Ethereum community, you might be accustomed to using a dedicated programming language to write smart contracts, like [Solidity](https://soliditylang.org/).
+
+You might wonder if there is a similar option for CKB Scripts. Indeed, there is a dedicated programming language for CKB Scripts developed by the CKB community called [Cell-Script](https://github.com/cell-labs/cell-script). It is still in the early stages, but feel free to try it out and provide feedback to the community.

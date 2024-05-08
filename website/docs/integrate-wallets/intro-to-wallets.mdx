@@ -1,0 +1,58 @@
+---
+id: intro-to-wallets
+title: Intro to Wallets
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+import Link from "@docusaurus/Link";
+import WalletCard from '@components/WalletCard';
+import CardLayout from '@components/CardLayout';
+import { walletCardContents } from './CardContents';
+
+Essential insights for CKB dApp developers, covering wallet choices, address specifics, and CKB transfer guidelines
+
+
+## CKB Wallet Options
+
+Crypto wallets store private keys to access cryptos. They come in two types: hot wallets (online) and cold wallets (offline). Hot wallets, such as web-based, desktop, and mobile wallets, offer convenience but pose higher risk. Cold wallets, including paper and hardware wallets, provide enhanced security by keeping keys offline.
+
+When it comes to storing and securing CKB assets, users have various options, including hot and cold wallets. While storing assets on exchanges is common, additional security can be achieved with dedicated wallets. 
+
+These wallets listed below offer custody and security services tailored to CKB. For more information, refer to the respective guides for each wallet.
+
+<CardLayout colNum={[2, 2, 2, 2]}> 
+{walletCardContents.map(({ index, title, href, tags }) => (
+    <WalletCard
+      key={index}
+      title={title}
+      href={href}
+      tags={tags}
+    />
+  ))}
+</CardLayout>
+---
+
+## CKB Address
+
+Nervos CKB follows [Bitcoin's bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki) for address generation. It features a new full address format like this: `ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`. 
+
+The previous short address format is now **deprecated**, for example: `ckb1qyq5lv479ewscx3ms620sv34pgeuz6zagaaqklhtgg`. 
+
+Tools for address generation and transformation include:
+- [CKB.tools/address](https://ckb.tools/)
+- [CKB Lumos](https://lumos-website.vercel.app/#2-generate-a-wallet-account)
+- [ckb-address-transformer](https://codesandbox.io/s/ckb-address-transformer-524gi)
+
+For detailed specifications, refer to [RFC0021: CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md).
+
+
+## Requirements for CKB Transfers
+
+To initiate a transfer, you need at least one Cell. Each Cell comprises the essential data fields: `capacity`, `lock`, `args`, and `hash_type`, with storage sizes as follows:
+- `capacity`: 8 bytes
+- `lock`: 32 bytes
+- `args`: 20 bytes
+- `hash_type`: 1 byte
+
+Thus, a single Cell requires at least 61 bytes of storage, equivalent to 61 CKBytes (CKB). **Allocating 62 CKB is recommended to cover additional fees.**
