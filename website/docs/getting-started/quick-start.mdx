@@ -1,0 +1,396 @@
+---
+id: qucik-start
+title: Quick Start(5m)
+sidebar_position: 2 
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Quick Start(5m)
+
+Use [offckb](https://www.npmjs.com/package/@offckb/cli) to quickly setup a local dev environment with full-stack dApp boilerplates.
+
+Offckb provides a one-line command to start a local blockchain(CKB Devnet) with pre-funded test accounts and built-in [Scripts](/docs/concepts/glossary#script) like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
+
+## Install
+
+```bash
+npm install -g @offckb/cli
+```
+
+:::note
+Required offckb version >= 0.2.2
+:::
+
+## Create A New Project
+
+Select from different boilerplates to create your project:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-project" label="Command">
+```
+```bash
+offckb create <your-project-name> 
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-create-project" label="Response">
+```
+```bash
+? Select a bare template
+  Remix-Vite Bare Templates
+❯ Next.js Bare Templates
+A full-stack template with Next.js framework and ckb-script-templates,
+[next.js,tailwindcss,ckb-script-templates,typescript,rust]
+
+Cloning into '/Users/Desktop/offckb/templates/temp-clone-folder'...
+Folder examples/next-js-template downloaded successfully from https://github.com/nervosnetwork/docs.nervos.org and moved to /Users/retric/Desktop/docs.nervos.org/your-project-name
+Version updated to '0.2.2' in /Users/Desktop/docs.nervos.org/first-project/frontend/offckb.config.ts
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+By default, the boilerplate is the a full-stack dApps with frontend and scripts(smart contract). If you only want to create and devleop a script project without any frontends, you can use the following commands:
+
+```bash
+offckb create --script <my-script-project>
+```
+
+`offckb` doesn't do much things for you. It simply calls the underlying script developing tools called [ckb-script-templates](https://nervosnetwork/ckb-script-templates) and do the jobs for you. You can of course dirrectly use the `ckb-script-templates` to init script project directly. Check the [script tutorial](/docs/script/minimal-script) for more details.
+
+## Start the Devnet
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="start-devnet" label="Command">
+```
+```bash
+offckb node 
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-start-devnet" label="Response">
+```
+```bash
+/bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
+/Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
+CKB installed successfully.
+init Devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
+modified  /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet/ckb-miner.toml
+CKB output: 2024-03-20 07:56:44.765 +00:00 main INFO sentry  sentry is disabled
+
+CKB output: 2024-03-20 07:56:44.766 +00:00 main INFO ckb_bin::helper  raise_fd_limit newly-increased limit: 61440
+
+CKB output: 2024-03-20 07:56:44.854 +00:00 main INFO ckb_bin::subcommand::run  ckb version: 0.113.1 (95ad24b 2024-01-31)
+
+CKB output: 2024-03-20 07:56:45.320 +00:00 main INFO ckb_db_migration  Init database version 20230206163640
+
+CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain spec hash: Byte32(0x3036c73473a371f3aa61c588c38924a93fb8513e481fa7c8d884fc4cf5fd368a)
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+Your local CKB blockchain is now running. The RPC endpoint is `localhost:8114`. Anytime you want to stop the chain, just press `CTRL+C` to exit the process in the terminal. Running `offckb node` again will strat the chain where it lefts. 
+
+If you want to restart over with a clean chain, just run `offckb clean` before running `offckb node`, the previous chain data will be removed.
+
+## Project Structure
+
+The boilerplate project constructs two parts of a full stack CKB dApp: 
+
+- One is the frontend part based on the CKB Javascript framework [Lumos](https://github.com/ckb-js/lumos). 
+- One is the scripts(smart-contract) part based on the [ckb-script-templates](https://github.com/nervosnetwork/ckb-script-templates).
+
+### Script Development
+
+By default, this template comes with a single simple smart contract `hello-world`: `contracts/hello-world/src/main.rs`.
+
+The smart contract is written in Rust lang. In order to develop, the following dependencies are required:
+
+- `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities.
+- `Rust` with `riscv64 target`: `rustup target add riscv64imac-unknown-none-elf`
+- `Clang 16+`
+- `cargo-generate`
+
+Check out the ckb-script-templates for more [detail](https://github.com/cryptape/ckb-script-templates/blob/main/README.md#dependencies).
+
+#### Usage
+
+Add a new script:
+
+```sh
+make generate
+```
+
+Build script:
+
+```sh
+make build
+```
+
+Run unit test:
+
+```sh
+make test
+```
+
+### DApp development
+
+The dApp is based on different Javascript web frontend framework like `remix-vite` and `next.js`, integrated with the CKB Javascript framework [Lumos](https://github.com/ckb-js/lumos). All the Lumos related code are defined in the `frontend/offckb.config.ts` file.
+
+To develop, enter the frontend workspace:
+
+```sh
+cd frontend
+```
+
+Checkout the `README.md` to see how to start the app. 
+
+Normally it is something like:
+
+```sh
+npm i && npm run dev
+```
+
+## Deploy Scripts to Blockchain
+
+After building your scripts, you can deploy it with `offckb` and the scripts deployed information will automatically get updated in the `frontend` config so you don't need to worried about it.
+
+`offckb` will look for the `offckb.config.ts` file to read config information. so you will need to enter the frontend workspace to do the instruction:
+
+```sh
+cd frontend
+offckb deploy --network devnet
+```
+
+If successfully deployed, you will see the deploy script info for your smart contract recorded in the `offckb.config.ts` file. You can then directly import and use your smart contract in your frontend Dapp like this:
+
+```ts
+import offckb from "offckb.config";
+import { CellDep } from "@ckb-lumos/lumos";
+
+const lumosConfig = offckb.lumosConfig;
+const myContractDep: CellDep = {
+  outPoint: {
+    txHash: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.TX_HASH,
+    index: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.INDEX,
+  },
+  depType: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.DEP_TYPE,
+};
+```
+
+Every time you deploy a new version of your smart contracts, those script infos will be updated by `offckb` in the `offckb.config.ts` and work out-of-box in your frontend.
+
+You can also deploy smart contracts to the CKB Testnet like this:
+
+```sh
+cd frontend
+offckb deploy --network testnet
+```
+
+## Easily Switch Between Different Networks
+
+One of the things you might want to do is to swtich different blockchain networks across the development of your dapps. This can be done by applying different environment variables in the project.
+
+Accroding to your boilerplate, you will switch the CKB blockchain network by applying different environment variables.
+
+### Remix-Vite boilerplate
+
+```sh
+export NETWORK=devnet # or testnet, mainnet
+```
+
+Start the dApp:
+
+```sh
+yarn dev
+```
+
+or
+
+```sh
+NETWORK=devnet yarn dev
+```
+
+### Next.js boilerplate
+
+edit `.env` file:
+
+```bash
+NEXT_PUBLIC_NETWORK=testnet # or testnet, mainnet
+```
+
+Start the dApp:
+
+```bash
+npm run dev
+```
+
+## Access Test accounts
+
+`offckb` has 20 prefund accounts to be used on devnet. Each account is funded with 42_000_000_00000000 capacity in the devnet genesis block. You can access the accounts and copy the private keys and addresses to use when developing your dApps.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="start-devnet" label="Command">
+```
+```bash
+offckb accounts 
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-start-devnet" label="Response">
+```
+```bash
+#### ALL ACCOUNTS ARE FOR TEST AND DEVELOP ONLY  ####
+#### DON'T USE THESE ACCOUNTS ON MAINNET         ####
+#### OTHERWISE YOU WILL LOOSE YOUR MONEY         ####
+
+Print account list, each account is funded with 42_000_000_00000000 capacity in the devnet genesis block.
+
+- "#": 0
+address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8
+privkey: 0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6
+pubkey: 0x02025fa7b61b2365aa459807b84df065f1949d58c0ae590ff22dd2595157bffefa
+lock_arg: 0x8e42b1999f265a0078503c4acec4d5e134534297
+lockScript:
+    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+    hashType: type
+    args: 0x8e42b1999f265a0078503c4acec4d5e134534297
+
+- "#": 1
+address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew
+privkey: 0x9f315d5a9618a39fdc487c7a67a8581d40b045bd7a42d83648ca80ef3b2cb4a1
+pubkey: 0x026efa0579f09cc7c1129b78544f70098c90b2ab155c10746316f945829c034a2d
+lock_arg: 0x758d311c8483e0602dfad7b69d9053e3f917457d
+lockScript:
+    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+    hashType: type
+    args: 0x758d311c8483e0602dfad7b69d9053e3f917457d
+
+- "#": 2
+address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvarm0tahu0qfkq6ktuf3wd8azaas0h24c9myfz6
+privkey: 0x59ddda57ba06d6e9c5fa9040bdb98b4b098c2fce6520d39f51bc5e825364697a
+pubkey: 0x02f1ec8d18e8ff13ecf7b3ab8f683d0c3a6d63478a7f7d14ca0fdfe8fea331e863
+lock_arg: 0x9d1edebedf8f026c0d597c4c5cd3f45dec1f7557
+lockScript:
+    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+    hashType: type
+    args: 0x9d1edebedf8f026c0d597c4c5cd3f45dec1f7557
+
+- "#": 3
+address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0xt7prh3dy3gu9z45svp89q0d6f6c46cg9dp9mn
+privkey: 0xf4a1fc19468b51ba9d1f0f5441fa3f4d91e625b2af105e1e37cc54bf9b19c0a1
+pubkey: 0x02e72cbdff20422a3886ec667a138a59478d93da072173be4344c55582acdce67c
+lock_arg: 0xe65f823bc5a48a38515690604e503dba4eb15d61
+lockScript:
+    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+    hashType: type
+    args: 0xe65f823bc5a48a38515690604e503dba4eb15d61
+# More accounts...
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+Check out specific account's balance:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="balance-devnet" label="Command">
+```
+```bash
+offckb balance <CKB-address> --network <devnet/testnet>
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-balance-devnet" label="Response">
+```
+```bash
+Balance: 42000000 CKB
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+:::note
+Required offckb node running when checking devnet balance
+:::
+
+## Deposit To Your Own Account
+
+Sometime you want to use your own CKB account instead of pre-funded accounts in `offckb`. You can deposit CKB to your own accounts using `offckb`:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="deposit-devnet" label="Command">
+```
+```bash
+offckb deposit --network devnet <your-ckb-address> <deposit-amount-in-shannon>
+```
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-deposit-devnet" label="Response">
+```
+```bash
+tx hash:  0xe895970e9c75a5c4703c38a4e37b000895e7690552ba67ef82ae92109d7322fd
+```
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+:::note
+Required offckb node running when depositing in devnet
+:::
+
+## Use A Different Frontend Framework?
+
+The frontend world is filled with many(maybe too many) frameworks. New framework comes out everyday. Different develops has different favors over all these frameworks. So if you don't use the framework in the pre-defined boilerplate like `remix-vite` and `next.js`, don't worry! You can still use `offckb` with the `inject-config` command.
+
+First, just init your dApp project with your favorite framework, say [CRA](https://nextjs.org):
+
+```bash
+npx create-react-app my-app --template typescript
+```
+
+Second, init the `offckb` config in your framework:
+
+```bash
+cd my-cra-dapp
+offckb inject-config
+```
+
+Now, when you deploy your scripts with `offckb deploy --network devnet --target <your-folder-to-your-script-binaries>`, after the deployment, you can run `offckb sync-config` in your frontend root path where the `offckb.config.ts` located to update the deployed scripts infos for your frontend.
+
+For switching different networks, you might need to update the `readEnvNetwork` method in `offckb.config.ts` accroding to your framework.
+
+```sh
+function readEnvNetwork(): 'devnet' | 'testnet' | 'mainnet' {
+  // you may need to update the env method
+  // accroding to your frontend framework
+  const network = process.env.NETWORK;
+  const defaultNetwork = 'devnet';
+  if (!network)return defaultNetwork;
+  if(!['devnet', 'testnet', 'mainnet'].includes(network)){
+    return defaultNetwork;
+  }
+
+  return network as 'devnet' | 'testnet' | 'mainnet';
+}
+```
+
+## About offckb.config.ts 
+
+`offckb.config.ts` is a very simple typescript code that wrap some basic info and configs for lumos. Everything is plain and exlicity so it is easy to modify. In this way, we hope `offckb` is doing a very thin wrapping and is not limited to the tech selections and different ways of building proecess from developers. 
+
+If you have any feedback you would like to share with us, feel free to contact us at [github](https://github.com/nervosnetwork/docs.nervos.org) or [discord](https://discord.gg/AqGTUE9).
+

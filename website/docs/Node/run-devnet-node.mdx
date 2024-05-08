@@ -1,22 +1,17 @@
 ---
-id: dev-environment
-title: Dev Environment
-sidebar_position: 3 
+id: run-devnet-node
+title: Run a Devnet Node
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Dev Environment
+# Run a Devnet Node
 
-For developers, a dev environment is the most important place to start their little side projects with blockchain on weekends. 
+## Quick Start with OffCKB
 
-Here we have provide different ways to setup your CKB dev environment to start your journey.
-
-## Quick Setup with OffCKB
-
-You can set up your local development environment by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides a one-line command to start a Devnet, pre-funded test accounts
-and useful [Scripts](/docs/concepts/glossary#script) like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
+You can run a devnet node by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides a one-line command to start a Devnet.
 
 ### Install
 
@@ -24,14 +19,10 @@ and useful [Scripts](/docs/concepts/glossary#script) like [Omnilock](https://git
 npm install -g @offckb/cli
 ```
 
-### Usage
+### Start the Devnet
 
 ```bash
-offckb node # start the Devnet of CKB, `ctrl-c` to stop running the chain 
-offckb clean # clean the Devnet data, needs to stop running the chain first  
-offckb init <project-name> # init a CKB dApp typescript boilerplate from multiple templates  
-offckb accounts # list 20 accounts info with prefund CKB tokens 
-offckb list-hashes # list built-in scripts hashes, equals `ckb list-hashes`
+offckb node # start the Devnet of CKB, `ctrl-c` to stop running the chain
 ```
 
 ---
