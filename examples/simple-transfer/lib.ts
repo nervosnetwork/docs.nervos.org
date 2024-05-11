@@ -1,10 +1,11 @@
 import { bytes } from '@ckb-lumos/codec';
 import { helpers, Address, Script, hd, config, Cell, commons, WitnessArgs, BI } from '@ckb-lumos/lumos';
 import { values, blockchain } from '@ckb-lumos/base';
-import { indexer, lumosConfig, rpc } from './ckb';
 const { ScriptValue } = values;
+import offCKB from './offckb.config';
 
-config.initializeConfig(lumosConfig);
+const {indexer, rpc, lumosConfig} = offCKB;
+offCKB.initializeLumosConfig();
 
 type Account = {
   lockScript: Script;
