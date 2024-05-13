@@ -1,11 +1,12 @@
 import { helpers, Address, Script, hd, config, BI } from "@ckb-lumos/lumos";
 import { setSporeConfig, createSpore } from "@spore-sdk/core";
-import { indexer, lumosConfig, rpc } from "./ckb";
 import { SPORE_CONFIG } from "./spore-config";
 import { createDefaultLockWallet } from "./helper";
 import { unpackToRawSporeData } from "@spore-sdk/core";
+import offCKBConfig from "./offckb.config";
 
-config.initializeConfig(lumosConfig);
+const { indexer, lumosConfig, rpc } = offCKBConfig;
+offCKBConfig.initializeLumosConfig();
 setSporeConfig(SPORE_CONFIG);
 
 type Account = {

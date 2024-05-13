@@ -41,39 +41,13 @@ In this tutorial, we will build a simple dApp to turn a picture on your computer
 
 ## Setup Devnet & Run Example
 
-### Step 1: Initialize
+### Step 1: Clone the Repository
 
-After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), run the following command to initlize a project with our built-in templates. 
+To get started with the tutorial dApp, clone the repository and navigate to the appropriate directory using the following commands:
 
-```bash
-offckb init <project-name>
-```
-
-When prompted to select a dApp template, use your arrow keys to select **Create a Digital Object Using Spore Protocol** for this tutorial.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="offckb-init" label="Command">
-```
-```bash {5}
-? Select a dApp template (Use arrow keys)
-  View and Transfer a CKB Balance
-  Write an On-Chain Message
-  Create a Fungible Token
-> Create a Digital Object Using Spore Protocol
-a simple dApp to create on-chain digital object with spore scripts
-```
-```mdx-code-block
-  </TabItem>
-  <TabItem value="offckb-init-result" label="Response">
-```
-```bash
-init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-```mdx-code-block
-  </TabItem>
-</Tabs>
+```bash {2}
+git clone https://github.com/nervosnetwork/docs.nervos.org.git
+cd docs.nervos.org/examples/create-dob
 ```
 
 ### Step 2: Start the Devnet
