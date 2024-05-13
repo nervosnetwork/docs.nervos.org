@@ -370,6 +370,7 @@ p, blockquote, ul, ol {
 
 code {
   border-radius: 4px;
+  border: 1px solid var(--border-invisible);
 }
 
 pre {
@@ -419,6 +420,7 @@ pre > code {
 /* Admonitions */
 .alert {
   border: 1px solid var(--ifm-alert-border-color);
+  box-shadow: none;
 }
 .alert--secondary {
   --ifm-alert-background-color: var(--alert-secondary-bg);
@@ -439,6 +441,10 @@ pre > code {
 .alert--danger {
   --ifm-alert-background-color: var(--alert-danger-bg);
   --ifm-alert-border-color: var(--alert-danger);
+}
+.alert a {
+  color: var(--text-link);
+  text-decoration-color: var(--border-accent);
 }
 
 /*Details*/

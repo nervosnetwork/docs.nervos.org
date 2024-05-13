@@ -4,5 +4,5 @@
   color: var(--prism-color);
   margin-bottom: var(--ifm-leading);
   border-radius: 8px;
-  border: 1px solid var(--border-invisible);
+  border: 1px solid var(--border-subtle);
 }

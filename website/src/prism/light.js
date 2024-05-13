@@ -21,6 +21,12 @@ module.exports = {
         },
     },
     {
+      types: ['operator'],
+      style: {
+          color: 'var(--text-secondary)',
+      },
+    },
+    {
       types: ['function', 'attr-name'],
       style: {
           color: 'var(--code-function)',
