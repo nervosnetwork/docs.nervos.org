@@ -14,7 +14,10 @@ export const ScriptHeaders: ScriptHeadersType = {
         link: "/docs/tech-explanation/glossary#ckb-vm",
       },
       { label: "Cell Model", link: "/docs/tech-explanation/cell-model" },
-      { label: "Transaction", link: "/docs/tech-explanation/glossary#transaction" },
+      {
+        label: "Transaction",
+        link: "/docs/tech-explanation/glossary#transaction",
+      },
     ],
     tools: [
       <div>
@@ -66,26 +69,26 @@ export const ScriptHeaders: ScriptHeadersType = {
         </a>
         {" sample installtion steps for selected platforms are:"}
         <ul>
-        <li>
-          Debian / Ubuntu:{" "}
-          <code>
-            wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && sudo
-            ./llvm.sh 16 && rm llvm.sh
-          </code>
-        </li>
-        <li>
-          Fedora 39+: <code>sudo dnf -y install clang</code>
-        </li>
-        <li>
-          Archlinux: <code>sudo pacman --noconfirm -Syu clang</code>
-        </li>
-        <li>
-          macOS: <code>brew install llvm@16</code>
-        </li>
-        <li>
-          Windows(with [Scoop](scoop install llvm yasm)):{" "}
-          <code>scoop install llvm yasm</code>
-        </li>
+          <li>
+            Debian / Ubuntu:{" "}
+            <code>
+              wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && sudo
+              ./llvm.sh 16 && rm llvm.sh
+            </code>
+          </li>
+          <li>
+            Fedora 39+: <code>sudo dnf -y install clang</code>
+          </li>
+          <li>
+            Archlinux: <code>sudo pacman --noconfirm -Syu clang</code>
+          </li>
+          <li>
+            macOS: <code>brew install llvm@16</code>
+          </li>
+          <li>
+            Windows(with [Scoop](scoop install llvm yasm)):{" "}
+            <code>scoop install llvm yasm</code>
+          </li>
         </ul>
       </div>,
       <div>

@@ -1,0 +1,39 @@
+name: Docs Nodejs
+
+on:
+  pull_request:
+    paths: [website/**]
+  push:
+    paths: [website/**]
+
+permissions: # Define the permissions for the GITHUB_TOKEN
+  contents: write
+  actions: write
+  deployments: write
+  pages: write
+
+jobs:
+  node-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          cache: yarn
+          cache-dependency-path: website/yarn.lock
+
+      - name: Install dependencies
+        working-directory: website
+        run: yarn
+
+      - name: Run fmt
+        working-directory: website
+        run: yarn run fmt
+
+      - name: Check if there are any changes after formatting
+        run: git diff --exit-code
+
+      - name: Build website
+        working-directory: website
+        run: yarn build

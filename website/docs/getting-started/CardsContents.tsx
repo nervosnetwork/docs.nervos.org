@@ -60,7 +60,8 @@ const toolCardContents: CardProps[] = [
   },
   {
     title: "CKB-Debugger",
-    description: "A standalone debugger enabling off-chain contract development",
+    description:
+      "A standalone debugger enabling off-chain contract development",
     link: "https://github.com/nervosnetwork/ckb-standalone-debugger",
     type: "tool",
     links: [
@@ -131,7 +132,4 @@ const tutorialFrameContent = [
   },
 ];
 
-export {
-  toolCardContents,
-  tutorialFrameContent,
-};
+export { toolCardContents, tutorialFrameContent };

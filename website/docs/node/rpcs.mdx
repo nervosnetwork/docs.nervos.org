@@ -2,36 +2,42 @@
 id: rpcs
 title: RPCs
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 # RPCs
+
 CKB RPCs are a set of programming interfaces provided by the Nervos CKB blockchain, enabling developers to interact with the network for querying data, managing transactions, and deploying smart contracts directly.
 
 ## Public JSON RPC Nodes
+
 - These nodes are provided by community members, they may be unstable, incomplete or not work at all, use at your own risk.
 - You may use these nodes to try out or test some features, but you should not use them for production.
 - Since ckb v0.105.0, ckb already included indexer service, just use ckb jsonrpc url for indexer service.
 
-Type         | Link
--------------|------------------------------
-Mainnet      | https://mainnet.ckbapp.dev/
-Mainnet      | https://mainnet.ckb.dev/
-Testnet      | https://testnet.ckbapp.dev/
-Testnet      | https://testnet.ckb.dev/
+| Type    | Link                        |
+| ------- | --------------------------- |
+| Mainnet | https://mainnet.ckbapp.dev/ |
+| Mainnet | https://mainnet.ckb.dev/    |
+| Testnet | https://testnet.ckbapp.dev/ |
+| Testnet | https://testnet.ckb.dev/    |
 
 ## RPC Provider: Ankr
+
 Ankr is an RPC provider that wors as intermediary to help you interact with the Nervos Network. You might experience some levels of latency depending on the provider’s location.
 Ankr’s endpoint root: [https://rpc.ankr.com/nervos](https://rpc.ankr.com/nervos)
 
 ## CKB JSON-RPC Protocols
+
 CKB exposes a set of RPCs in [JSON-RPC 2.0](https://www.jsonrpc.org/specification) protocols for interactions. For more details, please refer to [CKB JSON RPC Protocols Documentation](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md).
 
 :::tip
+
 - The RPCs exposed by CKB are only designed for internal usage. Please limit the access to the CKB RPCs strictly to trusted machines (by using rpc.listen_address configuration option). Exposing CKB RPCs to the public Internet is dangerous and strongly discouraged.
 - CKB JSON-RPC only supports HTTP now. If you need SSL support, please setup a reverse proxy via nginx or other HTTPS servers.
 - Subscriptions require a full duplex connection. CKB offers such connections in the form of tcp (enable with rpc.tcp_listen_address configuration option) and websockets (enable with rpc.ws_listen_address), plain HTTP connection does not support subscriptions. See below for examples on this.
-:::
+  :::
 
 ## Basic Usage
 
@@ -41,6 +47,7 @@ The following commands uses [get_tip_block_number](https://github.com/nervosnetw
 <Tabs>
   <TabItem value="get-tip-block-number" label="Command">
 ```
+
 ```
 echo '{
     "id": 2,
@@ -57,9 +64,11 @@ http://localhost:8114
   </TabItem>
   <TabItem value="tip-block-number" label="Response">
 ```
+
 ```bash
 {"jsonrpc":"2.0","result":"0x2cb4","id":2}
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -71,6 +80,7 @@ The following commands uses `send_transaction` RPC to send transactions to the C
 <Tabs>
   <TabItem value="send-transaction" label="Command">
 ```
+
 ```
 echo '{
   "id": 3,
@@ -122,10 +132,12 @@ echo '{
 | curl -H 'content-type: application/json' -d @- \
 http://localhost:8114
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="transaction" label="Response">
 ```
+
 ```json
 {
   "id": 3,
@@ -133,6 +145,7 @@ http://localhost:8114
   "result": "0xa0ef4eb5f4ceeb08a4c8524d84c5da95dce2f608e0ca2ec8091191b0f330c6e3"
 }
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -144,6 +157,7 @@ It should be noted that `send_transaction` is asynchronous, that is, the return 
 <Tabs>
   <TabItem value="send-transaction" label="Command">
 ```
+
 ```
 echo '{
     "id": 4,
@@ -155,10 +169,12 @@ echo '{
 | curl -H 'content-type: application/json' -d @- \
 http://localhost:8114
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="transaction" label="Response">
 ```
+
 ```json
 {
   "id": 4,
@@ -198,14 +214,12 @@ http://localhost:8114
           "type": null
         }
       ],
-      "outputs_data": [
-        "0x"
-      ],
+      "outputs_data": ["0x"],
       "version": "0x0",
       "witnesses": []
     },
     "cycles": "0x219",
-    "time_added_to_pool" : "0x187b3d137a1",
+    "time_added_to_pool": "0x187b3d137a1",
     "tx_status": {
       "block_hash": null,
       "status": "pending",
@@ -214,6 +228,7 @@ http://localhost:8114
   }
 }
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -222,6 +237,7 @@ http://localhost:8114
 ## Subscription
 
 To use `subscription` feature, you need to configure CKB to enable such features. In this section, we assume you use the following configuration in `CKB.toml`section:
+
 ```
 [rpc]
 listen_address = "127.0.0.1:8114"
@@ -230,6 +246,7 @@ ws_listen_address = "127.0.0.1:18115"
 
 # ... more configs
 ```
+
 This above config ensures CKB listens at 8114 port for normal HTTP connections, 18114 port for TCP duplex connections, and 18115 port for WebSocket duplex connections.
 
 ## TCP Based RPC
@@ -309,20 +326,20 @@ CKB's RPCs returns data in JSON format. While most fields are self-explanatory, 
 
 All numbers used in CKB's RPCs, including request parameters and return values, use hex encoding, the number is encoded first in hexadecimal in the most compact format(meaning useless leading zeros should be striped), and then prefixed with `0x`. Here are some examples:
 
-* `0` is encoded as `0x0`, we cannot remove the remaining `0` since otherwise it won't be a proper number
-* `4` is encoded as `0x4`
-* `15` is encoded as `0xf`
-* `42` is encoded as `0x2a`
-* `291` is encoded as `0x123`
-* `3984` is encoded as `0xf90`
+- `0` is encoded as `0x0`, we cannot remove the remaining `0` since otherwise it won't be a proper number
+- `4` is encoded as `0x4`
+- `15` is encoded as `0xf`
+- `42` is encoded as `0x2a`
+- `291` is encoded as `0x123`
+- `3984` is encoded as `0xf90`
 
 ### Binary Data
 
 All binary data, including all the hashes, `args` in script, `outputs_data` items, are represented as hex string with `0x` prefix. Some examples include:
 
-* `0x65b253cdcb6226e7f8cffec5c47c959b3d74af2caf7970a1eb1500e9b92aa200`
-* `0x927f3e74dceb87c81ba65a19da4f098b4de75a0d`
-* `0x40420f00000000000000000000000000`
-* `0x` (empty data)
+- `0x65b253cdcb6226e7f8cffec5c47c959b3d74af2caf7970a1eb1500e9b92aa200`
+- `0x927f3e74dceb87c81ba65a19da4f098b4de75a0d`
+- `0x40420f00000000000000000000000000`
+- `0x` (empty data)
 
 Unlike numbers, binary data should always have a even numbered length.

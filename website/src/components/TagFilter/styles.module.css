@@ -1,31 +1,31 @@
-@import '@css/customVariables.css';
+@import "@css/customVariables.css";
 
 .filters {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .tag {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.875em;
-    background-color: var(--surface-03);
-    color: var(--text-tertiary);
-    line-height: 170%;
-    border-radius: 4px;
-    border: none;
-    box-shadow: none;
-    cursor: pointer;
-    margin: 0 1rem 1rem 0;
-    padding: 0.25rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875em;
+  background-color: var(--surface-03);
+  color: var(--text-tertiary);
+  line-height: 170%;
+  border-radius: 4px;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  margin: 0 1rem 1rem 0;
+  padding: 0.25rem 0.5rem;
 }
 .tag:hover {
-    background-color: var(--surface-03-hover);
+  background-color: var(--surface-03-hover);
 }
 
 .activeTag {
-    background-color: var(--text-link) !important;
-    color: var(--text-inverse);
+  background-color: var(--text-link) !important;
+  color: var(--text-inverse);
 }

@@ -2,8 +2,9 @@
 id: js-script
 title: "Tutorial: Run JS on CKB"
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 import ScriptHeaders from "./ScriptHeaders.tsx";
 import TutorialHeader from "@components/TutorialHeader";
 
@@ -65,7 +66,7 @@ cargo install --git https://github.com/nervosnetwork/ckb-standalone-debuggger ck
 
 ### Quick Test with CKB-Debugger
 
-Now let's run the `ckb-js-vm` with some JS test codes. 
+Now let's run the `ckb-js-vm` with some JS test codes.
 
 Make sure you are in the root of the `ckb-vm-js` project folder:
 
@@ -73,13 +74,16 @@ Make sure you are in the root of the `ckb-vm-js` project folder:
 <Tabs>
   <TabItem value="ckb-debugger-run" label="Command">
 ```
+
 ```bash
 ckb-debugger --read-file tests/examples/hello.js --bin build/ckb-js-vm -- -r
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="ckb-debugger-run-result" label="Response">
 ```
+
 ```bash
 Run from file, local access enabled. For testing only.
 hello, world
@@ -87,6 +91,7 @@ Run result: 0
 Total cycles consumed: 30081070(2.9m)
 Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -94,7 +99,7 @@ Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
 
 With the `-r` option, `ckb-js-vm` will read a local JS file via CKB-Debugger. This function is
 intended for testing purposes and does not function in a production environment. However, we can see the
-running output, which includes a `hello, world` message. The run result is 0, indicating that the `hello.js` Script executes successfully. 
+running output, which includes a `hello, world` message. The run result is 0, indicating that the `hello.js` Script executes successfully.
 Also, you can see how many `cycles`(the overhead required to execute a Script) are needed to run the JS Script in the output as well.
 
 ## Integrate ckb-js-vm
@@ -105,10 +110,10 @@ understanding.
 
 The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
 
-* `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
-* `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
-* `Clang 16+`
-* `cargo-generate`: You can install this via `cargo install cargo-generate`
+- `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
+- `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
+- `Clang 16+`
+- `cargo-generate`: You can install this via `cargo install cargo-generate`
 
 If you encounter any problems with these dependencies, refer to the [ReadMe](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for installation details.
 
@@ -120,14 +125,17 @@ Now let's run the command to generate a new Script project called `my-first-scri
 <Tabs>
   <TabItem value="init-script" label="Command">
 ```
+
 ```bash
 alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
 create-ckb-scripts
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="init-script-result" label="Response">
 ```
+
 ```bash
 ⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
 🤷   Project Name: my-first-script-workspace
@@ -138,6 +146,7 @@ create-ckb-scripts
 🔧   Initializing a fresh Git repository
 ✨   Done! New project created /tmp/my-first-script-workspace
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -151,14 +160,17 @@ Let’s create a new Script called `run-js`.
 <Tabs>
   <TabItem value="create-a-new-script" label="Command">
 ```
+
 ```bash
 cd my-first-script-workspace
 make generate
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="create-a-new-script-result" label="Response">
 ```
+
 ```bash
 🤷   Project Name: run-js
 🔧   Destination: /tmp/my-first-script-workspace/contracts/run-js ...
@@ -168,6 +180,7 @@ make generate
 🔧   Initializing a fresh Git repository
 ✨   Done! New project created /tmp/my-first-script-workspace/contracts/run-js
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -191,7 +204,7 @@ Copy the `ckb-js-vm` binary we built before into the `deps` folder. When you're 
 ...
 ```
 
-Everything looks good now! 
+Everything looks good now!
 
 ### Integrate via Script
 
@@ -204,6 +217,7 @@ hash_type: <hash_type>
 args: <ckb-js-vm args, 2 bytes> <code_hash to JavaScript code cell, 32 bytes> <hash_type to
 javascript code cell, 1 byte> <javascript code args, variable length>
 ```
+
 :::note
 2 bytes ckb-js-vm args are reserved for further use
 :::
@@ -227,7 +241,7 @@ console.log("hello, ckb-js-script!");
 #### Compile the `hello.js` into binary with CKB-Debugger
 
 ```sh
-ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/hello.bc 
+ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/hello.bc
 ```
 
 #### Write tests for the `hello.js` Script
@@ -405,19 +419,23 @@ alternative command:
 <Tabs>
   <TabItem value="run-hello-test" label="Command">
 ```
+
 ```sh
 cargo test -- --nocapture
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="run-hello-test-result" label="Response">
 ```
+
 ```sh
 running 1 test
 [contract debug] hello, ckb-js-script!
 consume cycles: 3070458
 test tests::hello_script ... ok
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -432,15 +450,12 @@ We can try a different JavaScript example. Let's write a `fib.js` in the `js` fo
 ```js title='my-first-script-workspace/js/fib.js'
 console.log("testing fib");
 function fib(n) {
-    if (n <= 0)
-        return 0;
-    else if (n == 1)
-        return 1;
-    else
-        return fib(n - 1) + fib(n - 2);
-};
+  if (n <= 0) return 0;
+  else if (n == 1) return 1;
+  else return fib(n - 1) + fib(n - 2);
+}
 var value = fib(10);
-console.assert(value == 55, 'fib(10) = 55');
+console.assert(value == 55, "fib(10) = 55");
 ```
 
 #### Compile the `fib.js` into Binary with CKB-Debugger
@@ -541,7 +556,7 @@ fn fib_script() {
 }
 ```
 
-#### Run the test for `fib.js` smart contract 
+#### Run the test for `fib.js` smart contract
 
 ```sh
 make build
@@ -607,6 +622,7 @@ pub fn program_entry() -> i8 {
     0
 }
 ```
+
 The most important code in the Script is the usage of `ckb_std` library to perform the `spawn` syscall
 to call the `ckb-js-vm`:
 
@@ -643,117 +659,120 @@ const CKB_INDEX_OUT_OF_BOUND = 1;
 const ERROR_AMOUNT = -52;
 
 function assert(cond, obj1) {
-    if (!cond) {
-        throw Error(obj1);
-    }
+  if (!cond) {
+    throw Error(obj1);
+  }
 }
 
 function compare_array(a, b) {
-    if (a.byteLength != b.byteLength) {
-        return false;
+  if (a.byteLength != b.byteLength) {
+    return false;
+  }
+  for (let i = 0; i < a.byteLength; i++) {
+    if (a[i] != b[i]) {
+      return false;
     }
-    for (let i = 0; i < a.byteLength; i++) {
-        if (a[i] != b[i]) {
-            return false;
-        }
-    }
-    return true;
+  }
+  return true;
 }
 
 function unpack_script(buf) {
-    let script = new Uint32Array(buf);
-    let raw_data = new Uint8Array(buf);
+  let script = new Uint32Array(buf);
+  let raw_data = new Uint8Array(buf);
 
-    let full_size = script[0];
-    assert(full_size == buf.byteLength, 'full_size == buf.byteLength');
-    let code_hash_offset = script[1];
-    let code_hash = buf.slice(code_hash_offset, code_hash_offset + 32);
-    let hash_type_offset = script[2];
-    let hash_type = raw_data[hash_type_offset];
-    let args_offset = script[3];
-    let args = buf.slice(args_offset + 4);
-    return {'code_hash': code_hash, 'hash_type': hash_type, 'args': args};
+  let full_size = script[0];
+  assert(full_size == buf.byteLength, "full_size == buf.byteLength");
+  let code_hash_offset = script[1];
+  let code_hash = buf.slice(code_hash_offset, code_hash_offset + 32);
+  let hash_type_offset = script[2];
+  let hash_type = raw_data[hash_type_offset];
+  let args_offset = script[3];
+  let args = buf.slice(args_offset + 4);
+  return { code_hash: code_hash, hash_type: hash_type, args: args };
 }
 
 function* iterate_field(source, field) {
-    let index = 0;
-    while (true) {
-        try {
-            let ret = ckb.load_cell_by_field(index, source, field);
-            yield ret;
-            index++;
-        } catch (e) {
-            if (e.error_code == CKB_INDEX_OUT_OF_BOUND) {
-                break;
-            } else {
-                throw e;
-            }
-        }
+  let index = 0;
+  while (true) {
+    try {
+      let ret = ckb.load_cell_by_field(index, source, field);
+      yield ret;
+      index++;
+    } catch (e) {
+      if (e.error_code == CKB_INDEX_OUT_OF_BOUND) {
+        break;
+      } else {
+        throw e;
+      }
     }
+  }
 }
 
 function* iterate_cell_data(source) {
-    let index = 0;
-    while (true) {
-        try {
-            let ret = ckb.load_cell_data(index, source);
-            yield ret;
-            index++;
-        } catch (e) {
-            if (e.error_code == CKB_INDEX_OUT_OF_BOUND) {
-                break;
-            } else {
-                throw e;
-            }
-        }
+  let index = 0;
+  while (true) {
+    try {
+      let ret = ckb.load_cell_data(index, source);
+      yield ret;
+      index++;
+    } catch (e) {
+      if (e.error_code == CKB_INDEX_OUT_OF_BOUND) {
+        break;
+      } else {
+        throw e;
+      }
     }
+  }
 }
 
 function main() {
-    console.log('simple UDT ...');
-    let buf = ckb.load_script();
-    let script = unpack_script(buf);
-    let owner_mode = false;
-    // ckb-js-vm has leading 35 bytes args
-    let real_args = script.args.slice(35);
-    for (let lock_hash of iterate_field(ckb.SOURCE_INPUT, ckb.CELL_FIELD_LOCK_HASH)) {
-        if (compare_array(lock_hash, real_args)) {
-            owner_mode = true;
-        }
+  console.log("simple UDT ...");
+  let buf = ckb.load_script();
+  let script = unpack_script(buf);
+  let owner_mode = false;
+  // ckb-js-vm has leading 35 bytes args
+  let real_args = script.args.slice(35);
+  for (let lock_hash of iterate_field(
+    ckb.SOURCE_INPUT,
+    ckb.CELL_FIELD_LOCK_HASH
+  )) {
+    if (compare_array(lock_hash, real_args)) {
+      owner_mode = true;
     }
-    if (owner_mode) {
-        return 0;
-    }
-    let input_amount = 0n;
-
-    for (let data of iterate_cell_data(ckb.SOURCE_GROUP_INPUT)) {
-        if (data.byteLength != 16) {
-            throw `Invalid data length: ${data.byteLength}`;
-        }
-        let n = new BigUint64Array(data);
-        let current_amount = n[0] | (n[1] << 64n);
-        input_amount += current_amount;
-    }
-    let output_amount = 0n;
-    for (let data of iterate_cell_data(ckb.SOURCE_GROUP_OUTPUT)) {
-        if (data.byteLength != 16) {
-            throw `Invalid data length: ${data.byteLength}`;
-        }
-        let n = new BigUint64Array(data);
-        let current_amount = n[0] | (n[1] << 64n);
-        output_amount += current_amount;
-    }
-    console.log(`verifying amount: ${input_amount} and ${output_amount}`);
-    if (input_amount < output_amount) {
-        return ERROR_AMOUNT;
-    }
-    console.log('Simple UDT quit successfully');
+  }
+  if (owner_mode) {
     return 0;
+  }
+  let input_amount = 0n;
+
+  for (let data of iterate_cell_data(ckb.SOURCE_GROUP_INPUT)) {
+    if (data.byteLength != 16) {
+      throw `Invalid data length: ${data.byteLength}`;
+    }
+    let n = new BigUint64Array(data);
+    let current_amount = n[0] | (n[1] << 64n);
+    input_amount += current_amount;
+  }
+  let output_amount = 0n;
+  for (let data of iterate_cell_data(ckb.SOURCE_GROUP_OUTPUT)) {
+    if (data.byteLength != 16) {
+      throw `Invalid data length: ${data.byteLength}`;
+    }
+    let n = new BigUint64Array(data);
+    let current_amount = n[0] | (n[1] << 64n);
+    output_amount += current_amount;
+  }
+  console.log(`verifying amount: ${input_amount} and ${output_amount}`);
+  if (input_amount < output_amount) {
+    return ERROR_AMOUNT;
+  }
+  console.log("Simple UDT quit successfully");
+  return 0;
 }
 
 let exit_code = main();
 if (exit_code != 0) {
-    ckb.exit(exit_code);
+  ckb.exit(exit_code);
 }
 ```
 
@@ -872,6 +891,7 @@ fn sudt_script() {
     println!("consume cycles: {}", cycles);
 }
 ```
+
 Some explanation for this test:
 
 Just like the previous tests, we deploy all the Scripts we need, including `ckb-js-vm`, `run-js`,
@@ -925,6 +945,7 @@ assemble the transaction for submission on-chain:
         .expect("pass verification");
     println!("consume cycles: {}", cycles);
 ```
+
 #### Run test for `sudt.js`
 
 ```sh
@@ -945,6 +966,7 @@ test tests::sudt_script ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.04s
 ```
+
 ---
 
 ## Congratulations!
@@ -961,7 +983,7 @@ By following this tutorial so far, you have mastered how to write Scripts that i
 
 - Full source code of this tutorial:
   [ckb-js-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/ckb-js-script)
-- More about `ckb-js-vm`: [ckb-js-vm docs](https://nervosnetwork/ckb-js-vm/blob/main/docs)  
+- More about `ckb-js-vm`: [ckb-js-vm docs](https://nervosnetwork/ckb-js-vm/blob/main/docs)
 - CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
 - Script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)

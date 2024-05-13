@@ -3,8 +3,8 @@ id: quick-start
 title: Quick Start (5min)
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 # Quick Start (5min)
 
@@ -27,15 +27,16 @@ Throughout this documentation, we use offckb/cli version **>=0.2.2**. You can al
 To setup a boilerplate for a full-stacked dApp, run the following command. Replace `<my-dapp-project>` with any name you like.
 
 ```bash
-offckb create <my-dapp-project> 
+offckb create <my-dapp-project>
 ```
 
-When prompted to select a bare template, use your arrow keys to select the frontend framework you prefer. If you wish to use a frontend framework not listed, please refer to [this section](/docs/getting-started/quick-start#different-frontend-framework). 
+When prompted to select a bare template, use your arrow keys to select the frontend framework you prefer. If you wish to use a frontend framework not listed, please refer to [this section](/docs/getting-started/quick-start#different-frontend-framework).
 
 ```mdx-code-block
 <Tabs>
   <TabItem value="create-project" label="Command">
 ```
+
 ```bash {3}
 ? Select a bare template
   Remix-Vite Bare Templates
@@ -44,14 +45,17 @@ When prompted to select a bare template, use your arrow keys to select the fron
 A full-stack template with Next.js framework and ckb-script-templates,
 [next.js,tailwindcss,ckb-script-templates,typescript,rust]
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="show-create-project" label="Response">
 ```
+
 ```bash
 Cloning into '/Users/Desktop/offckb/templates/temp-clone-folder'...
 Folder examples/next-js-template downloaded successfully from https://github.com/nervosnetwork/docs.nervos.org and moved to /Users/nervosDocs/Desktop/offckb/my-dapp-project
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -60,14 +64,15 @@ Folder examples/next-js-template downloaded successfully from https://github.com
 <details>
   <summary>How to create a Script-only project?</summary>
 
-  To create a project focused solely on Script development without any frontend work, you can run the following command. Replace `<my-script-project>` with any name you like.
-  ```bash
-  offckb create --script <my-script-project>
-  ```
-  
-  Note that `offckb` essentially utilizes an underlying tool called `ckb-script-templates` to initialize Script projects. You can directly engage `ckb-script-templates` for more specific Script development tasks. For further details, refer to the [Script tutorial](/docs/script/minimal-script).
-</details>
+To create a project focused solely on Script development without any frontend work, you can run the following command. Replace `<my-script-project>` with any name you like.
 
+```bash
+offckb create --script <my-script-project>
+```
+
+Note that `offckb` essentially utilizes an underlying tool called `ckb-script-templates` to initialize Script projects. You can directly engage `ckb-script-templates` for more specific Script development tasks. For further details, refer to the [Script tutorial](/docs/script/minimal-script).
+
+</details>
 
 ## Start the Devnet
 
@@ -75,13 +80,16 @@ Folder examples/next-js-template downloaded successfully from https://github.com
 <Tabs>
   <TabItem value="start-devnet" label="Command">
 ```
+
 ```bash
-offckb node 
+offckb node
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="show-start-devnet" label="Response">
 ```
+
 ```bash
 /bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
 /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
@@ -98,6 +106,7 @@ CKB output: 2024-03-20 07:56:45.320 +00:00 main INFO ckb_db_migration  Init data
 
 CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain spec hash: Byte32(0x3036c73473a371f3aa61c588c38924a93fb8513e481fa7c8d884fc4cf5fd368a)
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -106,20 +115,25 @@ CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain s
 Your local CKB blockchain is currently active with the RPC endpoint at [localhost:8114](http://localhost:8114). To stop the chain, press `CTRL+C` in the terminal. To resume where you left off, simply run `offckb node` again.
 
 If you need to start fresh with a new chain, run the following command before starting the node:
+
 ```mdx-code-block
 <Tabs>
   <TabItem value="clean-node-data" label="Command">
 ```
+
 ```bash
 offckb clean
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="node-data-cleaned" label="Response">
 ```
+
 ```bash
 Chain data cleaned.
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -149,9 +163,8 @@ Once the server is up and running, you can view the dApp by visiting [localhost:
 
 The boilerplate project for a full-stack CKB dApp comprises two main components:
 
-- The frontend, which utilizes the CKB JavaScript framework, [Lumos](https://github.com/ckb-js/lumos). 
+- The frontend, which utilizes the CKB JavaScript framework, [Lumos](https://github.com/ckb-js/lumos).
 - The Scripts, which leverages the [ckb-script-templates](https://github.com/nervosnetwork/ckb-script-templates).
-
 
 By default, the Next.js template comes with a simple Script `hello-world` under `contracts/hello-world/src/main.rs`.
 
@@ -166,28 +179,33 @@ Check out the `ckb-script-templates` for more [details](https://github.com/crypt
 :::
 
 ### Script-Related Commands
+
 - Add a new Script: `make generate`
 - Build Script: `make build`
 - Run unit tests: `make test`
 
-
 ### Deploy Scripts to Blockchain
 
-After building your Scripts, you can navigate to your frontend workspace and deploy your Scripts to the Devnet or Testnet by using the following command: 
+After building your Scripts, you can navigate to your frontend workspace and deploy your Scripts to the Devnet or Testnet by using the following command:
+
 ```mdx-code-block
 <Tabs>
   <TabItem value="deploy-to-devnet" label="Devnet">
 ```
+
 ```sh
 offckb deploy --network devnet
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="deploy-to-testnet" label="Testnet">
 ```
+
 ```sh
 offckb deploy --network testnet
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -195,7 +213,7 @@ offckb deploy --network testnet
 
 ### Use Scripts in Frontend
 
-If the deployment is successful, the `offckb.config.ts` file will contain the necessary details to import and utilize your Scripts in your frontend dApp. Here's how you can use your Scripts directly: 
+If the deployment is successful, the `offckb.config.ts` file will contain the necessary details to import and utilize your Scripts in your frontend dApp. Here's how you can use your Scripts directly:
 
 ```ts
 import offckb from "offckb.config";
@@ -211,7 +229,6 @@ const myContractDep: CellDep = {
 };
 ```
 
-
 ## Switch Between Different Networks
 
 One of the things you might want to do is to switch between different blockchain networks during the development of your dApps. This can be accomplished by applying different environment variables in the project.
@@ -222,7 +239,8 @@ According to your boilerplate, you can switch the CKB blockchain network by sett
 <Tabs>
   <TabItem value="remixvite" label="Remix-Vite Boilerplate">
 ```
-Run the following command in your terminal. Replace `devnet` with `testnet` or `mainnet` as needed: 
+
+Run the following command in your terminal. Replace `devnet` with `testnet` or `mainnet` as needed:
 
 ```bash
 NETWORK=devnet yarn dev
@@ -232,16 +250,19 @@ NETWORK=devnet yarn dev
   </TabItem>
   <TabItem value="nextjs" label="Next.js Boilerplate">
 ```
-Search for the `.env` file, and modify `NEXT_PUBLIC_NETWORK` with your desired environment: 
+
+Search for the `.env` file, and modify `NEXT_PUBLIC_NETWORK` with your desired environment:
 
 ```bash
 NEXT_PUBLIC_NETWORK=testnet # or testnet, mainnet
 ```
+
 Then, run the following command to start your dApp:
 
 ```bash
 npm run dev
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -255,13 +276,16 @@ npm run dev
 <Tabs>
   <TabItem value="start-devnet" label="Command">
 ```
+
 ```bash
-offckb accounts 
+offckb accounts
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="show-start-devnet" label="Response">
 ```
+
 ```bash
 #### ALL ACCOUNTS ARE FOR TEST AND DEVELOP ONLY  ####
 #### DON'T USE THESE ACCOUNTS ON MAINNET         ####
@@ -310,6 +334,7 @@ lockScript:
     args: 0xe65f823bc5a48a38515690604e503dba4eb15d61
 # More accounts...
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -327,20 +352,25 @@ Occasionally, you may prefer to use your personal CKB account rather than the pr
 :::tip CKB vs. Shannons
 1 CKByte = 100,000,000 Shannons
 :::
+
 ```mdx-code-block
 <Tabs>
   <TabItem value="deposit-devnet" label="Command">
 ```
+
 ```bash
 offckb deposit --network devnet <your-ckb-address> <deposit-amount-in-shannon>
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="show-deposit-devnet" label="Response">
 ```
+
 ```bash
 tx hash:  0xe895970e9c75a5c4703c38a4e37b000895e7690552ba67ef82ae92109d7322fd
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -354,16 +384,20 @@ To check the balance of a specific account, use the following command. Replace `
 <Tabs>
   <TabItem value="balance-devnet" label="Command">
 ```
+
 ```bash
 offckb balance <CKB-address> --network <devnet/testnet>
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="show-balance-devnet" label="Response">
 ```
+
 ```bash
 Balance: 42000000 CKB
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -374,17 +408,21 @@ Balance: 42000000 CKB
 The frontend world is filled with numerous (perhaps too many) frameworks. New frameworks come out every day, and different developers have different preferences among these frameworks. So if you don't use the framework in the pre-defined boilerplate, like `remix-vite` and `next.js`, don't worry! You can still use `offckb` with the `inject-config` command.
 
 First, simply initialize your dApp project with your preferred framework, such as [CRA](https://create-react-app.dev/):
+
 ```mdx-code-block
 <Tabs>
   <TabItem value="create-my-cra-dapp" label="Command">
 ```
+
 ```bash
 npx create-react-app my-cra-dapp --template typescript
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="my-cra-dapp-created" label="Response">
 ```
+
 ```bash
 Creating a new React app in /Users/nervosDocs/Desktop/offckb/my-cra-dapp.
 
@@ -393,27 +431,32 @@ Installing react, react-dom, and react-scripts with cra-template-typescript...
 added 1489 packages in 2m
 
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
 ```
 
 Next, navigate to your dApp directory and initialize the `offckb` config within your framework:
+
 ```mdx-code-block
 <Tabs>
   <TabItem value="inject-config" label="Command">
 ```
+
 ```bash
 cd my-cra-dapp
 offckb inject-config
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="config-injected" label="Response">
 ```
+
 ```bash
-All good. You can now use it in your project like: 
-  
+All good. You can now use it in your project like:
+
 import offCKB from "offckb.config";
 
 const lumosConfig = offCKB.lumosConfig;
@@ -422,26 +465,32 @@ const rpc = offCKB.rpc;
 
 Check example at https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/simple-transfer
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
 ```
 
 Now, when you deploy your Scripts with `offckb deploy --network devnet --target <your-folder-to-your-script-binaries>`, run the following command in your frontend root path where the `offckb.config.ts` file is located to update the deployed Scripts info for your frontend.
+
 ```mdx-code-block
 <Tabs>
   <TabItem value="sync-config" label="Command">
 ```
+
 ```bash
 offckb sync-config
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="config-synced" label="Response">
 ```
+
 ```bash
 offCKB config updated.
 ```
+
 ```mdx-code-block
 </TabItem>
 </Tabs>
@@ -450,23 +499,22 @@ offCKB config updated.
 For switching between different networks, you might need to update the `readEnvNetwork` method in `offckb.config.ts` according to your framework.
 
 ```ts
-function readEnvNetwork(): 'devnet' | 'testnet' | 'mainnet' {
+function readEnvNetwork(): "devnet" | "testnet" | "mainnet" {
   // you may need to update the env method
   // according to your frontend framework
   const network = process.env.NETWORK;
-  const defaultNetwork = 'devnet';
-  if (!network)return defaultNetwork;
-  if(!['devnet', 'testnet', 'mainnet'].includes(network)){
+  const defaultNetwork = "devnet";
+  if (!network) return defaultNetwork;
+  if (!["devnet", "testnet", "mainnet"].includes(network)) {
     return defaultNetwork;
   }
 
-  return network as 'devnet' | 'testnet' | 'mainnet';
+  return network as "devnet" | "testnet" | "mainnet";
 }
 ```
 
-## About offckb.config.ts 
+## About offckb.config.ts
 
 `offckb.config.ts` is a straightforward TypeScript file that encapsulates basic info and configs for [Lumos](https://github.com/ckb-js/lumos). Everything is explicitly defined, making it easy to modify. This minimalistic approach ensures that `offckb` does not impose limitations on the tech selections and development processes of developers.
 
 If you have any feedback you would like to share with us, feel free to contact us at [github](https://github.com/nervosnetwork/docs.nervos.org) or [discord](https://discord.gg/AqGTUE9).
-

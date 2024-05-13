@@ -2,8 +2,9 @@
 id: transfer-ckb
 title: Transfer CKB
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import { TRANSFEROVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
@@ -36,7 +37,7 @@ cd docs.nervos.org/examples/simple-transfer
 
 ### Step 2: Start the Devnet
 
-<SetupProject imageSrc="img/dapps/transfer-dapp.jpg"/>
+<SetupProject imageSrc="img/dapps/transfer-dapp.jpg" />
 
 ## Behind the Scene
 
@@ -136,6 +137,7 @@ if (collectedSum.lt(neededCapacity)) {
 ```
 
 Now, let's create the transaction's output Cells:
+
 - `transferOutput`: Generated based on the desired transfer amount by the user.
 - `changeOutput`: Represents the remaining balance after completing the transaction.
 
@@ -158,6 +160,7 @@ const changeOutput: Cell = {
   data: "0x",
 };
 ```
+
 Then, we need to add Inputs and Outputs to the created `txSkeleton`. Additionally, we add `Cell Deps`, which contain an `OutPoint` pointing to some specific Live Cells. These Cells are related to the transaction and can be used as dependencies to place code that will be loaded and executed by the `ckb-vm` or to place data that can be used for on-chain script execution.
 
 ```ts
@@ -179,7 +182,6 @@ txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
 Next, update specific [witness](/docs/tech-explanation/glossary#witness) data in the transaction. The witness serves as a place to input data such as signatures for the transaction to be verified on the blockchain. The format of the witness data is flexible; however, in this instance, we adhere to the [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) specification for basic transaction structure. It is important to note that this specification may evolve to reflect best practices.
 
 The `witnessArgs` consists of 3 distinct parts, each corresponding to the different data required for the execution of specific scripts:
-
 
 ```ts
 export interface WitnessArgs {

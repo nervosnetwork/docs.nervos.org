@@ -13,12 +13,12 @@ Trade-offs are inevitable in designing any decentralized system. A common exampl
 
 An example on how layering helps improve this:
 
-* Layer 1 focuses on security and decentralization, providing trust to higher layers.
-* Layer 2 focuses on scalability, providing nearly instantaneous transactions for millions of users.
+- Layer 1 focuses on security and decentralization, providing trust to higher layers.
+- Layer 2 focuses on scalability, providing nearly instantaneous transactions for millions of users.
 
 These two layers function together to achieve higher levels of decentralization, security, and scalability.
 
-The Nervos blockchain represents the layer 1 of a multi-layer architecture that prioritizes security and decentralization as core design principles. 
+The Nervos blockchain represents the layer 1 of a multi-layer architecture that prioritizes security and decentralization as core design principles.
 
 ## What is a CKByte?
 

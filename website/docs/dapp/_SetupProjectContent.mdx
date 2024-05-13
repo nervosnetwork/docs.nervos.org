@@ -1,6 +1,6 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import ImgContainer from '@components/ImgContainer';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import ImgContainer from "@components/ImgContainer";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 To interact with the dApp, ensure that your Devnet is up and running. After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), open a terminal and start the Devnet with the following command:
@@ -9,13 +9,16 @@ To interact with the dApp, ensure that your Devnet is up and running. After inst
 <Tabs>
   <TabItem value="offckb-node" label="Command">
 ```
+
 ```bash
 offckb node
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="offckb-node-result" label="Response">
 ```
+
 ```bash
 /bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
 /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
@@ -32,6 +35,7 @@ CKB output: 2024-03-20 07:56:45.320 +00:00 main INFO ckb_db_migration  Init data
 
 CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain spec hash: Byte32(0x3036c73473a371f3aa61c588c38924a93fb8513e481fa7c8d884fc4cf5fd368a)
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -43,13 +47,16 @@ You might want to check pre-funded accounts and copy private keys for later use.
 <Tabs>
   <TabItem value="offckb-accounts" label="Command">
 ```
+
 ```bash
 offckb accounts
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="offckb-accounts-result" label="Response">
 ```
+
 ```bash
 Print account list, each account is funded with 42_000_000_00000000 capacity in the genesis block.
 [
@@ -75,9 +82,10 @@ Print account list, each account is funded with 42_000_000_00000000 capacity in 
     address: 'ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew',
     args: '0x758d311c8483e0602dfad7b69d9053e3f917457d'
   },
-  #... 
+  #...
 ]
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -91,18 +99,22 @@ Navigate to your project, install the node dependencies, and start running the e
 <Tabs>
   <TabItem value="offckb-yarn-start" label="Command">
 ```
+
 ```bash
 yarn && NETWORK=devnet yarn start
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="offckb-yarn-start-result" label="Response">
 ```
+
 ```bash
 $ parcel index.html
 Server running at http://localhost:1234
 ✨ Built in 66ms
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
