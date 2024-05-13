@@ -1,0 +1,11 @@
+# Ignore build artifacts
+build/
+dist/
+.docusaurus/
+node_modules/
+
+# Ignore configuration files
+config/
+
+# Ignore specific files
+*.log
