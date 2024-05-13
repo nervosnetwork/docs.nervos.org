@@ -2,8 +2,9 @@
 id: minimal-script
 title: "Tutorial: A Minimal Script"
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 import ScriptHeaders from "./ScriptHeaders.tsx";
 import TutorialHeader from "@components/TutorialHeader";
 
@@ -33,9 +34,9 @@ Despite its utility, the `always-success` Script is not very interesting due to 
 
 Here we will start with a more interesting idea:
 
-> Personally I dislike carrot. I do know that carrot is great from a nutritional point of view, but I still want to avoid it due to the taste. Now what if I want to set a rule, that none of my Cells on CKB has data that begin with the word `carrot`? 
+> Personally I dislike carrot. I do know that carrot is great from a nutritional point of view, but I still want to avoid it due to the taste. Now what if I want to set a rule, that none of my Cells on CKB has data that begin with the word `carrot`?
 
-Let’s write a Script code to ensure this. 
+Let’s write a Script code to ensure this.
 
 Below is a step-by-step guide, and you can also clone the full code example from the Github at [carrot-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/carrot-script).
 
@@ -43,10 +44,10 @@ Below is a step-by-step guide, and you can also clone the full code example from
 
 The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
 
-* `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
-* `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
-* `Clang 16+`
-* `cargo-generate`: You can install this via `cargo install cargo-generate`
+- `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
+- `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
+- `Clang 16+`
+- `cargo-generate`: You can install this via `cargo install cargo-generate`
 
 If you got any problems for these dependencies, refer to [readme](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for install details.
 
@@ -58,14 +59,17 @@ Now let's run the command to generate a new Script project called `my-first-cont
 <Tabs>
   <TabItem value="init-script" label="Command">
 ```
+
 ```bash
 alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
 create-ckb-scripts
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="init-script-result" label="Response">
 ```
+
 ```bash
 ⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
 🤷   Project Name: my-first-contract-workspace
@@ -76,6 +80,7 @@ create-ckb-scripts
 🔧   Initializing a fresh Git repository
 ✨   Done! New project created /tmp/my-first-contract-workspace
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -89,14 +94,17 @@ Let’s create a new Script called `carrot`.
 <Tabs>
   <TabItem value="create-a-new-script" label="Command">
 ```
+
 ```bash
 cd my-first-contract-workspace
 make generate
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="create-a-new-script-result" label="Response">
 ```
+
 ```bash
 🤷   Project Name: carrot
 🔧   Destination: /tmp/my-first-contract-workspace/contracts/carrot ...
@@ -106,6 +114,7 @@ make generate
 🔧   Initializing a fresh Git repository
 ✨   Done! New project created /tmp/my-first-contract-workspace/contracts/carrot
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -117,13 +126,16 @@ Our project is successfully setup! You can run `tree .` to show the project stru
 <Tabs>
   <TabItem value="script-project-structure" label="Command">
 ```
+
 ```bash {5}
 tree .
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="script-project-structure-result" label="Response">
 ```
+
 ```bash
 .
 ├── Cargo.lock
@@ -147,6 +159,7 @@ tree .
 
 7 directories, 13 files
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -154,11 +167,9 @@ tree .
 
 Here's a little introduction: `contracts/carrot/src/main.rs` contains the source code of the carrot Script, while `tests/tests.rs` provides unit tests for our Scripts. We will introduce the tests after we write the Script.
 
-
-
 ### Use CKB Syscall with CKB-STD Library
 
-To ensure the security of CKB Script, each Script has to run in an isolated environment that is totally separated from the main computer you are running CKB. This way it won’t be able to access data it doesn’t need, such as your private keys or passwords. 
+To ensure the security of CKB Script, each Script has to run in an isolated environment that is totally separated from the main computer you are running CKB. This way it won’t be able to access data it doesn’t need, such as your private keys or passwords.
 
 However, for a Script to be useful, there must be certain data it want to access, such as the Cell a Script guards, or a transaction a Script validates. CKB provides [syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md) to ensure this, syscalls are defined in RISC-V standard, they provide a way to access certain resources provided by the environment. In a normal situation, the environment here means the operating system, but in the case of CKB VM, the environment refers to the actual CKB process. With syscalls, a CKB Script can access the whole transaction containing itself, including inputs, outputs, witnesses, and deps.
 
@@ -187,7 +198,7 @@ ckb_std::entry!(program_entry);
 #[cfg(not(test))]
 default_alloc!();
 
-pub fn program_entry() -> i8 {    
+pub fn program_entry() -> i8 {
     match carrot_forbidden() {
         Ok(_) => 0,
         Err(err) => err as i8,
@@ -255,13 +266,13 @@ Several points worth explaining here:
 
 To load Cell data, we use `load_cell_data` syscall from `CKB-STD` library. the function takes two arguments, one is the index number, and one is source type flag that denoting the source of Cells to locate. Different source type and index number will point to different Cell. For example, `load_cell_data(0, Source::GroupOutput)` means load the first Cell from the output Cells group with the same running Script as current Script. You can check [rfc](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0046-syscalls-summary/0046-syscalls-summary.md#source) for more details.
 
-The workflow of our Script goes like this: 
+The workflow of our Script goes like this:
 
 First, it loops through all output Cells in the transaction, load each Cell data and test if those bytes match the word `carrot`. If we found a match, the Script would return -1, denoting an error status, if no match is found, the Script exits with 0, meaning execution success.
 
 To perform the loop, the Script would keep an index variable, in each loop iteration, it would tries to make the syscall to fetch the Cell denoted by current index value, if the syscall returns CKB_INDEX_OUT_OF_BOUND, it means the Script has iterated through all the Cells, hence it just exits the loop, otherwise, the loop would continue, the Cell data is tested, then index variable is incremented for the next iteration.
 
-Besides the main logic in `main.rs` file, we also write a `error.rs` to define our custom error code for the carrot Script. 
+Besides the main logic in `main.rs` file, we also write a `error.rs` to define our custom error code for the carrot Script.
 
 CKB defines some basic error code like:
 
@@ -272,7 +283,7 @@ CKB defines some basic error code like:
 
 We define error code 5 to be the custom `CarrotAttack` error. So everytime the Script throws out error code 5, we know that means the Script have found a Cell data starts with the `carrot` word so it fails.
 
-So that's all! This concludes your first useful CKB Script code! 
+So that's all! This concludes your first useful CKB Script code!
 
 In the next section, we will see how we can test and deploy it to CKB and run it.
 
@@ -476,4 +487,4 @@ By following this tutorial this far, you have mastered how to write a basic Scri
 - script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
-./ScriptHeaders.js
+  ./ScriptHeaders.js

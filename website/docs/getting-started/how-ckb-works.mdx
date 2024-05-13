@@ -9,15 +9,20 @@ To understand CKB, you first need to understand BTC. If you're familiar with BTC
 
 ## BTC’s UTXO vs. Cash
 
-BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/tech-explanation/glossary/#utxo). 
+BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/tech-explanation/glossary/#utxo).
 
-<img src="/img/how-ckb-works/utxo-box.png" alt="Features of UTXO" width="688" height="387" />
+<img
+  src="/img/how-ckb-works/utxo-box.png"
+  alt="Features of UTXO"
+  width="688"
+  height="387"
+/>
 
-- **Code as a lock:** Unlike a piece of paper, a UTXO is more like a locked box. Each box carries a code that can only be unlocked by some predefined conditions. If you have the right keys, you can unlock the box and claim the ownership. 
-- **Monetary value display:** Each UTXO box records the monetary value on its surface much like the denomination on the cash. 
+- **Code as a lock:** Unlike a piece of paper, a UTXO is more like a locked box. Each box carries a code that can only be unlocked by some predefined conditions. If you have the right keys, you can unlock the box and claim the ownership.
+- **Monetary value display:** Each UTXO box records the monetary value on its surface much like the denomination on the cash.
 - **Divisibility of value:** The value of UTXO boxes can be small or large. Larger value boxes can be split into multiple smaller one, allowing for precise value transactions similar to making change in cash dealings.
 
-Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/tech-explanation/cell-model).  A Cell is the basic unit of CKB, just like UTXOs to BTC.
+Now you understand the 80% of CKB, the rest 20% difference is that CKB uses generalized UTXOs called [Cell](/docs/tech-explanation/cell-model). A Cell is the basic unit of CKB, just like UTXOs to BTC.
 
 But what exactly are generalized UTXOs?
 
@@ -25,11 +30,11 @@ But what exactly are generalized UTXOs?
 
 UTXOs are like boxes that carry a lock made up of codes, with the monetary value clearly marked on the surface; Cells are boxes too, but much more versatile and powerful.
 
-### Dynamic Storage 
+### Dynamic Storage
 
 UTXO boxes represent a specific amount of BTC and that's all it can hold—just the cryptocurrency value. UTXO boxes cannot expand and do not have the capacity to store additional data.
 
-On the other hand, Cell boxes are different. Each Cell box not only holds a cryptocurrency value but also has storage capacity that can be used to hold arbitrary data. The larger the denomination, the more storage space available. 1 CKB = 1 byte of storage. Thus, if you have 50,000 CKB tokens, you get 50,000 bytes of on-chain storage space as well. 
+On the other hand, Cell boxes are different. Each Cell box not only holds a cryptocurrency value but also has storage capacity that can be used to hold arbitrary data. The larger the denomination, the more storage space available. 1 CKB = 1 byte of storage. Thus, if you have 50,000 CKB tokens, you get 50,000 bytes of on-chain storage space as well.
 
 ### Versatility of Content
 
@@ -37,7 +42,7 @@ Cell boxes can store any data types, as long as there is enough space to fit the
 
 ### Advanced Coding Capabilities
 
-Unlike the simple and limited code that UTXOs can carry, Cells can use complex, Turing-complete codes akin to the normal software runing on your computer. You can learn the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [Turing-complete scripts](/docs/tech-explanation/glossary/#script) further. 
+Unlike the simple and limited code that UTXOs can carry, Cells can use complex, Turing-complete codes akin to the normal software runing on your computer. You can learn the difference of [limited scripts](https://en.bitcoin.it/wiki/Script) and [Turing-complete scripts](/docs/tech-explanation/glossary/#script) further.
 
 ### Dual Lock System
 
@@ -61,14 +66,17 @@ Cell: {
   capacity: HexString; # represent the total storage space size of the Cell. The basic unit for capcaity is shannon, where 1 CKB equals 10**8 shannons.
   lock: Script; # a piece of code
   type: Script; # a piece of code
-  data: HexString; # this field can store arbitrary bytes, which means it can hold any type of data 
+  data: HexString; # this field can store arbitrary bytes, which means it can hold any type of data
 }
 ```
+
 :::note
-  The total size of all four fiels above in a Cell must be less than or equal to the Cell's capacity, as shown below:
+The total size of all four fiels above in a Cell must be less than or equal to the Cell's capacity, as shown below:
+
 ```
 capacity = Cell's total space >= Sum of the byte lengths of the 4 fields
 ```
+
 :::
 
 A Script‘s structure looks like this:
@@ -102,7 +110,12 @@ A major benefit of this design is efficiency. If everyone needs the same type of
 
 A transaction in CKB is simply an action that destroys some Cells and creates new ones.
 
-<img src="/img/how-ckb-works/transaction-structure.png" alt="transaction structure" width="688" height="428" />
+<img
+  src="/img/how-ckb-works/transaction-structure.png"
+  alt="transaction structure"
+  width="688"
+  height="428"
+/>
 
 The Cells in the inputs must all be Live Cells. These input Cells will be spent and become Dead Cells after a transaction is committed. The newly created output Cells will then become new Live Cells.
 
@@ -112,12 +125,14 @@ CKB also ensures that the total capacity of all output Cells is less than the to
 
 :::note
 In practice, for storage optimization reasons, we do not put the complete Cell in an input; instead, we just put the Cell's index that leads us to the real input Cell. This index structure is called OutPoint, which points to a particular Cell.
-```sh 
+
+```sh
 OutPoint: {
   tx_hash: HexString # The hash value of the transaction to which the target Cell belongs
   index: uint32 # The Cell position in the transaction to which the target Cell belongs
 }
 ```
+
 :::
 
 ## Congratulations!

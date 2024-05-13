@@ -1,4 +1,4 @@
-@import '@css/customVariables.css';
+@import "@css/customVariables.css";
 
 .cardContainer {
   width: 100%;
@@ -41,7 +41,7 @@
   flex-wrap: wrap;
 }
 .tags > p:not(:last-child)::after {
-  content: ',';
+  content: ",";
 }
 .tag {
   font-size: 0.75em;

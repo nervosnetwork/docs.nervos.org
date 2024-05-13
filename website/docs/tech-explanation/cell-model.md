@@ -7,7 +7,6 @@ title: Cell Model
 > This approach maintains Bitcoin's simplicity and consistency.
 > In CKB, all states are stored in Cells, computation is done off-chain, and nodes handle all verification.
 
-
 ## Cell
 
 A **Cell** represents the fundamental data storage unit in Nervos. It can encompass various data types, such as CKBytes, tokens, JavaScript code, or serialized data like JSON strings, offering extensive flexibility in data storage.
@@ -22,12 +21,11 @@ The collection of Cells constitutes the **state** of CKB. A state verified and h
 
 <img src="/img/cell/cell-ckb-state.png" alt="CKB State" width="688" height="387" />
 
-
 ## Cell Model
 
 Inspired by Bitcoin's UTXO model, Cell Model defines the behavior of individual Cells within Nervos, as well as the process for updating their contained data.
 
-Cells are immutable. No changes can be made once the Cells have been added on-chain. Updating data within a Cell requires a process called **Consumption**. This involves consuming the existing Cell, extracting and updating the data, followed by creating a new Cell with the updated data, which is then added on-chain. 
+Cells are immutable. No changes can be made once the Cells have been added on-chain. Updating data within a Cell requires a process called **Consumption**. This involves consuming the existing Cell, extracting and updating the data, followed by creating a new Cell with the updated data, which is then added on-chain.
 
 Each Cell can be consumed only once. A non-consumed Cell is a **Live Cell**. A consumed Cell is a **Dead Cell**. Once a Cell is dead, it can no longer be used.
 
@@ -43,7 +41,7 @@ This ownership structure also defines the responsibility for asset upkeep. As as
 
 ## Flexible Transaction Fee Coverage
 
-When transferring tokens, typically, those who initiate the transaction or execute smart contracts must cover the transaction fees. This poses a usability challenge in adoption. 
+When transferring tokens, typically, those who initiate the transaction or execute smart contracts must cover the transaction fees. This poses a usability challenge in adoption.
 
 Cell Model provides the flexibility by allowing any party to cover the transaction fees, eliminating the need for the sender to possess CKBytes (transaction fee in Nervos). Instead, either the receiver or a third-party can cover the fee, significantly enhancing user experience.
 
@@ -59,6 +57,6 @@ In Cell Model, smart contract execution is parallel. Each transaction runs indep
 
 Transactions are highly flexible and effective in Cell Model. Multiple smart contract operations can be batched into a single transaction, thereby minimizing transactions overhead and processing fees.
 
-***
+---
 
 For more details and the rationale behind the Cell Model, refer to [this post](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571).

@@ -1,72 +1,73 @@
-@import '@css/customVariables.css';
+@import "@css/customVariables.css";
 
 /* General styling */
 .homeLayout {
-    width: 100%;
-    background: url('/svg/header-bg.svg') no-repeat top center;
-    background-color: var(--dark-surface-01) !important;
+  width: 100%;
+  background: url("/svg/header-bg.svg") no-repeat top center;
+  background-color: var(--dark-surface-01) !important;
 }
 .relative {
-    position: relative;
+  position: relative;
 }
 .header1 {
-    font-size: 3.5em;
-    margin: 7.5rem 0 1.25rem;
+  font-size: 3.5em;
+  margin: 7.5rem 0 1.25rem;
 }
 .header2 {
-    font-size: 3em;
-    margin: 8.75rem 0 1.25rem;  
+  font-size: 3em;
+  margin: 8.75rem 0 1.25rem;
 }
-.header1, .header2 {
-    font-family: "Poppins-Bold", sans-serif;
-    line-height: 1.2;
-    text-align: center;
-    color: var(--dark-text-primary);
+.header1,
+.header2 {
+  font-family: "Poppins-Bold", sans-serif;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--dark-text-primary);
 }
 .description {
-    text-align: center;
-    color: var(--dark-text-secondary);
+  text-align: center;
+  color: var(--dark-text-secondary);
 }
 .titleBtm {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 .flexCol {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 .sectionContainer {
-    width: 100%;
-    max-width: 1440px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 4rem;
-    margin-bottom: 10rem;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 4rem;
+  margin-bottom: 10rem;
 }
 .textHighlight {
-    color: var(--dark-text-link);
+  color: var(--dark-text-link);
 }
 .ecoBG {
-    background: url('/svg/bg-eco-header.svg') no-repeat top center;
+  background: url("/svg/bg-eco-header.svg") no-repeat top center;
 }
 .updateBG {
-    background: url('/svg/bg-update-header.svg') no-repeat top center;
+  background: url("/svg/bg-update-header.svg") no-repeat top center;
 }
 
 @media (max-width: 768px) {
-    .header1 {
-        font-size: 2.5rem;
-        margin: 3rem 0 1.25rem;
-    }
-    .header2 {
-        font-size: 2em;
-        margin: 8rem 0 1.25rem;  
-    }
-    .sectionContainer {
-        padding: 0 1rem;
-        margin-bottom: 5rem;
-    }
+  .header1 {
+    font-size: 2.5rem;
+    margin: 3rem 0 1.25rem;
+  }
+  .header2 {
+    font-size: 2em;
+    margin: 8rem 0 1.25rem;
+  }
+  .sectionContainer {
+    padding: 0 1rem;
+    margin-bottom: 5rem;
+  }
 }

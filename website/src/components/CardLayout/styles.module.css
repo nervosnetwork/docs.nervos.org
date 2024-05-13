@@ -2,23 +2,44 @@
   display: grid;
   width: 100%;
   grid-gap: var(--gap);
-  grid-template-columns: repeat(var(--columnL), minmax(0, calc((100% - (var(--columnL) - 1) * var(--gap)) / var(--columnL))));
+  grid-template-columns: repeat(
+    var(--columnL),
+    minmax(0, calc((100% - (var(--columnL) - 1) * var(--gap)) / var(--columnL)))
+  );
 }
 
 @media (min-width: 997px) and (max-width: 1439px) {
   .layoutContainer {
-    grid-template-columns: repeat(var(--columnM), minmax(0, calc((100% - (var(--columnM) - 1) * var(--gap)) / var(--columnM))));
+    grid-template-columns: repeat(
+      var(--columnM),
+      minmax(
+        0,
+        calc((100% - (var(--columnM) - 1) * var(--gap)) / var(--columnM))
+      )
+    );
   }
 }
 
 @media (min-width: 769px) and (max-width: 996px) {
   .layoutContainer {
-    grid-template-columns: repeat(var(--columnS), minmax(0, calc((100% - (var(--columnS) - 1) * var(--gap)) / var(--columnS))));
+    grid-template-columns: repeat(
+      var(--columnS),
+      minmax(
+        0,
+        calc((100% - (var(--columnS) - 1) * var(--gap)) / var(--columnS))
+      )
+    );
   }
 }
 
 @media (max-width: 768px) {
   .layoutContainer {
-    grid-template-columns: repeat(var(--columnXS), minmax(0, calc((100% - (var(--columnXS) - 1) * var(--gap)) / var(--columnXS))));
+    grid-template-columns: repeat(
+      var(--columnXS),
+      minmax(
+        0,
+        calc((100% - (var(--columnXS) - 1) * var(--gap)) / var(--columnXS))
+      )
+    );
   }
 }

@@ -8,19 +8,21 @@ window.addEventListener("DOMContentLoaded", function () {
   document.querySelector("body").prepend(oldSiteLink);
 
   // Redirect users to /docs/getting-started
-  if (window.location.pathname === '/docs') {
-    window.location.pathname = '/docs/getting-started';
+  if (window.location.pathname === "/docs") {
+    window.location.pathname = "/docs/getting-started";
   }
 
   // Keeps track of search term in GA
-  document.addEventListener('keydown', function(event) {
+  document.addEventListener("keydown", function (event) {
     const target = event.target;
-    const isSearchInput = target.classList.contains('aa-Input') && target.type === 'search';
-    if (isSearchInput && event.key === 'Enter') {
-      window.gtag && window.gtag('event', 'search', {
-        event_category: 'Site Search',
-        event_label: target.value
-      });
+    const isSearchInput =
+      target.classList.contains("aa-Input") && target.type === "search";
+    if (isSearchInput && event.key === "Enter") {
+      window.gtag &&
+        window.gtag("event", "search", {
+          event_category: "Site Search",
+          event_label: target.value,
+        });
     }
   });
 });

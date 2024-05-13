@@ -9,7 +9,7 @@ export default {
         "getting-started/how-ckb-works",
         "getting-started/quick-start",
         "getting-started/devtool",
-      ]
+      ],
     },
     {
       type: "category",
@@ -21,7 +21,7 @@ export default {
         "dapp/write-message",
         "dapp/create-token",
         "dapp/create-dob",
-      ]
+      ],
     },
     {
       type: "category",
@@ -34,17 +34,14 @@ export default {
         "script/minimal-script",
         "script/js-script",
         "script/common-script-error-code",
-      ]
+      ],
     },
     {
       type: "category",
       label: "Integrate Wallets",
       className: "category-integrate-wallets",
       collapsible: false,
-      items: [
-        "integrate-wallets/intro-to-wallets",
-        "integrate-wallets/joyid",   
-      ]
+      items: ["integrate-wallets/intro-to-wallets", "integrate-wallets/joyid"],
     },
     {
       type: "category",
@@ -52,12 +49,12 @@ export default {
       className: "category-node",
       collapsible: false,
       items: [
-          "node/rpcs",
-          "node/run-mainnet-node",
-          "node/run-testnet-node",
-          "node/run-devnet-node",
-          "node/run-public-rpc-node",
-      ]
+        "node/rpcs",
+        "node/run-mainnet-node",
+        "node/run-testnet-node",
+        "node/run-devnet-node",
+        "node/run-public-rpc-node",
+      ],
     },
     {
       type: "category",
@@ -72,7 +69,7 @@ export default {
         "mining/hardware",
         "mining/guide",
         "mining/info-stats",
-      ]
+      ],
     },
     {
       type: "category",
@@ -86,16 +83,14 @@ export default {
         "tech-explanation/consensus",
         "tech-explanation/economics",
         "tech-explanation/glossary",
-      ]
+      ],
     },
     {
       type: "category",
       label: "Ecosystem",
       className: "category-ecosystem",
       collapsible: false,
-      items: [
-        "ecosystem/projects",
-      ]
+      items: ["ecosystem/projects"],
     },
     {
       type: "category",
@@ -117,8 +112,8 @@ export default {
           type: "link",
           label: "CKB Dev Log",
           href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
-        }
-      ]
+        },
+      ],
     },
   ],
 };

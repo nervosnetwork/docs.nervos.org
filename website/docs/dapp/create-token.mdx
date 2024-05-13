@@ -2,8 +2,9 @@
 id: create-token
 title: Create a Fungible Token
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import { TOKENOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
@@ -46,7 +47,7 @@ cd docs.nervos.org/examples/xudt
 
 ### Step 2: Start the Devnet
 
-<SetupProject imageSrc="img/dapps/issue-token-dapp.jpg"/>
+<SetupProject imageSrc="img/dapps/issue-token-dapp.jpg" />
 
 ## Behind the Scene
 
@@ -71,7 +72,8 @@ export async function issueToken(privKey: string, amount: string) {
 ```
 
 This function accepts two parameters:
-- `privKey`: The private key of the issuer 
+
+- `privKey`: The private key of the issuer
 - `amount`: The amount of token
 
 Note that we aim to create an output Cell whose [type script](/docs/tech-explanation/glossary#type-script) is an xUDT script. The args of this xUDT script are the issuer's lock script hash, which is why we include the following lines of code:

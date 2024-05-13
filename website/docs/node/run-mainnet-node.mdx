@@ -2,6 +2,7 @@
 id: run-mainnet-node
 title: Run a Mainnet Node
 ---
+
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
@@ -18,8 +19,7 @@ We will use **ckb_v0.115.0** for this guide. Please ensure you download the late
 
 :::
 
-Get the latest CKB binary from [Github releases](https://github.com/nervosnetwork/ckb/releases). 
-
+Get the latest CKB binary from [Github releases](https://github.com/nervosnetwork/ckb/releases).
 
 ## Step 2: Navigate to CKB Directory
 
@@ -29,16 +29,20 @@ Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windo
 <Tabs>
   <TabItem value="mac" label="Mac">
 ```
+
 ```bash
   cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="windows" label="Windows">
 ```
+
 ```bash
   cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -50,18 +54,22 @@ Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windo
 <Tabs>
   <TabItem value="check-version" label="Command">
 ```
+
 ```bash
   ckb --version
   ckb-cli --version
 ```
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="verify-version" label="Result">
 ```
+
 ```bash
   ckb 0.115.0 (d845cbf 2024-04-01)
   ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
 ```
+
 ```mdx-code-block
   </TabItem>
 </Tabs>
@@ -79,7 +87,7 @@ Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windo
   ckb run
 ```
 
-By following these steps, you've successfully started a CKB node connected to the mainnet. This node will participate in the network, contributing to its security and robustness. 
+By following these steps, you've successfully started a CKB node connected to the mainnet. This node will participate in the network, contributing to its security and robustness.
 
 ## Track Your Node
 

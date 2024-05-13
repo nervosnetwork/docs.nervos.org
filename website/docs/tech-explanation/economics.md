@@ -45,7 +45,7 @@ Base Issuance follows a transparent, predictable inflation schedule, [halving](h
 
 ## Secondary Issuance
 
-After Base Issuance, relying solely on transaction fees may not suffice for miner incentives or data persistence. Secondary Issuance, with an small annual fixed inflation of 1.344 billion CKBytes, addresses these concerns. 
+After Base Issuance, relying solely on transaction fees may not suffice for miner incentives or data persistence. Secondary Issuance, with an small annual fixed inflation of 1.344 billion CKBytes, addresses these concerns.
 
 Unlike Base Issuance, Secondary Issuance only targets at users occupying Nervos space or holding CKBytes outside Nervos DAO. Secondary Issuance are distributed to:
 
@@ -57,6 +57,6 @@ Unlike Base Issuance, Secondary Issuance only targets at users occupying Nervos 
 
 CKBytes holders can earn interest by locking tokens in Nervos DAO, similar to staking. Interest accrues proportionally to Secondary Issuance, offsetting the long-term inflationary effects of the latter, thus maintaining value. Users occupying space in Nervos have their CKBytes locked, making them ineligible to be placed in Nervos DAO. Once the space-occupying Cells are consumed and the CKBytes are released, they can be placed in Nervos DAO. This mechanism incentivizes the removal of unnecessary data, ensuring long-term manageability of the blockchain.
 
-***
+---
 
 For more information, refer to the [RFC Crypto-Economics of the Nervos Common Knowledge Base](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md).

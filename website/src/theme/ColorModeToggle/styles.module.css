@@ -1,4 +1,4 @@
-@import '@css/customVariables.css';
+@import "@css/customVariables.css";
 
 .toggle {
   width: 3rem;
@@ -23,8 +23,8 @@
   background: var(--hover);
 }
 
-[data-theme='light'] .darkToggleIcon,
-[data-theme='dark'] .lightToggleIcon {
+[data-theme="light"] .darkToggleIcon,
+[data-theme="dark"] .lightToggleIcon {
   display: none;
 }
 
