@@ -33,6 +33,6 @@ start the app:
 
 ```sh
 export NETWORK=devnet
-cd my-simple-transfer
+cd simple-transfer
 yarn && yarn start
 ```
