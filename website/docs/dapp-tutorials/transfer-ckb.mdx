@@ -27,38 +27,13 @@ A transaction in CKB works similarly to Bitcoin. Each transaction consumes some 
 
 ### Step 1: Initialize
 
-After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), run the following command to initlize a project with our built-in templates. 
+Clone the tutorial dApp by the follwoing commands:
 
-```bash
-offckb init <project-name>
-```
-
-When prompted to select a dApp template, use your arrow keys to select **View and Transfer a CKB Balance** for this tutorial.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="offckb-init" label="Command">
-```
 ```bash {2}
-? Select a dApp template (Use arrow keys)
-> View and Transfer a CKB Balance
-  Write an On-Chain Message
-  Create a Fungible Token
-  Create a Digital Object Using Spore Protocol
-A simple dApp to check CKB balance and transfer CKB
+git clone https://github.com/nervosnetwork/docs.nervos.org.git
+cd docs.nervos.org/examples/simple-transfer
 ```
-```mdx-code-block
-  </TabItem>
-  <TabItem value="offckb-init-result" label="Response">
-```
-```bash
-init CKB dApp project: /Users/ckb/Desktop/offckb/<project-name>
-✨  Done in 2.52s.
-```
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
+
 ### Step 2: Start the Devnet
 
 <SetupProject imageSrc="img/dapps/transfer-dapp.jpg"/>

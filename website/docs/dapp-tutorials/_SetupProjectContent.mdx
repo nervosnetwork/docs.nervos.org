@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 import ImgContainer from '@components/ImgContainer';
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-To interact with the dApp, you need to have your Devnet running. Open one terminal and start the Devnet:
+To interact with the dApp, you need to have your Devnet running. After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), open one terminal and start the Devnet:
 
 ```mdx-code-block
 <Tabs>
@@ -92,7 +92,7 @@ Navigate to your project, install the node dependencies, and start running the e
   <TabItem value="offckb-yarn-start" label="Command">
 ```
 ```bash
-cd <project-name> && yarn && yarn start
+yarn && NETWORK=devnet yarn start
 ```
 ```mdx-code-block
   </TabItem>
