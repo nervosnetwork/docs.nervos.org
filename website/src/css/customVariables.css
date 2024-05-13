@@ -24,15 +24,15 @@
 
     /* Alert Variables */
     --alert-success: #0C865C;
-    --alert-success-bg: rgba(12, 134, 92, 0.1);
-    --alert-secondary: #255063;
-    --alert-secondary-bg: rgba(37, 80, 99, 0.1);
+    --alert-success-bg: rgba(12, 134, 92, 0.05);
+    --alert-secondary: #D0E1E7;
+    --alert-secondary-bg: rgba(208, 225, 231, 0.05);
     --alert-info: #2047D1;
-    --alert-info-bg: rgba(32, 71, 209, 0.1);
+    --alert-info-bg: rgba(32, 71, 209, 0.05);
     --alert-warning: #CBC125;
-    --alert-warning-bg: rgba(203, 193, 37, 0.1);
+    --alert-warning-bg: rgba(203, 193, 37, 0.05);
     --alert-danger: #C51C1C;
-    --alert-danger-bg: rgba(197, 28, 28, 0.1);
+    --alert-danger-bg: rgba(197, 28, 28, 0.05);
 
     /* Code Variables*/
     --code-plain: #255063;
@@ -62,8 +62,8 @@
 
     --dark-alert-success: #18EFB1;
     --dark-alert-success-bg: rgba(24, 239, 177, 0.1);
-    --dark-alert-secondary: rgba(228, 247, 255, 0.85);
-    --dark-alert-secondary-bg: rgba(228, 247, 255, 0.1);
+    --dark-alert-secondary: #3D535B;
+    --dark-alert-secondary-bg: rgba(61, 83, 91, 0.1);
     --dark-alert-info: #828EF9;
     --dark-alert-info-bg: rgba(130, 142, 249, 0.1);
     --dark-alert-warning: #FFF778;

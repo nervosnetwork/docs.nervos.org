@@ -14,6 +14,12 @@ module.exports = {
       },
     },
     {
+      types: ['operator'],
+      style: {
+          color: 'var(--text-secondary)',
+      },
+    },
+    {
         types: ['constant'],
         style: {
             color: 'var(--code-constant)',
