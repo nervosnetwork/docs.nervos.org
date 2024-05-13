@@ -14,26 +14,26 @@ export default {
     {
       type: "category",
       label: "DApp Tutorials",
-      className: "category-dapp-tutorials",
+      className: "category-dapp",
       collapsible: false,
       items: [
-        "dapp-tutorials/transfer-ckb",
-        "dapp-tutorials/write-message",
-        "dapp-tutorials/create-token",
-        "dapp-tutorials/create-dob",
+        "dapp/transfer-ckb",
+        "dapp/write-message",
+        "dapp/create-token",
+        "dapp/create-dob",
       ]
     },
     {
       type: "category",
       label: "Scripts (Smart Contracts)",
-      className: "category-scripts",
+      className: "category-script",
       collapsible: false,
       items: [
-        "scripts/intro-to-script",
-        "scripts/program-language-for-script",
-        "scripts/minimal-script",
-        "scripts/js-script",
-        "scripts/common-script-error-code",
+        "script/intro-to-script",
+        "script/program-language-for-script",
+        "script/minimal-script",
+        "script/js-script",
+        "script/common-script-error-code",
       ]
     },
     {
@@ -49,14 +49,14 @@ export default {
     {
       type: "category",
       label: "Network & Nodes",
-      className: "category-network-and-nodes",
+      className: "category-node",
       collapsible: false,
       items: [
-          "network-and-nodes/rpcs",
-          "network-and-nodes/run-mainnet-node",
-          "network-and-nodes/run-testnet-node",
-          "network-and-nodes/run-devnet-node",
-          "network-and-nodes/run-public-rpc-node",
+          "node/rpcs",
+          "node/run-mainnet-node",
+          "node/run-testnet-node",
+          "node/run-devnet-node",
+          "node/run-public-rpc-node",
       ]
     },
     {

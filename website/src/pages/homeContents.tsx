@@ -19,25 +19,34 @@ const homeCardContents: HomeCardProps[] = [
         links: [
             { label: "How CKB Works", link: "/docs/getting-started/how-ckb-works"},
             { label: "Quick Start (5 min)", link: "/docs/getting-started/quick-start"},
-            { label: "DApp Tutorial: Transfer CKB", link: "/docs/dapp-tutorials/transfer-ckb"},
+            { label: "Dev Tools", link: "/docs/getting-started/devtool"},
         ],
         icon: 'rocket',
     },
     {
+        title: 'Dapp Tutorials',
+        links: [
+            { label: "Transfer CKB", link: "/docs/dapp/transfer-ckb"},
+            { label: "Write an On-Chain Message", link: "/docs/dapp/write-message"},
+            { label: "Create a DOB", link: "/docs/dapp/create-dob"},
+        ],
+        icon: 'dapp',
+    },
+    {
         title: 'Scripts',
         links: [
-            { label: "Intro to Script", link: "/docs/scripts/intro-to-script"},
-            { label: "Script Tutorial: A Minimal Script", link: "/docs/scripts/minimal-script"},
-            { label: "Script Tutorial: Run JS on CKB", link: "/docs/scripts/js-script"},
+            { label: "Intro to Script", link: "/docs/script/intro-to-script"},
+            { label: "Tutorial: A Minimal Script", link: "/docs/script/minimal-script"},
+            { label: "Tutorial: Run JS on CKB", link: "/docs/script/js-script"},
         ],
         icon: 'script',
     },
     {
         title: 'Run a Node',
         links: [
-            { label: "Run a Mainnet Node", link: "/docs/network-and-nodes/run-mainnet-node"},
-            { label: "Run a Testnet Node", link: "/docs/network-and-nodes/run-testnet-node"},
-            { label: "Run a Public RPC Node", link: "/docs/network-and-nodes/run-public-rpc-node"},
+            { label: "Run a Mainnet Node", link: "/docs/node/run-mainnet-node"},
+            { label: "Run a Testnet Node", link: "/docs/node/run-testnet-node"},
+            { label: "Run a Devnet Node", link: "/docs/node/run-devnet-node"},
         ],
         icon: 'node',
     },
@@ -51,22 +60,13 @@ const homeCardContents: HomeCardProps[] = [
         icon: 'mining',
     },
     {
-        title: 'Concepts',
+        title: 'Tech Explanation',
         links: [
             { label: "Nervos Blockchain", link: "/docs/tech-explanation/nervos-blockchain"},
             { label: "Cell Model", link: "/docs/tech-explanation/cell-model"},
             { label: "Tokenomics", link: "/docs/tech-explanation/economics"},
         ],
         icon: 'concept',
-    },
-    {
-        title: 'Resources',
-        links: [
-            { label: "Positioning Paper", link: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md"},
-            { label: "CKB RFCs", link: "https://github.com/nervosnetwork/rfcs"},
-            { label: "CKB Dev Log", link: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log"},
-        ],
-        icon: 'resource',
     },
 ];
 

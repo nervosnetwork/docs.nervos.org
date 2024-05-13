@@ -20,7 +20,7 @@ const TRANSFEROVERVIEW: TutorialHeaderProps =
                 Yarn
             </Link>
         </div>,
-        <div>CKB dev environment: <Link to={"/docs/network-and-nodes/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
+        <div>CKB dev environment: <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
     ],
 }
 const WRITEOVERVIEW: TutorialHeaderProps = 
@@ -41,7 +41,7 @@ const WRITEOVERVIEW: TutorialHeaderProps =
                 Yarn
             </Link>
         </div>,
-        <div>CKB dev environment: <Link to={"/docs/network-and-nodes/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
+        <div>CKB dev environment: <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
     ],
 }
 const TOKENOVERVIEW: TutorialHeaderProps = 
@@ -62,7 +62,7 @@ const TOKENOVERVIEW: TutorialHeaderProps =
                 Yarn
             </Link>
         </div>,
-        <div>CKB dev environment: <Link to={"/docs/network-and-nodes/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
+        <div>CKB dev environment: <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
     ],
 }
 const DOBOVERVIEW: TutorialHeaderProps = 
@@ -83,7 +83,7 @@ const DOBOVERVIEW: TutorialHeaderProps =
                 Yarn
             </Link>
         </div>,
-        <div>CKB dev environment: <Link to={"/docs/network-and-nodes/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
+        <div>CKB dev environment: <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>OffCKB</Link></div>
     ],
 }
   
