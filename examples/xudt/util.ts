@@ -1,9 +1,11 @@
 import { helpers, Address, Script, hd, BI, CellDep } from '@ckb-lumos/lumos';
 import { values } from '@ckb-lumos/base';
-import { indexer, lumosConfig } from './ckb';
 import { TransactionSkeletonType } from '@ckb-lumos/helpers';
 import { number } from '@ckb-lumos/codec';
+import offCKBConfig from './offckb.config';
 
+const { indexer, lumosConfig } = offCKBConfig;
+ 
 type Account = {
   lockScript: Script;
   address: Address;
