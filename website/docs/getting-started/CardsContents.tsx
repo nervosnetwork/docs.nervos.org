@@ -2,10 +2,10 @@ import { CardProps } from "@site/src/components/Card";
 
 // Tutorial links
 const TUTORIALS_LINKS = {
-  transferBalance: "/docs/dapp-tutorials/transfer-ckb",
-  writeMessage: "/docs/dapp-tutorials/write-message",
-  issueToken: "/docs/dapp-tutorials/create-token",
-  createDOB: "/docs/dapp-tutorials/create-dob",
+  transferBalance: "/docs/dapp/transfer-ckb",
+  writeMessage: "/docs/dapp/write-message",
+  issueToken: "/docs/dapp/create-token",
+  createDOB: "/docs/dapp/create-dob",
 };
 
 const toolCardContents: CardProps[] = [

@@ -227,13 +227,13 @@
   width: 1.5rem;
   height: 1.5rem;
 }
-.category-dapp-tutorials > div > a:before {
+.category-dapp > div > a:before {
   content:url('/svg/icon-sidebar-tutorial.svg');
   margin-right: 0.5rem;
   width: 1.5rem;
   height: 1.5rem;
 }
-.category-scripts > div > a:before {
+.category-script > div > a:before {
   content:url('/svg/icon-sidebar-script.svg');
   margin-right: 0.5rem;
   width: 1.5rem;
@@ -245,7 +245,7 @@
   width: 1.5rem;
   height: 1.5rem;
 }
-.category-network-and-nodes > div > a:before {
+.category-node > div > a:before {
   content:url('/svg/icon-sidebar-node.svg');
   margin-right: 0.5rem;
   width: 1.5rem;
