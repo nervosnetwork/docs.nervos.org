@@ -14,7 +14,6 @@ permissions: # Define the permissions for the GITHUB_TOKEN
 
 jobs:
   node-js:
-    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
