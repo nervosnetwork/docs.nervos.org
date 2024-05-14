@@ -7,6 +7,7 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import ScriptHeaders from "./ScriptHeaders.tsx";
 import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./_ScriptTools.mdx";
 
 # Tutorial: Run JavaScript Code on CKB
 
@@ -110,12 +111,7 @@ understanding.
 
 The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
 
-- `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
-- `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
-- `Clang 16+`
-- `cargo-generate`: You can install this via `cargo install cargo-generate`
-
-If you encounter any problems with these dependencies, refer to the [ReadMe](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for installation details.
+<ScriptTools />
 
 ### Init a Script Project
 

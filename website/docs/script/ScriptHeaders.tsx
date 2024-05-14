@@ -38,6 +38,14 @@ export const ScriptHeaders: ScriptHeadersType = {
         </a>
         ,
         <a
+          href="https://www.gnu.org/software/sed/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          sed
+        </a>
+        ,
+        <a
           href="https://www.gnu.org/software/bash/"
           target="_blank"
           rel="noopener noreferrer"
@@ -67,7 +75,7 @@ export const ScriptHeaders: ScriptHeadersType = {
         >
           Clang 16+
         </a>
-        {" sample installtion steps for selected platforms are:"}
+
         <ul>
           <li>
             Debian / Ubuntu:{" "}
@@ -83,10 +91,11 @@ export const ScriptHeaders: ScriptHeadersType = {
             Archlinux: <code>sudo pacman --noconfirm -Syu clang</code>
           </li>
           <li>
-            macOS: <code>brew install llvm@16</code>
+            MacOS (with <a href="https://brew.sh/">Homebrew</a>):{" "}
+            <code>brew install llvm@16</code>
           </li>
           <li>
-            Windows(with [Scoop](scoop install llvm yasm)):{" "}
+            Windows (with <a href="https://scoop.sh/">Scoop</a>):{" "}
             <code>scoop install llvm yasm</code>
           </li>
         </ul>
