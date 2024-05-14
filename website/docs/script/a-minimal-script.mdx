@@ -44,12 +44,20 @@ Below is a step-by-step guide, and you can also clone the full code example from
 
 The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
 
-- `git`, `make`, `sed`, `bash`, `sha256sum` and others Unix utilities
-- `Rust` with `riscv64` target installed: `rustup target add riscv64imac-unknown-none-elf`
-- `Clang 16+`
-- `cargo-generate`: You can install this via `cargo install cargo-generate`
+:::info Tools You Need
 
-If you got any problems for these dependencies, refer to [readme](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for install details.
+- [git](https://git-scm.com/), [make](https://www.tutorialspoint.com/unix_commands/make.htm), [sed](https://www.gnu.org/software/sed/), [bash](https://www.gnu.org/software/bash/), [sha256sum](https://linux.die.net/man/1/sha256sum) and others Unix utilities.
+- [Rust](https://www.rust-lang.org/) with `riscv64 target`: `rustup target add riscv64imac-unknown-none-elf`
+- [Clang 16+](https://releases.llvm.org/16.0.0/tools/clang/docs/ReleaseNotes.html)
+- [Cargo-generate](https://github.com/cargo-generate/cargo-generate)
+  - Debian / Ubuntu: ` wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && sudo./llvm.sh 16 && rm llvm.sh`
+  - Fedora 39+: `sudo dnf -y install clang`
+  - Archlinux: `sudo pacman --noconfirm -Syu clang`
+  - MacOS (with [Homebrew](https://brew.sh/)): `brew install llvm@16`
+  - Windows (with [Scoop](https://scoop.sh/)): `scoop install llvm yasm`
+
+Check out the `ckb-script-templates` for more [details](https://github.com/cryptape/ckb-script-templates/blob/main/README.md#dependencies).
+:::
 
 ### Init a Script Project
 
