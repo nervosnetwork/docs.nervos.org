@@ -1,7 +1,4 @@
-import { bytes } from '@ckb-lumos/codec';
-import { helpers, Address, Script, hd, config, Cell, commons, WitnessArgs, BI } from '@ckb-lumos/lumos';
-import { values, blockchain } from '@ckb-lumos/base';
-const { ScriptValue } = values;
+import { helpers, Address, Script, hd, commons, BI } from '@ckb-lumos/lumos';
 import offCKB from './offckb.config';
 
 const {indexer, rpc, lumosConfig} = offCKB;
@@ -42,112 +39,24 @@ export async function capacityOf(address: string): Promise<BI> {
   return balance;
 }
 
-interface Options {
-  from: string;
-  to: string;
-  amount: string;
-  privKey: string;
-}
+export async function transfer(fromAddress: string, toAddress: string, amountInShannon: string, signerPrivateKey: string): Promise<string> {
+  let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+  txSkeleton = await commons.common.transfer(txSkeleton, [fromAddress], toAddress, amountInShannon);
 
-export async function transfer(options: Options): Promise<string> {
-  let txSkeleton = helpers.TransactionSkeleton({});
-  const fromScript = helpers.parseAddress(options.from, {
-    config: lumosConfig,
-  });
-  const toScript = helpers.parseAddress(options.to, { config: lumosConfig });
-
-  if (BI.from(options.amount).lt(BI.from('6100000000'))) {
-    throw new Error(
-      `every cell's capacity must be at least 61 CKB, see https://medium.com/nervosnetwork/understanding-the-nervos-dao-and-cell-model-d68f38272c24`,
-    );
-  }
-
-  // additional 0.001 ckb for tx fee
-  // the tx fee could calculated by tx size
-  // this is just a simple example
-  const neededCapacity = BI.from(options.amount).add(100000);
-  let collectedSum = BI.from(0);
-  const collected: Cell[] = [];
-  const collector = indexer.collector({ lock: fromScript, type: 'empty' });
-  for await (const cell of collector.collect()) {
-    collectedSum = collectedSum.add(cell.cellOutput.capacity);
-    collected.push(cell);
-    if (collectedSum.gte(neededCapacity)) break;
-  }
-
-  if (collectedSum.lt(neededCapacity)) {
-    throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
-  }
-
-  const transferOutput: Cell = {
-    cellOutput: {
-      capacity: BI.from(options.amount).toHexString(),
-      lock: toScript,
-    },
-    data: '0x',
-  };
-
-  const changeOutput: Cell = {
-    cellOutput: {
-      capacity: collectedSum.sub(neededCapacity).toHexString(),
-      lock: fromScript,
-    },
-    data: '0x',
-  };
-
-  txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
-  txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(transferOutput, changeOutput));
-  txSkeleton = txSkeleton.update('cellDeps', (cellDeps) =>
-    cellDeps.push({
-      outPoint: {
-        txHash: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.TX_HASH,
-        index: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.INDEX,
-      },
-      depType: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.DEP_TYPE,
-    }),
-  );
-
-  const firstIndex = txSkeleton
-    .get('inputs')
-    .findIndex((input) =>
-      new ScriptValue(input.cellOutput.lock, { validate: false }).equals(
-        new ScriptValue(fromScript, { validate: false }),
-      ),
-    );
-  if (firstIndex !== -1) {
-    while (firstIndex >= txSkeleton.get('witnesses').size) {
-      txSkeleton = txSkeleton.update('witnesses', (witnesses) => witnesses.push('0x'));
-    }
-    let witness: string = txSkeleton.get('witnesses').get(firstIndex)!;
-    const newWitnessArgs: WitnessArgs = {
-      /* 65-byte zeros in hex */
-      lock: '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
-    };
-    if (witness !== '0x') {
-      const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
-      const lock = witnessArgs.lock;
-      if (!!lock && !!newWitnessArgs.lock && !bytes.equal(lock, newWitnessArgs.lock)) {
-        throw new Error('Lock field in first witness is set aside for signature!');
-      }
-      const inputType = witnessArgs.inputType;
-      if (inputType) {
-        newWitnessArgs.inputType = inputType;
-      }
-      const outputType = witnessArgs.outputType;
-      if (outputType) {
-        newWitnessArgs.outputType = outputType;
-      }
-    }
-    witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-    txSkeleton = txSkeleton.update('witnesses', (witnesses) => witnesses.set(firstIndex, witness));
-  }
+  // https://github.com/nervosnetwork/ckb/blob/develop/util/app-config/src/legacy/tx_pool.rs#L9
+  // const DEFAULT_MIN_FEE_RATE: FeeRate = FeeRate::from_u64(1000);
+  txSkeleton = await commons.common.payFeeByFeeRate(txSkeleton, [fromAddress], 1000 /*fee_rate*/);
 
   txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get('signingEntries').get(0)!.message;
-  const Sig = hd.key.signRecoverable(message!, options.privKey);
-  const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-  const hash = await rpc.sendTransaction(tx, 'passthrough');
-  console.log('Full transaction: ', JSON.stringify(tx, null, 2));
 
-  return hash;
+  const signatures = txSkeleton
+    .get("signingEntries")
+    .map((entry) => hd.key.signRecoverable(entry.message, signerPrivateKey))
+    .toArray();
+
+  const signedTx = helpers.sealTransaction(txSkeleton, signatures);
+  const txHash = await rpc.sendTransaction(signedTx);
+  console.log(`Go to explorer to check the sent transaction https://pudge.explorer.nervos.org/transaction/${txHash}`);
+
+  return txHash;
 }
