@@ -19,12 +19,11 @@ Script: {
 
 ## Fields & Description{#fields-and-description}
 
-| Name      | Type                                                                       | Description                                                                                         |
-| --------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `code_hash` | H256                                                                       | Hash of the ELF formatted RISC-V binary that contains a CKB Script. For more, see [`code_hash`](/docs/tech-explanation/code-hash)  |
+| Name        | Type                                                                         | Description                                                                                                                        |
+| ----------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `code_hash` | H256                                                                         | Hash of the ELF formatted RISC-V binary that contains a CKB Script. For more, see [`code_hash`](/docs/tech-explanation/code-hash)  |
 | `hash_type` | Uint8, one of the 4 values: \{0: "data", 1: "type", 2: "data1", 3: "data2"\} | Interpretation of the code hash when looking for matching dep cells. For more, see [`hash_type`](/docs/tech-explanation/hash-type) |
-| `args`      | H256                                                                       | Arguments as the Script input. For more, see [`args`](/docs/tech-explanation/args)                                     |
-
+| `args`      | H256                                                                         | Arguments as the Script input. For more, see [`args`](/docs/tech-explanation/args)                                                 |
 
 ## Script vs. Code
 
@@ -34,4 +33,3 @@ We differentiate the terms Script and Code as follows:
 - Code refers to the RISC-V binary, runnable in CKB-VM and can be referenced to by the Script structure.
 - A code Cell is a Cell containing RISC-V binary code.
 - Script does not directly include code; it simply stores a pointer to reference the code.
-

@@ -7,7 +7,6 @@ title: Cell Model
 > This approach maintains Bitcoin's simplicity and consistency.
 > In CKB, all states are stored in Cells, computation is done off-chain, and nodes handle all verification.
 
-
 ## Cell Model
 
 Inspired by Bitcoin's UTXO model, Cell Model defines the behavior of individual Cells within Nervos, as well as the process for updating their contained data.
