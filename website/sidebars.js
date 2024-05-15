@@ -82,7 +82,6 @@ export default {
         "tech-explanation/ckb-vm",
         "tech-explanation/consensus",
         "tech-explanation/economics",
-        "tech-explanation/glossary",
         "tech-explanation/cell-structure",
         "tech-explanation/cell-fields-description",
         "tech-explanation/cell-example",
@@ -93,6 +92,9 @@ export default {
         "tech-explanation/code-hash",
         "tech-explanation/hash-type",
         "tech-explanation/args",
+        "tech-explanation/lock-script",
+        "tech-explanation/type-script",
+        "tech-explanation/glossary",
       ],
     },
     {
