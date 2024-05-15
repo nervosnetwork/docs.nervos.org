@@ -1,0 +1,17 @@
+---
+id: cell-structure
+title: Cell: Structure
+---
+
+A Cell is the smallest and fundamental unit in Nervos CKB, used for storing states.
+
+In a transaction, some Cells from previous transactions are destroyed, and new cells are created. Cells destroyed and created are inputs and outputs.
+
+```
+Cell: {
+  capacity: HexString; 
+  lock: Script;
+  type: Script; 
+  data: HexString; 
+}
+```
