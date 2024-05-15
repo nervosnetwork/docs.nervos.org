@@ -7,19 +7,6 @@ title: Cell Model
 > This approach maintains Bitcoin's simplicity and consistency.
 > In CKB, all states are stored in Cells, computation is done off-chain, and nodes handle all verification.
 
-## Cell
-
-A **Cell** represents the fundamental data storage unit in Nervos. It can encompass various data types, such as CKBytes, tokens, JavaScript code, or serialized data like JSON strings, offering extensive flexibility in data storage.
-
-<img src="/img/cell/cell-data.png" alt="Cell Data" width="688" height="387" />
-
-Each Cell contains a small program known as a Lock Script that determines the owner of the Cell. While typically assigning ownership to a single user, Lock Script can also handle complex operations, such as having multiple owners (multi-sig) or conditional usage within specific timeframes.
-
-A Cell may include a **Type Script** to execute specific rules governing its usage. This empowers developers to customize smart contracts across diverse use-cases, such as issuing Non-Fungible Tokens, limiting the supply of fungible tokens, and implementing custom functionalities to suit unique requirements.
-
-The collection of Cells constitutes the **state** of CKB. A state verified and held by CKB is any data considered valuable and universally recognized.
-
-<img src="/img/cell/cell-ckb-state.png" alt="CKB State" width="688" height="387" />
 
 ## Cell Model
 

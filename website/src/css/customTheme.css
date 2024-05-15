@@ -299,6 +299,11 @@
   font-size: 0.875rem;
 }
 
+/* Table */
+table tr:nth-child(2n) {
+  background-color: var(--ifm-table-background);
+}
+
 /* Containers */
 .container {
   padding-bottom: 7.5rem !important;
