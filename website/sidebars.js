@@ -89,7 +89,7 @@ export default {
         "tech-explanation/capacity",
         "tech-explanation/script-structure",
         "tech-explanation/script-code-difference",
-        "tech-explanation/scirpt-fields-description",
+        "tech-explanation/script-fields-description",
         "tech-explanation/code-hash",
         "tech-explanation/hash-type",
         "tech-explanation/args",
