@@ -78,7 +78,13 @@ export default {
       collapsible: false,
       items: [
         "tech-explanation/nervos-blockchain",
+        "tech-explanation/cell",
         "tech-explanation/cell-model",
+        "tech-explanation/capacity",
+        "tech-explanation/script",
+        "tech-explanation/code-hash",
+        "tech-explanation/hash-type",
+        "tech-explanation/script-args",
         "tech-explanation/ckb-vm",
         "tech-explanation/consensus",
         "tech-explanation/economics",

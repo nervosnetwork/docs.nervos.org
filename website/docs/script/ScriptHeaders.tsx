@@ -8,10 +8,10 @@ export const ScriptHeaders: ScriptHeadersType = {
   basic: {
     time: "5 - 7 min",
     topics: [
-      { label: "Script", link: "/docs/tech-explanation/glossary#script" },
+      { label: "Script", link: "/docs/tech-explanation/script" },
       {
         label: "CKB-VM",
-        link: "/docs/tech-explanation/glossary#ckb-vm",
+        link: "/docs/tech-explanation/ckb-vm",
       },
       { label: "Cell Model", link: "/docs/tech-explanation/cell-model" },
       {
