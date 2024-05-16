@@ -14,12 +14,14 @@
     "rename-version": "docusaurus-rename-version",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "docusaurus": "docusaurus"
+    "docusaurus": "docusaurus",
+    "prepare": "cd .. && husky website/.husky"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.1.1",
     "@docusaurus/tsconfig": "^3.1.1",
     "@docusaurus/types": "^3.1.1",
+    "husky": "^9.0.11",
     "prettier": "^2.5.1",
     "typescript": "^5.3.3"
   },

@@ -1,0 +1,3 @@
+cd website
+yarn fmt && git add .
+
