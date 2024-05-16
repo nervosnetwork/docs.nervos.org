@@ -6,6 +6,10 @@ node_modules/
 
 # Ignore configuration files
 config/
+.prettierignore
+.husky/
+package-lock.json
+yarn.lock
 
 # Ignore specific files
 *.log
