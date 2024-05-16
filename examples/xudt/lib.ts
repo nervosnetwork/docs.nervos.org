@@ -1,10 +1,12 @@
 import { helpers, hd, config, Cell, commons, BI, utils } from '@ckb-lumos/lumos';
 import { blockchain, HexString } from '@ckb-lumos/base';
-import { indexer, lumosConfig, rpc } from './ckb';
 import { bytes, number } from '@ckb-lumos/codec';
 import { xudtWitnessType } from './scheme';
 import { addCellDep, generateAccountFromPrivateKey } from './util';
+import offCKB from './offckb.config';
 
+const { indexer, lumosConfig, rpc } = offCKB;
+ 
 config.initializeConfig(lumosConfig);
 
 export async function issueToken(privKey: string, amount: string) {

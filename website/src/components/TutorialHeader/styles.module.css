@@ -1,6 +1,6 @@
-@import '@css/customVariables.css';
+@import "@css/customVariables.css";
 
-.box{
+.box {
   border-radius: 20px;
   padding: 1.5rem;
   text-decoration: none !important;

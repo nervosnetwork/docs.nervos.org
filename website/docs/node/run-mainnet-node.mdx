@@ -1,0 +1,94 @@
+---
+id: run-mainnet-node
+title: Run a Mainnet Node
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Run a Mainnet Node
+
+Running a Mainnet node allows you to participate directly in the live blockchain, supporting the network's operation and integrity. This guide will cover the steps needed to set up and run a mainnet node on CKB, which is ideal for those looking to be actively involved in the network's governance and day-to-day activities. We suggest a minimum of 100GB of local storage for this purpose.
+
+## Step 1: Download CKB Binary
+
+:::info
+
+We will use **ckb_v0.115.0** for this guide. Please ensure you download the latest version corresponding to your operating system.
+
+:::
+
+Get the latest CKB binary from [Github releases](https://github.com/nervosnetwork/ckb/releases).
+
+## Step 2: Navigate to CKB Directory
+
+Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac. Open your terminal/command line and navigate to your CKB directory using the following command:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+```bash
+  cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+```bash
+  cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 3: Verify versions
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="check-version" label="Command">
+```
+
+```bash
+  ckb --version
+  ckb-cli --version
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="verify-version" label="Result">
+```
+
+```bash
+  ckb 0.115.0 (d845cbf 2024-04-01)
+  ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 4: Initialize Node
+
+```bash
+  ckb init --chain mainnet
+```
+
+## Step 5: Start the CKB Mainnet Node
+
+```bash
+  ckb run
+```
+
+By following these steps, you've successfully started a CKB node connected to the mainnet. This node will participate in the network, contributing to its security and robustness.
+
+## Track Your Node
+
+Track your node using [CKB Node Probe](https://nodes.ckb.dev/) and view the global distribution of active CKB nodes.

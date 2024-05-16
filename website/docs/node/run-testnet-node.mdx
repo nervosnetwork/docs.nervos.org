@@ -1,0 +1,118 @@
+---
+id: run-testnet-node
+title: Run a Testnet Node
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Run a Testnet Node
+
+Nervos has introduced the Pudge Testnet for developers to experiment with integrations and Scripts. This is ideal for exploring functionalities in a risk-free environment. Due to hash rate fluctuations, expect periodic resets. We suggest allocating 200GB for experimentation.
+
+## Step 1: Download CKB Binary
+
+:::info
+
+We will use **ckb_v0.115.0** for this guide. Please ensure you download the latest version corresponding to your operating system.
+
+:::
+
+Get the latest CKB binary from [Github releases](https://github.com/nervosnetwork/ckb/releases).
+
+## Step 2: Navigate to CKB Directory
+
+Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac. Open your terminal/command line and navigate to your CKB directory using the following command:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+```bash
+  cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+```bash
+  cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 3: Verify versions
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="check-version" label="Command">
+```
+
+```bash
+  ckb --version
+  ckb-cli --version
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="verify-version" label="Result">
+```
+
+```bash
+  ckb 0.115.0 (d845cbf 2024-04-01)
+  ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 4: Connect to Pudge Testnet
+
+Initialize your CKB node:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
+
+```bash
+  ckb init --chain testnet
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="result" label="Result">
+```
+
+```bash
+  WARN: Mining feature is disabled because of lacking the block assembler config options.
+  Initialized CKB directory in /PATH/0.115.0
+  create ckb.toml
+  create ckb-miner.toml
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 5: Start the CKB Testnet Node
+
+```
+ckb run
+```
+
+After these steps, your CKB Testnet node will be up and running, allowing you to experiment and develop with the Nervos blockchain.
+
+## Track Your Node
+
+Track your node using [CKB Node Probe](https://nodes.ckb.dev/) and view the global distribution of active CKB nodes.

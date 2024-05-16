@@ -12,10 +12,11 @@ import {
   HexString,
 } from "@ckb-lumos/lumos";
 import { values, blockchain } from "@ckb-lumos/base";
-import { indexer, lumosConfig, rpc } from "./ckb";
+import offCKBConfig from "./offckb.config";
 const { ScriptValue } = values;
 
-config.initializeConfig(lumosConfig);
+const { indexer, lumosConfig, rpc } = offCKBConfig;
+offCKBConfig.initializeLumosConfig();
 
 type Account = {
   lockScript: Script;

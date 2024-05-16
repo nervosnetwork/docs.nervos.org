@@ -1,7 +1,6 @@
 ---
 id: devtool
 title: Dev Tools
-sidebar_position: 8 
 ---
 
 import Card from '@components/Card';
@@ -9,6 +8,7 @@ import CardLayout from '@components/CardLayout';
 import { toolCardContents } from './CardsContents';
 
 # Dev Tools
+
 Explore essential tools and resources tailored for development on Nervos CKB, designed to streamline your workflow from concept to deployment.
 
 ## Development & Deployment

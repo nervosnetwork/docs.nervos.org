@@ -2,8 +2,8 @@ import path from "path";
 import math from "remark-math";
 import katex from "rehype-katex";
 
-const lightCodeTheme = require('./src/prism/light');
-const darkCodeTheme = require('./src/prism/dark');
+const lightCodeTheme = require("./src/prism/light");
+const darkCodeTheme = require("./src/prism/dark");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -73,10 +73,10 @@ const config = {
         },
         docs: {
           path: "./docs",
-          breadcrumbs:false,
+          breadcrumbs: false,
           showLastUpdateTime: true,
           showLastUpdateAuthor: false,
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve("./sidebars.js"),
           remarkPlugins: [math],
           rehypePlugins: [katex],
           editUrl:
@@ -98,13 +98,13 @@ const config = {
     ],
     function myPlugin() {
       return {
-        name: 'custom-webpack-plugin',
+        name: "custom-webpack-plugin",
         configureWebpack() {
           return {
             resolve: {
               alias: {
-                '@components': path.resolve(__dirname, 'src/components'),
-                '@css': path.resolve(__dirname, 'src/css'),
+                "@components": path.resolve(__dirname, "src/components"),
+                "@css": path.resolve(__dirname, "src/css"),
               },
             },
           };
@@ -128,26 +128,27 @@ const config = {
         src: "img/logo-dark.png",
         width: 89,
         height: 32,
-        alt:'Nervos CKB Docs',
-        href:'/'
+        alt: "Nervos CKB Docs",
+        href: "/",
       },
       items: [
         {
-          type: 'search',
-          position: 'right',
-          className: 'navbar-search',
+          type: "search",
+          position: "right",
+          className: "navbar-search",
         },
         {
-          type: 'html',
-          position: 'right',
-          value: '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
-          className: 'navbar-help'
-        }
-      ]
+          type: "html",
+          position: "right",
+          value:
+            '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
+          className: "navbar-help",
+        },
+      ],
     },
     image: "img/undraw_online.svg",
     footer: {
-      style: 'dark',
+      style: "dark",
       links: [
         {
           title: "Foundation",

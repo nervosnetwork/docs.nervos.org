@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Script } from '@ckb-lumos/lumos';
 import { capacityOf, generateAccountFromPrivateKey, transfer } from './lib';
-import { indexer } from './ckb';
+import offCKB from './offckb.config';
 
 const app = document.getElementById('root');
 ReactDOM.render(<App />, app);
@@ -60,7 +60,7 @@ export function App() {
       setTxHash(txHash);
       // Note: indexer.waitForSync has a bug, we use negative number to workaround. 
       // the negative number presents the block difference from current tip to wait
-      await indexer.waitForSync(-1);
+      await offCKB.indexer.waitForSync(-1);
       await updateFromInfo();
     }
     

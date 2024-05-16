@@ -17,10 +17,13 @@ export default function TutorialHeader({
   return (
     <div className={styles.box}>
       <h4>Tutorial Overview</h4>
-      <div className={styles.subsection}><strong>⏰ Estimated Time: </strong>{time}</div>
-      {topics &&
+      <div className={styles.subsection}>
+        <strong>⏰ Estimated Time: </strong>
+        {time}
+      </div>
+      {topics && (
         <div className={styles.subsection}>
-          <strong>💡 Topics: </strong> 
+          <strong>💡 Topics: </strong>
           {topics.map((topic, index) => (
             <React.Fragment key={index}>
               {index > 0 && ", "}
@@ -28,8 +31,10 @@ export default function TutorialHeader({
             </React.Fragment>
           ))}
         </div>
-      }
-      <div className={styles.subsection}><strong>🔧 Tools You Need: </strong></div>
+      )}
+      <div className={styles.subsection}>
+        <strong>🔧 Tools You Need: </strong>
+      </div>
       <ul className={styles.toolList}>
         {tools.map((list, index) => (
           <li key={index}>{list}</li>

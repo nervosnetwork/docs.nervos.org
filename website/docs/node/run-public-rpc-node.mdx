@@ -1,0 +1,151 @@
+---
+id: run-public-rpc-node
+title: Run a Public RPC Node
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Run a Public RPC Node
+
+A public RPC node allows external parties to interact with the blockchain, enabling actions such as querying blockchain data or submitting transactions. This setup is crucial for applications that rely on real-time data from the blockchain.
+
+:::warning
+
+Exposing RPC can pose significant security risks. Enabling RPC through the `rpc.listen_address` configuration can open the JSON-RPC port to arbitrary machines, increasing vulnerability. It's strongly advised against enabling RPC unless absolutely necessary. If unavoidable, ensure access is restricted solely to trusted machines, following the provided guidelines.
+
+:::
+
+## RPC Access Control
+
+Here is an example using Nginx API Gateway to configure the RPC access control.
+
+Explore more solutions or submit new ones using the GitHub tag [ckb-rpc-proxy](https://github.com/topics/ckb-rpc-proxy).
+
+### Step 1: Install Docker-Compose and Docker
+
+```bash
+apt install docker-compose
+apt install docker
+```
+
+### Step 2: Clone the Proxy Configuration
+
+```bash
+git clone https://github.com/cryptape/ckb-nginx-proxy.git
+```
+
+### Step 3: Replace Default RPC Address
+
+Navigate to the cloned directory and update the Nginx configuration to point to your CKB node's RPC IP address and port:
+
+```bash
+cd ckb-nginx-proxy
+sed -i "s/YOUR_CKR_RPC_IP:8114/192.168.1.100:8114/" nginx.conf
+```
+
+### Step 4: Run Proxy
+
+```bash
+docker-compose up -d
+```
+
+## Examples
+
+**Get tip block hash and number:**
+
+This example retrieves the latest block's hash and number from the CKB node through the configured Nginx proxy.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
+
+```bash
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "get_tip_header",
+    "params": []
+}' \
+| tr -d '\n' \
+| curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+
+## Note that http://192.168.1.100:80 needs to be changed to your proxy IP.
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="result" label="Result">
+```
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "compact_target": "0x1d090fbe",
+    "dao": "0xba17553fab3db84154bc4aa9f09b2600e826a2b0df99010400ed51b4686b5808",
+    "epoch": "0x7080687001539",
+    "extra_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "0x7a46e779a3fc2d5b55c82aad852e721b0097bf873927b9751409b1d185599ce4",
+    "nonce": "0xd265e70dfd205dbbed33b29294121856",
+    "number": "0x7037f2",
+    "parent_hash": "0x3d105fe9ec60f138baa6623abd16af70ba1be90ad23d1943bcaa55d5f14fcb6f",
+    "proposals_hash": "0x2581d1769886226a8c90ee99baf2d8696e24c7f6bb6751748ff8b4452f8006e5",
+    "timestamp": "0x1847a2bfad2",
+    "transactions_root": "0x28157a5962c4ae1d3e153b1d8d331e5fd3c158866287f5398ab7f7d38210dfb0",
+    "version": "0x0"
+  },
+  "id": 2
+}
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Restricted Methods
+
+Certain RPC methods are restricted to prevent abusive interactions with the CKB node:
+
+- `clear_banned_addresses`
+- `set_ban`
+- `set_network_active`
+- `add_node`
+- `remove_node`
+- `remove_transaction`
+- `clear_tx_pool`
+
+These methods can alter the node's network interactions significantly and should be exposed only to trusted administrators. For example, `clear_tx_pool` can be used to remove all transactions from the mempool, which could disrupt node operation if used maliciously.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
+
+```bash
+echo '{
+    "id": 2,
+    "jsonrpc": "2.0",
+    "method": "clear_tx_pool",
+    "params": []
+}' | tr -d '\n' | curl -H 'content-type: application/json' -d @- \
+http://192.168.1.100:80
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="result" label="Result">
+```
+
+```
+  This method has been banned.
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```

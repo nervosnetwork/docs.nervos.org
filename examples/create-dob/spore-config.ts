@@ -1,5 +1,8 @@
-import { lumosConfig, CKB_RPC_URL } from "./ckb";
 import { SporeConfig, predefinedSporeConfigs } from "@spore-sdk/core";
+import offCKBConfig from "./offckb.config";
+
+const { lumosConfig, rpc } = offCKBConfig;
+const CKB_RPC_URL = rpc.node.url;
 
 export type PredefinedDevnetSporeScriptName =
   | "Spore"

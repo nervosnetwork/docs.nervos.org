@@ -1,0 +1,46 @@
+.cookieBanner {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  background-color: var(--dark-surface-01);
+  padding: 1.25rem 4rem;
+  z-index: 1000;
+  width: 100%;
+  border: 1px solid var(--dark-border-invisible);
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+.text {
+  margin-right: 2rem;
+}
+.description {
+  color: var(--dark-text-secondary);
+}
+
+.button {
+  height: 2rem;
+  padding: 0 1rem;
+  line-height: 2rem;
+  background-color: var(--dark-text-link);
+  font-size: 0.875rem;
+  color: var(--dark-text-inverse);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .cookieBanner {
+    flex-direction: column;
+    align-items: start;
+    padding: 1rem;
+  }
+  .text {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  .button {
+    width: 100%;
+  }
+}

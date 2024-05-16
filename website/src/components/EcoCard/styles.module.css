@@ -1,4 +1,4 @@
-@import '@css/customVariables.css';
+@import "@css/customVariables.css";
 
 .cardContainer {
   width: 100%;
@@ -67,7 +67,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.title, .description, .tagList {
+.title,
+.description,
+.tagList {
   margin-bottom: 0.5rem;
 }
 .links {

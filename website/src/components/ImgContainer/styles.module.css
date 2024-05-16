@@ -1,10 +1,10 @@
 .imgContainer {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    background: linear-gradient(87deg, #A1E1BC -2.44%, #73F7FF 98.1%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  background: linear-gradient(87deg, #a1e1bc -2.44%, #73f7ff 98.1%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
