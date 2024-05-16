@@ -23,7 +23,7 @@ Script: {
 | ----------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `code_hash` | H256                                                                         | Hash of the ELF formatted RISC-V binary that contains a CKB Script. For more, see [`code_hash`](/docs/tech-explanation/code-hash)  |
 | `hash_type` | Uint8, one of the 4 values: \{0: "data", 1: "type", 2: "data1", 3: "data2"\} | Interpretation of the code hash when looking for matching dep cells. For more, see [`hash_type`](/docs/tech-explanation/hash-type) |
-| `args`      | H256                                                                         | Arguments as the Script input. For more, see [`args`](/docs/tech-explanation/args)                                                 |
+| `args`      | H256                                                                         | Arguments as the Script input. For more, see [`script_args`](/docs/tech-explanation/script-args)                                   |
 
 ## Script vs. Code
 
