@@ -1,3 +1,2 @@
 cd website
-yarn fmt && git add .
-
+yarn lint-staged
