@@ -1,26 +1,36 @@
 @import "@css/customVariables.css";
 
-.solidBtn {
+.priBtn, .secBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 1.5rem;
-  color: var(--dark-text-inverse) !important;
+  padding: 0 2rem;
   text-decoration: none !important;
   border-radius: 80px;
   font-weight: bold;
   font-size: 1em;
   line-height: 3em;
   border: none;
-  box-shadow: var(--dark-btn-shadow);
-  backdrop-filter: blur(15px);
   cursor: pointer;
   width: fit-content;
   position: relative;
   overflow: hidden;
   z-index: 1;
 }
-.solidBtn:after {
+.priBtn {
+  color: var(--dark-text-inverse) !important;
+  box-shadow: var(--dark-btn-shadow);
+  backdrop-filter: blur(15px);
+}
+.secBtn {
+  background-color: var(--dark-alert-success-bg);
+}
+.smallBtn {
+  line-height: 2rem;
+  padding: 0 1rem;
+}
+
+.priBtn:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -31,7 +41,7 @@
   border-radius: 80px;
   z-index: -2;
 }
-.solidBtn:before {
+.priBtn:before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -43,12 +53,16 @@
   border-radius: 80px;
   z-index: -1;
 }
-.solidBtn:hover:before {
+.priBtn:hover:before {
   width: 100%;
+}
+.secBtn:hover {
+  background: radial-gradient(50% 50% at 50% 50%, rgba(24, 239, 177, 0.00) 0%, rgba(24, 239, 177, 0.30) 100%);
+  transition: opacity 0.2s;
 }
 
 @media (max-width: 768px) {
-  .solidBtn {
+  .priBtn, .secBtn {
     line-height: 2.5rem;
     width: 100%;
   }

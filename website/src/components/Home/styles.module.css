@@ -2,28 +2,37 @@
 
 /* General styling */
 .section {
-  background: var(--dark-card-bg);
-  border-radius: 40px;
-  box-shadow: var(--dark-card-shadow);
+  background: var(--dark-alert-secondary-bg);
+  border-radius: 32px;
+  border: 1px solid var(--dark-border-invisible);
+  backdrop-filter: blur(10px);
   padding: 2.5rem;
   z-index: 1;
   width: 100%;
   position: relative;
 }
-.section::before {
-  content: "";
+
+.sectionGlow {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("/img/bg-noise.webp");
-  background-position: center;
-  background-size: cover;
-  background-repeat: repeat;
-  opacity: 0.5;
+  width: 400px;
+  height: 400px;
+  border-top-left-radius: 32px;
   z-index: -1;
 }
+
+.sectionGlowOpposite {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  height: 400px;
+  border-bottom-right-radius: 32px;
+  transform: scale(-1, -1);
+  z-index: -1;
+}
+
 .flexCol {
   display: flex;
   flex-direction: column;
@@ -57,9 +66,12 @@
   width: 4rem;
   height: 4rem;
 }
-.iconContainer img {
-  max-width: fit-content;
+
+.iconContainerSm {
+  width: 2rem;
+  height: 2rem;
 }
+
 .section h3,
 .section h2,
 .section h1 {
@@ -71,33 +83,23 @@
 }
 
 /* Home card used in header section */
-.homeCard {
-  color: var(--dark-text-primary);
-  position: relative;
+.smHomeCard {
+  cursor: pointer;
 }
-.sparkles {
-  position: absolute;
-  display: none;
-  right: 1.25rem;
-  top: 1.25rem;
-}
-.homeCard:hover {
-  transition: 0.2s;
-}
-.homeCard:hover .sparkles {
-  display: block;
+.smHomeCard:hover{
+  background-color: var(--dark-hover);
+  text-decoration: none;
 }
 .cardTitle {
   margin-top: 1.5rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 .cardLinks {
-  margin-top: 1.25rem;
   margin-left: -0.5rem;
   margin-right: -0.5rem;
 }
 .cardLinks > .borderBtm:not(:last-child) {
-  border-bottom: 1px solid var(--dark-border-subtle);
+  border-bottom: 1px solid var(--dark-border-invisible);
 }
 .link {
   line-height: 3rem;
@@ -145,6 +147,56 @@
   color: var(--dark-text-primary);
 }
 
+/* DApp section specific */
+.tutorialSection {
+  padding: 7.5rem 2.5rem;
+  gap: 2.5rem;
+}
+.tutorialLeft {
+  width: 636px;
+}
+.tutorialSidebar{
+  margin: 2.5rem 0;
+  color: var(--dark-text-secondary);
+}
+.tutorialItem {
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  opacity: 0.5;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.tutorialItem:hover {
+  background-color: var(--dark-hover);
+}
+.itemDecor {
+  position: absolute;
+  right: -1.5rem;
+  top: 0.4rem;
+  z-index: 0;
+  display: none;
+}
+.itemTitle {
+  margin-bottom: 0.5rem;
+  color: var(--dark-text-primary);
+  z-index: 1;
+}
+.itemActive {
+  background: var(--dark-surface-accent);
+  box-shadow: 0px 10px 40px -5px rgba(7, 28, 39, 0.40);
+  opacity: 1;
+}
+.itemActive .itemDecor {
+  display: block;
+}
+.tutorialFrame {
+  width: 567px;
+}
+
+
 /* Dev tools section specific */
 .tableContainer {
   display: flex;
@@ -190,17 +242,18 @@
 }
 .arrowLeft,
 .arrowRight {
-  width: 3rem;
-  min-width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
-  color: var(--dark-text-primary);
-  background: var(--dark-surface-03);
+  color: var(--dark-alert-success);
+  background: var(--dark-alert-success-bg);
   border-radius: 50%;
+  border: 1px solid var(--dark-border-accent);
 }
 .arrowLeft:hover,
 .arrowRight:hover {
@@ -212,23 +265,68 @@
 
 /* Dev Log specific */
 .illusContainer {
-  width: 418px;
+  width: 417px;
+  height: 350px;
 }
 .leftContainer {
-  max-width: 50%;
+  max-width: 55%;
 }
 .description {
   color: var(--dark-text-secondary);
+  font-size: 1.25rem;
 }
 
-/* contact section specific */
-.contactSection {
-  background: linear-gradient(87deg, #00ce88 -2.44%, #04e7f4 98.1%);
-  box-shadow: var(--dark-btn-shadow);
-  backdrop-filter: blur(15px);
+/* CTA section specific */
+.ctaSection {
+  background-color: var(--dark-surface-02);
 }
-.contactTitle {
-  color: var(--dark-text-inverse) !important;
+.ctaSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/img/noise.png");
+  background-position: center;
+  background-repeat: repeat;
+  z-index: -1;
+}
+.ctaSubsection {
+  max-width: 40%;
+}
+.or {
+  background-color: var(--dark-surface-01);
+  width: 5rem;
+  min-width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+.command {
+  background-color: var(--dark-alert-success-bg);
+  padding: 0 2rem;
+  line-height: 3rem;
+  width: 286px;
+  border-radius: 40px;
+  color: var(--dark-text-link);
+  cursor: pointer;
+}
+.command:hover {
+  background: radial-gradient(50% 50% at 50% 50%, rgba(24, 239, 177, 0.00) 0%, rgba(24, 239, 177, 0.30) 100%);
+  transition: opacity 0.2s;
+}
+
+
+/* Footer section specific */
+.footerSection {
+  border-top: 1px solid var(--dark-border-invisible);
+  min-height: 4rem;
+  padding: 1rem 4rem;
+}
+.copyright {
+  color: var(--dark-text-secondary);
+  font-size: 0.875rem;
+  text-align: center;
 }
 .icons {
   flex-wrap: wrap;
@@ -238,19 +336,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: #f8fdff;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: var(--dark-surface-02);
   border-radius: 50%;
   cursor: pointer;
 }
 .iconBG:hover {
-  background-color: #eefcfd;
+  background-color: var(--dark-surface-03);
 }
 
 /* Responsiveness */
 @media (max-width: 996px) {
   .illusContainer {
+    width: 100%;
+  }
+  .tutorialSection {
+    flex-direction: column;
+    padding: 3.5rem;
+  }
+  .tutorialLeft, .tutorialFrame {
     width: 100%;
   }
   .devlogSection {
@@ -260,9 +365,17 @@
   .leftContainer {
     max-width: 100%;
   }
-  .contactSection {
+  .ctaSection {
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .ctaSubsection {
+    max-width: 100%;
+  }
+  .footerSection {
+    flex-direction: column;
+    gap: 1rem;
   }
 }
 @media (max-width: 768px) {
@@ -270,17 +383,10 @@
     padding: 2.5rem 1.25rem;
     border-radius: 20px;
   }
+  .sectionGlow, .sectionGlowOpposite {
+    display: none;
+  }
   .flexCol {
     gap: 1.25rem;
-  }
-  .solidBtn {
-    line-height: 2.5rem;
-    width: 100%;
-  }
-  .arrowLeft,
-  .arrowRight {
-    width: 2.5rem;
-    min-width: 2.5rem;
-    height: 2.5rem;
   }
 }
