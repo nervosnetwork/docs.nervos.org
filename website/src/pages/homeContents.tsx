@@ -2,14 +2,23 @@ export interface CardLinks {
   label: string;
   link: string;
 }
+export interface TutorialProps {
+  title: string;
+  description: string;
+  link: string;
+  iframeSrc: string;
+  illusSrc: string;
+}
 export interface DevToolProps {
   title: string;
   href: string;
   category: string;
 }
+
 export interface HomeCardProps {
   title: string;
-  links: CardLinks[];
+  links?: CardLinks[];
+  to?: string;
   icon: string;
 }
 
@@ -27,7 +36,7 @@ const homeCardContents: HomeCardProps[] = [
     icon: "rocket",
   },
   {
-    title: "Dapp Tutorials",
+    title: "DApp Tutorials",
     links: [
       { label: "Transfer CKB", link: "/docs/dapp/transfer-ckb" },
       { label: "Write an On-Chain Message", link: "/docs/dapp/write-message" },
@@ -36,7 +45,7 @@ const homeCardContents: HomeCardProps[] = [
     icon: "dapp",
   },
   {
-    title: "Scripts",
+    title: "Scripts (Smart Contracts)",
     links: [
       { label: "Intro to Script", link: "/docs/script/intro-to-script" },
       {
@@ -49,33 +58,53 @@ const homeCardContents: HomeCardProps[] = [
   },
   {
     title: "Run a Node",
-    links: [
-      { label: "Run a Mainnet Node", link: "/docs/node/run-mainnet-node" },
-      { label: "Run a Testnet Node", link: "/docs/node/run-testnet-node" },
-      { label: "Run a Devnet Node", link: "/docs/node/run-devnet-node" },
-    ],
+    to: "/docs/node/run-mainnet-node",
     icon: "node",
   },
   {
     title: "Mining",
-    links: [
-      { label: "Rewards", link: "/docs/mining/rewards" },
-      { label: "Cost and Profit", link: "/docs/mining/cost-and-profit" },
-      { label: "Guide", link: "/docs/mining/guide" },
-    ],
+    to: "/docs/mining/algorithm-difficulty",
     icon: "mining",
   },
   {
     title: "Tech Explanation",
-    links: [
-      {
-        label: "Nervos Blockchain",
-        link: "/docs/tech-explanation/nervos-blockchain",
-      },
-      { label: "Cell Model", link: "/docs/tech-explanation/cell-model" },
-      { label: "Tokenomics", link: "/docs/tech-explanation/economics" },
-    ],
-    icon: "concept",
+    to: "/docs/tech-explanation/nervos-blockchain",
+    icon: "tech-explanation",
+  },
+];
+
+const tutorialSectionContents: TutorialProps[] = [
+  {
+    title: "Transfer CKB",
+    description: "View and transfer CKB from one address to another",
+    link: "/docs/dapp/transfer-ckb",
+    iframeSrc:
+      "https://codesandbox.io/embed/58n9pq?view=preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-transfer-ckb.svg",
+  },
+  {
+    title: "Write an On-Chain Message",
+    description: "Write ‘Hello CKB!’ to a CKB Cell and then retrieve it",
+    link: "/docs/dapp/write-message",
+    iframeSrc:
+      "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-write-message.svg",
+  },
+  {
+    title: "Create a Fungible Token",
+    description: "Create, view, and transfer a custom token",
+    link: "/docs/dapp/create-token",
+    iframeSrc:
+      "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-create-token.svg",
+  },
+  {
+    title: "Create a DOB",
+    description: "Create a digital object using Spore DOB",
+    link: "/docs/dapp/create-dob",
+    iframeSrc:
+      "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-create-dob.svg",
   },
 ];
 
@@ -137,4 +166,9 @@ const HomeContentsPage: React.FC = () => {
 };
 export default HomeContentsPage;
 
-export { homeCardContents, devToolSectionContents, contactUsContents };
+export {
+  homeCardContents,
+  tutorialSectionContents,
+  devToolSectionContents,
+  contactUsContents,
+};
