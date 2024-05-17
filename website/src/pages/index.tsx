@@ -28,7 +28,11 @@ export default function Home() {
       title="Home"
       description="Docs for Nervos CKB Blockchain dApp and Script development"
     >
-      <img className={styles.headerGlow} src={'/svg/header-glow.svg'} alt={"glowing effect"} />
+      <img
+        className={styles.headerGlow}
+        src={"/svg/header-glow.svg"}
+        alt={"glowing effect"}
+      />
       <SwtichToDark />
       <CookieConsent />
       <div className={clsx(styles.sectionContainer)}>
@@ -75,7 +79,8 @@ export default function Home() {
       <div className={styles.sectionContainer}>
         <div className={styles.header2}>Ready to Dive In?</div>
         <div className={clsx(styles.description, styles.titleBtm)}>
-          Whether you&apos;re curious about how CKB works or eager to jump straight into building, we&apos;ve got you covered.
+          Whether you&apos;re curious about how CKB works or eager to jump
+          straight into building, we&apos;ve got you covered.
         </div>
         <CTASection />
       </div>

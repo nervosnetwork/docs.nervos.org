@@ -1,6 +1,7 @@
 @import "@css/customVariables.css";
 
-.priBtn, .secBtn {
+.priBtn,
+.secBtn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,12 +58,17 @@
   width: 100%;
 }
 .secBtn:hover {
-  background: radial-gradient(50% 50% at 50% 50%, rgba(24, 239, 177, 0.00) 0%, rgba(24, 239, 177, 0.30) 100%);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(24, 239, 177, 0) 0%,
+    rgba(24, 239, 177, 0.3) 100%
+  );
   transition: opacity 0.2s;
 }
 
 @media (max-width: 768px) {
-  .priBtn, .secBtn {
+  .priBtn,
+  .secBtn {
     line-height: 2.5rem;
     width: 100%;
   }

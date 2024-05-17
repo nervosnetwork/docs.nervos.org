@@ -33,9 +33,14 @@ function HomeCardSection() {
         <Link
           key={index}
           to={card.to}
-          className={clsx(styles.section, {[styles.flexCol]: card.links},  {[styles.flexCenter]: card.to}, {[styles.smHomeCard]: card.to})}
+          className={clsx(
+            styles.section,
+            { [styles.flexCol]: card.links },
+            { [styles.flexCenter]: card.to },
+            { [styles.smHomeCard]: card.to }
+          )}
         >
-          {card.links ? 
+          {card.links ? (
             <div className={styles.iconContainer}>
               <img
                 src={`/svg/square-${card.icon}.svg`}
@@ -44,7 +49,7 @@ function HomeCardSection() {
                 alt={card.icon}
               />
             </div>
-            :
+          ) : (
             <div className={styles.iconContainerSm}>
               <img
                 src={`/svg/square-${card.icon}.svg`}
@@ -53,31 +58,32 @@ function HomeCardSection() {
                 alt={card.icon}
               />
             </div>
-          }
+          )}
           <h3 className={styles.cardTitle}>{card.title}</h3>
-          {card.links && <div className={styles.cardLinks}>
-            {card.links.map((link, index) => (
-              <Link
-                key={index}
-                to={link.link}
-                className={clsx(
-                  styles.flexBetween,
-                  styles.link,
-                  styles.line,
-                  styles.borderBtm
-                )}
-              >
-                {link.label}
-                <img
-                  src={"/svg/icon-circle-arrow.svg"}
-                  width={32}
-                  height={32}
-                  alt={"Navigate to"}
-                />
-              </Link>
-            ))}
-          </div>
-          }
+          {card.links && (
+            <div className={styles.cardLinks}>
+              {card.links.map((link, index) => (
+                <Link
+                  key={index}
+                  to={link.link}
+                  className={clsx(
+                    styles.flexBetween,
+                    styles.link,
+                    styles.line,
+                    styles.borderBtm
+                  )}
+                >
+                  {link.label}
+                  <img
+                    src={"/svg/icon-circle-arrow.svg"}
+                    width={32}
+                    height={32}
+                    alt={"Navigate to"}
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
         </Link>
       ))}
     </CardLayout>
@@ -85,16 +91,38 @@ function HomeCardSection() {
 }
 
 function DAppSection(): JSX.Element {
-  const [selectedTutorial, setSelectedTutorial] = useState<TutorialProps>(tutorialSectionContents[0]);
+  const [selectedTutorial, setSelectedTutorial] = useState<TutorialProps>(
+    tutorialSectionContents[0]
+  );
 
   const handleTutorialClick = (tutorial: TutorialProps) => {
     setSelectedTutorial(tutorial);
   };
 
   return (
-    <div className={clsx(styles.section, styles.flexBetween, styles.tutorialSection)}>
-      <div className={styles.sectionGlow}><img src={`/svg/section-glow.svg`} width={400} height={400} alt={"Glowing effect"}/></div>
-      <div className={styles.sectionGlowOpposite}><img src={`/svg/section-glow.svg`} width={400} height={400} alt={"Glowing effect"}/></div>
+    <div
+      className={clsx(
+        styles.section,
+        styles.flexBetween,
+        styles.tutorialSection
+      )}
+    >
+      <div className={styles.sectionGlow}>
+        <img
+          src={`/svg/section-glow.svg`}
+          width={400}
+          height={400}
+          alt={"Glowing effect"}
+        />
+      </div>
+      <div className={styles.sectionGlowOpposite}>
+        <img
+          src={`/svg/section-glow.svg`}
+          width={400}
+          height={400}
+          alt={"Glowing effect"}
+        />
+      </div>
       <div className={styles.tutorialLeft}>
         <h1>DApp Tutorials</h1>
         <div className={styles.tutorialSidebar}>
@@ -108,17 +136,24 @@ function DAppSection(): JSX.Element {
             >
               <h4 className={styles.itemTitle}>{tutorial.title}</h4>
               <div>{tutorial.description}</div>
-              <div className={styles.itemDecor}><img src={tutorial.illusSrc} width={230} height={82} /></div>
+              <div className={styles.itemDecor}>
+                <img src={tutorial.illusSrc} width={230} height={82} />
+              </div>
             </div>
           ))}
         </div>
-        <Button internal link={selectedTutorial.link}>Full Tutorial →</Button>
+        <Button internal link={selectedTutorial.link}>
+          Full Tutorial →
+        </Button>
       </div>
       <div className={styles.tutorialFrame}>
-        <TutorialFrame tutorialTitle={selectedTutorial.title} iframeSrc={selectedTutorial.iframeSrc} />
+        <TutorialFrame
+          tutorialTitle={selectedTutorial.title}
+          iframeSrc={selectedTutorial.iframeSrc}
+        />
       </div>
     </div>
-  )
+  );
 }
 
 // General Component for Ecosytem section
@@ -134,7 +169,11 @@ function EcoSection({
       className={clsx(styles.section, styles.flexCol)}
       style={{ marginTop: topMargin }}
     >
-      {glow && <div className={styles.sectionGlow}><img src={`/svg/section-glow.svg`} width={400} height={400} /></div>}
+      {glow && (
+        <div className={styles.sectionGlow}>
+          <img src={`/svg/section-glow.svg`} width={400} height={400} />
+        </div>
+      )}
       <div className={styles.flexCenter}>
         <div className={styles.iconContainer}>
           <img
@@ -219,7 +258,11 @@ function WalletDisplay(): JSX.Element {
           ))}
         </CardLayout>
       </div>
-      <Button internal size={"small"} link={"/docs/integrate-wallets/intro-to-wallets"}>
+      <Button
+        internal
+        size={"small"}
+        link={"/docs/integrate-wallets/intro-to-wallets"}
+      >
         View wallets →
       </Button>
     </EcoSection>
@@ -273,7 +316,9 @@ function ToolDisplay(): JSX.Element {
           </div>
         </div>
       </CardLayout>
-      <Button internal size={"small"} link={"/docs/getting-started/devtool"}>View dev tools →</Button>
+      <Button internal size={"small"} link={"/docs/getting-started/devtool"}>
+        View dev tools →
+      </Button>
     </EcoSection>
   );
 }
@@ -364,8 +409,12 @@ function ProjectDisplay(): JSX.Element {
 
 function DevLogSection(): JSX.Element {
   return (
-    <div className={clsx(styles.section, styles.flexBetween, styles.devlogSection)}>
-      <div className={styles.sectionGlow}><img src={`/svg/section-glow.svg`} width={400} height={400} /></div>
+    <div
+      className={clsx(styles.section, styles.flexBetween, styles.devlogSection)}
+    >
+      <div className={styles.sectionGlow}>
+        <img src={`/svg/section-glow.svg`} width={400} height={400} />
+      </div>
       <div className={clsx(styles.flexCol, styles.leftContainer)}>
         <h1>Discover Dev Log</h1>
         <div className={styles.description}>
@@ -394,44 +443,68 @@ function CTASection(): JSX.Element {
   const [copied, setCopied] = useState(false);
 
   const handleCopyToClipboard = async () => {
-    const textToCopy = 'npm install -g @offckb/cli';
+    const textToCopy = "npm install -g @offckb/cli";
 
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 3000); // Change text back after 3 seconds
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   };
   return (
-    <div className={clsx(styles.section, styles.flexBetween, styles.ctaSection)}>
-      <div className={styles.sectionGlow}><img src={`/svg/sm-section-glow.svg`} width={200} height={200} /></div>
+    <div
+      className={clsx(styles.section, styles.flexBetween, styles.ctaSection)}
+    >
+      <div className={styles.sectionGlow}>
+        <img src={`/svg/sm-section-glow.svg`} width={200} height={200} />
+      </div>
       <div className={styles.ctaSubsection}>
         <h3>Learn Basics</h3>
-        <p>Begin your journey with our comprehensive guide on "How CKB Works” to ensure you have a solid understanding before diving deeper.</p>
-        <Button type={"primary"} internal link={"/doc/getting-started/how-ckb-works"}>Start Learning</Button>
-        </div>
-      <div className={clsx(styles.or, styles.alignMiddle, styles.flexCenter)}><h3>OR</h3></div>
+        <p>
+          Begin your journey with our comprehensive guide on "How CKB Works” to
+          ensure you have a solid understanding before diving deeper.
+        </p>
+        <Button
+          type={"primary"}
+          internal
+          link={"/docs/getting-started/how-ckb-works"}
+        >
+          Start Learning
+        </Button>
+      </div>
+      <div className={clsx(styles.or, styles.alignMiddle, styles.flexCenter)}>
+        <h3>OR</h3>
+      </div>
       <div className={styles.ctaSubsection}>
         <h3>Jumpstart Your Development</h3>
-        <p>Run the command below in your terminal to start developing dApps on the CKB Devnet immediately.</p>
-        <div 
-          onClick={handleCopyToClipboard} 
+        <p>
+          Run the command below in your terminal to start developing dApps on
+          the CKB Devnet immediately.
+        </p>
+        <div
+          onClick={handleCopyToClipboard}
           className={clsx(styles.flexBetween, styles.command)}
         >
-          {copied ? 'Copied to clipboard!' : (
+          {copied ? (
+            "Copied to clipboard!"
+          ) : (
             <>
               npm install -g @offckb/cli
-              <img width={18} height={18} src="/svg/icon-copy-brand.svg" alt="Copy icon" />
+              <img
+                width={18}
+                height={18}
+                src="/svg/icon-copy-brand.svg"
+                alt="Copy icon"
+              />
             </>
           )}
         </div>
-        </div>
+      </div>
     </div>
-  )
+  );
 }
-
 
 function FooterSection(): JSX.Element {
   return (

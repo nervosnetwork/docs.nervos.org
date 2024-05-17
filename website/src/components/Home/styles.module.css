@@ -86,7 +86,7 @@
 .smHomeCard {
   cursor: pointer;
 }
-.smHomeCard:hover{
+.smHomeCard:hover {
   background-color: var(--dark-hover);
   text-decoration: none;
 }
@@ -155,7 +155,7 @@
 .tutorialLeft {
   width: 636px;
 }
-.tutorialSidebar{
+.tutorialSidebar {
   margin: 2.5rem 0;
   color: var(--dark-text-secondary);
 }
@@ -186,7 +186,7 @@
 }
 .itemActive {
   background: var(--dark-surface-accent);
-  box-shadow: 0px 10px 40px -5px rgba(7, 28, 39, 0.40);
+  box-shadow: 0px 10px 40px -5px rgba(7, 28, 39, 0.4);
   opacity: 1;
 }
 .itemActive .itemDecor {
@@ -195,7 +195,6 @@
 .tutorialFrame {
   width: 567px;
 }
-
 
 /* Dev tools section specific */
 .tableContainer {
@@ -312,10 +311,13 @@
   cursor: pointer;
 }
 .command:hover {
-  background: radial-gradient(50% 50% at 50% 50%, rgba(24, 239, 177, 0.00) 0%, rgba(24, 239, 177, 0.30) 100%);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(24, 239, 177, 0) 0%,
+    rgba(24, 239, 177, 0.3) 100%
+  );
   transition: opacity 0.2s;
 }
-
 
 /* Footer section specific */
 .footerSection {
@@ -355,7 +357,8 @@
     flex-direction: column;
     padding: 3.5rem;
   }
-  .tutorialLeft, .tutorialFrame {
+  .tutorialLeft,
+  .tutorialFrame {
     width: 100%;
   }
   .devlogSection {
@@ -383,7 +386,8 @@
     padding: 2.5rem 1.25rem;
     border-radius: 20px;
   }
-  .sectionGlow, .sectionGlowOpposite {
+  .sectionGlow,
+  .sectionGlowOpposite {
     display: none;
   }
   .flexCol {

@@ -58,17 +58,17 @@ const homeCardContents: HomeCardProps[] = [
   },
   {
     title: "Run a Node",
-    to:"/docs/node/run-mainnet-node",
+    to: "/docs/node/run-mainnet-node",
     icon: "node",
   },
   {
     title: "Mining",
-    to:"/docs/mining/algorithm-difficulty",
+    to: "/docs/mining/algorithm-difficulty",
     icon: "mining",
   },
   {
     title: "Tech Explanation",
-    to:"/docs/tech-explanation/nervos-blockchain",
+    to: "/docs/tech-explanation/nervos-blockchain",
     icon: "tech-explanation",
   },
 ];
@@ -78,31 +78,35 @@ const tutorialSectionContents: TutorialProps[] = [
     title: "Transfer CKB",
     description: "View and transfer CKB from one address to another",
     link: "/docs/dapp/transfer-ckb",
-    iframeSrc: "https://codesandbox.io/embed/58n9pq?view=preview&module=%2Flib.ts",
-    illusSrc:"/svg/illus-transfer-ckb.svg",
+    iframeSrc:
+      "https://codesandbox.io/embed/58n9pq?view=preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-transfer-ckb.svg",
   },
   {
     title: "Write an On-Chain Message",
     description: "Write ‘Hello CKB!’ to a CKB Cell and then retrieve it",
     link: "/docs/dapp/write-message",
-    iframeSrc: "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
-    illusSrc:"/svg/illus-write-message.svg",
+    iframeSrc:
+      "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-write-message.svg",
   },
   {
     title: "Create a Fungible Token",
     description: "Create, view, and transfer a custom token",
     link: "/docs/dapp/create-token",
-    iframeSrc: "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
-    illusSrc:"/svg/illus-create-token.svg",
+    iframeSrc:
+      "https://codesandbox.io/embed/drlfr5?view=Editor+%2B+Preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-create-token.svg",
   },
   {
     title: "Create a DOB",
     description: "Create a digital object using Spore DOB",
     link: "/docs/dapp/create-dob",
-    iframeSrc: "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
-    illusSrc:"/svg/illus-create-dob.svg",
+    iframeSrc:
+      "https://codesandbox.io/embed/rmwshy?view=Editor+%2B+Preview&module=%2Flib.ts",
+    illusSrc: "/svg/illus-create-dob.svg",
   },
-]
+];
 
 const devToolSectionContents: DevToolProps[] = [
   {
@@ -162,4 +166,9 @@ const HomeContentsPage: React.FC = () => {
 };
 export default HomeContentsPage;
 
-export { homeCardContents, tutorialSectionContents, devToolSectionContents, contactUsContents };
+export {
+  homeCardContents,
+  tutorialSectionContents,
+  devToolSectionContents,
+  contactUsContents,
+};
