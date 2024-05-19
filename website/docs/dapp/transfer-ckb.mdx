@@ -18,11 +18,11 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
   tools={TRANSFEROVERVIEW.tools}
 />
 
-## How Transaction Works
+CKB is based on a UTXO-like [Cell Model](/docs/tech-explanation/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously.
 
-CKB is based on a UTXO-like [Cell Model](/docs/tech-explanation/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously. A Cell can store any type of data.
+Transfering balance in CKB is to consume some input cells from the sender's account and produce new output cells which can be unlock by the receiver account. The amount of transfering is equal to the total capacities of the coverting cells.
 
-A transaction in CKB works similarly to Bitcoin. Each transaction consumes some input Cells and produces new output Cells. Note that the total capacities of the output Cells cannot be larger than those of the input Cells, similar to how UTXOs are transferred and converted in Bitcoin.
+In this tutorial, we will learn how to write a simple dApp to transfer CKB balance from one account to another.
 
 ## Setup Devnet & Run Example
 
@@ -66,7 +66,7 @@ What this function does is generate the account's public key and address via a p
 
 Here, we use the CKB standard lock script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a lock script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
 
-Once we have the lock script of an account, we can determine how much balance the account has. The calculation is straightforward; we query and find all the Cells that use the same lock script and sum all these Cells' capacities; the sum is the balance.
+Once we have the lock script of an account, we can determine how much balance the account has. The calculation is straightforward: we query and find all the Cells that use the same lock script and sum all these Cells' capacities; the sum is the balance.
 
 ```ts
 export async function capacityOf(address: string): Promise<BI> {
@@ -88,172 +88,58 @@ In Nervos CKB, [Shannon](/docs/tech-explanation/glossary#shannon) is the smalles
 Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:
 
 ```ts
-//CKB To Shannon
-interface Options {
-  from: string;
-  to: string;
-  amount: string;
-  privKey: string;
-}
-
-export async function transfer(options: Options): Promise<string>;
+export async function transfer(
+  fromAddress: string,
+  toAddress: string,
+  amountInShannon: string,
+  signerPrivateKey: string
+): Promise<string>;
 ```
 
-The `transfer` function accepts an `Option` parameter, which includes necessary information about the transfer such as `fromAddress`, `toAddress`, `amount`, and the `privateKey` to sign the transfer transaction.
+The `transfer` function accepts parameters such as `fromAddress`, `toAddress`, `amountInShannon`, and the `signerPrivateKey` to sign the transfer transaction.
 
 What this transfer transaction does is collect and consume as many capacities as needed with some [Live Cells](/docs/tech-explanation/glossary#live-cell) as the input Cells and produce some new output Cells. The lock script of all these new Cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
 
-Next, let's build the transaction for transferring the balance. The first step is to create an empty `txSkeleton`.
+Thanks to the Lumos SDK, we can use high level helper function `commons.common.transfer` to do the transfer transaction which wraps the above logic.
 
 ```ts
-let txSkeleton = helpers.TransactionSkeleton({});
-```
-
-Then we determine the total capacities required for our transaction including `Transfer Amount + Transaction Fee`, here we set the transaction fee as `100000` Shannon.
-
-```ts
-const neededCapacity = BI.from(options.amount).add(100000);
-```
-
-Then we retrieve the sender account's assets from blockchain RPC with the help of `indexer` and collect the transaction's inputs Cells
-
-```ts
-const fromScript = helpers.parseAddress(options.from, {
-  config: lumosConfig,
-});
-
-let collectedSum = BI.from(0);
-const collected: Cell[] = [];
-const collector = indexer.collector({ lock: fromScript, type: "empty" });
-for await (const cell of collector.collect()) {
-  collectedSum = collectedSum.add(cell.cellOutput.capacity);
-  collected.push(cell);
-  if (collectedSum.gte(neededCapacity)) break;
-}
-
-if (collectedSum.lt(neededCapacity)) {
-  throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
-}
-```
-
-Now, let's create the transaction's output Cells:
-
-- `transferOutput`: Generated based on the desired transfer amount by the user.
-- `changeOutput`: Represents the remaining balance after completing the transaction.
-
-```ts
-const toScript = helpers.parseAddress(options.to, { config: lumosConfig });
-
-const transferOutput: Cell = {
-  cellOutput: {
-    capacity: BI.from(options.amount).toHexString(),
-    lock: toScript,
-  },
-  data: "0x",
-};
-
-const changeOutput: Cell = {
-  cellOutput: {
-    capacity: collectedSum.sub(neededCapacity).toHexString(),
-    lock: fromScript,
-  },
-  data: "0x",
-};
-```
-
-Then, we need to add Inputs and Outputs to the created `txSkeleton`. Additionally, we add `Cell Deps`, which contain an `OutPoint` pointing to some specific Live Cells. These Cells are related to the transaction and can be used as dependencies to place code that will be loaded and executed by the `ckb-vm` or to place data that can be used for on-chain script execution.
-
-```ts
-txSkeleton = txSkeleton.update("inputs", (inputs) => inputs.push(...collected));
-txSkeleton = txSkeleton.update("outputs", (outputs) =>
-  outputs.push(transferOutput, changeOutput)
-);
-txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
-  cellDeps.push({
-    outPoint: {
-      txHash: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.TX_HASH,
-      index: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.INDEX,
-    },
-    depType: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.DEP_TYPE,
-  })
-);
-```
-
-Next, update specific [witness](/docs/tech-explanation/glossary#witness) data in the transaction. The witness serves as a place to input data such as signatures for the transaction to be verified on the blockchain. The format of the witness data is flexible; however, in this instance, we adhere to the [WitnessArgs](https://github.com/nervosnetwork/ckb/blob/1df5f2c1cbf07e04622fb8faa5b152c1af7ae341/util/types/schemas/blockchain.mol#L106) specification for basic transaction structure. It is important to note that this specification may evolve to reflect best practices.
-
-The `witnessArgs` consists of 3 distinct parts, each corresponding to the different data required for the execution of specific scripts:
-
-```ts
-export interface WitnessArgs {
-  lock?: HexString; // lock scripts of the input Cells
-  inputType?: HexString; // type scripts of the input Cells
-  outputType?: HexString; // type scripts of the output Cells
-}
-```
-
-We update the witness part according to the transaction structure.
-
-```ts
-const firstIndex = txSkeleton
-  .get("inputs")
-  .findIndex((input) =>
-    bytes.equal(
-      blockchain.Script.pack(input.cellOutput.lock),
-      blockchain.Script.pack(fromScript)
-    )
+export async function transfer(
+  fromAddress: string,
+  toAddress: string,
+  amountInShannon: string,
+  signerPrivateKey: string
+): Promise<string> {
+  let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+  txSkeleton = await commons.common.transfer(
+    txSkeleton,
+    [fromAddress],
+    toAddress,
+    amountInShannon
   );
-if (firstIndex !== -1) {
-  while (firstIndex >= txSkeleton.get("witnesses").size) {
-    txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-      witnesses.push("0x")
-    );
-  }
-  let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
-  const newWitnessArgs: WitnessArgs = {
-    /* 65-byte zeros in hex */
-    lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-  };
-  if (witness !== "0x") {
-    const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
-    const lock = witnessArgs.lock;
-    if (
-      !!lock &&
-      !!newWitnessArgs.lock &&
-      !bytes.equal(lock, newWitnessArgs.lock)
-    ) {
-      throw new Error(
-        "Lock field in first witness is set aside for signature!"
-      );
-    }
-    const inputType = witnessArgs.inputType;
-    if (!!inputType) {
-      newWitnessArgs.inputType = inputType;
-    }
-    const outputType = witnessArgs.outputType;
-    if (!!outputType) {
-      newWitnessArgs.outputType = outputType;
-    }
-  }
-  witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-    witnesses.set(firstIndex, witness)
+
+  // https://github.com/nervosnetwork/ckb/blob/develop/util/app-config/src/legacy/tx_pool.rs#L9
+  // const DEFAULT_MIN_FEE_RATE: FeeRate = FeeRate::from_u64(1000);
+  txSkeleton = await commons.common.payFeeByFeeRate(
+    txSkeleton,
+    [fromAddress],
+    1000 /*fee_rate*/
   );
+
+  //...
 }
 ```
 
-Next, we need to sign the transaction. But before that we will create a signing message.
-
-- Generate signingEntries based on the transaction's Inputs and Outputs
-- Retrieve the signature message
-- Use the private key to sign the message recoverably, including the signature information and necessary metadata for subsequent signature verification processes
+Next, we need to sign the transaction. We will generate `signingEntries` for the transaction and use the private key to sign the message recoverably.
 
 ```ts
 txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-const message = txSkeleton.get("signingEntries").get(0)?.message;
-const Sig = hd.key.signRecoverable(message!, options.privKey);
+const signatures = txSkeleton
+  .get("signingEntries")
+  .map((entry) => hd.key.signRecoverable(entry.message, signerPrivateKey))
+  .toArray();
 ```
 
-Now let's seal our transaction with the `txSkeleton` and the just-generated signature
+Now let's seal our transaction with the `txSkeleton` and the just-generated signature for subsequent signature verification processes.
 
 ```ts
 const tx = helpers.sealTransaction(txSkeleton, [Sig]);
@@ -262,7 +148,7 @@ const tx = helpers.sealTransaction(txSkeleton, [Sig]);
 Send the transaction
 
 ```ts
-const hash = await rpc.sendTransaction(tx, "passthrough");
+const txHash = await rpc.sendTransaction(signedTx);
 ```
 
 You can open the console on the browser to see the full transaction to confirm the process.
@@ -274,8 +160,8 @@ You can open the console on the browser to see the full transaction to confirm t
 By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
 
 - Capacity of the Cell means how much CKB balance you have and how much data can be stored in this Cell at the same time
-- To build a CKB transaction is just to collecting some Live Cells and producing some new Cells.
-- We follow the `witnessArgs` to place the needed signature or any other data in the transaction.
+- To transfer CKB balance is just to transfering some cells from sender to receiver.
+- We use `commons.common.transfer` from the Lumos SDK to build the transfer transaction.
 
 ## Next Step
 
