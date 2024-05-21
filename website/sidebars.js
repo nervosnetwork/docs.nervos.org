@@ -64,6 +64,7 @@ export default {
       items: [
         "mining/algorithm-difficulty",
         "mining/rewards",
+        "mining/halving",
         "mining/cost-and-profit",
         "mining/risks",
         "mining/hardware",

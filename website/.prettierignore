@@ -13,3 +13,8 @@ yarn.lock
 
 # Ignore specific files
 *.log
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
