@@ -20,7 +20,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 CKB is based on a UTXO-like [Cell Model](/docs/tech-explanation/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously.
 
-Transfering balance in CKB is to consume some input cells from the sender's account and produce new output cells which can be unlock by the receiver account. The amount of transfering is equal to the total capacities of the coverting cells.
+Transfering balance in CKB involves consuming some input Cells from the sender's account and producing new output Cells which can be unlocked by the receiver's account. The amount transferred is equal to the total capacities of the coverting Cells.
 
 In this tutorial, we will learn how to write a simple dApp to transfer CKB balance from one account to another.
 
@@ -62,11 +62,11 @@ export const generateAccountFromPrivateKey = (privKey: string): Account => {
 };
 ```
 
-What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [lock script](/docs/tech-explanation/glossary#lock-script) to obtain the corresponding address of this account. A lock script ensures that only the owner can consume their Live Cells.
+What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [Lock Script](/docs/tech-explanation/glossary#lock-script) to obtain the corresponding address of this account. A Lock Script ensures that only the owner can consume their [Live Cells](/docs/tech-explanation/glossary#live-cell).
 
-Here, we use the CKB standard lock script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a lock script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
+Here, we use the CKB standard Lock Script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a Lock Script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
 
-Once we have the lock script of an account, we can determine how much balance the account has. The calculation is straightforward: we query and find all the Cells that use the same lock script and sum all these Cells' capacities; the sum is the balance.
+Once we have the Lock Script of an account, we can determine how much balance the account has. The calculation is straightforward: we query and find all the Cells that use the same Lock Script and sum all these Cells' capacities; the sum is the balance.
 
 ```ts
 export async function capacityOf(address: string): Promise<BI> {
@@ -83,7 +83,9 @@ export async function capacityOf(address: string): Promise<BI> {
 }
 ```
 
-In Nervos CKB, [Shannon](/docs/tech-explanation/glossary#shannon) is the smallest currency unit, with 1 CKB equaling 10^8 Shannon. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. Note that in this tutorial, we use only the Shannon unit.
+:::tip
+In Nervos CKB, [Shannon](/docs/tech-explanation/glossary#shannon) is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In this tutorial, we use only the **Shannon unit**.
+:::
 
 Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:
 
@@ -96,11 +98,11 @@ export async function transfer(
 ): Promise<string>;
 ```
 
-The `transfer` function accepts parameters such as `fromAddress`, `toAddress`, `amountInShannon`, and the `signerPrivateKey` to sign the transfer transaction.
+The `transfer` function accepts parameters such as `fromAddress`, `toAddress`, `amountInShannon`, and `signerPrivateKey` to sign the transfer transaction.
 
-What this transfer transaction does is collect and consume as many capacities as needed with some [Live Cells](/docs/tech-explanation/glossary#live-cell) as the input Cells and produce some new output Cells. The lock script of all these new Cells is set to the new owner's lock script for another account. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
+This transfer transaction collects and consumes as many capacities as needed using some Live Cells as the input Cells and produce some new output Cells. The Lock Script of all these new Cells is set to the new owner's Lock Script. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
 
-Thanks to the Lumos SDK, we can use high level helper function `commons.common.transfer` to do the transfer transaction which wraps the above logic.
+Thanks to the Lumos SDK, we can use high-level helper function `commons.common.transfer` to perform the transfer transaction, which wraps the above logic.
 
 ```ts
 export async function transfer(
@@ -157,10 +159,10 @@ You can open the console on the browser to see the full transaction to confirm t
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how transfer balance works on CKB. Here's a quick recap:
+By following this tutorial this far, you have mastered how balance transfers work on CKB. Here's a quick recap:
 
-- Capacity of the Cell means how much CKB balance you have and how much data can be stored in this Cell at the same time
-- To transfer CKB balance is just to transfering some cells from sender to receiver.
+- The capacity of a Cell indicates both the CKB balance and the amount of data that can be stored in the Cell simultaneously.
+- Transferring CKB balance involves transferring some Cells from the sender to the receiver.
 - We use `commons.common.transfer` from the Lumos SDK to build the transfer transaction.
 
 ## Next Step
