@@ -52,7 +52,7 @@ pub fn check_factor() -> Result<(), Error> {
 
     let mut product: u128 = 1;
     for factor in factors {
-        //todo: assert_eq!(Factorization::run(factor).is_prime, true);
+        assert!(is_prime(factor));
         product = product.checked_mul(factor as u128).unwrap();
     }
 
@@ -61,6 +61,20 @@ pub fn check_factor() -> Result<(), Error> {
     } else {
         Err(Error::CheckError)
     }
+}
+
+fn is_prime(n: u32) -> bool {
+    if n <= 1 {
+        return false;
+    }
+
+    for i in 2..n {
+        if n % i == 0 {
+            return false;
+        }
+    }
+
+    true // If no number between 2 and n-1 divides n, then n is prime.
 }
 
 pub fn decode(encoded: &[u8]) -> (u32, Vec<u32>, u128) {
