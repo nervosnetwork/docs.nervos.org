@@ -53,7 +53,7 @@ export function App() {
 
   const onTransfer = async () => {
     setIsTransferring(true);
-    const txHash = await transfer({ amount, from: fromAddr, to: toAddr, privKey }).catch(alert);
+    const txHash = await transfer(fromAddr, toAddr, amount, privKey).catch(alert);
 
     // We can wait for this txHash to be on-chain so that we can trigger the UI/UX updates including balance.
     if(txHash){
