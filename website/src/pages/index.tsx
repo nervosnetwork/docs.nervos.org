@@ -28,11 +28,6 @@ export default function Home() {
       title="Home"
       description="Docs for Nervos CKB Blockchain dApp and Script development"
     >
-      <img
-        className={styles.headerGlow}
-        src={"/svg/header-glow.svg"}
-        alt={"glowing effect"}
-      />
       <SwitchToDark />
       <CookieConsent />
       <div className={clsx(styles.sectionContainer)}>
