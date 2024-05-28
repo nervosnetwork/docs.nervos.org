@@ -33,7 +33,7 @@ export default function Home() {
         src={"/svg/header-glow.svg"}
         alt={"glowing effect"}
       />
-      <SwtichToDark />
+      <SwitchToDark />
       <CookieConsent />
       <div className={clsx(styles.sectionContainer)}>
         <div className={styles.header1}>Nervos CKB Documentation</div>
@@ -89,7 +89,7 @@ export default function Home() {
   );
 }
 
-function SwtichToDark() {
+function SwitchToDark() {
   const { setColorMode } = useColorMode();
 
   useEffect(() => {

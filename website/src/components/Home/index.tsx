@@ -25,7 +25,7 @@ interface EcoSectionProps {
   children: React.ReactNode;
 }
 
-// Card componnet at the top of the home page
+// Card component at the top of the home page
 function HomeCardSection() {
   return (
     <CardLayout colNum={[3, 1, 1, 1]} gap={16}>
