@@ -5,7 +5,7 @@ interface ImgContainerProps {
   src: string;
 }
 
-export default function ImgContaienr({
+export default function ImgContainer({
   alt,
   src,
 }: ImgContainerProps): JSX.Element {

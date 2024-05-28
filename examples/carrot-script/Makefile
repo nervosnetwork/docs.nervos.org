@@ -13,7 +13,7 @@ CUSTOM_RUSTFLAGS := --cfg debug_assertions
 CARGO_ARGS :=
 MODE := release
 # Tweak this to change the clang version to use for building C code. By default
-# we use a bash script with somes heuristics to find clang in current system.
+# we use a bash script with some heuristics to find clang in current system.
 CLANG := $(shell $(TOP)/scripts/find_clang)
 # When this is set, a single contract will be built instead of all contracts
 CONTRACT :=
