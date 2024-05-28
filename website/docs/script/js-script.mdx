@@ -324,7 +324,7 @@ fn hello_script() {
     ];
 
     // prepare output cell data
-    let outputs_data = vec![Bytes::new()), Bytes::new()];
+    let outputs_data = vec![Bytes::new(), Bytes::new()];
 
     // build transaction
     let tx = TransactionBuilder::default()
@@ -775,7 +775,7 @@ if (exit_code != 0) {
 Compile this `sudt.js` into binaries with CKB-Debugger:
 
 ```sh
-ckb-debugger --read-file js/fib.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/fib.bc
+ckb-debugger --read-file js/sudt.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/sudt.bc
 ```
 
 Add a new test to the `tests` file:

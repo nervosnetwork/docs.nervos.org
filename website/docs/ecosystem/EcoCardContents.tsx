@@ -472,7 +472,7 @@ const ecoCardContents: EcoCardProps[] = [
   },
   {
     title: "Poolin",
-    description: "A great bitocin and multi-cryptocurrency mining pool",
+    description: "A great bitcoin and multi-cryptocurrency mining pool",
     href: "https://www.poolin.com/",
     bannerSrc: "poolin",
     tags: ["Mining pool"],

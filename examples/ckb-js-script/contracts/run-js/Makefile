@@ -16,7 +16,7 @@ FULL_RUSTFLAGS := -C target-feature=+zba,+zbb,+zbc,+zbs $(CUSTOM_RUSTFLAGS)
 CARGO_ARGS :=
 MODE := release
 # Tweak this to change the clang version to use for building C code. By default
-# we use a bash script with somes heuristics to find clang in current system.
+# we use a bash script with some heuristics to find clang in current system.
 CLANG := $(shell $(TOP)/scripts/find_clang)
 # When this is set to some value, the generated binaries will be copied over
 BUILD_DIR :=
