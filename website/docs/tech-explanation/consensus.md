@@ -11,7 +11,7 @@ Nervos Network, comprising thousands of computers and millions of transactions, 
 
 To achieve Nervos' objectives, a consensus mechanism without compromise is imperative. Proof of Work (PoW) emerged as the optimal choice with the following advantages over Proof of Stake (PoS):
 
-- **Decentralization**: PoW mining adapts to external factors, such as mining equipments, energy consumption, and regulation. This necessitates ongoing reinvestment to maintain competitiveness, thereby discouraging monopolization in the long run.
+- **Decentralization**: PoW mining adapts to external factors, such as mining equipment, energy consumption, and regulation. This necessitates ongoing reinvestment to maintain competitiveness, thereby discouraging monopolization in the long run.
 - **Security**: PoW offers a simpler and more robust framework, requiring fewer assumptions than alternative consensus mechanisms. This reduces the potential for security vulnerabilities and ensures a more secure network overall.
 - **Fairness**: PoW mitigates advantages favoring early participants. Unlike PoS, where rewards are deterministically awarded and favor those who enter the system early, PoW ensures a more equitable distribution of rewards over time.
 

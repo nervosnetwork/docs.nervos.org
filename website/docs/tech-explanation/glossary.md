@@ -2665,7 +2665,7 @@ A Live Cell that is created in a transaction.
 
 ### Overlord
 
-A byzantine fault tollerant consensus algorithm designed by Nervos for Huobi which can support thousands of transactions per second.
+A byzantine fault tolerant consensus algorithm designed by Nervos for Huobi which can support thousands of transactions per second.
 
 #### See Also
 
