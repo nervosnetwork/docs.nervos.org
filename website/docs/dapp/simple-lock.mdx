@@ -1,0 +1,365 @@
+---
+id: simple-lock
+title: Simple Lock Example
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import TutorialHeader from "@components/TutorialHeader";
+import { LOCKOVERVIEW } from "./TutorialOverview.tsx";
+import SwitchToTestnet from "./_SwitchToTestnet.mdx";
+import StartDevnet from "./_StartDevnet.mdx";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import ImgContainer from "@components/ImgContainer";
+import CodeTabs from "./_CodeTabs.mdx";
+
+# Simple Lock Example
+
+<TutorialHeader
+  time={LOCKOVERVIEW.time}
+  topics={LOCKOVERVIEW.topics}
+  tools={LOCKOVERVIEW.tools}
+/>
+
+In this tutorial, we will learn how to write a fullstack dApp(including the frontend and the smart contract) to understand the development of CKB blockchain.
+
+The dApp is a simple toy lock example, we will build a lock script called `hash lock` and use this lock to guard some CKB tokens. We will also construct a web interface to let users to transfer tokens from this hash lock.
+
+The `hash_lock` is a simple toy project, you denote a hash in the hash_lock script args, in order to unlock such a script, users must provide the preimage to unveal the hash.
+
+:::note
+While this toy lock can't be used in production, it serves a great purpose as a learning starting point.
+:::
+
+## Setup Devnet & Run Example
+
+### Step 1: Clone the Repository
+
+To get started with the tutorial dApp, clone the repository and navigate to the appropriate directory using the following commands:
+
+```bash {2}
+git clone https://github.com/nervosnetwork/docs.nervos.org.git
+cd docs.nervos.org/examples/simple-lock
+```
+
+### Step 2: Start the Devnet
+
+<StartDevnet />
+
+### Step 3: Build and Deploy the script
+
+Navigate to your project, compile and deploy the script on devnet.
+
+Compile the script:
+
+<CodeTabs
+  cmd={`make build`}
+  response={`Cleaning build/release directory...
+mkdir -p build/release
+RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs --cfg debug_assertions" TARGET_CC="clang"
+                cargo build --target=riscv64imac-unknown-none-elf --release 
+    Finished release [optimized] target(s) in 0.22s
+Copying binary hash-lock to build directory`}
+/>
+
+Deploy the script binary to the devnet:
+
+<CodeTabs
+  cmd={`cd frontend && offckb deploy --network devnet`}
+  response={`contract HASH-LOCK deployed, tx hash: 0x9f55da2b555cdc4412945ff8827b7e77508c84f0b85d82b027d31418e6a9b5d9
+wait 4 blocks..
+done.
+`}
+/>
+
+### Step 4: Run the dApp
+
+Navigate to your project's frontend folder, install the node dependencies, and start running the example:
+
+<CodeTabs
+  cmd={
+`cd frontend && npm run dev`
+  }
+  response={
+`> frontend@0.1.0 dev
+> next dev
+
+▲ Next.js 14.2.3
+
+- Local: http://localhost:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 1631ms
+`
+}
+/>
+
+Now, the app is running in http://localhost:3000
+
+<ImgContainer src={useBaseUrl(props.imageSrc)} />
+
+### Step 5: Deposit Some CKB
+
+We have our dApp running, you can now input a hash value to construct a hash_lock script. In order to use this hash_lock script, we need to prepare some live cells which used such a script as its lock script. This preparation is called **deposit**. We can use `offckb` to deposit any CKB address quickly. Below is a example to deposit 100 CKB into the address:
+
+<CodeTabs
+  cmd={`offckb deposit --network devnet ckt1qry2mh3j5cylve2tl2sjpg3zhp9wjeq2l92rvxtd2scsx4jks500xpqrnm4k4g7j8nlnyc0j3y3z5q6s5ns29k8wx9prkn8ff09mhepmagkhur6h 10000000000`}
+  response={`tx hash:  0x0668292c875ee31906e48651a553a16158307c02f2e91d24be75166ca080e1fd`}
+/>
+
+Once we deposit some CKB into the CKB address, we can try to transfer some balance from this address to another address in order to check hash_lock script to see if it works as expectdly.
+
+You can try to click the `transfer` button, the website will ask you to enter the preimage, if the preimage is the right one, the transaction will be accpect on chain, if not, the transaction will failed since our little script is rejecting the wrong preimage and works as expectdly.
+
+## Behind the Scene
+
+### Script Logic
+
+The hash_lock idea is to denote a hash in the special script, in order to unlock such a script, you must provide the preimage to unveal the hash. To be more specific, the `hash_lock` script will execute the following validations on-chain:
+
+1. firstly, the script will read preimage value from the transaction witness filed
+2. secondly, the script will take the preimage and hash it using `ckb-default-hash` based on `blake-2b-256`
+3. lastly, the script will compare the hash generated from the preimage with the hash value from script args, if two are matched, it returns 0 as success, otherwise it fails.
+
+Let's check the full script code to gain a better understandings. Open the `main.rs` file in the `contract` folder:
+
+```rust title='simple-lock/contracts/hash-lock/src/main.rs'
+#![no_std]
+#![cfg_attr(not(test), no_main)]
+
+#[cfg(test)]
+extern crate alloc;
+
+use ckb_hash::blake2b_256;
+use ckb_std::ckb_constants::Source;
+
+#[cfg(not(test))]
+use ckb_std::default_alloc;
+use ckb_std::error::SysError;
+#[cfg(not(test))]
+ckb_std::entry!(program_entry);
+#[cfg(not(test))]
+default_alloc!();
+
+#[repr(i8)]
+pub enum Error {
+    IndexOutOfBound = 1,
+    ItemMissing,
+    LengthNotEnough,
+    Encoding,
+    // Add customized errors here...
+    CheckError,
+    UnMatch,
+}
+
+impl From<SysError> for Error {
+    fn from(err: SysError) -> Self {
+        match err {
+            SysError::IndexOutOfBound => Self::IndexOutOfBound,
+            SysError::ItemMissing => Self::ItemMissing,
+            SysError::LengthNotEnough(_) => Self::LengthNotEnough,
+            SysError::Encoding => Self::Encoding,
+            SysError::Unknown(err_code) => panic!("unexpected sys error {}", err_code),
+        }
+    }
+}
+
+pub fn program_entry() -> i8 {
+    ckb_std::debug!("This is a sample contract!");
+
+    match check_hash() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
+}
+
+pub fn check_hash() -> Result<(), Error> {
+    let script = ckb_std::high_level::load_script()?;
+    let expect_hash = script.args().raw_data().to_vec();
+
+    let witness_args = ckb_std::high_level::load_witness_args(0, Source::GroupInput)?;
+    let preimage = witness_args
+        .lock()
+        .to_opt()
+        .ok_or(Error::CheckError)?
+        .raw_data();
+
+    let hash = blake2b_256(preimage.as_ref());
+
+    if hash.eq(&expect_hash.as_ref()) {
+        Ok(())
+    } else {
+        Err(Error::UnMatch)
+    }
+}
+```
+
+Couple things to be noted:
+
+- In the `check_hash()` function, we use `ckb_std::high_level::load_witness_args` syscalls to read the preimage value from the witness filed in the CKB transaction. The structure used in the witness filed here is the `witnessArgs`.
+- We then use ckb default hash function `blake2b_256` from `use ckb_hash::blake2b_256;` library to hash the preimage and get its hash value.
+- Then we compare the two hash value to see if they matched `hash.eq(&expect_hash.as_ref())`, if not, return a custom error code `Error::UnMatch` which is `6`.
+
+The whole logic is quite simple and straightforward. How do we use such a smart contract in our dApp then? Let's check the frontend code.
+
+### dApp to use the Hash_Lock Script
+
+```ts title='simple-lock/frontend/app/hash-lock.ts'
+// ...
+export function generateAccount(hash: string) {
+  const lockArgs = "0x" + hash;
+  const lockScript = {
+    codeHash: offCKB.lumosConfig.SCRIPTS.HASH_LOCK!.CODE_HASH,
+    hashType: offCKB.lumosConfig.SCRIPTS.HASH_LOCK!.HASH_TYPE,
+    args: lockArgs,
+  };
+  const address = helpers.encodeToAddress(lockScript, {
+    config: offCKB.lumosConfig,
+  });
+  return {
+    address,
+    lockScript,
+  };
+}
+// ...
+```
+
+Let's check the `generateAccount` function: it accepts a hash string parameter, use this hash string as script args to build a hash_lock script, this script can be used as the lock to guard CKB tokens. Notice that we can directly use `offCKB.lumosConfig.SCRIPTS.HASH_LOCK` to get `code_hash` & `hash_type` information thanks to the offckb templates.
+
+Another thing worth to mention is that the generateAccount function also returns a CKB address which is computing from the lock script using lumos utils `helpers.encodeToAddress(lockScript)`. The CKB address is really just the encoding of the lock script. Think it as a safe deposit box,
+the address is like the serial number of the lock(which used to identify the lock) on top of the safe box, when you deposit CKB tokens into a CKB address, it works like you deposit some money into a specific safe box with a specific lock.
+
+When we are talking about how much balance a CKB address hold, we are just talking about how much money a specific lock seals. And that is how the balance(capaciies) calculation function works in our frontend code---by collecting the live cells which use a specifci lock script and sum their capacities:
+
+```ts title='simple-lock/frontend/app/hash-lock.ts'
+// ...
+export async function capacityOf(address: string): Promise<BI> {
+  const collector = indexer.collector({
+    lock: helpers.parseAddress(address, { config: lumosConfig }),
+  });
+
+  let balance = BI.from(0);
+  for await (const cell of collector.collect()) {
+    balance = balance.add(cell.cellOutput.capacity);
+  }
+
+  return balance;
+}
+// ...
+```
+
+To transfer(or unlock) CKB from this hash_lock address, we need to build a CKB transaction which consume some live cells which use the hash_lock script and generate new live cells which use the receiver's lock script. Also, in the witness filed of the transaction, we need to provide the correct preimage for the hash value in the hash_lock script args to prove that we are indeed the owner of the hash_lock script(since only the owner knows the preimage).
+
+We use lumos `transactionSkeleton` to build such a transaction:
+
+```ts title='simple-lock/frontend/app/hash-lock.ts'
+// ...
+export async function unlock(
+  fromAddr: string,
+  toAddr: string,
+  amountInShannon: string
+): Promise<string> {
+  const { lumosConfig, indexer, rpc } = offCKB;
+  let txSkeleton = helpers.TransactionSkeleton({});
+  const fromScript = helpers.parseAddress(fromAddr, {
+    config: lumosConfig,
+  });
+  const toScript = helpers.parseAddress(toAddr, { config: lumosConfig });
+
+  if (BI.from(amountInShannon).lt(BI.from("6100000000"))) {
+    throw new Error(
+      `every cell's capacity must be at least 61 CKB, see https://medium.com/nervosnetwork/understanding-the-nervos-dao-and-cell-model-d68f38272c24`
+    );
+  }
+
+  // additional 0.001 ckb for tx fee
+  // the tx fee could calculated by tx size
+  // this is just a simple example
+  const neededCapacity = BI.from(amountInShannon).add(100000);
+  let collectedSum = BI.from(0);
+  const collected: Cell[] = [];
+  const collector = indexer.collector({ lock: fromScript, type: "empty" });
+  for await (const cell of collector.collect()) {
+    collectedSum = collectedSum.add(cell.cellOutput.capacity);
+    collected.push(cell);
+    if (collectedSum.gte(neededCapacity)) break;
+  }
+
+  if (collectedSum.lt(neededCapacity)) {
+    throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
+  }
+
+  const transferOutput: Cell = {
+    cellOutput: {
+      capacity: BI.from(amountInShannon).toHexString(),
+      lock: toScript,
+    },
+    data: "0x",
+  };
+
+  txSkeleton = txSkeleton.update("inputs", (inputs) =>
+    inputs.push(...collected)
+  );
+  txSkeleton = txSkeleton.update("outputs", (outputs) =>
+    outputs.push(transferOutput)
+  );
+  txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
+    cellDeps.push({
+      outPoint: {
+        txHash: lumosConfig.SCRIPTS.HASH_LOCK!.TX_HASH,
+        index: lumosConfig.SCRIPTS.HASH_LOCK!.INDEX,
+      },
+      depType: lumosConfig.SCRIPTS.HASH_LOCK!.DEP_TYPE,
+    })
+  );
+
+  const preimageAnswer = window.prompt("please enter the preimage: ");
+  if (preimageAnswer == null) {
+    throw new Error("user abort input!");
+  }
+
+  const newWitnessArgs: WitnessArgs = {
+    lock: stringToBytesHex(preimageAnswer),
+  };
+  console.log("newWitnessArgs: ", newWitnessArgs);
+  const witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
+  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+    witnesses.set(0, witness)
+  );
+
+  const tx = helpers.createTransactionFromSkeleton(txSkeleton);
+  const hash = await rpc.sendTransaction(tx, "passthrough");
+  console.log("Full transaction: ", JSON.stringify(tx, null, 2));
+
+  return hash;
+}
+```
+
+### Is the Hash_Lock safe to use?
+
+The short answer is no. The hash_lock is not very safe to use to guard your CKB tokens. Some of you might already knows the reason, here is some:
+
+- Miner can front-run your tokens. Since we reveal the preimage value in the witness, once we submit the transaction to blockchain, miners can see this preimage and construct a new transaction to transfer the tokens to their addresses.
+- Once you transfer parts of balance from the hash_lock address, the preimage value is relveal on-chain, and the rest tokens locked in the hash_lock now becomes volubilitie since anyone sees the preimage can steal the rest tokens.
+
+Eventhough the hash and preiamge way is too simple to works as a lock script in our example, it serves a pretty good purpose as a learning starting point. The main idea is to learn the concept and principles of how CKB script works and learn the development of CKB.
+
+---
+
+## Congratulations!
+
+By following this tutorial this far, you have mastered how to build a custom lock, fullstack dApp on CKB. Here's a quick recap:
+
+- We build a custom lock script to guard CKB tokens.
+- We build a dApp frontend to transfer/unlock tokens from this lock script.
+- We understand the limit and volubilitie of our lock script.
+
+## Next Step
+
+<SwitchToTestnet readmeLink="https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/README.md" />
+
+## Additional Resources
+
+- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)

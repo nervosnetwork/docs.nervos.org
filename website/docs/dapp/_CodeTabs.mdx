@@ -1,0 +1,12 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+<Tabs>
+  <TabItem value="cmd" label="Command">
+    <CodeBlock language="bash">{props.cmd}</CodeBlock>
+  </TabItem>
+  <TabItem value="response" label="Response">
+    <CodeBlock language="bash">{props.response}</CodeBlock>
+  </TabItem>
+</Tabs>

@@ -21,6 +21,7 @@ export default {
         "dapp/write-message",
         "dapp/create-token",
         "dapp/create-dob",
+        "dapp/simple-lock",
       ],
     },
     {
