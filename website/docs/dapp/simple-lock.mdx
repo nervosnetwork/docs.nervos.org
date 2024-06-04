@@ -97,8 +97,6 @@ Navigate to your project's frontend folder, install the node dependencies, and s
 
 Now, the app is running in http://localhost:3000
 
-<ImgContainer src={useBaseUrl(props.imageSrc)} />
-
 ### Step 5: Deposit Some CKB
 
 With our dApp up and running, you can now input a hash value to construct a `hash_lock` script. To utilize this `hash_lock` script, we need to prepare some live cells that use this script as their lock script. This preparation process is known as `deposit`. We can use `offckb` to quickly deposit any CKB address. Here's an example of how to deposit 100 CKB into a specific address:
@@ -111,6 +109,8 @@ With our dApp up and running, you can now input a hash value to construct a `has
 Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt to transfer some balance from this address to another. This will allow you to test the `hash_lock` script and see if it functions as expected.
 
 You can try clicking the `transfer` button. The website will prompt you to enter the preimage. If the preimage is correct, the transaction will be accepted on chain. If not, the transaction will fail because our small script rejects the incorrect preimage and works as expected.
+
+<ImgContainer src="/img/dapps/simple-lock.jpg" />
 
 ## Behind the Scene
 
@@ -360,7 +360,15 @@ By following this tutorial, you've mastered the basics of building a custom lock
 
 ## Next Step
 
-<SwitchToTestnet readmeLink="https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/README.md" />
+So now your dApp works great on the local blockchain, you might want to switch it to different environments like Testnet and Mainnet.
+
+To do that, just change the environment variable `NETWORK` to `testnet` in the `.env` file:
+
+```sh
+NEXT_PUBLIC_NETWORK=testnet # devnet, testnet or mainnet
+```
+
+For more details, check out the <a href={"https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/README.md"}>README.md</a>.
 
 ## Additional Resources
 
