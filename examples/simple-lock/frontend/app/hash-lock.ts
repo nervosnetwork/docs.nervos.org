@@ -3,6 +3,8 @@ import { bytes } from "@ckb-lumos/codec";
 import { helpers, Cell, WitnessArgs, BI } from "@ckb-lumos/lumos";
 import { blockchain } from "@ckb-lumos/base";
 
+const { indexer, lumosConfig } = offCKB;
+
 export function uint8ArrayToHexString(uint8Array: Uint8Array): string {
   return Array.prototype.map
     .call(uint8Array, (x) => ("00" + x.toString(16)).slice(-2))
@@ -14,6 +16,19 @@ export function stringToBytesHex(text: string) {
   const buf: Uint8Array = encoder.encode(text);
   console.log("preimage: ", buf);
   return "0x" + uint8ArrayToHexString(buf);
+}
+
+export async function capacityOf(address: string): Promise<BI> {
+  const collector = indexer.collector({
+    lock: helpers.parseAddress(address, { config: lumosConfig }),
+  });
+
+  let balance = BI.from(0);
+  for await (const cell of collector.collect()) {
+    balance = balance.add(cell.cellOutput.capacity);
+  }
+
+  return balance;
 }
 
 export function generateAccount(hash: string) {
@@ -35,7 +50,7 @@ export function generateAccount(hash: string) {
 export async function unlock(
   fromAddr: string,
   toAddr: string,
-  amountInShannon: string,
+  amountInShannon: string
 ): Promise<string> {
   const { lumosConfig, indexer, rpc } = offCKB;
   let txSkeleton = helpers.TransactionSkeleton({});
@@ -99,10 +114,12 @@ export async function unlock(
   const newWitnessArgs: WitnessArgs = {
     lock: stringToBytesHex(preimageAnswer),
   };
-  console.log("newWitnessArgs: ",newWitnessArgs);
+  console.log("newWitnessArgs: ", newWitnessArgs);
   const witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-  txSkeleton = txSkeleton.update('witnesses', (witnesses) => witnesses.set(0, witness));
-  
+  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+    witnesses.set(0, witness)
+  );
+
   const tx = helpers.createTransactionFromSkeleton(txSkeleton);
   const hash = await rpc.sendTransaction(tx, "passthrough");
   console.log("Full transaction: ", JSON.stringify(tx, null, 2));
