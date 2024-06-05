@@ -1,7 +1,9 @@
 ---
-id: address
-title: Address
+id: ckb-address
+title: CKB Address
 ---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 CKB address packages the lock script into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki). In this format, the lock script consists of three key parameters: `code_hash`, `hash_type`, and `args`.
 
@@ -47,9 +49,9 @@ A Bech32/Bech32m string consists of the **human-readable part**, the **separat
 The flow chart below outlines the process of encoding a lock script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and then appending a human-readable part and checksum to the data.
 
 <img
-alt="Encoding a lock script into a payload"
-src={useBaseUrl("img/tech_explanation/lock-script-encoding-into-payload.png")}
-width="688"
+  alt="Encoding a lock script into a payload"
+  src={useBaseUrl("img/tech_explanation/lock-script-encoding-into-payload.png")}
+  width="688"
 />
 
 ## Examples and Demo Code
