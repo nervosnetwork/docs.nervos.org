@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
 import { CardLinks } from "@site/src/pages/homeContents";
+import ScriptHeaders from "@site/docs/script/ScriptHeaders";
 
 export interface TutorialHeaderProps {
   time: string;
@@ -36,9 +37,24 @@ export default function TutorialHeader({
         <strong>🔧 Tools You Need: </strong>
       </div>
       <ul className={styles.toolList}>
-        {tools.map((list, index) => (
-          <li key={index}>{list}</li>
-        ))}
+        {tools.map((tool, index) => {
+          if (tool.props.children === "Script develop tools") {
+            return (
+              <details className={styles.collapsibleHeader}>
+                <summary className={styles.collapsibleText}>
+                  Script develop tools
+                </summary>
+                <div className={styles.expandedList}>
+                  {ScriptHeaders.basic.tools.map((scriptTool, scriptIndex) => {
+                    return <li key={scriptIndex}>{scriptTool}</li>;
+                  })}
+                </div>
+              </details>
+            );
+          } else {
+            return <li key={index}>{tool}</li>;
+          }
+        })}
       </ul>
     </div>
   );
