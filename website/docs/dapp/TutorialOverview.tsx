@@ -165,7 +165,7 @@ const LOCKOVERVIEW: TutorialHeaderProps = {
   topics: [
     {
       label: "Full-Stack",
-      link: "/docs/tech-explanation/glossary#digital-object-dob",
+      link: "/docs/getting-started/quick-start#dapp-project-structure",
     },
     {
       label: "Lock-Script",
