@@ -26,10 +26,17 @@ A kind of basic object in distributed ledger used to keep the balance and other 
 ### Address
 
 A label consists of string of letters and numbers that anonymously represents user's identity on chain. Crypto assets can be sent to and/or from addresses.
+CKB address packages [lock script](#lock-script) into a single line, verifiable, and human read friendly format. A single public-private key pair can generate multiple lock scripts, consequently multiple addresses.
 
 #### Synonyms
 
 - [Payment Address](#payment-address)
+
+#### See Also
+
+- [Lock Script](#lock-script)
+- [Private Key](#private-key)
+- [Public Key](#public-key)
 
 ---
 
@@ -2303,9 +2310,11 @@ A script that represents the ownership of a Cell. A user successfully unlocks a 
 ### Lock Script
 
 A script that enforces access and ownership of a Cell. This script controls who has permission to use the Cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
+In Nervos CKB, a lock script is encoded into a bytes array (payload) and wrapped into the final address format, creating a one-to-one correspondence between lock scripts and addresses. 
 
 #### See Also
 
+- [Address](#address)
 - [Cell](#cell)
 - [Type Script](#type-script)
 - [Script](#script)
