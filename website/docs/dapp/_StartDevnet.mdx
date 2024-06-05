@@ -1,0 +1,92 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import ImgContainer from "@components/ImgContainer";
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+To interact with the dApp, ensure that your Devnet is up and running. After installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli), open a terminal and start the Devnet with the following command:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-node" label="Command">
+```
+
+```bash
+offckb node
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-node-result" label="Response">
+```
+
+```bash
+/bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
+/Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
+CKB installed successfully.
+init Devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
+modified  /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet/ckb-miner.toml
+CKB output: 2024-03-20 07:56:44.765 +00:00 main INFO sentry  sentry is disabled
+
+CKB output: 2024-03-20 07:56:44.766 +00:00 main INFO ckb_bin::helper  raise_fd_limit newly-increased limit: 61440
+
+CKB output: 2024-03-20 07:56:44.854 +00:00 main INFO ckb_bin::subcommand::run  ckb version: 0.113.1 (95ad24b 2024-01-31)
+
+CKB output: 2024-03-20 07:56:45.320 +00:00 main INFO ckb_db_migration  Init database version 20230206163640
+
+CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain spec hash: Byte32(0x3036c73473a371f3aa61c588c38924a93fb8513e481fa7c8d884fc4cf5fd368a)
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+You might want to check pre-funded accounts and copy private keys for later use. Open another terminal and execute:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="offckb-accounts" label="Command">
+```
+
+```bash
+offckb accounts
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="offckb-accounts-result" label="Response">
+```
+
+```bash
+Print account list, each account is funded with 42_000_000_00000000 capacity in the genesis block.
+[
+  {
+    privkey: '0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6',
+    pubkey: '0x02025fa7b61b2365aa459807b84df065f1949d58c0ae590ff22dd2595157bffefa',
+    lockScript: {
+      codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
+      hashType: 'type',
+      args: '0x8e42b1999f265a0078503c4acec4d5e134534297'
+    },
+    address: 'ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8',
+    args: '0x8e42b1999f265a0078503c4acec4d5e134534297'
+  },
+  {
+    privkey: '0x9f315d5a9618a39fdc487c7a67a8581d40b045bd7a42d83648ca80ef3b2cb4a1',
+    pubkey: '0x026efa0579f09cc7c1129b78544f70098c90b2ab155c10746316f945829c034a2d',
+    lockScript: {
+      codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
+      hashType: 'type',
+      args: '0x758d311c8483e0602dfad7b69d9053e3f917457d'
+    },
+    address: 'ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew',
+    args: '0x758d311c8483e0602dfad7b69d9053e3f917457d'
+  },
+  #...
+]
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```

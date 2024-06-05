@@ -160,4 +160,53 @@ const DOBOVERVIEW: TutorialHeaderProps = {
   ],
 };
 
-export { TRANSFEROVERVIEW, WRITEOVERVIEW, TOKENOVERVIEW, DOBOVERVIEW };
+const LOCKOVERVIEW: TutorialHeaderProps = {
+  time: "10 - 15 min",
+  topics: [
+    {
+      label: "Full-Stack",
+      link: "/docs/getting-started/quick-start#dapp-project-structure",
+    },
+    {
+      label: "Lock-Script",
+      link: "/docs/tech-explanation/glossary#lock-script",
+    },
+  ],
+  tools: [
+    <div>An IDE/Editor that supports TypeScript</div>,
+    <div>
+      <Link
+        href={"https://nodejs.org/en"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Node.js
+      </Link>
+      {" and "}
+      <Link
+        href={"https://yarnpkg.com/"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Yarn
+      </Link>
+    </div>,
+    <div>
+      CKB dev environment:{" "}
+      <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>
+        OffCKB
+      </Link>
+    </div>,
+    <div>
+      <Link to={"/docs/script/minimal-script"}>Script develop tools</Link>
+    </div>,
+  ],
+};
+
+export {
+  TRANSFEROVERVIEW,
+  WRITEOVERVIEW,
+  TOKENOVERVIEW,
+  DOBOVERVIEW,
+  LOCKOVERVIEW,
+};
