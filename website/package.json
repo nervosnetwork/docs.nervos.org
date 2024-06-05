@@ -7,6 +7,7 @@
     "examples": "docusaurus-examples",
     "start": "docusaurus start",
     "build": "docusaurus build",
+    "serve": "docusaurus serve",
     "fmt": "prettier --write . --ignore-path .prettierignore",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
@@ -23,9 +24,9 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.1.1",
-    "@docusaurus/tsconfig": "^3.1.1",
-    "@docusaurus/types": "^3.1.1",
+    "@docusaurus/module-type-aliases": "^3.4.0",
+    "@docusaurus/tsconfig": "^3.4.0",
+    "@docusaurus/types": "^3.4.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^2.5.1",
@@ -33,8 +34,9 @@
   },
   "dependencies": {
     "@cmfcmf/docusaurus-search-local": "^1.1.0",
-    "@docusaurus/core": "3.1.1",
-    "@docusaurus/preset-classic": "3.1.1",
+    "@docusaurus/core": "^3.4.0",
+    "@docusaurus/plugin-client-redirects": "^3.4.0",
+    "@docusaurus/preset-classic": "^3.4.0",
     "clsx": "^1.1.1",
     "connect": "^3.7.0",
     "hast-util-is-element": "1.1.0",
