@@ -21,14 +21,14 @@ import CodeTabs from "./_CodeTabs.mdx";
   tools={LOCKOVERVIEW.tools}
 />
 
-In this tutorial, we'll explore how to create a full-stack dApp, encompassing both the frontend and the smart contract, to gain a deeper understanding of CKB blockchain development.
+In this tutorial, we'll show you how to create a full-stack dApp, including both the frontend and the Script, to help you better understand CKB blockchain development.
 
-Our dApp will be a straightforward toy lock example. We'll construct a lock script, referred to as `hash_lock`, and employ this lock to protect some CKB tokens. Additionally, we'll develop a web interface that enables users to transfer tokens from this `hash_lock`.
+Our example dApp will use a simple toy lock. We'll create a Lock Script named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
 
-The `hash_lock` is a basic toy project. You specify a hash in the `hash_lock` script's [script_args](/docs/tech-explanation/glossary#lock-script). To unlock this script, users must supply the preimage to reveal the hash.
+The `hash_lock` project involves specifying a hash in the Script's [script_args](/docs/tech-explanation/script-args). To unlock it, users must provide the preimage that matches the hash.
 
 :::note
-While this toy lock example isn't suitable for production use, it serves as an excellent starting point for learning.
+Although this toy lock example isn't intended for production, it's an excellent starting point for learning the basics.
 :::
 
 ## Setup Devnet & Run Example
@@ -46,11 +46,11 @@ cd docs.nervos.org/examples/simple-lock
 
 <StartDevnet />
 
-### Step 3: Build and Deploy the script
+### Step 3: Build and Deploy the Script
 
-Navigate to your project, compile and deploy the script to devnet.
+Navigate to your project, compile and deploy the Script to Devnet.
 
-Compile the script:
+Compile the Script:
 
 <CodeTabs
   cmd={`make build`}
@@ -62,7 +62,7 @@ RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs --cfg debug_assertions" TARGET_
 Copying binary hash-lock to build directory`}
 />
 
-Deploy the script binary to the devnet:
+Deploy the Script binary to the Devnet:
 
 <CodeTabs
   cmd={`cd frontend && offckb deploy --network devnet`}
@@ -72,7 +72,7 @@ done.
 `}
 />
 
-### Step 4: Run the dApp
+### Step 4: Run the DApp
 
 Navigate to your project's frontend folder, install the node dependencies, and start running the example:
 
@@ -99,30 +99,32 @@ Now, the app is running in http://localhost:3000
 
 ### Step 5: Deposit Some CKB
 
-With our dApp up and running, you can now input a hash value to construct a `hash_lock` script. To utilize this `hash_lock` script, we need to prepare some live cells that use this script as their lock script. This preparation process is known as `deposit`. We can use `offckb` to quickly deposit any CKB address. Here's an example of how to deposit 100 CKB into a specific address:
+With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some Live Cells that use this Script as their Lock Script. This preparation process is known as `deposit`. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 100 CKB into a specific address:
 
 <CodeTabs
   cmd={`offckb deposit --network devnet ckt1qry2mh3j5cylve2tl2sjpg3zhp9wjeq2l92rvxtd2scsx4jks500xpqrnm4k4g7j8nlnyc0j3y3z5q6s5ns29k8wx9prkn8ff09mhepmagkhur6h 10000000000`}
   response={`tx hash:  0x0668292c875ee31906e48651a553a16158307c02f2e91d24be75166ca080e1fd`}
 />
 
-Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt to transfer some balance from this address to another. This will allow you to test the `hash_lock` script and see if it functions as expected.
+Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt to transfer some balance from this address to another. This will allow you to test the `hash_lock` Script and see if it functions as expected.
 
-You can try clicking the `transfer` button. The website will prompt you to enter the preimage. If the preimage is correct, the transaction will be accepted on chain. If not, the transaction will fail because our small script rejects the incorrect preimage and works as expected.
+You can try clicking the `transfer` button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
 
 <ImgContainer src="/img/dapps/simple-lock.jpg" />
+
+---
 
 ## Behind the Scene
 
 ### Script Logic
 
-The concept behind `hash_lock` is to specify a hash in a particular script. To unlock this script, you must provide the preimage to reveal the hash. More specifically, the `hash_lock` script will execute the following validations on-chain:
+The concept behind `hash_lock` is to specify a hash in a particular Script. To unlock this Script, you must provide the preimage to reveal the hash. More specifically, the `hash_lock` Script will execute the following validations on-chain:
 
-- First, the script will read the preimage value from the transaction witness field.
-- Second, the script will take the preimage and hash it using `ckb-default-hash` based on `blake-2b-256`.
-- Lastly, the script will compare the hash generated from the preimage with the hash value from the script args. If the two are matched, it returns 0 as success; otherwise, it fails.
+- First, the Script will read the preimage value from the transaction witness field.
+- Second, the Script will take the preimage and hash it using `ckb-default-hash` based on `blake-2b-256`.
+- Lastly, the Script will compare the hash generated from the preimage with the hash value from the `script_args`. If the two match, it returns 0 as success; otherwise, it fails.
 
-To gain a better understanding, let's examine the full script code. Open the `main.rs` file in the `contracts` folder:
+To gain a better understanding, let's examine the full Script code. Open the `main.rs` file in the `contracts` folder:
 
 ```rust title='simple-lock/contracts/hash-lock/src/main.rs'
 #![no_std]
@@ -195,19 +197,19 @@ pub fn check_hash() -> Result<(), Error> {
 }
 ```
 
-Couple of things to note:
+Here are a few things to note:
 
-- In the `check_hash()` function, we use `ckb_std::high_level::load_witness_args` syscalls to read the preimage value from the witness filed in the CKB transaction. The structure used in the witness filed here is the `witnessArgs`.
-- We then use the CKB default hash function `blake2b_256` from the `use ckb_hash::blake2b_256;` library to hash the preimage and get its hash value.
-- Then we compare the two hash values to see if they match `(hash.eq(&expect_hash.as_ref()))`. If not, we return a custom error code `Error::UnMatch` (which is 6).
+- In the `check_hash()` function, we use `ckb_std::high_level::load_witness_args` syscalls to read the preimage value from the witness fieled in the CKB transaction. The structure used in the witness fieled here is the `witnessArgs`.
+- We then use the CKB default hash function `blake2b_256` from the `use ckb_hash::blake2b_256` library to hash the preimage and get its hash value.
+- Next, we compare the two hash values to see if they match `(hash.eq(&expect_hash.as_ref()))`. If they do not match, we return a custom error code `Error::UnMatch` (which is 6).
 
-The whole logic is quite simple and straightforward. How do we use such a smart contract in our dApp then? Let's check the frontend code.
+The whole logic is quite simple and straightforward. How do we use such a Script in our dApp? Let's check the frontend code.
 
-### DApp to use the Hash_Lock Script
+### Use the Hash_Lock Script in Your DApp
 
-Let's check the `generateAccount` function: It accepts a hash string parameter. This hash string is used as script args to build a `hash_lock` script. This script can then be used as the lock to guard CKB tokens.
+Let's take a look at the `generateAccount` function: It accepts a hash string parameter. This hash string is used as `script_args` to build a `hash_lock` Script. This Script can then be used as the lock to secure CKB tokens.
 
-Notice that we can directly use `offCKB.lumosConfig.SCRIPTS.HASH_LOCK` to get `code_hash` and `hash_type` information thanks to the `offckb` templates.
+Note that we can directly use `offCKB.lumosConfig.SCRIPTS.HASH_LOCK` to get the `code_hash` and `hash_type` information, thanks to the `offckb` templates.
 
 ```ts title='simple-lock/frontend/app/hash-lock.ts'
 // ...
@@ -229,11 +231,11 @@ export function generateAccount(hash: string) {
 // ...
 ```
 
-Another thing worth mentioning is that the `generateAccount` function also returns a CKB address. This address is computed from the lock script using Lumos utils `helpers.encodeToAddress(lockScript)`. The CKB address is essentially just the encoding of the lock script.
+Another important aspect of the `generateAccount` function is that it also returns a CKB address. This address is computed from the Lock Script using Lumos utils `helpers.encodeToAddress(lockScript)`. Essentially, the CKB address is just the encoded version of the Lock Script.
 
-Think of it like a safe deposit box. The address is like the serial number of the lock (used to identify the lock) on top of the safe box. When you deposit CKB tokens into a CKB address, it works like depositing money into a specific safe box with a specific lock.
+Think of it like a safe deposit box. The address is like the serial number of the lock (used to identify the lock) on top of the safe box. When you deposit CKB tokens into a CKB address, it's like depositing money into a specific safe box with a specific lock.
 
-When we talk about how much balance a CKB address holds, we're simply talking about how much money a specific lock seals. And that's how the balance (capacities) calculation function works in our frontend code --- by collecting the live cells which use a specific lock script and summing their capacities.
+When we talk about how much balance a CKB address holds, we're simply referring to how much value a specific lock secures. The balance (capacities) calculation function in our frontend code works by collecting the Live Cells that use a specific Lock Script and summing their capacities.
 
 ```ts title='simple-lock/frontend/app/hash-lock.ts'
 // ...
@@ -252,7 +254,7 @@ export async function capacityOf(address: string): Promise<BI> {
 // ...
 ```
 
-To transfer (or unlock) CKB from this `hash_lock` script address, we need to build a CKB transaction that consumes some live cells which use the `hash_lock` script and generates new live cells which use the receiver's lock script. Additionally, in the witness field of the transaction, we need to provide the correct preimage for the hash value in the `hash_lock` script args to prove that we are indeed the owner of the `hash_lock` script (since only the owner knows the preimage).
+To transfer (or unlock) CKB from this `hash_lock` Script address, we need to build a CKB transaction that consumes some Live Cells which use the `hash_lock` Script and generates new Live Cells which use the receiver's Lock Script. Additionally, in the witness field of the transaction, we need to provide the preimage for the hash value in the `hash_lock` Script args to prove that we are indeed the owner of the `hash_lock` Script (since only the owner knows the preimage).
 
 We use Lumos' `transactionSkeleton` to build such a transaction.
 
@@ -339,14 +341,14 @@ export async function unlock(
 }
 ```
 
-### Is the Hash_Lock safe to use?
+### Is the Hash_Lock Safe to Use?
 
 The short answer is no. The `hash_lock` is not very secure for guarding your CKB tokens. Some of you might already know the reason, but here are some points to consider:
 
-- Miner Front-running: Since the preimage value is revealed in the witness, once you submit the transaction to the blockchain, miners can see this preimage and construct a new transaction to transfer the tokens to their addresses before you do.
-- Balance Vulnerability: Once you transfer part of the balance from the `hash_lock` address, the preimage value is revealed on-chain. This makes the remaining tokens locked in the `hash_lock` vulnerable since anyone who sees the preimage can steal them.
+- **Miner Front-running**: Since the preimage value is revealed in the witness, once you submit the transaction to the blockchain, miners can see this preimage and construct a new transaction to transfer the tokens to their addresses before you do.
+- **Balance Vulnerability**: Once you transfer part of the balance from the `hash_lock` address, the preimage value is revealed on-chain. This makes the remaining tokens locked in the `hash_lock` vulnerable since anyone who sees the preimage can steal them.
 
-Even though the hash and preimage approach is too simplistic to function as a secure lock script in our example, it serves a valuable purpose as a learning starting point. The main idea is to learn the concepts and principles of how CKB scripts work and gain experience with CKB development.
+Even though using a hash and preimage is too simple to be a secure Lock Script, it’s a great starting point for learning. The goal is to understand how CKB Scripts work and gain experience with CKB development.
 
 ---
 
@@ -354,9 +356,9 @@ Even though the hash and preimage approach is too simplistic to function as a se
 
 By following this tutorial, you've mastered the basics of building a custom lock and a full-stack dApp on CKB. Here's a quick recap:
 
-- We built a custom lock script to guard CKB tokens.
-- We built a dApp frontend to transfer/unlock tokens from this lock script.
-- We explored the limitations and vulnerabilities of our naive lock script design.
+- We built a custom Lock Script to guard CKB tokens.
+- We built a dApp frontend to transfer/unlock tokens from this Lock Script.
+- We explored the limitations and vulnerabilities of our naive Lock Script design.
 
 ## Next Step
 

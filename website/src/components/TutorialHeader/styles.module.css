@@ -17,3 +17,12 @@
   margin: 0;
   padding-left: 2.5rem;
 }
+.collapsibleHeader {
+  margin-left: -1.125rem;
+}
+.collapsibleText {
+  color: var(--text-link);
+}
+.expandedList {
+  padding-left: 2.5rem;
+}

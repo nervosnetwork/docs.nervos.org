@@ -168,8 +168,16 @@ const LOCKOVERVIEW: TutorialHeaderProps = {
       link: "/docs/getting-started/quick-start#dapp-project-structure",
     },
     {
-      label: "Lock-Script",
+      label: "Lock Script",
       link: "/docs/tech-explanation/glossary#lock-script",
+    },
+    {
+      label: "Witness",
+      link: "/docs/tech-explanation/glossary#witness",
+    },
+    {
+      label: "Cryptographic hash function",
+      link: "https://en.wikipedia.org/wiki/Cryptographic_hash_function",
     },
   ],
   tools: [
@@ -197,9 +205,7 @@ const LOCKOVERVIEW: TutorialHeaderProps = {
         OffCKB
       </Link>
     </div>,
-    <div>
-      <Link to={"/docs/script/minimal-script"}>Script develop tools</Link>
-    </div>,
+    <div>Script develop tools</div>,
   ],
 };
 
