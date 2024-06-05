@@ -148,7 +148,7 @@ const devToolSectionContents: DevToolProps[] = [
 
 const contactUsContents: CardLinks[] = [
   { label: "github", link: "https://github.com/nervosnetwork" },
-  { label: "discord", link: "https://discord.gg/nervosnetwork" },
+  { label: "discord", link: "https://discord.gg/4Jcw8MwEEv" },
   { label: "reddit", link: "https://www.reddit.com/r/NervosNetwork/" },
   { label: "nervostalk", link: "https://talk.nervos.org/" },
   { label: "telegram", link: "https://t.me/nervosnetwork" },
