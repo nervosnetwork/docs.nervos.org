@@ -2310,7 +2310,7 @@ A script that represents the ownership of a Cell. A user successfully unlocks a 
 ### Lock Script
 
 A script that enforces access and ownership of a Cell. This script controls who has permission to use the Cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
-In Nervos CKB, a lock script is encoded into a bytes array (payload) and wrapped into the final address format, creating a one-to-one correspondence between lock scripts and addresses. 
+In Nervos CKB, a lock script is encoded into a bytes array (payload) and wrapped into the final address format, creating a one-to-one correspondence between lock scripts and addresses.
 
 #### See Also
 

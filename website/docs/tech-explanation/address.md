@@ -16,9 +16,10 @@ payload = 0x00 | code_hash | hash_type | args
 ```
 
 The `hash_type` field is for CKB VM version selection.
+
 - `hash_type` 0: the script group matches code via data hash and will run the code using CKB VM v0.
 - `hash_type` 1: the script group matches code via type script hash and will run the code using CKB VM v1.
-- `hash_type` 2:  the script group matches code via data hash and will run the code using CKB VM v1.
+- `hash_type` 2: the script group matches code via data hash and will run the code using CKB VM v1.
 
 ## Wrap Into Address
 
@@ -27,28 +28,28 @@ The payload is wrapped into an address following [Bitcoin Bech32 address format
 The original version of Bech32/Bech32m allows at most 90 characters long. Similar with [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md), we simply remove the length limit. The error correction function is disabled when the Bech32/Bech32m string is longer than 90. We don't intent to use this function anyway, because there is a risk to get wrong correction result.
 
 :::note
-Unlike the original Bech32/Bech32m version with the max 90-character limit, we remove the length limit similar to [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md), due to the risk of getting wrong correction result. 
+Unlike the original Bech32/Bech32m version with the max 90-character limit, we remove the length limit similar to [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md), due to the risk of getting wrong correction result.
 :::
 
-A Bech32/Bech32m string consists of the **human-readable part**, the **separator**, and the **data part**. The last 6 characters of data part is **checksum**. 
+A Bech32/Bech32m string consists of the **human-readable part**, the **separator**, and the **data part**. The last 6 characters of data part is **checksum**.
 
 - Human-readable part: "ckb" for CKB mainnet and "ckt" for the testnet
 - Separator: always being "1"
 - Data part: base32 encoded. The table below provides a translation for Base32 encoding:
 
-|      | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-| ---- | - | - | - | - | - | - | - | - |
-|  +0  | q | p | z | r | y | 9 | x | 8 |
-|  +8  | g | f | 2 | t | v | d | w | 0 |
-| +16  | s | 3 | j | n | 5 | 4 | k | h |
-| +24  | c | e | 6 | m | u | a | 7 | l |
+|     | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| +0  | q   | p   | z   | r   | y   | 9   | x   | 8   |
+| +8  | g   | f   | 2   | t   | v   | d   | w   | 0   |
+| +16 | s   | 3   | j   | n   | 5   | 4   | k   | h   |
+| +24 | c   | e   | 6   | m   | u   | a   | 7   | l   |
 
 The flow chart below outlines the process of encoding a lock script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and then appending a human-readable part and checksum to the data.
 
 <img
-  alt="Encoding a lock script into a payload"
-  src={useBaseUrl("img/tech_explanation/lock-script-encoding-into-payload.png")}
-  width="688"
+alt="Encoding a lock script into a payload"
+src={useBaseUrl("img/tech_explanation/lock-script-encoding-into-payload.png")}
+width="688"
 />
 
 ## Examples and Demo Code
