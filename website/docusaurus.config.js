@@ -96,6 +96,25 @@ const config = {
         style: undefined,
       },
     ],
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        redirects: [
+          {
+            from: "/docs/basics/guides/mining-ckb",
+            to: "/docs/mining/guide",
+          },
+          {
+            from: "/docs/reference/halving",
+            to: "/docs/mining/halving",
+          },
+          {
+            from: "/docs/basics/guides/crypto wallets/neuron",
+            to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
+          },
+        ],
+      },
+    ],
     function myPlugin() {
       return {
         name: "custom-webpack-plugin",
