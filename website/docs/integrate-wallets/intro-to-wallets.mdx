@@ -29,17 +29,19 @@ These wallets listed below offer custody and security services tailored to CKB. 
 
 ## CKB Address
 
-Nervos CKB follows [Bitcoin's bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki) for address generation. It features a new full address format like this: `ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`.
+CKB address packages the [Lock Script](/docs/tech-explanation/glossary#lock-script) into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki).
 
-The previous short address format is now **deprecated**, for example: `ckb1qyq5lv479ewscx3ms620sv34pgeuz6zagaaqklhtgg`.
+The CKB address format is an application-level Cell Lock Script display recommendation.
+Here is an example: `ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`.
 
-Tools for address generation and transformation include:
+The Lock Script consists of 3 key parameters: `code_hash`, `hash_type`, and `args`. To decode the address and view the components and their attributes, use this tools: [CKB.tools/address](https://ckb.tools/).
+For detailed specifications, refer to [CKB Address](/docs/tech-explanation/ckb-address) in the Tech Explanation.
 
-- [CKB.tools/address](https://ckb.tools/)
-- [CKB Lumos](https://lumos-website.vercel.app/#2-generate-a-wallet-account)
-- [ckb-address-transformer](https://codesandbox.io/s/ckb-address-transformer-524gi)
+:::note
 
-For detailed specifications, refer to [RFC0021: CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md).
+A single public-private key pair can generate multiple Lock Scripts, consequently multiple addresses.
+
+:::
 
 ## Requirements for CKB Transfers
 

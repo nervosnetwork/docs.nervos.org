@@ -1,0 +1,63 @@
+---
+id: ckb-address
+title: CKB Address
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+CKB address packages the Lock Script into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki). In this format, the Lock Script consists of three key parameters: `code_hash`, `hash_type`, and `args`.
+
+## Get Full Payload
+
+To generate a CKB address, the Lock Script is encoded into a byte array, termed "payload," which is then wrapped into the final address format.
+
+Full payload format encodes all data fields of Lock Script using Bech32m encoding:
+
+```
+payload = 0x00 | code_hash | hash_type | args
+```
+
+The `hash_type` field is for CKB-VM version selection.
+
+- `hash_type` 0: the Script group matches code via data hash and will run the code using CKB-VM v0.
+- `hash_type` 1: the Script group matches code via Type Script hash and will run the code using CKB-VM v1.
+- `hash_type` 2: the Script group matches code via data hash and will run the code using CKB-VM v1.
+
+## Wrap Into Address
+
+The payload is wrapped into an address following [Bitcoin Bech32 address format (BIP-173)](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) or [Bitcoin bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki), using Bech32/Bech32m encoding and a [BCH checksum](https://en.wikipedia.org/wiki/BCH_code).
+
+:::note
+The original Bech32/Bech32m format limits strings to 90 characters. However, we have removed this length restriction, similar to [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md). For strings longer than 90 characters, the error correction function is disabled to prevent the risk of incorrect corrections, which we do not intend to use.
+:::
+
+A Bech32/Bech32m string consists of the **human-readable part**, the **separator**, and the **data part**. The last 6 characters of data part is **checksum**.
+
+- Human-readable part: "ckb" for CKB mainnet and "ckt" for the testnet
+- Separator: always being "1"
+- Data part: base32 encoded. The table below provides a translation for Base32 encoding:
+
+|     | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| +0  | q   | p   | z   | r   | y   | 9   | x   | 8   |
+| +8  | g   | f   | 2   | t   | v   | d   | w   | 0   |
+| +16 | s   | 3   | j   | n   | 5   | 4   | k   | h   |
+| +24 | c   | e   | 6   | m   | u   | a   | 7   | l   |
+
+The flow chart below outlines the process of encoding a Lock Script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and then appending a human-readable part and checksum to the data.
+
+<img
+  alt="Encoding a Lock Script into a payload"
+  src={useBaseUrl("img/tech_explanation/lock-script-encoding-into-payload.png")}
+  width="688"
+/>
+
+## Examples and Demo Code
+
+```
+== full address test ==
+code_hash to encode:     9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+hash_type to encode:     01
+with args to encode:     b39bbc0b3673c7d36450bc14cfcdad2d559c6c64
+full address generated:  ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4
+```

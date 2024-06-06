@@ -87,6 +87,7 @@ export default {
         "tech-explanation/code-hash",
         "tech-explanation/hash-type",
         "tech-explanation/script-args",
+        "tech-explanation/ckb-address",
         "tech-explanation/ckb-vm",
         "tech-explanation/consensus",
         "tech-explanation/economics",
