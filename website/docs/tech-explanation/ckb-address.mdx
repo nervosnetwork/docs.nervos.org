@@ -17,20 +17,18 @@ Full payload format encodes all data fields of lock script using Bech32m encodin
 payload = 0x00 | code_hash | hash_type | args
 ```
 
-The `hash_type` field is for CKB VM version selection.
+The `hash_type` field is for CKB-VM version selection.
 
-- `hash_type` 0: the script group matches code via data hash and will run the code using CKB VM v0.
-- `hash_type` 1: the script group matches code via type script hash and will run the code using CKB VM v1.
-- `hash_type` 2: the script group matches code via data hash and will run the code using CKB VM v1.
+- `hash_type` 0: the Script group matches code via data hash and will run the code using CKB-VM v0.
+- `hash_type` 1: the Script group matches code via Type Script hash and will run the code using CKB-VM v1.
+- `hash_type` 2: the Script group matches code via data hash and will run the code using CKB-VM v1.
 
 ## Wrap Into Address
 
 The payload is wrapped into an address following [Bitcoin Bech32 address format (BIP-173)](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) or [Bitcoin bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki), using Bech32/Bech32m encoding and a [BCH checksum](https://en.wikipedia.org/wiki/BCH_code).
 
-The original version of Bech32/Bech32m allows at most 90 characters long. Similar with [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md), we simply remove the length limit. The error correction function is disabled when the Bech32/Bech32m string is longer than 90. We don't intent to use this function anyway, because there is a risk to get wrong correction result.
-
 :::note
-Unlike the original Bech32/Bech32m version with the max 90-character limit, we remove the length limit similar to [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md), due to the risk of getting wrong correction result.
+The original Bech32/Bech32m format limits strings to 90 characters. However, we have removed this length restriction, similar to [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md). For strings longer than 90 characters, the error correction function is disabled to prevent the risk of incorrect corrections, which we do not intend to use.
 :::
 
 A Bech32/Bech32m string consists of the **human-readable part**, the **separator**, and the **data part**. The last 6 characters of data part is **checksum**.
