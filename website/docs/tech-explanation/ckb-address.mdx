@@ -5,13 +5,13 @@ title: CKB Address
 
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-CKB address packages the lock script into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki). In this format, the lock script consists of three key parameters: `code_hash`, `hash_type`, and `args`.
+CKB address packages the Lock Script into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki). In this format, the Lock Script consists of three key parameters: `code_hash`, `hash_type`, and `args`.
 
 ## Get Full Payload
 
-To generate a CKB address, the lock script is encoded into a byte array, termed "payload," which is then wrapped into the final address format.
+To generate a CKB address, the Lock Script is encoded into a byte array, termed "payload," which is then wrapped into the final address format.
 
-Full payload format encodes all data fields of lock script using Bech32m encoding:
+Full payload format encodes all data fields of Lock Script using Bech32m encoding:
 
 ```
 payload = 0x00 | code_hash | hash_type | args
@@ -44,10 +44,10 @@ A Bech32/Bech32m string consists of the **human-readable part**, the **separat
 | +16 | s   | 3   | j   | n   | 5   | 4   | k   | h   |
 | +24 | c   | e   | 6   | m   | u   | a   | 7   | l   |
 
-The flow chart below outlines the process of encoding a lock script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and then appending a human-readable part and checksum to the data.
+The flow chart below outlines the process of encoding a Lock Script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and then appending a human-readable part and checksum to the data.
 
 <img
-  alt="Encoding a lock script into a payload"
+  alt="Encoding a Lock Script into a payload"
   src={useBaseUrl("img/tech_explanation/lock-script-encoding-into-payload.png")}
   width="688"
 />
