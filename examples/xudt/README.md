@@ -1,6 +1,6 @@
 # View & Transfer Balance
 
-This is a simple Dapp example to show how to issue and transfer custom tokens on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/docs/dapp-tutorials/create-token) to understand how it works.
+This is a simple Dapp example to show how to issue and transfer custom tokens on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/create-token) to understand how it works.
 
 ## How to run
 

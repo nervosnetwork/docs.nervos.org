@@ -1,10 +1,24 @@
-# CKB-Hands-On
+# Build a Simple Lock
 
-A simple hash lock example to showcase the development of CKB with scripts and the frontend.
+A a full-stack dApp example to showcase the development of CKB with scripts(smart contract) and the frontend. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/simple-lock) to understand how it works.
 
-> Given a hash, you need to provide its preimage in order to unlock the Lock Script in the transaction
+We'll create a Lock Script named hash_lock to secure some CKB tokens and build a web interface for users to transfer tokens from this hash_lock.
 
-Example: `Hash = blake2b_256(preimage)`
+The hash_lock project involves specifying a hash in the Script's script_args. To unlock it, users must provide the preimage that matches the hash.
+
+`Hash = blake2b_256(preimage)`
+
+> [!WARNING]
+> Although this toy lock example isn't intended for production, it's an excellent starting point for learning the basics.
+
+### Is the Hash_Lock Safe to Use?
+
+The short answer is **NO**. The hash_lock is not secure for guarding your CKB tokens. Some of you might already know the reason, but here are some points to consider:
+
+- **Miner Front-running**: Since the preimage value is revealed in the witness, once you submit the transaction to the blockchain, miners can see this preimage and construct a new transaction to transfer the tokens to their addresses before you do.
+- **Balance Vulnerability**: Once you transfer part of the balance from the hash_lock address, the preimage value is revealed on-chain. This makes the remaining tokens locked in the hash_lock vulnerable since anyone who sees the preimage can steal them.
+
+Even though using a hash and preimage is too simple to be a secure Lock Script, it’s a great starting point for learning. The goal is to understand how CKB Scripts works and gain experience with CKB development.
 
 ## offckb-template
 
