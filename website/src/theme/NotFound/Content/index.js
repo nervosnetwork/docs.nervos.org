@@ -44,7 +44,7 @@ export default function ContentWrapper(props) {
         </a>{" "}
       </h2>
       <div>
-        Or get help from <a href="https://discord.gg/nervosnetwork">discord</a>
+        Or get help from <a href="https://discord.gg/4Jcw8MwEEv">discord</a>
       </div>
     </div>
   );

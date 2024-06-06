@@ -99,7 +99,7 @@ export default {
       label: "Ecosystem",
       className: "category-ecosystem",
       collapsible: false,
-      items: ["ecosystem/projects"],
+      items: ["ecosystem/projects", "ecosystem/organizations"],
     },
     {
       type: "category",

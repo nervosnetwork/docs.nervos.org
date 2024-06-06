@@ -160,7 +160,7 @@ const config = {
           type: "html",
           position: "right",
           value:
-            '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
+            '<a class="help-flex" href="https://discord.gg/4Jcw8MwEEv" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
           className: "navbar-help",
         },
       ],
