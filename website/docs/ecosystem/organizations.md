@@ -17,4 +17,4 @@ Explore all the organizations and their relevant GitHub repositories within the 
 | Nervina-labs   | https://github.com/nervina-labs  | JoyID, CoTA                                       |
 | CKB-JS         | https://github.com/ckb-js        | Lumos, Kuai, CKB-SDK-JS                           |
 | .bit           | https://github.com/dotbitHQ      | did-contracts , dotbit.js                         |
-| ckb-ecofund    | https://github.com/ckb-ecofund   | ccc                                        |
+| ckb-ecofund    | https://github.com/ckb-ecofund   | ccc                                               |
