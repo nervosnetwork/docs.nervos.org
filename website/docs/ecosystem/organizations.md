@@ -16,4 +16,5 @@ Explore all the organizations and their relevant GitHub repositories within the 
 | Magickbase     | https://github.com/Magickbase    | CKB Explorer, Neuron, CKB Testnet Faucet          |
 | Nervina-labs   | https://github.com/nervina-labs  | JoyID, CoTA                                       |
 | CKB-JS         | https://github.com/ckb-js        | Lumos, Kuai, CKB-SDK-JS                           |
-| .bit           | https://github.com/DIDHQ         | DID, Voty                                         |
+| .bit           | https://github.com/dotbitHQ      | did-contracts , dotbit.js                         |
+| synapseweb3    | https://github.com/synapseweb3   | forcerelay                                        |
