@@ -6,6 +6,7 @@ title: Transfer CKB
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
 import { TRANSFEROVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
@@ -18,7 +19,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
   tools={TRANSFEROVERVIEW.tools}
 />
 
-CKB is based on a UTXO-like [Cell Model](/docs/tech-explanation/cell-model). Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously.
+CKB is based on a UTXO-like <Tooltip>Cell Model</Tooltip>. Every <Tooltip>Cell</Tooltip> has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously.
 
 Transfering balance in CKB involves consuming some input Cells from the sender's account and producing new output Cells which can be unlocked by the receiver's account. The amount transferred is equal to the total capacities of the coverting Cells.
 
@@ -62,7 +63,7 @@ export const generateAccountFromPrivateKey = (privKey: string): Account => {
 };
 ```
 
-What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a [Lock Script](/docs/tech-explanation/glossary#lock-script) to obtain the corresponding address of this account. A Lock Script ensures that only the owner can consume their [Live Cells](/docs/tech-explanation/glossary#live-cell).
+What this function does is generate the account's public key and address via a private key. Here, we need to construct and encode a <Tooltip>Lock Script</Tooltip> to obtain the corresponding address of this account. A Lock Script ensures that only the owner can consume their <Tooltip>Live Cells</Tooltip>.
 
 Here, we use the CKB standard Lock Script template, combining the [SECP256K1](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) signing algorithm with the BLAKE160 hashing algorithm, to build such a Lock Script. Note that different templates will yield different addresses when encoding the address, corresponding to different types of guard for the assets.
 
@@ -84,7 +85,7 @@ export async function capacityOf(address: string): Promise<BI> {
 ```
 
 :::tip
-In Nervos CKB, [Shannon](/docs/tech-explanation/glossary#shannon) is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In this tutorial, we use only the **Shannon unit**.
+In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In this tutorial, we use only the **Shannon unit**.
 :::
 
 Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:

@@ -26,7 +26,7 @@ A kind of basic object in distributed ledger used to keep the balance and other 
 ### Address
 
 A label consists of string of letters and numbers that anonymously represents user's identity on chain. Crypto assets can be sent to and/or from addresses.
-CKB address packages [lock script](#lock-script) into a single line, verifiable, and human read friendly format. A single public-private key pair can generate multiple lock scripts, consequently multiple addresses.
+CKB address packages [Lock Script](#lock-script) into a single line, verifiable, and human read friendly format. A single public-private key pair can generate multiple Lock Scripts, consequently multiple addresses.
 
 #### Synonyms
 
@@ -453,7 +453,7 @@ Cryptography is the practice and study of techniques for secure communication in
 
 ### Cycles
 
-The number of RISC-V computational cycles required by a script to execute. It's a metric used to prevent malicious behavior such as infinite loops, that's why it is called cycles.
+The number of RISC-V computational cycles required by a Script to execute. It's a metric used to prevent malicious behavior such as infinite loops, that's why it is called cycles.
 
 This is a similar concept to Ethereum's Gas, we set cycles to ensure optimal performance and security. Scripts must stay within cycle limits, otherwise the block will be rejected by CKB nodes.
 
@@ -637,7 +637,7 @@ ckb init --chain Mainnet && ckb run
 
 ### Full Payload Format
 
-The deprecated full payload format directly encodes all data field of lock script. The encode rule of deprecated full payload format is [Bech32](https://en.bitcoin.it/wiki/Bech32).
+The deprecated full payload format directly encodes all data field of Lock Script. The encode rule of deprecated full payload format is [Bech32](https://en.bitcoin.it/wiki/Bech32).
 
 #### See Also
 
@@ -1113,7 +1113,7 @@ A shorthand name for cryptographic signature.
 
 ### Smart Contract
 
-A smart contract is a self-executing contract with the terms of the agreement between contract creators and contract users being directly written into lines of code. The code and the agreements contained therein exist across a distributed, decentralized blockchain network. Also known as script on Nervos CKB.
+A smart contract is a self-executing contract with the terms of the agreement between contract creators and contract users being directly written into lines of code. The code and the agreements contained therein exist across a distributed, decentralized blockchain network. Also known as Script on Nervos CKB.
 
 ---
 
@@ -1594,7 +1594,7 @@ A framework layer that runs on top of Nervos CKB which provides an easy way to q
 
 ### Args
 
-Args is short for arguments. Arguments are data provided to the lock script or type script of a Cell, similar to args provided to a function or method call.
+Args is short for arguments. Arguments are data provided to the Lock Script or Type Script of a Cell, similar to args provided to a function or method call.
 
 Arguments are stored as part of the Cell when it is created.
 
@@ -1710,7 +1710,7 @@ EpochNumberWithFraction::new_unchecked(4, 0, 1);
 
 ### `cell_deps`
 
-Pointers to Live Cells on the chain that allow scripts in the transaction to access (read-only) referenced Live Cells.
+Pointers to Live Cells on the chain that allow Scripts in the transaction to access (read-only) referenced Live Cells.
 
 Find more in the essay [Script dependencies](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/dependencies/#how-dependencies-work).
 
@@ -1919,7 +1919,7 @@ A shorthand name for dependencies.
 
 ### Dependencies
 
-Dependencies are commonly referred to as deps. Dependencies are Cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any scripts executing within the transaction. Dependencies, or deps, are not consumed.
+Dependencies are commonly referred to as deps. Dependencies are Cells that are referenced in a transaction. Cells that are referenced as dependencies are read-only and made available to any Scripts executing within the transaction. Dependencies, or deps, are not consumed.
 
 #### Synonyms
 
@@ -1936,7 +1936,7 @@ Dependencies are commonly referred to as deps. Dependencies are Cells that are r
 
 ### Duktape
 
-Duktape is an embeddable Javascript engine, with a focus on portability and compact footprint.
+Duktape is an embeddable JavaScript engine, with a focus on portability and compact footprint.
 
 Duktape is used to run JavaScript based smart contracts on Nervos.
 
@@ -2054,7 +2054,7 @@ An Ethereum token standard that supports the creation any number of fungible or 
 
 ### Full Address
 
-An address format used on Nervos that includes the full code hash of the lock script associated.
+An address format used on Nervos that includes the full code hash of the Lock Script associated.
 
 #### See Also
 
@@ -2110,7 +2110,7 @@ Godwoken is a layer 2 rollup framework for Nervos CKB. It provides scaling capab
 
 ### Governance Script
 
-A type script which defines the monetary policy of a User Defined Token (UDT).
+A Type Script which defines the monetary policy of a User Defined Token (UDT).
 
 #### See Also
 
@@ -2123,7 +2123,7 @@ A type script which defines the monetary policy of a User Defined Token (UDT).
 
 ### Governance Script Hash
 
-A Blake2b hash of a type script which is used as an identifier for the script when referenced by a Cell.
+A Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
 
 #### Synonyms
 
@@ -2301,7 +2301,7 @@ This is similar to an unspent transaction output (UTXO) in Bitcoin.
 
 ### Lock
 
-A script that represents the ownership of a Cell. A user successfully unlocks a Cell and is able to consume it if the Cell's lock script exits normally.
+A Script that represents the ownership of a Cell. A user successfully unlocks a Cell and is able to consume it if the Cell's Lock Script exits normally.
 
 #### See Also
 
@@ -2309,8 +2309,8 @@ A script that represents the ownership of a Cell. A user successfully unlocks a 
 
 ### Lock Script
 
-A script that enforces access and ownership of a Cell. This script controls who has permission to use the Cell as an input. Lock scripts accept user generated proofs or witnesses and including transaction as inputs.
-In Nervos CKB, a lock script is encoded into a bytes array (payload) and wrapped into the final address format, creating a one-to-one correspondence between lock scripts and addresses.
+A Script that enforces access and ownership of a Cell. This Script controls who has permission to use the Cell as an input. Lock Scripts accept user generated proofs or witnesses and including transaction as inputs.
+In Nervos CKB, a Lock Script is encoded into a bytes array (payload) and wrapped into the final address format, creating a one-to-one correspondence between Lock Scripts and addresses.
 
 #### See Also
 
@@ -2323,7 +2323,7 @@ In Nervos CKB, a lock script is encoded into a bytes array (payload) and wrapped
 
 ### Lock Script Hash
 
-A [Blake2b](#blake2b) hash of a lock script which is used as an identifier for the script when referenced by a Cell.
+A [Blake2b](#blake2b) hash of a Lock Script which is used as an identifier for the Script when referenced by a Cell.
 
 #### See Also
 
@@ -2792,7 +2792,7 @@ A cryptographic signature scheme for signing and verification.
 
 ### Script
 
-A script in Nervos CKB is a binary executable on the CKB-VM. Compared to Bitcoin script, CKB script is Turing-complete, equivalent to smart contract. A Script can be one of two types:
+A Script in Nervos CKB is a binary executable on the CKB-VM. Compared to Bitcoin script, CKB Script is Turing-complete, equivalent to smart contract. A Script can be one of two types:
 
 - Lock Script - Used to control ownership and access to a Cell.
 - Type Script - Used to control how a Cell is used in a transaction.
@@ -2855,7 +2855,7 @@ A design pattern on Nervos from creating unique identifiers used to create unfor
 
 ### Shannon
 
-A fractional denomination of CKBytes. One CKByte is equal to 100,000,000 Shannons.
+A fractional denomination of CKBytes. 1 CKByte is equal to 100,000,000 Shannons.
 
 A Shannon is the equivalent of a Bitcoin Satoshi.
 
@@ -2869,7 +2869,7 @@ A Shannon is the equivalent of a Bitcoin Satoshi.
 
 ### Short Address
 
-An address format on Nervos that does not include a code hash of the associated lock script, instead using one of the many common lock scripts.
+An address format on Nervos that does not include a code hash of the associated Lock Script, instead using one of the many common Lock Scripts.
 
 The short address format is the most common address format used, and is often referred to as simply "address".
 
@@ -2887,7 +2887,7 @@ The short address format is the most common address format used, and is often re
 
 ### Simple UDT
 
-A standard that defines a the most basic implementation of a UDT fungible token on Nervos.
+A standard that defines the most basic implementation of a UDT fungible token on Nervos.
 
 An sUDT on Nervos is the equivalent of Ethereum tokens standards ERC20 or ERC777.
 
@@ -3069,7 +3069,7 @@ pub const TX_VERSION: Version = 0;
 
 ### `type_id`
 
-One of the CKB `system_scripts`. A unique feature of Type ID is that it‘s a CKB built-in script directly implemented in Rust. It doesn't run in CKB-VM but can be used in the same way as other [CKB genesis scripts](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#type-id).
+One of the CKB `system_scripts`. A unique feature of Type ID is that it‘s a CKB built-in Script directly implemented in Rust. It doesn't run in CKB-VM but can be used in the same way as other [CKB genesis scripts](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#type-id).
 
 For a deeper understanding of Type ID, check out this blog post: [Introduction to CKB Script Programming 6: Type ID](https://xuejie.space/2020_02_03_introduction_to_ckb_script_programming_type_id/) (also translated into [Chinese](https://talk.nervos.org/t/ckb-type-id/4258)).
 
@@ -3092,7 +3092,7 @@ The `code_hash` of `type_id`. In view of the specificity of `type_id`, `type_id_
 
 ### Type Script
 
-A script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output.
+A Script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output.
 
 #### See Also
 
@@ -3107,9 +3107,9 @@ A script that enforces the rules that must be followed in a transaction for a Ce
 
 Or `type_hash`, a Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.
 
-The two entities in the data structure of CKB’s Cell are `lock` and `type`. Type scripts can capture any validation logic needed in the Offtransformation.
+The two entities in the data structure of CKB’s Cell are `lock` and `type`. Type Scripts can capture any validation logic needed in the Offtransformation.
 
-Type scripts can implement economic constructs as well. NervosDAO is completely implemented as a type script with minimal support from the consensus layer.
+Type Scripts can implement economic constructs as well. NervosDAO is completely implemented as a Type Script with minimal support from the consensus layer.
 
 #### See Also
 
@@ -3179,7 +3179,7 @@ C2 and C3 cannot be linked to the main chain as their parent is unknown, therefo
 
 ### Validator
 
-A script that is used to ensure that the transactions created by the generators are valid. Validators are scripts that run in CKB-VM as either lock scripts or type scripts.
+A Script that is used to ensure that the transactions created by the generators are valid. Validators are Scripts that run in CKB-VM as either Lock Scripts or Type Scripts.
 
 #### See Also
 

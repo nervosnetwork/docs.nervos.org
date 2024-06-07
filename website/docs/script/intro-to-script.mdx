@@ -3,13 +3,15 @@ id: intro-to-script
 title: "Intro to Script"
 ---
 
+import Tooltip from "@components/Tooltip";
+
 # Intro to Script
 
-A [Script](/docs/tech-explanation/script) in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitrary logic to guard and protect your on-chain assets. You can think of it as smart contract.
+A <Tooltip>Script</Tooltip> in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitrary logic to guard and protect your on-chain assets. You can think of it as smart contract.
 
 ## How a Script Work
 
-When executing a Script, CKB takes the executables and runs them in a virtual machine environment called [CKB-VM](/docs/tech-explanation/ckb-vm). After the execution, if the program returns a code of 0, we consider the Script successful; any non-zero return codes will be considered Script failures.
+When executing a Script, CKB takes the executables and runs them in a virtual machine environment called <Tooltip>CKB-VM</Tooltip>. After the execution, if the program returns a code of 0, we consider the Script successful; any non-zero return codes will be considered Script failures.
 
 When you submit a transaction to CKB, it executes all the Scripts from the transaction to ensure that each Script succeeds. If any Script fails, the transaction will not be included on-chain.
 
@@ -19,8 +21,8 @@ In this way, we can allow the Cell to carry different Scripts to perform various
 
 A Script can be one of two types:
 
-- Lock Script - Used to control ownership and access to a Cell.
-- Type Script - Used to control how a Cell is used in a transaction.
+- **Lock Script** - Used to control ownership and access to a Cell.
+- **Type Script** - Used to control how a Cell is used in a transaction.
 
 In most cases, Lock Script works the same with Type Script. The difference is that, only the Lock Script from the input Cells will be exeuted in the transaction, while the Type Script from both the input Cells and output Cells will be executed in the transaction.
 
