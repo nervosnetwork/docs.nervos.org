@@ -1,6 +1,6 @@
 # View & Transfer Balance
 
-This is a simple Dapp example to show how to view and transfer balance on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp-tutorials/transfer-ckb) to understand how it works.
+This is a simple Dapp example to show how to view and transfer balance on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/transfer-ckb) to understand how it works.
 
 ## How to run
 

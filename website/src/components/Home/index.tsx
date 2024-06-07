@@ -7,16 +7,20 @@ import Link from "@docusaurus/Link";
 import EcoCard, { EcoCardProps } from "../EcoCard";
 import Button from "../Button";
 import {
+  TutorialProps,
   contactUsContents,
   devToolSectionContents,
   homeCardContents,
+  tutorialSectionContents,
 } from "../../pages/homeContents";
 import { walletCardContents } from "../../../docs/integrate-wallets/CardContents";
 import ecoCardContents from "../../../docs/ecosystem/EcoCardContents";
+import TutorialFrame from "../TutorialFrame";
 
 interface EcoSectionProps {
   title: string;
-  icon: "wallet" | "project" | "tool";
+  icon: "wallet" | "project" | "devtool";
+  glow?: boolean;
   topMargin?: number;
   children: React.ReactNode;
 }
@@ -24,54 +28,131 @@ interface EcoSectionProps {
 // Card component at the top of the home page
 function HomeCardSection() {
   return (
-    <CardLayout colNum={[3, 1, 1, 1]} gap={40}>
+    <CardLayout colNum={[3, 1, 1, 1]} gap={16}>
       {homeCardContents.map((card, index) => (
-        <div
+        <Link
           key={index}
-          className={clsx(styles.homeCard, styles.flexCol, styles.section)}
+          to={card.to}
+          className={clsx(
+            styles.section,
+            { [styles.flexCol]: card.links },
+            { [styles.flexCenter]: card.to },
+            { [styles.smHomeCard]: card.to }
+          )}
         >
-          <div className={styles.sparkles}>
-            <img
-              src={"/svg/sparkles.svg"}
-              width={128}
-              height={"auto"}
-              alt="sparkles decoration"
-            />
-          </div>
-          <div className={styles.iconContainer}>
-            <img
-              src={`/svg/polygon-${card.icon}.svg`}
-              width={160}
-              height={160}
-              alt={card.icon}
-            />
-          </div>
-          <h2 className={styles.cardTitle}>{card.title}</h2>
-          <div className={styles.cardLinks}>
-            {card.links.map((link, index) => (
-              <Link
-                key={index}
-                to={link.link}
-                className={clsx(
-                  styles.flexBetween,
-                  styles.link,
-                  styles.line,
-                  styles.borderBtm
-                )}
-              >
-                {link.label}
-                <img
-                  src={"/svg/icon-circle-arrow.svg"}
-                  width={32}
-                  height={32}
-                  alt={"Navigate to"}
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
+          {card.links ? (
+            <div className={styles.iconContainer}>
+              <img
+                src={`/svg/square-${card.icon}.svg`}
+                width={56}
+                height={56}
+                alt={card.icon}
+              />
+            </div>
+          ) : (
+            <div className={styles.iconContainerSm}>
+              <img
+                src={`/svg/square-${card.icon}.svg`}
+                width={32}
+                height={32}
+                alt={card.icon}
+              />
+            </div>
+          )}
+          <h3 className={styles.cardTitle}>{card.title}</h3>
+          {card.links && (
+            <div className={styles.cardLinks}>
+              {card.links.map((link, index) => (
+                <Link
+                  key={index}
+                  to={link.link}
+                  className={clsx(
+                    styles.flexBetween,
+                    styles.link,
+                    styles.line,
+                    styles.borderBtm
+                  )}
+                >
+                  {link.label}
+                  <img
+                    src={"/svg/icon-circle-arrow.svg"}
+                    width={32}
+                    height={32}
+                    alt={"Navigate to"}
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
+        </Link>
       ))}
     </CardLayout>
+  );
+}
+
+function DAppSection(): JSX.Element {
+  const [selectedTutorial, setSelectedTutorial] = useState<TutorialProps>(
+    tutorialSectionContents[0]
+  );
+
+  const handleTutorialClick = (tutorial: TutorialProps) => {
+    setSelectedTutorial(tutorial);
+  };
+
+  return (
+    <div
+      className={clsx(
+        styles.section,
+        styles.flexBetween,
+        styles.tutorialSection
+      )}
+    >
+      <div className={styles.sectionGlow}>
+        <img
+          src={`/svg/section-glow.svg`}
+          width={400}
+          height={400}
+          alt={"Glowing effect"}
+        />
+      </div>
+      <div className={styles.sectionGlowOpposite}>
+        <img
+          src={`/svg/section-glow.svg`}
+          width={400}
+          height={400}
+          alt={"Glowing effect"}
+        />
+      </div>
+      <div className={styles.tutorialLeft}>
+        <h1>DApp Tutorials</h1>
+        <div className={styles.tutorialSidebar}>
+          {tutorialSectionContents.map((tutorial, index) => (
+            <div
+              key={index}
+              onClick={() => handleTutorialClick(tutorial)}
+              className={clsx(styles.tutorialItem, {
+                [styles.itemActive]: selectedTutorial.title === tutorial.title,
+              })}
+            >
+              <h4 className={styles.itemTitle}>{tutorial.title}</h4>
+              <div>{tutorial.description}</div>
+              <div className={styles.itemDecor}>
+                <img src={tutorial.illusSrc} width={230} height={82} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <Button internal link={selectedTutorial.link}>
+          Full Tutorial →
+        </Button>
+      </div>
+      <div className={styles.tutorialFrame}>
+        <TutorialFrame
+          tutorialTitle={selectedTutorial.title}
+          iframeSrc={selectedTutorial.iframeSrc}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -80,6 +161,7 @@ function EcoSection({
   title,
   icon,
   topMargin = 0,
+  glow = false,
   children,
 }: EcoSectionProps): JSX.Element {
   return (
@@ -87,12 +169,17 @@ function EcoSection({
       className={clsx(styles.section, styles.flexCol)}
       style={{ marginTop: topMargin }}
     >
+      {glow && (
+        <div className={styles.sectionGlow}>
+          <img src={`/svg/section-glow.svg`} width={400} height={400} />
+        </div>
+      )}
       <div className={styles.flexCenter}>
         <div className={styles.iconContainer}>
           <img
-            src={`/svg/polygon-${icon}.svg`}
-            width={160}
-            height={160}
+            src={`/svg/square-${icon}.svg`}
+            width={56}
+            height={56}
             alt={icon}
           />
         </div>
@@ -171,9 +258,13 @@ function WalletDisplay(): JSX.Element {
           ))}
         </CardLayout>
       </div>
-      <Link to={"/docs/integrate-wallets/intro-to-wallets"}>
+      <Button
+        internal
+        size={"small"}
+        link={"/docs/integrate-wallets/intro-to-wallets"}
+      >
         View wallets →
-      </Link>
+      </Button>
     </EcoSection>
   );
 }
@@ -182,7 +273,7 @@ function WalletDisplay(): JSX.Element {
 function ToolDisplay(): JSX.Element {
   // Render filters and cards
   return (
-    <EcoSection title={"Dev Tools"} icon={"tool"}>
+    <EcoSection title={"Dev Tools"} icon={"devtool"}>
       <CardLayout topMargin={0} gap={0} colNum={[2, 1, 1, 1]}>
         <div className={styles.column}>
           <div className={clsx(styles.columnHeader, styles.cell)}>
@@ -225,7 +316,9 @@ function ToolDisplay(): JSX.Element {
           </div>
         </div>
       </CardLayout>
-      <Link to={"/docs/getting-started/devtool"}>View dev tools →</Link>
+      <Button internal size={"small"} link={"/docs/getting-started/devtool"}>
+        View dev tools →
+      </Button>
     </EcoSection>
   );
 }
@@ -283,7 +376,7 @@ function ProjectDisplay(): JSX.Element {
   }
 
   return (
-    <EcoSection topMargin={40} title={"Projects"} icon={"project"}>
+    <EcoSection topMargin={40} title={"Projects"} icon={"project"} glow>
       <div className={styles.carouselContainer}>
         <CardLayout topMargin={0} colNum={[3, 3, 2, 1]}>
           {items?.map((card, index) => (
@@ -300,7 +393,7 @@ function ProjectDisplay(): JSX.Element {
             alt="Previous"
           />
         </button>
-        <Button link={"/docs/ecosystem/projects"}>Explore all projects</Button>
+        <Button link={"/docs/ecosystem/projects"}>Explore All Projects</Button>
         <button onClick={goToNext} className={styles.arrowRight}>
           <img
             src={"/svg/icon-chevron-right.svg"}
@@ -316,43 +409,109 @@ function ProjectDisplay(): JSX.Element {
 
 function DevLogSection(): JSX.Element {
   return (
-    <div className={styles.section}>
-      <div className={clsx(styles.flexBetween, styles.devlogSection)}>
-        <div className={clsx(styles.flexCol, styles.leftContainer)}>
-          <h1>Discover Dev Log</h1>
-          <div className={styles.description}>
-            Dive into the continuous evolution of the Nervos CKB through our Dev
-            Log, where we document the journey of innovation, feature
-            enhancements, and the collaborative efforts that drive the ecosystem
-            forward.
-          </div>
-          <Button
-            link={
-              "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log"
-            }
-            internal={false}
-          >
-            Explore Dev Log
-          </Button>
+    <div
+      className={clsx(styles.section, styles.flexBetween, styles.devlogSection)}
+    >
+      <div className={styles.sectionGlow}>
+        <img src={`/svg/section-glow.svg`} width={400} height={400} />
+      </div>
+      <div className={clsx(styles.flexCol, styles.leftContainer)}>
+        <h1>Discover Dev Log</h1>
+        <div className={styles.description}>
+          Dive into the continuous evolution of the Nervos CKB through our Dev
+          Log, where we document the journey of innovation, feature
+          enhancements, and the collaborative efforts that drive the ecosystem
+          forward.
         </div>
-        <div className={styles.illusContainer}>
-          <img alt={"dev log"} loading="lazy" src={"/svg/illus-dev-log.svg"} />
+        <Button
+          link={
+            "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log"
+          }
+          internal={false}
+        >
+          Explore Dev Log
+        </Button>
+      </div>
+      <div className={styles.illusContainer}>
+        <img alt={"dev log"} loading="lazy" src={"/svg/illus-dev-log.svg"} />
+      </div>
+    </div>
+  );
+}
+
+function CTASection(): JSX.Element {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyToClipboard = async () => {
+    const textToCopy = "npm install -g @offckb/cli";
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000); // Change text back after 3 seconds
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+  return (
+    <div
+      className={clsx(styles.section, styles.flexBetween, styles.ctaSection)}
+    >
+      <div className={styles.sectionGlow}>
+        <img src={`/svg/sm-section-glow.svg`} width={200} height={200} />
+      </div>
+      <div className={styles.ctaSubsection}>
+        <h3>Learn Basics</h3>
+        <p>
+          Begin your journey with our comprehensive guide on "How CKB Works” to
+          ensure you have a solid understanding before diving deeper.
+        </p>
+        <Button
+          type={"primary"}
+          internal
+          link={"/docs/getting-started/how-ckb-works"}
+        >
+          Start Learning
+        </Button>
+      </div>
+      <div className={clsx(styles.or, styles.alignMiddle, styles.flexCenter)}>
+        <h3>OR</h3>
+      </div>
+      <div className={styles.ctaSubsection}>
+        <h3>Jumpstart Your Development</h3>
+        <p>
+          Run the command below in your terminal to start developing dApps on
+          the CKB Devnet immediately.
+        </p>
+        <div
+          onClick={handleCopyToClipboard}
+          className={clsx(styles.flexBetween, styles.command)}
+        >
+          {copied ? (
+            "Copied to clipboard!"
+          ) : (
+            <>
+              npm install -g @offckb/cli
+              <img
+                width={18}
+                height={18}
+                src="/svg/icon-copy-brand.svg"
+                alt="Copy icon"
+              />
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function ContactUsSection(): JSX.Element {
+function FooterSection(): JSX.Element {
   return (
-    <div
-      className={clsx(
-        styles.section,
-        styles.contactSection,
-        styles.flexBetween
-      )}
-    >
-      <h2 className={styles.contactTitle}>Contact us: </h2>
+    <div className={clsx(styles.footerSection, styles.flexBetween)}>
+      <div className={styles.copyright}>
+        {`Copyright © ${new Date().getFullYear()} Nervos Foundation. All Rights Reserved.`}
+      </div>
       <div className={clsx(styles.flexCenter, styles.icons)}>
         {contactUsContents.map((media, index) => (
           <Link
@@ -364,8 +523,8 @@ function ContactUsSection(): JSX.Element {
           >
             <img
               loading="lazy"
-              width={36}
-              height={36}
+              width={24}
+              height={24}
               src={`svg/logo-media-${media.label}.svg`}
               alt={media.label}
             />
@@ -378,10 +537,12 @@ function ContactUsSection(): JSX.Element {
 
 export {
   HomeCardSection,
+  DAppSection,
   EcoSection,
   WalletDisplay,
   ToolDisplay,
   ProjectDisplay,
   DevLogSection,
-  ContactUsSection,
+  CTASection,
+  FooterSection,
 };

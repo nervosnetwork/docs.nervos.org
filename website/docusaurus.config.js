@@ -96,6 +96,25 @@ const config = {
         style: undefined,
       },
     ],
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        redirects: [
+          {
+            from: "/docs/basics/guides/mining-ckb",
+            to: "/docs/mining/guide",
+          },
+          {
+            from: "/docs/reference/halving",
+            to: "/docs/mining/halving",
+          },
+          {
+            from: "/docs/basics/guides/crypto wallets/neuron",
+            to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
+          },
+        ],
+      },
+    ],
     function myPlugin() {
       return {
         name: "custom-webpack-plugin",
@@ -141,76 +160,10 @@ const config = {
           type: "html",
           position: "right",
           value:
-            '<a class="help-flex" href="https://discord.gg/nervosnetwork" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
+            '<a class="help-flex" href="https://discord.gg/4Jcw8MwEEv" target="__blank"><img alt="Discord for help" src="/svg/icon-discord.svg" width={24} height={24}><p class="help-text">Get Help</p></a>',
           className: "navbar-help",
         },
       ],
-    },
-    image: "img/undraw_online.svg",
-    footer: {
-      style: "dark",
-      links: [
-        {
-          title: "Foundation",
-          items: [
-            {
-              label: "About Us",
-              to: "https://www.nervos.org/",
-            },
-          ],
-        },
-        {
-          title: "Developer",
-          items: [
-            { label: "GitHub", to: "https://github.com/nervosnetwork" },
-            {
-              label: "Whitepaper",
-              to: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0002-ckb/0002-ckb.md",
-            },
-            { label: "RFCs", to: "https://github.com/nervosnetwork/rfcs" },
-          ],
-        },
-        {
-          title: "Community",
-          items: [
-            {
-              label: "Discord",
-              to: "https://discord.gg/nervosnetwork ",
-            },
-
-            {
-              label: "Forum",
-              to: "https://talk.nervos.org/",
-            },
-            {
-              label: "Reddit",
-              to: "https://www.reddit.com/r/NervosNetwork/",
-            },
-            {
-              label: "Telegram",
-              to: "https://t.me/nervosnetwork",
-            },
-          ],
-        },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Twitter/X",
-              to: "https://twitter.com/nervosnetwork",
-            },
-            {
-              label: "Medium",
-              to: "https://medium.com/nervosnetwork",
-            },
-            {
-              label: "YouTube",
-              to: "https://www.youtube.com/channel/UCONuJGdMzUY0Y6jrPBOzH7A",
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} Nervos Foundation. All Rights Reserved.`,
     },
     algolia: {
       appId: "LU9B8PQ7W5",

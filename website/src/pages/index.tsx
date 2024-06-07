@@ -9,8 +9,10 @@ import {
   WalletDisplay,
   ToolDisplay,
   DevLogSection,
-  ContactUsSection,
   ProjectDisplay,
+  FooterSection,
+  CTASection,
+  DAppSection,
 } from "../components/Home";
 import { useColorMode } from "@docusaurus/theme-common";
 import CookieConsent from "../components/CookieConsent";
@@ -24,17 +26,25 @@ export default function Home() {
     <Layout
       wrapperClassName={clsx(styles.homeLayout, styles.relative)}
       title="Home"
-      description="Docs for Nervos CKB Blockchain dApp and smart contract development"
+      description="Docs for Nervos CKB Blockchain dApp and Script development"
     >
+      <img
+        className={styles.headerGlow}
+        src={"/svg/header-glow.svg"}
+        alt={"glowing effect"}
+      />
       <SwitchToDark />
       <CookieConsent />
       <div className={clsx(styles.sectionContainer)}>
         <div className={styles.header1}>Nervos CKB Documentation</div>
-        <h4 className={clsx(styles.description, styles.titleBtm)}>
+        <div className={clsx(styles.description, styles.titleBtm)}>
           Discover the power of Nervos CKB through tutorials, guides, and
           concepts
-        </h4>
+        </div>
         <HomeCardSection />
+      </div>
+      <div className={styles.sectionContainer}>
+        <DAppSection />
       </div>
 
       <div
@@ -66,10 +76,15 @@ export default function Home() {
         </div>
         <DevLogSection />
       </div>
-
       <div className={styles.sectionContainer}>
-        <ContactUsSection />
+        <div className={styles.header2}>Ready to Dive In?</div>
+        <div className={clsx(styles.description, styles.titleBtm)}>
+          Whether you&apos;re curious about how CKB works or eager to jump
+          straight into building, we&apos;ve got you covered.
+        </div>
+        <CTASection />
       </div>
+      <FooterSection />
     </Layout>
   );
 }

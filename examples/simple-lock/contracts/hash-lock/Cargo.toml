@@ -1,0 +1,8 @@
+[package]
+name = "hash-lock"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ckb-std = "0.15.1"
+ckb-hash = {version = "0.114.0", default-features = false, features = ["ckb-contract"] }

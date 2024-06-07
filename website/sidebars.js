@@ -21,6 +21,7 @@ export default {
         "dapp/write-message",
         "dapp/create-token",
         "dapp/create-dob",
+        "dapp/simple-lock",
       ],
     },
     {
@@ -64,6 +65,7 @@ export default {
       items: [
         "mining/algorithm-difficulty",
         "mining/rewards",
+        "mining/halving",
         "mining/cost-and-profit",
         "mining/risks",
         "mining/hardware",
@@ -85,6 +87,7 @@ export default {
         "tech-explanation/code-hash",
         "tech-explanation/hash-type",
         "tech-explanation/script-args",
+        "tech-explanation/ckb-address",
         "tech-explanation/ckb-vm",
         "tech-explanation/consensus",
         "tech-explanation/economics",
@@ -96,7 +99,7 @@ export default {
       label: "Ecosystem",
       className: "category-ecosystem",
       collapsible: false,
-      items: ["ecosystem/projects"],
+      items: ["ecosystem/projects", "ecosystem/organizations"],
     },
     {
       type: "category",

@@ -6,6 +6,12 @@
   background: url("/svg/header-bg.svg") no-repeat top center;
   background-color: var(--dark-surface-01) !important;
 }
+.headerGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
 .relative {
   position: relative;
 }
@@ -27,6 +33,7 @@
 .description {
   text-align: center;
   color: var(--dark-text-secondary);
+  font-size: 1.25rem;
 }
 .titleBtm {
   margin-bottom: 2rem;
