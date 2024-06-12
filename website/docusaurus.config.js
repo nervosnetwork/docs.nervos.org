@@ -151,6 +151,7 @@ const config = {
         href: "/",
       },
       items: [
+        { to: "blog", label: "Blog", position: "left" }, // or position: 'right'
         {
           type: "search",
           position: "right",
