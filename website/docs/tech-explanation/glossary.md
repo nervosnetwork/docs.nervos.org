@@ -189,7 +189,7 @@ The maximum space (in bytes) that a Cell can occupy on the Nervos CKB.
 
 ### Cell
 
-All data on Nervos CKB is stored in Cells. Cells are the primary state units in CKB, within them users can include arbitrary states.
+Cells are the primary state units in CKB, within them users can include arbitrary states. All data on Nervos CKB is stored in Cells.
 
 A Cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 
@@ -275,7 +275,7 @@ CKByte is also sometimes shortened to CKB. Exchanges often use CKB as the ticker
 
 ### CKB-VM
 
-CKB VM is a crypto-agnostic virtual machine, a RISC-V instruction set based VM for executing both on-chain and off-chain code.
+CKB-VM is a crypto-agnostic virtual machine, a RISC-V instruction set based VM for executing both on-chain and off-chain code.
 
 #### See Also
 
@@ -2804,6 +2804,19 @@ A Script in Nervos CKB is a binary executable on the CKB-VM. Compared to Bitcoin
 - [RISC-V](#risc-v)
 - [Type Script](#type-script)
 - [ELF on Wikipedia](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
+
+---
+
+### `script_args`
+
+`script_args` refers to the arguments imported into the CKB-VM instance as input for the Scripts. In CKB, public key information is conventionally stored in `script_args`, while signature information is in `witnesses`, though it's not mandatory.
+
+When a Script is validated, CKB runs it in a RISC-V VM, and `script_args` must be loaded via special CKB syscalls. The UNIX standard `argc`/`argv` convention is NOT used in CKB. For more information on CKB-VM, please refer to [RFC003: CKB-VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md).
+
+#### See Also
+
+- [CKB-VM](#risc-v)
+- [Witness](#witness)
 
 ---
 

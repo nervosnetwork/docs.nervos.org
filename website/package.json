@@ -8,6 +8,8 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "serve": "docusaurus serve",
+    "type": "module",
+    "gen-term": "node scripts/generate-keyTerms.mjs",
     "fmt": "prettier --write . --ignore-path .prettierignore",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
@@ -45,6 +47,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rehype-katex": "^5.0.0",
-    "remark-math": "^3.0.1"
+    "remark": "^15.0.1",
+    "remark-math": "^3.0.1",
+    "unist-util-visit": "^5.0.0"
   }
 }
