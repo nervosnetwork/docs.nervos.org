@@ -20,7 +20,7 @@ npm install -g @offckb/cli
 ```
 
 :::info
-Throughout this documentation, we use offckb/cli version **>=0.2.3**. You can always run the above command to update to the latest version.
+Throughout this documentation, we use offckb/cli version **>=0.2.5**. You can always run the above command to update to the latest version.
 :::
 
 ## Create a New Project
@@ -158,6 +158,8 @@ npm i && npm run dev
 
 Once the server is up and running, you can view the dApp by visiting [localhost:3000](http://localhost:3000). You can start editing the page by modifying `app/page.tsx`. As you make changes to the file, the page will automatically update to reflect your edits. For detailed instructions on how to start the dApp and explore additional config options, please see the `README.md` file.
 
+![dapp-screenshot](/img/quick-start/next-js-dapp.jpg)
+
 ---
 
 ## DApp Project Structure
@@ -236,7 +238,7 @@ According to your boilerplate, you can switch the CKB blockchain network by sett
 Run the following command in your terminal. Replace `devnet` with `testnet` or `mainnet` as needed:
 
 ```bash
-NETWORK=devnet yarn dev
+NETWORK=devnet npm run dev
 ```
 
 ```mdx-code-block
