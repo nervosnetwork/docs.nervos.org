@@ -11,6 +11,7 @@
   --surface-02: #f2fcff;
   --surface-03: #e7f8f9;
   --surface-accent: #e4f7ff;
+  --surface-inverse: #003247;
 
   /* Border Variables*/
   --border-subtle: #d0e1e7;
@@ -51,6 +52,7 @@
   --dark-surface-02: #132831;
   --dark-surface-03: #18323b;
   --dark-surface-accent: #18323b;
+  --dark-surface-inverse: #e4f7ff;
 
   --dark-border-subtle: #3d535b;
   --dark-border-invisible: #25373e;
@@ -88,6 +90,7 @@ html[data-theme="dark"] {
   --surface-02: var(--dark-surface-02);
   --surface-03: var(--dark-surface-03);
   --surface-accent: var(--dark-surface-accent);
+  --surface-inverse: var(--dark-surface-inverse);
 
   --border-subtle: var(--dark-border-subtle);
   --border-invisible: var(--dark-border-invisible);

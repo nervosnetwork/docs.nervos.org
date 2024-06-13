@@ -91,3 +91,14 @@ In `website` folder:
 ```bash
 yarn build
 ```
+
+#### Maintain key-terms.json file
+The `key-terms.json` file is generated from the glossary in the `docs/tech-explanation/glossary.md` file. This file is used by the Tooltip component to provide definitions and links to key terms throughout the documentation.
+
+Once you have updates in `glossary.md`, please remember to run the following command in the `website` folder to re-generate the `key-terms.json` file:
+
+```bash
+yarn gen-terms
+```
+
+After running the command, you can navigate to `src/components/Tooltip` to verify that the `key-terms.json` file has been generated successfully.

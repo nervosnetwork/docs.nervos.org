@@ -3,6 +3,8 @@ id: cell
 title: Cell
 ---
 
+import Tooltip from "@components/Tooltip";
+
 # Cell
 
 ## Structure
@@ -20,12 +22,12 @@ Cell: {
 
 ## Fields & Description{#fields-and-description}
 
-| Name       | Type                                              | Description                                                    |
-| ---------- | ------------------------------------------------- | -------------------------------------------------------------- |
-| `capacity` | Uint64                                            | Size of the Cell in shannon. 1 CKB = 100,000,000 shannons.     |
-| `lock`     | [Script](/docs/tech-explanation/script#structure) | See [Lock Script](/docs/tech-explanation/glossary#lock-script) |
-| `type`     | [Script](/docs/tech-explanation/script#structure) | See [Type Script](/docs/tech-explanation/glossary#type-script) |
-| `data`     | Bytes                                             | Used for storing states.                                       |
+| Name       | Type                                              | Description                                                                                                                                            |
+| ---------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `capacity` | Uint64                                            | Size of the Cell in shannon. 1 CKB = 100,000,000 shannons.                                                                                             |
+| `lock`     | [Script](/docs/tech-explanation/script#structure) | A Script that enforces access and ownership of a Cell.                                                                                                 |
+| `type`     | [Script](/docs/tech-explanation/script#structure) | A Script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output |
+| `data`     | Bytes                                             | Used for storing states.                                                                                                                               |
 
 ## Example
 

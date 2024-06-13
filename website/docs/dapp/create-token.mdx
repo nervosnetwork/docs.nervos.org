@@ -6,6 +6,7 @@ title: Create a Fungible Token
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
 import { TOKENOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
@@ -20,17 +21,17 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 ## Custom Token on CKB
 
-Different from [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on the UTXO-like [Cell Model](/docs/tech-explanation/cell-model).
+Different from [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on the UTXO-like <Tooltip>Cell Model</Tooltip>.
 
-In CKB, custom tokens are called User-Defined-Token, aka UDT. The core team of CKB has proposed a minimal standard for UDT called xUDT(extensible UDT). In this tutorial, we will use the pre-deployed smart contracts `xUDT script` to issue custom tokens.
+In CKB, custom tokens are called User-Defined-Token, aka UDT. The core team of CKB has proposed a minimal standard for UDT called xUDT(extensible UDT). In this tutorial, we will use the pre-deployed Script `xUDT script` to issue custom tokens.
 
 The high-level workflow to issue a custom token with xUDT goes like this:
 
 When you issue a token, you create a special Cell that presents some balance of your token, like a piece of printed cash to the dollars.
 
-For this special Cell, its data field contains the amount of the token and its type script is xUDT script where the args of that Script will be the issuer's [lock script hash](/docs/tech-explanation/glossary#lock-script-hash).
+For this special Cell, its data field contains the amount of the token and its Type Script is xUDT Script where the args of that Script will be the issuer's <Tooltip>Lock Script Hash</Tooltip>.
 
-This issuer's lock script hash works like the unique ID for the custom token. Different lock script Hash means a different kind of token. It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
+This issuer's Lock Script Hash works like the unique ID for the custom token. Different Lock Script Hash means a different kind of token. It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
 
 In reality, xUDT is more complicated and powerful with many features but the idea is the same, you can check the [full specs here](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md).
 
@@ -76,14 +77,14 @@ This function accepts two parameters:
 - `privKey`: The private key of the issuer
 - `amount`: The amount of token
 
-Note that we aim to create an output Cell whose [type script](/docs/tech-explanation/glossary#type-script) is an xUDT script. The args of this xUDT script are the issuer's lock script hash, which is why we include the following lines of code:
+Note that we aim to create an output Cell whose <Tooltip>Type Script</Tooltip> is an xUDT Script. The args of this xUDT Script are the issuer's Lock Script Hash, which is why we include the following lines of code:
 
 ```ts
 const { lockScript } = generateAccountFromPrivateKey(privKey);
 const xudtArgs = utils.computeScriptHash(lockScript) + "00000000";
 ```
 
-Also, note that the `00000000` here is just a placeholder. To unlock more capabilities of the xUDT script, this placeholder can contain specific data. However, we don't need to concern ourselves with this detail at the moment.
+Also, note that the `00000000` here is just a placeholder. To unlock more capabilities of the xUDT Script, this placeholder can contain specific data. However, we don't need to concern ourselves with this detail at the moment.
 
 Further down in the function, you'll see that the complete target output Cell of our custom token appears as follows:
 
@@ -168,15 +169,15 @@ export async function queryIssuedTokenCells(xudtArgs: HexString) {
 }
 ```
 
-Note that to query a custom token Cell, we must know its xUDTArgs. As explained in the high-level ideas for xUDT scripts, this xUDTArgs functions like the unique ID for the token you issued.
+Note that to query a custom token Cell, we must know its xUDTArgs. As explained in the high-level ideas for xUDT Scripts, this xUDTArgs functions like the unique ID for the token you issued.
 
-Thus, `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then construct a type script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the Live Cells that possess such a type script.
+Thus, `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then construct a Type Script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the Live Cells that possess such a Type Script.
 
-By identifying the lock scripts of these Live Cells, we can determine that those custom tokens now belong to the individual who can unlock this lock script. Consequently, we know who the token holders are.
+By identifying the Lock Scripts of these Live Cells, we can determine that those custom tokens now belong to the individual who can unlock this Lock Script. Consequently, we know who the token holders are.
 
 ### Transfer Custom Token
 
-The next step you want to do is probably sending your tokens to someone else. To do that, you will replace the lock script of the custom token Cell with the receiver's lock script. Therefore, the receiver can unlock the custom token Cell. In this way, the token is transferred from you to other people.
+The next step you want to do is probably sending your tokens to someone else. To do that, you will replace the Lock Script of the custom token Cell with the receiver's Lock Script. Therefore, the receiver can unlock the custom token Cell. In this way, the token is transferred from you to other people.
 
 Check out the `transferTokenToAddress` function in `lib.ts` file.
 
@@ -191,9 +192,9 @@ export async function transferTokenToAddress(
 }
 ```
 
-The function use `udtIssuerArgs` to build the type script from the custom token. It then collects Live Cells which match the type script and the lock script of the `senderLockScript`, effectively saying, "give me the custom token Cells that belong to the sender (the sender can unlock the lock script).".
+The function use `udtIssuerArgs` to build the Type Script from the custom token. It then collects Live Cells which match the Type Script and the Lock Script of the `senderLockScript`, effectively saying, "give me the custom token Cells that belong to the sender (the sender can unlock the Lock Script).".
 
-With all these Live Cells, we can build the transaction to produce custom token Cells with the required amount and the receiver's lock scripts from the input Cells.
+With all these Live Cells, we can build the transaction to produce custom token Cells with the required amount and the receiver's Lock Scripts from the input Cells.
 
 ```ts
 let txSkeleton = helpers.TransactionSkeleton();
@@ -304,8 +305,8 @@ By following this tutorial this far, you have mastered how custom tokens work on
 
 - Create a CKB transaction containing a xUDT Cell in the outputs
 - The data of the xUDT Cell contains the amount number of the token
-- Query the custom token Cell by passing the lock script hash of the token issuer
-- Transfer tokens to another account by replacing the lock script.
+- Query the custom token Cell by passing the Lock Script Hash of the token issuer
+- Transfer tokens to another account by replacing the Lock Script.
 
 ## Next Step
 

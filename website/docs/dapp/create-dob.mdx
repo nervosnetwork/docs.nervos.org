@@ -6,6 +6,7 @@ title: Create a DOB
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
 import { DOBOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
@@ -20,7 +21,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 ## Spore Protocol on CKB
 
-Spore is an on-chain [digital object (DOB)](/docs/tech-explanation/glossary#digital-object-dob) protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A Spore Cell can hold any type of assets users want to store on-chain, the following data structure is used in the Spore Cell:
+Spore is an on-chain <Tooltip>digital object (DOB)</Tooltip> protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A Spore Cell can hold any type of assets users want to store on-chain, the following data structure is used in the Spore Cell:
 
 ```js
 data:
