@@ -18,3 +18,4 @@ yarn.lock
 *.jpeg
 *.gif
 *.webp
+*.svg

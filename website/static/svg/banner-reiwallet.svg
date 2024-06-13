@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 342 120" xmlns:v="https://vecta.io/nano">
+  <style>
+    <![CDATA[
+    .B {
+      letter-spacing: -.1em
+    }
+
+    .C {
+      letter-spacing: -.09em
+    }
+    ]]>
+  </style>
+  <defs>
+    <linearGradient id="A" x1="121.667" y1="81.283" x2="119.019" y2="38.54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#01f395" />
+      <stop offset="1" stop-color="#01b56a" />
+    </linearGradient>
+  </defs><text transform="matrix(1.17 0 0 1 160.64 83.69)" font-family="KohinoorDevanagari-Regular,Kohinoor Devanagari"
+    font-size="64.16">
+    <tspan class="B" x="0" y="0">R</tspan>
+    <tspan class="C" x="31.89" y="0">EI</tspan>
+  </text>
+  <path d="m109.02,38.31h-9.06l31.83,45.35h9.07l-31.83-45.35Z" fill="url(#A)" />
+  <path
+    d="M140.98 66.48c6.35-1.82 10.81-6.3 10.81-13.74v-.13c0-3.95-1.35-7.31-3.75-9.77-2.91-2.84-7.38-4.52-13.08-4.52h-22.74l5.09 7.27h16.99c5.89 0 9.4 2.63 9.4 7.49v.13c0 4.6-3.63 7.58-9.33 7.58h-6.38l16.05 22.87h9.18l-12.25-17.17h0zM96.83 51.19l22.78 32.45h9.07L105.9 51.19h-9.07z" />
+</svg>

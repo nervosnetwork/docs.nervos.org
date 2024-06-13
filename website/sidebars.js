@@ -42,7 +42,11 @@ export default {
       label: "Integrate Wallets",
       className: "category-integrate-wallets",
       collapsible: false,
-      items: ["integrate-wallets/intro-to-wallets", "integrate-wallets/joyid"],
+      items: [
+        "integrate-wallets/intro-to-wallets",
+        "integrate-wallets/joyid",
+        "integrate-wallets/reiwallet",
+      ],
     },
     {
       type: "category",

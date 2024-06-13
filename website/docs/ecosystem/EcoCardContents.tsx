@@ -255,6 +255,19 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
+    title: "ReiWallet",
+    description:
+      "Nervos CKB native chrome extension wallet for digital asset management",
+    href: "https://reiwallet.io",
+    bannerSrc: "reiwallet",
+    tags: ["Wallet"],
+    links: [
+      { label: "website", link: "https://reiwallet.io" },
+      { label: "github", link: "https://github.com/teamtaoist/" },
+      { label: "doc", link: "https://docs.reiwallet.io/" },
+    ],
+  },
+  {
     title: "ForceBridge",
     description:
       "A cross-chain interoperability bridge b/w Nervos and other blockchains",
