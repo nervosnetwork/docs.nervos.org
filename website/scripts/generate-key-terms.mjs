@@ -13,7 +13,7 @@ const glossaryPath = path.join(
 );
 const outputPath = path.join(
   __dirname,
-  "../src/components/Tooltip/keyTerms.json"
+  "../src/components/Tooltip/key-terms.json"
 );
 const docsPath = path.join(__dirname, "../docs/tech-explanation");
 

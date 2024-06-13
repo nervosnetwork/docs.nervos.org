@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 import React, { ReactNode } from "react";
-import keyTerms from "./keyTerms.json";
+import keyTerms from "./key-terms.json";
 
 interface TooltipProps {
   className?: string;

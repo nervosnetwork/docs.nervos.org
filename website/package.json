@@ -9,7 +9,7 @@
     "build": "docusaurus build",
     "serve": "docusaurus serve",
     "type": "module",
-    "gen-term": "node scripts/generate-keyTerms.mjs",
+    "gen-term": "node scripts/generate-key-terms.mjs",
     "fmt": "prettier --write . --ignore-path .prettierignore",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
