@@ -35,6 +35,7 @@ export default {
         "script/minimal-script",
         "script/js-script",
         "script/common-script-error-code",
+        "script/syscalls-for-script",
       ],
     },
     {

@@ -1,0 +1,96 @@
+---
+id: syscalls-for-script
+title: "CKB Syscalls for Script"
+---
+
+# CKB Syscalls for Script
+
+A collection of CKB-VM syscalls. Also include relevant constant, such as return codes, sources, Cell fields, header fields, and input fields.
+
+## CKB-VM Syscalls
+
+| VM Ver. | Syscall ID | C Function Name                                                                                                                                  | Rust Function Name                                                                                   | Description                                                                                                                                                                                                                                                                                                     |
+| ------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1       | 93         | [ckb_exit](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#exit)                                     | [exit](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.exit.html)                                 | Immediately terminate the execution of the currently running Script and exit with the specified return code.                                                                                                                                                                                                    |
+| 1       | 2061       | [ckb_load_tx_hash](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-transaction-hash)            | [load_tx_hash](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_tx_hash.html)               | Calculate the hash of the current transaction and copy it using partial loading.                                                                                                                                                                                                                                |
+| 1       | 2051       | [ckb_load_transaction](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-transaction)             | [load_transaction](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_transaction.html)       | Serialize the full transaction of the running Script using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                                                    |
+| 1       | 2062       | [ckb_load_script_hash](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-script-hash)             | [load_script_hash](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_script_hash.html)       | Calculate the hash of currently running Script and copy it using partial loading.                                                                                                                                                                                                                               |
+| 1       | 2052       | [ckb_load_script](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-script)                       | [load_script](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_script.html)                 | Serialize the currently running Script using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                                                                  |
+| 1       | 2071       | [ckb_load_cell](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell)                           | [load_cell](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_cell.html)                     | Serialize the specified Cell in the current transaction using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                                                 |
+| 1       | 2081       | [ckb_load_cell_by_field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-by-field)         | [load_cell_by_field](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.load_cell_by_field.html)     | Load a single field from the specified Cell in the current transaction and copy it using partial loading.                                                                                                                                                                                                       |
+| 1       | 2092       | [ckb_load_cell_data](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data)                 | [load_cell_data](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_cell_data.html)           | Load the data from the Cell data field in the specified Cell from the current transaction and copy it using partial loading.                                                                                                                                                                                    |
+| 1       | 2091       | [ckb_load_cell_data_as_code](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data-as-code) | [load_cell_code](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.load_cell_code.html)             | Load the data from the Cell data field in the specified Cell from the current transaction, mark the loaded memory page as executable, and copy it using partial loading. The loaded code can then be executed by CKB-VM at a later time.                                                                        |
+| 1       | 2073       | [ckb_load_input](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-input)                         | [load_input](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_input.html)                   | Serialize the specified input Cell in the current transaction using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                                           |
+| 1       | 2083       | [ckb_load_input_by_field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-input-by-field)       | [load_input_by_field](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.load_input_by_field.html)   | Load a single field from the specified input Cell in the current transaction and copy it using partial loading.                                                                                                                                                                                                 |
+| 1       | 2072       | [ckb_load_header](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-header)                       | [load_header](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_header.html)                 | Serialize the specified header associated with an input Cell, dep Cell, or header dep using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                   |
+| 1       | 2082       | [ckb_load_header_by_field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-header-by-field)     | [load_header_by_field](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.load_header_by_field.html) | Load a single field from the specified header associated with an input Cell, dep Cell, or header dep and copy it using partial loading.                                                                                                                                                                         |
+| 1       | 2074       | [ckb_load_witness](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-witness)                     | [load_witness](https://docs.rs/ckb-std/latest/ckb_std/high_level/fn.load_witness.html)               | Load the specified witness in the current transaction and copy it using partial loading.                                                                                                                                                                                                                        |
+| 1       | 2177       | [ckb_debug](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug)                                   | [debug](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.debug.html)                               | Print the specified message in CKB's terminal output for the purposes of debugging.                                                                                                                                                                                                                             |
+| 2       | 2041       | [ckb_vm_version](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#vm-version)                     | [vm_version](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.vm_version.html)                     | Return the version of CKB-VM being used to execute the current Script.                                                                                                                                                                                                                                          |
+| 2       | 2042       | [ckb_current_cycles](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#current-cycles)             | [current_cycles](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.current_cycles.html)             | Return the number of cycles consumed by the currently running Script _immediately before_ executing this syscall. This syscall will consume an additional 500 cycles.                                                                                                                                           |
+| 2       | 2043       | [ckb_exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec)                                 | [exec](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.exec.html)                                 | Run a Script executable from the specified Cell using the current VM context. This replaces the original calling running Script executable with the new specified Script executable. This is similar to the [exec call](<https://en.wikipedia.org/wiki/Exec_(system_call)>) found in several operating systems. |
+| 2       | 2101       | [ckb_spawn](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#spawn)                               | [spawn](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.spawn.html)                               | Run a Script executable from the specified Cell using the current VM context, but return to the original calling Script executable upon termination. This is similar to the [spawn function](<https://en.wikipedia.org/wiki/Spawn_(computing)>) found in several operating systems and programming languages.   |
+| 2       | 2102       | [ckb_get_memory_limit](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#get-memory-limit)         | [get_memory_limit](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.get_memory_limit.html)         | Return the maximum amount of memory available to the current Script being executed.                                                                                                                                                                                                                             |
+| 2       | 2105       | [ckb_current_memory](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#current-memory)             | [current_memory](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.current_memory.html)             | Get the Current Memory Usage. The result is the sum of the memory usage of the parent Script and the child Script.｜                                                                                                                                                                                            |
+| 2       | 2103       | [ckb_set_content](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#set-content)                   | [set_content](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.set_content.html)                   | Set the content of the designated memory region that can be read by the parent (calling) Script which executed the current Script via the spawn function.                                                                                                                                                       |
+| 2       | 2104       | [ckb_load_extension](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#load-block-extension)       | [load_block_extension](https://docs.rs/ckb-std/latest/ckb_std/syscalls/fn.load_block_extension.html) | Load the extension field data and copy it using partial loading.                                                                                                                                                                                                                                                |
+
+## Constants
+
+### Return Codes
+
+These are the return codes used by the CKB-VM syscalls.
+
+| Const No. | C Example              | Description                                    |
+| --------- | ---------------------- | ---------------------------------------------- |
+| 0         | CKB_SUCCESS            | No error.                                      |
+| 1         | CKB_INDEX_OUT_OF_BOUND | Index out of bound. (e.g. No such input Cell.) |
+| 2         | CKB_ITEM_MISSING       | The requested resource does not exist.         |
+| 3         | CKB_LENGTH_NOT_ENOUGH  | The supplied memory buffer too small.          |
+| 4         | CKB_INVALID_DATA       | The data provided is invalid.                  |
+
+### Source
+
+These are the sources for syscalls that query the transaction for input Cells, output Cells, dep Cells, and header deps.
+
+| Const No.          | C Example               | Description                                                                                 |
+| ------------------ | ----------------------- | ------------------------------------------------------------------------------------------- |
+| 0x1                | CKB_SOURCE_INPUT        | All input Cells in the transaction.                                                         |
+| 0x0100000000000001 | CKB_SOURCE_GROUP_INPUT  | Only the input Cells in the transaction using the same Script as currently running Script.  |
+| 2                  | CKB_SOURCE_OUTPUT       | All output Cells in the transaction.                                                        |
+| 0x0100000000000002 | CKB_SOURCE_GROUP_OUTPUT | Only the output Cells in the transaction using the same Script as currently running Script. |
+| 3                  | CKB_SOURCE_CELL_DEP     | All dep Cells in the transaction.                                                           |
+| 4                  | CKB_SOURCE_HEADER_DEP   | All header deps in the transaction.                                                         |
+
+### Cell Fields
+
+These are the field specifiers for syscalls that request a specific field of a cell.
+
+| Const No. | C Example                        | Description                                                            |
+| --------- | -------------------------------- | ---------------------------------------------------------------------- |
+| 0         | CKB_CELL_FIELD_CAPACITY          | The capacity (CKB) contained in the Cell.                              |
+| 1         | CKB_CELL_FIELD_DATA_HASH         | The hash of the data within the data field of the Cell.                |
+| 2         | CKB_CELL_FIELD_LOCK              | The Lock Script of the Cell.                                           |
+| 3         | CKB_CELL_FIELD_LOCK_HASH         | The hash of the Lock Script of the Cell.                               |
+| 4         | CKB_CELL_FIELD_TYPE              | The Type Script of the Cell.                                           |
+| 5         | CKB_CELL_FIELD_TYPE_HASH         | The hash of the Type Script of the Cell.                               |
+| 6         | CKB_CELL_FIELD_OCCUPIED_CAPACITY | The amount of capacity (CKB) that is currently being used by the Cell. |
+
+### Header Fields
+
+These are the field specifiers for syscalls that request a specific field of a header dep.
+
+| Const No. | C Example                                 | Description                                                      |
+| --------- | ----------------------------------------- | ---------------------------------------------------------------- |
+| 0         | CKB_HEADER_FIELD_EPOCH_NUMBER             | The epoch number for the header dep.                             |
+| 1         | CKB_HEADER_FIELD_EPOCH_START_BLOCK_NUMBER | The block number of first block in the epoch for the header dep. |
+| 2         | CKB_HEADER_FIELD_EPOCH_LENGTH             | The length of the epoch for the header dep.                      |
+
+### Input Fields
+
+These are the field specifiers for syscalls that request a specific field of an input Cell.
+
+| Const No. | C Example                 | Description                                  |     |
+| --------- | ------------------------- | -------------------------------------------- | --- |
+| 0         | CKB_INPUT_FIELD_OUT_POINT | The out point of the specified input Cell.   |     |
+| 1         | CKB_INPUT_FIELD_SINCE     | The since value of the specified input Cell. |     |
