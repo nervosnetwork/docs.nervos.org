@@ -7,7 +7,7 @@ import Tooltip from "@components/Tooltip";
 
 # Cell
 
-## Structure
+## Structure {#cell-structure}
 
 A Cell is the smallest and fundamental unit in Nervos CKB, used for storing states.
 

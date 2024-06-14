@@ -1,0 +1,14 @@
+---
+id: type-script
+title: Type Script
+---
+
+# Type Script {#type-script}
+
+This determines the type of the Cell, typically defining the conditions for Cell transformation, or state transition constraints. It specifies how the `data` of new Cells is transformed from old ones. `type` must have a data structure as `Script`.
+
+In a transaction, when input Cell and output Cell share the same Type Script, the transformation between them must follow the rules defined by that Type Script.
+
+A typical use case of Type Script is in [User-Defined Tokens](https://docs.nervos.org/docs/concepts/glossary#user-defined-token). In token issuance, new tokens will be created as new Cell outputs, so a Type Script is required to validate that these new tokens are created adhere to predefined rules.
+
+Type Script is optional.
