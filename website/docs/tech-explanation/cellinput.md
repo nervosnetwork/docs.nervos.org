@@ -1,5 +1,5 @@
 ---
-id: cellinpit
+id: cellinput
 title: CellInput
 ---
 
