@@ -1,3 +1,5 @@
+import Tooltip from "@components/Tooltip";
+
 ---
 id: lock-type-diff
 title: "Lock Script vs. Type Script: The Difference"
