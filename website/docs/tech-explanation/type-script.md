@@ -9,6 +9,6 @@ This determines the type of the Cell, typically defining the conditions for Cell
 
 In a transaction, when input Cell and output Cell share the same Type Script, the transformation between them must follow the rules defined by that Type Script.
 
-A typical use case of Type Script is in [User-Defined Tokens](https://docs.nervos.org/docs/concepts/glossary#user-defined-token). In token issuance, new tokens will be created as new Cell outputs, so a Type Script is required to validate that these new tokens are created adhere to predefined rules.
+A typical use case of Type Script is in <Tooltip>UDT</Tooltip>. In token issuance, new tokens will be created as new Cell outputs, so a Type Script is required to validate that these new tokens are created adhere to predefined rules.
 
 Type Script is optional.
