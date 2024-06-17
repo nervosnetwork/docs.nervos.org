@@ -3,6 +3,8 @@ id: outpoint
 title: OutPoint
 ---
 
+import Tooltip from "@components/Tooltip";
+
 # OutPoint
 
 The transaction uses `OutPoint` in inputs to reference the previously created Cells instead of embedding them.
