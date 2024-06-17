@@ -13,5 +13,3 @@ title: "Cell_deps"
 | ----------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | `out_point` | `OutPoint`                           | A Cell outpoint pointing to the Cells used as deps. For more, see [`out_point`](/docs/tech-explanation/out-point). |
 | `dep_type`  | String, either `code` or `dep_group` | Interpreting referenced cell deps.                                                                                 |
-
-
