@@ -17,6 +17,6 @@ Similar to the [`scriptPubKey` in Bitcoin's CTxOut](https://doxygen.bitcoincore.
 
 :::note
 
-The signature algorithm and hash function used in the Lock Script are not hardcoded by the CKB protocol. Developers are free to design and implement customized signature algorithms and hash functions in the Script. This can also be implemented in [Type Script](#type-script).
+The signature algorithm and hash function used in the Lock Script are not hardcoded by the CKB protocol. Developers are free to design and implement customized signature algorithms and hash functions in the Script. This can also be implemented in [Type Script](/docs/tech-explanation/type-script).
 
 :::
