@@ -3,7 +3,7 @@ id: cell-deps
 title: "Cell_deps"
 ---
 
-# Cell-deps
+# Cell_deps
 
 `Cell_deps` allows scripts in the transaction to access referenced live Cells. Cells listed here are all live and read-only.
 
