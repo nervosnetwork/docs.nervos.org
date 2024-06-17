@@ -7,7 +7,7 @@ title: witnesses
 
 `witnesses` is provided by transaction creator to enable the successful execution of the corresponding Script. For example, signatures might be included to ensure a signature verification Lock Script passes.
 
-In CKB convention, public key information is stored in the [`args`](https://www.notion.so/Tech-Explanation-Explained-Key-Fields-Explained-Technical-Notions-Explained-WIP-317da3d6c38543e9be272e80b4d30a3e?pvs=21) of the Script, while signature information is in `witnesses`.
+In CKB convention, public key information is stored in the `args` of the Script, while signature information is in `witnesses`.
 
 `witnesses` is a bytes vector. You can serialize any proof data required by the transaction into bytes vector in the `witnesses` filed. The serialization can be done using [Molecule](https://github.com/nervosnetwork/molecule) or any other custom serialization method.
 
@@ -33,7 +33,7 @@ table WitnessArgs {
 }
 ```
 
-Under this convention, each item in the witnesses field is a byte array serialized by Molecule from a WitnessArgs structure. Each WitnessArgs contains multiple proof data read by the input Lock Script, input Type Script, and the output Type Script. The order of WitnessArgs item in the `witnesses` field also matters, corresponding to the index of the virtual array created by the [scripts grouping](#script-group-exe).
+Under this convention, each item in the witnesses field is a byte array serialized by Molecule from a WitnessArgs structure. Each WitnessArgs contains multiple proof data read by the input Lock Script, input Type Script, and the output Type Script. The order of WitnessArgs item in the `witnesses` field also matters, corresponding to the index of the virtual array created by the [scripts grouping](/docs/tech-explanation/script-group-exe).
 
 ### CoBuild
 
