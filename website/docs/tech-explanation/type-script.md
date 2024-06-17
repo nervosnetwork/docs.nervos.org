@@ -3,6 +3,8 @@ id: type-script
 title: Type Script
 ---
 
+import Tooltip from "@components/Tooltip";
+
 # Type Script {#type-script}
 
 This determines the type of the Cell, typically defining the conditions for Cell transformation, or state transition constraints. It specifies how the `data` of new Cells is transformed from old ones. `type` must have a data structure as `Script`.
