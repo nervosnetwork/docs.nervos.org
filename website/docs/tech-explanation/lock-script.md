@@ -9,7 +9,7 @@ This defines the Script that determines the ownership of a Cell, used to govern 
 
 A typical Lock Script references the hash value of the Cell storing the referenced signature algorithm in the `code_hash`, and stores parameters related to the public key address in the `args`.
 
-![Lock Script in a Cell with its components.](/static/img/tech_explanation/Lock Script.png)
+<img src={"/img/tech_explanation/lock-script.png"} width={688} height={361} alt="Structure of Lock Script" />
 
 When unlocking this Cell, i.e., completing the Lock Script verification, the user needs to place the signature information in the `witness`. During the verification, Lock Script verifies whether the result matches the `args` through the signature information and the indexed signature algorithm, ensuring that the transaction is indeed signed by the owner of the input Cell.
 
