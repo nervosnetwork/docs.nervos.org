@@ -1,0 +1,220 @@
+---
+id: go
+title: Go
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Go
+
+## Introduction
+
+The [CKB-SDK-Go](https://github.com/nervosnetwork/ckb-sdk-go) is a robust and scalable toolkit designed for developers building on the Nervos CKB blockchain with the Go programming language. Go's simplicity and powerful concurrency features make it ideal for developing scalable blockchain services and applications. This SDK is well-suited for server-side applications, networked services, and other use cases requiring high performance and reliability.
+
+## Requirements
+
+| Components                   | Version     | Description             |
+| ---------------------------- | ----------- | ----------------------- |
+| [Golang](https://golang.org) | &ge; 1.11.5 | Go programming language |
+
+To verify that you have Golang installed, you can run this in your terminal:
+
+```bash
+go version
+```
+
+## Setup Project
+
+1. **Create a new project:** Open a terminal and run the following commands to create a folder for your Go project:
+
+```bash
+mkdir ckb-go-example
+cd ckb-go-example
+go mod init ckb-go-example
+```
+
+2. **Install `ckb-sdk-go`**: Add the `ckb-sdk-go` dependency to your project:
+
+```bash
+go get -v github.com/nervosnetwork/ckb-sdk-go/v2
+```
+
+3. **Build the project:** Run the following command in the project root directory:
+
+```bash
+go build
+```
+
+## Setup Client
+
+CKB-SDK-Go provides a convenient client that enables you to easily interact with CKB nodes. You can connect to different networks (Testnet, Devnet, and Mainnet) by specifying the appropriate URL.
+
+```go
+import (
+	"github.com/nervosnetwork/ckb-sdk-go/v2/rpc"
+)
+
+testnetURL := "https://testnet.ckb.dev" // Testnet
+devnetURL := "http://127.0.0.1:8114" // Devnet
+mainnetURL := "https://mainnet.ckb.dev/rpc" // Mainnet
+
+// Connect to Testnet
+ckbClient, err := rpc.Dial(testnetURL)
+```
+
+## Examples
+
+### Get Block Info
+
+You can call JSON-RPC APIs via the above client. For example, you can get a block info by:
+
+```go
+block, err := ckbClient.GetBlock(context.Background(), types.HexToHash("0x77fdd22f6ae8a717de9ae2b128834e9b2a1424378b5fc95606ba017aab5fed75"))
+```
+
+For more details about JSON-RPC APIs, please refer to [CKB RPC](https://github.com/nervosnetwork/ckb/blob/develop/rpc/README.md)
+
+### Build a Transaction
+
+Here's an example to construct a `TransactionWithScriptGroups`.
+
+```go
+tx := &types.Transaction{
+	Version: 0,
+	CellDeps: []*types.CellDep{
+		&types.CellDep{
+			OutPoint: &types.OutPoint{
+				TxHash: types.HexToHash("0xf8de3bb47d055cdf460d93a2a6e1b05f7432f9777c8c474abf4eec1d4aee5d37"),
+				Index:  0,
+			},
+			DepType: types.DepTypeDepGroup,
+		},
+	},
+	HeaderDeps: nil,
+	Inputs: []*types.CellInput{
+		&types.CellInput{
+			Since: 0,
+			PreviousOutput: &types.OutPoint{
+				TxHash: types.HexToHash("0x2ff7f46d509c85e1878cf091aef0ba0b89f34f9fea9e8bc868aed2d627490512"),
+				Index:  1,
+			},
+		},
+	},
+	Outputs: []*types.CellOutput{
+		&types.CellOutput{
+			Capacity: 10000000000,
+			Lock: &types.Script{
+				CodeHash: types.HexToHash("0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"),
+				HashType: types.HashTypeType,
+				Args:     common.FromHex("0x3f1573b44218d4c12a91919a58a863be415a2bc3"),
+			},
+			Type: nil,
+		},
+		&types.CellOutput{
+			Capacity: 90000000000,
+			Lock: &types.Script{
+				CodeHash: types.HexToHash("0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"),
+				HashType: types.HashTypeType,
+				Args:     common.FromHex("0xb1d41a1fb06f782cf10a87f3e49e80711af63fcf"),
+			},
+			Type: nil,
+		},
+	},
+	OutputsData: make([][]byte, 2),
+	Witnesses: [][]byte{
+		common.FromHex("0x55000000100000005500000055000000410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"),
+	},
+}
+
+scriptGroups := []*transaction.ScriptGroup{
+	&transaction.ScriptGroup{
+		Script: types.Script{
+			CodeHash: types.HexToHash("0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"),
+			HashType: types.HashTypeType,
+			Args:     common.FromHex("0x3f1573b44218d4c12a91919a58a863be415a2bc3"),
+		},
+		GroupType:    types.ScriptTypeLock,
+		InputIndices: []uint32{0},
+	},
+}
+txWithScriptGroups := &transaction.TransactionWithScriptGroups{
+	TxView:       tx,
+	ScriptGroups: scriptGroups,
+}
+```
+
+### Sign & Send Transaction
+
+Once the `TransactionWithScriptGroups` is prepared, you can follow these steps to sign and send transaction to CKB network:
+
+1. Sign transaction with your private key.
+2. Send Signed transaction to CKB node, and wait for it to be confirmed.
+
+:::note
+The address and key are for demo purposes only and should not be used in a production environment.
+:::
+
+```go
+// Your built txWithScriptGroups
+var txWithScriptGroups *transaction.TransactionWithScriptGroups
+// 0. Set your private key
+privKey := "0xccb083b37aa346c5ce2e1f99a687a153baa04052f26db6ab3c26d6a4cc15c5f1"
+// 1. Sign transaction with your private key
+txSigner := signer.GetTransactionSignerInstance(types.NetworkTest)
+txSigner.SignTransactionByPrivateKeys(txWithScriptGroups, privKey)
+// 2. Send transaction to CKB node
+txHash, err := ckbClient.SendTransaction(context.Background(), txWithScriptGroups.TxView)
+```
+
+### Generate a New Address
+
+In CKB world, a <Tooltip>Lock Script</Tooltip> can be represented as an address. `secp256k1_blake160_signhash_all` is the most commonly used address. Here's how to generate it.
+
+```go
+// Generate a new address randomly
+key, err := secp256k1.RandomNew()
+if err != nil {
+	// handle error
+}
+script := systemscript.Secp256K1Blake160SignhashAll(key)
+addr := &address.Address{Script: script, Network: types.NetworkTest}
+encodedAddr, err := addr.Encode()
+```
+
+### Convert Public Key to Address
+
+Convert elliptic curve public key to an address (`secp256k1_blake160`):
+
+```go
+// You should provide an elliptic curve public key of compressed format, with 33 bytes.
+script, err := systemscript.Secp256K1Blake160SignhashAllByPublicKey("0x03a0a7a7597b019828a1dda6ed52ab25181073ec3a9825d28b9abbb932fe1ec83d")
+if err != nil {
+	// handle error
+}
+addr := &address.Address{Script: script, Network: types.NetworkTest}
+```
+
+### Parse Address
+
+Parse an address from an encoded string and get its network, Script, and encoded string in other formats.
+
+```go
+addr, err := address.Decode("ckt1qyqxgp7za7dajm5wzjkye52asc8fxvvqy9eqlhp82g")
+if err != nil {
+	// handle error
+}
+script := addr.Script
+network := addr.Network
+```
+
+:::note
+Short address and full bech32 address are deprecated. For more details about addresses, check out [CKB Address](/docs/tech-explanation/ckb-address) and [RFC-0021](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md).
+:::
+
+---
+
+## Additional Resources
+
+- [Github](https://github.com/nervosnetwork/ckb-sdk-go)
+- [Examples](https://github.com/nervosnetwork/ckb-sdk-go/blob/v2/collector/example/example.go) to show how to use this sdk to interact with CKB's RPC, transaction, and Nervos DAO (deposit and withdraw).
+- [Changelog](https://github.com/nervosnetwork/ckb-sdk-go/blob/v2/CHANGELOG.md)
