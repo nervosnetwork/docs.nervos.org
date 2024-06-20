@@ -23,7 +23,8 @@
   --ifm-font-family-monospace: "Space Mono", monospace;
   --ifm-blockquote-color: var(--text-secondary);
 
-  --ifm-container-width-xl: 1022px;
+  --ifm-container-width: 2000px;
+  --ifm-container-width-xl: 2000px;
   --ifm-hr-background-color: var(--border-subtle);
   --ifm-hr-margin-vertical: 4rem;
 
