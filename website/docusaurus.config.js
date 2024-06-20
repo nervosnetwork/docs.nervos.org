@@ -82,7 +82,51 @@ const config = {
           editUrl:
             "https://github.com/nervosnetwork/docs-new/tree/develop/website",
         },
-        blog: {},
+        blog: {
+          path: "blog",
+          // Simple use-case: string editUrl
+          // editUrl: 'https://github.com/facebook/docusaurus/edit/main/website/',
+          // Advanced use-case: functional editUrl
+          editUrl: ({ locale, blogDirPath, blogPath, permalink }) =>
+            `https://github.com/facebook/docusaurus/edit/main/website/${blogDirPath}/${blogPath}`,
+          editLocalizedFiles: false,
+          blogTitle: "Nervos Blog",
+          blogDescription: "Blog Posts About Nervos Blockchain",
+          blogSidebarCount: 20,
+          blogSidebarTitle: "All Posts",
+          routeBasePath: "blog",
+          include: ["**/*.{md,mdx}"],
+          exclude: [
+            "**/_*.{js,jsx,ts,tsx,md,mdx}",
+            "**/_*/**",
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/__tests__/**",
+          ],
+          postsPerPage: 1,
+          blogListComponent: "@theme/BlogListPage",
+          blogPostComponent: "@theme/BlogPostPage",
+          blogTagsListComponent: "@theme/BlogTagsListPage",
+          blogTagsPostsComponent: "@theme/BlogTagsPostsPage",
+          processBlogPosts: async ({ blogPosts }) =>
+            blogPosts.sort(
+              (a, b) =>
+                Date.parse(a.metadata.date) - Date.parse(b.metadata.date)
+            ),
+          truncateMarker: /<!--\s*(truncate)\s*-->/,
+          showReadingTime: true,
+          feedOptions: {
+            title: "Nervos Blog",
+            description: "Blog Posts About Nervos Blockchain",
+            createFeedItems: async (params) => {
+              const { blogPosts, defaultCreateFeedItems, ...rest } = params;
+              return defaultCreateFeedItems({
+                // keep only the 10 most recent blog posts in the feed
+                blogPosts: blogPosts.filter((item, index) => index < 10),
+                ...rest,
+              });
+            },
+          },
+        },
         theme: {
           customCss: [path.join(__dirname, "./src/css/customTheme.css")],
         },
