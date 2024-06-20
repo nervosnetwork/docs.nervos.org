@@ -116,7 +116,27 @@ $ ls
 carrot*  carrot.c  ckb_consts.h  ckb_syscalls.h
 ```
 
-And that's it, CKB can use the compiled executable from GCC directly as scripts on chain, there's no way for further processing. We can now deploy it on chain. Note that I will use CKB's Nodejs SDK [Lumos](https://github.com/ckb-js/lumos). Please refer to the official [Docs](https://lumos-website.vercel.app/) for how to set it up.
+And that's it, CKB can use the compiled executable from GCC directly as scripts on chain, there's no way for further processing. We can now deploy it on chain. Note that I will use CKB's Node.js SDK [Lumos](https://github.com/ckb-js/lumos). Please refer to the official [Docs](https://lumos-website.vercel.app/) for how to set it up. Across the serial posts, there are some common codes to set up in the Repl environment with Lumos packages, we won't repeat these codes for simplicity, but you can take the following as a reference:
+
+```js
+$ node
+Welcome to Node.js v20.12.0.
+Type ".help" for more information.
+>
+> const lumos = require("@ckb-lumos/lumos");
+> const indexer = new lumos.Indexer("https://testnet.ckb.dev/rpc");
+> const rpc = new lumos.RPC("https://testnet.ckb.dev/rpc");
+> lumos.config.initializeConfig(lumos.config.TESTNET);
+> const wallet = {
+  address:
+    "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8",
+  privkey: "0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6",
+};
+> const wallet2 = {
+  address: "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq2prryvze6fhufxkgjx35psh7w70k3hz7c3mtl4d",
+  privkey: "0xace08599f3174f4376ae51fdc30950d4f2d731440382bb0aa1b6b0bd3a9728cd"
+}
+```
 
 To deploy the script to CKB, we can just create a new cell, with the script code as cell data part:
 
@@ -125,10 +145,6 @@ To deploy the script to CKB, we can just create a new cell, with the script code
 > const data = fs.readFileSync("carrot");
 > data.byteLength
 7744
-> const lumos = require("@ckb-lumos/lumos");
-> const indexer = new lumos.Indexer(TESTNET_RPC_URL);
-> const rpc = new lumos.RPC(TESTNET_RPC_URL);
-> lumos.config.initializeConfig(lumos.config.TESTNET);
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
 > txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address], wallet2.address, "8000" + "00000000");
 > txSkeleton.update("outputs", (outputs) => {
