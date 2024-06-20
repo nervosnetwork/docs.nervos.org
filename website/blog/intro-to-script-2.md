@@ -116,22 +116,42 @@ $ ls
 carrot*  carrot.c  ckb_consts.h  ckb_syscalls.h
 ```
 
-And that's it, CKB can use the compiled executable from GCC directly as scripts on chain, there's no way for further processing. We can now deploy it on chain. Note that I will use CKB's Ruby SDK since I used to be a Ruby programmer, and Ruby feels the most natural one(but not necessarily the best one) to me. Please refer to the official [README](https://github.com/nervosnetwork/ckb-sdk-ruby/blob/develop/README.md) for how to set it up.
+And that's it, CKB can use the compiled executable from GCC directly as scripts on chain, there's no way for further processing. We can now deploy it on chain. Note that I will use CKB's Nodejs SDK [Lumos](https://github.com/ckb-js/lumos). Please refer to the official [Docs](https://lumos-website.vercel.app/) for how to set it up.
 
 To deploy the script to CKB, we can just create a new cell, with the script code as cell data part:
 
-```ruby
-pry(main)> data = File.read("carrot")
-pry(main)> data.bytesize
-=> 6864
-pry(main)> carrot_tx_hash = wallet.send_capacity(wallet.address, CKB::Utils.byte_to_shannon(8000), CKB::Utils.bin_to_hex(data))
+```js
+> const fs = require("fs");
+> const data = fs.readFileSync("carrot");
+> data.byteLength
+7744
+> const lumos = require("@ckb-lumos/lumos");
+> const indexer = new lumos.Indexer(TESTNET_RPC_URL);
+> const rpc = new lumos.RPC(TESTNET_RPC_URL);
+> lumos.config.initializeConfig(lumos.config.TESTNET);
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address], wallet2.address, "8000" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.data = "0x" + data.toString("hex");
+  return outputs;
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address], 1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const carrotTxHash = await rpc.sendTransaction(signedTx)
 ```
 
-Here I simply create a new cell with enough capacity by sending tokens to myself. Now we can create the type script containing the carrot script code:
+Here I simply create a new cell with enough capacity by sending tokens to another wallet. Now we can create the type script containing the carrot script code:
 
-```ruby
-pry(main)> carrot_data_hash = CKB::Blake2b.hexdigest(data)
-pry(main)> carrot_type_script = CKB::Types::Script.new(code_hash: carrot_data_hash, args: "0x")
+```js
+> const carrotDataHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
+> const carrotTypeScript =  {
+  codeHash: carrotDataHash,
+  hashType: "data",
+  args: "0x"
+};
 ```
 
 Recall the Script data structure:
@@ -150,37 +170,65 @@ Note I'm still ignoring `hash_type` here, we will leave to a future post to see 
 
 To run the carrot script, we need to create a new transaction, and set carrot type script as the type script of one of the output cells:
 
-```ruby
-pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(100), fee: 5000)
-pry(main)> tx.outputs[0].type = carrot_type_script.dup
+```js
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address], wallet2.address,"100" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = carrotTypeScript;
+  return outputs;
+});
 ```
 
 There's one more step needed: in order for CKB to locate the carrot script, we need to reference the cell containing carrot script in one of transaction deps:
 
-```ruby
-pry(main)> carrot_cell_dep = CKB::Types::CellDep.new(out_point: CKB::Types::OutPoint.new(tx_hash: carrot_tx_hash, index: 0))
-pry(main)> tx.cell_deps << carrot_cell_dep.dup
+```js
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: carrotTxHash,
+    index: "0x0"
+  },
+  depType: "code"
+})
 ```
 
 Now we are ready to sign and send the transaction:
 
-```ruby
-[46] pry(main)> tx = tx.sign(wallet.key, api.compute_transaction_hash(tx))
-[19] pry(main)> api.send_transaction(tx)
-=> "0xd7b0fea7c1527cde27cc4e7a2e055e494690a384db14cc35cd2e51ec6f078163"
+```js
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable> (entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const txHash = await rpc.sendTransaction(signedTx)
+> txHash
+0xd7b0fea7c1527cde27cc4e7a2e055e494690a384db14cc35cd2e51ec6f078163
 ```
 
 Since this transaction does not have any cell containing `carrot` in the cell data, the type script validates successfully. Now let's try a different transaction that does have a cell that begins with `carrot`:
 
-```ruby
-pry(main)> tx2 = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(400), fee: 5000)
-pry(main)> tx2.cell_deps.push(carrot_cell_dep.dup)
-pry(main)> tx2.outputs[0].type = carrot_type_script.dup
-pry(main)> tx2.outputs_data[0] = CKB::Utils.bin_to_hex("carrot123")
-pry(main)> tx2 = tx2.sign(wallet.key)
-pry(main)> api.send_transaction(tx2)
-CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"InvalidTx(ScriptFailure(ValidationFailure(-1)))"}
-from /home/ubuntu/code/ckb-sdk-ruby/lib/ckb/rpc.rb:164:in `rpc_request'
+```js
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"400" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = carrotTypeScript;
+  cell.data = "0x" + Buffer.from("carrot123", "utf8").toString("hex");
+  return outputs;
+});
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: carrotTxHash,
+    index: "0x0",
+  },
+  depType: "code",
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures);
+> await rpc.sendTransaction(signedTx);
+Uncaught:
+ResponseException [Error]: {"code":-302,"message":"TransactionFailedToVerify: Verification failed Script(TransactionScriptError { source: Outputs[0].Type, cause: ValidationFailure: see error code -1 on page.."}
 ```
 
 We can see our carrot script rejects a transaction that generates a cell with carrot. Now I can use this script to make sure all my cells are free from carrots!
@@ -235,38 +283,74 @@ build/duktape*
 
 Like the carrot example, the first step here is to deploy duktape script code in a CKB cell:
 
-```ruby
-pry(main)> duktape_data = File.read("../ckb-duktape/build/duktape")
-pry(main)> duktape_data.bytesize
-=> 269064
-pry(main)> duktape_tx_hash = wallet.send_capacity(wallet.address, CKB::Utils.byte_to_shannon(280000), CKB::Utils.bin_to_hex(duktape_data))
-pry(main)> duktape_data_hash = CKB::Blake2b.hexdigest(duktape_data)
-pry(main)> duktape_cell_dep = CKB::Types::CellDep.new(out_point: CKB::Types::OutPoint.new(tx_hash: duktape_tx_hash, index: 0))
+```js
+> const data = fs.readFileSync("../ckb-duktape/build/duktape");
+> data.byteLength
+281440
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"290000" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.data = "0x" + data.toString("hex");
+  return outputs;
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const duktapeTxHash = await rpc.sendTransaction(signedTx)
+> const duktapeCodeHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
 ```
 
 Unlike the carrot example, duktape script code now requires one argument: the JavaScript source you want to execute:
 
-```ruby
-pry(main)> duktape_hello_type_script = CKB::Types::Script.new(code_hash: duktape_data_hash, args: CKB::Utils.bin_to_hex("CKB.debug(\"I'm running in JS!\")"))
+```js
+> const duktapeTypeScript =  {
+  codeHash: duktapeCodeHash,
+  hashType: "data",
+  args: "0x" + Buffer.from("CKB.debug(\"I'm running in JS!\")", "utf8").toString("hex")
+};
 ```
 
 Notice that with a different argument, you can create a different duktape powered type script for different use case:
 
-```ruby
-pry(main)> duktape_hello_type_script = CKB::Types::Script.new(code_hash: duktape_data_hash, args: CKB::Utils.bin_to_hex("var a = 1;\nvar b = a + 2;"))
+```js
+> const duktapeTypeScript =  {
+  codeHash: duktapeCodeHash,
+  hashType: "data",
+  args: "0x" + Buffer.from("var a = 1;\nvar b = a + 2;", "utf8").toString("hex")
+};
 ```
 
 This echos the differences mentioned above on script code vs script: here duktape serves as a script code providing a JavaScript engine, while different script leveraging duktape script code serves different functionalities on chain.
 
 Now we can create a cell with the duktape type script attached:
 
-```ruby
-pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(200), fee: 600)
-pry(main)> tx.cell_deps.push(duktape_cell_dep.dup)
-pry(main)> tx.outputs[0].type = duktape_hello_type_script.dup
-pry(main)> tx = tx.sign(wallet.key)
-pry(main)> api.send_transaction(tx)
-=> "0x2e4d3aab4284bc52fc6f07df66e7c8fc0e236916b8a8b8417abb2a2c60824028"
+```js
+> const duktapeTypeScript =  {
+  codeHash: duktapeCodeHash,
+  hashType: "data",
+  args: "0x" + Buffer.from("CKB.debug(\"I'm running in JS!\")", "utf8").toString("hex")
+};
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"290000" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = duktapeTypeScript;
+  return outputs;
+});
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: duktapeTxHash,
+    index: "0x0"
+  },
+  depType: "code"
+})
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const txHash = await rpc.sendTransaction(signedTx)
 ```
 
 We can see that the script executes successfully, and if you have `ckb-script` module's log level set to `debug` in your `ckb.toml` file, you can also notice the following log:
