@@ -9,6 +9,19 @@ export default {
     },
     {
       type: "category",
+      label: "SDK & Devtools",
+      className: "category-tool",
+      collapsible: false,
+      items: [
+        "sdk-and-devtool/rust",
+        "sdk-and-devtool/go",
+        "sdk-and-devtool/java",
+        "sdk-and-devtool/lumos",
+        "sdk-and-devtool/devtool",
+      ],
+    },
+    {
+      type: "category",
       label: "DApp Tutorials",
       className: "category-dapp",
       collapsible: false,
@@ -32,19 +45,6 @@ export default {
         "script/js-script",
         "script/common-script-error-code",
         "script/syscalls-for-script",
-      ],
-    },
-    {
-      type: "category",
-      label: "SDK & Devtools",
-      className: "category-tool",
-      collapsible: false,
-      items: [
-        "sdk-and-devtool/rust",
-        "sdk-and-devtool/go",
-        "sdk-and-devtool/java",
-        "sdk-and-devtool/lumos",
-        "sdk-and-devtool/devtool",
       ],
     },
     {
