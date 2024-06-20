@@ -5,10 +5,19 @@ export default {
       label: "Getting Started",
       className: "category-getting-started",
       collapsible: false,
+      items: ["getting-started/how-ckb-works", "getting-started/quick-start"],
+    },
+    {
+      type: "category",
+      label: "SDK & Devtools",
+      className: "category-tool",
+      collapsible: false,
       items: [
-        "getting-started/how-ckb-works",
-        "getting-started/quick-start",
-        "getting-started/devtool",
+        "sdk-and-devtool/rust",
+        "sdk-and-devtool/go",
+        "sdk-and-devtool/java",
+        "sdk-and-devtool/lumos",
+        "sdk-and-devtool/devtool",
       ],
     },
     {

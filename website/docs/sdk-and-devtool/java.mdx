@@ -1,0 +1,174 @@
+---
+id: java
+title: Java
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Java
+
+## Introduction
+
+The [CKB-SDK-Java](https://github.com/nervosnetwork/ckb-sdk-java) is a versatile and reliable toolkit for integrating the Nervos CKB blockchain into Java applications. Java's platform independence, robustness, and extensive library support make it a suitable choice for enterprise-level blockchain solutions. This SDK is particularly useful for developing applications that require strong consistency, reliability, and integration with existing enterprise systems.
+
+## Requirements
+
+| Components                                                                  | Version  | Description                |
+| --------------------------------------------------------------------------- | -------- | -------------------------- |
+| [Java](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html) | 8        | Java Development Kit (JDK) |
+| [Gradle](https://gradle.org/install/)                                       | &ge; 5.0 | Build automation tool      |
+
+To verify that you have Java and Gradle installed, you can run this in your terminal:
+
+```bash
+java -version
+gradle -v
+```
+
+## Setup Project
+
+1. **Create a new project:** Open a terminal and run the following commands to create a folder for your Java project:
+
+```bash
+mkdir ckb-java-example
+cd ckb-java-example
+gradle init
+```
+
+2. **Edit `build.gradle`**: Open the `build.gradle` file and add the `ckb-sdk-java` dependency:
+
+```bash title='build.gradle'
+dependencies {
+    implementation 'org.nervos.ckb:ckb:{version}'
+}
+```
+
+Replace `{version}` with the latest version of the CKB-SDK-Java
+
+3. **Build the project**: Run the following command in the project root directory:
+
+```bash
+gradle build
+```
+
+## Setup Client
+
+CKB-SDK-Java provides a convenient client that enables you to easily interact with CKB nodes. You can connect to different networks (Testnet, Devnet, and Mainnet) by specifying the appropriate URL.
+
+```java
+import org.nervos.ckb.service.Api;
+import org.nervos.ckb.service.CkbRpcApi;
+
+String testnetUrl = "https://testnet.ckb.dev"; // Testnet
+String devnetUrl = "http://127.0.0.1:8114"; // Devnet
+String mainnetUrl = "https://mainnet.ckb.dev/rpc"; // Mainnet
+
+// Connect to Testnet
+CkbRpcApi ckbApi = new Api(testnetUrl);
+```
+
+## Examples
+
+### Get Block Info
+
+You can leverage the above client to call any RPC APIs provided by CKB in Java. Here is a simple example to get block info using a block hash.
+
+```java
+byte[] blockHash = Numeric.hexStringToByteArray("0x77fdd22f6ae8a717de9ae2b128834e9b2a1424378b5fc95606ba017aab5fed75");
+Block block = ckbApi.getBlock(blockHash);
+System.out.println("Block: " + block);
+```
+
+For more details about JSON-RPC APIs, please refer to [CKB RPC](https://github.com/nervosnetwork/ckb/blob/develop/rpc/README.md)
+
+### Build a Transaction
+
+`ckb-sdk-java` encapsulates the common logic into a user-friendly transaction builder. It could greatly free you from getting into Script details and from tedious manual work of building transaction including adding celldeps, transaction fee calculation, change output set and so on.
+
+Here is an example to build a CKB transfer transaction with the help of transaction builder and CKB node.
+
+:::note
+The address and key are for demo purposes only and should not be used in a production environment.
+:::
+
+```java
+String sender = "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq2qf8keemy2p5uu0g0gn8cd4ju23s5269qk8rg4r";
+String receiver = "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqg958atl2zdh8jn3ch8lc72nt0cf864ecqdxm9zf";
+Iterator<TransactionInput> iterator = new InputIterator(sender);
+TransactionBuilderConfiguration configuration = new TransactionBuilderConfiguration(Network.TESTNET);
+configuration.setFeeRate(1000);
+TransactionWithScriptGroups txWithGroups = new CkbTransactionBuilder(configuration, iterator)
+    .addOutput(receiver, 50100000000L)
+    .setChangeOutput(sender)
+    .build();
+```
+
+For more use cases of building transaction with a CKB node, please refer to:
+
+- [SendCKBExample](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/example/src/main/java/org/nervos/ckb/example/SendCkbExample.java): Sign and send CKB from single-sig address:
+- [SendCKBFromMultisigAddressExample](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/example/src/main/java/org/nervos/ckb/example/SendCkbMultisigExample.java): Sign and send CKB from multi-sig address with multiple private keys.
+
+### Sign & Send Transaction
+
+Once the `TransactionWithScriptGroups` is prepared, you can follow these steps to sign and send transaction to CKB network:
+
+1. Sign transaction with your private key.
+2. Send signed transaction to CKB node, and wait for it to be confirmed.
+
+```java
+TransactionWithScriptGroups txWithScriptGroups = ...; // Your built transaction
+// 0. Set your private key
+String privateKey = "0x6c9ed03816e31...";
+// 1. Sign transaction with your private key
+TransactionSigner.getInstance(Network.TESTNET).signTransaction(txWithScriptGroups, privateKey);
+// 2. Send transaction to CKB node
+byte[] txHash = ckbApi.sendTransaction(txWithScriptGroups.txView);
+System.out.println(Numeric.toHexString(txHash));
+```
+
+### Generate a New Address
+
+In CKB world, a <Tooltip>Lock Script</Tooltip> can be represented as an address. The `secp256k1_blake160` is the most commonly used address. Here's how to generate it.
+
+```java
+// Generate a random address
+ECKeyPair keyPair = Keys.createEcKeyPair();
+Script script = Script.generateSecp256K1Blake160SignhashAllScript(keyPair));
+Address address = new Address(script, Network.TESTNET);
+System.out.println(address.encode());
+```
+
+### Convert Public Key to Address
+
+Convert elliptic curve public key to an address (`secp256k1_blake160`):
+
+```java
+// The public key sent is an elliptic curve public key of compressed format - a 65-length hex (not include hex prefix 0x).
+byte[] publicKey = Numeric.hexStringToByteArray("0x24a501efd328e062c8675f2365970728c859c592beeefd6be8ead3d901330bc01");
+Script script = Script.generateSecp256K1Blake160SignhashAllScript(publicKey);
+Address address = new Address(script, Network.TESTNET);
+System.out.println(address.encode());
+```
+
+### Parse Address
+
+Parse an address from an encoded string and get its network, Script, and encoded string in other formats.
+
+```java
+Address address = Address.decode("ckt1qyqxgp7za7dajm5wzjkye52asc8fxvvqy9eqlhp82g");
+Script script = address.getScript();
+Network network = address.getNetwork();
+System.out.println(address.encode());
+```
+
+:::note
+Short address and full bech32 address are deprecated. For more details about addresses, check out [CKB Address](/docs/tech-explanation/ckb-address) and [RFC-0021](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md).
+:::
+
+---
+
+Additional Resources
+
+- [Github](https://github.com/nervosnetwork/ckb-sdk-java)
+- [Examples](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/example/src/main/java/org/nervos/ckb/example) to show how to build transactions with CKB nodes.
+- [Changelog](https://github.com/nervosnetwork/ckb-sdk-java/blob/master/CHANGELOG.md)
