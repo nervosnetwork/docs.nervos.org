@@ -1,5 +1,6 @@
 ---
 title: "Introduction to CKB Script Programming 7: Advanced Duktape Examples"
+date: "2020-02-21"
 slug: intro-to-ckb-script-programming-7
 authors:
   - name: Xuejie Xiao
@@ -7,35 +8,38 @@ authors:
     url: https://xuejie.space/about/
 ---
 
-I’ve introduced duktape before, shown how you can run JavaScript code on Nervos CKB. But up to this point, the code I’ve shown is all single piece of code with very simple logic. What if we need to parse CKB data structures? What if I need external libraries in my script? In this post we will create a duktape-powered CKB script with the following requirements:
+I've introduced duktape before, shown how you can run JavaScript code on Nervos CKB. But up to this point, the code I've shown is all single piece of code with very simple logic. What if we need to parse CKB data structures? What if I need external libraries in my script? In this post we will create a duktape-powered CKB script with the following requirements:
 
 - External library dependency
 - Serialization/Deserialization of CKB data structures
 - Hashing
-  Before continuing on this post, I want to mention that the major work used in this post, is not written by me. The credit really goes to one of my colleagues, who spent the effort putting together a very nice template we can use here, so we can have a streamlined CKB script development experience via JavaScript & duktape.
+
+Before continuing on this post, I want to mention that the major work used in this post, is not written by me. The credit really goes to [one](https://github.com/Keith-CY) of my colleagues, who spent the effort putting together a very nice [template](https://github.com/xxuejie/ckb-duktape-template) we can use here, so we can have a streamlined CKB script development experience via JavaScript & duktape.
 
 This post is written based on current CKB Lina mainnet version now.
 
-## Scope
+# Scope
 
-In this post, we will write a simple HTLC script in JavaScript. Let me admit that I’m not the world’s best teacher, there’re many, many people who are better than me in explaining HTLC. So if you want to know what HTLC is, feel free to check other places first and come back here later.
+In this post, we will write a simple [HTLC](https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts) script in JavaScript. Let me admit that I'm not the world's best teacher, there're many, many people who are better than me in [explaining HTLC](https://liquality.io/blog/hash-time-locked-contracts-htlcs-explained/~). So if you want to know what HTLC is, feel free to check other places first and come back here later.
 
 Now I will assume you know what HTLC is :P The HTLC script we create here, will be unlocked if either one of the following conditions is met:
 
-A correct secret string, and a valid signature for public key A are provided;
-Certain amount of time is passed, and a valid signature for public key B is provided
+- A correct secret string, and a valid signature for public key A are provided;
+- Certain amount of time is passed, and a valid signature for public key B is provided
+
 And there are also several points made in the design of our HTLC script:
 
-For simplicity, we will use a trick to do signature verification here: instead of doing signature verification directly in JavaScript, we will rely on a separate cell to provide that a signature of the correct public key is provided. Later in this post we will explain the consequence and consideration regarding signature verifi2ation in JavaScript;
-A hash of the correct secret string will be included in args part of the CKB HTLC script structure, so when the script runs, it can run a hashing function on the provided secret string, testing if it is correct;
-The amount of time is always set as 100 blocks. To verify 100 blocks has passed, the unlock transaction should include a block header which at least 100 blocks after the cell to unlock is committed on chain.
-With the design set in stone, let’s jump to the implementation now.
+1. For simplicity, we will use a trick to do signature verification here: instead of doing signature verification directly in JavaScript, we will rely on a separate cell to provide that a signature of the correct public key is provided. Later in this post we will explain the consequence and consideration regarding signature verifi2ation in JavaScript;
+2. A hash of the correct secret string will be included in `args` part of the CKB HTLC script structure, so when the script runs, it can run a hashing function on the provided secret string, testing if it is correct;
+3. The amount of time is always set as 100 blocks. To verify 100 blocks has passed, the unlock transaction should include a block header which at least 100 blocks after the cell to unlock is committed on chain.
 
-## Getting Our Hands Dirty
+With the design set in stone, let's jump to the implementation now.
 
-While you are certainly welcome to craft the skeleton on your own, a decent template has already been prepared by one of my colleagues to save us the time. In this post, we will start from the already built template here:
+# Getting Our Hands Dirty
 
-```bash
+While you are certainly welcome to craft the skeleton on your own, a decent [template](https://github.com/xxuejie/ckb-duktape-template) has already been prepared by one of my colleagues to save us the time. In this post, we will start from the already built template here:
+
+```
 $ export TOP=$(pwd)
 $ git clone https://github.com/xxuejie/ckb-duktape-template htlc-template
 $ cd htlc-template
@@ -44,9 +48,9 @@ $ npm install
 $ npm run build
 ```
 
-Now you can use your favorite editor to open src/index.js file in htlc-template repo, the current content of the file looks like this:
+Now you can use your favorite editor to open `src/index.js` file in `htlc-template` repo, the current content of the file looks like this:
 
-```bash
+```
 $ cd $TOP/htlc-template
 $ cat src/index.js
 const { Molecule } = require('molecule-javascript')
@@ -58,15 +62,20 @@ const scriptType = schema.declarations[scriptTypeIndex]
 
 // Write your script logic here.
 CKB.debug(scriptType)
+```
+
 We will modify this file to add the logic we need.
 
-Script Debugger Preparation
-To aid script programming, let’s put together a debugging environment. The debugging environment will serve 2 purposes:
+## Script Debugger Preparation
 
-Prepare a complete transaction that can be loaded to CKB debugger;
-Create transactions and relay them to CKB
-Let’s first create the environment skeleton:
+To aid script programming, let's put together a debugging environment. The debugging environment will serve 2 purposes:
 
+- Prepare a complete transaction that can be loaded to CKB debugger;
+- Create transactions and relay them to CKB
+
+Let's first create the environment skeleton:
+
+```
 $ cd $TOP
 $ mkdir htlc-runner
 $ cd htlc-runner
@@ -77,9 +86,9 @@ $ npm install --save molecule-javascript
 $ npm install --save crc32
 ```
 
-Now let’s create a transaction skeleton for debugger usage:
+Now let's create a transaction skeleton for debugger usage:
 
-```bash
+```
 $ cd $TOP/htlc-runner
 $ cat skeleton.json
 {
@@ -215,7 +224,7 @@ $ cat skeleton.json
 
 You might notice that the skeleton skips dep cell data part, this is because as we develop the HTLC script, we might need to insert different contents in the skeleton. Hence a runner here is needed to prepare the skeleton to a full transaction, then run it via CKB debugger:
 
-```bash
+```
 $ cd $TOP/htlc-runner
 $ cat runner.js
 #!/usr/bin/env node
@@ -260,7 +269,7 @@ console.log(`../ckb-standalone-debugger/bins/target/release/ckb-debugger -g lock
 
 We need to compile duktape here:
 
-```bash
+```
 $ cd $TOP
 $ git clone --recursive https://github.com/xxuejie/ckb-duktape
 $ cd ckb-duktape
@@ -272,7 +281,7 @@ root@18d4b1952624:/code# exit
 
 And also CKB debugger:
 
-```bash
+```
 $ cd $TOP
 $ git clone --recursive https://github.com/xxuejie/ckb-standalone-debugger
 $ cd ckb-standalone-debugger/bins
@@ -281,7 +290,7 @@ $ cargo build --release
 
 Now you can try running generated script:
 
-```bash
+```
 $ cd $TOP/htlc-runner
 $ chmod +x runner.js
 $ RUST_LOG=debug `./runner.js ../ckb-duktape/build/load0 ../htlc-template/build/duktape.js`
@@ -293,27 +302,28 @@ This will prepare the transaction to run from duktape binary and JS script, then
 
 Or if you find a REPL more helpful, you can use the following line to execute the script and then start a REPL:
 
-```bash
+```
 $ cd $TOP/htlc-runner
 $ RUST_LOG=debug `./runner.js ../ckb-duktape/build/repl0 ../htlc-template/build/duktape.js`
 duk>
 ```
 
-With the debugger ready, let’s now start to implement the HTLC script.
+With the debugger ready, let's now start to implement the HTLC script.
 
 ## Custom Arguments
 
 CKB provides 2 places that we can use to hold arguments to scripts running on CKB:
 
-- args field in Script structure
-- witnesses field in Transaction structure
-  The difference between them, is that args field is used to hold arguments that remains the same for all usage of the same script, while witnesses field is used for temporary arguments that are used in one-time transaction validation. One example here is: for a script that does signature verification, args field is typically used to store public key hash, while witnesses field is used to hold valid signature.
+- `args` field in `Script` structure
+- `witnesses` field in `Transaction` structure
 
-For maximum flexibility, both args field and each item in the witnesses array field are just plain raw bytes. It’s up to dapp developers to design the actual format of data they want to hold. In our HTLC script, we will use molecule serialization format. Molecule is widely used in CKB. If you want to interact with CKB, such as reading certain cell/script used in the current transaction, you will need to deal with molecule format. Now this is a perfect opportunity to explain how one can interact with CKB via molecule in great details, hence we will implement the custom structure used by args and witness in molecule format. Though you are free to use any serialization format in your own scripts.
+The difference between them, is that `args` field is used to hold arguments that remains the same for all usage of the same script, while `witnesses` field is used for temporary arguments that are used in one-time transaction validation. One example here is: for a script that does signature verification, `args` field is typically used to store public key hash, while `witnesses` field is used to hold valid signature.
 
-Let’s first create a file with the 2 needed data structure:
+For maximum flexibility, both `args` field and each item in the `witnesses` array field are just plain raw bytes. It's up to dapp developers to design the actual format of data they want to hold. In our HTLC script, we will use [molecule](https://github.com/nervosnetwork/molecule) serialization format. Molecule is widely used in CKB. If you want to interact with CKB, such as reading certain cell/script used in the current transaction, you will need to deal with molecule format. Now this is a perfect opportunity to explain how one can interact with CKB via molecule in great details, hence we will implement the custom structure used by `args` and `witness` in molecule format. Though you are free to use any serialization format in your own scripts.
 
-```bash
+Let's first create a file with the 2 needed data structure:
+
+```
 $ cd $TOP/htlc-template
 $ cat htlc.mol
 array Uint32 [byte; 4];
@@ -332,16 +342,16 @@ table HtlcWitness {
 }
 ```
 
-For more information on molecule, please refer to the RFC. Here we are defining 2 structures with following requirements:
+For more information on molecule, please refer to the [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0008-serialization/0008-serialization.md). Here we are defining 2 structures with following requirements:
 
-- HtlcArgs requires 2 32-byte long raw bytes for storing both public keys(later we shall the HTLC script here actually generalizes a bit from this design), and a single 32-bit integer value for storing hash. For simplicity, our HTLC will use CRC32 as the hash function, but in a production setting, this is far from a secure solution, and you should definitely use a proper secure hash function for this;
-- HtlcWitness has 2 optional(denoted by the table construct) arguments: it contains either a variable length string containing the secret string for HTLC, or a 32-bit integer value denoting the header to check for 100 block rule.
+- `HtlcArgs` requires 2 32-byte long raw bytes for storing both public keys(later we shall the HTLC script here actually generalizes a bit from this design), and a single 32-bit integer value for storing hash. For simplicity, our HTLC will use CRC32 as the hash function, but in a production setting, this is far from a secure solution, and you should definitely use a proper secure hash function for this;
+- `HtlcWitness` has 2 optional(denoted by the `table` construct) arguments: it contains either a variable length string containing the secret string for HTLC, or a 32-bit integer value denoting the header to check for 100 block rule.
 
 ## Deserializing in Molecule
 
 With the molecule definition in place for the custom data structure, we need to first convert them into a format that can be consumed by the JavaScript implementation of molecule:
 
-```bash
+```
 $ cd $TOP/htlc-template
 $ cargo install moleculec
 $ moleculec --language - --format json --schema-file htlc.mol > src/htlc.json
@@ -350,7 +360,7 @@ $ npx moleculec-js -ns src/htlc.json > src/htlc-combined.json
 
 Now we can fill in the code that loads current Script, and parses the serialized args into a valid structure:
 
-```bash
+```
 $ cd $TOP/htlc-template
 $ cat src/index.js
 const { Molecule } = require('molecule-javascript')
@@ -395,7 +405,7 @@ CKB.debug(`c: ${hexStringArrayToHexString(htlcArgs[2][1])}`)
 
 If we ignore the bookkeeping code for a sec, what matters here, is that we first use CKB syscall to load script, parse script structure, then get args:
 
-```bash
+```
 const current_script = scriptType.deserialize(bytesToHex(CKB.load_script(0)))
 const args = hexStringArrayToHexString(current_script[2][1])
 const htlcArgs = htlcArgsType.deserialize(args)
@@ -403,10 +413,13 @@ const htlcArgs = htlcArgsType.deserialize(args)
 
 We assume script args contain serialized HtlcArgs structure defined above, then we apply similar method to exact them:
 
-```bash
+```
 const htlcArgs = htlcArgsType.deserialize(args)
+```
+
 I have already provided some meaningful data in the skeleton, so if we try to execute the script:
 
+```
 $ cd $TOP/htlc-template
 $ npm run build
 $ cd $TOP/htlc-runner
@@ -423,13 +436,14 @@ We can find parsed results from debug logs.
 
 Another thing I want to show here, is that you can include many libraries out there already on npm, assuming:
 
-There’s a ES5 version(or you can actually adjust the webpack pipeline yourself to add polyfills) of the library;
-It is implemented purely in JavaScript without native code
-In the HTLC script, I’m gonna add crc32, and use crc32 to calculate secret string hash. I want to mention again here that CRC32 is never a secure hash function. We pick it out of simplicity, not security. In a production setting, you should really use a real secure hash function probably implemented natively rather than using JavaScript. But for now, crc32 is quite perfect for our tutorial :P
+- There's a ES5 version(or you can actually adjust the webpack pipeline yourself to add polyfills) of the library;
+- It is implemented purely in JavaScript without native code
 
-Let’s include crc32 in our template, and write some debugging code to test it:
+In the HTLC script, I'm gonna add [crc32](https://github.com/beatgammit/crc32), and use crc32 to calculate secret string hash. I want to mention again here that CRC32 is never a secure hash function. We pick it out of simplicity, not security. In a production setting, you should really use a real secure hash function probably implemented natively rather than using JavaScript. But for now, crc32 is quite perfect for our tutorial :P
 
-```bash
+Let's include crc32 in our template, and write some debugging code to test it:
+
+```
 $ cd $TOP/htlc-template
 $ npm install --save crc32
 $ cat src/index.js
@@ -480,13 +494,13 @@ DEBUG:<unknown>: script group: Byte32(0x35ab3d033e66c426573ed4b7ce816e248cb042d9
 Run result: Ok(0)
 ```
 
-You might noticed that the 2 values we printed here are exactly the same! That’s because i am a secret is exactly the secret string I’m picking when preparing the skeleton.
+You might noticed that the 2 values we printed here are exactly the same! That's because `i am a secret` is exactly the secret string I'm picking when preparing the skeleton.
 
 ## Piecing the Contract Together
 
 With all the libraries and required knowledge in place, we can now finish implementing the script:
 
-```bash
+```
 $ cd $TOP/htlc-template
 $ cat src/index.js
 const { Molecule } = require('molecule-javascript')
@@ -608,27 +622,29 @@ while (true) {
 
 It uses similar techniques as shown above to parse witness and block headers, which are also in molecule format.
 
-There’s one trick worth mentioning: in the design of HTLC script, I mentioned that the script needs to do signature verification for a given public key. The actual implemention we have here, generalizes slightly from this design:
+There's one trick worth mentioning: in the design of HTLC script, I mentioned that the script needs to do signature verification for a given public key. The actual implemention we have here, generalizes slightly from this design:
 
-Instead of test a given public key, we are testing for the whole lock script hash. While this certainly satisfies our requirement, it provides more possibilities: if everyone is using the default secp256k1 lock script, different public keys will be reflected in script args part, resulting in differnet lock scripts. So testing lock scripts can certainly ensure different public keys are using. On the other hand, not everyone might be using the default secp256k1 lock script, so testing lock script hash directly, can enable more flexibilities in the HTLC script usage.
-While one can certainly embeds the signature verification logic within the HTLC script, we opt for a different and simpler solution here: we just test that one of the input cell has the specified lock script. Per CKB’s validation rules, if the transaction is accepted by the blockchain, each input cells' lock script must pass validation, which means the lock script specified in the HTLC script will also pass validation, satisfying the validation rules of HTLC script.
+1. Instead of test a given public key, we are testing for the whole lock script hash. While this certainly satisfies our requirement, it provides more possibilities: if everyone is using the default secp256k1 lock script, different public keys will be reflected in script args part, resulting in differnet lock scripts. So testing lock scripts can certainly ensure different public keys are using. On the other hand, not everyone might be using the default secp256k1 lock script, so testing lock script hash directly, can enable more flexibilities in the HTLC script usage.
+2. While one can certainly embeds the signature verification logic within the HTLC script, we opt for a different and simpler solution here: we just test that one of the input cell has the specified lock script. Per CKB's validation rules, if the transaction is accepted by the blockchain, each input cells' lock script must pass validation, which means the lock script specified in the HTLC script will also pass validation, satisfying the validation rules of HTLC script.
+
 To summarize a bit, we are actually showing 2 patterns that can be handy when desining dapps on CKB:
 
-Instead of testing signature verification for a public key, one can test for the validation of a lock script to enable flexibilities.
-Instead of duplicating a different lock script, one can check for the existence of an input cell using the same lock, and delegate the validation work to the input cell’s lock script.
+1. Instead of testing signature verification for a public key, one can test for the validation of a lock script to enable flexibilities.
+2. Instead of duplicating a different lock script, one can check for the existence of an input cell using the same lock, and delegate the validation work to the input cell's lock script.
+
 Fundamentally, it depends on your use case to see if those patterns can apply. Later we might also build real composable scripts via dynamic linking to supplyment pattern 2. But having those in your armory might turn out to be useful when your design can be simply by them.
 
 ## Always Audit Your Script
 
 One final note here, is that you should always remember to audit the script before deploying it and putting real tokens in it. The above HTLC script is primarily for introductory purposes. I can easily recognize a few vulnerabilities in them. You should never use it directly on CKB mainnet. However, it does provide a quite interesting exercise, so if you are interested, feel free to read the script and see if you can spot the vulnerabilities yourself :P
 
-## Running HTLC Script on Chain
+# Running HTLC Script on Chain
 
-There’re 2 parts in testing a CKB script: previously, we were using a off-chain debugger environment to test the script for faster iteration. Now that we have a complete HTLC script, we should also deploy it on a dev chain and test the whole workflow. After all any blockchain smart contracts cannot live alone, they have to have a surrounding environments that help prepare the transaction and invoke them on chain. This is more the case for CKB, since CKB uses a separated validator-generator model.
+There're 2 parts in testing a CKB script: previously, we were using a off-chain debugger environment to test the script for faster iteration. Now that we have a complete HTLC script, we should also deploy it on a dev chain and test the whole workflow. After all any blockchain smart contracts cannot live alone, they have to have a surrounding environments that help prepare the transaction and invoke them on chain. This is more the case for CKB, since CKB uses a separated validator-generator model.
 
-To test our HTLC script on chain, we are gonna reuse our htlc-runner environment here, and write a few more node executables that can deploy and test the HTLC script on chain. The first executable we will write, is an executable to deploy duktape binary as well as our HTLC script on chain:
+To test our HTLC script on chain, we are gonna reuse our `htlc-runner` environment here, and write a few more node executables that can deploy and test the HTLC script on chain. The first executable we will write, is an executable to deploy duktape binary as well as our HTLC script on chain:
 
-```bash
+```
 $ cd $TOP/htlc-runner
 $ cat deploy_scripts.js
 #!/usr/bin/env node
@@ -737,8 +753,11 @@ const run = async () => {
 }
 
 run()
+```
+
 The second executable creates a cell using HTLC script as lock:
 
+```
 $ cd $TOP/htlc-runner
 $ cat create_htlc_cell.js
 #!/usr/bin/env node
@@ -859,8 +878,11 @@ const run = async () => {
 }
 
 run()
+```
+
 One thing worth mentioning, is that this executable shows how we can serialize a molecule formatted data structure:
 
+```
 // ...
 
 function hexStringToHexStringArray(s) {
@@ -883,8 +905,11 @@ const htlcScriptArgs = htlcArgsType.serialize([
 ])
 
 // ...
+```
+
 And now a executable that tries to unlock HTLC guarded cell by providing secret string:
 
+```
 $ cd $TOP/htlc-runner
 $ cat unlock_via_secret_string.js
 #!/usr/bin/env node
@@ -1025,8 +1050,11 @@ const run = async () => {
 }
 
 run()
+```
+
 Finally a executable that tries to unlock HTLC guarded cell assuming the waiting period has passed:
 
+```
 $ cd $TOP/htlc-runner
 $ cat unlock_via_timeout.js
 #!/usr/bin/env node
@@ -1169,11 +1197,11 @@ run()
 
 We are putting the header dep for HTLC input cell at index 0, the header to test for current timestamp at index 1, hence when we are preparing witness data, we use 0x01000000 for i, which is the little endian representation for 1.
 
-This also provides a different inspiration. To prove certain time has past in CKB, you can use since field as shown in Nervos DAO validator script, you can also include a header on chain, and rely on the header’s block number or timestamp to prove that certain time has already been reached. It really depends on your use case to tell which one is the better choice here.
+This also provides a different inspiration. To prove certain time has past in CKB, you can use `since` field as shown in Nervos DAO validator script, you can also include a header on chain, and rely on the header's block number or timestamp to prove that certain time has already been reached. It really depends on your use case to tell which one is the better choice here.
 
-With all 4 executables ready here, we are ready to play with our HTLC script a bit. But first, let’s start a new CKB dev chain.
+With all 4 executables ready here, we are ready to play with our HTLC script a bit. But first, let's start a new CKB dev chain.
 
-```bash
+```
 $ cd $TOP
 $ export CKB="<path to your ckb binary>"
 $ $CKB --version
@@ -1182,17 +1210,20 @@ ckb 0.28.0 (728eff2 2020-02-04)
 # 0x0a14c6fd7af6a3f13c9e2aacad80d78968de5d068a342828080650084bf20104
 $ $CKB init -c dev -C ckb-data --ba-arg 0x5a7487f529b8b8fd4d4a57c12dc0c70f7958a196
 $ $CKB run -C ckb-data
-On a different terminal, let’s start a miner instance:
+```
 
+On a different terminal, let's start a miner instance:
+
+```
 $ cd $TOP
 $ $CKB miner -C ckb-data
 ```
 
-We are using CKB’s dev chain, since there are already 2 handy addresses with issued balance, so we don’t have to mine the CKB before testing. In addition, with a dev chain you can customize block issuing speed. However if you like you can also use the testnet, just remember never to use mainnet for testing here.
+We are using CKB's dev chain, since there are already 2 handy [addresses](https://github.com/nervosnetwork/ckb/blob/dad394ea3f50f518a40e5a8a457dfb6811ba245a/resource/specs/dev.toml#L70-L82) with issued balance, so we don't have to mine the CKB before testing. In addition, with a dev chain you can customize block issuing speed. However if you like you can also use the testnet, just remember never to use mainnet for testing here.
 
 With the CKB instance running, HTLC script can be deployed and tested for real on chain.
 
-```bash
+```
 # Make sure the HTLC script is successfully built first
 $ cd $TOP/htlc-template
 $ npm run build
@@ -1335,15 +1366,16 @@ Notice the generated transaction hashes might different in each different run. S
 
 This concludes our HTLC script runs as expected(well, excluding those vulnarable situations), hooray!
 
-## Compute Intensive Code in JavaScript
+# Compute Intensive Code in JavaScript
 
-Let’s jump back for a second. I’ve been avoiding doing signatue verification code in our HTLC script written in JavaScript here. You might notice we also use a very simple CRC32 hashing algorithm, instead of the more secure hashing algorithms such as blake2b. While one major reason I did, is for the simplicity of this post(if you read till this point you will notice this post is already insanely long!), it is still not recommended to do those operations in JavaScript since:
+Let's jump back for a second. I've been avoiding doing signatue verification code in our HTLC script written in JavaScript here. You might notice we also use a very simple CRC32 hashing algorithm, instead of the more secure hashing algorithms such as blake2b. While one major reason I did, is for the simplicity of this post(if you read till this point you will notice this post is already insanely long!), it is still not recommended to do those operations in JavaScript since:
 
-A crypto algorithm requires precise implementation, while I’m not saying you cannot do that, it certainly requires more care to build crypto algorithms in a higher-level language like JavaScript. It’s much better to leverage existing battle-tested libraries written in C or Rust.
-Crypto algorithms are typical compute intensive code, since we are running JavaScript code in duktape, it can easily slow your code by 10x or even 100x. A native implementation can be much faster and saves significant cycles on CKB.
-Right now the duktape distribution used here only contains duktape with no external libraries. In the future I might add other distributions with certain crypto algorithms shipped together, such as secp256k1 and blake2b. This way you will be able to invoke fast and secure crypto algorithms well within JavaScript. But please also remember sometimes, the delegate patterns mentioned above might suit your use case better.
+- A crypto algorithm requires precise implementation, while I'm not saying you cannot do that, it certainly requires more care to build crypto algorithms in a higher-level language like JavaScript. It's much better to leverage existing battle-tested libraries written in C or Rust.
+- Crypto algorithms are typical compute intensive code, since we are running JavaScript code in duktape, it can easily slow your code by 10x or even 100x. A native implementation can be much faster and saves significant cycles on CKB.
 
-## Recap
+Right now the [duktape](https://github.com/xxuejie/ckb-duktape) distribution used here only contains duktape with no external libraries. In the future I might add other distributions with certain crypto algorithms shipped together, such as secp256k1 and blake2b. This way you will be able to invoke fast and secure crypto algorithms well within JavaScript. But please also remember sometimes, the delegate patterns mentioned above might suit your use case better.
+
+# Recap
 
 I sincerely hope you have read till this far, instead of skipping it. This is a ridiculously long post, but it contains a lot of useful information when building scripts on CKB:
 
@@ -1351,4 +1383,5 @@ I sincerely hope you have read till this far, instead of skipping it. This is a 
 - How to build custom data structure in molecule format
 - How to serialize/deserialize molecule data structures
 - How to include external libraries on npm and pack a single JavaScript for CKB use
-  While I might still add more posts to this series if I noticed interesting stuff to write, I’m sure the existing 7 posts in this series, together with many other awesome posts by my colleagues, have well prepared you to build awesome things on CKB. We are all prepared to amazed by the beautiful things you build on CKB :)
+
+While I might still add more posts to this series if I noticed interesting stuff to write, I'm sure the existing 7 posts in this series, together with [many](https://justjjy.com/Build-CKB-contract-with-Rust-part-1) [other](https://justjjy.com/CKB-contract-in-Rust-part-2-Rewrite-contract-with-ckb) [awesome](https://docs.nervos.org/dev-guide/debugging-ckb-script.html) [posts](https://mp.weixin.qq.com/s/9cP_Qik-AsdpiqL-q0ac4w) by my colleagues, have well prepared you to build awesome things on CKB. We are all prepared to amazed by the beautiful things you build on CKB :)
