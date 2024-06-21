@@ -70,64 +70,101 @@ root@3efa454be9af:/code# exit
 
 Notice when I compile the script, I added `-g` so as to generate debugging information which is quite useful in GDB. For a production script, you would almost always want to strip them out to save previous on-chain space.
 
-Now let's deploy the script to CKB. Have your CKB node running, and fire up to Ruby SDK:
+Now let's deploy the script to CKB. Have your CKB node running, and fire up to Javascript SDK:
 
-:::note
-The Repl codes in this post are still using the outdated version of CKB Ruby SDK since the article was written a long time ago. We are trying to migrate them to JavaScript SDK, please stay tuned for the updates.
-:::
+```js
+$ node
+Welcome to Node.js v20.12.0.
+Type ".help" for more information.
+>
+> const lumos = require("@ckb-lumos/lumos");
+> const indexer = new lumos.Indexer("https://testnet.ckb.dev/rpc");
+> const rpc = new lumos.RPC("https://testnet.ckb.dev/rpc");
+> lumos.config.initializeConfig(lumos.config.TESTNET);
+> const wallet = {
+  address:
+    "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8",
+  privkey: "0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6",
+};
+> const wallet2 = {
+  address: "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq2prryvze6fhufxkgjx35psh7w70k3hz7c3mtl4d",
+  privkey: "0xace08599f3174f4376ae51fdc30950d4f2d731440382bb0aa1b6b0bd3a9728cd"
+}
 
-```ruby
-pry(main)> api = CKB::API.new
-pry(main)> wallet = CKB::Wallet.from_hex(api, "<your private key>")
-pry(main)> wallet2 = CKB::Wallet.from_hex(api, CKB::Key.random_private_key)
-pry(main)> carrot_data = File.read("carrot")
-pry(main)> carrot_data.bytesize
-=> 19296
-pry(main)> carrot_tx_hash = wallet.send_capacity(wallet2.address, CKB::Utils.byte_to_shannon(20000), CKB::Utils.bin_to_hex(carrot_data), fee: 21000)
-pry(main)> carrot_data_hash = CKB::Blake2b.hexdigest(carrot_data)
-pry(main)> carrot_type_script = CKB::Types::Script.new(code_hash: carrot_data_hash, args: "0x")
-pry(main)> carrot_cell_dep = CKB::Types::CellDep.new(out_point: CKB::Types::OutPoint.new(tx_hash: carrot_tx_hash, index: 0))
+> const data = fs.readFileSync("carrot_bug");
+> data.byteLength
+19760
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"19900" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.data = "0x" + data.toString("hex");
+  return outputs;
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const carrotTxHash = await rpc.sendTransaction(signedTx)
 ```
 
 With carrot script on blockchain, we can create a transaction to test the carrot script:
 
-```ruby
-pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(100), use_dep_group: false, fee: 5000)
-pry(main)> tx.outputs[0].type = carrot_type_script
-pry(main)> tx.cell_deps << carrot_cell_dep
-pry(main)> tx.witnesses[0] = "0x"
-pry(main)> tx = tx.sign(wallet.key, api.compute_transaction_hash(tx))
-pry(main)> api.send_transaction(tx)
-CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"Script(ValidationFailure(-1))"}
+```js
+> const carrotDataHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
+> const carrotTypeScript =  {
+  codeHash: carrotDataHash,
+  hashType: "data",
+  args: "0x"
+};
+
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"100" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = carrotTypeScript;
+  return outputs;
+});
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: carrotTxHash,
+    index: "0x0"
+  },
+  depType: "code"
+})
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const txHash = await rpc.sendTransaction(signedTx)
+
+Uncaught:
+ResponseException [Error]: {"code":-302,"message":"TransactionFailedToVerify: Verification failed Script(TransactionScriptError { source: Outputs[0].Type, cause: ValidationFailure: see error code -1 on page..
 ```
 
 If you checked the transaction carefully, you will noticed that none of the output cells has data starting with `carrot`. However we still run into validation failure, it means our script must have a bug. Previously, you would run out of options here, you might go back to check the code, hoping you can see where it goes wrong. But that is not necessary now, you can just dump the transaction here, and feed it into a standalone CKB debugger to debug it!
 
 First, let's dump the transaction together with its surrounding environment, into a local file:
 
-```ruby
-pry(main)> CKB::MockTransactionDumper.new(api, tx).write("carrot.json")
+```js
+> let txJson = rpc.paramsFormatter.toRawTransaction(lumos.helpers.createTransactionFromSkeleton(txSkeleton))
+> fs.writeFileSync('failed-tx.json', JSON.stringify(txJson, null, 2))
 ```
 
-What you also need here, is to keep track of the carrot type script hash:
+You will need [ckb-transaction-dumper](https://github.com/nervosnetwork/ckb-transaction-dumper) to convert the `failed-tx.json` to a dump transaction:
 
-```ruby
-pry(main)> carrot_type_script.compute_hash
-=> "0x039c2fba64f389575cdecff8173882b97be5f8d3bdb2bb0770d8a7e265b91933"
+```bash
+$ ckb-transaction-dumper -t failed-tx.json -o carrot.json
 ```
-
-Notice depending on your environment you might get a different hash from what I have here.
 
 Now let's try [ckb-standalone-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger):
 
 ```bash
-$ git clone https://github.com/nervosnetwork/ckb-standalone-debugger
-$ cd ckb-standalone-debugger/bins
-$ cargo build --release
-$ ./target/release/ckb-debugger -l 0.0.0.0:2000 -g type -h 0x039c2fba64f389575cdecff8173882b97be5f8d3bdb2bb0770d8a7e265b91933 -t carrot.json
+$ cargo install --git https://github.com/nervosnetwork/ckb-standalone-debugger ckb-debugger
+$ ckb-debugger --mode gdb --gdb-listen 0.0.0.0:2000 --tx-file carrot.json --cell-index 0 --cell-type output --script-group-type type
 ```
 
-Keep in mind you might need to tweak the carrot type script hash, or the path to `carrot.json` depending on your environment. Now we can try connecting to the debugger via GDB in a differnet terminal:
+Keep in mind you might need to tweak the path to `carrot.json` depending on your environment. Now we can try connecting to the debugger via GDB in a differnet terminal:
 
 ```
 $ sudo docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:bionic-20191012 bash
@@ -215,41 +252,90 @@ root@982d1e906b76:/code# exit
 
 You will need the `build/repl` binary generated here. Similar to the carrot example, let's first deploy duktape REPL binary on CKB:
 
-```ruby
-pry(main)> api = CKB::API.new
-pry(main)> wallet = CKB::Wallet.from_hex(api, "<your private key>")
-pry(main)> wallet2 = CKB::Wallet.from_hex(api, CKB::Key.random_private_key)
-pry(main)> duktape_repl_data = File.read("build/repl")
-pry(main)> duktape_repl_data.bytesize
-=> 283048
-pry(main)> duktape_repl_tx_hash = wallet.send_capacity(wallet2.address, CKB::Utils.byte_to_shannon(300000), CKB::Utils.bin_to_hex(duktape_repl_data), fee: 310000)
-pry(main)> duktape_repl_data_hash = CKB::Blake2b.hexdigest(duktape_repl_data)
-pry(main)> duktape_repl_type_script = CKB::Types::Script.new(code_hash: duktape_repl_data_hash, args: "0x")
-pry(main)> duktape_repl_cell_dep = CKB::Types::CellDep.new(out_point: CKB::Types::OutPoint.new(tx_hash: duktape_repl_tx_hash, index: 0))
+```js
+$ node
+Welcome to Node.js v20.12.0.
+Type ".help" for more information.
+>
+> const lumos = require("@ckb-lumos/lumos");
+> const indexer = new lumos.Indexer("https://testnet.ckb.dev/rpc");
+> const rpc = new lumos.RPC("https://testnet.ckb.dev/rpc");
+> lumos.config.initializeConfig(lumos.config.TESTNET);
+> const wallet = {
+  address:
+    "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8",
+  privkey: "0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6",
+};
+> const wallet2 = {
+  address: "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq2prryvze6fhufxkgjx35psh7w70k3hz7c3mtl4d",
+  privkey: "0xace08599f3174f4376ae51fdc30950d4f2d731440382bb0aa1b6b0bd3a9728cd"
+}
+
+> const data = fs.readFileSync("../ckb-duktape/build/repl");
+> data.byteLength
+285448
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"290000" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.data = "0x" + data.toString("hex");
+  return outputs;
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const duktapeReplTxHash = await rpc.sendTransaction(signedTx)
 ```
 
 We will also need to create a transaction containing the duktape script, I'm building a simpler one, but you are free to include more data so you can play with CKB:
 
-```ruby
-pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(100), use_dep_group: false, fee: 5000)
-pry(main)> tx.outputs[0].type = duktape_repl_type_script
-pry(main)> tx.cell_deps << duktape_repl_cell_dep
-pry(main)> tx.witnesses[0] = "0x"
+```js
+> const duktapeReplCodeHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
+> const duktapeTypeScript = {
+  codeHash: duktapeReplCodeHash,
+  hashType: "data",
+  args: "0x" + Buffer.from("CKB.debug(\"I'm running in JS!\")", "utf8").toString("hex"),
+};
+
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"150" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = duktapeTypeScript;
+  return outputs;
+});
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: duktapeReplTxHash,
+    index: "0x0",
+  },
+  depType: "code",
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures);
+> const txHash = await rpc.sendTransaction(signedTx);
 ```
 
-Let's also dump it to file, and check out duktape type script hash:
+Let's also dump it to file:
 
-```ruby
-pry(main)> CKB::MockTransactionDumper.new(api, tx).write("duktape.json")
-=> 2765824
-pry(main)> duktape_repl_type_script.compute_hash
-=> "0xa8b79392c857e29cb283e452f2cd48a8e06c51af64be175e0fe0e2902c482837"
+```js
+let txJson = rpc.paramsFormatter.toRawTransaction(
+  lumos.helpers.createTransactionFromSkeleton(txSkeleton)
+);
+fs.writeFileSync("duktape-tx.json", JSON.stringify(txJson, null, 2));
+```
+
+```bash
+ckb-transaction-dumper -t duktape-tx.json -o duktape.json
 ```
 
 Different from last time, we don't need to start GDB, we can start the program directly:
 
 ```bash
-$ ./target/release/ckb-debugger -g type -h 0xa8b79392c857e29cb283e452f2cd48a8e06c51af64be175e0fe0e2902c482837 -t duktape.json
+$ ckb-debugger  --tx-file duktape.json --cell-index 0 --cell-type output --script-group-type type
 duk>
 ```
 
