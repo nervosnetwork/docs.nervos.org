@@ -244,6 +244,10 @@ if (input_coins !== output_coins) {
 
 In order to run JavaScript, let's first deploy duktape on CKB:
 
+:::note
+The Repl codes in this post are still using the outdated version of CKB Ruby SDK since the article was written a long time ago. We are trying to migrate them to JavaScript SDK, please stay tuned for the updates.
+:::
+
 ```
 pry(main)> data = File.read("../ckb-duktape/build/duktape")
 pry(main)> duktape_tx_hash = wallet.send_capacity(wallet.address, CKB::Utils.byte_to_shannon(300000), CKB::Utils.bin_to_hex(duktape_data))

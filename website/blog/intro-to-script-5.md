@@ -72,6 +72,10 @@ Notice when I compile the script, I added `-g` so as to generate debugging infor
 
 Now let's deploy the script to CKB. Have your CKB node running, and fire up to Ruby SDK:
 
+:::note
+The Repl codes in this post are still using the outdated version of CKB Ruby SDK since the article was written a long time ago. We are trying to migrate them to JavaScript SDK, please stay tuned for the updates.
+:::
+
 ```ruby
 pry(main)> api = CKB::API.new
 pry(main)> wallet = CKB::Wallet.from_hex(api, "<your private key>")
