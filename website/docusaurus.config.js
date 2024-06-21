@@ -195,6 +195,11 @@ const config = {
         href: "/",
       },
       items: [
+        {
+          to: "/docs/getting-started/how-ckb-works",
+          label: "Docs",
+          position: "left",
+        }, // or position: 'right'
         { to: "blog", label: "Blog", position: "left" }, // or position: 'right'
         {
           type: "search",
