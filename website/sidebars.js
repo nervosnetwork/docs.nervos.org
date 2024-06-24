@@ -60,6 +60,21 @@ export default {
     },
     {
       type: "category",
+      label: "Serialization (Molecule)",
+      className: "category-serialization",
+      collapsible: false,
+      items: [
+        "serialization/serialization-molecule-in-ckb",
+        "serialization/features-molecule",
+        "serialization/use-in-ckb-scripts",
+        "serialization/tools-molecule",
+        "serialization/schema-language",
+        "serialization/encoding-specs",
+        "serialization/example-role-playing-game",
+      ],
+    },
+    {
+      type: "category",
       label: "Mining",
       className: "category-mining",
       collapsible: false,

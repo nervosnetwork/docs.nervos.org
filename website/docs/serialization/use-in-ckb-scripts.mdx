@@ -1,0 +1,20 @@
+---
+id: use-in-ckb-scripts
+title: Use in CKB Scripts
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Use in CKB Scripts
+
+When used in CKB <Tooltip>Scripts</Tooltip>, no-std needs to be specified.
+
+```
+molecule = { version = "0.7", default-features = false }
+```
+
+Particularly, for versions later than 0.8, you need to additionally specify `bytes_vec`:
+
+```
+molecule = { version = "0.8.0", default-features = false, features = ["bytes_vec"] }
+```
