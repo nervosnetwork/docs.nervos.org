@@ -9,7 +9,120 @@ import Tooltip from "@components/Tooltip";
 
 As an example, we’ve developed a role-playing game consisting of four schema files:
 
-- [Basic Types](https://github.com/nervosnetwork/molecule/blob/master/docs/schemas/common/basic_types.mol)
-- [Attributes](https://github.com/nervosnetwork/molecule/blob/master/docs/schemas/attributes.mol)
-- [Skills](https://github.com/nervosnetwork/molecule/blob/master/docs/schemas/skills.mol)
-- [Roles](https://github.com/nervosnetwork/molecule/blob/master/docs/schemas/roles.mol)
+- Basic Types
+- Attributes
+- Roles
+- Skills
+
+## Basic Types
+
+```
+// AttrValue is an alias of `byte`.
+//
+// Since Molecule data are strongly-typed, it can gives compile time guarantees
+// that the right type of value is supplied to a method.
+//
+// In this example, we use this alias to define an unsigned integer which
+// has an upper limit: 100.
+// So it's easy to distinguish between this type and a real `byte`.
+// Of course, the serialization wouldn't do any checks for this upper limit
+// automatically. You have to implement it by yourself.
+//
+// **NOTE**:
+// - This feature is dependent on the exact implementation.
+//   In official Rust generated code, we use new type to implement this feature.
+array AttrValue [byte; 1];
+
+// SkillLevel is an alias of `byte`, too.
+//
+// Each skill has only 10 levels, so we use another alias of `byte` to distinguish.
+array SkillLevel [byte; 1];
+
+// Define several unsigned integers.
+array Uint8 [byte; 1];
+array Uint16 [byte; 2];
+array Uint32 [byte; 4];
+```
+
+## Attributes
+
+```
+import common/basic_types;
+
+// Each role has 8 attributes. The size is fixed.
+struct Attributes {
+    strength:       AttrValue,
+    dexterity:      AttrValue,
+    endurance:      AttrValue,
+    speed:          AttrValue,
+    intelligence:   AttrValue,
+    wisdom:         AttrValue,
+    perception:     AttrValue,
+    concentration:  AttrValue,
+}
+```
+
+## Roles
+
+```
+import attributes;
+import skills;
+import common/basic_types;
+
+// We have only 3 classes: Fighter, Ranger and Mage. A `byte` is enough.
+array Class [byte; 1];
+
+table Hero {
+    class: Class,
+    level: Uint8,
+    experiences: Uint32,
+    hp: Uint16,
+    mp: Uint16,
+    base_damage: Uint16,
+    attrs: Attributes,
+    skills: Skills,
+}
+
+table Monster {
+    hp: Uint16,
+    damage: Uint16,
+}
+```
+
+## Skills
+
+```
+import common/basic_types;
+
+// We define several skills.
+// None means the role can learn a skill but he/she doesn't learn it.
+option ArmorLight       (SkillLevel);
+option ArmorHeavy       (SkillLevel);   // only Fighter can learn this
+option ArmorShields     (SkillLevel);   // only Fighter can learn this
+option WeaponSwords     (SkillLevel);   // only Mage can't learn this
+option WeaponBows       (SkillLevel);   // only Ranger can learn this
+option WeaponBlunt      (SkillLevel);
+option Dodge            (SkillLevel);
+option PickLocks        (SkillLevel);
+option Mercantile       (SkillLevel);
+option Survival         (SkillLevel);
+// ... omit other skills ...
+
+// Any skill which is defined above.
+union Skill {
+    ArmorLight,
+    ArmorHeavy,
+    ArmorShields,
+    WeaponSwords,
+    WeaponBows,
+    WeaponBlunt,
+    Dodge,
+    PickLocks,
+    Mercantile,
+    Survival,
+    // ... omit other skills ...
+}
+
+// A hero can learn several skills. The size of learned skills is dynamic.
+vector Skills <Skill>;
+```

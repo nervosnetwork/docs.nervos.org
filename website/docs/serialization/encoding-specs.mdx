@@ -112,9 +112,9 @@ Define `vector BytesVec <Bytes>;`:
 
 ### `table`
 
-| Name    | Description          | Serialization                                        |
-| ------- | -------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `table` | A dynamic-size type. | Can be considered as a `dynvec` with a fixed length. | The same as `dynvec`: <br/>**Step1**. Serialize the full size in bytes as a 32-bit unsigned integer in little-endian. <br/>**Step 2**. Serialize all offset of the items as 32-bit unsigned integer in little-endian. <br/>**Step 3**. Serialize all items. |
+| Name    | Description                                                                    | Serialization                                                                                                                                                                                                                                               |
+| ------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `table` | A dynamic-size type. <br/>Can be considered as a `dynvec` with a fixed length. | The same as `dynvec`: <br/>**Step1**. Serialize the full size in bytes as a 32-bit unsigned integer in little-endian. <br/>**Step 2**. Serialize all offset of the items as 32-bit unsigned integer in little-endian. <br/>**Step 3**. Serialize all items. |
 
 #### Example
 
