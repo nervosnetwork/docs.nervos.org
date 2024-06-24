@@ -5,7 +5,7 @@ title: "Cell_deps"
 
 # Cell_deps
 
-`Cell_deps` allows scripts in the transaction to access referenced live Cells. Cells listed here are all live and read-only.
+`Cell_deps` allows Scripts in the transaction to access referenced Live Cells. Cells listed here are all live and read-only.
 
 `Cell_deps` includes a `dep_type` field to differentiate the normal Cells, which directly provide the code, and the `dep_groups` expanded to its members inside `cell_deps`.
 
