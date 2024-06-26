@@ -9,7 +9,7 @@ title: witnesses
 
 In CKB convention, public key information is stored in the `args` of the Script, while signature information is in `witnesses`.
 
-`witnesses` is a bytes vector. You can serialize any proof data required by the transaction into bytes vector in the `witnesses` filed. The serialization can be done using [Molecule](https://github.com/nervosnetwork/molecule) or any other custom serialization method.
+`witnesses` is a bytes vector. You can serialize any proof data required by the transaction into bytes vector in the `witnesses` field. The serialization can be done using [Molecule](https://github.com/nervosnetwork/molecule) or any other custom serialization method.
 
 :::note
 
@@ -23,7 +23,7 @@ A transaction without the `witnesses` field is referred to as a Raw Transaction.
 
 ### WitnessArgs
 
-WitnessArgs is an actively used convention in CKB community, with a structure including three fields:
+WitnessArgs is an actively used convention in CKB community, with a structure including 3 fields:
 
 ```
 table WitnessArgs {
@@ -33,7 +33,7 @@ table WitnessArgs {
 }
 ```
 
-Under this convention, each item in the witnesses field is a byte array serialized by Molecule from a WitnessArgs structure. Each WitnessArgs contains multiple proof data read by the input Lock Script, input Type Script, and the output Type Script. The order of WitnessArgs item in the `witnesses` field also matters, corresponding to the index of the virtual array created by the [scripts grouping](/docs/tech-explanation/script-group-exe).
+Under this convention, each item in the witnesses field is a byte array serialized by Molecule from a WitnessArgs structure. Each WitnessArgs contains multiple proof data read by the input Lock Script, input Type Script, and the output Type Script. The order of WitnessArgs item in the `witnesses` field also matters, corresponding to the index of the virtual array created by the [Scripts grouping](/docs/tech-explanation/script-group-exe).
 
 ### CoBuild
 

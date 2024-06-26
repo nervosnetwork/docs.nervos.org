@@ -23,7 +23,8 @@
   --ifm-font-family-monospace: "Space Mono", monospace;
   --ifm-blockquote-color: var(--text-secondary);
 
-  --ifm-container-width-xl: 1022px;
+  --ifm-container-width: 2000px;
+  --ifm-container-width-xl: 2000px;
   --ifm-hr-background-color: var(--border-subtle);
   --ifm-hr-margin-vertical: 4rem;
 
@@ -243,6 +244,12 @@
   width: 1.5rem;
   height: 1.5rem;
 }
+.category-tool > div > a:before {
+  content: url("/svg/icon-sidebar-tool.svg");
+  margin-right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
 .category-integrate-wallets > div > a:before {
   content: url("/svg/icon-sidebar-wallet.svg");
   margin-right: 0.5rem;
@@ -358,6 +365,10 @@ ol {
   line-height: 1.7;
   font-size: 1rem;
   margin: 1rem 0 1rem;
+}
+
+ol {
+  padding-left: 1rem;
 }
 
 .markdown > h1,

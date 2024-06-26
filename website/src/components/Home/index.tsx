@@ -273,23 +273,15 @@ function WalletDisplay(): JSX.Element {
 function ToolDisplay(): JSX.Element {
   // Render filters and cards
   return (
-    <EcoSection title={"Dev Tools"} icon={"devtool"}>
+    <EcoSection title={"SDKs & Dev Tools"} icon={"devtool"}>
       <CardLayout topMargin={0} gap={0} colNum={[2, 1, 1, 1]}>
         <div className={styles.column}>
-          <div className={clsx(styles.columnHeader, styles.cell)}>
-            Development & Deployment
-          </div>
+          <div className={clsx(styles.columnHeader, styles.cell)}>SDKs</div>
           <div className={styles.flexWrap}>
             {devToolSectionContents
-              .filter((tool) => tool.category === "Development & Deployment")
+              .filter((tool) => tool.category === "SDK")
               .map((tool, index) => (
-                <Link
-                  key={index}
-                  href={tool.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.cell}
-                >
+                <Link key={index} to={tool.href} className={styles.cell}>
                   {tool.title}
                 </Link>
               ))}
@@ -297,11 +289,11 @@ function ToolDisplay(): JSX.Element {
         </div>
         <div className={styles.column}>
           <div className={clsx(styles.columnHeader, styles.cell)}>
-            Utilities & Testing
+            Other Dev Tools
           </div>
           <div className={styles.flexWrap}>
             {devToolSectionContents
-              .filter((tool) => tool.category === "Utilities & Testing")
+              .filter((tool) => tool.category === "Other DevTools")
               .map((tool, index) => (
                 <Link
                   key={index}
@@ -316,7 +308,7 @@ function ToolDisplay(): JSX.Element {
           </div>
         </div>
       </CardLayout>
-      <Button internal size={"small"} link={"/docs/getting-started/devtool"}>
+      <Button internal size={"small"} link={"/docs/sdk-and-devtool/devtool"}>
         View dev tools →
       </Button>
     </EcoSection>

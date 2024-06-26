@@ -1,0 +1,22 @@
+---
+id: features-molecule
+title: Rust Library Features
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Rust Library Features
+
+Molecule is developed in Rust language. The `default` feature in the Rust library is enabled by default, including `std` feature and more:
+
+- [`std::*` modules](https://doc.rust-lang.org/std/) in Rust
+- `faster-hex` for hexadecimal operations
+- `bytes_vec`：A `std` feature for [Bytes](https://github.com/tokio-rs/bytes), offering compatibility to maintain consistency with previous versions
+
+## Benchmark
+
+- [Benchmark in Rust with serde](https://github.com/nervosnetwork/serde_bench)
+
+## Supported Rust Versions
+
+The minimum supported version is 1.56.1. Molecule may not build on versions earlier than this.

@@ -1,0 +1,51 @@
+---
+id: tools-molecule
+title: Molecule Tools
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Molecule Tools
+
+## Schema Compiler and Code Generator
+
+### Install
+
+The official schema compiler and code generator are written in [Rust](https://www.rust-lang.org/) and can be installed via [Cargo](https://doc.rust-lang.org/cargo/):
+
+```
+cargo install moleculec --locked
+```
+
+:::note
+
+The official code generator only supports [Rust](https://www.rust-lang.org/) and [C](https://en.wikipedia.org/wiki/C_%28programming_language%29).
+
+:::
+
+## Usage
+
+Generate the code with the command below:
+
+```
+moleculec --language <language> --schema-file <schema-file>
+```
+
+Find more details with the command below:
+
+```
+moleculec --help
+```
+
+## Other Languages
+
+Molecule's reference implementation is in Rust and C. Implementations in other languages are maintained by their respective authors.
+
+- [Go](https://github.com/driftluo/moleculec-go)
+- [Modern JavaScript](https://github.com/xxuejie/moleculec-es)
+
+## Plugins for Editors
+
+- [Emacs](https://github.com/yangby-cryptape/emacs-molecule)
+- [Vim](https://github.com/yangby-cryptape/vim-molecule)
+- [Sublime Text](https://github.com/yangby-cryptape/sublimetext-molecule)
