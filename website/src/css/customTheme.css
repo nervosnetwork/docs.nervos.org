@@ -30,10 +30,12 @@
 
   /* Navbar */
   --ifm-navbar-background-color: var(--dark-surface-03);
+  --ifm-navbar-link-color: var(--dark-text-secondary);
+  --ifm-navbar-link-hover-color: var(--dark-text-link);
   --ifm-navbar-height: 64px;
 
   /* Sidebar */
-  --doc-sidebar-width: 322px !important;
+  --doc-sidebar-width: 260px !important;
   --ifm-sidebar-border-color: var(--border-subtle);
 
   /* DocSearch for algolia*/
@@ -74,7 +76,7 @@
   padding: 0 1.5rem;
 }
 
-/*Search bar*/
+/*Search bar - deprecated*/
 .navbar-search .DocSearch-Button {
   background-color: transparent;
   border: 1px solid var(--dark-border-subtle);
@@ -114,9 +116,9 @@
   background-color: transparent;
   border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
-  width: 280px;
-  height: 3rem;
-  padding: 0 1rem;
+  width: 260px;
+  height: 2.5rem;
+  padding: 0 1rem 0 0.5rem;
   margin-right: 0.5rem;
 }
 .navbar-search .aa-DetachedSearchButton:hover {
@@ -159,12 +161,15 @@
 .aa-Input {
   color: var(--text-primary) !important;
 }
+.aa-DetachedSearchButtonPlaceholder {
+  font-size: 0.875rem;
+}
 .aa-Input::-webkit-input-placeholder {
   color: var(--text-tertiary) !important;
 }
 
 .navbar-help {
-  height: 3rem;
+  height: 2.5rem;
   border: 1px solid var(--dark-border-subtle);
   border-radius: 40px;
   cursor: pointer;
@@ -183,7 +188,9 @@
   color: var(--dark-text-primary);
   text-decoration: none !important;
 }
+
 .help-text {
+  font-size: 0.875rem;
   margin: 0 0 0 0.5rem;
 }
 
@@ -200,28 +207,25 @@
   padding-right: 0;
 }
 .menu__link {
-  height: 2.5rem;
+  height: 2.25rem;
+  font-size: 0.875rem;
   border-radius: 20px !important;
 }
 .menu__list-item-collapsible {
-  height: 3rem;
+  height: 2.25rem;
   cursor: default;
   background-color: transparent !important;
 }
 .menu__list-item-collapsible > .menu__link {
-  font-weight: bold;
   color: var(--text-tertiary);
 }
 
-.menu__link--active {
-  font-weight: 700;
-}
 .menu__list .menu__list {
   margin-top: 0;
   padding-left: 0;
 }
 .menu__list .menu__list > .menu__list-item > .menu__link {
-  padding-left: calc(var(--ifm-menu-link-padding-horizontal) + 1rem);
+  padding-left: calc(var(--ifm-menu-link-padding-horizontal) + 0.625rem);
   padding-right: 1rem;
 }
 
@@ -229,62 +233,68 @@
 .category-getting-started > div > a:before {
   content: url("/svg/icon-sidebar-rocket.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-dapp > div > a:before {
   content: url("/svg/icon-sidebar-tutorial.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-script > div > a:before {
   content: url("/svg/icon-sidebar-script.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-tool > div > a:before {
   content: url("/svg/icon-sidebar-tool.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-integrate-wallets > div > a:before {
   content: url("/svg/icon-sidebar-wallet.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-node > div > a:before {
   content: url("/svg/icon-sidebar-node.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.category-molecule > div > a:before {
+  content: url("/svg/icon-sidebar-molecule.svg");
+  margin-right: 0.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-mining > div > a:before {
   content: url("/svg/icon-sidebar-mining.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-tech-explanation > div > a:before {
   content: url("/svg/icon-sidebar-concept.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-ecosystem > div > a:before {
   content: url("/svg/icon-sidebar-ecosystem.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 .category-resources > div > a:before {
   content: url("/svg/icon-sidebar-resource.svg");
   margin-right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 /* Footer */
@@ -298,10 +308,13 @@
 
 /* Table of Contents */
 .table-of-contents {
-  padding: 0;
-  padding-left: 1rem;
-  margin-top: 3rem;
+  padding: 0rem 1rem 3rem 1rem;
 }
+
+.table-of-contents__left-border {
+  border-left: none;
+}
+
 .table-of-contents__link {
   font-size: 0.875rem;
 }
@@ -371,30 +384,35 @@ ol {
   padding-left: 1rem;
 }
 
+.markdown > img {
+  width: 100%;
+  height: auto;
+}
+
 .markdown > h1,
 h1 {
-  font-size: 2.5rem;
-  margin: 3rem 0 2rem;
+  font-size: 2.25rem;
+  margin: 4rem 0 2rem;
 }
 .markdown > h2,
 h2 {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   margin: 3.5rem 0 1.5rem;
 }
 
 .markdown > h3,
 h3 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 2rem 0 1.5rem;
 }
 
 .markdown > h4,
 h4 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   margin-bottom: 1rem;
 }
 .markdown li::marker {
-  color: var(--text-link);
+  color: var(--text-tertiary);
 }
 
 code {
@@ -506,6 +524,11 @@ details {
 }
 
 /* Responsive */
+@media (min-width: 1441px) {
+  :root {
+    --doc-sidebar-width: 300px !important;
+  }
+}
 @media only screen and (min-width: 1024px) {
   .navigationSlider {
     margin-left: 0;
