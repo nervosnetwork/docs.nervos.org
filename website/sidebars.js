@@ -70,7 +70,7 @@ export default {
     {
       type: "category",
       label: "Serialization (Molecule)",
-      className: "category-serialization",
+      className: "category-molecule",
       collapsible: false,
       items: [
         "serialization/serialization-molecule-in-ckb",
