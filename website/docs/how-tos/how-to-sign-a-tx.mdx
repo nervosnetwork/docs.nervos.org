@@ -1,0 +1,254 @@
+---
+id: how-to-sign-a-tx
+title: How to Sign a Transaction
+---
+
+import Tooltip from "@components/Tooltip";
+
+# How to Sign a Transaction
+
+In CKB, there are two primary <Tooltip>Lock Scripts</Tooltip> with distinct address code hash indexes:
+
+- `0x00`: Pay to Public Key Hash (P2PKH)
+- `0x01`: Pay to Multisignature (Multisig)
+
+This how-to demonstrates how to sign P2PKH and multisig transactions.
+
+Before you begin, ensure you have a solid grasp of:
+
+- CKB transaction structure, as detailed in [RFC0022: CKB Transaction Structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB Address Format, as detailed in [RFC0021: CKB Address Format](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md#short-payload-format)
+
+## P2PKH Signing
+
+### Required Arguments
+
+- **Private Key**: a secp256k1 private key
+- **Witnesses**: contain transaction signatures
+
+### Pseudo Code
+
+```python
+def sign_tx(pk, tx):
+	# Group transaction inputs for signing
+    input_groups = compute_input_groups(tx.inputs)
+
+    # Iterate through each group of inputs
+    for indexes in input_groups:
+        group_index = indexes[0]
+
+        # Create a placeholder for the lock field in the first witness of the group
+        dummy_lock = [0] * 65 # Placeholder, assuming a 65-byte lock field
+
+        # Retrieve and deserialize the first witness in the group
+        witness = tx.witnesses[group_index]
+        witness_args = witness.deserialize()
+
+        # Replace the lock field with the dummy placeholder
+        witness_args.lock = dummy_lock
+
+        # Initialize a new BLAKE2b hasher for creating the signature hash
+        hasher = new_blake2b()
+
+        # Hash the transaction hash
+        hasher.update(tx.hash())
+
+        # Hash the first witness
+        witness_len_bytes = len(serialize(witness_args)).to_le()
+        assert(len(witness_len_bytes), 8)
+
+        # Hash the length of witness
+        hasher.update(witness_len_bytes)
+        hasher.update(serialize(witness_args))
+
+        # Hash the remaining witnesses in the group
+        for i in indexes[1:]:
+            witness = tx.witnesses[i]
+            witness_len_bytes = len(witness).to_le()
+            assert(len(witness_len_bytes), 8)
+            hasher.update(witness_len_bytes)
+            hasher.update(witness)
+
+        # Hash additional witnesses not in any input group
+        for witness in tx.witnesses[len(tx.inputs):]
+            witness_len_bytes = len(witness).to_le()
+            assert(len(witness_len_bytes), 8)
+            hasher.update(witness_len_bytes)
+            hasher.update(witness)
+
+        # Finalize the hasher to get the signature hash
+        sig_hash = hasher.finalize()
+
+        # Sign the transaction with private key
+        signature = pk.sign(sig_hash)
+
+        # Replace the dummy lock field with the actual signature in the first witness
+        witness_args.lock = signature
+
+        # Serialize the updated witness_args and update the transaction's witnesses list
+        tx.witnesses[group_index] = serialize(witness_args)
+```
+
+### Input group
+
+:::note
+
+This article focuses specifically on the input group associated with Lock Script. While there is a similar concept in <Tooltip>Type Script</Tooltip>, they will not be discussed here.
+
+:::
+
+CKB processes transactions by grouping inputs based on the `script_hash` of each input’s lock field, processing them collectively rather than individually.
+
+For example, consider the following inputs:
+
+```
+inputs = [g1, g2, g1]
+```
+
+Here are three inputs, where the gN notation represents the group. `inputs[0]` and `inputs[2]` share the same group **g1**, while `inputs[1]` is in a different group **g2**. CKB runs the Lock Script on **g1** and **g2** separately. Understanding that the same `script_hash` implies identical lock fields of inputs, thus requiring only one signature per group.
+
+The default locks, such as P2SH and multisig, assume there is a <Tooltip>witness</Tooltip> for each input group. The witness contains the signature and the default locks read the signature from the index of the first input. For **g1**, the signature is read from `witnesses[0]`, while for **g2**, from `witnesses[1]`.
+
+The number of required witnesses corresponds to the number of input groups. For example:
+
+- For inputs `[g1, g2, g1]`, two witnesses are needed: `[witness1, witness2]`.
+- For inputs `[g1, g2, g1, g3]`, four witnesses are needed, including an empty byte to align `witness3` for **g3**: `[witness1, witness2, (empty bytes), witness3]`.
+- For inputs `[g1, g2, g2, g1]`, two witnesses are needed: `[witness1, witness2]`.
+
+A helper function grouping inputs by their `script_hash` and returning the indexes could look like this:
+
+```
+def compute_input_groups(inputs):
+		groups = defaultdict(list)
+		for i, input in enumerate(inputs):
+				script_hash = blake256(serialize(input.lock))
+				groups[script_hash].append(i)
+
+		return groups.values()
+```
+
+### Witness
+
+The witness field of a transaction holds signatures, which are read by P2PKH Lock Scripts.
+
+### WitnessArgs
+
+[`WitnessArgs`](https://github.com/nervosnetwork/ckb/blob/eece5d0c250e0ae0644f9ca9a3f13dab7d7c936c/util/gen-types/schemas/blockchain.mol#L114-L118) allows Lock Script and <Tooltip>Type Script</Tooltip> to read data from different fields of WitnessArgs.
+
+The default P2PKH and the multisig Scripts require user to use `WitnessArgs` on the first `witness` of each group.
+
+:::info
+
+In CKB, `witnesses` is extended to allow users to include any one-time data necessary solely for the transaction’s verification process. However, this flexibility brings a problem, a transaction's Lock Script and Type Script may require different data from the same witness, there is a risk that neither script’s requirement can be met at the same time, potentially causing the transaction permanently locked.
+
+To dismiss this potential conflict, `WitnessArgs` is introduced to allow Lock Script and Type Script to read data from different fields in the `WitnessArgs`.
+
+:::
+
+## Multisig Signing
+
+Much like P2PKH transactions, multisig signing is about providing signatures in witnesses to unlock the input. Plus, with each input group isolated, a single transaction can combine both multisig and P2PKH signing methods.
+
+### Required Arguments
+
+- **Private Keys**: a set of secp256k1 private keys
+- **Witnesses**: contain transaction signatures
+- **Multisig Script**: a Script defining the multisig constraint
+
+### Pseudo Code
+
+```python
+def sign_tx(pks, tx, multisig_script):
+	# Group the transaction inputs for signing
+    input_groups = compute_input_groups(tx.inputs)
+
+    # Iterate through each group of inputs
+    for indexes in input_groups:
+        group_index = indexes[0]
+
+        # Extract the required number of signatures 'm' from the multisig script
+        m = multisig_script[2]
+
+        # Create a dummy lock field with space for 'm' signatures
+        dummy_lock = multisig_script + [0] * 65 * m
+
+        # Deserialize the first witness and replace its lock field with the dummy lock
+        witness = tx.witnesses[group_index]
+        witness_args = witness.deserialize()
+        witness_args.lock = dummy_lock
+
+        # Initialize a new BLAKE2b hasher for the signature hash
+        hasher = new_blake2b()
+
+        # Hash the tx hash
+        hasher.update(tx.hash())
+
+        # Hash the first witness
+        witness_len_bytes = len(serialize(witness_args)).to_le()
+        assert(len(witness_len_bytes), 8)
+
+        # Hash the length of witness
+        hasher.update(witness_len_bytes)
+        hasher.update(serialize(witness_args))
+
+        # Hash the remaining witnesses in the group
+        for i in indexes[1:]:
+            witness = tx.witnesses[i]
+            witness_len_bytes = len(witness).to_le()
+            assert(len(witness_len_bytes), 8)
+            hasher.update(witness_len_bytes)
+            hasher.update(witness)
+
+        # Hash additional witnesses not in any input group
+        for witness in tx.witnesses[len(tx.inputs):]
+            witness_len_bytes = len(witness).to_le()
+            assert(len(witness_len_bytes), 8)
+            hasher.update(witness_len_bytes)
+            hasher.update(witness)
+
+        # Finalize the hasher to get the signature hash
+        sig_hash = hasher.finalize()
+
+        # Sign the transaction with each private key
+        for (i, pk) in enumerate(pks):
+            signature = pk.sign(sig_hash)
+
+            # Place each signature in the appropriate position in the dummy lock field
+            sig_offset = len(multisig_script) + i * 65 # Calculate the starting index for the signature
+            witness_args.lock[sig_offset:sig_offset + 65] = signature
+        # Serialize the updated witness arguments and update the transaction's witnesses list
+        tx.witnesses[group_index] = serialize(witness_args)
+```
+
+### Multisig Script
+
+The multisig script hash is a 20-byte blake160 hash, assembled as follows:
+
+```
+S | R | M | N | blake160(Pubkey1) | blake160(Pubkey2) | ...
+```
+
+Here, `S`/ `R`/ `M`/ `N` are four single byte unsigned integers, ranging from 0 to 255.
+
+- `S` is format version, set to 0.
+- `R` specifies that at least R of the provided signatures must match the first R items of the public key list.
+- `M` and `N` indicate the required number of signatures, M of N, to unlock the cell.
+- `blake160 (Pubkey1)` represents the first 160 bits of the blake2b hash of secp256K1 compressed public keys.
+
+For example, if Alice, Bob, and Cipher collectively control a multisig-locked cell with the unlocking rule "any two of us can unlock the cell, and one must be Cipher’s". The corresponding multisig script is:
+
+```
+0 | 1 | 2 | 3 | Pk_Cipher_h | Pk_Alice_h | Pk_Bob_h
+```
+
+To sign a transaction, the multisig script must be revealed in the witness field, followed by the corresponding signatures:
+
+```
+multisig_script | Signature1 | Signature2 | ...
+```
+
+### Since
+
+The `since` field introduces a timelock constraint, dictating when the multisig lock can be unlocked. It is typically empty, indicating that there is no temporal restriction on unlocking the lock, allowing immediate access.
+
+For an in-depth understanding and detailed exploration, refer to: [RFC0017: Transaction Since Precondition](https://github.com/nervosnetwork/rfcs/blob/5ce42eeadd62c011d5903e82bf3a4304ff1a3f29/rfcs/0017-tx-valid-since/0017-tx-valid-since.md) and [RFC0028: Change Since Relative Timestamp](https://github.com/nervosnetwork/rfcs/blob/5ce42eeadd62c011d5903e82bf3a4304ff1a3f29/rfcs/0028-change-since-relative-timestamp/0028-change-since-relative-timestamp.md?plain=1#L9).

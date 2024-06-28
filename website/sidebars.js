@@ -84,6 +84,13 @@ export default {
     },
     {
       type: "category",
+      label: "How-Tos",
+      className: "how-tos",
+      collapsible: false,
+      items: ["how-tos/how-to-sign-a-tx"],
+    },
+    {
+      type: "category",
       label: "Tech Explanation",
       className: "category-tech-explanation",
       collapsible: false,
