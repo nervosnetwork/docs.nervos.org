@@ -28,9 +28,9 @@ Mainnet is the primary public CKB production blockchain, where actual-value tran
 
 ### CKB Testnet: PUDGE
 
-In addition to Mainnet, there is a public testnet for CKB called PUDGE. The testnet is used by developers to test both protocol upgrades as well as potential <Tooltip>Scripts</Tooltip>(smart contract) in a production-like environment before deployment to Mainnet. Think of this as an analog to production versus staging servers.
+In addition to Mainnet, there is a public Testnet for CKB called PUDGE. The Testnet is used by developers to test both protocol upgrades as well as potential <Tooltip>Scripts</Tooltip>(smart contract) in a production-like environment before deployment to Mainnet. Think of this as analogous to production versus staging servers.
 
-You should test any Script code you write on a testnet before deploying to Mainnet. Many dApps also runs on testnet before going to production level.
+You should test any Script code you write on a Testnet before deploying to Mainnet. Many dApps also run on Testnet before going to the production level.
 
 - CKB Testnet RPCs
   - https://testnet.ckbapp.dev/rpc
@@ -43,11 +43,11 @@ Most of the times, you will need some Testnet tokens to deploy Scripts & test yo
 
 You can get free Testnet tokens from the faucet website:
 
-- [https://faucet-api.nervos.org/](https://faucet-api.nervos.org/)
+-  https://faucet.nervos.org/
 
 ## Private Networks
 
-Besides public networks that anyone can join, you can also running your own priate CKB blockchain on your local machine called Devnet(developmenmt network). Most developers use the CKB Devnet as the local developmnent environment.
+Besides public networks that anyone can join, you can also run your own priate CKB blockchain on your local machine, called Devnet (development network). Most developers use the CKB Devnet as the local development environment.
 
 ### CKB Devnet
 
@@ -62,11 +62,11 @@ CKB Devnet Address Prefix: `ckt`, eg `ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2
 
 One of the things you might want to do is switching between different blockchain networks during the development of your dApps. The recommended order is:
 
-1. Firstly, develop your dApp in the CKB Devnet, where everything is under your control with a rapid feedback loop.
-2. Secondly, migrate your dApp to the CKB Testnet to see if it works fine in a more production-like environment.
-3. Lastly, launch your dApp on the CKB Mainnet for production.
+1. Develop your dApp in the CKB Devnet, where everything is under your control with a rapid feedback loop.
+2. Migrate your dApp to the CKB Testnet to see if it works fine in a more production-like environment.
+3. Launch your dApp on the CKB Mainnet for production.
 
-To switch different networks, you need to point your dApp to different blockchain RPC urls with different pre-deployed System Script configs.
+To switch different networks, you need to point your dApp to different blockchain RPC URLs with different pre-deployed System Script configs.
 
 ### Using Lumos SDK
 
@@ -86,9 +86,9 @@ const rpc = new lumos.RPC("https://mainnet.ckb.dev/rpc");
 lumos.config.initializeConfig(lumos.config.Mainnet);
 ```
 
-### Using OffCKB boilerplate
+### Using OffCKB Boilerplate
 
-OffCKB dApp boilerplates provide easy way to switch different networks by applying different environment variables in the project.
+OffCKB dApp boilerplates provide an easy way to switch different networks by applying different environment variables in the project.
 
 According to your boilerplate, you can switch the CKB blockchain network by setting different environment variables.
 
