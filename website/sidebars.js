@@ -41,10 +41,11 @@ export default {
       items: [
         "script/intro-to-script",
         "script/program-language-for-script",
+        "script/syscalls-for-script",
+        "script/vm-cycle-limits",
         "script/minimal-script",
         "script/js-script",
         "script/common-script-error-code",
-        "script/syscalls-for-script",
       ],
     },
     {
