@@ -1,0 +1,67 @@
+---
+id: ccc-wallet
+title: "Wallet Connector(CCC)"
+---
+
+# All-In-One Wallet Connector(CCC)
+
+[Common Chains Connector (CCC)](https://github.com/ckb-ecofund/ccc) is a new wallet connectivity library developed in Typescript Lang, designed to make it easier for developers to help users connect with multiple ecosystem wallets and manage their assets directly on CKB.
+
+What sets CCC apart is its use of CKB’s advanced cryptographic technologies coupled with native account abstraction. This feature fundamentally transforms how users transact and manage their digital assets across different wallets, providing a unified and fluid experience.
+
+Currently supporting wallets like:
+
+- [JoyID](https://joy.id/)
+- [OKX Wallet](https://www.okx.com/web3)
+- [UniSat Wallet](https://link3.to/unisat)
+- [MetaMask](https://metamask.io/)
+
+<p align="center">
+  <a href="https://ckbccc-demo.vercel.app/">
+    <img src="/img/wallet/ccc-preview.png" />
+  </a>
+</p>
+
+## Installing
+
+We design CCC for both front-end and back-end developers. You need only one package to fulfil all your needs:
+
+- [NodeJS](https://www.npmjs.com/package/@ckb-ccc/ccc): `npm install @ckb-ccc/ccc`
+- [Web Component](https://www.npmjs.com/package/@ckb-ccc/connector): `npm install @ckb-ccc/connector`
+- [React](https://www.npmjs.com/package/@ckb-ccc/connector-react): `npm install @ckb-ccc/connector-react`
+
+CCC exports everything on the `ccc` object:
+
+```typescript
+import { ccc } from "@ckb-ccc/<package-name>";
+```
+
+## Lumos Patches
+
+For developers who use [Lumos](https://github.com/ckb-js/lumos) to compose CKB transactions, CCC provides patches to:
+
+- Support the JoyID Wallet.
+
+See [lumos-patches](https://www.npmjs.com/package/@ckb-ccc/lumos-patches): `npm install @ckb-ccc/lumos-patches`
+
+You can apply patches by:
+
+```typescript
+import { generateDefaultScriptInfos } from "@ckb-ccc/lumos-patches";
+
+// Before using Lumos. You don't need @ckb-lumos/joyid anymore.
+registerCustomLockScriptInfos(generateDefaultScriptInfos());
+```
+
+## Examples
+
+CCC demo
+
+- online preview: [https://ckbccc-demo.vercel.app/](https://ckbccc-demo.vercel.app/)
+- source code: [https://github.com/ckb-ecofund/ccc/tree/master/packages/demo](https://github.com/ckb-ecofund/ccc/tree/master/packages/demo)
+
+offckb dApp boilerplate also integrated with CCC for wallet connection:
+
+- guide: [/docs/getting-started/quick-start#run-the-dapp-project](/docs/getting-started/quick-start#run-the-dapp-project)
+- source code: [nextjs](https://github.com/RetricSu/offckb/tree/master/templates/next-js-template/frontend)
+- source code: [remix-vite](https://github.com/RetricSu/offckb/tree/master/templates/remix-vite-template/frontend)
