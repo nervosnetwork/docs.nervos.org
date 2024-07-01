@@ -272,6 +272,12 @@
   width: 1.125rem;
   height: 1.125rem;
 }
+.category-howto > div > a:before {
+  content: url("/svg/icon-sidebar-howto.svg");
+  margin-right: 0.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
 .category-mining > div > a:before {
   content: url("/svg/icon-sidebar-mining.svg");
   margin-right: 0.5rem;
