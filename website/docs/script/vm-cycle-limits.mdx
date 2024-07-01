@@ -99,3 +99,65 @@ In general, the cycle consumption rules above follow certain guidelines:
 - Syscalls include 2 parts: the bookkeeping part at first, and a plain memcpy phase. The first bookkeeping part includes quite complex logic, which should consume much more cycles. The memcpy part is quite cheap on modern hardware, hence less cycles will be charged.
 
 Looking into the literature, the cycle consumption rules here resemble a lot like the performance metrics one can find in modern computer archtecture.
+
+## Other Cycles
+
+### B extension in CKB-VM version 1
+
+We have added the RISC-V B extension (v1.0.0). This extension aims at covering the four major categories of bit manipulation: counting, extracting, inserting and swapping. For all B instructions, 1 cycle will be consumed.
+
+### MOP Fusion in CKB-VM version 1
+
+Macro-Operation Fusion (also Macro-Op Fusion, MOP Fusion, or Macrofusion) is a hardware optimization technique found in many modern microarchitectures whereby a series of adjacent macro-operations are merged into a single macro-operation prior or during decoding. Those instructions are later decoded into fused-µOPs.
+
+The cycle consumption of the merged instructions is the maximum cycle value of the two instructions before the merge. We have verified that the use of MOPs can lead to significant improvements in some encryption algorithms.
+
+| Opcode                       | Origin                       | Cycles            |
+| ---------------------------- | ---------------------------- | ----------------- |
+| ADC [2]                      | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| SBB                          | sub + sltu + sub + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| WIDE_MUL                     | mulh + mul                   | 5 + 0             |
+| WIDE_MULU                    | mulhu + mul                  | 5 + 0             |
+| WIDE_MULSU                   | mulhsu + mul                 | 5 + 0             |
+| WIDE_DIV                     | div + rem                    | 32 + 0            |
+| WIDE_DIVU                    | divu + remu                  | 32 + 0            |
+| FAR_JUMP_REL                 | auipc + jalr                 | 0 + 3             |
+| FAR_JUMP_ABS                 | lui + jalr                   | 0 + 3             |
+| LD_SIGN_EXTENDED_32_CONSTANT | lui + addiw                  | 1 + 0             |
+
+### MOP Fusion in CKB-VM version 2
+
+There are 5 MOPs added in VM version 2, there are:
+
+| Opcode | Origin           | Cycles    | Description                                                        |
+| ------ | ---------------- | --------- | ------------------------------------------------------------------ |
+| ADCS   | add + sltu       | 1 + 0     | Overflowing addition                                               |
+| SBBS   | sub + sltu       | 1 + 0     | Borrowing subtraction                                              |
+| ADD3A  | add + sltu + add | 1 + 0 + 0 | Overflowing addition and add the overflow flag to the third number |
+| ADD3B  | add + sltu + add | 1 + 0 + 0 | Similar to ADD3A but the registers order is different              |
+| ADD3C  | add + sltu + add | 1 + 0 + 0 | Similar to ADD3A but the registers order is different              |
+
+### Spawn Syscall in CKB-VM version 2
+
+Two new Spawn-related constants for cycles consumption are introduced VM version 2:
+
+```rust
+pub const SPAWN_EXTRA_CYCLES_BASE: u64 = 100_000;
+pub const SPAWN_YIELD_CYCLES_BASE: u64 = 800;
+```
+
+The Cycles consumption of each Spawn-related Syscall is as follows. Among them, the constant 500 and BYTES_TRANSFERRED_CYCLES can be referred to [RFC-0014](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md).
+
+| Syscall Name         | Cycles Charge                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| spawn                | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES + SPAWN_EXTRA_CYCLES_BASE |
+| pipe                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| inherited_fd         | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| read                 | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES                           |
+| write                | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES                           |
+| close                | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| wait                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| process_id           | 500                                                                                |
+| load block extension | 500 + BYTES_TRANSFERRED_CYCLES                                                     |
+
+In addition, when a VM switches from instantiated to uninstantiated, or from uninstantiated to instantiated, each VM needs `SPAWN_EXTRA_CYCLES_BASE` cycles.
