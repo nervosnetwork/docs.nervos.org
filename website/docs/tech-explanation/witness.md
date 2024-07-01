@@ -33,6 +33,8 @@ table WitnessArgs {
 }
 ```
 
+<img src={"/img/tech_explanation/witnessArg-structure.png"} width={688} height={353} alt="Structure of WitnessArg" />
+
 Under this convention, each item in the witnesses field is a byte array serialized by Molecule from a WitnessArgs structure. Each WitnessArgs contains multiple proof data read by the input Lock Script, input Type Script, and the output Type Script. The order of WitnessArgs item in the `witnesses` field also matters, corresponding to the index of the virtual array created by the [Scripts grouping](/docs/tech-explanation/script-group-exe).
 
 ### CoBuild

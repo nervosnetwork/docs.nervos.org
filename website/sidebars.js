@@ -85,7 +85,7 @@ export default {
     {
       type: "category",
       label: "How-Tos",
-      className: "how-tos",
+      className: "category-howto",
       collapsible: false,
       items: ["how-tos/how-to-sign-a-tx"],
     },
