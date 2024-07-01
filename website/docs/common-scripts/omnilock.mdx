@@ -17,10 +17,12 @@ Hash type: Omnilock script hash type
 Args: <21 byte auth> <Omnilock args>
 ```
 
-There are 2 key fields in `args`: `Omnilock args` and `auth`. The `Omnilock args` is to control extra checking. It allows different modes to be enabled in the same `Omnilock args`. The `auth` is used for authentication. It is generally with pubkey hash in its content.
+There are two key fields in `args`: 
+- `auth`: for authentication, generally with pubkey hash in its content
+- `Omnilock args`: for extra checking control, allowing different modes to be enabled in the same `Omnilock args`
 
-The `Omnilock args` can be without mode (with `Omnilock flags` = 0) while the `auth` must be present. The functionality of Omnilock script without mode is almost the same as traditional
-[SECP256K1/blake160](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) lock script. The Omnilock script can be considered as a traditional lock script with additional checking/modes.
+The `Omnilock args` can be without mode (when `Omnilock flags` = 0), while the `auth` must be present. The functionality of Omnilock Script without mode is almost the same as traditional
+[SECP256K1/blake160](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) Lock Script. The Omnilock Script can be considered as a traditional Lock Script with additional checking/modes.
 
 ### Authentication
 
@@ -32,10 +34,10 @@ An authentication (auth) is a 21-byte data structure containing the following co
 
 Depending on the value of the flag, the auth content has the following interpretations:
 
-- 0x0: The auth content represents the blake160 hash of a secp256k1 public key. The lock script will perform secp256k1 signature verification, the same as the [SECP256K1/blake160
+- 0x0: It represents the blake160 hash of a secp256k1 public key. The Lock Script performs secp256k1 signature verification, the same as the [SECP256K1/blake160
   lock](https://github.com/nervosnetwork/rfcs/blob/780b2f98068ed2337f3a97b02ec6b5336b6fb143/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160).
 - 0x01: It follows the unlocking method used by Ethereum. The signing message
-  hash(sighash_all, see [reference implementation](https://github.com/nervosnetwork/ckb-system-scripts/blob/a7b7c75662ed950c9bd024e15f83ce702a54996e/c/secp256k1_blake160_sighash_all.c#L219)) is converted as following:
+  hash (sighash_all, see [reference implementation](https://github.com/nervosnetwork/ckb-system-scripts/blob/a7b7c75662ed950c9bd024e15f83ce702a54996e/c/secp256k1_blake160_sighash_all.c#L219)) is converted as following:
   `"0x" + hex(signing message hash)`
 
       The hex operator is to convert binary into hex string.
@@ -47,22 +49,21 @@ Depending on the value of the flag, the auth content has the following interpret
   hash is required to be converted as following:
   `"CKB (Bitcoin Layer) transaction: 0x" + hex(signing message hash)`
 
-      In this way, it can show message on wallets(e.g. UniSat, OKX) nicely.
+  This way, it facilitates a neat presentation of messages on wallet interfaces, such as UniSat and OKX.
 
-- 0x05: It follows the unlocking method used by dogecoin. The signing message
+- 0x05: It follows the unlocking method used by Dogecoin. The signing message
   hash is converted as following:
   `"0x" + hex(signing message hash)`
-- 0x12: It follows the unlocking method same to 0x02 with the signing message hash
-  to be converted as following:
+- 0x12: It follows the unlocking same method as 0x02, with the signing message hash
+  to be converted as follows:
   `"CKB transaction: 0x" + hex(signing message hash)`
 
-      In this way, it can show message on wallets(e.g. MetaMask) nicely.
+  This way, it facilitates a neat presentation of messages on wallet interfaces, such as MetaMask.
 
-- 0x06: It follows the same unlocking method used by [CKB MultiSig](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c) with a little modification. When a message is calculated for signing, there is a step to clear witness. In omnilock, it clears the whole field `lock` in `witness`. But in CKB MultiSig script, it only clears part of `lock` in `witness`. This part is used as `signatures` followed by `multisig_script`.
-- 0xFC: The auth content that represents the blake160 hash of a lock script. The lock script will check if the current transaction contains an input cell with a matching lock script. Otherwise, it would return with an error. It's similar to [P2SH in BTC](https://en.bitcoin.it/wiki/Pay_to_script_hash).
-- 0xFD: The auth content that represents the blake160 hash of a preimage. The preimage contains [exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) information that is used to delegate signature verification to
-  another script via exec.
-- 0xFE: The auth content that represents the blake160 hash of a preimage. The preimage contains [dynamic linking](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial/) information that is used to delegate signature verification to the dynamic linking script. The interface described in [Swappable Signature Verification Protocol Spec](https://talk.nervos.org/t/rfc-swappable-signature-verification-protocol-spec/4802) is used here.
+- 0x06: It follows the same unlocking method used by [CKB MultiSig](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c) with a minor modification. When a message is calculated for signing, there is a step to witness clearance. In Omnilock, this involves clearing the entire `lock` field in `witness`. But in CKB MultiSig Script, it is only a partial clearance. This part is used as `signatures` followed by `multisig_script`.
+- 0xFC: It represents the blake160 hash of a Lock Script that checks if the current transaction contains an input Cell with a matching Lock Script. Otherwise, it would return with an error, similar to [P2SH in BTC](https://en.bitcoin.it/wiki/Pay_to_script_hash).
+- 0xFD: It represents the blake160 hash of a preimage that contains [exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) information used to delegate signature verification to another script via exec.
+- 0xFE: It represents the blake160 hash of a preimage that contains [dynamic linking](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial/) information used to delegate signature verification to the dynamic linking Script. The interface described in [Swappable Signature Verification Protocol Spec](https://talk.nervos.org/t/rfc-swappable-signature-verification-protocol-spec/4802) is used here.
 
 ### Omnilock args
 
@@ -79,11 +80,11 @@ The structure of `Omnilock args` is as follows:
 | time-lock mode      | 0b00000100 | since for timelock          | 8                         | N/A                                            |
 | supply mode         | 0b00001000 | type script hash for supply | 32                        | N/A                                            |
 
-You can check out the detail for different modes at [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0042-omnilock/0042-omnilock.md).
+You can check out the details for different modes at [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0042-omnilock/0042-omnilock.md).
 
 ### Witness Structure
 
-When unlocking an Omnilock, the corresponding witness must be a proper `WitnessArgs` data structure in molecule format. In
+When unlocking an Omnilock, the corresponding witness must be a proper `WitnessArgs` data structure in Molecule format. In
 the lock field of the `WitnessArgs`, an `OmniLockWitnessLock` structure must be present as follows:
 
 ```
