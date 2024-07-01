@@ -9,13 +9,13 @@ import Tooltip from "@components/Tooltip";
 
 # CLI Tools
 
-Commandline tools are often used by developers to perform specific blockchain tasks in a faster and more efficient way.
+Command-line tools are often used by developers to perform specific blockchain tasks in a faster and more efficient way.
 
 ## CKB-CLI
 
-[ckb-cli](https://github.com/nervosnetwork/ckb-cli) is a CKB command line tool developed in Rust Lang.
+[ckb-cli](https://github.com/nervosnetwork/ckb-cli) is a CKB command-line tool developed in Rust.
 
-If you need to interact with Mainnet blockchain from commandline, `ckb-cli` is a ideal choice to manager accounts, deploy Scripts and send Transactions.
+If you need to interact with Mainnet blockchain from the command line, `ckb-cli` is an ideal choice to manager accounts, deploy Scripts and send Transactions.
 
 ### Features
 
@@ -30,7 +30,7 @@ If you need to interact with Mainnet blockchain from commandline, `ckb-cli` is a
     dao         Deposit / prepare / withdraw / query NervosDAO balance (with local index) / key utils
 ```
 
-All second level sub-commands are listed in [wiki page](https://github.com/nervosnetwork/ckb-cli/wiki/Sub-Commands).
+All second-level sub-commands are listed on the [wiki page](https://github.com/nervosnetwork/ckb-cli/wiki/Sub-Commands).
 
 ### Install
 
@@ -63,7 +63,7 @@ ckb-cli --help
 ckb-cli rpc --help
 ```
 
-#### Example: Get live cell (json output format)
+#### Example: Get Live Cell (JSON Output Format)
 
 ```
 ckb-cli rpc get_live_cell --tx-hash 0x4ec75b5a8de8d180853d5046760a99285c73283a5dc528f81d6ee056f5335172 --index 0
@@ -88,7 +88,7 @@ ckb-cli rpc get_live_cell --tx-hash 0x4ec75b5a8de8d180853d5046760a99285c73283a5d
 
 ## OffCKB
 
-[offckb](https://github.com/RetricSu/offckb) is a CLI tool developed in Nodejs to help you quickly set up a predefined CKB Devnet and create dApp boilerplate.
+[offckb](https://github.com/RetricSu/offckb) is a CLI tool developed in Node.js to help you quickly set up a predefined CKB Devnet and create dApp boilerplates.
 
 If you need a local development environment for the very first try on your dApp, `offckb` is the ideal choice.
 
@@ -125,7 +125,7 @@ Commands:
   help [command]                                    display help for command
 ```
 
-#### Create a full-stack Project
+#### Create a Full-Stack Project
 
 Create a new project from predefined boilerplates.
 
@@ -133,7 +133,7 @@ Create a new project from predefined boilerplates.
 offckb create <your-project-name, eg:my-first-ckb-project>
 ```
 
-The boilerplate can be targeting on different CKB networks. Check [README.md](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/remix-vite-template/readme.md) in the project to get started.
+The boilerplate can target on different CKB networks. Check the [README.md](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/remix-vite-template/readme.md) in the project to get started.
 
 #### Access Testing Accounts
 
