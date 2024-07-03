@@ -5,11 +5,11 @@ title: Omnilock Script
 
 # Omnilock Script
 
-Omnilock is a lock script designed for interoperability. It comes with built-in support for verification of transaction signing methods used in Bitcoin, Ethereum, EOS, Dogecoin and more. It also comes with another feature of the regulation compliance module, which allows administrator to revoke tokens held by users under certain circumstances.
+Omnilock is a Lock Script designed for interoperability. It comes with built-in support for verification of transaction signing methods used in Bitcoin, Ethereum, EOS, Dogecoin and more. It also includes a regulation compliance module, which allows an administrator to revoke tokens held by users under certain circumstances.
 
 ## How Omnilock Works
 
-An Omnilock script has the following structure:
+An Omnilock Script has the following structure:
 
 ```
 Code hash: Omnilock script code hash
@@ -17,12 +17,12 @@ Hash type: Omnilock script hash type
 Args: <21 byte auth> <Omnilock args>
 ```
 
-There are two key fields in `args`:
+There are 2 key fields in `args`:
 
-- `auth`: for authentication, generally with pubkey hash in its content
+- `auth`: for authentication, generally with a pubkey hash in its content
 - `Omnilock args`: for extra checking control, allowing different modes to be enabled in the same `Omnilock args`
 
-The `Omnilock args` can be without mode (when `Omnilock flags` = 0), while the `auth` must be present. The functionality of Omnilock Script without mode is almost the same as traditional
+The `Omnilock args` can be without mode (when `Omnilock flags` = 0), while the `auth` must be present. The functionality of Omnilock Script without mode is almost the same as a traditional
 [SECP256K1/blake160](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) Lock Script. The Omnilock Script can be considered as a traditional Lock Script with additional checking/modes.
 
 ### Authentication
@@ -41,19 +41,19 @@ Depending on the value of the flag, the auth content has the following interpret
   hash (sighash_all, see [reference implementation](https://github.com/nervosnetwork/ckb-system-scripts/blob/a7b7c75662ed950c9bd024e15f83ce702a54996e/c/secp256k1_blake160_sighash_all.c#L219)) is converted as following:
   `"0x" + hex(signing message hash)`
 
-      The hex operator is to convert binary into hex string.
+      The hex operator converts the binary into a hex string.
 
 - 0x03: It follows the unlocking method used by Tron. The signing message hash
-  is converted as following:
+  is converted as follows:
   `"0x" + hex(signing message hash)`
 - 0x04: It follows the unlocking method used by Bitcoin. The signing message
-  hash is required to be converted as following:
+  hash is required to be converted as follows:
   `"CKB (Bitcoin Layer) transaction: 0x" + hex(signing message hash)`
 
   This way, it facilitates a neat presentation of messages on wallet interfaces, such as UniSat and OKX.
 
 - 0x05: It follows the unlocking method used by Dogecoin. The signing message
-  hash is converted as following:
+  hash is converted as follows:
   `"0x" + hex(signing message hash)`
 - 0x12: It follows the unlocking same method as 0x02, with the signing message hash
   to be converted as follows:
@@ -61,9 +61,9 @@ Depending on the value of the flag, the auth content has the following interpret
 
   This way, it facilitates a neat presentation of messages on wallet interfaces, such as MetaMask.
 
-- 0x06: It follows the same unlocking method used by [CKB MultiSig](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c) with a minor modification. When a message is calculated for signing, there is a step to witness clearance. In Omnilock, this involves clearing the entire `lock` field in `witness`. But in CKB MultiSig Script, it is only a partial clearance. This part is used as `signatures` followed by `multisig_script`.
+- 0x06: It follows the same unlocking method used by [CKB MultiSig](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c) with a minor modification. When a message is calculated for signing, there is a step to clear the `witnesses`. In Omnilock, this involves clearing the entire `lock` field in `witnesses`. But in CKB MultiSig Script, it is only a partial clearance. This part is used as `signatures` followed by `multisig_script`.
 - 0xFC: It represents the blake160 hash of a Lock Script that checks if the current transaction contains an input Cell with a matching Lock Script. Otherwise, it would return with an error, similar to [P2SH in BTC](https://en.bitcoin.it/wiki/Pay_to_script_hash).
-- 0xFD: It represents the blake160 hash of a preimage that contains [exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) information used to delegate signature verification to another script via exec.
+- 0xFD: It represents the blake160 hash of a preimage that contains [exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) information used to delegate signature verification to another Script via exec.
 - 0xFE: It represents the blake160 hash of a preimage that contains [dynamic linking](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial/) information used to delegate signature verification to the dynamic linking Script. The interface described in [Swappable Signature Verification Protocol Spec](https://talk.nervos.org/t/rfc-swappable-signature-verification-protocol-spec/4802) is used here.
 
 ### Omnilock args
@@ -111,8 +111,7 @@ To learn the detail of witness in Omnilock, check out the [RFC](https://github.c
 
 ## Script Deployed Info
 
-An [implementation](https://github.com/cryptape/omnilock) of the Omnilock spec above has been deployed to Mirana CKB mainnet and Pudge testnet:
-
+The [Omnilock spec](https://github.com/cryptape/omnilock) has been deployed to CKB's Mainnet Mirana and Testnet Pudge. The following are the deployment details:
 ### Mainnet
 
 | parameter | value                                                              |
@@ -133,10 +132,13 @@ An [implementation](https://github.com/cryptape/omnilock) of the Omnilock spec a
 | index     | 0x0                                                                |
 | dep_type  | code                                                               |
 
+
+---
+
 ## Offchain SDK Examples
 
 ### Rust SDK
-
+The following example demonstrates creating, signing, and sending a transaction using the Omnilock Script with the [Rust SDK](/docs/sdk-and-devtool/rust).
 ```rust title='omnilock-example.rs'
 use ckb_sdk::{
     constants::ONE_CKB,
@@ -207,7 +209,7 @@ fn main() -> Result<(), Box<dyn StdErr>> {
 }
 ```
 
-Others:
+Other example:
 
 - [Omnilock Multisig Example](https://github.com/nervosnetwork/ckb-sdk-rust/pull/114/commits/fa9a9813906d44bbab802e0206129dc8f2d0a560#diff-7e049a2f31f79d323e40b25f4e1c55a5ebdf48b075c49b3675dad1343be76780)
 
@@ -503,7 +505,7 @@ export async function capacityOf(address: string): Promise<BI> {
 }
 ```
 
-Others examples:
+Other examples:
 
 - [Omnilock-Unisat](https://github.com/ckb-js/lumos/tree/d279b87c5f843f07f77b11923e6659025f1f8bdd/examples/omni-lock-unisat)
 - [Omnilock-secp256k1-blake160](https://github.com/ckb-js/lumos/tree/d279b87c5f843f07f77b11923e6659025f1f8bdd/examples/omni-lock-secp256k1-blake160)
