@@ -1509,7 +1509,7 @@ Nervos uses Secondary Issuance to create targeted inflation on users who occupy 
 
 ### Tragedy of the Commons
 
-A situation in a system where the participants act in accordance with their own self interest and deplete or destroy a shared resource through their collective action.
+A situation in a system where the participants act in accordance with their self-interest and deplete or destroy a shared resource through their collective action.
 
 #### See Also
 
