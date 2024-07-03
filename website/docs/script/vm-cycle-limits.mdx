@@ -24,7 +24,7 @@ Note there's no limit on the cycles for an individual transaction or a Script. A
 ## Cycle Measures
 
 Here we will specify the cycles needed by each CKB-VM instruction or syscall.
- 
+
 :::note
 Currently, we define hard rules for each instruction or syscall in the RFC. In future, this might be moved into consensus rules so we can change them more easily.
 :::
@@ -36,7 +36,7 @@ The cycles consumed for each operation are determined based on the following rul
 
 ### Initial Loading Cycles
 
-For each byte loaded into CKB-VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dApp developers to ship smaller Scripts as well as preventing DDoS attacks using large binaries. 
+For each byte loaded into CKB-VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dApp developers to ship smaller Scripts as well as preventing DDoS attacks using large binaries.
 ::: note
 Fractions will be rounded up. For example, 30.25 cycles will become 31 cycles.
 :::
@@ -45,48 +45,48 @@ Fractions will be rounded up. For example, 30.25 cycles will become 31 cycles.
 
 All CKB-VM instructions consume 1 cycle except the following ones:
 
-| Instruction | Cycles               |
-| ----------- | -------------------- |
-| JALR        | 3                    |
-| JAL         | 3                    |
-| J           | 3                    |
-| JR          | 3                    |
-| BEQ         | 3                    |
-| BNE         | 3                    |
-| BLT         | 3                    |
-| BGE         | 3                    |
-| BLTU        | 3                    |
-| BGEU        | 3                    |
-| BEQZ        | 3                    |
-| BNEZ        | 3                    |
-| LD          | 2                    |
-| SD          | 2                    |
-| LDSP        | 2                    |
-| SDSP        | 2                    |
-| LW          | 3                    |
-| LH          | 3                    |
-| LB          | 3                    |
-| LWU         | 3                    |
-| LHU         | 3                    |
-| LBU         | 3                    |
-| SW          | 3                    |
-| SH          | 3                    |
-| SB          | 3                    |
-| LWSP        | 3                    |
-| SWSP        | 3                    |
-| MUL         | 5                    |
-| MULW        | 5                    |
-| MULH        | 5                    |
-| MULHU       | 5                    |
-| MULHSU      | 5                    |
-| DIV         | 32                   |
-| DIVW        | 32                   |
-| DIVU        | 32                   |
-| DIVUW       | 32                   |
-| REM         | 32                   |
-| REMW        | 32                   |
-| REMU        | 32                   |
-| REMUW       | 32                   |
+| Instruction | Cycles                                      |
+| ----------- | ------------------------------------------- |
+| JALR        | 3                                           |
+| JAL         | 3                                           |
+| J           | 3                                           |
+| JR          | 3                                           |
+| BEQ         | 3                                           |
+| BNE         | 3                                           |
+| BLT         | 3                                           |
+| BGE         | 3                                           |
+| BLTU        | 3                                           |
+| BGEU        | 3                                           |
+| BEQZ        | 3                                           |
+| BNEZ        | 3                                           |
+| LD          | 2                                           |
+| SD          | 2                                           |
+| LDSP        | 2                                           |
+| SDSP        | 2                                           |
+| LW          | 3                                           |
+| LH          | 3                                           |
+| LB          | 3                                           |
+| LWU         | 3                                           |
+| LHU         | 3                                           |
+| LBU         | 3                                           |
+| SW          | 3                                           |
+| SH          | 3                                           |
+| SB          | 3                                           |
+| LWSP        | 3                                           |
+| SWSP        | 3                                           |
+| MUL         | 5                                           |
+| MULW        | 5                                           |
+| MULH        | 5                                           |
+| MULHU       | 5                                           |
+| MULHSU      | 5                                           |
+| DIV         | 32                                          |
+| DIVW        | 32                                          |
+| DIVU        | 32                                          |
+| DIVUW       | 32                                          |
+| REM         | 32                                          |
+| REMW        | 32                                          |
+| REMU        | 32                                          |
+| REMUW       | 32                                          |
 | ECALL       | 500 (see [Syscall Cycles](#syscall-cycles)) |
 | EBREAK      | 500 (see [Syscall Cycles](#syscall-cycles)) |
 
@@ -119,18 +119,18 @@ Macro-Operation Fusion (also Macro-Op Fusion, MOP Fusion, or Macrofusion) is a h
 
 The cycle consumption of the merged instructions is the maximum cycle value of the two instructions before the merge. We have verified that the use of MOPs can lead to significant improvements in some encryption algorithms.
 
-| Opcode                       | Origin                       | Cycles            |
-| ---------------------------- | ---------------------------- | ----------------- |
-| [ADC](https://github.com/nervosnetwork/ckb-vm/issues/169)                      | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
-| SBB                          | sub + sltu + sub + sltu + or | 1 + 0 + 0 + 0 + 0 |
-| WIDE_MUL                     | mulh + mul                   | 5 + 0             |
-| WIDE_MULU                    | mulhu + mul                  | 5 + 0             |
-| WIDE_MULSU                   | mulhsu + mul                 | 5 + 0             |
-| WIDE_DIV                     | div + rem                    | 32 + 0            |
-| WIDE_DIVU                    | divu + remu                  | 32 + 0            |
-| FAR_JUMP_REL                 | auipc + jalr                 | 0 + 3             |
-| FAR_JUMP_ABS                 | lui + jalr                   | 0 + 3             |
-| LD_SIGN_EXTENDED_32_CONSTANT | lui + addiw                  | 1 + 0             |
+| Opcode                                                    | Origin                       | Cycles            |
+| --------------------------------------------------------- | ---------------------------- | ----------------- |
+| [ADC](https://github.com/nervosnetwork/ckb-vm/issues/169) | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| SBB                                                       | sub + sltu + sub + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| WIDE_MUL                                                  | mulh + mul                   | 5 + 0             |
+| WIDE_MULU                                                 | mulhu + mul                  | 5 + 0             |
+| WIDE_MULSU                                                | mulhsu + mul                 | 5 + 0             |
+| WIDE_DIV                                                  | div + rem                    | 32 + 0            |
+| WIDE_DIVU                                                 | divu + remu                  | 32 + 0            |
+| FAR_JUMP_REL                                              | auipc + jalr                 | 0 + 3             |
+| FAR_JUMP_ABS                                              | lui + jalr                   | 0 + 3             |
+| LD_SIGN_EXTENDED_32_CONSTANT                              | lui + addiw                  | 1 + 0             |
 
 ### MOP Fusion in CKB-VM version 2
 
