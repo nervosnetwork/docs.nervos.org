@@ -26,7 +26,7 @@ The native token of Nervos is known as the CKByte, or CKB for short. One CKByte 
 
 To store 100 bytes of data in Nervos, it is mandatory to have 100 CKBytes. If your data occupies space on Nervos, your CKBytes will remain locked. If your data is no longer needed and is removed from Nervos, the 100 CKBytes will be available for other purposes.
 
-CKBytes can also be deposited in the Nervos DAO，where they gain interests in a staking-like process.
+CKBytes can also be deposited in the Nervos DAO，where they gain rewards in a staking-like process.
 
 Further information about CKByte will be presented in the [Cell Model](cell-model.md) and [Economics](economics.md) sections.
 
