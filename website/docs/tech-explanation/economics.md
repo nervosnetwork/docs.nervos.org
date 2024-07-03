@@ -33,7 +33,7 @@ Miners ensure data validity and preservation on the network, while cycles and tr
 
 When users store data on Nervos, they incur a small State Rent fee based on the space occupied. Recurring upfront fee is inconvenient for users, so Nervos uses targeted inflation on users occupying network space.
 
-During data storage, a portion of CKBytes must be locked and cannot earn interest. Although the locked CKBytes remain constant in number, their value slowly decreases due to inflation, affecting only users storing data on Nervos. This small depreciation constitutes State Rent.
+During data storage, a portion of CKBytes must be locked and cannot earn rewards. Although the locked CKBytes remain constant in number, their value slowly decreases due to inflation, affecting only users storing data on Nervos. This small depreciation constitutes State Rent.
 
 The inflation funding State Rent comes from a process known as Secondary Issuance. Nervos users who do not occupy space on the network may gain rewards from Secondary Issuance by locking their CKBytes in Nervos DAO. The following sections will delve deeper into this mechanism.
 
