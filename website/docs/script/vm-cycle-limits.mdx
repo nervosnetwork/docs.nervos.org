@@ -9,34 +9,41 @@ import Tooltip from "@components/Tooltip";
 
 # VM Cycle Limits
 
-Cycle limits are used to regulate VM Scripts. <Tooltip>ckb-vm</Tooltip> is a flexible VM that is free to implement many control flow constructs, such as loops or branches. As a result, we will need to enforce certain rules in CKB VM to prevent malicious scripts, such as a script with infinite loops.
+Cycle limits are used to regulate VM Scripts. <Tooltip>CKB-VM</Tooltip> is a flexible VM that can implement many control flow constructs, such as loops or branches. As a result, we need to enforce certain rules in CKB-VM to prevent malicious Scripts, such as those with infinite loops.
 
-We introduce a concept called `cycles`, each VM instruction or syscall will consume some amount of cycles. At consensus level, a scalar `max_block_cycles` field is defined so that the sum of cycles consumed by all scripts in a block cannot exceed this value. Otherwise, the block will be rejected. This way we can guarantee all scripts running in CKB VM will halt, or result in error state.
+We introduce a concept called `cycles`: each VM instruction or syscall will consume some amount of cycles. At the consensus level, a scalar `max_block_cycles` field is defined so that the sum of cycles consumed by all Scripts in a block cannot exceed this value. Otherwise, the block will be rejected. This way, we can guarantee that all Scripts running in CKB-VM will halt or result in an error state.
 
 ## max_block_cycles
 
-As mentioned above, a new scalar `max_block_cycles` field is added to chain spec as a consensus rule, it puts a hard limit on how many cycles a block's scripts can consume. No block can consume cycles larger than `max_block_cycles`.
+As mentioned above, a new scalar `max_block_cycles` field is added to the chain spec as a consensus rule. It puts a hard limit on how many cycles a block's Scripts can consume. No block can consume cycles larger than `max_block_cycles`.
 
-The current `max_block_cycles` in CKB Mainnet `MIRANA` is `3_500_000_000`.
+The current `max_block_cycles` in CKB Mainnet `MIRANA` is `3,500,000,000`.
 
-Note there's no limit on the cycles for an individual transaction or a script. As long as the whole block consumes cycles less than `max_block_cycles`, a transaction or a script in that block are free to consume how many cycles they want.
+Note there's no limit on the cycles for an individual transaction or a Script. As long as the whole block consumes fewer cycles than `max_block_cycles`, a transaction or a Script in that block is free to consume as many cycles as they want.
 
 ## Cycle Measures
 
-Here we will specify the cycles needed by each CKB VM instructions or syscalls. Note right now in the RFC, we define hard rules for each instruction or syscall here, in future this might be moved into consensus rules so we can change them more easily.
+Here we will specify the cycles needed by each CKB-VM instruction or syscall.
+ 
+:::note
+Currently, we define hard rules for each instruction or syscall in the RFC. In future, this might be moved into consensus rules so we can change them more easily.
+:::
 
 The cycles consumed for each operation are determined based on the following rules:
 
-1. Cycles for RISC-V instructions are determined based on real hardware that implement RISC-V ISA.
+1. Cycles for RISC-V instructions are determined based on real hardware that implements RISC-V ISA.
 2. Cycles for syscalls are measured based on real runtime performance metrics obtained while benchmarking current CKB implementation.
 
 ### Initial Loading Cycles
 
-For each byte loaded into CKB VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dapp developers to ship smaller smart contracts as well as preventing DDoS attacks using large binaries. Notice fractions will be rounded up here, so 30.25 cycles will become 31 cycles.
+For each byte loaded into CKB-VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dApp developers to ship smaller Scripts as well as preventing DDoS attacks using large binaries. 
+::: note
+Fractions will be rounded up. For example, 30.25 cycles will become 31 cycles.
+:::
 
 ### Instruction Cycles
 
-All CKB VM instructions consume 1 cycle except the following ones:
+All CKB-VM instructions consume 1 cycle except the following ones:
 
 | Instruction | Cycles               |
 | ----------- | -------------------- |
@@ -94,9 +101,9 @@ In addition, for each byte loaded into CKB VM in the syscalls, 0.25 cycles will 
 In general, the cycle consumption rules above follow certain guidelines:
 
 - Branches are more expensive than normal instructions.
-- Memory accesses are more expensive than normal instructions. Since CKB VM is a 64-bit system, loading 64-bit value directly will cost less cycle than loading smaller values.
+- Memory accesses are more expensive than normal instructions. Since CKB-VM is a 64-bit system, loading a 64-bit value directly will cost fewer cycles than loading smaller values.
 - Multiplication and divisions are much more expensive than normal instructions.
-- Syscalls include 2 parts: the bookkeeping part at first, and a plain memcpy phase. The first bookkeeping part includes quite complex logic, which should consume much more cycles. The memcpy part is quite cheap on modern hardware, hence less cycles will be charged.
+- Syscalls include 2 parts: the bookkeeping part at first, and a plain memcpy phase. The first bookkeeping part includes quite complex logic, which should consume much more cycles. The memcpy part is quite cheap on modern hardware, hence fewer cycles will be charged.
 
 Looking into the literature, the cycle consumption rules here resemble a lot like the performance metrics one can find in modern computer archtecture.
 
@@ -127,7 +134,7 @@ The cycle consumption of the merged instructions is the maximum cycle value of t
 
 ### MOP Fusion in CKB-VM version 2
 
-There are 5 MOPs added in VM version 2, there are:
+There are 5 MOPs added in VM version 2:
 
 | Opcode | Origin           | Cycles    | Description                                                        |
 | ------ | ---------------- | --------- | ------------------------------------------------------------------ |
@@ -139,14 +146,14 @@ There are 5 MOPs added in VM version 2, there are:
 
 ### Spawn Syscall in CKB-VM version 2
 
-Two new Spawn-related constants for cycles consumption are introduced VM version 2:
+2 new Spawn-related constants for cycle consumption are introduced VM version 2:
 
 ```rust
 pub const SPAWN_EXTRA_CYCLES_BASE: u64 = 100_000;
 pub const SPAWN_YIELD_CYCLES_BASE: u64 = 800;
 ```
 
-The Cycles consumption of each Spawn-related Syscall is as follows. Among them, the constant 500 and BYTES_TRANSFERRED_CYCLES can be referred to [RFC-0014](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md).
+The cycle consumption of each Spawn-related Syscall is as follows. The constants 500 and `BYTES_TRANSFERRED_CYCLES` can be referred to in [RFC-0014](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md).
 
 | Syscall Name         | Cycles Charge                                                                      |
 | -------------------- | ---------------------------------------------------------------------------------- |
