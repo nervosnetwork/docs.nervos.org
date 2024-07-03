@@ -1,0 +1,513 @@
+---
+id: omnilock
+title: Omnilock Script
+---
+
+# Omnilock Script
+
+Omnilock is a Lock Script designed for interoperability. It comes with built-in support for verification of transaction signing methods used in Bitcoin, Ethereum, EOS, Dogecoin and more. It also includes a regulation compliance module, which allows an administrator to revoke tokens held by users under certain circumstances.
+
+## How Omnilock Works
+
+An Omnilock Script has the following structure:
+
+```
+Code hash: Omnilock script code hash
+Hash type: Omnilock script hash type
+Args: <21 byte auth> <Omnilock args>
+```
+
+There are 2 key fields in `args`:
+
+- `auth`: for authentication, generally with a pubkey hash in its content
+- `Omnilock args`: for extra checking control, allowing different modes to be enabled in the same `Omnilock args`
+
+The `Omnilock args` can be without mode (when `Omnilock flags` = 0), while the `auth` must be present. The functionality of Omnilock Script without mode is almost the same as a traditional
+[SECP256K1/blake160](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160) Lock Script. The Omnilock Script can be considered as a traditional Lock Script with additional checking/modes.
+
+### Authentication
+
+An authentication (auth) is a 21-byte data structure containing the following components:
+
+```
+<1 byte flag> <20 bytes auth content>
+```
+
+Depending on the value of the flag, the auth content has the following interpretations:
+
+- 0x0: It represents the blake160 hash of a secp256k1 public key. The Lock Script performs secp256k1 signature verification, the same as the [SECP256K1/blake160
+  lock](https://github.com/nervosnetwork/rfcs/blob/780b2f98068ed2337f3a97b02ec6b5336b6fb143/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160).
+- 0x01: It follows the unlocking method used by Ethereum. The signing message
+  hash (sighash_all, see [reference implementation](https://github.com/nervosnetwork/ckb-system-scripts/blob/a7b7c75662ed950c9bd024e15f83ce702a54996e/c/secp256k1_blake160_sighash_all.c#L219)) is converted as following:
+  `"0x" + hex(signing message hash)`
+
+      The hex operator converts the binary into a hex string.
+
+- 0x03: It follows the unlocking method used by Tron. The signing message hash
+  is converted as follows:
+  `"0x" + hex(signing message hash)`
+- 0x04: It follows the unlocking method used by Bitcoin. The signing message
+  hash is required to be converted as follows:
+  `"CKB (Bitcoin Layer) transaction: 0x" + hex(signing message hash)`
+
+  This way, it facilitates a neat presentation of messages on wallet interfaces, such as UniSat and OKX.
+
+- 0x05: It follows the unlocking method used by Dogecoin. The signing message
+  hash is converted as follows:
+  `"0x" + hex(signing message hash)`
+- 0x12: It follows the unlocking same method as 0x02, with the signing message hash
+  to be converted as follows:
+  `"CKB transaction: 0x" + hex(signing message hash)`
+
+  This way, it facilitates a neat presentation of messages on wallet interfaces, such as MetaMask.
+
+- 0x06: It follows the same unlocking method used by [CKB MultiSig](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c) with a minor modification. When a message is calculated for signing, there is a step to clear the `witnesses`. In Omnilock, this involves clearing the entire `lock` field in `witnesses`. But in CKB MultiSig Script, it is only a partial clearance. This part is used as `signatures` followed by `multisig_script`.
+- 0xFC: It represents the blake160 hash of a Lock Script that checks if the current transaction contains an input Cell with a matching Lock Script. Otherwise, it would return with an error, similar to [P2SH in BTC](https://en.bitcoin.it/wiki/Pay_to_script_hash).
+- 0xFD: It represents the blake160 hash of a preimage that contains [exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) information used to delegate signature verification to another Script via exec.
+- 0xFE: It represents the blake160 hash of a preimage that contains [dynamic linking](https://docs.nervos.org/docs/labs/capsule-dynamic-loading-tutorial/) information used to delegate signature verification to the dynamic linking Script. The interface described in [Swappable Signature Verification Protocol Spec](https://talk.nervos.org/t/rfc-swappable-signature-verification-protocol-spec/4802) is used here.
+
+### Omnilock args
+
+The structure of `Omnilock args` is as follows:
+
+```
+<1 byte Omnilock flags> <32 byte AdminList cell Type ID, optional> <2 bytes minimum ckb/udt in ACP, optional> <8 bytes since for time lock, optional> <32 bytes type script hash for supply, optional>
+```
+
+| Name                | Flags      | Affected Args               | Affected Args Size (byte) | Affected Witness                               |
+| ------------------- | ---------- | --------------------------- | ------------------------- | ---------------------------------------------- |
+| administrator mode  | 0b00000001 | AdminList cell Type ID      | 32                        | omni_identity/signature in OmniLockWitnessLock |
+| anyone-can-pay mode | 0b00000010 | minimum ckb/udt in ACP      | 2                         | N/A                                            |
+| time-lock mode      | 0b00000100 | since for timelock          | 8                         | N/A                                            |
+| supply mode         | 0b00001000 | type script hash for supply | 32                        | N/A                                            |
+
+You can check out the details for different modes at [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0042-omnilock/0042-omnilock.md).
+
+### Witness Structure
+
+When unlocking an Omnilock, the corresponding witness must be a proper `WitnessArgs` data structure in Molecule format. In
+the lock field of the `WitnessArgs`, an `OmniLockWitnessLock` structure must be present as follows:
+
+```
+import xudt_rce;
+
+array Auth[byte; 21];
+
+table Identity {
+    identity: Auth,
+    proofs: SmtProofEntryVec,
+}
+option IdentityOpt (Identity);
+
+// the data structure used in lock field of witness
+table OmniLockWitnessLock {
+    signature: BytesOpt,
+    omni_identity: IdentityOpt,
+    preimage: BytesOpt,
+}
+```
+
+To learn the detail of witness in Omnilock, check out the [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0042-omnilock/0042-omnilock.md#omnilock-witness)
+
+## Script Deployed Info
+
+The [Omnilock spec](https://github.com/cryptape/omnilock) has been deployed to CKB's Mainnet Mirana and Testnet Pudge. The following are the deployment details:
+
+### Mainnet
+
+| parameter | value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| code_hash | 0x9b819793a64463aed77c615d6cb226eea5487ccfc0783043a587254cda2b6f26 |
+| hash_type | type                                                               |
+| tx_hash   | 0xc76edf469816aa22f416503c38d0b533d2a018e253e379f134c3985b3472c842 |
+| index     | 0x0                                                                |
+| dep_type  | code                                                               |
+
+### Testnet
+
+| parameter | value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| code_hash | 0xf329effd1c475a2978453c8600e1eaf0bc2087ee093c3ee64cc96ec6847752cb |
+| hash_type | type                                                               |
+| tx_hash   | 0x3d4296df1bd2cc2bd3f483f61ab7ebeac462a2f336f2b944168fe6ba5d81c014 |
+| index     | 0x0                                                                |
+| dep_type  | code                                                               |
+
+---
+
+## Offchain SDK Examples
+
+### Rust SDK
+
+The following example demonstrates creating, signing, and sending a transaction using the Omnilock Script with the [Rust SDK](/docs/sdk-and-devtool/rust).
+
+```rust title='omnilock-example.rs'
+use ckb_sdk::{
+    constants::ONE_CKB,
+    transaction::{
+        builder::{CkbTransactionBuilder, SimpleTransactionBuilder},
+        handler::{omnilock, HandlerContexts},
+        input::InputIterator,
+        signer::{SignContexts, TransactionSigner},
+        TransactionBuilderConfiguration,
+    },
+    unlock::OmniLockConfig,
+    Address, CkbRpcClient, NetworkInfo,
+};
+use ckb_types::{
+    h256,
+    packed::CellOutput,
+    prelude::{Builder, Entity, Pack},
+};
+use std::{error::Error as StdErr, str::FromStr};
+
+fn main() -> Result<(), Box<dyn StdErr>> {
+    let network_info = NetworkInfo::testnet();
+    let sender = Address::from_str("ckt1qrejnmlar3r452tcg57gvq8patctcgy8acync0hxfnyka35ywafvkqgqgpy7m88v3gxnn3apazvlpkkt32xz3tg5qq3kzjf3")?;
+    let receiver = Address::from_str("ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqv5dsed9par23x4g58seaw58j3ym5ml2hs8ztche")?;
+
+    let configuration = TransactionBuilderConfiguration::new_with_network(network_info.clone())?;
+
+    let iterator = InputIterator::new_with_address(&[sender.clone()], configuration.network_info());
+    let mut builder = SimpleTransactionBuilder::new(configuration, iterator);
+
+    let output = CellOutput::new_builder()
+        .capacity((128 * ONE_CKB).pack())
+        .lock((&receiver).into())
+        .build();
+    builder.add_output_and_data(output.clone(), ckb_types::packed::Bytes::default());
+    builder.set_change_lock((&sender).into());
+
+    let omni_cfg = OmniLockConfig::from_addr(&sender).unwrap();
+    let context = omnilock::OmnilockScriptContext::new(omni_cfg.clone(), network_info.url.clone());
+
+    let mut contexts = HandlerContexts::default();
+    contexts.add_context(Box::new(context) as Box<_>);
+
+    let mut tx_with_groups = builder.build(&mut contexts)?;
+
+    let json_tx = ckb_jsonrpc_types::TransactionView::from(tx_with_groups.get_tx_view().clone());
+    println!("tx: {}", serde_json::to_string_pretty(&json_tx).unwrap());
+
+    let private_key = h256!("0x6c9ed03816e3111e49384b8d180174ad08e29feb1393ea1b51cef1c505d4e36a");
+    TransactionSigner::new(&network_info).sign_transaction(
+        &mut tx_with_groups,
+        &SignContexts::new_omnilock(
+            [secp256k1::SecretKey::from_slice(private_key.as_bytes())?].to_vec(),
+            omni_cfg,
+        ),
+    )?;
+
+    let json_tx = ckb_jsonrpc_types::TransactionView::from(tx_with_groups.get_tx_view().clone());
+    println!("tx: {}", serde_json::to_string_pretty(&json_tx).unwrap());
+
+    let tx_hash = CkbRpcClient::new(network_info.url.as_str())
+        .send_transaction(json_tx.inner, None)
+        .expect("send transaction");
+    // example tx: 0xc0c9954a3299b540e63351146a301438372abf93682d96c7cce691c334dd5757
+    println!(">>> tx {} sent! <<<", tx_hash);
+
+    Ok(())
+}
+```
+
+Other example:
+
+- [Omnilock Multisig Example](https://github.com/nervosnetwork/ckb-sdk-rust/pull/114/commits/fa9a9813906d44bbab802e0206129dc8f2d0a560#diff-7e049a2f31f79d323e40b25f4e1c55a5ebdf48b075c49b3675dad1343be76780)
+
+### JavaScript/TypeScript (Lumos)
+
+#### Omnilock-Solana Example
+
+```bash
+# Build Lumos
+git clone https://github.com/ckb-js/lumos.git
+cd lumos
+pnpm install
+pnpm run build
+
+# Check if it is working
+npx ts-node misc/config-manager.ts
+
+# Start to work on Omnilock-Solana
+npm run build
+cd examples/omni-lock-solana
+npm start
+```
+
+Checkout `lib.ts` file to learn the detail:
+
+```typescript title='lib.ts'
+import { BI, helpers, Indexer, RPC, config, commons } from "@ckb-lumos/lumos";
+import { common, omnilock } from "@ckb-lumos/lumos/common-scripts";
+import { blockchain, bytify, hexify } from "@ckb-lumos/lumos/codec";
+import { Config } from "@ckb-lumos/lumos/config";
+
+const CKB_RPC_URL = "https://testnet.ckb.dev";
+const rpc = new RPC(CKB_RPC_URL);
+const indexer = new Indexer(CKB_RPC_URL);
+
+export const CONFIG: Config = config.TESTNET;
+
+config.initializeConfig(CONFIG);
+
+declare global {
+  interface Window {
+    phantom: {
+      solana: omnilock.solana.Provider;
+    };
+  }
+}
+
+export const solana = window.phantom.solana;
+
+export function asyncSleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+interface Options {
+  from: string;
+  to: string;
+  amount: string;
+}
+
+export async function transfer(options: Options): Promise<string> {
+  let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+
+  txSkeleton = await common.transfer(
+    txSkeleton,
+    [options.from],
+    options.to,
+    options.amount
+  );
+  txSkeleton = await common.payFeeByFeeRate(txSkeleton, [options.from], 1000);
+  txSkeleton = commons.omnilock.prepareSigningEntries(txSkeleton);
+
+  const signedMessage = await omnilock.solana.signMessage(
+    txSkeleton.signingEntries.get(0)!.message,
+    window.phantom.solana
+  );
+
+  const signedWitness = hexify(
+    blockchain.WitnessArgs.pack({
+      lock: commons.omnilock.OmnilockWitnessLock.pack({
+        signature: bytify(signedMessage),
+      }),
+    })
+  );
+
+  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
+    witnesses.set(0, signedWitness)
+  );
+
+  const signedTx = helpers.createTransactionFromSkeleton(txSkeleton);
+  const txHash = await rpc.sendTransaction(signedTx, "passthrough");
+
+  return txHash;
+}
+
+export async function capacityOf(address: string): Promise<BI> {
+  const collector = indexer.collector({
+    lock: helpers.parseAddress(address),
+  });
+
+  let balance = BI.from(0);
+  for await (const cell of collector.collect()) {
+    balance = balance.add(cell.cellOutput.capacity);
+  }
+
+  return balance;
+}
+```
+
+#### Omnilock-Metamask Example
+
+```bash
+# Build Lumos
+git clone https://github.com/ckb-js/lumos.git
+cd lumos
+pnpm install
+pnpm run build
+
+# Check if it is working
+npx ts-node misc/config-manager.ts
+
+# Start to work on Omnilock-Metamask
+npm run build
+npm run build-release
+cd examples/omni-lock-metamask
+npm start
+```
+
+Checkout `lib.ts` file to learn the detail:
+
+```typescript title='lib.ts'
+import {
+  BI,
+  Cell,
+  helpers,
+  Indexer,
+  RPC,
+  config,
+  commons,
+} from "@ckb-lumos/lumos";
+import { blockchain, bytify, hexify } from "@ckb-lumos/lumos/codec";
+
+const CKB_RPC_URL = "https://testnet.ckb.dev/rpc";
+const rpc = new RPC(CKB_RPC_URL);
+const indexer = new Indexer(CKB_RPC_URL);
+// prettier-ignore
+interface EthereumRpc {
+    (payload: { method: 'personal_sign'; params: [string /*from*/, string /*message*/] }): Promise<string>;
+  }
+
+// prettier-ignore
+export interface EthereumProvider {
+    selectedAddress: string;
+    isMetaMask?: boolean;
+    enable: () => Promise<string[]>;
+    addListener: (event: 'accountsChanged', listener: (addresses: string[]) => void) => void;
+    removeEventListener: (event: 'accountsChanged', listener: (addresses: string[]) => void) => void;
+    request: EthereumRpc;
+  }
+// @ts-ignore
+export const ethereum = window.ethereum as EthereumProvider;
+
+export function asyncSleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+interface Options {
+  from: string;
+  to: string;
+  amount: string;
+}
+const SECP_SIGNATURE_PLACEHOLDER = hexify(
+  new Uint8Array(
+    commons.omnilock.OmnilockWitnessLock.pack({
+      signature: new Uint8Array(65).buffer,
+    }).byteLength
+  )
+);
+
+export async function transfer(options: Options): Promise<string> {
+  const CONFIG = config.getConfig();
+  let tx = helpers.TransactionSkeleton({});
+  const fromScript = helpers.parseAddress(options.from);
+  const toScript = helpers.parseAddress(options.to);
+
+  // additional 0.001 ckb as tx fee
+  // tx fee is calculated by tx size
+  // this is just a simple example
+  const neededCapacity = BI.from(options.amount).add(100000);
+  let collectedSum = BI.from(0);
+  const collectedCells: Cell[] = [];
+  const collector = indexer.collector({ lock: fromScript, type: "empty" });
+  for await (const cell of collector.collect()) {
+    collectedSum = collectedSum.add(cell.cellOutput.capacity);
+    collectedCells.push(cell);
+    if (BI.from(collectedSum).gte(neededCapacity)) break;
+  }
+
+  if (collectedSum.lt(neededCapacity)) {
+    throw new Error(
+      `Not enough CKB, expected: ${neededCapacity}, actual: ${collectedSum} `
+    );
+  }
+
+  const transferOutput: Cell = {
+    cellOutput: {
+      capacity: BI.from(options.amount).toHexString(),
+      lock: toScript,
+    },
+    data: "0x",
+  };
+
+  const changeOutput: Cell = {
+    cellOutput: {
+      capacity: collectedSum.sub(neededCapacity).toHexString(),
+      lock: fromScript,
+    },
+    data: "0x",
+  };
+
+  tx = tx.update("inputs", (inputs) => inputs.push(...collectedCells));
+  tx = tx.update("outputs", (outputs) =>
+    outputs.push(transferOutput, changeOutput)
+  );
+  tx = tx.update("cellDeps", (cellDeps) =>
+    cellDeps.push(
+      // omni lock dep
+      {
+        outPoint: {
+          txHash: CONFIG.SCRIPTS.OMNILOCK.TX_HASH,
+          index: CONFIG.SCRIPTS.OMNILOCK.INDEX,
+        },
+        depType: CONFIG.SCRIPTS.OMNILOCK.DEP_TYPE,
+      },
+      // SECP256K1 lock is depended by omni lock
+      {
+        outPoint: {
+          txHash: CONFIG.SCRIPTS.SECP256K1_BLAKE160.TX_HASH,
+          index: CONFIG.SCRIPTS.SECP256K1_BLAKE160.INDEX,
+        },
+        depType: CONFIG.SCRIPTS.SECP256K1_BLAKE160.DEP_TYPE,
+      }
+    )
+  );
+
+  const witness = hexify(
+    blockchain.WitnessArgs.pack({ lock: SECP_SIGNATURE_PLACEHOLDER })
+  );
+
+  // fill txSkeleton's witness with placeholder
+  for (let i = 0; i < tx.inputs.toArray().length; i++) {
+    tx = tx.update("witnesses", (witnesses) => witnesses.push(witness));
+  }
+
+  tx = commons.omnilock.prepareSigningEntries(tx, { config: CONFIG });
+
+  let signedMessage = await ethereum.request({
+    method: "personal_sign",
+    params: [ethereum.selectedAddress, tx.signingEntries.get(0).message],
+  });
+
+  let v = Number.parseInt(signedMessage.slice(-2), 16);
+  if (v >= 27) v -= 27;
+  signedMessage =
+    "0x" + signedMessage.slice(2, -2) + v.toString(16).padStart(2, "0");
+
+  const signedWitness = hexify(
+    blockchain.WitnessArgs.pack({
+      lock: commons.omnilock.OmnilockWitnessLock.pack({
+        signature: bytify(signedMessage).buffer,
+      }),
+    })
+  );
+
+  tx = tx.update("witnesses", (witnesses) => witnesses.set(0, signedWitness));
+
+  const signedTx = helpers.createTransactionFromSkeleton(tx);
+  const txHash = await rpc.sendTransaction(signedTx, "passthrough");
+
+  return txHash;
+}
+
+export async function capacityOf(address: string): Promise<BI> {
+  const collector = indexer.collector({
+    lock: helpers.parseAddress(address),
+  });
+
+  let balance = BI.from(0);
+  for await (const cell of collector.collect()) {
+    balance = balance.add(cell.cellOutput.capacity);
+  }
+
+  return balance;
+}
+```
+
+Other examples:
+
+- [Omnilock-Unisat](https://github.com/ckb-js/lumos/tree/d279b87c5f843f07f77b11923e6659025f1f8bdd/examples/omni-lock-unisat)
+- [Omnilock-secp256k1-blake160](https://github.com/ckb-js/lumos/tree/d279b87c5f843f07f77b11923e6659025f1f8bdd/examples/omni-lock-secp256k1-blake160)

@@ -66,6 +66,13 @@ export default {
     },
     {
       type: "category",
+      label: "Common Scripts",
+      className: "category-common-scripts",
+      collapsible: false,
+      items: ["common-scripts/omnilock", "common-scripts/xudt"],
+    },
+    {
+      type: "category",
       label: "Network & Nodes",
       className: "category-node",
       collapsible: false,

@@ -1,0 +1,344 @@
+---
+id: xudt
+title: xUDT Script
+---
+
+# xUDT Script
+
+[Extensible UDT(xUDT)](https://github.com/nervosnetwork/ckb-production-scripts) is the User-Defined-Token(fungible token) Script implementation on CKB. When issuing tokens, most developers use xUDT as the Script. You can think of it as the `ERC-20` smart contract on Ethereum. There is also a [dApp tutorial](/docs/dapp/create-token) on creating a fungible token using the xUDT Script.
+
+## How xUDT Works
+
+### Data Structure for xUDT Cell
+
+An xUDT Cell is backward compatible with [Simple UDT](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md), all the existing rules defined in the Simple UDT spec must still hold true for xUDT Cells. On top of sUDT, xUDT extends a Cell as follows:
+
+```yaml
+data:
+  <amount: uint128> <xUDT data>
+type:
+  code_hash: xUDT type script
+  args: <owner lock script hash> <xUDT args>
+lock: <user_defined>
+```
+
+The `amount` is a 128-bit unsigned integer in little endian format. The added `xUDT args` and `xUDT data` parts provide all the new functions needed by xUDT, the
+detailed structure is explained below.
+
+### xUDT Args
+
+xUDT args has the following structure:
+
+```
+<4-byte xUDT flags> <Variable length bytes, extension data>
+```
+
+Depending on the content of `flags`, which is represented as a 32-bit unsigned
+integer in little-endian format, different extension data might be attached:
+
+• If `flags & 0x1FFFFFFF` is 0, no extension data is required. Note a
+backward-compatible way of viewing things, which is that a plain sUDT Cell also
+has a hidden `flags` field with all zeros.
+
+• If `flags & 0x1FFFFFFF` is 0x1, the extension data will contain a
+[molecule](https://github.com/nervosnetwork/molecule) serialized `ScriptVec`
+structure:
+
+```
+table Script {
+    code_hash:      Byte32,
+    hash_type:      byte,
+    args:           Bytes,
+}
+
+vector ScriptVec <Script>
+```
+
+Each entry included in `ScriptVec` structure is interpreted as
+an extension Script with additional behaviors. When an xUDT Script is
+executed, it will run through each included extension Script. Only when all
+extension Scripts pass validation will xUDT consider the validation to be
+successful.
+
+An extension Script can be loaded in any of the following ways:
+
+1. Some extension logics might have a predefined hash. For example, we can
+   use `0x0000 ... 0001` to represent a regulation extension. The actual code for
+   such Scripts can be embedded in the xUDT Script itself.
+2. If an input Cell in the current transaction uses a Lock Script with the same
+   Script hash as the current extension Script, we can consider the extension
+   Script to be validated already.
+3. If an extension Script does not match any of the above criteria, xUDT will
+   use the `code_hash` and `hash_type` included in the extension Script to
+   invoke [ckb_dlopen2](https://github.com/nervosnetwork/ckb-c-stdlib/blob/37eba3102100808ffc6fa2383bcf9e1e2651c8ea/ckb_dlfcn.h#L108-L113) function,
+   hoping to load a dynamically linked Script from `cell_deps` in the current
+   transaction. If a Script can be located successfully, xUDT will then look for
+   an exported function with the following signature:
+
+```c
+int validate(int is_owner_mode, size_t extension_index, const uint8_t* args, size_t args_length);
+```
+
+`is_owner_mode` indicates if the current xUDT is unlocked via owner mode(as
+described by sUDT), `extension_index` refers to the index of the current
+extension in the `ScriptVec` structure. `args` and `args_length` are set to the
+Script args included in `Script` structure of the current extension Script.
+
+If this function returns 0, the current extension Script validation is
+considered successful.
+
+• If `flags & 0x1FFFFFFF` is 0x2, the extension data will contain the blake160 hash
+of the `ScriptVec` structure as explained in the previous section. The
+actual `extension_scripts` (`ScriptVec`) structure data will be included in a
+witness field `input_type` or `output_type` contained in the current
+transaction. We will explain this part below. Choosing `input_type` or
+`output_type` depends on whether the Type Script is running on input or output
+Cells. Under a lot of scenarios, it is `input_type`. However, in the following example, “Owner
+Mode Without Consuming Cell,” it can be `output_type`.
+
+### Witness Structure
+
+The `input_type` or `output_type` field in `WitnessArgs` has the following data
+structure in molecule format:
+
+```js
+table XudtWitness {
+    owner_script: ScriptOpt,
+    owner_signature: BytesOpt,
+    extension_scripts: ScriptVecOpt,
+    extension_data: BytesVec,
+}
+```
+
+The field `owner_script` and `owner_signature` will be used in owner mode. The
+field `extension_scripts` is used when `flags & 0x1FFFFFFF` is 0x2 in args.
+
+The length of the `extension_data` structure inside must also be the same as
+`ScriptVec` in `xUDT args` or `extension_scripts`. An extension Script might also
+require transaction-specific data for validation. The witness here provides a
+place for these data needs.
+
+### Owner Mode Update
+
+As described in the RFC for sUDT, if an input Cell in the current transaction uses an
+input Lock Script with the same Script hash as the owner Lock Script hash, the
+`is_owner_mode` will be set to true. In xUDT, this rule is updated with the following conditions:
+
+`is_owner_mode` will be set to true if an input or output Cell in the current transaction uses one or more of the
+following Scripts:
+
+- Input Lock Script (when `flags & 0x20000000` is **zero** or `flags` is not present)
+- Output Type Script (when `flags & 0x40000000` is **non-zero**)
+- Input Type Script (when `flags & 0x80000000` is **non-zero**)
+
+With the same Script hash as the owner Lock Script hash, the `is_owner_mode`
+will be set to true. The output Lock Scripts are not included because they
+won’t be run in a transaction.
+
+If the `owner_script` in witness isn’t none and its blake2b hash matches
+the owner Lock Script hash in `args`, this Script will be run as an extension
+Script. If the Script returns success, `is_owner_mode` is set to true. Note that the
+`owner_signature` field can be used by this owner Script. When tokens are
+minted, the `owner_script` and `owner_signature` can be set to appropriate
+values. When tokens are transferred, they can be set to none.
+
+### xUDT Data
+
+xUDT data is a molecule serialized `XudtData` structure:
+
+```
+vector Bytes <byte>
+vector BytesVec <Bytes>
+
+table XudtData {
+  lock: Bytes,
+  data: BytesVec,
+}
+```
+
+The `data` field included in `XudtData` must be the same length
+as the `ScriptVec` structure included in xUDT args. Some extensions might require
+user-specific data stored in each xUDT Cell. xUDT data provides a place for such
+data. The `XudtData` can be optional regardless of whether there is any extension
+Script or not. However, if an extension Script requires such data, it must be
+present.
+
+The `lock` field included in `XudtData` will not be used by the xUDT Script. It
+is reserved for Lock Script-specific data for current Cells.
+
+An extension Script should first locate the index it resides in within the xUDT
+args, then look for the data for the current extension Script at the same index
+in the `data` field of the `XudtData` structure.
+
+## Operations
+
+xUDT uses the same governance operations as Simple UDT: an owner lock controls
+all governance operations, such as minting.
+
+A normal transfer operation of xUDT, however, differs from Simple UDT. Depending
+on the flags used, there might be 2 usage patterns:
+
+### Pattern #1: Raw Extension Script
+
+When `flags & 0x1FFFFFFF` are set to 0x1, raw extension data is included in xUDT args directly.
+
+```yaml
+Inputs:
+    <vec> xUDT_Cell
+        Data:
+            <amount: uint128> <xUDT data>
+        Type:
+            code_hash: xUDT type script
+            args: <owner lock script hash> <xUDT args>
+        Lock:
+            <user defined>
+    <...>
+Outputs:
+    <vec> xUDT_Cell
+        Data:
+            <amount: uint128> <xUDT data>
+        Type:
+            code_hash: xUDT type script
+            args: <owner lock script hash> <xUDT args>
+        Lock:
+            <user defined>
+    <...>
+Witnesses:
+    WitnessArgs structure:
+        Lock: <user defined>
+        Input Type: <XudtWitness>
+            owner_script: <None>
+            owner_signature: <None>
+            extension_scripts: <None>
+            extension_data:
+                <vec> BytesVec
+                    <data>
+                <...>
+```
+
+The witness of the same index as the first input xUDT Cell is located by xUDT Script. It is parsed first as a `WitnessArgs` structure, with the `input_type` or `output_type` field of `WitnessArgs` treated as the `XudtWitness` structure.
+
+Note that each extension Script is only executed once per transaction. When multiple instances of the same extension Script are included, each instance will execute independently. The extension Script is responsible for checking all xUDT Cells of the current type, ensuring each Cell's data and witness for the current extension Script can be validated against the extension Script’s rules.
+
+### Pattern #2: P2SH Style Extension Script
+
+When `flags & 0x1FFFFFFF` are set to 0x2, only the blake160 hash of extension data is included in xUDT args. The user is required to provide the actual extension data in witness directly:
+
+```yaml
+Inputs:
+    <vec> xUDT_Cell
+        Data:
+            <amount: uint128> <xUDT data>
+        Type:
+            code_hash: xUDT type script
+            args: <owner lock script hash> <xUDT args, hash of raw extension data>
+        Lock:
+            <user defined>
+    <...>
+Outputs:
+    <vec> xUDT_Cell
+        Data:
+            <amount: uint128> <xUDT data>
+        Type:
+            code_hash: xUDT type script
+            args: <owner lock script hash> <xUDT args, hash of raw extension data>
+        Lock:
+            <user defined>
+    <...>
+Witnesses:
+    WitnessArgs structure:
+        Lock: <user defined>
+        Input Type: XudtWitness
+            owner_script: <None>
+            owner_signature: <None>
+            extension_scripts:
+                <vec> ScriptVec
+                    <script>
+                <...>
+            extension_data:
+                <vec> BytesVec
+                    <data>
+                <...>
+```
+
+The only difference here is that the `XudtWitness` in the `input_type` or
+`output_type` field of the corresponding `WitnessArgs` structure contains raw
+extension data in the `ScriptVec` data structure. The xUDT Script must first validate the hash of the raw extension data provide here matches the blake160 hash
+included in the xUDT args. After this, it uses the same logic as the previous
+workflow.
+
+### Owner Mode without Consuming Cell
+
+As described above, If an input Cell uses an input Lock Script with same Script
+hash as the owner Lock Script hash, the `is_owner_mode` will be set to true. It
+isn’t convenient: this requires an extra Cell to be consumed. With `owner_script`
+and `owner_signature` set to proper values, we can use owner mode without consuming an extra
+Cell.
+
+```yaml
+Inputs:
+    <vec>
+			<Any input cells>
+    <...>
+Outputs:
+    <vec> xUDT_Cell
+        Data:
+            <amount: uint128> <xUDT data>
+        Type:
+            code_hash: xUDT type script
+            args: <owner lock script hash 1> <xUDT args>
+        Lock:
+            <user defined>
+    <...>
+Witnesses:
+    WitnessArgs structure:
+        Lock: <user defined>
+        Input Type: <None>
+        Output Type: XudtWitness
+            owner_script: <owner script 1>
+            owner_signature: <signature 1>
+            extension_scripts:
+                <vec> ScriptVec
+                    <script>
+                <...>
+            extension_data:
+                <vec> BytesVec
+                    <data>
+                <...>
+```
+
+The example above shows a scenario of owner mode without consuming the owner's
+Cell. We can implement an extension Script as `<owner script 1>` with signature
+validation. The `<signature 1>` can be used by `<owner script 1>` to place
+signature information.
+
+## Script Deployed Info
+
+An [implementation](https://github.com/nervosnetwork/ckb-production-scripts/blob/master/c/xudt_rce.c) of
+the spec above has been deployed to Mirana CKB mainnet and Pudge testnet:
+
+### Mainnet
+
+| parameter | value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
+| hash_type | data1                                                              |
+| tx_hash   | 0xc07844ce21b38e4b071dd0e1ee3b0e27afd8d7532491327f39b786343f558ab7 |
+| index     | 0x0                                                                |
+| dep_type  | code                                                               |
+
+This Script is not upgradeable due to zero lock (lock args with all zeros).
+
+### Testnet
+
+| parameter | value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| code_hash | 0x50bd8d6680b8b9cf98b73f3c08faf8b2a21914311954118ad6609be6e78a1b95 |
+| hash_type | data1                                                              |
+| tx_hash   | 0xbf6fb538763efec2a70a6a3dcb7242787087e1030c4e7d86585bc63a9d337f5f |
+| index     | 0x0                                                                |
+| dep_type  | code                                                               |
+
+## DApp Example
+
+- Tutorial: [Create a Fungible Token](/docs/dapp/create-token)
