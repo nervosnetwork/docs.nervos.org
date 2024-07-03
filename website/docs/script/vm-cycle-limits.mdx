@@ -87,14 +87,14 @@ All CKB-VM instructions consume 1 cycle except the following ones:
 | REMW        | 32                   |
 | REMU        | 32                   |
 | REMUW       | 32                   |
-| ECALL       | 500 (see note below) |
-| EBREAK      | 500 (see note below) |
+| ECALL       | 500 (see [Syscall Cycles](#syscall-cycles)) |
+| EBREAK      | 500 (see [Syscall Cycles](#syscall-cycles)) |
 
 ### Syscall Cycles
 
-As shown in the above chart, each syscall will have 500 initial cycle consumptions. This is based on real performance metrics gathered benchmarking CKB implementation, certain bookkeeping logics are required for each syscall here.
+As shown in the above chart, each syscall or breakpoint instruction will have an initial consumption of 500 cycles. This is based on real performance metrics gathered from benchmarking the CKB implementation. Certain bookkeeping logic is required for each syscall.
 
-In addition, for each byte loaded into CKB VM in the syscalls, 0.25 cycles will be charged. Notice fractions will also be rounded up here, so 30.25 cycles will become 31 cycles.
+In addition, for each byte loaded into CKB-VM in the syscalls, 0.25 cycles will be charged. Notice that fractions will also be rounded up here.
 
 ## Guidelines
 
@@ -111,7 +111,7 @@ Looking into the literature, the cycle consumption rules here resemble a lot lik
 
 ### B extension in CKB-VM version 1
 
-We have added the RISC-V B extension (v1.0.0). This extension aims at covering the four major categories of bit manipulation: counting, extracting, inserting and swapping. For all B instructions, 1 cycle will be consumed.
+We have added the [RISC-V B extension (v1.0.0)](https://github.com/riscv/riscv-bitmanip). This extension aims at covering the four major categories of bit manipulation: counting, extracting, inserting and swapping. For all B instructions, 1 cycle will be consumed.
 
 ### MOP Fusion in CKB-VM version 1
 
@@ -121,7 +121,7 @@ The cycle consumption of the merged instructions is the maximum cycle value of t
 
 | Opcode                       | Origin                       | Cycles            |
 | ---------------------------- | ---------------------------- | ----------------- |
-| ADC [2]                      | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| [ADC](https://github.com/nervosnetwork/ckb-vm/issues/169)                      | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
 | SBB                          | sub + sltu + sub + sltu + or | 1 + 0 + 0 + 0 + 0 |
 | WIDE_MUL                     | mulh + mul                   | 5 + 0             |
 | WIDE_MULU                    | mulhu + mul                  | 5 + 0             |
