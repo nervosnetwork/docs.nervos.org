@@ -1,0 +1,170 @@
+---
+id: vm-cycle-limits
+title: "VM Cycle Limits"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Tooltip from "@components/Tooltip";
+
+# VM Cycle Limits
+
+Cycle limits are used to regulate VM Scripts. <Tooltip>CKB-VM</Tooltip> is a flexible VM that can implement many control flow constructs, such as loops or branches. As a result, we need to enforce certain rules in CKB-VM to prevent malicious Scripts, such as those with infinite loops.
+
+We introduce a concept called `cycles`: each VM instruction or syscall will consume some amount of cycles. At the consensus level, a scalar `max_block_cycles` field is defined so that the sum of cycles consumed by all Scripts in a block cannot exceed this value. Otherwise, the block will be rejected. This way, we can guarantee that all Scripts running in CKB-VM will halt or result in an error state.
+
+## max_block_cycles
+
+As mentioned above, a new scalar `max_block_cycles` field is added to the chain spec as a consensus rule. It puts a hard limit on how many cycles a block's Scripts can consume. No block can consume cycles larger than `max_block_cycles`.
+
+The current `max_block_cycles` in CKB Mainnet `MIRANA` is `3,500,000,000`.
+
+Note there's no limit on the cycles for an individual transaction or a Script. As long as the whole block consumes fewer cycles than `max_block_cycles`, a transaction or a Script in that block is free to consume as many cycles as they want.
+
+## Cycle Measures
+
+Here we will specify the cycles needed by each CKB-VM instruction or syscall.
+
+:::note
+Currently, we define hard rules for each instruction or syscall in the RFC. In future, this might be moved into consensus rules so we can change them more easily.
+:::
+
+The cycles consumed for each operation are determined based on the following rules:
+
+1. Cycles for RISC-V instructions are determined based on real hardware that implements RISC-V ISA.
+2. Cycles for syscalls are measured based on real runtime performance metrics obtained while benchmarking current CKB implementation.
+
+### Initial Loading Cycles
+
+For each byte loaded into CKB-VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dApp developers to ship smaller Scripts as well as preventing DDoS attacks using large binaries.
+::: note
+Fractions will be rounded up. For example, 30.25 cycles will become 31 cycles.
+:::
+
+### Instruction Cycles
+
+All CKB-VM instructions consume 1 cycle except the following ones:
+
+| Instruction | Cycles                                      |
+| ----------- | ------------------------------------------- |
+| JALR        | 3                                           |
+| JAL         | 3                                           |
+| J           | 3                                           |
+| JR          | 3                                           |
+| BEQ         | 3                                           |
+| BNE         | 3                                           |
+| BLT         | 3                                           |
+| BGE         | 3                                           |
+| BLTU        | 3                                           |
+| BGEU        | 3                                           |
+| BEQZ        | 3                                           |
+| BNEZ        | 3                                           |
+| LD          | 2                                           |
+| SD          | 2                                           |
+| LDSP        | 2                                           |
+| SDSP        | 2                                           |
+| LW          | 3                                           |
+| LH          | 3                                           |
+| LB          | 3                                           |
+| LWU         | 3                                           |
+| LHU         | 3                                           |
+| LBU         | 3                                           |
+| SW          | 3                                           |
+| SH          | 3                                           |
+| SB          | 3                                           |
+| LWSP        | 3                                           |
+| SWSP        | 3                                           |
+| MUL         | 5                                           |
+| MULW        | 5                                           |
+| MULH        | 5                                           |
+| MULHU       | 5                                           |
+| MULHSU      | 5                                           |
+| DIV         | 32                                          |
+| DIVW        | 32                                          |
+| DIVU        | 32                                          |
+| DIVUW       | 32                                          |
+| REM         | 32                                          |
+| REMW        | 32                                          |
+| REMU        | 32                                          |
+| REMUW       | 32                                          |
+| ECALL       | 500 (see [Syscall Cycles](#syscall-cycles)) |
+| EBREAK      | 500 (see [Syscall Cycles](#syscall-cycles)) |
+
+### Syscall Cycles
+
+As shown in the above chart, each syscall or breakpoint instruction will have an initial consumption of 500 cycles. This is based on real performance metrics gathered from benchmarking the CKB implementation. Certain bookkeeping logic is required for each syscall.
+
+In addition, for each byte loaded into CKB-VM in the syscalls, 0.25 cycles will be charged. Notice that fractions will also be rounded up here.
+
+## Guidelines
+
+In general, the cycle consumption rules above follow certain guidelines:
+
+- Branches are more expensive than normal instructions.
+- Memory accesses are more expensive than normal instructions. Since CKB-VM is a 64-bit system, loading a 64-bit value directly will cost fewer cycles than loading smaller values.
+- Multiplication and divisions are much more expensive than normal instructions.
+- Syscalls include 2 parts: the bookkeeping part at first, and a plain memcpy phase. The first bookkeeping part includes quite complex logic, which should consume much more cycles. The memcpy part is quite cheap on modern hardware, hence fewer cycles will be charged.
+
+Looking into the literature, the cycle consumption rules here resemble a lot like the performance metrics one can find in modern computer archtecture.
+
+## Other Cycles
+
+### B extension in CKB-VM version 1
+
+We have added the [RISC-V B extension (v1.0.0)](https://github.com/riscv/riscv-bitmanip). This extension aims at covering the four major categories of bit manipulation: counting, extracting, inserting and swapping. For all B instructions, 1 cycle will be consumed.
+
+### MOP Fusion in CKB-VM version 1
+
+Macro-Operation Fusion (also Macro-Op Fusion, MOP Fusion, or Macrofusion) is a hardware optimization technique found in many modern microarchitectures whereby a series of adjacent macro-operations are merged into a single macro-operation prior or during decoding. Those instructions are later decoded into fused-µOPs.
+
+The cycle consumption of the merged instructions is the maximum cycle value of the two instructions before the merge. We have verified that the use of MOPs can lead to significant improvements in some encryption algorithms.
+
+| Opcode                                                    | Origin                       | Cycles            |
+| --------------------------------------------------------- | ---------------------------- | ----------------- |
+| [ADC](https://github.com/nervosnetwork/ckb-vm/issues/169) | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| SBB                                                       | sub + sltu + sub + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| WIDE_MUL                                                  | mulh + mul                   | 5 + 0             |
+| WIDE_MULU                                                 | mulhu + mul                  | 5 + 0             |
+| WIDE_MULSU                                                | mulhsu + mul                 | 5 + 0             |
+| WIDE_DIV                                                  | div + rem                    | 32 + 0            |
+| WIDE_DIVU                                                 | divu + remu                  | 32 + 0            |
+| FAR_JUMP_REL                                              | auipc + jalr                 | 0 + 3             |
+| FAR_JUMP_ABS                                              | lui + jalr                   | 0 + 3             |
+| LD_SIGN_EXTENDED_32_CONSTANT                              | lui + addiw                  | 1 + 0             |
+
+### MOP Fusion in CKB-VM version 2
+
+There are 5 MOPs added in VM version 2:
+
+| Opcode | Origin           | Cycles    | Description                                                        |
+| ------ | ---------------- | --------- | ------------------------------------------------------------------ |
+| ADCS   | add + sltu       | 1 + 0     | Overflowing addition                                               |
+| SBBS   | sub + sltu       | 1 + 0     | Borrowing subtraction                                              |
+| ADD3A  | add + sltu + add | 1 + 0 + 0 | Overflowing addition and add the overflow flag to the third number |
+| ADD3B  | add + sltu + add | 1 + 0 + 0 | Similar to ADD3A but the registers order is different              |
+| ADD3C  | add + sltu + add | 1 + 0 + 0 | Similar to ADD3A but the registers order is different              |
+
+### Spawn Syscall in CKB-VM version 2
+
+2 new Spawn-related constants for cycle consumption are introduced VM version 2:
+
+```rust
+pub const SPAWN_EXTRA_CYCLES_BASE: u64 = 100_000;
+pub const SPAWN_YIELD_CYCLES_BASE: u64 = 800;
+```
+
+The cycle consumption of each Spawn-related Syscall is as follows. The constants 500 and `BYTES_TRANSFERRED_CYCLES` can be referred to in [RFC-0014](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md).
+
+| Syscall Name         | Cycles Charge                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| spawn                | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES + SPAWN_EXTRA_CYCLES_BASE |
+| pipe                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| inherited_fd         | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| read                 | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES                           |
+| write                | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES                           |
+| close                | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| wait                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| process_id           | 500                                                                                |
+| load block extension | 500 + BYTES_TRANSFERRED_CYCLES                                                     |
+
+In addition, when a VM switches from instantiated to uninstantiated, or from uninstantiated to instantiated, each VM needs `SPAWN_EXTRA_CYCLES_BASE` cycles.
