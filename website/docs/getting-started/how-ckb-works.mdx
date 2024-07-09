@@ -3,13 +3,15 @@ id: how-ckb-works
 title: How CKB Works
 ---
 
+import Tooltip from "@components/Tooltip";
+
 # How CKB Works
 
 To understand CKB, you first need to understand BTC. If you're familiar with BTC, you can directly jump to our [next section](#generalized-utxos) detailing the unique aspects of CKB. Otherwise, continue reading and take 1 minute to understand the UTXO, the essential component of BTC.
 
 ## BTC’s UTXO vs. Cash
 
-BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a [UTXO (Unspent Transaction Output)](/docs/tech-explanation/glossary/#utxo).
+BTC works just like cash. To know how much money you have, you simply count the cash in your pocket. In the BTC world, this cash is termed as a <Tooltip>UTXO</Tooltip>.
 
 <img
   src="/img/how-ckb-works/utxo-box.png"
@@ -30,6 +32,13 @@ But what exactly are generalized UTXOs?
 
 UTXOs are like boxes that carry a lock made up of codes, with the monetary value clearly marked on the surface; Cells are boxes too, but much more versatile and powerful.
 
+<img
+  src="/img/how-ckb-works/cell-box.png"
+  alt="Features of Cell"
+  width="700"
+  height="451"
+/>
+
 ### Dynamic Storage
 
 UTXO boxes represent a specific amount of BTC and that's all it can hold—just the cryptocurrency value. UTXO boxes cannot expand and do not have the capacity to store additional data.
@@ -38,7 +47,7 @@ On the other hand, Cell boxes are different. Each Cell box not only holds a cryp
 
 ### Versatility of Content
 
-Cell boxes can store any data types, as long as there is enough space to fit them. This feature makes CKB highly flexible, allowing you to store any kinds of information beyond just cryptocurrency value. This is also why CKB is called [common knowledge base](/docs/tech-explanation/glossary/#common-knowledge-base).
+Cell boxes can store any data types, as long as there is enough space to fit them. This feature makes CKB highly flexible, allowing you to store any kinds of information beyond just cryptocurrency value. This is also why CKB is called **Common Knowledge Base**.
 
 ### Advanced Coding Capabilities
 
@@ -48,10 +57,10 @@ Unlike the simple and limited code that UTXOs can carry, Cells can use complex, 
 
 BTC only has one lock to guard the ownership of the UTXO box while CKB can have two locks for one Cell box.
 
-- The first required lock is called [Lock Script](/docs/tech-explanation/glossary/#lock-script), which is used to safeguard ownership, similar to BTC’s system.
-- The second optional lock is called [Type Script](/docs/tech-explanation/glossary/#type-script), which determines how the boxes can be spent and updated in the future.
+- The first required lock is called **Lock Script**, which is used to safeguard ownership, similar to BTC’s system.
+- The second optional lock is called **Type Script**, which determines how the boxes can be spent and updated in the future.
 
-Some people are trying to do things like type script to give BTC the ability to limit and determine how the UTXO can be spent and updated in the future transaction, it is called [covenant](https://cointelegraph.com/explained/what-are-bitcoin-covenants-and-how-do-they-work). However, CKB has such ability from the very first beginning due to the design of it. This also makes CKB the ideal layer 2 for Bitcoin since they share the same ideololegy but CKB has more powerful programability.
+Some people are trying to do things like Type Script to give BTC the ability to limit and determine how the UTXO can be spent and updated in the future transaction, it is called [covenant](https://cointelegraph.com/explained/what-are-bitcoin-covenants-and-how-do-they-work). However, CKB has such ability from the very first beginning due to the design of it. This also makes CKB the ideal layer 2 for Bitcoin since they share the same ideololegy but CKB has more powerful programability.
 
 Good! We have master the most important ideas of CKB. Now let's get to meet its real face.
 
@@ -89,16 +98,16 @@ Script: {
 }
 ```
 
-You might wonder why the code_hash is not the actual code, but rather a kind of index pointing to the code. This index helps us retrieve the code, but where exactly is it stored?
+You might wonder why the `code_hash` is not the actual code, but rather a kind of index pointing to the code. This index helps us retrieve the code, but where exactly is it stored?
 
 The answer is simple: the code is stored in another Cell!
 
-Here's how it works: the data field of a Cell can hold arbitrary data, so we can put the real code in the data field of another Cell and link this Cell as a dependency to a transaction. This dependency Cell is therefore called CellDep.
+Here's how it works: the data field of a Cell can hold arbitrary data, so we can put the real code in the data field of another Cell and link this Cell as a dependency to a transaction. This dependency Cell is therefore called **CellDep**.
 
-code_hash is interpreted differently based on the value of hash_type:
+`code_hash` is interpreted differently based on the value of `hash_type`:
 
-- If hash_type is "data", "data1" or "data2", then code_hash should match the `blake2b_ckbhash(data)` of a dep Cell;
-- If hash_type is "type", then code_hash should instead match the `blake2b_ckbhash(type script)` of a dep Cell.
+- If `hash_type` is "data", "data1" or "data2", then `code_hash` should match the `blake2b_ckbhash(data)` of a dep Cell;
+- If `hash_type` is "type", then `code_hash` should instead match the `blake2b_ckbhash(type script)` of a dep Cell.
 
 Keep in mind, `code_hash` and `hash_type` are just ways to locate the code. When a transaction needs to unlock a Cell, it imports the dep Cell, and CKB figures out the rest according to these rules.
 

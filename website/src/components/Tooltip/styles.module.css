@@ -1,0 +1,32 @@
+@import "@css/customVariables.css";
+
+.tooltipContainer {
+  position: relative;
+  display: inline-block;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-decoration: underline !important;
+  text-decoration-style: dotted !important;
+  text-underline-offset: 4px !important;
+}
+
+.tooltipContent {
+  visibility: hidden;
+  background-color: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  left: 0;
+  margin-left: -60px;
+  width: 400px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tooltipContainer:hover .tooltipContent {
+  visibility: visible;
+  opacity: 1;
+}

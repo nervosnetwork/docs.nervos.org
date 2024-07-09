@@ -1,0 +1,174 @@
+---
+id: encoding-specs
+title: Encoding Spec With Examples
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Encoding Spec With Examples
+
+## Summary of Data Types
+
+Molecule categorizes data types into fixed and dynamic sizes:
+
+|       | Fixed Size              | Dynamic Size                      |
+| ----- | ----------------------- | --------------------------------- |
+| Types | `byte` `array` `struct` | `vector` `table` `option` `union` |
+
+## Memory Layout
+
+```
+|  Type  |                      Header                      |               Body                |
+|--------+--------------------------------------------------+-----------------------------------|
+| array  |                                                  |  item-0 |  item-1 | ... |  item-N |
+| struct |                                                  | field-0 | field-1 | ... | field-N |
+| fixvec | items-count                                      |  item-0 |  item-1 | ... |  item-N |
+| dynvec | full-size | offset-0 | offset-1 | ... | offset-N |  item-0 |  item-1 | ... |  item-N |
+| table  | full-size | offset-0 | offset-1 | ... | offset-N | filed-0 | field-1 | ... | field-N |
+| option |                                                  | item or none (zero bytes)         |
+| union  | item-type-id                                     | item                              |                             |
+```
+
+:::note
+
+All items in Header are 32-bit unsigned integers in little-endian.
+
+:::
+
+## Primitive Data Type
+
+### `byte`
+
+| Name   | Description   | Example |
+| ------ | ------------- | ------- |
+| `byte` | A single byte | `00`    |
+
+## Composite Data Types
+
+### `array`
+
+| Name    | Description                                                                                                 | Size                                                           | Serialization                                                                                                                                |
+| ------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `array` | A fixed-size type with a fixed-size inner type and a fixed length. <br/>All items are stored consecutively. | The size of an `array` is the size of inner type times length. | Serializing an array is to serialize all fields in it. <br/>No overhead incurs since all items are stored consecutively without extra space. |
+
+#### Examples
+
+| Definition                     | Stored Value                                                             | Serialized Bytes          |
+| ------------------------------ | ------------------------------------------------------------------------ | ------------------------- |
+| `array Byte3 [byte; 3];`       | `01`, `02`, `03`                                                         | `01 02 03`                |
+| `array Uint32 [byte; 4];`      | A 32-bit unsigned integer `0x01020304` in little-endian                  | `04 03 02 01`             |
+| `array TwoUint32 [Uint32; 2];` | Two 32-bit unsigned integers `0x01020304` and `0xabcde` in little-endian | `04 03 02 01 de bc 0a 00` |
+
+### `struct`
+
+| Name     | Description                                                                        | Size                                                 | Serialization                                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `struct` | A fixed-size type with all fields being fixed-size and a fixed quantity of fields. | The size of a `struct` is the sum of all its fields. | Serializing a `struct` is to serialize all fields in it. <br/>No overhead incurs since all items are stored consecutively without extra space. |
+
+#### Examples
+
+| Definition                                      | Stored Value                                                          | Serialized Bytes |
+| ----------------------------------------------- | --------------------------------------------------------------------- | ---------------- |
+| `struct OnlyAByte { f1: byte }`                 | A byte `ab`                                                           | `ab`             |
+| `struct ByteAndUint32 { f1: byte, f2: Uint32 }` | A byte `ab` and a 32-bit unsigned integer `0x010203` in little-endian | `ab 03 02 01 00` |
+
+### `vectors`
+
+Vectors are categorized into: fixed vector, `fixvec`, and dynamic vector, `dynvec`. If the inner item is fixed-size, it's a `fixvec`; otherwise, it's a `dynvec`.
+
+Both of `fixvec` and `dynvec` are dynamic-size types.
+
+| Name     | Description                                       | Serialization                                                                                                                                                                                                                    |
+| -------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fixvec` | A dynamic-size type with fixed-size inner item.   | **Step 1**. Serialize the length as a 32-bit unsigned integer in little-endian. <br/>**Step 2**. Serialize all items.                                                                                                            |
+| `dynvec` | A dynamic-size type with dynamic-size inner item. | **Step1**. Serialize the full size in bytes as a 32-bit unsigned integer in little-endian. <br/>**Step 2**. Serialize all offset of the items as 32-bit unsigned integer in little-endian. <br/>**Step 3**. Serialize all items. |
+
+#### Examples of Fixed Vector
+
+Define `vector Bytes <byte>;`:
+| Item | Serialized Bytes |
+| --- | --- |
+| An empty `Bytes` | `00 00 00 00` (The length of any empty fixed vector is `0`). |
+| `0x12` | `01 00 00 00, 12` |
+| `0x1234567890abcdef` | `08 00 00 00, 12 34 56 78 90 ab cd ef` |
+
+Define `vector Uint32Vec <Uint32>;`:
+
+| Item                                       | Serialized Bytes                                                                                                                              |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| An empty `Uint32Vec`                       | `00 00 00 00`                                                                                                                                 |
+| `0x123`                                    | `01 00 00 00, 23 01 00 00`                                                                                                                    |
+| `[0x123, 0x456, 0x7890, 0xa, 0xbc, 0xdef]` | # there are six items <br/>`06 00 00 00` <br/># six items <br/>`23 01 00 00, 56 04 00 00, 90 78 00 00, 0a 00 00 00, bc 00 00 00, ef 0d 00 00` |
+
+#### Example of Dynamic Vector
+
+Define `vector BytesVec <Bytes>;`:
+
+| Item                                  | Serialized Bytes                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An empty `BytesVec`                   | `04 00 00 00` (The full size of an empty dynamic vector is 4 bytes).                                                                                                                                                                                                                                                               |
+| `[0x1234]`                            | # the full size is 14 bytes <br/>`0e 00 00 00` <br/># one offset <br/>`08 00 00 00` <br/># one item <br/>`02 00 00 00 12 34`                                                                                                                                                                                                       |
+| `[0x1234, 0x, 0x567, 0x89, 0xabcdef]` | # full size is 52 (0x34) bytes <br/>`34 00 00 00` <br/># five offsets (20 bytes in total) <br/>`18 00 00 00, 1e 00 00 00, 22 00 00 00, 28 00 00 00, 2d 00 00 00` <br/># five items (28 bytes in total) <br/>`02 00 00 00, 12 34` <br/>`00 00 00 00,` <br/>`02 00 00 00, 05 67` <br/>`01 00 00 00, 89` <br/>`03 00 00 00, ab cd ef` |
+
+### `table`
+
+| Name    | Description                                                                    | Serialization                                                                                                                                                                                                                                               |
+| ------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `table` | A dynamic-size type. <br/>Can be considered as a `dynvec` with a fixed length. | The same as `dynvec`: <br/>**Step1**. Serialize the full size in bytes as a 32-bit unsigned integer in little-endian. <br/>**Step 2**. Serialize all offset of the items as 32-bit unsigned integer in little-endian. <br/>**Step 3**. Serialize all items. |
+
+#### Example
+
+Define `table MixedType { f1: Bytes, f2: byte, f3: Uint32, f4: Byte3, f5: Bytes }`, the serialized bytes of a `MixedType { f1: 0x, f2: 0xab, f3: 0x123, f4: 0x456789, f5: 0xabcdef }` is:
+
+```
+# the full size is 43 (0x2b) bytes
+2b 00 00 00
+# five offsets (20 bytes in total)
+18 00 00 00, 1c 00 00 00, 1d 00 00 00, 21 00 00 00, 24 00 00 00
+# five items (19 bytes in total)
+00 00 00 00
+ab
+23 01 00 00
+45 67 89
+03 00 00 00, ab cd ef
+```
+
+### `option`
+
+| Name     | Description          | Serialization                                                                                                                                                                                  |
+| -------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `option` | A dynamic-size type. | Serializing an `option` depends on whether it is empty or not. <br/>If empty, zero bytes (the size is `0`). <br/>If not, serialize the inner item (the size is same as the inner item's size). |
+
+#### Example
+
+Define `option BytesVecOpt (BytesVec);`
+
+| Item         | Serialized Bytes                                                                                                                                       |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `None`       | ` ` (Empty)                                                                                                                                            |
+| `Some([])`   | `04 00 00 00`                                                                                                                                          |
+| `Some([0x])` | # the full size of BytesVec is 12 bytes <br/>`0c 00 00 00` <br/># the offset of Bytes <br/>`08 00 00 00` <br/># the length of Bytes <br/>`00 00 00 00` |
+
+### `union`
+
+| Name    | Description          | Serialization                                                                                                                                                                                            |
+| ------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `union` | A dynamic-size type. | **Step 1**. Serialize a item type ID in bytes as a 32-bit unsigned integer in little-endian. The item type ID is the index of the inner items, starting at 0. <br/>**Step 2**. Serialize the inner item. |
+
+#### Example
+
+Define `union HybridBytes { Byte3, Bytes, BytesVec, BytesVecOpt }`
+| Item | Serialized Bytes |
+| --- | --- |
+| `Byte3 (0x123456)` | `00 00 00 00, 12 34 56` |
+| `Bytes (0x)` | `01 00 00 00, 00 00 00 00` |
+| `Bytes (0x123)` | `01 00 00 00, 02 00 00 00, 01 23` |
+| `BytesVec ([])` | `02 00 00 00, 04 00 00 00` |
+| `BytesVec ([0x])` | `02 00 00 00, 0c 00 00 00, 08 00 00 00, 00 00 00 00` |
+| `BytesVec ([0x123])` | `02 00 00 00, 0e 00 00 00, 08 00 00 00, 02 00 00 00, 01 23` |
+| `BytesVec ([0x123, 0x456])` | # Item Type Id <br/>`02 00 00 00` <br/># the full size of BytesVec is 24 bytes <br/>`18 00 00 00` <br/># two offsets of BytesVec (8 bytes in total) <br/>`0c 00 00 00, 12 00 00 00,` <br/># two Bytes (12 bytes in total) <br/>`02 00 00 00, 01 23` <br/>`02 00 00 00, 04 56` |
+| `BytesVecOpt (None)` | `03 00 00 00` |
+| `BytesVecOpt (Some(([])))` | `03 00 00 00, 04 00 00 00` |
+| `BytesVecOpt (Some(([0x])))` | `03 00 00 00, 0c 00 00 00, 08 00 00 00, 00 00 00 00` |
+| `BytesVecOpt (Some(([0x123])))` | `03 00 00 00, 0e 00 00 00, 08 00 00 00, 02 00 00 00, 01 23` |
+| `BytesVecOpt (Some(([0x123, 0x456])))` | # Item Type Id <br/>`03 00 00 00` <br/># the full size of BytesVec is 24 bytes <br/>`18 00 00 00` <br/># two offsets of BytesVec (8 bytes in total) <br/>`0c 00 00 00, 12 00 00 00,` <br/># two Bytes (12 bytes in total) <br/>`02 00 00 00, 01 23` <br/>`02 00 00 00, 04 56` |

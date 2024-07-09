@@ -15,6 +15,7 @@ yarn.lock
 *.log
 *.png
 *.jpg
+*.svg
 *.jpeg
 *.gif
 *.webp

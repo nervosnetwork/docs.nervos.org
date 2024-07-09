@@ -1,0 +1,111 @@
+---
+id: schema-language
+title: Molecule Schema Language
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Molecule Schema Language
+
+## Grammar
+
+- [EBNF Version](https://www.notion.so/cryptape/grammar/grammar.ebnf)
+
+## Language Reference
+
+### Comments
+
+Line comments:
+
+```
+// This is a line comment
+```
+
+Block comments:
+
+```
+/* This
+   is
+   a
+   block
+   comment
+ */
+
+```
+
+### Built-in Types
+
+#### Primitive Type
+
+There is only one built-in primitive type: `byte`.
+
+:::note
+
+Molecule serialization does not consider the order of user data where a sequence of bytes is stored in memory. You must pack and unpack the data manually.
+
+:::
+
+#### Composite Types
+
+- `array`
+  An array consists of an item type and an unsigned integer.
+
+```
+array ArrayName [ItemType; N];  // N is an unsigned integer
+```
+
+- `struct`
+  A struct consists of a set of named and typed fields.
+
+```
+struct StructName {
+    field_name_1: FieldType1,
+    field_name_2: FieldType2,
+    field_name_3: FieldType3,
+}
+```
+
+- `vector`
+  A vector contains only one item type.
+
+```
+vector VectorName <ItemType>;
+```
+
+- `table`
+  A table consists of a set of named and typed fields, same as `struct`.
+
+```
+table TableName {
+    field_name_1: FieldType1,
+    field_name_2: FieldType2,
+    field_name_3: FieldType3,
+}
+```
+
+- `option`
+  An option contains only an item type.
+
+```
+option OptionName (ItemType);
+```
+
+- `union`
+  A `union` contains a set of item types.
+
+```
+union UnionName {
+    ItemType1,
+    ItemType2,
+    ItemType3,
+}
+```
+
+### Keywords
+
+- `import`
+  Import types from other schema files.
+
+```
+import ../library/common_types;
+```

@@ -1,0 +1,284 @@
+---
+id: lumos
+title: JavaScript/TypeScript (Lumos)
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# JavaScript/TypeScript (Lumos)
+
+## Introduction
+
+[Lumos](https://github.com/ckb-js/lumos/) is the JavaScript/TypeScript SDK designed for developers who want to interact with the Nervos CKB in both web environments and Node.js applications. The flexibility and widespread use of JavaScript/TypeScript make it an excellent choice for developing web-based dApps. Lumos is particularly suitable for creating interactive and user-friendly web interfaces, as well as full-stack blockchain solutions.
+
+## Requirements
+
+| Components                                                | Description                                 |
+| --------------------------------------------------------- | ------------------------------------------- |
+| [Node.js](https://nodejs.org/en/download/package-manager) | JavaScript runtime                          |
+| [pnpm](https://pnpm.io/installation)                      | Fast, disk space efficient pacakaga manager |
+
+To verify that you have Node.js and npm installed, you can run this in your terminal:
+
+```bash
+node -v
+pnpm -v
+```
+
+## Setup Project
+
+1. **Create a new project:** Open a terminal and run the following commands to create a folder for your Lumos project:
+
+```bash
+mkdir lumos-example
+cd lumos-example
+pnpm init -y
+```
+
+2. **Install Lumos:** Add the Lumos dependency to your project:
+
+```bash
+pnpm add @ckb-lumos/lumos
+```
+
+3. **Install TypeScript (Optional):** If you want to use TypeScript, you can install it globally using:
+
+```bash
+pnpm add -g typescript
+```
+
+## Setup Client
+
+`@ckb-lumos/lumos` provides a convenient way to interact with CKB nodes. You can connect to different networks (Testnet, Devnet, and Mainnet) by specifying the appropriate URL.
+
+```ts
+import { RPC } from "@ckb-lumos/lumos";
+
+const TESTNET_RPC_URL = "https://testnet.ckb.dev"; // Testnet
+const DEVNET_RPC_URL = "http://127.0.0.1:8114"; // Devnet
+const MAINNET_RPC_URL = "https://mainnet.ckb.dev/rpc"; // Mainnet
+
+// Connect to Testnet
+const rpc = new RPC(TESTNET_RPC_URL);
+```
+
+## Examples
+
+### Generate a Wallet
+
+We can easily generate a private key and address using `ckb-lumos/hd`. Create a `wallet.ts` file in the root directory, and enter the following code:
+
+```ts title='wallet.ts'
+import { hd, config, helpers } from "@ckb-lumos/lumos";
+const { mnemonic, ExtendedPrivateKey, AddressType } = hd;
+
+// Use Testnet environment for this example
+config.initializeConfig(config.predefined.AGGRON4);
+
+// Generate a mnemonic and derive a private key
+export const generateFirstHDPrivateKey = () => {
+  const m = mnemonic.generateMnemonic();
+  const seed = mnemonic.mnemonicToSeedSync(m);
+  const extendedPrivKey = ExtendedPrivateKey.fromSeed(seed);
+  return extendedPrivKey.privateKeyInfo(AddressType.Receving, 0).privateKey;
+};
+
+// Derive an address from the private key
+const getAddressByPrivateKey = (privateKey: string) => {
+  const args = hd.key.privateKeyToBlake160(privateKey);
+  const template = config.predefined.AGGRON4.SCRIPTS["SECP256K1_BLAKE160"]!;
+  const lockScript = {
+    codeHash: template.CODE_HASH,
+    hashType: template.HASH_TYPE,
+    args: args,
+  };
+
+  return helpers.encodeToAddress(lockScript);
+};
+
+const privateKey = generateFirstHDPrivateKey();
+const address = getAddressByPrivateKey(privateKey);
+console.log("privateKey: ", privateKey);
+console.log("address: ", address);
+```
+
+Run the following command and see output in the console:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="print-priv-key-and-address" label="Command">
+```
+
+```bash
+npx ts-node wallet.ts
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="view-priv-key-and-address" label="Result">
+```
+
+```bash
+privateKey: 0x9ab62c912c48d615a030318af514758e8c7b9f03d37a95dd1b89e775b669e0c3
+address:  ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0820lwy5m5uqnhpap2h0kms9ta3u3pp2ss889v4
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+
+```
+
+:::caution
+When you generate a private key, keep it in a safe place and do not disclose it to anyone, otherwise the asset may not be unlocked or lost.
+:::
+
+### Check CKB Balance
+
+To check the balance of a CKB address, you need to collect the Cells associated with the address and sum their capacities. Add the following code to your `wallet.ts` file:
+
+```ts title='wallet.ts'
+import { BI, RPC, Indexer } from "@ckb-lumos/lumos";
+
+// CKB also provides an indexer rpc to help searching easily.
+const TESTNET_RPC_URL = "https://testnet.ckb.dev/rpc";
+const TESTNET_INDEXER_URL = "https://testnet.ckb.dev/indexer";
+
+const rpc = new RPC(TESTNET_RPC_URL);
+const indexer = new Indexer(TESTNET_INDEXER_URL, TESTNET_RPC_URL);
+
+// Check CKB balance
+async function getCapacities(address: string): Promise<BI> {
+  const collector = indexer.collector({ lock: helpers.parseAddress(address) });
+
+  let capacities = BI.from(0);
+  for await (const cell of collector.collect()) {
+    capacities = capacities.add(cell.cell_output.capacity);
+  }
+
+  return capacities;
+}
+
+console.log(`address: ${address}`);
+getCapacities(address).then((capacities) =>
+  console.log(`balance: ${capacities.div(10 ** 8).toString()} CKB`)
+);
+```
+
+:::tip CKB vs. Shannons
+The unit of capacity in CKB is Shannon, 1 CKByte = 100,000,000 Shannons, so here we have to divide by 10^8 to get the unit of CKB
+:::
+
+Now, run the following command again to check the balance:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="print-balance" label="Command">
+```
+
+```bash
+npx ts-node wallet.ts
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="view-balance" label="Result">
+```
+
+```bash
+address: <your-address>
+balance: 0 CKB
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+It looks like we don't have any CKB yet, but don't worry, we can claim CKB from [Pudget Faucet](https://faucet.nervos.org/). After inputting your address and claiming 10000.0 CKB, wait about 10s, and run the above command to check your balance again. You should see the change in your balance.
+
+```bash
+address: <your-address>
+balance: 10000 CKB
+```
+
+### Build a Transfer Transaction
+
+Suppose Bob is a pizzeria and you have ordered a pizza from Bob for 100 CKB. Now you need to pay Bob. Bob's address is: `ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqgy5rtexzvhk7jt7gla8wlq5lztf79tjhg9fmd4f`.
+
+Update the `wallet.ts` to build the transfer:
+
+```ts title='wallet.ts'
+import { commons, Address, HexString } from "@ckb-lumos/lumos";
+
+const transfer = async (
+  from: Address,
+  to: Address,
+  capacity: number,
+  privateKey: HexString
+) => {
+  let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
+
+  // Build the base transaction
+  txSkeleton = await commons.common.transfer(
+    txSkeleton,
+    [from],
+    to,
+    BigInt(capacity)
+  );
+  // Pay the transaction fee
+  txSkeleton = await commons.common.payFeeByFeeRate(txSkeleton, [from], 1000);
+
+  // Prepare signing entried and sign the transaction
+  txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
+  const message = txSkeleton.get("signingEntries").get(0)?.message;
+  const Sig = hd.key.signRecoverable(message!, privateKey);
+  const tx = helpers.sealTransaction(txSkeleton, [Sig]);
+
+  // Send the transaction
+  return rpc.sendTransaction(tx, "passthrough");
+};
+
+const bobAddress =
+  "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqgy5rtexzvhk7jt7gla8wlq5lztf79tjhg9fmd4f";
+transfer(address, bobAddress, 100 * 10 ** 8, privateKey).then(
+  (txHash: string) => console.log("txHash: ", txHash)
+);
+```
+
+Run the following command to execute the transfer:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="build-transfer" label="Command">
+```
+
+```bash
+npx ts-node wallet.ts
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="view-transfer" label="Result">
+```
+
+```bash
+txHash is: 0x998dd1ec986ad0f1aff5f527dc3e9fe13cba0d20ee2e7ee0ce83af213cd399c4
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+You can look up the transaction by pasting your `txHash` to the [Explorer](https://pudge.explorer.nervos.org/). This transaction consumed a 10000 CKB Cell and generated a 100 CKB Cell for Bob as well as generated change for itself.
+
+---
+
+## Additional Resources
+
+- [Github](https://github.com/ckb-js/lumos/)
+- [Examples](https://github.com/ckb-js/lumos/tree/develop/examples)
+- [Lumos Docs](https://lumos-website.vercel.app/)
+- [DApp Tutorials](/docs/dapp/transfer-ckb)

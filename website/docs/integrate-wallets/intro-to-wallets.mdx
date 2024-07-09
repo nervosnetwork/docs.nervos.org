@@ -8,6 +8,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import Link from "@docusaurus/Link";
 import WalletCard from "@components/WalletCard";
 import CardLayout from "@components/CardLayout";
+import Tooltip from "@components/Tooltip";
 import { walletCardContents } from "./CardContents";
 
 Essential insights for CKB dApp developers, covering wallet choices, address specifics, and CKB transfer guidelines
@@ -29,7 +30,7 @@ These wallets listed below offer custody and security services tailored to CKB. 
 
 ## CKB Address
 
-CKB address packages the [Lock Script](/docs/tech-explanation/glossary#lock-script) into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki).
+CKB address packages the <Tooltip>Lock Script</Tooltip> into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki).
 
 The CKB address format is an application-level Cell Lock Script display recommendation.
 Here is an example: `ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`.

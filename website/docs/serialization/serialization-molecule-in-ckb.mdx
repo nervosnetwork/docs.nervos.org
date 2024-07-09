@@ -1,0 +1,22 @@
+---
+id: serialization-molecule-in-ckb
+title: Serilization and Molecule in CKB
+---
+
+import Tooltip from "@components/Tooltip";
+
+# Serialization and Molecule in CKB
+
+Serialization refers to the conversion of data structures into a format that facilitates easy storage, transmission, and reconstruction. In Nervos CKB, serialization must ensure stability, consistency, and efficiency. These requirements are essential for maintaining data integrity and ensuring smooth data operations.
+
+Nervos CKB uses two serialization formats: [JSON](https://www.json.org/json-en.html) and [Molecule](https://github.com/nervosnetwork/molecule). While JSON is widely used for node [RPC services](https://www.jsonrpc.org/specification), Molecule serves as the core serialization method in CKB. Molecule defines nearly all structures in CKB, including the overall structure of contracts. Although alternative serialization schemes can be applied to customized parts, Molecule is highly recommended due to its strength and reliability.
+
+## Why Molecule & Advantages
+
+Serialization must be consistent across different implementations. Formats like Protocol Buffers or FlatBuffers exhibit slight differences in byte representation across various languages, leading to inconsistencies. Additionally, CKB requires a serialization solution that supports partial reading and version compatibility.
+
+Molecule was developed to address these specific needs, providing a reliable and consistent serialization format. It stands out due to the following features:
+
+- **Canonicalization**: Ensures the results from different language implementations are consistent in bytes.
+- **Partial Reading and Self-contained Substructures**: Substructures are self-contained and can be directly extracted from their parents, independent from any data of the parent structure. This enables partial reading by only focusing on the necessary parts of the serialized data.
+- **Zero-Copy**: Molecule can directly access specified memory locations, simplifying the parsing process.

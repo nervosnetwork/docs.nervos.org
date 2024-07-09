@@ -31,7 +31,7 @@ const homeCardContents: HomeCardProps[] = [
         label: "Quick Start (5 min)",
         link: "/docs/getting-started/quick-start",
       },
-      { label: "Dev Tools", link: "/docs/getting-started/devtool" },
+      { label: "Dev Tools", link: "/docs/sdk-and-devtool/devtool" },
     ],
     icon: "rocket",
   },
@@ -110,39 +110,44 @@ const tutorialSectionContents: TutorialProps[] = [
 
 const devToolSectionContents: DevToolProps[] = [
   {
-    title: "Lumos",
-    href: "https://github.com/ckb-js/lumos",
-    category: "Development & Deployment",
+    title: "Rust",
+    href: "/docs/sdk-and-devtool/rust",
+    category: "SDK",
   },
   {
-    title: "CKB SDKs",
-    href: "https://github.com/nervosnetwork/ckb-sdk-rust",
-    category: "Development & Deployment",
+    title: "Go",
+    href: "/docs/sdk-and-devtool/go",
+    category: "SDK",
+  },
+  {
+    title: "Java",
+    href: "/docs/sdk-and-devtool/java",
+    category: "SDK",
+  },
+  {
+    title: "Lumos",
+    href: "/docs/sdk-and-devtool/lumos",
+    category: "SDK",
   },
   {
     title: "CKB-CLI",
     href: "https://github.com/nervosnetwork/ckb-cli",
-    category: "Development & Deployment",
+    category: "Other DevTools",
   },
   {
     title: "OffCKB",
     href: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
-    category: "Development & Deployment",
+    category: "Other DevTools",
   },
   {
     title: "CKB Debugger",
     href: "https://github.com/nervosnetwork/ckb-standalone-debugger",
-    category: "Utilities & Testing",
+    category: "Other DevTools",
   },
   {
     title: "CKB Address",
     href: "https://ckb.tools/address",
-    category: "Utilities & Testing",
-  },
-  {
-    title: "Nervos Pudge Faucet",
-    href: "https://faucet.nervos.org/",
-    category: "Utilities & Testing",
+    category: "Other DevTools",
   },
 ];
 

@@ -5,6 +5,7 @@ title: Quick Start (5min)
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import Tooltip from "@components/Tooltip";
 import ScriptTools from "../script/_ScriptTools.mdx";
 
 # Quick Start (5min)
@@ -13,14 +14,14 @@ We recommend using [offCKB](https://www.npmjs.com/package/@offckb/cli) to quickl
 
 ## Install OffCKB
 
-OffCKB provides a one-line command to start a local blockchain (CKB Devnet) with pre-funded test accounts and built-in [Scripts](/docs/tech-explanation/script) like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
+OffCKB provides a one-line command to start a local blockchain (CKB Devnet) with pre-funded test accounts and built-in <Tooltip>Scripts</Tooltip> like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract).
 
 ```bash
 npm install -g @offckb/cli
 ```
 
 :::info
-Throughout this documentation, we use offckb/cli version **>=0.2.3**. You can always run the above command to update to the latest version.
+Throughout this documentation, we use offckb/cli version **>=0.2.5**. You can always run the above command to update to the latest version.
 :::
 
 ## Create a New Project
@@ -158,6 +159,8 @@ npm i && npm run dev
 
 Once the server is up and running, you can view the dApp by visiting [localhost:3000](http://localhost:3000). You can start editing the page by modifying `app/page.tsx`. As you make changes to the file, the page will automatically update to reflect your edits. For detailed instructions on how to start the dApp and explore additional config options, please see the `README.md` file.
 
+![dapp-screenshot](/img/quick-start/next-js-dapp.jpg)
+
 ---
 
 ## DApp Project Structure
@@ -220,180 +223,6 @@ const myContractDep: CellDep = {
   },
   depType: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.DEP_TYPE,
 };
-```
-
-## Switch Between Different Networks
-
-One of the things you might want to do is to switch between different blockchain networks during the development of your dApps. This can be accomplished by applying different environment variables in the project.
-
-According to your boilerplate, you can switch the CKB blockchain network by setting different environment variables.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="remixvite" label="Remix-Vite Boilerplate">
-```
-
-Run the following command in your terminal. Replace `devnet` with `testnet` or `mainnet` as needed:
-
-```bash
-NETWORK=devnet yarn dev
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="nextjs" label="Next.js Boilerplate">
-```
-
-Search for the `.env` file, and modify `NEXT_PUBLIC_NETWORK` with your desired environment:
-
-```bash
-NEXT_PUBLIC_NETWORK=testnet # or testnet, mainnet
-```
-
-Then, run the following command to start your dApp:
-
-```bash
-npm run dev
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-## Access Testing Accounts
-
-`offckb` provides 20 pre-funded accounts for use on Devnet. Each account is funded with 42,000,000,000,000,000 capacity in the Devnet's genesis block. You can access these accounts and copy the private keys and addresses for use when developing your dApps.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="start-devnet" label="Command">
-```
-
-```bash
-offckb accounts
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-start-devnet" label="Response">
-```
-
-```bash
-#### ALL ACCOUNTS ARE FOR TEST AND DEVELOP ONLY  ####
-#### DON'T USE THESE ACCOUNTS ON MAINNET         ####
-#### OTHERWISE YOU WILL LOOSE YOUR MONEY         ####
-
-Print account list, each account is funded with 42_000_000_00000000 capacity in the devnet genesis block.
-
-- "#": 0
-address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8
-privkey: 0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6
-pubkey: 0x02025fa7b61b2365aa459807b84df065f1949d58c0ae590ff22dd2595157bffefa
-lock_arg: 0x8e42b1999f265a0078503c4acec4d5e134534297
-lockScript:
-    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
-    hashType: type
-    args: 0x8e42b1999f265a0078503c4acec4d5e134534297
-
-- "#": 1
-address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew
-privkey: 0x9f315d5a9618a39fdc487c7a67a8581d40b045bd7a42d83648ca80ef3b2cb4a1
-pubkey: 0x026efa0579f09cc7c1129b78544f70098c90b2ab155c10746316f945829c034a2d
-lock_arg: 0x758d311c8483e0602dfad7b69d9053e3f917457d
-lockScript:
-    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
-    hashType: type
-    args: 0x758d311c8483e0602dfad7b69d9053e3f917457d
-
-- "#": 2
-address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvarm0tahu0qfkq6ktuf3wd8azaas0h24c9myfz6
-privkey: 0x59ddda57ba06d6e9c5fa9040bdb98b4b098c2fce6520d39f51bc5e825364697a
-pubkey: 0x02f1ec8d18e8ff13ecf7b3ab8f683d0c3a6d63478a7f7d14ca0fdfe8fea331e863
-lock_arg: 0x9d1edebedf8f026c0d597c4c5cd3f45dec1f7557
-lockScript:
-    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
-    hashType: type
-    args: 0x9d1edebedf8f026c0d597c4c5cd3f45dec1f7557
-
-- "#": 3
-address: ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsq0xt7prh3dy3gu9z45svp89q0d6f6c46cg9dp9mn
-privkey: 0xf4a1fc19468b51ba9d1f0f5441fa3f4d91e625b2af105e1e37cc54bf9b19c0a1
-pubkey: 0x02e72cbdff20422a3886ec667a138a59478d93da072173be4344c55582acdce67c
-lock_arg: 0xe65f823bc5a48a38515690604e503dba4eb15d61
-lockScript:
-    codeHash: 0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
-    hashType: type
-    args: 0xe65f823bc5a48a38515690604e503dba4eb15d61
-# More accounts...
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-## Deposits and Balance Checks
-
-:::note
-To deposit or check balances on Devnet, ensure that you have started the `offckb node`. This step is not required for Testnet operations.
-:::
-
-### Deposit Funds
-
-Occasionally, you may prefer to use your personal CKB account rather than the pre-funded accounts provided by `offckb`. To deposit CKB into your own account using `offckb`, use the command below. Replace `<your-ckb-address>` with your personal CKB address and `<deposit-amount-in-shannon>` with the specific amount you wish to deposit, expressed in shannons:
-:::tip CKB vs. Shannons
-1 CKByte = 100,000,000 Shannons
-:::
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="deposit-devnet" label="Command">
-```
-
-```bash
-offckb deposit --network devnet <your-ckb-address> <deposit-amount-in-shannon>
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-deposit-devnet" label="Response">
-```
-
-```bash
-tx hash:  0xe895970e9c75a5c4703c38a4e37b000895e7690552ba67ef82ae92109d7322fd
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-### Check Balance
-
-To check the balance of a specific account, use the following command. Replace `<CKB-address>` with the address of the account you want to check, and `<devnet/testnet>` with the appropriate network depending on which one you are using:
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="balance-devnet" label="Command">
-```
-
-```bash
-offckb balance <CKB-address> --network <devnet/testnet>
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-balance-devnet" label="Response">
-```
-
-```bash
-Balance: 42000000 CKB
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
 ```
 
 ## Use a Different Frontend Framework? {#different-frontend-framework}

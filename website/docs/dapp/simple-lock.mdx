@@ -11,6 +11,7 @@ import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 import StartDevnet from "./_StartDevnet.mdx";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ImgContainer from "@components/ImgContainer";
+import Tooltip from "@components/Tooltip";
 import CodeTabs from "./_CodeTabs.mdx";
 
 # Build a Simple Lock
@@ -23,9 +24,9 @@ import CodeTabs from "./_CodeTabs.mdx";
 
 In this tutorial, we'll show you how to create a full-stack dApp, including both the frontend and the Script, to help you better understand CKB blockchain development.
 
-Our example dApp will use a simple toy lock. We'll create a Lock Script named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
+Our example dApp will use a simple toy lock. We'll create a <Tooltip>Lock Script</Tooltip> named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
 
-The `hash_lock` project involves specifying a hash in the Script's [script_args](/docs/tech-explanation/script-args). To unlock it, users must provide the preimage that matches the hash.
+The `hash_lock` project involves specifying a hash in the Script's <Tooltip>script_args</Tooltip>. To unlock it, users must provide the preimage that matches the hash.
 
 :::note
 Although this toy lock example isn't intended for production, it's an excellent starting point for learning the basics.
@@ -99,7 +100,7 @@ Now, the app is running in http://localhost:3000
 
 ### Step 5: Deposit Some CKB
 
-With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some Live Cells that use this Script as their Lock Script. This preparation process is known as `deposit`. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 100 CKB into a specific address:
+With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some <Tooltip>Live Cells</Tooltip> that use this Script as their Lock Script. This preparation process is known as **deposit**. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 100 CKB into a specific address:
 
 <CodeTabs
   cmd={`offckb deposit --network devnet ckt1qry2mh3j5cylve2tl2sjpg3zhp9wjeq2l92rvxtd2scsx4jks500xpqrnm4k4g7j8nlnyc0j3y3z5q6s5ns29k8wx9prkn8ff09mhepmagkhur6h 10000000000`}
@@ -108,7 +109,7 @@ With our dApp up and running, you can now input a hash value to construct a `has
 
 Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt to transfer some balance from this address to another. This will allow you to test the `hash_lock` Script and see if it functions as expected.
 
-You can try clicking the `transfer` button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
+You can try clicking the **"Transfer"** button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
 
 <ImgContainer src="/img/dapps/simple-lock.jpg" />
 
