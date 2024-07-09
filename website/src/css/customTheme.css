@@ -266,6 +266,12 @@
   width: 1.125rem;
   height: 1.125rem;
 }
+.category-common-scripts > div > a:before {
+  content: url("/svg/icon-sidebar-common-script.svg");
+  margin-right: 0.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
 .category-molecule > div > a:before {
   content: url("/svg/icon-sidebar-molecule.svg");
   margin-right: 0.5rem;
