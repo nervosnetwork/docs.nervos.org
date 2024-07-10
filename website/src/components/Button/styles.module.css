@@ -19,12 +19,12 @@
   z-index: 1;
 }
 .priBtn {
-  color: var(--dark-text-inverse) !important;
-  box-shadow: var(--dark-btn-shadow);
+  color: var(--text-inverse) !important;
+  box-shadow: var(--btn-shadow);
   backdrop-filter: blur(15px);
 }
 .secBtn {
-  background-color: var(--dark-alert-success-bg);
+  background-color: var(--alert-success-bg);
 }
 .smallBtn {
   line-height: 2rem;
@@ -38,7 +38,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--dark-text-link);
+  background-color: var(--text-link);
   border-radius: 80px;
   z-index: -2;
 }
