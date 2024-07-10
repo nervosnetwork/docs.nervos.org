@@ -1,9 +1,94 @@
 @import "@css/customVariables.css";
 
 .notFoundContainer {
-  width: auto;
-  margin: 0 auto;
-  padding: 1.5em 1em;
-  color: var(--text-secondary) !important;
+  max-width: 852px;
+  width: 100%;
+  margin: 6rem auto 0;
   text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.bgContainer {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: -1;
+}
+.btmContent {
+  margin-top: 4rem;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+.description {
+  margin-bottom: 24px;
+  margin-top: 0;
+  color: var(--text-secondary);
+  width: 100%;
+  max-width: 400px;
+}
+.priButton {
+  margin-bottom: 4rem;
+}
+.links {
+  display: grid;
+  width: 100%;
+  grid-gap: 4rem;
+  row-gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+.eachLink {
+  border-radius: 8px;
+  line-height: 2.25rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-accent);
+}
+.eachLink:hover {
+  background-color: var(--text-link);
+  color: var(--text-inverse);
+  text-decoration: none;
+}
+@media (max-width: 996px) {
+  .links {
+    display: grid;
+    width: 100%;
+    grid-gap: 2rem;
+    row-gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .notFoundContainer {
+    padding: 0 1rem 4rem;
+  }
+  .bgContainer {
+    width: calc(100% - 2rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .links {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+  .priButton {
+    margin-bottom: 2rem;
+  }
+  .notFoundContainer {
+    margin-top: 3rem;
+  }
+  .btmContent {
+    margin-top: 2rem;
+  }
 }
