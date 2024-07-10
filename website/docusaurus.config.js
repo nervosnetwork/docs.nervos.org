@@ -145,6 +145,34 @@ const config = {
       {
         redirects: [
           {
+            from: "/docs",
+            to: "/",
+          },
+          {
+            from: "/docs/reference/rpc/",
+            to: "/docs/node/rpcs",
+          },
+          {
+            from: "/docs/reference/tools",
+            to: "/docs/sdk-and-devtool/devtool",
+          },
+          {
+            from: "/docs/basics/concepts/economics",
+            to: "/docs/tech-explanation/economics",
+          },
+          {
+            from: "/docs/basics/glossary/",
+            to: "/docs/tech-explanation/glossary",
+          },
+          {
+            from: "/docs/basics/guides/mainnet",
+            to: "/docs/node/run-mainnet-node",
+          },
+          {
+            from: "/docs/basics/guides/get-ckb",
+            to: "https://docs-old.nervos.org/docs/basics/guides/get-ckb",
+          },
+          {
             from: "/docs/basics/guides/mining-ckb",
             to: "/docs/mining/guide",
           },
@@ -153,10 +181,24 @@ const config = {
             to: "/docs/mining/halving",
           },
           {
-            from: "/docs/basics/guides/crypto wallets/neuron",
+            from: [
+              "/docs/basics/guides/crypto wallets/neuron",
+              "/docs/basics/guides/neuron",
+            ],
             to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
           },
         ],
+        createRedirects(existingPath) {
+          if (
+            existingPath.includes("/docs/essays/") ||
+            existingPath.includes("/docs/labs/")
+          ) {
+            // Redirect to old-doc
+            console.log("rediect to old-doc");
+            return [`https://docs-old.nervos.org${existingPath}`];
+          }
+          return undefined;
+        },
       },
     ],
     function myPlugin() {

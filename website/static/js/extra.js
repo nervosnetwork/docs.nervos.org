@@ -7,11 +7,6 @@ window.addEventListener("DOMContentLoaded", function () {
                 </div>`;
   document.querySelector("body").prepend(oldSiteLink);
 
-  // Redirect users to /docs/getting-started
-  if (window.location.pathname === "/docs") {
-    window.location.pathname = "/docs/getting-started";
-  }
-
   // Keeps track of search term in GA
   document.addEventListener("keydown", function (event) {
     const target = event.target;
