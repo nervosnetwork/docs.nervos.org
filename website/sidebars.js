@@ -50,6 +50,7 @@ export default {
         "script/vm-cycle-limits",
         "script/minimal-script",
         "script/js-script",
+        "script/debug-script",
         "script/common-script-error-code",
       ],
     },
