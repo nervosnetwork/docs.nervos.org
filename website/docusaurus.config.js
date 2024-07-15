@@ -193,8 +193,6 @@ const config = {
             existingPath.includes("/docs/essays/") ||
             existingPath.includes("/docs/labs/")
           ) {
-            // Redirect to old-doc
-            console.log("rediect to old-doc");
             return [`https://docs-old.nervos.org${existingPath}`];
           }
           return undefined;
