@@ -117,7 +117,7 @@ export const ScriptHeaders: ScriptHeadersType = {
       { label: "Script", link: "/docs/tech-explanation/script" },
       {
         label: "Transaction",
-        link: "/docs/tech-explanation/glossary#transaction",
+        link: "/docs/tech-explanation/transaction",
       },
     ],
     tools: [

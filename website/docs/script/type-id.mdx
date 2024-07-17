@@ -1,6 +1,6 @@
 ---
 id: type-id
-title: "Tutorial: Type ID (Upgradable Script)"
+title: "Tutorial: Upgradable Scripts with Type ID"
 ---
 
 import Tabs from "@theme/Tabs";
@@ -17,25 +17,25 @@ import ScriptTools from "./_ScriptTools.mdx";
   tools={ScriptHeaders.typeid.tools}
 />
 
-Smart contracts are codes that got executed on-chain that nobody can stops. However, sometimes you might want to implement some kind of upgradability for your smart contract in case there are bugs in the source code.
+Scripts are codes that execute on-chain and cannot be stopped. However, sometimes you might want to ensure your Script is upgradable in case there are bugs in the source code.
 
-In CKB, there is a commomly used pattern called [Type ID](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#type-id) to leverage the `hash_type` field in CKB's Script structure to make your Script upgradable. We will explorer this idea in the post.
+In CKB, there is a commomly used pattern called [Type ID](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#type-id) that leverages the `hash_type` field in CKB's Script structure to make your Script upgradable. We will explore this idea in this tutorial.
 
 ## Write A Unique Type Script
 
-Let's first ask a question: how can we create a type Script that ensures only one live cell in CKB can have that unique type Script? By unique type Script, we mean the whole type Script structure, including `code_hash`, `hash_type` and `script_args`.
+How can we create a Type Script that ensures only one <Tooltip>Live Cell</Tooltip> in CKB can have that unique Type Script? By unique Type Script, we mean the whole Type Script structure, including `code_hash`, `hash_type` and `script_args`.
 
-Note that this question might seem irrelevant to Script upgradability right now, but please bear with me, we will see how it will contribute to the final solution in CKB.
+Note that this question might seem irrelevant to Script upgradability right now, but please bear with me, as we will see how it will contribute to the final solution in CKB.
 
 The answer is quite simple, here's the basic workflow of the Script:
 
-1. Count how many output cells use current type Script, if there's more than one cell with current type Script, returns a failure return code;
-2. Count how many input cells use current type Script, if there's one input cell with current type Script, returns a success return code;
-3. Use CKB syscall to read the first OutPoint in current transaction;
-4. If the OutPoint data read match the `args` part of current type Script, returns a success return code;
+1. Count how many output Cells use current Type Script. If there's more than one Cell with the current Type Script, returns a failure return code.
+2. Count how many input Cells use the current Type Script, if there's one input Cell with the current Type Script, returns a success return code.
+3. Use the CKB syscall to read the first OutPoint in the current transaction.
+4. If the OutPoint data read matches the `args` part of the current Type Script, returns a success return code.
 5. Returns a failure return code otherwise.
 
-Putting in simple C code, the Script would look like following:
+Putting in simple C code, the Script would look like the following:
 
 ```c
 #include "blockchain.h"
@@ -97,58 +97,59 @@ int main() {
 }
 ```
 
-Attackers will be prevented in several different directions:
+Attackers will be prevented in several different ways:
 
-1. If an attacker tries to create a cell with the exactly same type Script, there will be 2 cases:
-   a. A valid transaction will have different OutPoint data in the first input from the type Script args;
-   b. If the user tries to duplicate type Script args as the first transaction input, CKB will signal a double-spent error;
-2. If the attacker tries to use a different type Script args, it will be a different type Script by definition.
+1. If an attacker tries to create a Cell with the exact same Type Script, there will be 2 cases:
+   a. A valid transaction will have different OutPoint data in the first input from the Type Script args;
+   b. If the user tries to duplicate the Type Script args as the first transaction input, CKB will signal a double-spent error;
+2. If the attacker tries to use a different Type Script args, it will be a different Type Script by definition.
 
-This way, we can ensure a cell will have unique type Script across all live cells in CKB. Considering each Script has an associated hash, we will have a cell in CKB with its unique hash, or unique ID.
+This way, we can ensure a Cell will have a unique Type Script across all Live Cells in CKB. Considering each Script has an associated hash, we will have a Cell in CKB with its unique hash, or unique ID.
 
 ## Resolving Scripts in CKB Transaction
 
 Now let's look at how CKB resolves the Script to run before the `hash_type` change:
 
-- CKB extracts `code_hash` value from the Script structure to run.
-- It loops through all dep cells, computes the hash of each dep cell data. If any dep cell data hash matches the specified `code_hash`, CKB uses the data in the found dep cell as the Script to run.
-- If no dep cell has data hash matching specified `code_hash`, CKB results in a validation error.
+- CKB extracts the `code_hash` value from the Script structure to run.
+- It loops through all dep Cells, computes the hash of each dep Cell's data. 
+  - If a dep Cell's data hash matches the specified `code_hash`, CKB uses the data in the found dep Cell as the Script to run.
+  - If no dep Cell has a matching data hash, CKB results in a validation error.
 
-The upgradability problem, in fact lies in the way we test for dep cells. Right now we are testing against data hash, and when a Script is upgraded, a different hash will be generated, the matching would fail. That brings a question: can we test for dep cells using a different solution? Is there something that can stay unchanged when the Script is changed? Considering the actual Script to run lives in a cell, we can rephrase the question in a different way:
+The upgradability problem arises because we test dep Cells against data hashes. When a Script is upgraded, the hash changes, causing the match to fail. Therefore, we need a different approach to test dep Cells. 
 
-Is there something that can stay unchanged when a cell's data get updated?
+Is there something that stays unchanged when a Cell's data is updated?
 
-We can use a Script structure! Since lock Script is typically used for signature verification, we can use a type Script for this problem. A type Script can stay perfectly unchanged when a cell's data get changed. Hence we added `hash_type` field to CKB's Script structure, and modified the Script resolving flow to the following:
+Yes, we can use a Script structure! Since <Tooltip>Lock Scripts</Tooltip> are typically used for signature verification, we can use a Type Script to address this problem. A Type Script can stay perfectly unchanged when a Cell's data changes. Hence, we added the `hash_type` field to CKB's Script structure, and modified the Script resolving process:
 
-- For each dep cell, we extract the `test hash` based on `hash_type` value in the Script structure:
-  - If `hash_type` is `data`, the dep cell's data hash is used as `test hash`
-  - If `hash_type` is `type`, the dep cell's type Script hash is used as `test hash`
-- CKB extracts `code_hash` and `hash_type` values from the Script structure to run
-- If CKB finds a dep cell whose `test hash` matches specified `code_hash`, CKB uses the data in the found dep cell as the scrip to run.
-- If no dep cell has `test hash` matching specified `code_hash`, CKB results in a validation error.
+- For each dep Cell, we extract the `test hash` based on `hash_type` value in the Script structure:
+  - If `hash_type` is `data`, the dep Cell's data hash is used as `test hash`.
+  - If `hash_type` is `type`, the dep Cell's type Script hash is used as `test hash`.
+- CKB extracts the `code_hash` and the `hash_type` values from the Script structure to run.
+- If CKB finds a dep Cell with a matching `test hash`, it uses the data in the that dep Cell as the Script to run.
+- If no dep Cell has the matching `test hash`, CKB results in a validation error.
 
-Notice the `hash_type` used here, is the value belonging to the Script to run, not the values of scripts in a dep cell. You could perfectly have 2 inputs in a transaction, one using `data` as `hash_type`, the other using `type` as `hash_type`. Either one of them will use its own correct way to locate the correct cell.
+Note that the `hash_type` used here is for the Script to run, not the values of Scripts in a dep Cell. You can have multiple inputs in a transaction, each with a different `hash_type`. Each will use its own method to find the correct Cell. 
 
-This way we have totally conquered determinism property A above, but for property B there will be some subtle affects, we will discuss those in more details below.
+This approach ensures determinism, meaning the system behaves predictably. However, there may be subtle effects on other properties, which we will discuss in more details below. 
 
 ## Putting Everything Together
 
 There's still one problem unsolved, there might still be an attack:
 
-- A lock Script L1 is stored in a cell C1 with type Script T1
-- Alice guards her cells via lock Script L1 using `hash_type` as `type`, by definition, she fills her Script structure's `code_hash` field with the hash of type Script T1
-- Bob creates a different cell C2 with a always success lock Script L2, and also use the same type Script T1
-- Now Bob can use C2 as a dep cell to unlock Alice's cell. CKB won't be able to distinguish that Alice wants to use C1, while Bob provides C2. Both C1 and C2 use T1 as type Script
+- A Lock Script L1 is stored in a Cell C1 with Type Script T1
+- Alice guards her Cells via Lock Script L1 using `hash_type` as `type`. By definition, she fills her Script structure's `code_hash` field with the hash of Type Script T1
+- Bob creates a different Cell C2 with a always-success Lock Script L2, and also uses the same Type Script T1
+- Now Bob can use C2 as a dep Cell to unlock Alice's Cell. CKB won't be able to distinguish that Alice wants to use C1 while Bob provides C2. Both C1 and C2 use T1 as their Type Script
 
-That teaches us a very important lesson: if you build a lock/type Script and want people to leverage the upgradability property, you have to make sure to use a type Script that is unique and unforgeable.
+This teaches us a very important lesson: if you build a Lock/Type Script and want others to leverage the upgradability property, you have to ensure that the Type Script is unique and unforgeable.
 
-Luckily, we just solved this problem! In the above we just developed a type Script that can provide a unique type Script hash in CKB. Combined together, this unique type Script and `hash_type` feature in CKB provide a way to upgrade already deployed smart contracts.
+Luckily, we have just solved this problem! By developing a Type Script that can provide a unique Type Script hash in CKB, combined with the `hash_type` feature in CKB, we now have a way to upgrade already deployed Scripts.
 
 ## Type-ID as a Genesis Script
 
-The Type ID type Script can be implemented as an ordinaly Script, but CKB team choose to implement it in the CKB node as a special genesis Script. Because if we want to make it upgradable, it has to use itself as the type Script via type Script hash, which is a recursive dependency.
+The Type ID type Script can be implemented as an ordinary Script, but the CKB team chose to implement it in the CKB node as a special genesis Script. This is because if we want to make it upgradable, it has to use itself as the Type Script via Type Script hash, which creates a recursive dependency.
 
-As a genesis Script, the Type ID code cell uses a special type Script hash, which is just the ascii codes in hex of the text `TYPE_ID`.
+As a genesis Script, the Type ID code Cell uses a special Type Script hash, which is just the ASCII codes in hex of the text `TYPE_ID`.
 
 ```
 0x00000000000000000000000000000000000000000000000000545950455f4944
