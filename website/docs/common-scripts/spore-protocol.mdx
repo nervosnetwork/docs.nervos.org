@@ -1,0 +1,101 @@
+---
+id: spore-protocol
+title: Spore Protocol
+---
+
+# Spore Protocol
+
+The [Spore Protocol](https://github.com/sporeprotocol/spore-contract) is an on-chain protocol designed to empower the ownership, distribution, and value capture of unique digital objects (DOBs) known as Spores.
+
+## How Spore Protocol Works
+
+Spore Protocol embeds value into on-chain digital objects (DOBs) using two Cell types: [Spore Cell](#spore) and [Spore Cluster Cell](#cluster). Spore Cells are fundamental, while Spore Cluster Cells are optional extensions providing extra information.
+
+### Spore
+
+A Spore is an on-chain DOB backed by CKBytes. Unlike traditional NFTs that rely on external market demand for their value, Spores offer intrinsic value at minting and potential for value growth. Holders can "melt" their Spores at any time to retrieve the underlying CKBytes.
+
+#### Data Structure
+
+```bash
+data:
+    content-type: Bytes # String Bytes
+    content: Bytes
+    # OPTIONAL
+    cluster_id: Bytes
+type:
+    hash_type: "data1"
+    code_hash: SPORE_TYPE_DATA_HASH
+    args: SPORE_ID
+lock:
+    <user_defined>
+```
+
+- `content-type`: Specifies the content format (e.g., image/png) following [MIME standards](https://datatracker.ietf.org/doc/html/rfc2046). It can include parameters (e.g., immortal=true for indestructible Spore).
+- `content`: Main content of the Spore.
+- `cluster_id`: Optional field for categorizing the Spore into a series or collection.
+- `type`: Type Script set to `SPORE_TYPE_DATA_HASH` with `SPORE_ID` as an argument following the rules of [Type ID Script](https://docs.spore.pro/glossary/terms#type-id)
+  - `SPORE_ID` = hash(this_transaction.inputs[0]) | Output_Index_Of_This_Cell
+
+:::note
+All fields in a Spore Cell are immutable once created.
+:::
+
+### Cluster
+
+A Cluster organizes multiple valuable digital objects (DOBs). Each Spore can be linked to only one Cluster, while each Cluster can associate with many Spores.
+
+- **Cluster Types**: Clusters can be Public or Private. Public Clusters allow anyone to tag a Spore, while Private Clusters restrict tagging to the owner during minting.
+- **Permanent Storage**: Clusters are designed to be indestructible once created, ensuring permanent on-chain presence.
+
+#### Data Structure
+
+```bash
+data:
+    name: Bytes # String Bytes
+    description: Bytes # String Bytes
+type:
+    hash_type: "data1"
+    code_hash: CLUSTER_TYPE_DATA_HASH
+    args: CLUSTER_ID
+lock:
+    <user_defined>
+```
+
+- `name`: Name of the Spore Cluster.
+- `description`: Textual description of the Cluster.
+- `type`: Type Script set to `CLUSTER_TYPE_DATA_HASH` with `CLUSTER_ID` as an argument following the rules of [Type ID Script](https://docs.spore.pro/glossary/terms#type-id)
+  - CLUSTER_ID = hash(this_transaction.inputs[0]) | Grouputput_index_of_this_cell
+
+:::note
+All fields in a Spore Cluster Cell are immutable once created.
+:::
+
+## Deployed Info
+
+The [Spore Protocol](https://github.com/sporeprotocol/spore-contract) has been deployed to CKB's Mainnet Mirana. The following are the deployment details:
+
+### Spore
+
+| parameter | value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| code_hash | 0x4a4dce1df3dffff7f8b2cd7dff7303df3b6150c9788cb75dcf6747247132b9f5 |
+| hash_type | type                                                               |
+| tx_hash   | 0x96b198fb5ddbd1eed57ed667068f1f1e55d07907b4c0dbd38675a69ea1b69824 |
+| index     | 0x0                                                                |
+| dep_type  | code                                                               |
+
+### Cluster
+
+| parameter | value                                                              |
+| --------- | ------------------------------------------------------------------ |
+| code_hash | 0x7366a61534fa7c7e6225ecc0d828ea3b5366adec2b58206f2ee84995fe030075 |
+| hash_type | type                                                               |
+| tx_hash   | 0xe464b7fb9311c5e2820e61c99afc615d6b98bdefbe318c34868c010cbd0dc938 |
+| index     | 0x0                                                                |
+| dep_type  | code                                                               |
+
+## Examples
+
+- DApp tutorial: [Create a DOB](/docs/dapp/create-dob)
+- Other examples: [Spore Protocol tutorials](https://docs.spore.pro/tutorials)

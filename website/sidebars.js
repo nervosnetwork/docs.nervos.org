@@ -69,7 +69,12 @@ export default {
       label: "Common Scripts",
       className: "category-common-scripts",
       collapsible: false,
-      items: ["common-scripts/omnilock", "common-scripts/xudt"],
+      items: [
+        "common-scripts/omnilock",
+        "common-scripts/xudt",
+        "common-scripts/spore-protocol",
+        "common-scripts/spore-dob-0",
+      ],
     },
     {
       type: "category",
