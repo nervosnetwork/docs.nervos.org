@@ -1,0 +1,239 @@
+---
+id: type-id
+title: "Tutorial: Upgradable Scripts with Type ID"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import ScriptHeaders from "./ScriptHeaders.tsx";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./_ScriptTools.mdx";
+import Tooltip from "@components/Tooltip";
+
+# Tutorial: Type ID (Upgradable Script)
+
+<TutorialHeader
+  time={ScriptHeaders.typeid.time}
+  topics={ScriptHeaders.typeid.topics}
+  tools={ScriptHeaders.typeid.tools}
+/>
+
+Scripts are codes that execute on-chain and cannot be stopped. However, sometimes you might want to ensure your Script is upgradable in case there are bugs in the source code.
+
+In CKB, there is a commomly used pattern called [Type ID](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#type-id) that leverages the `hash_type` field in CKB's Script structure to make your Script upgradable. We will explore this idea in this tutorial.
+
+## Write A Unique Type Script
+
+How can we create a Type Script that ensures only one <Tooltip>Live Cell</Tooltip> in CKB can have that unique Type Script? By unique Type Script, we mean the whole Type Script structure, including `code_hash`, `hash_type` and `script_args`.
+
+Note that this question might seem irrelevant to Script upgradability right now, but please bear with me, as we will see how it will contribute to the final solution in CKB.
+
+The answer is quite simple, here's the basic workflow of the Script:
+
+1. Count how many output Cells use current Type Script. If there's more than one Cell with the current Type Script, returns a failure return code.
+2. Count how many input Cells use the current Type Script, if there's one input Cell with the current Type Script, returns a success return code.
+3. Use the CKB syscall to read the first OutPoint in the current transaction.
+4. If the OutPoint data read matches the `args` part of the current Type Script, returns a success return code.
+5. Returns a failure return code otherwise.
+
+Putting in simple C code, the Script would look like the following:
+
+```c
+#include "blockchain.h"
+#include "ckb_syscalls.h"
+
+#define INPUT_SIZE 128
+#define SCRIPT_SIZE 32768
+
+int main() {
+  uint64_t len = 0;
+  int ret = ckb_load_cell(NULL, &len, 0, 1, CKB_SOURCE_GROUP_OUTPUT);
+  if (ret != CKB_INDEX_OUT_OF_BOUND) {
+    return -1;  /* 1 */
+  }
+
+  len = 0;
+  ret = ckb_load_cell(NULL, &len, 0, 0, CKB_SOURCE_GROUP_INPUT);
+  if (ret != CKB_INDEX_OUT_OF_BOUND) {
+    return 0;  /* 2 */
+  }
+
+  /* 3 */
+  unsigned char input[INPUT_SIZE];
+  uint64_t input_len = INPUT_SIZE;
+  ret = ckb_load_input(input, &input_len, 0, 0, CKB_SOURCE_INPUT);
+  if (ret != CKB_SUCCESS) {
+    return ret;
+  }
+  if (input_len > INPUT_SIZE) {
+    return -100;
+  }
+
+  unsigned char Script[SCRIPT_SIZE];
+  len = SCRIPT_SIZE;
+  ret = ckb_load_script(Script, &len, 0);
+  if (ret != CKB_SUCCESS) {
+    return ret;
+  }
+  if (len > SCRIPT_SIZE) {
+    return -101;
+  }
+  mol_seg_t script_seg;
+  script_seg.ptr = (uint8_t *)Script;
+  script_seg.size = len;
+
+  if (MolReader_Script_verify(&script_seg, false) != MOL_OK) {
+    return -102;
+  }
+
+  mol_seg_t args_seg = MolReader_Script_get_args(&script_seg);
+  mol_seg_t args_bytes_seg = MolReader_Bytes_raw_bytes(&args_seg);
+
+  if ((input_len == args_bytes_seg.size) &&
+      (memcmp(args_bytes_seg.ptr, input, input_len) == 0)) {
+    /* 4 */
+    return 0;
+  }
+  return -103;
+}
+```
+
+Attackers will be prevented in several different ways:
+
+1. If an attacker tries to create a Cell with the exact same Type Script, there will be 2 cases:
+   a. A valid transaction will have different OutPoint data in the first input from the Type Script args;
+   b. If the user tries to duplicate the Type Script args as the first transaction input, CKB will signal a double-spent error;
+2. If the attacker tries to use a different Type Script args, it will be a different Type Script by definition.
+
+This way, we can ensure a Cell will have a unique Type Script across all Live Cells in CKB. Considering each Script has an associated hash, we will have a Cell in CKB with its unique hash, or unique ID.
+
+## Resolving Scripts in CKB Transaction
+
+Now let's look at how CKB resolves the Script to run before the `hash_type` change:
+
+- CKB extracts the `code_hash` value from the Script structure to run.
+- It loops through all dep Cells, computes the hash of each dep Cell's data.
+  - If a dep Cell's data hash matches the specified `code_hash`, CKB uses the data in the found dep Cell as the Script to run.
+  - If no dep Cell has a matching data hash, CKB results in a validation error.
+
+The upgradability problem arises because we test dep Cells against data hashes. When a Script is upgraded, the hash changes, causing the match to fail. Therefore, we need a different approach to test dep Cells.
+
+Is there something that stays unchanged when a Cell's data is updated?
+
+Yes, we can use a Script structure! Since <Tooltip>Lock Scripts</Tooltip> are typically used for signature verification, we can use a Type Script to address this problem. A Type Script can stay perfectly unchanged when a Cell's data changes. Hence, we added the `hash_type` field to CKB's Script structure, and modified the Script resolving process:
+
+- For each dep Cell, we extract the `test hash` based on `hash_type` value in the Script structure:
+  - If `hash_type` is `data`, the dep Cell's data hash is used as `test hash`.
+  - If `hash_type` is `type`, the dep Cell's type Script hash is used as `test hash`.
+- CKB extracts the `code_hash` and the `hash_type` values from the Script structure to run.
+- If CKB finds a dep Cell with a matching `test hash`, it uses the data in the that dep Cell as the Script to run.
+- If no dep Cell has the matching `test hash`, CKB results in a validation error.
+
+Note that the `hash_type` used here is for the Script to run, not the values of Scripts in a dep Cell. You can have multiple inputs in a transaction, each with a different `hash_type`. Each will use its own method to find the correct Cell.
+
+This approach ensures determinism, meaning the system behaves predictably. However, there may be subtle effects on other properties, which we will discuss in more details below.
+
+## Putting Everything Together
+
+There's still one problem unsolved, there might still be an attack:
+
+- A Lock Script L1 is stored in a Cell C1 with Type Script T1
+- Alice guards her Cells via Lock Script L1 using `hash_type` as `type`. By definition, she fills her Script structure's `code_hash` field with the hash of Type Script T1
+- Bob creates a different Cell C2 with a always-success Lock Script L2, and also uses the same Type Script T1
+- Now Bob can use C2 as a dep Cell to unlock Alice's Cell. CKB won't be able to distinguish that Alice wants to use C1 while Bob provides C2. Both C1 and C2 use T1 as their Type Script
+
+This teaches us a very important lesson: if you build a Lock/Type Script and want others to leverage the upgradability property, you have to ensure that the Type Script is unique and unforgeable.
+
+Luckily, we have just solved this problem! By developing a Type Script that can provide a unique Type Script hash in CKB, combined with the `hash_type` feature in CKB, we now have a way to upgrade already deployed Scripts.
+
+## Type-ID as a Genesis Script
+
+The Type ID type Script can be implemented as an ordinary Script, but the CKB team chose to implement it in the CKB node as a special genesis Script. This is because if we want to make it upgradable, it has to use itself as the Type Script via Type Script hash, which creates a recursive dependency.
+
+As a genesis Script, the Type ID code Cell uses a special Type Script hash, which is just the ASCII codes in hex of the text `TYPE_ID`.
+
+```
+0x00000000000000000000000000000000000000000000000000545950455f4944
+```
+
+## Integrate Type-ID in Your Script
+
+There are several Rust implementations of `Type-ID` Script you can take as reference to integrate in your Script.
+
+- https://github.com/cryptape/nostr-binding/blob/main/contracts/nostr-binding/src/type_id.rs
+- https://github.com/axonweb3/ckb-type-id
+
+```rust
+use alloc::vec::Vec;
+use blake2b_ref::Blake2bBuilder;
+use ckb_std::{
+    ckb_constants::Source,
+    ckb_types::prelude::Entity,
+    debug,
+    error::SysError,
+    high_level::{load_cell_type_hash, load_input, load_script_hash},
+    syscalls::load_cell,
+};
+
+use super::Error;
+
+pub fn has_type_id_cell(index: usize, source: Source) -> bool {
+    let mut buf = Vec::new();
+    match load_cell(&mut buf, 0, index, source) {
+        Ok(_) => true,
+        Err(e) => {
+            // just confirm cell presence, no data needed
+            if let SysError::LengthNotEnough(_) = e {
+                return true;
+            }
+            false
+        }
+    }
+}
+
+fn locate_first_type_id_output_index() -> Result<usize, Error> {
+    let current_script_hash = load_script_hash()?;
+
+    let mut i = 0;
+    loop {
+        let type_hash = load_cell_type_hash(i, Source::Output)?;
+
+        if type_hash == Some(current_script_hash) {
+            break;
+        }
+        i += 1
+    }
+    Ok(i)
+}
+
+/// Given a 32-byte type id, this function validates if
+/// current transaction confronts to the type ID rules.
+pub fn validate_type_id(type_id: [u8; 32]) -> Result<(), Error> {
+    if has_type_id_cell(1, Source::GroupInput) || has_type_id_cell(1, Source::GroupOutput) {
+        debug!("There can only be at most one input and at most one output type ID cell!");
+        return Err(Error::TooManyTypeIdCell);
+    }
+
+    if !has_type_id_cell(0, Source::GroupInput) {
+        // We are creating a new type ID cell here. Additional checkings are needed to ensure the type ID is legit.
+        let index = locate_first_type_id_output_index()?;
+        // The type ID is calculated as the blake2b (with CKB's personalization) of
+        // the first CellInput in current transaction, and the created output cell
+        // index(in 64-bit little endian unsigned integer).
+        let input = load_input(0, Source::Input)?;
+        let mut blake2b = Blake2bBuilder::new(32)
+            .personal(b"ckb-default-hash")
+            .build();
+        blake2b.update(input.as_slice());
+        blake2b.update(&index.to_le_bytes());
+        let mut ret = [0; 32];
+        blake2b.finalize(&mut ret);
+
+        if ret != type_id {
+            debug!("Invalid type ID!");
+            return Err(Error::TypeIdNotMatch);
+        }
+    }
+    Ok(())
+}
+```

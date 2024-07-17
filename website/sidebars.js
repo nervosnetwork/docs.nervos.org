@@ -49,6 +49,7 @@ export default {
         "script/syscalls-for-script",
         "script/vm-cycle-limits",
         "script/minimal-script",
+        "script/type-id",
         "script/js-script",
         "script/common-script-error-code",
       ],
