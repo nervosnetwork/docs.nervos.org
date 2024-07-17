@@ -111,11 +111,11 @@ This way, we can ensure a Cell will have a unique Type Script across all Live Ce
 Now let's look at how CKB resolves the Script to run before the `hash_type` change:
 
 - CKB extracts the `code_hash` value from the Script structure to run.
-- It loops through all dep Cells, computes the hash of each dep Cell's data. 
+- It loops through all dep Cells, computes the hash of each dep Cell's data.
   - If a dep Cell's data hash matches the specified `code_hash`, CKB uses the data in the found dep Cell as the Script to run.
   - If no dep Cell has a matching data hash, CKB results in a validation error.
 
-The upgradability problem arises because we test dep Cells against data hashes. When a Script is upgraded, the hash changes, causing the match to fail. Therefore, we need a different approach to test dep Cells. 
+The upgradability problem arises because we test dep Cells against data hashes. When a Script is upgraded, the hash changes, causing the match to fail. Therefore, we need a different approach to test dep Cells.
 
 Is there something that stays unchanged when a Cell's data is updated?
 
@@ -128,9 +128,9 @@ Yes, we can use a Script structure! Since <Tooltip>Lock Scripts</Tooltip> are ty
 - If CKB finds a dep Cell with a matching `test hash`, it uses the data in the that dep Cell as the Script to run.
 - If no dep Cell has the matching `test hash`, CKB results in a validation error.
 
-Note that the `hash_type` used here is for the Script to run, not the values of Scripts in a dep Cell. You can have multiple inputs in a transaction, each with a different `hash_type`. Each will use its own method to find the correct Cell. 
+Note that the `hash_type` used here is for the Script to run, not the values of Scripts in a dep Cell. You can have multiple inputs in a transaction, each with a different `hash_type`. Each will use its own method to find the correct Cell.
 
-This approach ensures determinism, meaning the system behaves predictably. However, there may be subtle effects on other properties, which we will discuss in more details below. 
+This approach ensures determinism, meaning the system behaves predictably. However, there may be subtle effects on other properties, which we will discuss in more details below.
 
 ## Putting Everything Together
 
