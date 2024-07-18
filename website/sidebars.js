@@ -51,6 +51,7 @@ export default {
         "script/minimal-script",
         "script/type-id",
         "script/js-script",
+        "script/debug-script",
         "script/common-script-error-code",
       ],
     },
