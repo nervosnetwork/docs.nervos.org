@@ -13,15 +13,23 @@ import ScriptTools from "./_ScriptTools.mdx";
 
 ## CKB-Debugger
 
-[ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger) is a standalone debugger CLI tool enabling off-chain contract development.
+Debugging Scripts on the Nervos CKB can be challenging without the right tools. We recommend using the [CKB-Debugger](https://github.com/nervosnetwork/ckb-standalone-debugger), a powerful standalone command-line tool designed for off-chain Script development. With CKB-Debugger, you can efficiently identify and resolve issues in your Scripts, ensuring smooth execution and optimal performance.
 
-### Install
+## Install
+
+Install CKB-Debugger using [cargo](https://doc.rust-lang.org/cargo):
 
 ```bash
 cargo install --git https://github.com/nervosnetwork/ckb-standalone-debugger ckb-debugger
 ```
 
-### Usage
+On **MacOS**, the `protoc` binary must be available to compile `ckb-vm-pprof-converter`. This can be installed via [Homebrew](https://brew.sh/):
+
+```bash
+brew install protobuf
+```
+
+## Usage
 
 ```bash
 ckb-debugger 0.113.0
@@ -62,17 +70,17 @@ ARGS:
     <args>...
 ```
 
-### Examples
+## Examples
 
-#### 1. Execute Transactions Locally
+### 1. Execute Transactions Locally
 
-We can download a on-chain transaction from the network and execute it locally. To download a transaction, use [ckb-cli](https://github.com/nervosnetwork/ckb-cli):
+To download an on-chain transaction from the network and execute it locally, use [ckb-cli](https://github.com/nervosnetwork/ckb-cli):
 
 ```sh
 $ ckb-cli --url https://mainnet.ckbapp.dev/rpc mock-tx dump --tx-hash 0x5f0a4162622daa0e50b2cf8f49bc6ece22d1458d96fc12a094d6f074d6adbb55 --output-file mock_tx.json
 ```
 
-You can execute the lock script or type script in the transaction:
+Then execute the Lock Script or Type Script in the transaction:
 
 ```sh
 $ ckb-debugger --tx-file mock_tx.json --cell-index 0 --cell-type input --script-group-type lock
@@ -82,7 +90,7 @@ Total cycles consumed: 1697297(1.6M)
 Transfer cycles: 12680(12.4K), running cycles: 1684617(1.6M)
 ```
 
-The option `--bin` gives ckb-debugger a chance to "replace" the script, We try to replace the running code in the transaction above with a new version of the lock.
+To replace the Script in the transaction with a new version of the lock, use the `--bin` option:
 
 ```c
 // always_failure.c
@@ -99,37 +107,35 @@ Total cycles consumed: 1706(1.7K)
 Transfer cycles: 764, running cycles: 942
 ```
 
-#### 2. Debug Failed Transactions
+### 2. Debug Failed Transactions
 
-In most case, you want to debug failed transactions instead of successful one to find out the failed reasons.
+In most case, you want to debug failed transactions instead of successful ones to find out the reasons for the failures.
 
-First, let's dump the transaction into a local file. Assume that you are using [Lumos SDK](/docs/sdk-and-devtool/lumos) to build the transaction,
-you can do this by converting the `txSkeleton` type into a json file:
+First, dump the transaction into a local file. Assume you are using the [Lumos SDK](/docs/sdk-and-devtool/lumos) to build the transaction,
+you can convert the `txSkeleton` type into a JSON file:
 
 ```js
 > let txJson = rpc.paramsFormatter.toRawTransaction(lumos.helpers.createTransactionFromSkeleton(txSkeleton))
 > fs.writeFileSync('failed-tx.json', JSON.stringify(txJson, null, 2))
 ```
 
-Second, you will need [ckb-transaction-dumper](https://github.com/nervosnetwork/ckb-transaction-dumper) to convert the `failed-tx.json` to a dump transaction with its surrounding context info:
+Next, convert the `failed-tx.json` to a dump transaction with context info using [ckb-transaction-dumper](https://github.com/nervosnetwork/ckb-transaction-dumper):
 
 ```bash
 $ ckb-transaction-dumper -t failed-tx.json -o full-failed-tx.json -r <mainnet/testnet/devnet RPC url>
 ```
 
-Now let's try debugging the Script, remember to replace the actual `cell-type` and `cell-index` in the following command:
+Then, debug the Script. Remember to replace the `cell-type` and `cell-index` with the actual values in the following command:
 
 ```bash
 $ ckb-debugger --tx-file full-failed-tx.json --cell-index 0 --cell-type output --script-group-type type
 ```
 
-#### 3. Debug Script with GDB
+### 3. Debug Script with GDB
 
-We can use `ckb-debugger` for debugging Script programs using GDB.
+You can debug Scripts using GDB with `ckb-debugger`. Assume the Script is in `fib.c`:
 
-Assume the Script is a `fib.c` file:
-
-```c
+```c title='fib.c'
 int fib(int n) {
     if (n == 0 || n == 1) {
         return n;
@@ -146,7 +152,7 @@ int main() {
 }
 ```
 
-After compiling the `fib.c` to riscv binary `fib`, we can debug this Script in GDB mode:
+After compiling `fib.c` to RISC-V binary `fib`, we can debug this Script in GDB mode:
 
 ```bash
 $ ckb-debugger --mode gdb --gdb-listen 127.0.0.1:9999 --bin fib
@@ -158,17 +164,17 @@ $ (gdb) c
     Breakpoint 1, fib (n=5) at fib.c:2
 ```
 
-At the Breakpoint 1, we learn that fib (n=5) at fib.c:2.
+At the Breakpoint 1, we see that `fib (n=5)` at `fib.c:2`.
 
-#### 4. Profiling data With Flamegraph Visualization Tool
+#### 4. Profiling Data with Flamegraph Visualization Tool
 
-We can use `ckb-debugger` to profile data in the format expected by the flamegraph visualization tool.
+Use `ckb-debugger` to profile data for flamegraph visualization:
 
 ```sh
 $ ckb-debugger --bin fib --pprof fib.pprof
 ```
 
-To convert the textual representation of a flamegraph to a visual one, first install inferno:
+Install [inferno](https://crates.io/crates/inferno) to conver the profile data:
 
 ```sh
 $ cargo install inferno
@@ -180,6 +186,12 @@ Then, pass the file created by ckb-debugger into inferno-flamegraph:
 $ cat fib.pprof | inferno-flamegraph > fib.svg
 ```
 
-Open the svg:
+Open the resulting SVG file to view the flamegraph:
 
 ![img](/img/debug-script/ckb-debugger-flamegraph.jpg)
+
+---
+
+## Additional Resources
+
+- [More debugging examples](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger/examples)
