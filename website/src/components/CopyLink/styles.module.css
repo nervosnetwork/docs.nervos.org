@@ -1,0 +1,12 @@
+.link {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-link);
+}
+.link > a:hover {
+  text-decoration: none;
+}
+.icon {
+  margin-left: 0.5rem;
+}
