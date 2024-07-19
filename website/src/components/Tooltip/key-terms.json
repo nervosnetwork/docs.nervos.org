@@ -13,7 +13,7 @@
   },
   "block": {
     "content": "A grouping of transactions, marked with a timestamp, and a fingerprint of the previous block.",
-    "link": "/docs/tech-explanation/glossary#block"
+    "link": "/docs/tech-explanation/block"
   },
   "block height": {
     "content": "Block height is the total number of blocks that have been confirmed on the blockchain, also used to identify a unique block when specifying a particular block height, as there is always an exact block at any block height.",
@@ -397,7 +397,7 @@
   },
   "transaction": {
     "content": "Transaction is the basic object created and signed by users to interact with distributed ledger.",
-    "link": "/docs/tech-explanation/glossary#transaction"
+    "link": "/docs/tech-explanation/transaction"
   },
   "transaction fee": {
     "content": "A fee which is paid in the native token to miners in exchange for processing a transaction.",
@@ -561,11 +561,11 @@
   },
   "cell_deps": {
     "content": "Pointers to Live Cells on the chain that allow Scripts in the transaction to access (read-only) referenced Live Cells.",
-    "link": "/docs/tech-explanation/glossary#cell-deps"
+    "link": "/docs/tech-explanation/cell-deps"
   },
   "ckbhash": {
     "content": "CKB uses blake2b as the default hash algorithm with the following configurations:.",
-    "link": "/docs/tech-explanation/glossary#ckbhash"
+    "link": "/docs/tech-explanation/ckbhash"
   },
   "ckb merkle tree": {
     "content": "CKB Merkle Tree is a CBMT(  ) using following merge function:.",
@@ -589,11 +589,11 @@
   },
   "dep group": {
     "content": "A method for referencing multiple dependencies which are commonly used together using a single dependency field.",
-    "link": "/docs/tech-explanation/glossary#dep-group"
+    "link": "/docs/tech-explanation/dep-group"
   },
   "dep type": {
     "content": "A field that specifies the type of the dependency.",
-    "link": "/docs/tech-explanation/glossary#dep-type"
+    "link": "/docs/tech-explanation/dep-type"
   },
   "deps": {
     "content": "A shorthand name for dependencies.",
@@ -717,7 +717,7 @@
   },
   "lock script": {
     "content": "A Script that enforces access and ownership of a Cell.",
-    "link": "/docs/tech-explanation/glossary#lock-script"
+    "link": "/docs/tech-explanation/lock-script"
   },
   "lock script hash": {
     "content": "A  hash of a Lock Script which is used as an identifier for the Script when referenced by a Cell.",
@@ -825,7 +825,7 @@
   },
   "outpoint": {
     "content": "A particular output Cell in a transaction.",
-    "link": "/docs/tech-explanation/glossary#outpoint"
+    "link": "/docs/tech-explanation/outpoint"
   },
   "output": {
     "content": "A Live Cell that is created in a transaction.",
@@ -909,7 +909,7 @@
   },
   "since": {
     "content": "since is the u64 (unsigned 64-bit integer) field in transaction input for preventing inclusion before a certain block timestamp or a block number.",
-    "link": "/docs/tech-explanation/glossary#since"
+    "link": "/docs/tech-explanation/since"
   },
   "spv": {
     "content": "An abbreviation for Simplified Payment Verification.",
@@ -961,7 +961,7 @@
   },
   "type script": {
     "content": "A Script that enforces the rules that must be followed in a transaction for a Cell to be consumed as an input or for a Cell to be created as an output.",
-    "link": "/docs/tech-explanation/glossary#type-script"
+    "link": "/docs/tech-explanation/type-script"
   },
   "type script hash": {
     "content": "Or type_hash, a Blake2b hash of a Type Script which is used as an identifier for the Script when referenced by a Cell.",
@@ -981,7 +981,7 @@
   },
   "witness": {
     "content": "A set of cryptographic proof containing the data required to prove authorization of the resources used in the transaction.",
-    "link": "/docs/tech-explanation/glossary#witness"
+    "link": "/docs/tech-explanation/witness"
   },
   "xudt": {
     "content": "An extended UDT standard upon sUDT (Simple UDT) to accommodate additional functionalities, including regulatory compliance.",

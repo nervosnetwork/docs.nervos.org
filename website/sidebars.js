@@ -111,7 +111,12 @@ export default {
       label: "How-Tos",
       className: "category-howto",
       collapsible: false,
-      items: ["how-tos/how-to-sign-a-tx"],
+      items: [
+        "how-tos/how-to-sign-a-tx",
+        "how-tos/how-to-culculate-tx-hash",
+        "how-tos/how-to-culculate-script-hash",
+        "how-tos/how-to-culculate-code-hash",
+      ],
     },
     {
       type: "category",
@@ -132,6 +137,7 @@ export default {
         "tech-explanation/lock-type-diff",
         "tech-explanation/script-group-exe",
         "tech-explanation/witness",
+        "tech-explanation/ckbhash",
         "tech-explanation/transaction",
         "tech-explanation/cell-deps",
         "tech-explanation/out-point",
