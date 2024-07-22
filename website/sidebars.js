@@ -113,9 +113,9 @@ export default {
       collapsible: false,
       items: [
         "how-tos/how-to-sign-a-tx",
-        "how-tos/how-to-culculate-tx-hash",
-        "how-tos/how-to-culculate-script-hash",
-        "how-tos/how-to-culculate-code-hash",
+        "how-tos/how-to-calculate-tx-hash",
+        "how-tos/how-to-calculate-script-hash",
+        "how-tos/how-to-calculate-code-hash",
       ],
     },
     {
