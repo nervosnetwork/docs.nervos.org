@@ -39,7 +39,7 @@ const homeCardContents: HomeCardProps[] = [
     title: "DApp Tutorials",
     links: [
       { label: "Transfer CKB", link: "/docs/dapp/transfer-ckb" },
-      { label: "Write an On-Chain Message", link: "/docs/dapp/write-message" },
+      { label: "Store Data on Cell", link: "/docs/dapp/store-data-on-cell" },
       { label: "Create a DOB", link: "/docs/dapp/create-dob" },
     ],
     icon: "dapp",
@@ -57,8 +57,8 @@ const homeCardContents: HomeCardProps[] = [
     icon: "script",
   },
   {
-    title: "Run a Node",
-    to: "/docs/node/run-mainnet-node",
+    title: "RPCs & Nodes",
+    to: "/docs/node/rpcs",
     icon: "node",
   },
   {
@@ -83,9 +83,9 @@ const tutorialSectionContents: TutorialProps[] = [
     illusSrc: "/svg/illus-transfer-ckb.svg",
   },
   {
-    title: "Write an On-Chain Message",
+    title: "Store Data on Cell",
     description: "Write ‘Hello CKB!’ to a CKB Cell and then retrieve it",
-    link: "/docs/dapp/write-message",
+    link: "/docs/dapp/store-data-on-cell",
     iframeSrc:
       "https://codesandbox.io/embed/jsn25g?view=Editor+%2B+Preview&module=%2Flib.ts",
     illusSrc: "/svg/illus-write-message.svg",

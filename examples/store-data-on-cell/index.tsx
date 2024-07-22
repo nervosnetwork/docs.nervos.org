@@ -57,7 +57,7 @@ export function App() {
 
   return (
     <div>
-      <h1>Write & Read On-Chain Message</h1>
+      <h1>Store Data on Cell</h1>
       <label htmlFor="private-key">Private Key: </label>&nbsp;
       <input
         id="private-key"
@@ -68,7 +68,7 @@ export function App() {
       <ul>
         <li>CKB Address: {fromAddr}</li>
         <li>
-          Current lock script:
+          Current Lock Script:
           <pre>{JSON.stringify(fromLock, null, 2)}</pre>
         </li>
 

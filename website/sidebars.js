@@ -32,7 +32,7 @@ export default {
       collapsible: false,
       items: [
         "dapp/transfer-ckb",
-        "dapp/write-message",
+        "dapp/store-data-on-cell",
         "dapp/create-token",
         "dapp/create-dob",
         "dapp/simple-lock",
