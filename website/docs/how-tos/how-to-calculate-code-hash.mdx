@@ -1,0 +1,18 @@
+---
+id: how-to-calculate-code-hash
+title: How to Calculate Code Hash
+---
+
+import Tooltip from "@components/Tooltip";
+
+# How to Calculate Code Hash
+
+Code hash is the hash of the code binary stored as the data in the code Cell. It is calculated as follows:
+
+```
+ckbhash(data)
+```
+
+Where:
+
+- `ckbhash` is the BLAKE2b hash algorithm specifically used in CKB. For details, refer to [ckbhash](https://docs.nervos.org/docs/tech-explanation/ckbhash).

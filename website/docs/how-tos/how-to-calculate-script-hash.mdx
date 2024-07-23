@@ -1,0 +1,30 @@
+---
+id: how-to-calculate-script-hash
+title: How to Calculate Script Hash
+---
+
+import Tooltip from "@components/Tooltip";
+
+# How to Calculate Script Hash
+
+Script hash is calculated as follows:
+
+```
+ckbhash(molecule_encode(script))
+```
+
+Where:
+
+- `ckbhash` is the BLAKE2b hash algorithm specifically used in CKB. For details, refer to [ckbhash](https://docs.nervos.org/docs/tech-explanation/ckbhash).
+
+- `molecule_encode` serializes a structure into a binary format with the [Molecule serialization method](https://docs.nervos.org/docs/serialization/serialization-molecule-in-ckb)
+
+The definition of Script is as follows:
+
+```
+table Script {
+    code_hash:      Byte32,
+    hash_type:      byte,
+    args:           Bytes,
+}
+```
