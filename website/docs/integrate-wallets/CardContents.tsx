@@ -41,6 +41,16 @@ const walletCardContents: WalletCardProps[] = [
     href: "https://onekey.so/",
     tags: ["Mobile", "Desktop", "Hardware"],
   },
+  {
+    title: "Rei Wallet",
+    href: "https://reiwallet.io/#home",
+    tags: ["Browser Extension"],
+  },
+  {
+    title: "Gate",
+    href: "https://www.gate.io/web3",
+    tags: ["Browser Extension"],
+  },
 ];
 
 export { walletCardContents };
