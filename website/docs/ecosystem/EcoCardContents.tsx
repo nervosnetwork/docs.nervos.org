@@ -7,7 +7,7 @@ const ecoCardContents: EcoCardProps[] = [
       "An extended RGB protocol to manage state changes and transaction verification",
     href: "https://github.com/ckb-cell/RGBPlusPlus-design",
     bannerSrc: "rgb++",
-    tags: ["Protocol"],
+    tags: ["Protocol", "RGB++"],
     links: [
       {
         label: "github",
@@ -42,6 +42,80 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
+    title: "HueHub",
+    description: "First DEX for RGB++ Assets on Bitcoin",
+    href: "https://huehub.xyz/",
+    bannerSrc: "huehub",
+    tags: ["RGB++", "DEX", "DApp"],
+    links: [{ label: "website", link: "https://huehub.xyz/" }],
+  },
+  {
+    title: "Haste",
+    description: "Assets Management Tool for Bitcoin/RGB++/CKB",
+    href: "https://haste.pro/",
+    bannerSrc: "haste",
+    tags: ["RGB++", "DApp"],
+    links: [{ label: "website", link: "https://haste.pro/" }],
+  },
+  {
+    title: "UTXO Swap",
+    description:
+      "An AMM DEX that trades assets within the RGB++ and CKB ecosystems",
+    href: "https://utxoswap.xyz/",
+    bannerSrc: "utxoswap",
+    tags: ["RGB++", "DEX", "DApp"],
+    links: [
+      { label: "website", link: "https://utxoswap.xyz/" },
+      { label: "doc", link: "https://utxoswap.gitbook.io/en" },
+    ],
+  },
+  {
+    title: "Stable++",
+    description: "The first stablecoin issued on RGB++",
+    href: "https://www.stablepp.xyz/",
+    bannerSrc: "stable++",
+    tags: ["RGB++"],
+    links: [{ label: "website", link: "https://www.stablepp.xyz/" }],
+  },
+  {
+    title: "Unicorn",
+    description: "The First DOBs on CKB",
+    href: "https://unidob.xyz/",
+    bannerSrc: "unicorn",
+    tags: ["DOB"],
+    links: [
+      { label: "website", link: "https://unidob.xyz/" },
+      {
+        label: "doc",
+        link: "https://unicorns-organization.gitbook.io/unicorn-cao-zuo-shou-ce",
+      },
+    ],
+  },
+  {
+    title: "Dobby market",
+    description: "The platform for Digital Objects on Bitcoin",
+    href: "https://app.dobby.market/",
+    bannerSrc: "dobby",
+    tags: ["DOB", "DEX", "DApp"],
+    links: [{ label: "website", link: "https://app.dobby.market/" }],
+  },
+  {
+    title: "World3",
+    description: "AI-powered autonomous world on Bitcoin",
+    href: "https://world3.ai/",
+    bannerSrc: "world3",
+    tags: ["AIW"],
+    links: [{ label: "website", link: "https://world3.ai/" }],
+  },
+  {
+    title: "Cellula",
+    description: "A fully on-chain artificial life simulation game",
+    href: "https://www.cellula.life/",
+    bannerSrc: "cellula",
+    tags: ["AIW"],
+    links: [{ label: "website", link: "https://www.cellula.life/" }],
+  },
+  {
     title: ".bit",
     description: "Cross-chain Web3 identities for you and your community",
     href: "https://did.id/",
@@ -62,7 +136,7 @@ const ecoCardContents: EcoCardProps[] = [
       "The 1st inscription protocol established on Nervos $CKB blockchain",
     href: "https://omiga.io/",
     bannerSrc: "omiga",
-    tags: ["Protocol", "DApp"],
+    tags: ["Protocol", "DOB", "DEX", "DApp"],
     links: [
       { label: "website", link: "https://omiga.io/" },
       { label: "doc", link: "https://docs.omiga.io/" },
@@ -190,6 +264,14 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
+    title: "Gate",
+    description: "A browser-extension wallet that supports CKB & RGB++ assets",
+    href: "https://www.gate.io/web3",
+    bannerSrc: "gate",
+    tags: ["RGB++", "Wallet"],
+    links: [{ label: "website", link: "https://www.gate.io/web3" }],
+  },
+  {
     title: "imToken",
     description:
       "A built-in CKB wallet on mobile that enables users to safely send, receive and store CKB",
@@ -202,6 +284,22 @@ const ecoCardContents: EcoCardProps[] = [
       {
         label: "doc",
         link: "https://medium.com/imtoken/imtoken-2-5-0-now-with-nervos-tron-bch-ltc-support-14d7171ccf4",
+      },
+    ],
+  },
+  {
+    title: "Rei Wallet",
+    description:
+      "CKB's native Chrome-extension wallet for digital asset management",
+    href: "https://reiwallet.io/#home",
+    bannerSrc: "reiwallet",
+    tags: ["RGB++", "Wallet"],
+    links: [
+      { label: "website", link: "https://reiwallet.io/#home" },
+      { label: "github", link: "https://github.com/teamtaoist/" },
+      {
+        label: "doc",
+        link: "https://docs.reiwallet.io/",
       },
     ],
   },
@@ -315,18 +413,6 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
-    title: "Axon",
-    description: "A L2 framework that unleashes the power of appchain future",
-    href: "https://axonweb3.io/",
-    bannerSrc: "axon",
-    tags: ["Tools & Infra"],
-    links: [
-      { label: "website", link: "https://axonweb3.io/" },
-      { label: "github", link: "https://github.com/axonweb3/axon" },
-      { label: "doc", link: "https://docs.axonweb3.io/" },
-    ],
-  },
-  {
     title: "BandProtocol",
     description: "A L2 framework that unleashes the power of appchain future",
     href: "https://www.bandprotocol.com/",
@@ -357,19 +443,6 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
-    title: "Godwoken",
-    description:
-      "An EVM-compatible, L2 optimistic rollup solution built on Nervos L1",
-    href: "https://www.godwoken.com/",
-    bannerSrc: "godwoken",
-    tags: ["Tools & Infra"],
-    links: [
-      { label: "website", link: "https://www.godwoken.com/" },
-      { label: "github", link: "https://github.com/godwokenrises" },
-      { label: "doc", link: "https://docs.godwoken.io/" },
-    ],
-  },
-  {
     title: "Khalani",
     description:
       "A decentralized infrastructure for collaborative solving in intent-driven applications",
@@ -379,6 +452,17 @@ const ecoCardContents: EcoCardProps[] = [
     links: [
       { label: "website", link: "https://khalani.network/" },
       { label: "doc", link: "https://blog.khalani.network/" },
+    ],
+  },
+  {
+    title: "Metaforo",
+    description: "Governance tool supporting CKB",
+    href: "https://metaforo.io/",
+    bannerSrc: "metaforo",
+    tags: ["Tools & Infra"],
+    links: [
+      { label: "website", link: "https://metaforo.io/" },
+      { label: "doc", link: "https://metaforo.io/g/metaforodocs" },
     ],
   },
   {
@@ -402,6 +486,19 @@ const ecoCardContents: EcoCardProps[] = [
     tags: ["Tools & Infra"],
     links: [{ label: "website", link: "https://unifra.io/" }],
   },
+  {
+    title: "UTXO Stack",
+    description: "Bitcoin-Native programmability and scalability Layer 2",
+    href: "https://www.utxostack.network/en-us",
+    bannerSrc: "utxostack",
+    tags: ["RGB++", "Tools & Infra"],
+    links: [
+      { label: "website", link: "https://www.utxostack.network/en-us" },
+      { label: "github", link: "https://github.com/ckb-cell" },
+      { label: "doc", link: "https://docs.utxostack.network/docs/intro" },
+    ],
+  },
+
   {
     title: "F2Pool",
     description: "Leading mining pool for PoW network",
