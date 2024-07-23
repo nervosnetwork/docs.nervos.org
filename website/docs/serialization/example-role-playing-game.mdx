@@ -7,16 +7,16 @@ import Tooltip from "@components/Tooltip";
 
 # Example: A Role-Playing Game
 
-As an example, we’ve developed a role-playing game consisting of four schema files:
+As an example, we’ve developed a role-playing game consisting of 4 schema files:
 
-- Basic Types
-- Attributes
-- Roles
-- Skills
+- [Basic Types](#basic-types)
+- [Attributes](#attributes)
+- [Roles](#roles)
+- [Skills](#skills)
 
 ## Basic Types
 
-```
+```c
 // AttrValue is an alias of `byte`.
 //
 // Since Molecule data are strongly-typed, it can gives compile time guarantees
@@ -46,7 +46,7 @@ array Uint32 [byte; 4];
 
 ## Attributes
 
-```
+```c
 import common/basic_types;
 
 // Each role has 8 attributes. The size is fixed.
@@ -64,7 +64,7 @@ struct Attributes {
 
 ## Roles
 
-```
+```c
 import attributes;
 import skills;
 import common/basic_types;
@@ -91,7 +91,7 @@ table Monster {
 
 ## Skills
 
-```
+```c
 import common/basic_types;
 
 // We define several skills.

@@ -17,17 +17,15 @@ Molecule categorizes data types into fixed and dynamic sizes:
 
 ## Memory Layout
 
-```
-|  Type  |                      Header                      |               Body                |
-|--------+--------------------------------------------------+-----------------------------------|
-| array  |                                                  |  item-0 |  item-1 | ... |  item-N |
-| struct |                                                  | field-0 | field-1 | ... | field-N |
-| fixvec | items-count                                      |  item-0 |  item-1 | ... |  item-N |
-| dynvec | full-size | offset-0 | offset-1 | ... | offset-N |  item-0 |  item-1 | ... |  item-N |
-| table  | full-size | offset-0 | offset-1 | ... | offset-N | filed-0 | field-1 | ... | field-N |
-| option |                                                  | item or none (zero bytes)         |
-| union  | item-type-id                                     | item                              |                             |
-```
+| Type   | Header       | Body                      |
+| ------ | ------------ | ------------------------- | -------- | --- | -------- | ------- | ------- | --- | ------- |
+| array  |              | item-0                    | item-1   | ... | item-N   |
+| struct |              | field-0                   | field-1  | ... | field-N  |
+| fixvec | items-count  | item-0                    | item-1   | ... | item-N   |
+| dynvec | full-size    | offset-0                  | offset-1 | ... | offset-N | item-0  | item-1  | ... | item-N  |
+| table  | full-size    | offset-0                  | offset-1 | ... | offset-N | filed-0 | field-1 | ... | field-N |
+| option |              | item or none (zero bytes) |
+| union  | item-type-id | item                      |
 
 :::note
 
@@ -120,7 +118,7 @@ Define `vector BytesVec <Bytes>;`:
 
 Define `table MixedType { f1: Bytes, f2: byte, f3: Uint32, f4: Byte3, f5: Bytes }`, the serialized bytes of a `MixedType { f1: 0x, f2: 0xab, f3: 0x123, f4: 0x456789, f5: 0xabcdef }` is:
 
-```
+```bash
 # the full size is 43 (0x2b) bytes
 2b 00 00 00
 # five offsets (20 bytes in total)

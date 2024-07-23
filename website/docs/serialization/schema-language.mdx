@@ -9,7 +9,7 @@ import Tooltip from "@components/Tooltip";
 
 ## Grammar
 
-- [EBNF Version](https://www.notion.so/cryptape/grammar/grammar.ebnf)
+- [EBNF Version](https://github.com/nervosnetwork/molecule/blob/master/docs/grammar/grammar.ebnf)
 
 ## Language Reference
 
@@ -17,20 +17,19 @@ import Tooltip from "@components/Tooltip";
 
 Line comments:
 
-```
+```c
 // This is a line comment
 ```
 
 Block comments:
 
-```
+```c
 /* This
    is
    a
    block
    comment
  */
-
 ```
 
 ### Built-in Types
@@ -50,14 +49,14 @@ Molecule serialization does not consider the order of user data where a sequence
 - `array`
   An array consists of an item type and an unsigned integer.
 
-```
+```c
 array ArrayName [ItemType; N];  // N is an unsigned integer
 ```
 
 - `struct`
   A struct consists of a set of named and typed fields.
 
-```
+```c
 struct StructName {
     field_name_1: FieldType1,
     field_name_2: FieldType2,
@@ -68,14 +67,14 @@ struct StructName {
 - `vector`
   A vector contains only one item type.
 
-```
+```c
 vector VectorName <ItemType>;
 ```
 
 - `table`
   A table consists of a set of named and typed fields, same as `struct`.
 
-```
+```c
 table TableName {
     field_name_1: FieldType1,
     field_name_2: FieldType2,
@@ -86,14 +85,14 @@ table TableName {
 - `option`
   An option contains only an item type.
 
-```
+```c
 option OptionName (ItemType);
 ```
 
 - `union`
   A `union` contains a set of item types.
 
-```
+```c
 union UnionName {
     ItemType1,
     ItemType2,
@@ -106,6 +105,6 @@ union UnionName {
 - `import`
   Import types from other schema files.
 
-```
+```c
 import ../library/common_types;
 ```

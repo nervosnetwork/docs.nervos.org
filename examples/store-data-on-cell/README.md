@@ -1,6 +1,6 @@
 # Write & Read On-chain Message
 
-This is a simple Dapp example to show how to write and read data on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/write-message) to understand how it works.
+This is a simple Dapp example to show how to write and read data on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/store-data-on-cell) to understand how it works.
 
 This example is originally modified from [hello, CKB](https://github.com/cryptape/ckb-tutorial) by [@Flouse](https://github.com/Flouse).
 
@@ -8,7 +8,7 @@ This example is originally modified from [hello, CKB](https://github.com/cryptap
 
 ```sh
 git clone https://github.com/nervosnetwork/docs.nervos.org.git
-cd docs.nervos.org/examples/write-and-read-message
+cd docs.nervos.org/examples/store-data-on-cell
 yarn && yarn start
 ```
 

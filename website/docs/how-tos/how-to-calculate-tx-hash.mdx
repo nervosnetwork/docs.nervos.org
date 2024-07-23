@@ -1,0 +1,35 @@
+---
+id: how-to-calculate-tx-hash
+title: How to Calculate Transaction Hash
+---
+
+import Tooltip from "@components/Tooltip";
+
+# How to Calculate Transaction Hash
+
+Transaction hash is calculated as follows:
+
+```
+ckbhash(molecule_encode(tx_excluding_witness))
+```
+
+Where:
+
+- `ckbhash` is the BLAKE2b hash algorithm specifically used in CKB. For details, refer to [ckbhash](https://docs.nervos.org/docs/tech-explanation/ckbhash).
+
+- `molecule_encode` serializes a structure into a binary format with the [Molecule serialization method](https://docs.nervos.org/docs/serialization/serialization-molecule-in-ckb)
+
+- `tx_excluding_witness` refers to the transaction structure excluding the witness field, i.e., a raw transaction
+
+The definition of `RawTransaction` is as follows:
+
+```
+table RawTransaction {
+    version:        Uint32,
+    cell_deps:      CellDepVec,
+    header_deps:    Byte32Vec,
+    inputs:         CellInputVec,
+    outputs:        CellOutputVec,
+    outputs_data:   BytesVec,
+}
+```

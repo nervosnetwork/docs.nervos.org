@@ -9,12 +9,12 @@ import Tooltip from "@components/Tooltip";
 
 When Molecule Rust [library](https://github.com/nervosnetwork/molecule) is used in CKB <Tooltip>Scripts</Tooltip>, `no-std` needs to be specified.
 
-```
+```bash
 molecule = { version = "0.7", default-features = false }
 ```
 
 Particularly, for versions later than 0.8, you need to additionally specify `bytes_vec`:
 
-```
+```bash
 molecule = { version = "0.8.0", default-features = false, features = ["bytes_vec"] }
 ```
