@@ -116,6 +116,7 @@ export default {
         "how-tos/how-to-calculate-tx-hash",
         "how-tos/how-to-calculate-script-hash",
         "how-tos/how-to-calculate-code-hash",
+        "how-tos/how-to-manage-txs",
       ],
     },
     {

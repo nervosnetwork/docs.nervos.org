@@ -1826,6 +1826,23 @@ The process of consumption marks the Live Cell as a Dead Cell. This is the equiv
 
 ---
 
+### CPFP
+
+Abbreviation of Child Pays For Parent. A transaction replacement method where a child transaction, a transaction spending the output of the stuck one, using a higher fee to encourage miners to process it along its parent, aiding timely processing during congestion.
+
+<img
+alt="Child Pays for Parent"
+src={useBaseUrl("img/tech_explanation/CPFP.png")}
+width="688"
+/>
+
+#### See Also
+
+- [Fee Bumping](#fee-bumping)
+- [RBF](#RBF)
+
+---
+
 ### Crypto Primitives
 
 Well-established, low-level cryptographic algorithm commonly used to build out a cryptographic protocol.
@@ -2049,6 +2066,17 @@ An Ethereum token standard that supports the creation any number of fungible or 
 - [Token](#token)
 - [User-Defined Token](#user-defined-token)
 - [ERC1155 on Ethereum.org](https://eips.ethereum.org/EIPS/eip-1155)
+
+---
+
+### Fee Bumping
+
+A mechanism for users to increase the fee of a broadcasted transaction to accelerate confirmation, particularly useful during network congestion, or when the initial fee is too low. Typical fee bumping methods are: CPFP (Child Pays For Parent) and RBF (Replace-By-Fee).
+
+#### See Also
+
+- [CPFP](#cpfp)
+- [RBF](#rbf)
 
 ---
 
@@ -2626,9 +2654,9 @@ pub(crate) const DEFAULT_ORPHAN_RATE_TARGET: (u32, u32) = (1, 40);
 
 ---
 
-### Orphan Transactions
+### Orphan Transaction
 
-Orphan transactions are those whose parental transactions are missing at the time that they are processed. These transactions are not propagated to other nodes until all of their missing parents are received, and they thus end up languishing in a local buffer until evicted or their parents are found.
+An orphan transaction is one for which the parent transaction is absent at the time of its processing. It remains unpropagated to other nodes, lingering in a local buffer until it is either evicted or its parent transactions are found.
 
 #### See Also
 
@@ -2766,6 +2794,21 @@ const PROPOSER_REWARD_RATIO: Ratio = Ratio::new(4, 10);
 - [NC-Max](#nc-max)
 
 ---
+
+### RBF
+
+Abbreviation of Replace-by-Fee. A transaction replacement strategy allowing a transaction in the mempool to be replaced with a new transaction having the same input but a higher fee. The fee must be enough to cover itself and all its replaced transactions. RBF was first introduced in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).
+
+<img
+alt="Replace by Fee"
+src={useBaseUrl("img/tech_explanation/RBF.png")}
+width="688"
+/>
+
+#### See Also
+
+- [CPFP](#cpfp)
+- [Fee Bumping](#fee-bumping)
 
 ### RISC-V
 
