@@ -44,7 +44,7 @@ The generator must store pending transactions locally and regularly send them to
 
 It is not recommended for the generator to use output Cells of pending transactions unless the transaction is stuck and requires a <Tooltip>fee bumping</Tooltip>. If chaining pending transactions is unavoidable, limit the chain’s length.
 
-Once the transaction appears in a block on the canonical chain, it turns to **Confirming**.
+The transaction turns to the **Confirming** state once it appears in a block on the canonical chain.
 
 If the pending transaction or any of its ancestor transactions[^1] has conflicting input Cells with a transaction on the canonical chain, it becomes conflicting.
 
