@@ -38,11 +38,11 @@ Different states require different strategies as described in the following sect
 
 ## Pending Transaction
 
-The newly created transaction enters the **Pending** state.
+A newly created transaction starts in the **Pending** state.
 
 The generator must store pending transactions locally and regularly send them to CKB nodes. It's essential because CKB nodes may drop transactions from their pools.
 
-It is not recommended for the generator to use output Cells of pending transactions unless the transaction is stuck and requires a <Tooltip>fee bumping</Tooltip>. If chaining pending transactions is necessary, limit the chain’s length.
+It is not recommended for the generator to use output Cells of pending transactions unless the transaction is stuck and requires a <Tooltip>fee bumping</Tooltip>. If chaining pending transactions is unavoidable, limit the chain’s length.
 
 Once the transaction appears in a block on the canonical chain, it turns to **Confirming**.
 
