@@ -575,6 +575,10 @@
     "content": "Section of the block that contains transaction commitments.",
     "link": "/docs/tech-explanation/glossary#commitment-zone"
   },
+  "cpfp": {
+    "content": "Abbreviation of Child Pays For Parent.",
+    "link": "/docs/tech-explanation/glossary#cpfp"
+  },
   "crypto primitives": {
     "content": "Well-established, low-level cryptographic algorithm commonly used to build out a cryptographic protocol.",
     "link": "/docs/tech-explanation/glossary#crypto-primitives"
@@ -638,6 +642,10 @@
   "erc1155": {
     "content": "An Ethereum token standard that supports the creation any number of fungible or non-fungible tokens on a single contract.",
     "link": "/docs/tech-explanation/glossary#erc1155"
+  },
+  "fee bumping": {
+    "content": "A mechanism for users to increase the fee of a broadcasted transaction to accelerate confirmation, particularly useful during network congestion, or when the initial fee is too low.",
+    "link": "/docs/tech-explanation/glossary#fee-bumping"
   },
   "full address": {
     "content": "An address format used on Nervos that includes the full code hash of the Lock Script associated.",
@@ -815,9 +823,9 @@
     "content": "The estimated orphan block rate specified in NC-max.",
     "link": "/docs/tech-explanation/glossary#orphan-rate-target"
   },
-  "orphan transactions": {
+  "orphan transaction": {
     "content": "Orphan transactions are those whose parental transactions are missing at the time that they are processed.",
-    "link": "/docs/tech-explanation/glossary#orphan-transactions"
+    "link": "/docs/tech-explanation/glossary#orphan-transaction"
   },
   "outbound connection": {
     "content": "Also knowns as \"outgoing connection\".",
@@ -862,6 +870,10 @@
   "proposer_reward_ratio": {
     "content": "The reward ratio from transaction fees for miners who submit proposals specified by NC-Max.",
     "link": "/docs/tech-explanation/glossary#proposer-reward-ratio"
+  },
+  "rbf": {
+    "content": "Abbreviation of Replace-by-Fee.",
+    "link": "/docs/tech-explanation/glossary#rbf"
   },
   "risc-v": {
     "content": "An open standard instruction set architecture (ISA) for general computing.",

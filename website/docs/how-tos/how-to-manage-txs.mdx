@@ -1,0 +1,118 @@
+---
+id: how-to-manage-txs
+title: How to Manage Transactions
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tooltip from "@components/Tooltip";
+
+# How to Manage Transactions
+
+Contributor: [@doitian](https://github.com/doitian)
+
+Managing UTXO transactions can be challenging because they may be stuck in or even dropped from the CKB node transactions pool when the fee is too low.
+
+This guideline is for any transaction generator looking to trace the transaction status before it is finally confirmed on the chain.
+
+## Transaction States
+
+The transaction lifecycle starts after creation and ends when it is finally confirmed or conflicts with a confirmed transaction. During this lifecycle, the transaction must be in one of the following states:
+
+- Pending
+- Confirming
+- Confirmed
+- Conflicting
+- Conflictive
+- Reverted
+- Abandoned
+
+The list excludes <Tooltip>orphan transaction</Tooltip> that depends on unknown Cells, as transaction generators typically ignore them.
+
+Different states require different strategies as described in the following sections.
+
+<img
+  alt="Transition Between Different Transaction States"
+  src={useBaseUrl("img/how-tos/transaction-states.png")}
+  width="688"
+/>
+
+## Pending Transaction
+
+A newly created transaction starts in the **Pending** state.
+
+The generator must store pending transactions locally and regularly send them to CKB nodes. It's essential because CKB nodes may drop transactions from their pools.
+
+It is not recommended for the generator to use output Cells of pending transactions unless the transaction is stuck and requires a <Tooltip>fee bumping</Tooltip>. If chaining pending transactions is unavoidable, limit the chain’s length.
+
+The transaction turns to the **Confirming** state once it appears in a block on the canonical chain.
+
+If the pending transaction or any of its ancestor transactions[^1] has conflicting input Cells with a transaction on the canonical chain, it becomes conflicting.
+
+User or Apps can mark a pending transaction as **Abandoned**, if they decide to give up a stuck transaction.
+
+## Confirming Transaction
+
+Transactions in **Confirming** state are in the chain but have not qualified as **Confirmed** yet.
+
+The generator must store confirming transactions locally but does not need to send them to CKB nodes regularly.
+
+Same as pending transactions, it is not recommended to use the output Cells of confirming transactions.
+
+The block containing the transaction gives one confirmation. Each descendant block in the chain gives an extra confirmation. Although any block can be reverted theoretically, it is safe to assume that the transaction will never be reverted after a certain number, say X, of confirmations. The confirming transaction becomes **Confirmed** when it has received at least X confirmations. X depends on various factors. The generator must decide the value of X and adjust it regularly.
+
+If a chain reorganization reverts the block containing the transaction, the transaction reverts to **Pending**.
+
+## Confirmed Transaction
+
+Transactions in **Confirmed** state are in the chain and has received at least X confirmations.
+
+The generator can remove confirmed transactions from local storage or keep the latest ones as a historical reference.
+
+The generator can freely use the output Cells of confirmed transactions.
+
+If a chain reorganization reverts the block containing the transaction, the transaction becomes **Reverted**.
+
+## Conflicting Transaction
+
+A transaction is in **Conflicting** state if it conflicts with any transaction in the chain. Two different transactions conflict when:
+
+- They have conflict input Cells;
+- A transaction has conflicting input Cells with any ancestor of another transaction;
+- They are descendants of a pair of conflict transactions.
+
+The generator must store these conflicting transactions locally, because there is a chance they may become **Pending** again.
+
+The generator should not use the output Cells of conflicting transactions.
+
+If all blocks containing conflicting transactions have been reverted, the conflicting transactions revert to Pending.
+
+If any conflicting transaction received X confirmations, the conflicting transactions become **Conflicted**.
+
+## Conflictive Transaction
+
+A transaction is in **Conflictive** state when it conflicts with an on-chain transaction that has received at least X confirmations.
+
+The generator can remove conflictive transactions from local storage, or keep the most recent ones for reference.
+
+The generator should not use the output Cells of conflictive transactions.
+
+If all blocks containing conflicting transactions have been reverted, the conflictive transactions revert to **Pending**.
+
+## Reverted Transaction
+
+**Reverted** state is an alias of **Pending**, suggesting that the transaction was once confirmed, but has been reverted.
+
+The generator must store and send reverted transactions regularly. The state transformations are the same as pending transactions.
+
+## Abandoned
+
+The generator should allow users to mark a pending or reverted transaction as **Abandoned**, when they give up the effort to commit it. But due to a timing gap, an abandoned transaction may still be already submitted to a node.
+
+The generator must store a sufficient time range of recent abandoned transactions. Try not to delete transactions that are marked as **Abandoned**, as they might already be in **Pending** state.[^2]
+
+Users are allowed to mark an abandoned transaction to **Pending**.
+
+Transactions can transform from **Abandoned** to **Confirming** or **Conflicting**, like pending and reverted transactions.
+
+[^1]: Transaction A is considered a parent of B, if B uses an output Cell of A as its input Cell. An ancestor is either the parent or an ancestor of any parent.
+[^2]: If you want to accelerate the confirmation, consider using <Tooltip>RBF</Tooltip> <Tooltip>fee bumping</Tooltip> method that involves creating a new transaction using some or all of the same inputs from an unconfirmed transaction, but with a higher fee. Deleting the abandoned transaction eliminates this option. RBF has been a default feature in CKB since [v0.112.1](https://github.com/nervosnetwork/ckb/releases/tag/v0.112.1).
