@@ -246,7 +246,7 @@ function WalletDisplay(): JSX.Element {
             </button>
           ))}
         </div>
-        <CardLayout topMargin={0} colNum={[4, 2, 2, 2]} gap={20}>
+        <CardLayout topMargin={0} colNum={[3, 2, 2, 2]} gap={20}>
           {filteredCards.map((card, index) => (
             <WalletCard
               key={index}
