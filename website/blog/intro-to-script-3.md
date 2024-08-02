@@ -185,7 +185,7 @@ I'm not like [some other organizations](https://hacks.mozilla.org/2019/09/debugg
 
 In case you might need it, here's the full UDT script without diff format:
 
-```
+```bash
 $ cat udt.js
 if (CKB.ARGV.length !== 1) {
   throw "Requires only one argument!";
@@ -244,35 +244,79 @@ if (input_coins !== output_coins) {
 
 In order to run JavaScript, let's first deploy duktape on CKB:
 
-:::note
-The Repl codes in this post are still using the outdated version of CKB Ruby SDK since the article was written a long time ago. We are trying to migrate them to JavaScript SDK, please stay tuned for the updates.
-:::
-
-```
-pry(main)> data = File.read("../ckb-duktape/build/duktape")
-pry(main)> duktape_tx_hash = wallet.send_capacity(wallet.address, CKB::Utils.byte_to_shannon(300000), CKB::Utils.bin_to_hex(duktape_data))
-pry(main)> duktape_data_hash = CKB::Blake2b.hexdigest(duktape_data)
-pry(main)> duktape_out_point = CKB::Types::CellDep.new(out_point: CKB::Types::OutPoint.new(tx_hash: duktape_tx_hash, index: 0))
+```js
+> const fs = require("fs");
+> const data = fs.readFileSync("../ckb-duktape/build/duktape");
+> data.byteLength
+290000
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton, [wallet.address], wallet2.address, "290000" + "00000000");
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.data = "0x" + data.toString("hex");
+  return outputs;
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const duktapeTxHash = await rpc.sendTransaction(signedTx)
+> const duktapeCodeHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
 ```
 
 First, let's create a UDT with 1000000 tokens
 
+```js
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton, [wallet.address], wallet2.address, "20000" + "00000000");
+> const outPointBuf = blockchain.OutPoint.pack(txSkeleton.get("inputs").first().outPoint);
+> const outPointHex = Buffer.from(outPointBuf).toString("hex");
+> outPointHex
+0xd7b0fea7c1527cde27cc4e7a2e055e494690a384db14cc35cd2e51ec6f078163
 ```
-pry(main)> tx = wallet.generate_tx(wallet.address, CKB::Utils.byte_to_shannon(20000))
-pry(main)> tx.cell_deps.push(duktape_out_point.dup)
-pry(main)> arg = CKB::Utils.bin_to_hex(CKB::Serializers::InputSerializer.new(tx.inputs[0]).serialize)
-pry(main)> duktape_udt_script = CKB::Types::Script.new(code_hash: duktape_data_hash, args: [CKB::Utils.bin_to_hex(File.read("udt.js")), arg])
-pry(main)> tx.outputs[0].type = duktape_udt_script
-pry(main)> tx.outputs_data[0] = CKB::Utils.bin_to_hex([1000000].pack("L<"))
-pry(main)> tx.witnesses[0] = "0x"
-pry(main)> signed_tx = tx.sign(wallet.key, api.compute_transaction_hash(tx))
-pry(main)> root_udt_tx_hash = api.send_transaction(signed_tx)
+
+`outPointHex` is part of the args in the Script, we will use a small tool to build the whole js Script args:
+
+```bash
+cd ckb-duktape
+docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
+root@0d31cad7a539:~# cd /code
+root@0d31cad7a539:/code# ./build/native_args_assembler -f udt.js -t 0xd7b0fea7c1527cde27cc4e7a2e055e494690a384db14cc35cd2e51ec6f078163
+da0500000c0000008c050000000000007805000069662028434b422e415247562e6c656e67746820213d3d203129207b0a20207468726f7720225265717569726573206f6e6c79206f6e6520617267756d656e7421223b0a7d0a0a76617220696e7075745f696e646578203d20303b0a76617220696e7075745f636f696e73203d20303b0a76617220627566666572203d206e65772041727261794275666665722834293b0a76617220726574203d20434b422e434f44452e494e4445585f4f55545f4f465f424f554e443b0a0a7768696c6520287472756529207b0a2020726574203d20434b422e7261775f6c6f61645f63656c6c5f64617461286275666665722c20302c20696e7075745f696e6465782c20434b422e534f555243452e47524f55505f494e505554293b0a202069662028726574203d3d3d20434b422e434f44452e494e4445585f4f55545f4f465f424f554e4429207b0a20202020627265616b3b0a20207d0a20206966202872657420213d3d203429207b0a202020207468726f772022496e76616c696420696e7075742063656c6c21223b0a20207d0a20207661722076696577203d206e657720446174615669657728627566666572293b0a2020696e7075745f636f696e73202b3d20766965772e67657455696e74333228302c2074727565293b0a2020696e7075745f696e646578202b3d20313b0a7d0a0a766172206f75747075745f696e646578203d20303b0a766172206f75747075745f636f696e73203d20303b0a0a7768696c6520287472756529207b0a2020726574203d20434b422e7261775f6c6f61645f63656c6c5f64617461280a202020206275666665722c0a20202020302c0a202020206f75747075745f696e6465782c0a20202020434b422e534f555243452e47524f55505f4f55545055540a2020293b0a202069662028726574203d3d3d20434b422e434f44452e494e4445585f4f55545f4f465f424f554e4429207b0a20202020627265616b3b0a20207d0a20206966202872657420213d3d203429207b0a202020207468726f772022496e76616c6964206f75747075742063656c6c21223b0a20207d0a20207661722076696577203d206e657720446174615669657728627566666572293b0a20206f75747075745f636f696e73202b3d20766965772e67657455696e74333228302c2074727565293b0a20206f75747075745f696e646578202b3d20313b0a7d0a0a69662028696e7075745f636f696e7320213d3d206f75747075745f636f696e7329207b0a2020696620282128696e7075745f696e646578203d3d3d2030202626206f75747075745f696e646578203d3d3d20312929207b0a202020207468726f772022496e76616c696420746f6b656e2069737375696e67206d6f646521223b0a20207d0a20207661722066697273745f696e707574203d20434b422e6c6f61645f696e70757428302c20302c20434b422e534f555243452e494e505554293b0a202069662028747970656f662066697273745f696e707574203d3d3d20226e756d6265722229207b0a202020207468726f77202243616e6e6f742066657463682074686520666972737420696e707574223b0a20207d0a2020766172206865785f696e707574203d2041727261792e70726f746f747970652e6d61700a202020202e63616c6c286e65772055696e743841727261792866697273745f696e707574292c2066756e6374696f6e20287829207b0a20202020202072657475726e202822303022202b20782e746f537472696e6728313629292e736c696365282d32293b0a202020207d290a202020202e6a6f696e282222293b0a202069662028434b422e415247565b305d20213d206865785f696e70757429207b0a202020207468726f772022496e76616c6964206372656174696f6e20617267756d656e7421223b0a20207d0a7d0a4e0000000800000042000000307864376230666561376331353237636465323763633465376132653035356534393436393061333834646231346363333563643265353165633666303738313633
+```
+
+Copy this args to the Script args:
+
+```js
+> let duktapeUdtTypeScript = {
+    codeHash: duktapeCodeHash,
+    hashType: "data",
+    args: "0xda0500000c0000008c050000000000007805000069662028434b422e415247562e6c656e67..",
+  };
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = duktapeUdtTypeScript;
+  cell.data = bytes.hexify(Uint128LE.pack(1000000));
+  return outputs;
+});
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: duktapeTxHash,
+    index: "0x0"
+  },
+  depType: "code"
+})
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> const rootUdtTxHash = await rpc.sendTransaction(signedTx)
 ```
 
 If we tried to submit the same transaction again, double-spent error will prevent us from forging the same token:
 
-```
-pry(main)> api.send_transaction(signed_tx)
+```js
+await rpc.sendTransaction(signedTx)
 CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"UnresolvableTransaction(Dead(OutPoint(0x0b607e9599f23a8140d428bd24880e5079de1f0ee931618b2f84decf2600383601000000)))"}
 ```
 
@@ -280,31 +324,51 @@ And no matter how we tried, we cannot create another cell which forges the same 
 
 Now we can try transfering UDTs to another account. First let's try creating one with has more output UDTs than input UDTs
 
-```
-pry(main)> udt_out_point = CKB::Types::OutPoint.new(tx_hash: root_udt_tx_hash, index: 0)
-pry(main)> tx = wallet.generate_tx(wallet2.address, CKB::Utils.byte_to_shannon(20000))
-pry(main)> tx.cell_deps.push(duktape_out_point.dup)
-pry(main)> tx.witnesses[0] = "0x"
-pry(main)> tx.witnesses.push(CKB::Types::Witness.new(data: []))
-pry(main)> tx.outputs[0].type = duktape_udt_script
-pry(main)> tx.outputs_data[0] = CKB::Utils.bin_to_hex([1000000].pack("L<"))
-pry(main)> tx.inputs.push(CKB::Types::Input.new(previous_output: udt_out_point, since: "0"))
-pry(main)> tx.outputs.push(tx.outputs[1].dup)
-pry(main)> tx.outputs[2].capacity = CKB::Utils::byte_to_shannon(20000)
-pry(main)> tx.outputs[2].type = duktape_udt_script
-pry(main)> tx.outputs_data.push(CKB::Utils.bin_to_hex([1000000].pack("L<")))
-pry(main)> signed_tx = tx.sign(wallet.key, api.compute_transaction_hash(tx))
-pry(main)> api.send_transaction(signed_tx)
+```js
+> let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton, [wallet.address], wallet2.address, "20000" + "00000000");
+// todo: push {txHash: rootUdtTxHash, index: "0x0"} to inputs
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = duktapeUdtTypeScript;
+  cell.data = bytes.hexify(Uint128LE.pack(1000000));
+
+  // add one more output
+  outputs.push(cell);
+  return outputs;
+});
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: duktapeTxHash,
+    index: "0x0"
+  },
+  depType: "code"
+})
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> await rpc.sendTransaction(signedTx)
 CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"InvalidTx(ScriptFailure(ValidationFailure(-2)))"}
 ```
 
 Here we tried to send another user 1000000 UDTs while also keeping 1000000 UDTs for the sender itself, of course this should trigger an error since we are trying to forge more tokens. But with slight modification, we can show that a UDT transferring transaction works if you respect the sum verification rule:
 
-```
-pry(main)> tx.outputs_data[0] = CKB::Utils.bin_to_hex([900000].pack("L<"))
-pry(main)> tx.outputs_data[2] = CKB::Utils.bin_to_hex([100000].pack("L<"))
-pry(main)> signed_tx = tx.sign(wallet.key, api.compute_transaction_hash(tx))
-pry(main)> api.send_transaction(signed_tx)
+```js
+> txSkeleton.update("outputs", (outputs) => {
+  let cell = outputs.first();
+  cell.cellOutput.type = duktapeUdtTypeScript;
+  cell.data = bytes.hexify(Uint128LE.pack(500000));
+
+  // add one more output
+  outputs.push(cell);
+  return outputs;
+});
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
+> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> await rpc.sendTransaction(signedTx)
 ```
 
 # Flexible Rules
