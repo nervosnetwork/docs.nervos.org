@@ -9,6 +9,7 @@ export default {
         "getting-started/how-ckb-works",
         "getting-started/quick-start",
         "getting-started/blockchain-networks",
+        "getting-started/ckb-vs-btc",
       ],
     },
     {
