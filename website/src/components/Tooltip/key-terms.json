@@ -824,7 +824,7 @@
     "link": "/docs/tech-explanation/glossary#orphan-rate-target"
   },
   "orphan transaction": {
-    "content": "Orphan transactions are those whose parental transactions are missing at the time that they are processed.",
+    "content": "An orphan transaction is one for which the parent transaction is absent at the time of its processing.",
     "link": "/docs/tech-explanation/glossary#orphan-transaction"
   },
   "outbound connection": {
