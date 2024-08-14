@@ -3,50 +3,53 @@ id: how-to-query-tx-state
 title: How to Query Transaction State
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 import Tooltip from "@components/Tooltip";
 
 # How to Query Transaction State
 
-Upon broadcasting a transaction with `send_transaction` RPC, you will receive a `txhash`, which only indicates that the transaction has been sent to the network, NOT verified on-chain.
+Upon broadcasting a transaction using the `send_transaction` RPC, you will receive a transaction hash (`txhash`), which only indicates that the transaction has been sent to the network, NOT necessarily that it has been verified on-chain.
 
-To query [transaction state](docs/tech-explanation/transaction.md#transaction-states), use `get_transaction`RPC. Remember, `send_transaction` operates asynchronously.
+To query the [transaction state](docs/tech-explanation/transaction.md#transaction-states), use the `get_transaction` RPC. Remember, `send_transaction` operates asynchronously.
 
-For details on CKB JSON-RPC `send_transaction` method, visit the list of [CKB RPC methods](https://github.com/nervosnetwork/ckb/tree/develop/rpc#method-send_transaction).
+For more details on the CKB JSON-RPC `send_transaction` method, visit the list of [CKB RPC methods](https://github.com/nervosnetwork/ckb/tree/develop/rpc#method-send_transaction).
 
-## Example: Query With JSON RPC
+## Example: Query With JSON-RPC
 
-### Request
+```mdx-code-block
+<Tabs>
+  <TabItem value="query-jsonrpc-request" label="Request">
+```
 
-<details>
-    <summary>View details</summary>
-    ```javascript
-    {
-    "id": 42,
-    "jsonrpc": "2.0",
-    "method": "get_transaction",
-    "params": [
-        "0xa0ef4eb5f4ceeb08a4c8524d84c5da95dce2f608e0ca2ec8091191b0f330c6e3"
-    ]
-    }
-    ```
-</details>
+```javascript
+{
+  "id": 42,
+  "jsonrpc": "2.0",
+  "method": "get_transaction",
+  "params": [
+    "0xa0ef4eb5f4ceeb08a4c8524d84c5da95dce2f608e0ca2ec8091191b0f330c6e3"
+  ]
+}
+```
 
-### Response
+```mdx-code-block
+  </TabItem>
+  <TabItem value="query-jsonrpc-response" label="Response">
+```
 
-<details>
-  <summary>View details</summary>
-  ```javascript
-  {
-    "id": 42,
-    "jsonrpc": "2.0",
-    "result": {
-      "transaction": {
-        "cell_deps": [
-          {
-            "dep_type": "code",
-            "out_point": {
-              "index": "0x0",
-              "tx_hash": "0xa4037a893eb48e18ed4ef61034ce26eba9c585f15c9cee102ae58505565eccc3"
+```javascript
+{
+  "id": 42,
+  "jsonrpc": "2.0",
+  "result": {
+    "transaction": {
+      "cell_deps": [
+        {
+          "dep_type": "code",
+          "out_point": {
+            "index": "0x0",
+            "tx_hash": "0xa4037a893eb48e18ed4ef61034ce26eba9c585f15c9cee102ae58505565eccc3"
           }
         }
       ],
@@ -93,7 +96,11 @@ For details on CKB JSON-RPC `send_transaction` method, visit the list of [CKB RP
   }
 }
 ```
-</details>
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
 ## Example: Query With Lumos JavaScript SDK
 
