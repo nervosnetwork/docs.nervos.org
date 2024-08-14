@@ -341,53 +341,50 @@ The following are the step-by-step breakdown of the verification process:
 
 - The values `v1` (3) and `v2` (5) are loaded from the `witnesses` field
 
-```rust
-const v1 = load_value1_from_witness(); // number 3
-const v2 = load_value2_from_witness(); // number 5
-```
+  ```rust
+  const v1 = load_value1_from_witness(); // number 3
+  const v2 = load_value2_from_witness(); // number 5
+  ```
 
-{" "}
-<img
-  src="/img/ckb-vs-btc/execute-load-witness.png"
-  width="700px"
-  height="533px"
-  alt="Witness data fetched and decoded into registers"
-/>
+  <img
+    src="/img/ckb-vs-btc/execute-load-witness.png"
+    width="700px"
+    height="533px"
+    alt="Witness data fetched and decoded into registers"
+  />
 
 2. Calculate the sum
 
 - The Script calculates the sum of these two numbers.
 
-```rust
-const result = v1 + v2; // 3 + 5 = 8
-```
+  ```rust
+  const result = v1 + v2; // 3 + 5 = 8
+  ```
 
-{" "}
-<img
-  src="/img/ckb-vs-btc/execute-check-sum.png"
-  width="700px"
-  height="533px"
-  alt="Sum the two values"
-/>
+  <img
+    src="/img/ckb-vs-btc/execute-check-sum.png"
+    width="700px"
+    height="533px"
+    alt="Sum the two values"
+  />
 
 3. Check the condition
 
 - If the previous`result` equals 8, the CKB-VM returns `0`
 - Otherwise, the CKB-VM returns `1`
 
-```rust
-if (result === 8) { return 0; }  // 8 === 8 in this case
+  ```rust
+  if (result === 8) { return 0; }  // 8 === 8 in this case
 
-return 1;
-```
+  return 1;
+  ```
 
-{" "}
-<img
-  src="/img/ckb-vs-btc/execute-return-valid.png"
-  width="700px"
-  height="533px"
-  alt="Return the final result"
-/>
+  <img
+    src="/img/ckb-vs-btc/execute-return-valid.png"
+    width="700px"
+    height="533px"
+    alt="Return the final result"
+  />
 
 4. The CKB-VM interprets the return value: If the final result is `0`, the transaction is considered **valid;** Otherwise, the transaction is considered **invalid**. In this case, since 8 === 8, `0` is returned, and the transaction is valid.
 
