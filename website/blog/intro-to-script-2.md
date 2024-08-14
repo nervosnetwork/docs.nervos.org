@@ -335,9 +335,9 @@ First, let's create the script args:
 ```bash
 > docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
 > cd /code
-> echo "CKB.debug(\"I'm running in JS)" >> test.js
+> echo "CKB.debug(\"I'm running in JS\")" > test.js
 > ./build/native_args_assembler -f test.js
-360000000c00000032000000000000001e000000434b422e6465627567282249276d2072756e6e696e6720696e204a53290a04000000
+370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000
 ```
 
 Next, copy the script args and build the script:
@@ -346,7 +346,7 @@ Next, copy the script args and build the script:
 > const duktapeTypeScript =  {
   codeHash: duktapeCodeHash,
   hashType: "data",
-  args: "0x360000000c00000032000000000000001e000000434b422e6465627567282249276d2072756e6e696e6720696e204a53290a04000000"
+  args: "0x370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000"
 };
 ```
 
@@ -376,7 +376,7 @@ Now we can create a cell with the duktape type script attached:
 > const duktapeTypeScript =  {
   codeHash: duktapeCodeHash,
   hashType: "data",
-  args: "0x0x360000000c00000032000000000000001e000000434b422e6465627567282249276d2072756e6e696e6720696e204a53290a04000000"
+  args: "0x370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000"
 };
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
 > txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"200" + "00000000");
