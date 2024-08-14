@@ -3,18 +3,18 @@ id: ckb-vs-btc
 title: CKB vs. BTC
 ---
 
-Nervos CKB draws inspiration from Bitcoin, the pioneer of blockchain, and inherits Bitcoin’s robust security features while extending its capabilities. This guide will walk you through key concepts and comparisons to get you started on your journey with Nervos CKB, focusing on the [basic unit](#utxo-vs-cell), [virtual machine (VM)](#bitcoin-script-interpreter-vs-ckb-vm), [Scripts](#btc-script-vs-ckb-script), [transaction structure](#btc-transaction-vs-ckb-transaction), and [verification process](#unlocking--verification-process).
+CKB draws inspiration from Bitcoin, the pioneer of blockchain, and builds on Bitcoin’s foundational innovations such as UTXO and Proof of Work, while uniquely focusing on enhancing contract flexibility and layer 2 solutions tailored for Bitcoin. This guide will walk you through key concepts and comparisons to get you started on your journey with Nervos CKB, focusing on the [basic unit](#utxo-vs-cell), [virtual machine (VM)](#bitcoin-script-interpreter-vs-ckb-vm), [Scripts](#btc-script-vs-ckb-script), [transaction structure](#btc-transaction-vs-ckb-transaction), and [verification process](#unlocking--verification-process).
 
 ## UTXO vs Cell
 
 ### BTC’s UTXO
 
-A UTXO (Unspent Transaction Output) is the remaining amount of digital currency after a transaction is completed. For instance, if Alice has 5 BTC and sends 4 BTC to Bob, two new UTXOs are created: one for Bob (4 BTC) and one for Alice (1 BTC).
+A UTXO (Unspent Transaction Output) is the remaining amount of digital currency after a transaction is completed. For instance, if Alice has 5 BTC and sends 4 BTC to Bob, two new UTXOs are created: one for Bob (4 BTC) and one for Alice (0.999 BTC). Note that the total value of the UTXOs is less than the input amount because the difference is paid as a transaction fee to miners.
 
 <img
   src="/img/ckb-vs-btc/utxo-example.png"
   width="688px"
-  height="347px"
+  height="327px"
   alt="UTXO example"
 />
 
@@ -28,6 +28,13 @@ Here’s the data structure of a UTXO:
   "scriptPubKey": "OP_DUP OP_HASH160 <PubKeyHash> OP_EQUALVERIFY OP_CHECKSIG" // The locking Script that sets the conditions for spending the UTXO
 }
 ```
+
+<img
+  src="/img/ckb-vs-btc/utxo-lock.png"
+  width="688px"
+  height="128px"
+  alt="UTXO with a locking Script"
+/>
 
 ### CKB’s Cell
 
@@ -51,17 +58,26 @@ Here’s the data structure of a Cell:
 }
 ```
 
+<img
+  src="/img/ckb-vs-btc/ckb-lock-script.png"
+  width="688px"
+  height="300px"
+  alt="Cell with a Lock Script"
+/>
+
 ## Bitcoin Script Interpreter vs. CKB-VM
 
 ### Bitcoin Script Interpreter
 
 The Bitcoin Script Interpreter is **stack-based**, meaning it uses a stack data structure to store temporary data during Script execution. Operations in Bitcoin Script push (add) and pop (remove) data from the stack. Here's a GIF depicting a typical Bitcoin Script operation like simple P2PKH (Pay to Public Key Hash):
 
-![btc-script-interpreter](/img/ckb-vs-btc/btc-script-interpreter.gif)
+![How btc-script-interpreter process Script](/img/ckb-vs-btc/btc-script-interpreter.gif)
 
 ### **CKB-VM**
 
-CKB-VM uses the RISC-V instruction set, which is a modern, open-source architecture. This design provides a low-level access to the CPU, enabling highly efficient execution and flexibility. Any programming language that can target RISC-V can be used natively for development on CKB. From JavaScript to Rust, developers can utilize preferred tools and languages, eliminating the need for untested tooling and enabling efficient, secure Script deployment.
+CKB-VM uses the RISC-V instruction set, which is a modern, open-source architecture. This design provides a low-level access to the CPU, enabling highly efficient execution and flexibility. Any programming language that can target RISC-V can be used natively for development on CKB. Here's a GIF depicting a typical CKB-VM process, where the Script validates a transaction by loading values from the transaction data and returning `0` for a valid transaction or `1` for an invalid one.
+
+![How CKB-VM process Script](/img/ckb-vs-btc/ckb-vm.gif)
 
 ## BTC Script vs. CKB Script
 
@@ -70,7 +86,7 @@ Here’s a detailed comparison between BTC Script and CKB Script:
 | Aspect           | BTC Script                                                                                 | CKB Script                                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | Statefulness     | Stateless                                                                                  | Stateful; Can maintain and update state (data) across multiple transactions                                        |
-| Introspection    | Limited. Proposed opcodes like OP_CTV to impose future spending constraints                | Extensive. With Lock Script and Type Script to inspect and interact with other Scripts and the entire transaction. |
+| Introspection    | Limited. Proposed opcodes like `OP_CTV` to impose future spending constraints              | Extensive. With Lock Script and Type Script to inspect and interact with other Scripts and the entire transaction. |
 | Programmability  | Limited by stack-based scripting and predefined opcodes                                    | RISC-V based VM enables extensive programmability and multiple high-level languages                                |
 | Script Structure | Series of opcodes operating on a stack, limiting its scope to basic transaction conditions | Written in high-level languages and compiled to the RISC-V instruction set                                         |
 | Use Cases        | Transaction validation, basic contracts                                                    | Transaction validation, Smart contracts, dApps                                                                     |
@@ -85,8 +101,8 @@ In blockchain systems, the transaction lifecycle spans several stages, from crea
 
 <img
   src="/img/ckb-vs-btc/transaction-lifecycle.png"
-  width="700px"
-  height="130px"
+  width="688px"
+  height="132px"
   alt="Transaction lifecycle spans from creation to confirmation"
 />
 
@@ -101,7 +117,8 @@ In blockchain systems, the transaction lifecycle spans several stages, from crea
 
 Bitcoin transactions are built on the UTXO model, where each transaction output can be used as an input for future transactions.
 
-Here’s the data structure of a BTC transaction:
+<details>
+  <summary>Here’s the data structure of a BTC transaction:</summary>
 
 ```json
 {
@@ -148,11 +165,14 @@ Here’s the data structure of a BTC transaction:
 - The transaction creates new `outputs`, each with a specific `amount` indicating the value being transferred.
 - A `scriptPubKey` is applied to each output, specifying the conditions required to spend these outputs in future transactions. Typically, this includes the recipient’s public key hash and opcodes to verify a signature.
 
+</details>
+
 ### CKB Transaction
 
-While the UTXO model is straightforward and efficient for cryptocurrency transactions, the Cell model in Nervos CKB provides greater versatility, making it suitable for a wider range of applications. The Cell model centers around state as the fundamental element. In CKB, a transaction updates the state by destroying Live Cells and creating new ones, where the total capacity of the destroyed Cells must be greater than or equal to the newly-created Cells, preventing the creation of additional capacity.
+While the UTXO model is straightforward and efficient for cryptocurrency transactions, the Cell Model in Nervos CKB provides greater versatility, making it suitable for a wider range of applications. The Cell Model centers around state as the fundamental element. In CKB, a transaction updates the state by destroying Live Cells and creating new ones, where the total capacity of the destroyed Cells must be greater than or equal to the newly-created Cells, preventing the creation of additional capacity.
 
-Here’s the data structure of a CKB transaction:
+<details>
+  <summary>Here’s the data structure of a CKB transaction:</summary>
 
 ```json
 {
@@ -210,6 +230,8 @@ Here’s the data structure of a CKB transaction:
 }
 ```
 
+</details>
+
 ## Unlocking & Verification Process
 
 ### BTC Example
@@ -225,7 +247,7 @@ OP_ADD <8> OP_EQUAL
 <img
   src="/img/ckb-vs-btc/btc-locking-script.png"
   width="688px"
-  height="231px"
+  height="128px"
   alt="The locking script in a UTXO"
 />
 
@@ -237,9 +259,9 @@ OP_3 OP_5
 
 <img
   src="/img/ckb-vs-btc/btc-unlocking-script.png"
-  width="732px"
-  height="254px"
-  alt="The unlocking script in a transaction's input"
+  width="688px"
+  height="176px"
+  alt="The unlocking Script in a transaction's input"
 />
 
 The following are the step-by-step breakdown of the verification process:
@@ -285,31 +307,29 @@ The following are the step-by-step breakdown of the verification process:
 
 In the CKB example, the Scripting logic is implemented in a more versatile programming environment compared to Bitcoin’s stack-based Script system. Here we’ll use the same example that we used for BTC where Alice wants to spend a Live Cell that is locked by a Script requiring two numbers that, when provided, must sum to 8.
 
-We’ll use simple Rust pseudocode to represent the locking Script:
+We’ll use pseudocode to represent the Lock Script:
 
 ```rust
-const value1 = load_value1_from_witness();
-const value2 = load_value2_from_witness();
-const result = value1 + value2;
+const v1 = load_value1_from_witness();
+const v2 = load_value2_from_witness();
 
-if(result === 8) {
-    return 0;
-} else {
-    return 1;
-}
+const result = v1 + v2;
+
+if (result === 8) { return 0; }
+return 1;
 ```
 
 <img
-  src="/img/ckb-vs-btc/ckb-locking-script.png"
+  src="/img/ckb-vs-btc/ckb-lock-script.png"
   width="688px"
   height="281px"
   alt="The locking Script of an output Cell"
 />
 
-To unlock this Cell for spending, Alice must provide an unlocking Script. In this case, Alice provides the numbers 3 and 5 in the `witnesses` field.
+To unlock this Cell for spending, Alice must provide a key (similar to the unlocking Script in BTC). In this case, Alice provides the numbers 3 and 5 in the `witnesses` field.
 
 <img
-  src="/img/ckb-vs-btc/ckb-unlocking-script.png"
+  src="/img/ckb-vs-btc/ckb-witness.png"
   width="732px"
   height="379px"
   alt="The unlocking Script in the witnesses field"
@@ -319,35 +339,55 @@ The following are the step-by-step breakdown of the verification process:
 
 1. Load Witness data
 
-- The values `value1` (3) and `value2` (5) are loaded from the `witnesses` field
+- The values `v1` (3) and `v2` (5) are loaded from the `witnesses` field
 
 ```rust
-const value1 = load_value1_from_witness(); // number 3
-const value2 = load_value2_from_witness(); // number 5
+const v1 = load_value1_from_witness(); // number 3
+const v2 = load_value2_from_witness(); // number 5
 ```
+
+{" "}
+<img
+  src="/img/ckb-vs-btc/execute-load-witness.png"
+  width="700px"
+  height="533px"
+  alt="Witness data fetched and decoded into registers"
+/>
 
 2. Calculate the sum
 
 - The Script calculates the sum of these two numbers.
-- The Script calculates the sum of these two numbers.
 
 ```rust
-const result = value1 + value2;
-// 3 + 5 = 8
+const result = v1 + v2; // 3 + 5 = 8
 ```
+
+{" "}
+<img
+  src="/img/ckb-vs-btc/execute-check-sum.png"
+  width="700px"
+  height="533px"
+  alt="Sum the two values"
+/>
 
 3. Check the condition
 
-- If the previous`result` equals 8, the Script returns `0`
-- Otherwise, the Script returns `1`
+- If the previous`result` equals 8, the CKB-VM returns `0`
+- Otherwise, the CKB-VM returns `1`
 
 ```rust
-if(result === 8) { // 8 === 8 in this case
-    return 0;
-} else {
-    return 1;
-}
+if (result === 8) { return 0; }  // 8 === 8 in this case
+
+return 1;
 ```
+
+{" "}
+<img
+  src="/img/ckb-vs-btc/execute-return-valid.png"
+  width="700px"
+  height="533px"
+  alt="Return the final result"
+/>
 
 4. The CKB-VM interprets the return value: If the final result is `0`, the transaction is considered **valid;** Otherwise, the transaction is considered **invalid**. In this case, since 8 === 8, `0` is returned, and the transaction is valid.
 
@@ -356,5 +396,6 @@ if(result === 8) { // 8 === 8 in this case
 ## Additional Resources
 
 - [Cell Model](/docs/tech-explanation/cell-model)
+- [CKB-VM](/docs/tech-explanation/ckb-vm)
 - [CKB Script](/docs/tech-explanation/script)
 - [CKB Transaction](/docs/tech-explanation/transaction)

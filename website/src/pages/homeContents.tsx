@@ -31,7 +31,7 @@ const homeCardContents: HomeCardProps[] = [
         label: "Quick Start (5 min)",
         link: "/docs/getting-started/quick-start",
       },
-      { label: "Dev Tools", link: "/docs/sdk-and-devtool/devtool" },
+      { label: "CKB vs. BTC", link: "/docs/getting-started/ckb-vs-btc" },
     ],
     icon: "rocket",
   },
