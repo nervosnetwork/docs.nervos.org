@@ -168,10 +168,14 @@ index e02b993..cd443bf 100644
 +  if (typeof first_input === "number") {
 +    throw "Cannot fetch the first input";
 +  }
-+  var hex_input = Array.prototype.map.call(
-+    new Uint8Array(first_input),
-+    function(x) { return ('00' + x.toString(16)).slice(-2); }).join('');
-+  if (CKB.ARGV[0] != hex_input) {
++  var hex_input_outpoint = Array.prototype.map
++   .call(new Uint8Array(first_input), function (x) {
++     return ("00" + x.toString(16)).slice(-2);
++   })
++   .join("")
++   .slice(16); // remove the first 8 bytes of since
++  var outpoint_arg = new TextDecoder().decode(CKB.ARGV[0]);
++  if (outpoint_arg != hex_input_outpoint) {
 +    throw "Invalid creation argument!";
 +  }
  }
@@ -272,7 +276,7 @@ First, let's create a UDT with 1000000 tokens
 
 ```js
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
-> txSkeleton = await lumos.commons.common.transfer(txSkeleton, [wallet.address], wallet2.address, "1800" + "00000000");
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton, [wallet.address], wallet2.address, "1820" + "00000000");
 > const blockchain = require("@ckb-lumos/base").blockchain;
 > const outPointBuf = blockchain.OutPoint.pack(txSkeleton.get("inputs").first().outPoint);
 > const outPointHex = Buffer.from(outPointBuf).toString("hex");
@@ -313,7 +317,7 @@ Copy this args to the Script args:
   },
   depType: "code"
 })
-> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 3000);
 > txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
 > const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
 > const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
@@ -329,21 +333,30 @@ CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"UnresolvableTransaction(Dea
 
 And no matter how we tried, we cannot create another cell which forges the same UDT token.
 
-Now we can try transfering UDTs to another account. First let's try creating one with has more output UDTs than input UDTs
+Now we can try transfering UDTs to another account. First let's try creating one which has more output UDTs than input UDTs
 
 ```js
+> let inputOutpoint = {
+  txHash: rootUdtTxHash,
+  index: "0x0"
+}
+> let udtCellWithStatus = await rpc.getLiveCell(inputOutpoint, true);
+> let blockHash = (await rpc.getTransaction(rootUdtTxHash)).txStatus.blockHash;
+> let blockNumber = (await rpc.getHeader(blockHash)).number;
+> let input = {
+    outPoint: inputOutpoint,
+    data: udtCellWithStatus.cell.data.content,
+    cellOutput: udtCellWithStatus.cell.output,
+    blockNumber
+  }
+> let output = {
+  data: bytes.hexify(Uint32LE.pack(2000000)),
+  cellOutput: udtCellWithStatus.cell.output,
+}
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
-> txSkeleton = await lumos.commons.common.transfer(txSkeleton, [wallet.address], wallet2.address, "20000" + "00000000");
-// todo: push {txHash: rootUdtTxHash, index: "0x0"} to inputs
-> txSkeleton.update("outputs", (outputs) => {
-  let cell = outputs.first();
-  cell.cellOutput.type = duktapeUdtTypeScript;
-  cell.data = bytes.hexify(Uint128LE.pack(1000000));
-
-  // add one more output
-  outputs.push(cell);
-  return outputs;
-});
+> txSkeleton = txSkeleton.update("inputs", (inputs) => inputs.push(input));
+> txSkeleton = txSkeleton.update("outputs", (outputs) => outputs.push(output));
+> txSkeleton = txSkeleton.update("witnesses", (witnesses) => witnesses.push("0x55000000100000005500000055000000410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
 > txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
   outPoint: {
     txHash: duktapeTxHash,
@@ -351,31 +364,35 @@ Now we can try transfering UDTs to another account. First let's try creating one
   },
   depType: "code"
 })
-> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = lumos.helpers.addCellDep(txSkeleton, {
+  outPoint: {
+    txHash: lumos.config.TESTNET.SCRIPTS['SECP256K1_BLAKE160']['TX_HASH'],
+    index: lumos.config.TESTNET.SCRIPTS['SECP256K1_BLAKE160']['INDEX']
+  },
+  depType: lumos.config.TESTNET.SCRIPTS['SECP256K1_BLAKE160']['DEP_TYPE']
+})
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet2.address], 3000);
 > txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
-> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
-> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> let signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet2.privkey)).toArray();
+> let signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
 > await rpc.sendTransaction(signedTx)
-CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"InvalidTx(ScriptFailure(ValidationFailure(-2)))"}
+CKB::RPCError: jsonrpc error: {:code=>-3, :message=>"InvalidTx(ScriptFailure(ValidationFailure(101)))"}
 ```
 
-Here we tried to send another user 1000000 UDTs while also keeping 1000000 UDTs for the sender itself, of course this should trigger an error since we are trying to forge more tokens. But with slight modification, we can show that a UDT transferring transaction works if you respect the sum verification rule:
+Here we tried to send another user 2000000 UDTs, of course this should trigger an error since we are trying to forge more tokens. But with slight modification, we can show that a UDT transferring transaction works if you respect the sum verification rule:
 
 ```js
-> txSkeleton.update("outputs", (outputs) => {
+> txSkeleton = txSkeleton.update("outputs", (outputs) => {
   let cell = outputs.first();
-  cell.cellOutput.type = duktapeUdtTypeScript;
-  cell.data = bytes.hexify(Uint128LE.pack(500000));
-
-  // add one more output
-  outputs.push(cell);
+  cell.cellOutput.type = input.cellOutput.type;
+  cell.data = bytes.hexify(Uint32LE.pack(1000000));
   return outputs;
 });
-> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet.address], 1000);
+> txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton, [wallet2.address], 3000);
 > txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
-> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
-> const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
-> await rpc.sendTransaction(signedTx)
+> signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet2.privkey)).toArray();
+> signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
+> let txHash = await rpc.sendTransaction(signedTx)
 ```
 
 # Flexible Rules
