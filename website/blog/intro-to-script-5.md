@@ -271,11 +271,11 @@ Type ".help" for more information.
   privkey: "0xace08599f3174f4376ae51fdc30950d4f2d731440382bb0aa1b6b0bd3a9728cd"
 }
 
-> const data = fs.readFileSync("../ckb-duktape/build/repl");
+> const data = fs.readFileSync("./ckb-duktape/build/repl");
 > data.byteLength
-285448
+306040
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
-> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"290000" + "00000000");
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"306240" + "00000000");
 > txSkeleton.update("outputs", (outputs) => {
   let cell = outputs.first();
   cell.data = "0x" + data.toString("hex");
@@ -290,14 +290,21 @@ Type ".help" for more information.
 
 We will also need to create a transaction containing the duktape script, I'm building a simpler one, but you are free to include more data so you can play with CKB:
 
+```bash
+> docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
+> cd /code
+> echo "CKB.debug(\"I'm running in JS\")" > test.js
+> ./build/native_args_assembler -f test.js
+370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000
+```
+
 ```js
 > const duktapeReplCodeHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
 > const duktapeTypeScript = {
   codeHash: duktapeReplCodeHash,
   hashType: "data",
-  args: "0x" + Buffer.from("CKB.debug(\"I'm running in JS!\")", "utf8").toString("hex"),
+  args: "0x370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000",
 };
-
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
 > txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"150" + "00000000");
 > txSkeleton.update("outputs", (outputs) => {
