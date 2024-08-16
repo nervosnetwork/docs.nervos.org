@@ -36,7 +36,7 @@ const TRANSFEROVERVIEW: TutorialHeaderProps = {
     </div>,
     <div>
       CKB dev environment:{" "}
-      <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>
+      <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
       </Link>
     </div>,
@@ -73,7 +73,7 @@ const WRITEOVERVIEW: TutorialHeaderProps = {
     </div>,
     <div>
       CKB dev environment:{" "}
-      <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>
+      <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
       </Link>
     </div>,
@@ -113,7 +113,7 @@ const TOKENOVERVIEW: TutorialHeaderProps = {
     </div>,
     <div>
       CKB dev environment:{" "}
-      <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>
+      <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
       </Link>
     </div>,
@@ -153,7 +153,7 @@ const DOBOVERVIEW: TutorialHeaderProps = {
     </div>,
     <div>
       CKB dev environment:{" "}
-      <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>
+      <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
       </Link>
     </div>,
@@ -201,7 +201,7 @@ const LOCKOVERVIEW: TutorialHeaderProps = {
     </div>,
     <div>
       CKB dev environment:{" "}
-      <Link to={"/docs/node/run-devnet-node/#quick-setup-with-offckb"}>
+      <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
       </Link>
     </div>,

@@ -30,7 +30,7 @@ A transaction in CKB destroys some Cells (outputs from previous transactions) an
 <details>
   <summary>View Full Transaction</summary>
 
-```
+```json
 {
   "version": "0x0",
   "cell_deps": [

@@ -1839,7 +1839,7 @@ width="688"
 #### See Also
 
 - [Fee Bumping](#fee-bumping)
-- [RBF](#RBF)
+- [RBF](#rbf)
 
 ---
 

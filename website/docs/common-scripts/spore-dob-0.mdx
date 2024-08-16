@@ -30,7 +30,7 @@ bytifyRawString(JSON.stringify({ dna: "df4ffcb5e7a283ea7e6f09a504d0e256" }))[
 ];
 ```
 
-DNA should be stored in the `content` field of the [Spore](/docs/common-scripts/spore-protocol#Spore):
+DNA should be stored in the `content` field of the [Spore](/docs/common-scripts/spore-protocol#spore):
 
 ```js
 {
@@ -47,7 +47,7 @@ DNA should be stored in the `content` field of the [Spore](/docs/common-scripts/
 
 ### Pattern
 
-Pattern is the common data for a set of DOBs specified when creating the [Spore Cluster](/docs/common-scripts/spore-protocol#Cluster). It is parsed in the DOB/0 decoder as a JSON array:
+Pattern is the common data for a set of DOBs specified when creating the [Spore Cluster](/docs/common-scripts/spore-protocol#cluster). It is parsed in the DOB/0 decoder as a JSON array:
 
 ```js
 [
@@ -69,7 +69,7 @@ Pattern is the common data for a set of DOBs specified when creating the [Spore 
 
 ### Decoder
 
-The decoder interprets `DNA` and `Pattern`, specified when the [Spore Cluster](/docs/common-scripts/spore-protocol#Cluster) is released. The configuration is a JSON object encoded in UTF-8:
+The decoder interprets `DNA` and `Pattern`, specified when the [Spore Cluster](/docs/common-scripts/spore-protocol#cluster) is released. The configuration is a JSON object encoded in UTF-8:
 
 ```js
 {
