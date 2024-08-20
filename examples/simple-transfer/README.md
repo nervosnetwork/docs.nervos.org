@@ -20,7 +20,7 @@ yarn start
 
 ### On Devnet
 
-Use a CLI tool [`offckb`](https://github.com/RetricSu/offckb) to start a CKB devnet:
+Use a CLI tool [`offckb`](https://github.com/ckb-ecofund/offckb) to start a CKB devnet:
 
 ```sh
 npm install -g offckb
