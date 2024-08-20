@@ -18,12 +18,12 @@ const toolCardContents: CardProps[] = [
   {
     title: "OffCKB",
     description: "CKB local development network for your first try",
-    link: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
+    link: "https://github.com/ckb-ecofund/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
     type: "tool",
     links: [
       {
         label: "Github",
-        link: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
+        link: "https://github.com/ckb-ecofund/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
       },
     ],
   },
