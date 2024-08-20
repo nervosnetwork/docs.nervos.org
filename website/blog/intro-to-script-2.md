@@ -355,7 +355,7 @@ Notice that with a different argument, you can create a different duktape powere
 ```bash
 > docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
 > cd /code
-> echo "var a = 1;\nvar b = a + 2;" >> test.js
+> echo "var a = 1;var b = a + 2;" >> test.js
 > ./build/native_args_assembler -f test.js
 330000000c0000002f000000000000001b0000007661722061203d20313b5c6e7661722062203d2061202b20323b0a04000000
 ```
