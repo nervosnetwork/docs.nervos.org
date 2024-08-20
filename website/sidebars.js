@@ -9,6 +9,7 @@ export default {
         "getting-started/how-ckb-works",
         "getting-started/quick-start",
         "getting-started/blockchain-networks",
+        "getting-started/ckb-vs-btc",
       ],
     },
     {
@@ -113,7 +114,7 @@ export default {
       collapsible: false,
       items: [
         "how-tos/how-to-sign-a-tx",
-        "how-tos/how-to-manage-txs",
+        "how-tos/how-to-query-tx-state",
         "how-tos/how-to-calculate-tx-hash",
         "how-tos/how-to-calculate-script-hash",
         "how-tos/how-to-calculate-code-hash",

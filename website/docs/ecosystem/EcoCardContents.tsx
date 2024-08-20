@@ -372,21 +372,6 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
-    title: "Godwoken Bridge",
-    description: "A token bridge between CKB and Godwoken",
-    href: "https://bridge.godwoken.io/",
-    bannerSrc: "godwokenbridge",
-    tags: ["Bridge"],
-    links: [
-      { label: "website", link: "https://bridge.godwoken.io/" },
-      {
-        label: "github",
-        link: "https://github.com/godwokenrises/light-godwoken/tree/develop/apps/godwoken-bridge",
-      },
-      { label: "doc", link: "https://docs.godwoken.io/" },
-    ],
-  },
-  {
     title: "Yokaiswap Bridge",
     description:
       "A cross-chain interoperability bridge b/w Nervos and other blockchains",
@@ -409,21 +394,6 @@ const ecoCardContents: EcoCardProps[] = [
       {
         label: "doc",
         link: "https://archive.nervos.org/blog/ankr-integrates-support-for-nervos-nodes",
-      },
-    ],
-  },
-  {
-    title: "BandProtocol",
-    description: "A L2 framework that unleashes the power of appchain future",
-    href: "https://www.bandprotocol.com/",
-    bannerSrc: "bandprotocol",
-    tags: ["Tools & Infra"],
-    links: [
-      { label: "website", link: "https://www.bandprotocol.com/" },
-      { label: "github", link: "https://github.com/bandprotocol" },
-      {
-        label: "doc",
-        link: "https://medium.com/bandprotocol/band-protocol-integrates-with-nervos-godwoken-361546e1091d",
       },
     ],
   },
@@ -476,15 +446,6 @@ const ecoCardContents: EcoCardProps[] = [
       { label: "website", link: "https://perun.network/" },
       { label: "github", link: "https://github.com/perun-network/go-perun" },
     ],
-  },
-  {
-    title: "Unifra",
-    description:
-      "A leading L2 platform that provides open, reliable infrastructure services",
-    href: "https://unifra.io/",
-    bannerSrc: "unifra",
-    tags: ["Tools & Infra"],
-    links: [{ label: "website", link: "https://unifra.io/" }],
   },
   {
     title: "UTXO Stack",

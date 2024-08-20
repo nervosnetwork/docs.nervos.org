@@ -31,7 +31,7 @@ const homeCardContents: HomeCardProps[] = [
         label: "Quick Start (5 min)",
         link: "/docs/getting-started/quick-start",
       },
-      { label: "Dev Tools", link: "/docs/sdk-and-devtool/devtool" },
+      { label: "CKB vs. BTC", link: "/docs/getting-started/ckb-vs-btc" },
     ],
     icon: "rocket",
   },
@@ -136,7 +136,7 @@ const devToolSectionContents: DevToolProps[] = [
   },
   {
     title: "OffCKB",
-    href: "https://github.com/RetricSu/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
+    href: "https://github.com/ckb-ecofund/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
     category: "Other DevTools",
   },
   {

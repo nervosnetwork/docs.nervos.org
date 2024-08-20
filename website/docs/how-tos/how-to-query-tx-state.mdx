@@ -1,0 +1,110 @@
+---
+id: how-to-query-tx-state
+title: How to Query Transaction State
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Tooltip from "@components/Tooltip";
+
+# How to Query Transaction State
+
+Upon broadcasting a transaction using the `send_transaction` RPC, you will receive a transaction hash (`txhash`), which only indicates that the transaction has been sent to the network, NOT necessarily that it has been verified on-chain.
+
+To query the [transaction state](docs/tech-explanation/transaction.md#transaction-states), use the `get_transaction` RPC. Remember, `send_transaction` operates asynchronously.
+
+For more details on the CKB JSON-RPC `send_transaction` method, visit the list of [CKB RPC methods](https://github.com/nervosnetwork/ckb/tree/develop/rpc#method-send_transaction).
+
+## Example: Query With JSON-RPC
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="query-jsonrpc-request" label="Request">
+```
+
+```javascript
+{
+  "id": 42,
+  "jsonrpc": "2.0",
+  "method": "get_transaction",
+  "params": [
+    "0xa0ef4eb5f4ceeb08a4c8524d84c5da95dce2f608e0ca2ec8091191b0f330c6e3"
+  ]
+}
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="query-jsonrpc-response" label="Response">
+```
+
+```javascript
+{
+  "id": 42,
+  "jsonrpc": "2.0",
+  "result": {
+    "transaction": {
+      "cell_deps": [
+        {
+          "dep_type": "code",
+          "out_point": {
+            "index": "0x0",
+            "tx_hash": "0xa4037a893eb48e18ed4ef61034ce26eba9c585f15c9cee102ae58505565eccc3"
+          }
+        }
+      ],
+      "hash": "0xa0ef4eb5f4ceeb08a4c8524d84c5da95dce2f608e0ca2ec8091191b0f330c6e3",
+      "header_deps": [
+        "0x7978ec7ce5b507cfb52e149e36b1a23f6062ed150503c85bbf825da3599095ed"
+      ],
+      "inputs": [
+        {
+          "previous_output": {
+            "index": "0x0",
+            "tx_hash": "0x365698b50ca0da75dca2c87f9e7b563811d3b5813736b8cc62cc3b106faceb17"
+          },
+          "since": "0x0"
+        }
+      ],
+      "outputs": [
+        {
+          "capacity": "0x2540be400",
+          "lock": {
+            "code_hash": "0x28e83a1277d48add8e72fadaa9248559e1b632bab2bd60b27955ebc4c03800a5",
+            "hash_type": "data",
+            "args": "0x"
+          },
+          "type": null
+        }
+      ],
+      "outputs_data": [
+        "0x"
+      ],
+      "version": "0x0",
+      "witnesses": []
+    },
+    "cycles": "0x219",
+    "time_added_to_pool" : "0x187b3d137a1",
+    "fee": "0x16923f7dcf",
+    "min_replace_fee": "0x16923f7f6a",
+    "tx_status": {
+      "block_hash": null,
+      "block_number": null,
+      "status": "pending",
+      "reason": null
+    }
+  }
+}
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+## Example: Query With Lumos JavaScript SDK
+
+```javascript
+const txHash = await rpc.sendTransaction(tx, "passthrough");
+const state = await rpc.getTransaction(txHash);
+```

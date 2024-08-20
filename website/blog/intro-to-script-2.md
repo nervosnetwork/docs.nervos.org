@@ -55,7 +55,7 @@ In order to ensure none of the cells can have `carrot` in cell data, we need a w
 
 To ensure the security of CKB script, each script has to run in an isolated environment that is totally separated from the main computer you are running CKB. This way it won't be able to access data it doesn't need, such as your private keys or passwords. However, for a script to be useful, there must be certain data it want to access, such as the cell a script guards, or a transaction a script validates. CKB provides `syscalls` to ensure this, syscalls are defined in RISC-V standard, they provide a way to access certain resources provided by the environment. In a normal situation, the environment here means the operating system, but in the case of CKB VM, the environment refers to the actual CKB process. With syscalls, a CKB script can access the whole transaction containing itself, including inputs, outputs, witnesses, and deps.
 
-The good news, is that we have encapsulated syscalls in an easy to use [header file](https://github.com/nervosnetwork/ckb-system-scripts/blob/66d7da8ec72dffaa7e9c55904833951eca2422a9/c/ckb_syscalls.h), you are very welcome to poke around this file to see how syscalls are implemented. The bottomline is you can just grab this header file and use the wrapped functions to make syscalls as you want.
+The good news, is that we have encapsulated syscalls in an easy to use [header file](https://github.com/nervosnetwork/ckb-system-scripts/blob/a7b7c75662ed950c9bd024e15f83ce702a54996e/c/ckb_syscalls.h), you are very welcome to poke around this file to see how syscalls are implemented. The bottomline is you can just grab this header file and use the wrapped functions to make syscalls as you want.
 
 Now with the syscalls at hand, we can start with our carrot-forbidden script:
 
@@ -162,6 +162,7 @@ To deploy the script to CKB, we can just create a new cell, with the script code
 Here I simply create a new cell with enough capacity by sending tokens to another wallet. Now we can create the type script containing the carrot script code:
 
 ```js
+> const bytes = require("@ckb-lumos/lumos/codec").bytes;
 > const carrotDataHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
 > const carrotTypeScript =  {
   codeHash: carrotDataHash,
@@ -213,7 +214,7 @@ Now we are ready to sign and send the transaction:
 ```js
 > txSkeleton = await lumos.commons.common.payFeeByFeeRate(txSkeleton,[wallet.address],1000);
 > txSkeleton = lumos.commons.common.prepareSigningEntries(txSkeleton);
-> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable> (entry.message, wallet.privkey)).toArray();
+> const signatures = txSkeleton.get("signingEntries").map((entry) => lumos.hd.key.signRecoverable(entry.message, wallet.privkey)).toArray();
 > const signedTx = lumos.helpers.sealTransaction(txSkeleton, signatures)
 > const txHash = await rpc.sendTransaction(signedTx)
 > txHash
@@ -281,20 +282,29 @@ At this stage you might want to ask: yes this is possible, but won't VM on top o
 To use duktape on CKB, first you need to compile duktape itself into a RISC-V executable binary:
 
 ```bash
-$ git clone https://github.com/xxuejie/ckb-duktape
+$ git clone https://github.com/xxuejie/ckb-duktape.git
 $ cd ckb-duktape
 $ git submodule init
 $ git submodule update
 $ sudo docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
 root@0d31cad7a539:~# cd /code
 root@0d31cad7a539:/code# make
-riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Wall -Werror c/entry.c -c -o build/entry.o
-riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Wall -Werror duktape/duktape.c -c -o build/duktape.o
+riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Ischema -Ideps/ckb-c-stdlib -Ideps/ckb-c-stdlib/molecule -Wall -Werror c/entry.c -c -o build/entry.o
+riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Ischema -Ideps/ckb-c-stdlib -Ideps/ckb-c-stdlib/molecule -Wall -Werror duktape/duktape.c -c -o build/duktape.o
 riscv64-unknown-elf-gcc build/entry.o build/duktape.o -o build/duktape -lm -Wl,-static -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-s
+riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Ischema -Ideps/ckb-c-stdlib -Ideps/ckb-c-stdlib/molecule -Wall -Werror c/repl.c -c -o build/repl.o
+riscv64-unknown-elf-gcc build/repl.o build/duktape.o -o build/repl -lm -Wl,-static -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-s
+riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Ischema -Ideps/ckb-c-stdlib -Ideps/ckb-c-stdlib/molecule -Wall -Werror c/dump_load.c -c -o build/dump_load.o
+riscv64-unknown-elf-gcc build/dump_load.o build/duktape.o -o build/dump_load -lm -Wl,-static -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-s
+gcc -Wall -Werror -Iduktape -O3 c/native_dump_bytecode.c duktape/duktape.c -o build/native_dump_bytecode -lm
+riscv64-unknown-elf-gcc -Os -DCKB_NO_MMU -D__riscv_soft_float -D__riscv_float_abi_soft -Iduktape -Ic -Ischema -Ideps/ckb-c-stdlib -Ideps/ckb-c-stdlib/molecule -Wall -Werror c/dump_load_nocleanup.c -c -o build/dump_load_nocleanup.o
+riscv64-unknown-elf-gcc build/dump_load_nocleanup.o build/duktape.o -o build/dump_load_nocleanup -lm -Wl,-static -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-s
+gcc -Wall -Werror -Ischema -Ideps/ckb-c-stdlib/molecule -O3 c/native_args_assembler.c -o build/native_args_assembler
 root@0d31cad7a539:/code# exit
 exit
-$ ls build/duktape
-build/duktape*
+$ ls build/
+duktape               dump_load             dump_load_nocleanup   entry.o               native_dump_bytecode  repl.o
+duktape.o             dump_load.o           dump_load_nocleanup.o native_args_assembler repl
 ```
 
 Like the carrot example, the first step here is to deploy duktape script code in a CKB cell:
@@ -302,9 +312,9 @@ Like the carrot example, the first step here is to deploy duktape script code in
 ```js
 > const data = fs.readFileSync("../ckb-duktape/build/duktape");
 > data.byteLength
-281440
+291440
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
-> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"290000" + "00000000");
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"292000" + "00000000");
 > txSkeleton.update("outputs", (outputs) => {
   let cell = outputs.first();
   cell.data = "0x" + data.toString("hex");
@@ -318,23 +328,43 @@ Like the carrot example, the first step here is to deploy duktape script code in
 > const duktapeCodeHash = lumos.utils.ckbHash(bytes.bytify("0x" + data.toString("hex")));
 ```
 
-Unlike the carrot example, duktape script code now requires one argument: the JavaScript source you want to execute:
+Unlike the carrot example, duktape script code now requires one argument: the JavaScript source you want to execute and the arguments to pass to the JavaScript source code. `ckb-duktape` provides a small binary tool called `native_args_assembler` to help us provide the script args from the js file and the js arguments.
+
+First, let's create the script args:
+
+```bash
+> docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
+> cd /code
+> echo "CKB.debug(\"I'm running in JS\")" > test.js
+> ./build/native_args_assembler -f test.js
+370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000
+```
+
+Next, copy the script args and build the script:
 
 ```js
 > const duktapeTypeScript =  {
   codeHash: duktapeCodeHash,
   hashType: "data",
-  args: "0x" + Buffer.from("CKB.debug(\"I'm running in JS!\")", "utf8").toString("hex")
+  args: "0x370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000"
 };
 ```
 
 Notice that with a different argument, you can create a different duktape powered type script for different use case:
 
+```bash
+> docker run --rm -it -v `pwd`:/code nervos/ckb-riscv-gnu-toolchain:xenial bash
+> cd /code
+> echo "var a = 1;var b = a + 2;" >> test.js
+> ./build/native_args_assembler -f test.js
+330000000c0000002f000000000000001b0000007661722061203d20313b5c6e7661722062203d2061202b20323b0a04000000
+```
+
 ```js
 > const duktapeTypeScript =  {
   codeHash: duktapeCodeHash,
   hashType: "data",
-  args: "0x" + Buffer.from("var a = 1;\nvar b = a + 2;", "utf8").toString("hex")
+  args: "0x330000000c0000002f000000000000001b0000007661722061203d20313b5c6e7661722062203d2061202b20323b0a04000000"
 };
 ```
 
@@ -346,10 +376,10 @@ Now we can create a cell with the duktape type script attached:
 > const duktapeTypeScript =  {
   codeHash: duktapeCodeHash,
   hashType: "data",
-  args: "0x" + Buffer.from("CKB.debug(\"I'm running in JS!\")", "utf8").toString("hex")
+  args: "0x370000000c00000033000000000000001f000000434b422e6465627567282249276d2072756e6e696e6720696e204a5322290a04000000"
 };
 > let txSkeleton = lumos.helpers.TransactionSkeleton({ cellProvider: indexer });
-> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"290000" + "00000000");
+> txSkeleton = await lumos.commons.common.transfer(txSkeleton,[wallet.address],wallet2.address,"200" + "00000000");
 > txSkeleton.update("outputs", (outputs) => {
   let cell = outputs.first();
   cell.cellOutput.type = duktapeTypeScript;
