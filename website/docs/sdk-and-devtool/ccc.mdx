@@ -89,7 +89,7 @@ Please notice that these advanced interfaces are subject to change and may not b
 
 Below is a example demonstrating how to compose a transaction for transferring CKB:
 
-```
+```tsx
 const tx = ccc.Transaction.from({
   outputs: [{ lock: toLock, capacity: ccc.fixedPointFrom(amount) }],
 });
@@ -123,7 +123,6 @@ export default function Sign() {
 
   const [messageToSign, setMessageToSign] = useState<string>("");
   const [signature, setSignature] = useState<string>("");
-
   return (
     <div className="flex w-full flex-col items-stretch">
       <TextInput
@@ -306,6 +305,7 @@ const [amount, setAmount] = useState<string>("");
 const [data, setData] = useState<string>("");
 
 return (
+
 <div className="flex w-full flex-col items-stretch">
 <Textarea
 label="Address"
@@ -437,7 +437,6 @@ export default function TransferLumos() {
   const [transferTo, setTransferTo] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [data, setData] = useState<string>("");
-
   return (
     <>
       <div className="flex w-full flex-col items-stretch">
@@ -569,8 +568,8 @@ const [amount, setAmount] = useState<string>("");
 const [decimals, setDecimals] = useState<string>("");
 const [name, setName] = useState<string>("");
 const [symbol, setSymbol] = useState<string>("");
-
 return (
+
 <>
 <div className="flex w-full flex-col items-stretch">
 <Message title="Hint" type="info">
@@ -752,7 +751,6 @@ export default function IssueXUdtTypeId() {
   const [decimals, setDecimals] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [symbol, setSymbol] = useState<string>("");
-
   return (
     <>
       <div className="flex w-full flex-col items-stretch">
@@ -960,8 +958,8 @@ const { explorerTransaction } = useGetExplorerLink();
 const [xUdtArgs, setXUdtArgs] = useState<string>("");
 const [transferTo, setTransferTo] = useState<string>("");
 const [amount, setAmount] = useState<string>("");
-
 return (
+
 <div className="flex w-full flex-col items-stretch">
 <TextInput
 label="Args"
@@ -1107,7 +1105,6 @@ function getClaimEpoch(
       depositEpoch[2],
     ];
   }
-
   return [
     depositEpoch[0] + (intDiff / ccc.numFrom(180)) * ccc.numFrom(180),
     depositEpoch[1],
@@ -1194,7 +1191,6 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
       }
     })();
   }, [dao, signer, isNew]);
-
   return (
     <BigButton
       key={ccc.hexFrom(dao.outPoint.toBytes())}
@@ -1361,7 +1357,6 @@ export default function Transfer() {
       }
     })();
   }, [signer]);
-
   return (
     <div className="flex w-full flex-col items-stretch">
       <TextInput
@@ -1533,8 +1528,8 @@ setAccount(newAccounts);
 }
 })();
 }, [client, accounts]);
-
 return (
+
 <div className="mb-1 flex w-9/12 flex-col items-stretch">
 <TextInput
 label="Mnemonic"
@@ -1687,7 +1682,6 @@ useEffect(() => {
     }
   })();
 }, [client, accounts]);
-
 return (
   <div className="flex w-full flex-col items-stretch">
     <Textarea
