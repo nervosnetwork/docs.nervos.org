@@ -21,6 +21,7 @@ export default {
         "sdk-and-devtool/rust",
         "sdk-and-devtool/go",
         "sdk-and-devtool/java",
+        "sdk-and-devtool/ccc",
         "sdk-and-devtool/lumos",
         "sdk-and-devtool/cli-tools",
         "sdk-and-devtool/devtool",
