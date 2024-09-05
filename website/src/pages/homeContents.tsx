@@ -125,8 +125,8 @@ const devToolSectionContents: DevToolProps[] = [
     category: "SDK",
   },
   {
-    title: "Lumos",
-    href: "/docs/sdk-and-devtool/lumos",
+    title: "Common Chain Connector (CCC)",
+    href: "/docs/sdk-and-devtool/ccc",
     category: "SDK",
   },
   {
