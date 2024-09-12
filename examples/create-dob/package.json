@@ -10,6 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@ckb-ccc/core": "^0.0.14-alpha.0",
     "@ckb-lumos/base": "0.21.1",
     "@ckb-lumos/codec": "0.21.1",
     "@ckb-lumos/lumos": "0.21.1",

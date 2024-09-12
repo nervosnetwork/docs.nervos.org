@@ -2,7 +2,8 @@
   "compilerOptions": {
     "lib": ["dom", "ES2015"],
     "jsx": "react",
-    "module": "CommonJS",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true

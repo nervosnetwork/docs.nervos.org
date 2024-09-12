@@ -31,7 +31,7 @@ export function App() {
 
   useEffect(() => {
     const updateFromInfo = async () => {
-      const { lockScript, address } = generateAccountFromPrivateKey(privKey);
+      const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
       const capacity = await capacityOf(address);
       setFromAddr(address);
       setFromLock(lockScript);
