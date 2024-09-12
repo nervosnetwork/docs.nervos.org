@@ -45,20 +45,15 @@ cd docs.nervos.org/examples/simple-transfer
 Open the `lib.ts` file in your project and check out the `generateAccountFromPrivateKey` function:
 
 ```ts
-export const generateAccountFromPrivateKey = (privKey: string): Account => {
-  const pubKey = hd.key.privateToPublic(privKey);
-  const args = hd.key.publicKeyToBlake160(pubKey);
-  const template = lumosConfig.SCRIPTS["SECP256K1_BLAKE160"]!;
-  const lockScript = {
-    codeHash: template.CODE_HASH,
-    hashType: template.HASH_TYPE,
-    args: args,
-  };
-  const address = helpers.encodeToAddress(lockScript, { config: lumosConfig });
+export const generateAccountFromPrivateKey = async (
+  privKey: string
+): Promise<Account> => {
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privKey);
+  const lock = await signer.getAddressObjSecp256k1();
   return {
-    lockScript,
-    address,
-    pubKey,
+    lockScript: lock.script,
+    address: lock.toString(),
+    pubKey: signer.publicKey,
   };
 };
 ```
@@ -70,16 +65,9 @@ Here, we use the CKB standard Lock Script template, combining the [SECP256K1](ht
 Once we have the Lock Script of an account, we can determine how much balance the account has. The calculation is straightforward: we query and find all the Cells that use the same Lock Script and sum all these Cells' capacities; the sum is the balance.
 
 ```ts
-export async function capacityOf(address: string): Promise<BI> {
-  const collector = indexer.collector({
-    lock: helpers.parseAddress(address, { config: lumosConfig }),
-  });
-
-  let balance = BI.from(0);
-  for await (const cell of collector.collect()) {
-    balance = balance.add(cell.cellOutput.capacity);
-  }
-
+export async function capacityOf(address: string): Promise<bigint> {
+  const addr = await ccc.Address.fromString(address, cccClient);
+  let balance = await cccClient.getBalance([addr.script]);
   return balance;
 }
 ```
@@ -92,66 +80,66 @@ Next, we can start to transfer balance. Check out the transfer function in `lib.
 
 ```ts
 export async function transfer(
-  fromAddress: string,
   toAddress: string,
-  amountInShannon: string,
+  amountInCKB: string,
   signerPrivateKey: string
 ): Promise<string>;
 ```
 
-The `transfer` function accepts parameters such as `fromAddress`, `toAddress`, `amountInShannon`, and `signerPrivateKey` to sign the transfer transaction.
+The `transfer` function accepts parameters such as `toAddress`, `amountInShannon`, and `signerPrivateKey` to sign the transfer transaction.
 
 This transfer transaction collects and consumes as many capacities as needed using some Live Cells as the input Cells and produce some new output Cells. The Lock Script of all these new Cells is set to the new owner's Lock Script. In this way, the CKB balance is transferred from one account to another, marking the transition of Cells from old to new.
 
-Thanks to the Lumos SDK, we can use high-level helper function `commons.common.transfer` to perform the transfer transaction, which wraps the above logic.
+Thanks to the [CCC SDK](/docs/sdk-and-devtool/ccc), we can use high-level helper function `ccc.Transaction.from` to perform the transfer transaction, which wraps the above logic.
 
 ```ts
 export async function transfer(
-  fromAddress: string,
   toAddress: string,
-  amountInShannon: string,
+  amountInCKB: string,
   signerPrivateKey: string
 ): Promise<string> {
-  let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
-  txSkeleton = await commons.common.transfer(
-    txSkeleton,
-    [fromAddress],
-    toAddress,
-    amountInShannon
-  );
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, signerPrivateKey);
+  const { script: toLock } = await ccc.Address.fromString(toAddress, cccClient);
 
-  // https://github.com/nervosnetwork/ckb/blob/develop/util/app-config/src/legacy/tx_pool.rs#L9
-  // const DEFAULT_MIN_FEE_RATE: FeeRate = FeeRate::from_u64(1000);
-  txSkeleton = await commons.common.payFeeByFeeRate(
-    txSkeleton,
-    [fromAddress],
-    1000 /*fee_rate*/
-  );
+  // Build the full transaction to estimate the fee
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: toLock }],
+    outputsData: [],
+  });
 
-  //...
+  // CCC transactions are easy to be edited
+  tx.outputs.forEach((output, i) => {
+    if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
+      alert(`Insufficient capacity at output ${i} to store data`);
+      return;
+    }
+    output.capacity = ccc.fixedPointFrom(amountInCKB);
+  });
+
+  // ....
 }
 ```
 
-Next, we need to sign the transaction. We will generate `signingEntries` for the transaction and use the private key to sign the message recoverably.
+Next, we need to complete the inputs of the transaction.
 
 ```ts
-txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-const signatures = txSkeleton
-  .get("signingEntries")
-  .map((entry) => hd.key.signRecoverable(entry.message, signerPrivateKey))
-  .toArray();
+//....
+
+// Complete missing parts for transaction
+await tx.completeInputsAll(signer);
+await tx.completeFeeBy(signer, 1000);
 ```
 
-Now let's seal our transaction with the `txSkeleton` and the just-generated signature for subsequent signature verification processes.
+Now we can use signer to sign and send the CKB transaction
 
 ```ts
-const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-```
+// ...
+const txHash = await signer.sendTransaction(tx);
+console.log(
+  `Go to explorer to check the sent transaction https://pudge.explorer.nervos.org/transaction/${txHash}`
+);
 
-Send the transaction
-
-```ts
-const txHash = await rpc.sendTransaction(signedTx);
+return txHash;
 ```
 
 You can open the console on the browser to see the full transaction to confirm the process.
@@ -164,7 +152,7 @@ By following this tutorial this far, you have mastered how balance transfers wor
 
 - The capacity of a Cell indicates both the CKB balance and the amount of data that can be stored in the Cell simultaneously.
 - Transferring CKB balance involves transferring some Cells from the sender to the receiver.
-- We use `commons.common.transfer` from the Lumos SDK to build the transfer transaction.
+- We use `ccc.Transaction.from` from the CCC SDK to build the transfer transaction.
 
 ## Next Step
 

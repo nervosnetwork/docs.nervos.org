@@ -1,62 +1,98 @@
-import { helpers, Address, Script, hd, commons, BI } from '@ckb-lumos/lumos';
-import offCKB from './offckb.config';
+import {
+  ccc,
+  CellDepInfoLike,
+  KnownScript,
+  Script,
+} from "@ckb-ccc/core";
+import offCKB, { Network } from "./offckb.config";
 
-const {indexer, rpc, lumosConfig} = offCKB;
-offCKB.initializeLumosConfig();
+export const cccClient = buildCccClient(offCKB.currentNetwork);
+
+export const DEVNET_SCRIPTS: Record<
+  string,
+  Pick<Script, "codeHash" | "hashType"> & { cellDeps: CellDepInfoLike[] }
+> = {
+  [KnownScript.Secp256k1Blake160]:
+    offCKB.systemScripts.secp256k1_blake160_sighash_all!.script,
+  [KnownScript.Secp256k1Multisig]:
+    offCKB.systemScripts.secp256k1_blake160_multisig_all!.script,
+  [KnownScript.AnyoneCanPay]: offCKB.systemScripts.anyone_can_pay!.script,
+  [KnownScript.OmniLock]: offCKB.systemScripts.omnilock!.script,
+  [KnownScript.XUdt]: offCKB.systemScripts.xudt!.script,
+};
+
+export function buildCccClient(network: Network) {
+  const client =
+    network === "mainnet"
+      ? new ccc.ClientPublicMainnet()
+      : network === "testnet"
+      ? new ccc.ClientPublicTestnet()
+      : new ccc.ClientPublicTestnet({
+          url: offCKB.rpcUrl,
+          scripts: DEVNET_SCRIPTS as any,
+        });
+
+  return client;
+}
 
 type Account = {
   lockScript: Script;
-  address: Address;
+  address: string;
   pubKey: string;
 };
-export const generateAccountFromPrivateKey = (privKey: string): Account => {
-  const pubKey = hd.key.privateToPublic(privKey);
-  const args = hd.key.publicKeyToBlake160(pubKey);
-  const template = lumosConfig.SCRIPTS['SECP256K1_BLAKE160']!;
-  const lockScript = {
-    codeHash: template.CODE_HASH,
-    hashType: template.HASH_TYPE,
-    args: args,
-  };
-  const address = helpers.encodeToAddress(lockScript, { config: lumosConfig });
+
+export const generateAccountFromPrivateKey = async (
+  privKey: string
+): Promise<Account> => {
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privKey);
+  const lock = await signer.getAddressObjSecp256k1();
   return {
-    lockScript,
-    address,
-    pubKey,
+    lockScript: lock.script,
+    address: lock.toString(),
+    pubKey: signer.publicKey,
   };
 };
 
-export async function capacityOf(address: string): Promise<BI> {
-  const collector = indexer.collector({
-    lock: helpers.parseAddress(address, { config: lumosConfig }),
-  });
-
-  let balance = BI.from(0);
-  for await (const cell of collector.collect()) {
-    balance = balance.add(cell.cellOutput.capacity);
-  }
-
+export async function capacityOf(address: string): Promise<bigint> {
+  const addr = await ccc.Address.fromString(address, cccClient);
+  let balance = await cccClient.getBalance([addr.script]);
   return balance;
 }
 
-export async function transfer(fromAddress: string, toAddress: string, amountInShannon: string, signerPrivateKey: string): Promise<string> {
-  let txSkeleton = helpers.TransactionSkeleton({ cellProvider: indexer });
-  txSkeleton = await commons.common.transfer(txSkeleton, [fromAddress], toAddress, amountInShannon);
+export async function transfer(
+  toAddress: string,
+  amountInCKB: string,
+  signerPrivateKey: string
+): Promise<string> {
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, signerPrivateKey);
+  const { script: toLock } = await ccc.Address.fromString(toAddress, cccClient);
 
-  // https://github.com/nervosnetwork/ckb/blob/develop/util/app-config/src/legacy/tx_pool.rs#L9
-  // const DEFAULT_MIN_FEE_RATE: FeeRate = FeeRate::from_u64(1000);
-  txSkeleton = await commons.common.payFeeByFeeRate(txSkeleton, [fromAddress], 1000 /*fee_rate*/);
+  // Build the full transaction to estimate the fee
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: toLock }],
+    outputsData: [],
+  });
 
-  txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
+  // CCC transactions are easy to be edited
+  tx.outputs.forEach((output, i) => {
+    if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
+      alert(`Insufficient capacity at output ${i} to store data`);
+      return;
+    }
+    output.capacity = ccc.fixedPointFrom(amountInCKB);
+  });
 
-  const signatures = txSkeleton
-    .get("signingEntries")
-    .map((entry) => hd.key.signRecoverable(entry.message, signerPrivateKey))
-    .toArray();
-
-  const signedTx = helpers.sealTransaction(txSkeleton, signatures);
-  const txHash = await rpc.sendTransaction(signedTx);
-  console.log(`Go to explorer to check the sent transaction https://pudge.explorer.nervos.org/transaction/${txHash}`);
+  // Complete missing parts for transaction
+  await tx.completeInputsAll(signer);
+  await tx.completeFeeBy(signer, 1000);
+  const txHash = await signer.sendTransaction(tx);
+  console.log(
+    `Go to explorer to check the sent transaction https://pudge.explorer.nervos.org/transaction/${txHash}`
+  );
 
   return txHash;
+}
+
+export async function wait(seconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }

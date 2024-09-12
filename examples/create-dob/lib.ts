@@ -14,6 +14,7 @@ type Account = {
   address: Address;
   pubKey: string;
 };
+
 export const generateAccountFromPrivateKey = (privKey: string): Account => {
   const pubKey = hd.key.privateToPublic(privKey);
   const args = hd.key.publicKeyToBlake160(pubKey);

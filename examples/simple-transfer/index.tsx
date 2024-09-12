@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Script } from '@ckb-lumos/lumos';
-import { capacityOf, generateAccountFromPrivateKey, transfer } from './lib';
-import offCKB from './offckb.config';
+import { capacityOf, generateAccountFromPrivateKey, transfer, wait } from './lib';
+import { Script } from '@ckb-ccc/core';
 
 const app = document.getElementById('root');
 ReactDOM.render(<App />, app);
@@ -17,7 +16,7 @@ export function App() {
   // default value: second account address from offckb
   const [toAddr, setToAddr] = useState('ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew');
   // default value: 62 CKB
-  const [amount, setAmount] = useState('6200000000');
+  const [amountInCKB, setAmountInCKB] = useState('62');
 
   const [isTransferring, setIsTransferring] = useState(false);
   const [txHash, setTxHash] = useState<string>();
@@ -29,7 +28,7 @@ export function App() {
   }, [privKey]);
 
   const updateFromInfo = async () => {
-    const { lockScript, address } = generateAccountFromPrivateKey(privKey);
+    const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
     const capacity = await capacityOf(address);
     setFromAddr(address);
     setFromLock(lockScript);
@@ -53,25 +52,26 @@ export function App() {
 
   const onTransfer = async () => {
     setIsTransferring(true);
-    const txHash = await transfer(fromAddr, toAddr, amount, privKey).catch(alert);
+    const txHash = await transfer(toAddr, amountInCKB, privKey).catch(alert);
 
     // We can wait for this txHash to be on-chain so that we can trigger the UI/UX updates including balance.
     if(txHash){
       setTxHash(txHash);
-      // Note: indexer.waitForSync has a bug, we use negative number to workaround. 
-      // the negative number presents the block difference from current tip to wait
-      await offCKB.indexer.waitForSync(-1);
+      // wait 10 seconds for tx confirm
+      // the right way to do this is to use get_transaction rpc but here we just keep it simple
+      await wait(10);
+      
       await updateFromInfo();
     }
     
    setIsTransferring(false);
   }
 
-  const enabled = +amount > 6100000000 && +balance > +amount && toAddr.length > 0 && !isTransferring;
+  const enabled = +amountInCKB > 61 && +balance > +amountInCKB && toAddr.length > 0 && !isTransferring;
   const amountTip =
-    amount.length > 0 && +amount < 6100000000 ? (
+    amountInCKB.length > 0 && +amountInCKB < 61 ? (
       <span>
-        amount must larger than 6,100,000,000(61 CKB), see{' '}
+        amount must larger than 61 CKB, see{' '}
         <a href="https://docs.nervos.org/docs/wallets/#requirements-for-ckb-transfers">why</a>
       </span>
     ) : null;
@@ -95,8 +95,8 @@ export function App() {
       <br />
       <label htmlFor="amount">Amount</label>
       &nbsp;
-      <input id="amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
-      <small>Tx fee: 100,000 (0.001 CKB)</small>
+      <input id="amount" type="number" value={amountInCKB} onChange={(e) => setAmountInCKB(e.target.value)} />CKB{" "}
+      <small>Tx fee: 0.001 CKB</small>
       <br />
       <small style={{ color: 'red' }}>{amountTip}</small>
       <br />
