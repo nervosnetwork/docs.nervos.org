@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Script } from "@ckb-lumos/lumos";
 import {
   buildMessageTx,
   capacityOf,
   generateAccountFromPrivateKey,
   readOnChainMessage,
 } from "./lib";
+import { Script } from "@ckb-ccc/core";
 
 const app = document.getElementById("root");
 ReactDOM.render(<App />, app);
@@ -25,7 +25,7 @@ export function App() {
 
   useEffect(() => {
     const updateFromInfo = async () => {
-      const { lockScript, address } = generateAccountFromPrivateKey(privKey);
+      const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
       const capacity = await capacityOf(address);
       setFromAddr(address);
       setFromLock(lockScript);

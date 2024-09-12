@@ -6,8 +6,6 @@ import {
 } from "@ckb-ccc/core";
 import offCKB, { Network } from "./offckb.config";
 
-export const cccClient = buildCccClient(offCKB.currentNetwork);
-
 export const DEVNET_SCRIPTS: Record<
   string,
   Pick<Script, "codeHash" | "hashType"> & { cellDeps: CellDepInfoLike[] }
@@ -34,6 +32,8 @@ export function buildCccClient(network: Network) {
 
   return client;
 }
+
+export const cccClient = buildCccClient(offCKB.currentNetwork);
 
 type Account = {
   lockScript: Script;

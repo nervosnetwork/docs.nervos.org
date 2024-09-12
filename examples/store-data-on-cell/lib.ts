@@ -1,55 +1,56 @@
-import { bytes } from "@ckb-lumos/codec";
-import {
-  helpers,
-  Address,
-  Script,
-  hd,
-  config,
-  Cell,
-  commons,
-  WitnessArgs,
-  BI,
-  HexString,
-} from "@ckb-lumos/lumos";
-import { values, blockchain } from "@ckb-lumos/base";
-import offCKBConfig from "./offckb.config";
-const { ScriptValue } = values;
+import { ccc, CellDepInfoLike, KnownScript, Script } from "@ckb-ccc/core";
+import offCKB, { Network } from "./offckb.config";
 
-const { indexer, lumosConfig, rpc } = offCKBConfig;
-offCKBConfig.initializeLumosConfig();
+export const DEVNET_SCRIPTS: Record<
+  string,
+  Pick<Script, "codeHash" | "hashType"> & { cellDeps: CellDepInfoLike[] }
+> = {
+  [KnownScript.Secp256k1Blake160]:
+    offCKB.systemScripts.secp256k1_blake160_sighash_all!.script,
+  [KnownScript.Secp256k1Multisig]:
+    offCKB.systemScripts.secp256k1_blake160_multisig_all!.script,
+  [KnownScript.AnyoneCanPay]: offCKB.systemScripts.anyone_can_pay!.script,
+  [KnownScript.OmniLock]: offCKB.systemScripts.omnilock!.script,
+  [KnownScript.XUdt]: offCKB.systemScripts.xudt!.script,
+};
+
+export function buildCccClient(network: Network) {
+  const client =
+    network === "mainnet"
+      ? new ccc.ClientPublicMainnet()
+      : network === "testnet"
+      ? new ccc.ClientPublicTestnet()
+      : new ccc.ClientPublicTestnet({
+          url: offCKB.rpcUrl,
+          scripts: DEVNET_SCRIPTS as any,
+        });
+
+  return client;
+}
+
+export const cccClient = buildCccClient(offCKB.currentNetwork);
 
 type Account = {
   lockScript: Script;
-  address: Address;
+  address: string;
   pubKey: string;
 };
-export const generateAccountFromPrivateKey = (privKey: string): Account => {
-  const pubKey = hd.key.privateToPublic(privKey);
-  const args = hd.key.publicKeyToBlake160(pubKey);
-  const template = lumosConfig.SCRIPTS["SECP256K1_BLAKE160"]!;
-  const lockScript = {
-    codeHash: template.CODE_HASH,
-    hashType: template.HASH_TYPE,
-    args: args,
-  };
-  const address = helpers.encodeToAddress(lockScript, { config: lumosConfig });
+
+export const generateAccountFromPrivateKey = async (
+  privKey: string
+): Promise<Account> => {
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privKey);
+  const lock = await signer.getAddressObjSecp256k1();
   return {
-    lockScript,
-    address,
-    pubKey,
+    lockScript: lock.script,
+    address: lock.toString(),
+    pubKey: signer.publicKey,
   };
 };
 
-export async function capacityOf(address: string): Promise<BI> {
-  const collector = indexer.collector({
-    lock: helpers.parseAddress(address, { config: lumosConfig }),
-  });
-
-  let balance = BI.from(0);
-  for await (const cell of collector.collect()) {
-    balance = balance.add(cell.cellOutput.capacity);
-  }
-
+export async function capacityOf(address: string): Promise<bigint> {
+  const addr = await ccc.Address.fromString(address, cccClient);
+  let balance = await cccClient.getBalance([addr.script]);
   return balance;
 }
 
@@ -78,130 +79,30 @@ export async function buildMessageTx(
   onChainMemo: string,
   privateKey: string
 ): Promise<string> {
-  let txSkeleton = helpers.TransactionSkeleton({});
-  const fromAccount = generateAccountFromPrivateKey(privateKey);
-  const onChainMemoHex: HexString = utf8ToHex(onChainMemo);
-
-  const messageOutput: Cell = {
-    cellOutput: {
-      lock: fromAccount.lockScript,
-      capacity: "0x0",
-    },
-    data: onChainMemoHex,
-  };
-  const minimalCapacity = helpers.minimalCellCapacity(messageOutput);
-  messageOutput.cellOutput.capacity = BI.from(minimalCapacity).toHexString();
-
-  // additional 0.001 ckb for tx fee
-  // the tx fee could calculated by tx size
-  // this is just a simple example
-  const neededCapacity = BI.from(minimalCapacity).add(100000);
-  let collectedSum = BI.from(0);
-  const collected: Cell[] = [];
-  const collector = indexer.collector({
-    lock: fromAccount.lockScript,
-    type: "empty",
-    // filter cells by output data len range, [inclusive, exclusive)
-    // data length range: [0, 1), which means the data length is 0
-    outputDataLenRange: ["0x0", "0x1"],
+  const onChainMemoHex = utf8ToHex(onChainMemo);
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privateKey);
+  const signerAddress = await signer.getAddressObjSecp256k1();
+  // Build the full transaction to estimate the fee
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: signerAddress.script }],
+    outputsData: [onChainMemoHex],
   });
-  for await (const cell of collector.collect()) {
-    collectedSum = collectedSum.add(cell.cellOutput.capacity);
-    collected.push(cell);
-    if (collectedSum.gte(neededCapacity)) break;
-  }
 
-  if (collectedSum.lt(neededCapacity)) {
-    throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
-  }
-
-  const changeOutput: Cell = {
-    cellOutput: {
-      capacity: collectedSum.sub(neededCapacity).toHexString(),
-      lock: fromAccount.lockScript,
-    },
-    data: "0x",
-  };
-
-  txSkeleton = txSkeleton.update("inputs", (inputs) =>
-    inputs.push(...collected)
-  );
-  txSkeleton = txSkeleton.update("outputs", (outputs) =>
-    outputs.push(messageOutput, changeOutput)
-  );
-  txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
-    cellDeps.push({
-      outPoint: {
-        txHash: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.TX_HASH,
-        index: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.INDEX,
-      },
-      depType: lumosConfig.SCRIPTS.SECP256K1_BLAKE160.DEP_TYPE,
-    })
-  );
-
-  const firstIndex = txSkeleton
-    .get("inputs")
-    .findIndex((input) =>
-      new ScriptValue(input.cellOutput.lock, { validate: false }).equals(
-        new ScriptValue(fromAccount.lockScript, { validate: false })
-      )
-    );
-  if (firstIndex !== -1) {
-    while (firstIndex >= txSkeleton.get("witnesses").size) {
-      txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-        witnesses.push("0x")
-      );
-    }
-    let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
-    const newWitnessArgs: WitnessArgs = {
-      /* 65-byte zeros in hex */
-      lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    };
-    if (witness !== "0x") {
-      const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
-      const lock = witnessArgs.lock;
-      if (
-        !!lock &&
-        !!newWitnessArgs.lock &&
-        !bytes.equal(lock, newWitnessArgs.lock)
-      ) {
-        throw new Error(
-          "Lock field in first witness is set aside for signature!"
-        );
-      }
-      const inputType = witnessArgs.inputType;
-      if (inputType) {
-        newWitnessArgs.inputType = inputType;
-      }
-      const outputType = witnessArgs.outputType;
-      if (outputType) {
-        newWitnessArgs.outputType = outputType;
-      }
-    }
-    witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-    txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-      witnesses.set(firstIndex, witness)
-    );
-  }
-
-  txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get("signingEntries").get(0)!.message;
-  const Sig = hd.key.signRecoverable(message!, privateKey);
-  const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-
-  const txHash = await rpc.sendTransaction(tx, "passthrough");
-  console.log("Full transaction: ", JSON.stringify(tx, null, 2));
+  // Complete missing parts for transaction
+  await tx.completeInputsAll(signer);
+  await tx.completeFeeBy(signer, 1000);
+  const txHash = await signer.sendTransaction(tx);
   alert(`The transaction hash is ${txHash}`);
 
   return txHash;
 }
 
 export async function readOnChainMessage(txHash: string, index = "0x0") {
-  const { cell } = await rpc.getLiveCell({ txHash, index }, true);
+  const cell = await cccClient.getCellLive({ txHash, index }, true);
   if (cell == null) {
     return alert("cell not found, please retry later");
   }
-  const data = cell.data.content;
+  const data = cell.outputData;
   const msg = hexToUtf8(data);
   alert("read msg: " + msg);
   return msg;
