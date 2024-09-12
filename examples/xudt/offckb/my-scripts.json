@@ -1,0 +1,66 @@
+{
+  "devnet": {
+    "hello-world": {
+      "codeHash": "0x8f4283a49dccb62572aa6c0538ab06eb998c186f0cc048f069417231e37472f4",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x5899b55b5061f0eb6729c16bd58d0b26fa09ccb87234a3756af38ea091ad1c84",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "nostr-binding": {
+      "codeHash": "0x87dfd8abc003a65d4ed41eb31bd7b8136dae7882ec386eade9359905ef8526fe",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x7f8bda64e743eb3958eefd989403dba97e06a902b435830cbcbbf039cdd34af3",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "nostr-lock": {
+      "codeHash": "0xf97d31c4dfc7bac1f34ed938dfcab06b721347c8800c91894669f2a3418e5c48",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xa697d7252a7b692a815dde116a8e4d0cdb9ebad55f6c7bb70687a5ea022d2d78",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "ssri-test": {
+      "codeHash": "0x25c827a75565246bdeff1a98a4068e60cc1df020cf4cef98699d0828cb51a27b",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x6b95d4f1cb2090e361df1541c9bdc598d12a3e2e879529a6c89ce08332c57b1a",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    }
+  },
+  "testnet": {},
+  "mainnet": {}
+}
