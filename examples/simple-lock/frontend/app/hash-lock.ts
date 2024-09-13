@@ -59,7 +59,7 @@ export function generateAccount(hash: string) {
   const address = ccc.Address.fromScript(lockScript, cccClient).toString();
   return {
     address,
-    lockScript,
+    lockScript: ccc.Script.from(lockScript),
   };
 }
 

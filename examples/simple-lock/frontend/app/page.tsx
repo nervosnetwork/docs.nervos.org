@@ -1,10 +1,10 @@
 "use client";
 
 import offCKB from "@/offckb.config";
-import { Script } from "@ckb-lumos/lumos";
 import React, { useEffect, useState } from "react";
 import { capacityOf, generateAccount, unlock, wait } from "./hash-lock";
 import Link from "next/link";
+import { Script } from "@ckb-ccc/core";
 
 export default function Home() {
   return (
