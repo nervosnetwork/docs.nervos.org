@@ -67,7 +67,7 @@ export async function transfer(
   const signer = new ccc.SignerCkbPrivateKey(cccClient, signerPrivateKey);
   const { script: toLock } = await ccc.Address.fromString(toAddress, cccClient);
 
-  // Build the full transaction to estimate the fee
+  // Build the full transaction
   const tx = ccc.Transaction.from({
     outputs: [{ lock: toLock }],
     outputsData: [],

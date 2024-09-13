@@ -1,9 +1,34 @@
-import offCKB from "@/offckb.config";
-import { bytes } from "@ckb-lumos/codec";
-import { helpers, Cell, WitnessArgs, BI } from "@ckb-lumos/lumos";
-import { blockchain } from "@ckb-lumos/base";
+import offCKB, { Network } from "@/offckb.config";
+import { ccc, CellDepInfoLike, KnownScript, Script } from "@ckb-ccc/core";
 
-const { indexer, lumosConfig } = offCKB;
+export const DEVNET_SCRIPTS: Record<
+  string,
+  Pick<Script, "codeHash" | "hashType"> & { cellDeps: CellDepInfoLike[] }
+> = {
+  [KnownScript.Secp256k1Blake160]:
+    offCKB.systemScripts.secp256k1_blake160_sighash_all!.script,
+  [KnownScript.Secp256k1Multisig]:
+    offCKB.systemScripts.secp256k1_blake160_multisig_all!.script,
+  [KnownScript.AnyoneCanPay]: offCKB.systemScripts.anyone_can_pay!.script,
+  [KnownScript.OmniLock]: offCKB.systemScripts.omnilock!.script,
+  [KnownScript.XUdt]: offCKB.systemScripts.xudt!.script,
+};
+
+export function buildCccClient(network: Network) {
+  const client =
+    network === "mainnet"
+      ? new ccc.ClientPublicMainnet()
+      : network === "testnet"
+      ? new ccc.ClientPublicTestnet()
+      : new ccc.ClientPublicTestnet({
+          url: offCKB.rpcUrl,
+          scripts: DEVNET_SCRIPTS as any,
+        });
+
+  return client;
+}
+
+export const cccClient = buildCccClient(offCKB.currentNetwork);
 
 export function uint8ArrayToHexString(uint8Array: Uint8Array): string {
   return Array.prototype.map
@@ -18,29 +43,20 @@ export function stringToBytesHex(text: string) {
   return "0x" + uint8ArrayToHexString(buf);
 }
 
-export async function capacityOf(address: string): Promise<BI> {
-  const collector = indexer.collector({
-    lock: helpers.parseAddress(address, { config: lumosConfig }),
-  });
-
-  let balance = BI.from(0);
-  for await (const cell of collector.collect()) {
-    balance = balance.add(cell.cellOutput.capacity);
-  }
-
+export async function capacityOf(address: string): Promise<bigint> {
+  const addr = await ccc.Address.fromString(address, cccClient);
+  let balance = await cccClient.getBalance([addr.script]);
   return balance;
 }
 
 export function generateAccount(hash: string) {
   const lockArgs = "0x" + hash;
   const lockScript = {
-    codeHash: offCKB.lumosConfig.SCRIPTS.HASH_LOCK!.CODE_HASH,
-    hashType: offCKB.lumosConfig.SCRIPTS.HASH_LOCK!.HASH_TYPE,
+    codeHash: offCKB.myScripts["hash-lock"]!.codeHash,
+    hashType: offCKB.myScripts["hash-lock"]!.hashType,
     args: lockArgs,
   };
-  const address = helpers.encodeToAddress(lockScript, {
-    config: offCKB.lumosConfig,
-  });
+  const address = ccc.Address.fromScript(lockScript, cccClient).toString();
   return {
     address,
     lockScript,
@@ -50,79 +66,59 @@ export function generateAccount(hash: string) {
 export async function unlock(
   fromAddr: string,
   toAddr: string,
-  amountInShannon: string
+  amountInCKB: string
 ): Promise<string> {
-  const { lumosConfig, indexer, rpc } = offCKB;
-  let txSkeleton = helpers.TransactionSkeleton({});
-  const fromScript = helpers.parseAddress(fromAddr, {
-    config: lumosConfig,
+  const fromScript = (await ccc.Address.fromString(fromAddr, cccClient)).script;
+  const toScript = (await ccc.Address.fromString(toAddr, cccClient)).script;
+  const readSigner = new ccc.SignerCkbScriptReadonly(cccClient, fromScript);
+
+  // Build the full transaction
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: toScript }],
+    outputsData: [],
   });
-  const toScript = helpers.parseAddress(toAddr, { config: lumosConfig });
 
-  if (BI.from(amountInShannon).lt(BI.from("6100000000"))) {
-    throw new Error(
-      `every cell's capacity must be at least 61 CKB, see https://medium.com/nervosnetwork/understanding-the-nervos-dao-and-cell-model-d68f38272c24`
-    );
-  }
+  // CCC transactions are easy to be edited
+  tx.outputs.forEach((output, i) => {
+    if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
+      alert(`Insufficient capacity at output ${i} to store data`);
+      return;
+    }
+    output.capacity = ccc.fixedPointFrom(amountInCKB);
+  });
 
-  // additional 0.001 ckb for tx fee
-  // the tx fee could calculated by tx size
-  // this is just a simple example
-  const neededCapacity = BI.from(amountInShannon).add(100000);
-  let collectedSum = BI.from(0);
-  const collected: Cell[] = [];
-  const collector = indexer.collector({ lock: fromScript, type: "empty" });
-  for await (const cell of collector.collect()) {
-    collectedSum = collectedSum.add(cell.cellOutput.capacity);
-    collected.push(cell);
-    if (collectedSum.gte(neededCapacity)) break;
-  }
-
-  if (collectedSum.lt(neededCapacity)) {
-    throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
-  }
-
-  const transferOutput: Cell = {
-    cellOutput: {
-      capacity: BI.from(amountInShannon).toHexString(),
-      lock: toScript,
-    },
-    data: "0x",
-  };
-
-  txSkeleton = txSkeleton.update("inputs", (inputs) =>
-    inputs.push(...collected)
-  );
-  txSkeleton = txSkeleton.update("outputs", (outputs) =>
-    outputs.push(transferOutput)
-  );
-  txSkeleton = txSkeleton.update("cellDeps", (cellDeps) =>
-    cellDeps.push({
-      outPoint: {
-        txHash: lumosConfig.SCRIPTS.HASH_LOCK!.TX_HASH,
-        index: lumosConfig.SCRIPTS.HASH_LOCK!.INDEX,
-      },
-      depType: lumosConfig.SCRIPTS.HASH_LOCK!.DEP_TYPE,
-    })
-  );
-
+  // fill the witness with preimage
   const preimageAnswer = window.prompt("please enter the preimage: ");
   if (preimageAnswer == null) {
     throw new Error("user abort input!");
   }
-
-  const newWitnessArgs: WitnessArgs = {
-    lock: stringToBytesHex(preimageAnswer),
-  };
-  console.log("newWitnessArgs: ", newWitnessArgs);
-  const witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-    witnesses.set(0, witness)
+  const newWitnessArgs = new ccc.WitnessArgs(
+    stringToBytesHex(preimageAnswer) as `0x${string}`
   );
+  console.log("newWitnessArgs: ", newWitnessArgs);
+  tx.setWitnessArgsAt(0, newWitnessArgs);
 
-  const tx = helpers.createTransactionFromSkeleton(txSkeleton);
-  const hash = await rpc.sendTransaction(tx, "passthrough");
-  console.log("Full transaction: ", JSON.stringify(tx, null, 2));
+  // Complete missing parts for transaction
+  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+  await tx.completeInputsByCapacity(
+    readSigner,
+    ccc.fixedPointFrom(amountInCKB)
+  );
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+    });
+  }
+  //await tx.completeFeeBy(readSigner, 1000);
 
-  return hash;
+  const txHash = await cccClient.sendTransaction(tx);
+  console.log("Full transaction: ", tx.stringify());
+  return txHash;
+}
+
+export async function wait(seconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }
