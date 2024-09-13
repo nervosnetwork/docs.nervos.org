@@ -1,34 +1,5 @@
-import offCKB, { Network } from "./offckb.config";
-import { ccc, CellDepInfoLike, Hex, KnownScript, Script } from "@ckb-ccc/core";
-
-export const DEVNET_SCRIPTS: Record<
-  string,
-  Pick<Script, "codeHash" | "hashType"> & { cellDeps: CellDepInfoLike[] }
-> = {
-  [KnownScript.Secp256k1Blake160]:
-    offCKB.systemScripts.secp256k1_blake160_sighash_all!.script,
-  [KnownScript.Secp256k1Multisig]:
-    offCKB.systemScripts.secp256k1_blake160_multisig_all!.script,
-  [KnownScript.AnyoneCanPay]: offCKB.systemScripts.anyone_can_pay!.script,
-  [KnownScript.OmniLock]: offCKB.systemScripts.omnilock!.script,
-  [KnownScript.XUdt]: offCKB.systemScripts.xudt!.script,
-};
-
-export function buildCccClient(network: Network) {
-  const client =
-    network === "mainnet"
-      ? new ccc.ClientPublicMainnet()
-      : network === "testnet"
-      ? new ccc.ClientPublicTestnet()
-      : new ccc.ClientPublicTestnet({
-          url: offCKB.rpcUrl,
-          scripts: DEVNET_SCRIPTS as any,
-        });
-
-  return client;
-}
-
-export const cccClient = buildCccClient(offCKB.currentNetwork);
+import { ccc, Hex, Script } from "@ckb-ccc/core";
+import { cccClient } from "./ccc-client";
 
 type Account = {
   lockScript: Script;
@@ -104,7 +75,7 @@ export async function transferTokenToAddress(
   udtIssuerArgs: string,
   senderPrivKey: string,
   amount: string,
-  receiverAddress: string,
+  receiverAddress: string
 ) {
   const signer = new ccc.SignerCkbPrivateKey(cccClient, senderPrivKey);
   const senderLockScript = (await signer.getAddressObjSecp256k1()).script;
@@ -128,7 +99,7 @@ export async function transferTokenToAddress(
   const balanceDiff =
     (await tx.getInputsUdtBalance(signer.client, xUdtType)) -
     tx.getOutputsUdtBalance(xUdtType);
-    console.log("balanceDiff: ", balanceDiff)
+  console.log("balanceDiff: ", balanceDiff);
   if (balanceDiff > ccc.Zero) {
     tx.addOutput(
       {
@@ -139,7 +110,7 @@ export async function transferTokenToAddress(
     );
   }
   await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
-  
+
   // Complete missing parts for transaction
   await tx.completeInputsByCapacity(signer);
   await tx.completeFeeBy(signer, 1000);
