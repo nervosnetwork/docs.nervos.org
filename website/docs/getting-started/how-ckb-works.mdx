@@ -15,6 +15,8 @@ Blockchain is a decentralized, immutable ledger that records transactions across
 
 The CKB blockchain works like a storage facility filled with boxes, called Cells. These Cells can hold CKBytes, the native tokens of CKB, which represents both value and storage capacity—the more CKBytes you own, the more data you can store on the blockchain.
 
+Each Cell requires at least **61 CKBytes** to cover the essential data it needs to function. In practice, it's recommended to allocate **62 CKBytes** or more to cover transaction fees and ensure smooth processing.
+
 The Cell Model defines how these Cells behave, governed by [Scripts](#scripts) that set the rules for how Cells can be used or accessed. Once added to the blockchain, Cells are immutable, meaning they can’t be changed. To update a Cell’s data, you must consume it—extract the data, modify it, and create a new Cell with the updated information.
 
 <img
@@ -24,9 +26,9 @@ The Cell Model defines how these Cells behave, governed by [Scripts](#scripts) t
   alt="Cells are removed and added to the set of Live Cells"
 />
 
-Cells that have not been consumed are known as Live Cells, and these are available for use in future transactions. For example, if you want to send 50 CKByes to Alice from a Live Cell containing 100 CKBytes:
+Cells that have not been consumed are known as Live Cells, and these are available for use in future transactions. For example, if you want to send 100 CKByes to Alice from a Live Cell containing 200 CKBytes:
 
-1. **Create**: You start by selecting a Live Cell with a capacity of 100 CKBytes. Two new Live Cells will be created as output: one Cell with 50 CKBytes, locked so only Alice can unlock it; another Cell with 49.999 CKBytes locked to yourself as your change. The 0.001 CKBytes difference will be used as the transaction fee.
+1. **Create**: You start by selecting a Live Cell with a capacity of 200 CKBytes. Two new Live Cells will be created as output: one Cell with 100 CKBytes, locked so only Alice can unlock it; another Cell with 99.999 CKBytes locked to yourself as your change. The 0.001 CKBytes difference will be used as the transaction fee.
 
    <img
      src="/img/how-ckb-works/select-live-cell.png"
@@ -81,8 +83,8 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 
 As a result:
 
-- Your original 100 CKBytes Live Cell is consumed and marked as a Dead Cell.
-- The two new Live Cells (50 CKBytes for Alice and 49.999 CKBytes for you) are now active on the blockchain.
+- Your original 200 CKBytes Live Cell is consumed and marked as a Dead Cell.
+- The two new Live Cells (100 CKBytes for Alice and 99.999 CKBytes for you) are now active on the blockchain.
 - With each subsequent block mined, your transaction gains additional confirmations, solidifying its permanence and security in the blockchain.
 
 ## Scripts
