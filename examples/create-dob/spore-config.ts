@@ -60,14 +60,14 @@ const lumosConfig = {
     },
     "SPORE": {
       "CODE_HASH": "0x7e8bf78a62232caa2f5d47e691e8db1a90d05e93dc6828ad3cb935c01ec6d208",
-      "HASH_TYPE": "data",
+      "HASH_TYPE": "data1",
       "TX_HASH": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
       "INDEX": "0xa",
       "DEP_TYPE": "code"
     },
     "SPORE_CLUSTER": {
       "CODE_HASH": "0x7366a61534fa7c7e6225ecc0d828ea3b5366adec2b58206f2ee84995fe030075",
-      "HASH_TYPE": "data",
+      "HASH_TYPE": "data1",
       "TX_HASH": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
       "INDEX": "0xb",
       "DEP_TYPE": "code"
@@ -81,21 +81,21 @@ const lumosConfig = {
     },
     "SPORE_CLUSTER_AGENT": {
       "CODE_HASH": "0xc986099b41d79ca1b2a56ce5874bcda8175440a17298ea5e2bbc3897736b8c21",
-      "HASH_TYPE": "data",
+      "HASH_TYPE": "data1",
       "TX_HASH": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
       "INDEX": "0xc",
       "DEP_TYPE": "code"
     },
     "SPORE_CLUSTER_PROXY": {
       "CODE_HASH": "0xbe8b9ce3d05a32c4bb26fe71cd5fc1407ce91e3a8b9e8719be2ab072cef1454b",
-      "HASH_TYPE": "data",
+      "HASH_TYPE": "data1",
       "TX_HASH": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
       "INDEX": "0xd",
       "DEP_TYPE": "code"
     },
     "SPORE_LUA": {
       "CODE_HASH": "0x94a9b875911ace20f1f0d063a26495d14e4b04e32fd218261bb747f34e71ae47",
-      "HASH_TYPE": "data",
+      "HASH_TYPE": "data1",
       "TX_HASH": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
       "INDEX": "0xe",
       "DEP_TYPE": "code"
