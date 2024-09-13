@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Script } from "@ckb-lumos/lumos";
 import {
   capacityOf,
   generateAccountFromPrivateKey,
@@ -9,6 +8,7 @@ import {
 } from "./lib";
 import { hexStringToUint8Array } from "./helper";
 import { RawSporeData } from "@spore-sdk/core";
+import { Script } from "@ckb-ccc/core";
 const app = document.getElementById("root");
 ReactDOM.render(<App />, app);
 
