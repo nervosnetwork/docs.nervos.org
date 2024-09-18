@@ -32,12 +32,25 @@ const TRANSFEROVERVIEW: TutorialHeaderProps = {
         rel="noopener noreferrer"
       >
         Yarn
-      </Link>
+      </Link>{" "}
+      With{" "}
+      <Link
+        to={"/docs/sdk-and-devtool/ccc"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CCC
+      </Link>{" "}
+      Javascript SDK
     </div>,
     <div>
       CKB dev environment:{" "}
       <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
+      </Link>
+      {", version >= "}
+      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+        v0.3.0-rc2
       </Link>
     </div>,
   ],
@@ -69,12 +82,25 @@ const WRITEOVERVIEW: TutorialHeaderProps = {
         rel="noopener noreferrer"
       >
         Yarn
-      </Link>
+      </Link>{" "}
+      With{" "}
+      <Link
+        to={"/docs/sdk-and-devtool/ccc"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CCC
+      </Link>{" "}
+      Javascript SDK
     </div>,
     <div>
       CKB dev environment:{" "}
       <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
+      </Link>
+      {", version >= "}
+      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+        v0.3.0-rc2
       </Link>
     </div>,
   ],
@@ -109,12 +135,25 @@ const TOKENOVERVIEW: TutorialHeaderProps = {
         rel="noopener noreferrer"
       >
         Yarn
-      </Link>
+      </Link>{" "}
+      With{" "}
+      <Link
+        to={"/docs/sdk-and-devtool/ccc"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CCC
+      </Link>{" "}
+      Javascript SDK
     </div>,
     <div>
       CKB dev environment:{" "}
       <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
+      </Link>
+      {", version >= "}
+      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+        v0.3.0-rc2
       </Link>
     </div>,
   ],
@@ -149,12 +188,25 @@ const DOBOVERVIEW: TutorialHeaderProps = {
         rel="noopener noreferrer"
       >
         Yarn
-      </Link>
+      </Link>{" "}
+      With{" "}
+      <Link
+        to={"/docs/sdk-and-devtool/ccc"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CCC
+      </Link>{" "}
+      Javascript SDK
     </div>,
     <div>
       CKB dev environment:{" "}
       <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
+      </Link>
+      {", version >= "}
+      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+        v0.3.0-rc2
       </Link>
     </div>,
   ],
@@ -197,12 +249,25 @@ const LOCKOVERVIEW: TutorialHeaderProps = {
         rel="noopener noreferrer"
       >
         Yarn
-      </Link>
+      </Link>{" "}
+      With{" "}
+      <Link
+        to={"/docs/sdk-and-devtool/ccc"}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CCC
+      </Link>{" "}
+      Javascript SDK
     </div>,
     <div>
       CKB dev environment:{" "}
       <Link to={"/docs/node/run-devnet-node#quick-start-with-offckb"}>
         OffCKB
+      </Link>
+      {", version >= "}
+      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+        v0.3.0-rc2
       </Link>
     </div>,
     <div>Script develop tools</div>,

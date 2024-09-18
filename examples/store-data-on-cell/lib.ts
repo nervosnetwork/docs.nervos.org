@@ -78,3 +78,7 @@ export async function readOnChainMessage(txHash: string, index = "0x0") {
   alert("read msg: " + msg);
   return msg;
 }
+
+export function shannonToCKB(amount: bigint){
+  return amount / 100000000n;
+}

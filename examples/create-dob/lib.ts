@@ -68,3 +68,7 @@ export async function showSporeContent(txHash: string, index = 0) {
   console.log("spore data: ", sporeData);
   return sporeData;
 }
+
+export function shannonToCKB(amount: bigint){
+  return amount / 100000000n;
+}

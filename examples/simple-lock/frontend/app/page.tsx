@@ -2,7 +2,7 @@
 
 import offCKB from "@/offckb.config";
 import React, { useEffect, useState } from "react";
-import { capacityOf, generateAccount, unlock, wait } from "./hash-lock";
+import { capacityOf, generateAccount, shannonToCKB, unlock, wait } from "./hash-lock";
 import Link from "next/link";
 import { Script } from "@ckb-ccc/core";
 
@@ -37,7 +37,7 @@ function HashLock() {
     const capacity = await capacityOf(address);
     setFromAddr(address);
     setFromLock(lockScript);
-    setBalance(capacity.toString());
+    setBalance(shannonToCKB(capacity).toString());
   };
 
   // default value: second account address from offckb
@@ -119,7 +119,7 @@ function HashLock() {
               <pre>{JSON.stringify(fromLock, null, 2)}</pre>
             </li>
 
-            <li>Total capacity: {(+balance).toLocaleString()}</li>
+            <li>Total capacity: {balance} CKB</li>
           </ul>
         </div>
       </div>
@@ -148,7 +148,7 @@ function HashLock() {
             className="w-full px-1 py-1"
           />
         </div>
-        <small>Tx fee: 100,000 (0.001 CKB)</small>
+        <small>Tx fee: 0.001 CKB</small>
 
         <div>
           <small style={{ color: "red" }}>{amountTip}</small>

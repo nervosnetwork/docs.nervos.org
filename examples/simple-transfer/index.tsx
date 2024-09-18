@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { capacityOf, generateAccountFromPrivateKey, transfer, wait } from './lib';
+import { capacityOf, generateAccountFromPrivateKey, shannonToCKB, transfer, wait } from './lib';
 import { Script } from '@ckb-ccc/core';
 
 const app = document.getElementById('root');
@@ -32,7 +32,7 @@ export function App() {
     const capacity = await capacityOf(address);
     setFromAddr(address);
     setFromLock(lockScript);
-    setBalance(capacity.toString());
+    setBalance(shannonToCKB(capacity).toString());
   };
 
   const onInputPrivKey = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +88,7 @@ export function App() {
           <pre>{JSON.stringify(fromLock, null, 2)}</pre>
         </li>
 
-        <li>Total capacity: {(+balance).toLocaleString()}</li>
+        <li>Total capacity: {balance} CKB</li>
       </ul>
       <label htmlFor="to-address">Transfer to Address: </label>&nbsp;
       <input id="to-address" type="text" value={toAddr} onChange={(e) => setToAddr(e.target.value)} />

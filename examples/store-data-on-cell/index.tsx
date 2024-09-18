@@ -5,6 +5,7 @@ import {
   capacityOf,
   generateAccountFromPrivateKey,
   readOnChainMessage,
+  shannonToCKB,
 } from "./lib";
 import { Script } from "@ckb-ccc/core";
 
@@ -29,7 +30,7 @@ export function App() {
       const capacity = await capacityOf(address);
       setFromAddr(address);
       setFromLock(lockScript);
-      setBalance(capacity.toString());
+      setBalance(shannonToCKB(capacity).toString());
     };
 
     if (privKey) {
@@ -72,7 +73,7 @@ export function App() {
           <pre>{JSON.stringify(fromLock, null, 2)}</pre>
         </li>
 
-        <li>Total capacity: {(+balance).toLocaleString()}</li>
+        <li>Total capacity: {balance} CKB</li>
       </ul>
       <label htmlFor="message">write message: </label>&nbsp;
       <input
@@ -82,7 +83,7 @@ export function App() {
         onChange={(e) => setMessage(e.target.value)}
       />
       &nbsp;
-      <small>Tx fee: 100,000 (0.001 CKB)</small>
+      <small>Tx fee: 0.001 CKB</small>
       <br />
       <br />
       <button

@@ -94,3 +94,7 @@ export async function unlock(
 export async function wait(seconds: number) {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }
+
+export function shannonToCKB(amount: bigint){
+  return amount / BigInt(100000000);
+}

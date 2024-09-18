@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { capacityOf, generateAccountFromPrivateKey, issueToken, queryIssuedTokenCells, transferTokenToAddress } from './lib';
+import { capacityOf, generateAccountFromPrivateKey, issueToken, queryIssuedTokenCells, shannonToCKB, transferTokenToAddress } from './lib';
 import { ccc, CellOutput, Script } from '@ckb-ccc/core';
 
 const app = document.getElementById('root');
@@ -23,7 +23,7 @@ function IssuedToken() {
       const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
       const capacity = await capacityOf(address);
       setLockScript(lockScript);
-      setBalance(capacity.toString());
+      setBalance(shannonToCKB(capacity).toString());
     };
 
     if (privKey) {
@@ -53,7 +53,7 @@ function IssuedToken() {
       <label htmlFor="private-key">Private Key: </label>&nbsp;
       <input id="private-key" type="text" value={privKey} onChange={onInputPrivKey} />
       <ul>
-        <li>Balance(Total Capacity): {(+balance).toLocaleString()}</li>
+        <li>Balance(Total Capacity): {balance} CKB</li>
         <li>
           Lock Script:
           <pre>{JSON.stringify(lockScript, null, 2)}</pre>

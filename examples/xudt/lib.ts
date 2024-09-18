@@ -119,3 +119,7 @@ export async function transferTokenToAddress(
   console.log("The transaction hash is", txHash);
   return { txHash, tx };
 }
+
+export function shannonToCKB(amount: bigint){
+  return amount / 100000000n;
+}

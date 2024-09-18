@@ -73,7 +73,7 @@ export async function capacityOf(address: string): Promise<bigint> {
 ```
 
 :::tip
-In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In this tutorial, we use only the **Shannon unit**.
+In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In CCC SDK, the value handle are mostly done in the **Shannon unit**.
 :::
 
 Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:
