@@ -21,7 +21,7 @@ npm install -g @offckb/cli
 ```
 
 :::info
-Throughout this documentation, we use offckb/cli version **>=0.2.5**. You can always run the above command to update to the latest version.
+Throughout this documentation, we use offckb/cli version **>=0.3.0-rc2**. You can always run the above command to update to the latest version.
 :::
 
 ## Create a New Project
@@ -167,7 +167,7 @@ Once the server is up and running, you can view the dApp by visiting [localhost:
 
 The boilerplate project for a full-stack CKB dApp comprises two main components:
 
-- The frontend, which utilizes the CKB JavaScript framework, [Lumos](https://github.com/ckb-js/lumos).
+- The frontend, which utilizes the CKB JavaScript framework, [CCC](https://github.com/ckb-ecofund/ccc).
 - The Scripts, which leverage the [ckb-script-templates](https://github.com/cryptape/ckb-script-templates).
 
 By default, the Next.js template comes with a simple Script `hello-world` under `contracts/hello-world/src/main.rs`.
@@ -213,15 +213,12 @@ If the deployment is successful, the `offckb.config.ts` file will contain the ne
 
 ```ts
 import offckb from "offckb.config";
-import { CellDep } from "@ckb-lumos/lumos";
 
-const lumosConfig = offckb.lumosConfig;
-const myContractDep: CellDep = {
-  outPoint: {
-    txHash: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.TX_HASH,
-    index: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.INDEX,
-  },
-  depType: lumosConfig.SCRIPTS.YOUR_SCRIPT_NAME!.DEP_TYPE,
+const myScriptDeps: CellDep[] = offCKB.myScripts["YOUR_SCRIPT_NAME"]!.cellDeps;
+const myScript: Script = {
+  codeHash: offCKB.myScripts["hash-lock"]!.codeHash,
+  hashType: offCKB.myScripts["hash-lock"]!.hashType,
+  args: lockArgs,
 };
 ```
 
@@ -279,11 +276,10 @@ offckb inject-config
 ```bash
 All good. You can now use it in your project like:
 
-import offCKB from "offckb.config";
+  import offCKB from "offckb.config";
 
-const lumosConfig = offCKB.lumosConfig;
-const indexer = offCKB.indexer;
-const rpc = offCKB.rpc;
+  const myScriptCodeHash = offCKB.myScripts['script-name'].codeHash;
+  const omnilockScriptCodeHash = offCKB.systemScripts['omnilock'].codeHash;
 
 Check example at https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/simple-transfer
 ```
@@ -301,7 +297,7 @@ Now, when you deploy your Scripts with `offckb deploy --network devnet --target 
 ```
 
 ```bash
-offckb sync-config
+offckb sync-scripts
 ```
 
 ```mdx-code-block
@@ -310,7 +306,7 @@ offckb sync-config
 ```
 
 ```bash
-offCKB config updated.
+scripts json config updated.
 ```
 
 ```mdx-code-block
@@ -335,8 +331,65 @@ function readEnvNetwork(): "devnet" | "testnet" | "mainnet" {
 }
 ```
 
+## Debug a transaction
+
+If you are using the offckb dApp template to create your project, one of the beneficial is that all the failed transactions will be dumped and recorded so you can debug them later.
+
+Everytime you run a transaction, you can debug it with the transaction hash:
+
+```sh
+offckb debug <transaction-hash>
+```
+
+It will verify all the scripts in the transaction and print the detailed info in the terminal.
+
+```sh
+offckb debug --tx-hash 0x64c936ee78107450d49e57b7453dce9031ce68b056b2f1cdad5c2218ab7232ad
+Dump transaction successfully
+
+******************************
+****** Input[0].Lock ******
+
+hello, this is new add!
+Hashed 1148 bytes in sighash_all
+sighash_all = 5d9b2340738ee28729fc74eba35e6ef969878354fe556bd89d5b6f62642f6e50
+event = {"pubkey":"45c41f21e1cf715fa6d9ca20b8e002a574db7bb49e96ee89834c66dac5446b7a","tags":[["ckb_sighash_all","5d9b2340738ee28729fc74eba35e6ef969878354fe556bd89d5b6f62642f6e50"]],"created_at":1725339769,"kind":23334,"content":"Signing a CKB transaction\n\nIMPORTANT: Please verify the integrity and authenticity of connected Nostr client before signing this message\n","id":"90af298075ac878901282e23ce35b24e584b7727bc545e149fc259875a23a7aa","sig":"b505e7d5b643d2e6b1f0e5581221bbfe3c37f17534715e51eecf5ff97a2e1b828a3d767eb712555c78a8736e9085b4960458014fa171d5d169a1b267b186d2f3"}
+verify_signature costs 3654 k cycles
+Run result: 0
+Total cycles consumed: 4013717(3.8M)
+Transfer cycles: 44947(43.9K), running cycles: 3968770(3.8M)
+
+******************************
+****** Output[0].Type ******
+
+verify_signature costs 3654 k cycles
+Run result: 0
+Total cycles consumed: 3916670(3.7M)
+Transfer cycles: 43162(42.2K), running cycles: 3873508(3.7M)
+```
+
+If you want to debug a single cell script in the transaction, you can use the following command:
+
+```sh
+offckb debug <transaction-hash> --single-script <single-cell-script-option>
+```
+
+The `single-cell-script-option` format is `<cell-type>[<cell-index>].<script-type>`, eg: `"input[0].lock"`
+
+- `cell-type` could be `input` or `output`, refers to the cell type
+- `cell-index` is the index of the cell in the transaction
+- `script-type` could be `lock` or `type`, refers to the script type
+
+Or you can replace the script with a binary file in your single cell script debug session:
+
+```sh
+offckb debug <transaction-hash> --single-script <single-cell-script-option> --bin <path/to/binary/file>
+```
+
+All the debug utils are borrowed from [ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger).
+
 ## About offckb.config.ts
 
-`offckb.config.ts` is a straightforward TypeScript file that encapsulates basic info and configs for [Lumos](https://github.com/ckb-js/lumos). Everything is explicitly defined, making it easy to modify. This minimalistic approach ensures that `offckb` does not impose limitations on the tech selections and development processes of developers.
+`offckb.config.ts` is a straightforward TypeScript file that encapsulates basic devnet information. Everything is explicitly defined, making it easy to modify. This minimalistic approach ensures that `offckb` does not impose limitations on the tech selections and development processes of developers.
 
 If you have any feedback you would like to share with us, feel free to contact us at [github](https://github.com/nervosnetwork/docs.nervos.org) or [discord](https://discord.gg/4Jcw8MwEEv).
