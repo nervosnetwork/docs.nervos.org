@@ -1,113 +1,71 @@
-import { helpers, hd, config, Cell, commons, BI, utils } from '@ckb-lumos/lumos';
-import { blockchain, HexString } from '@ckb-lumos/base';
-import { bytes, number } from '@ckb-lumos/codec';
-import { xudtWitnessType } from './scheme';
-import { addCellDep, generateAccountFromPrivateKey } from './util';
-import offCKB from './offckb.config';
+import { ccc, Hex, Script } from "@ckb-ccc/core";
+import { cccClient } from "./ccc-client";
 
-const { indexer, lumosConfig, rpc } = offCKB;
- 
-config.initializeConfig(lumosConfig);
+type Account = {
+  lockScript: Script;
+  address: string;
+  pubKey: string;
+};
 
-export async function issueToken(privKey: string, amount: string) {
-  const xudtDeps = lumosConfig.SCRIPTS.XUDT;
-  const lockDeps = lumosConfig.SCRIPTS.SECP256K1_BLAKE160;
-
-  const { lockScript } = generateAccountFromPrivateKey(privKey);
-  const xudtArgs = utils.computeScriptHash(lockScript) + '00000000';
-
-  const typeScript = {
-    codeHash: xudtDeps.CODE_HASH,
-    hashType: xudtDeps.HASH_TYPE,
-    args: xudtArgs,
+export const generateAccountFromPrivateKey = async (
+  privKey: string
+): Promise<Account> => {
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privKey);
+  const lock = await signer.getAddressObjSecp256k1();
+  return {
+    lockScript: lock.script,
+    address: lock.toString(),
+    pubKey: signer.publicKey,
   };
+};
 
-  let txSkeleton = helpers.TransactionSkeleton();
-  txSkeleton = addCellDep(txSkeleton, {
-    outPoint: {
-      txHash: lockDeps.TX_HASH,
-      index: lockDeps.INDEX,
-    },
-    depType: lockDeps.DEP_TYPE,
-  });
-  txSkeleton = addCellDep(txSkeleton, {
-    outPoint: {
-      txHash: xudtDeps.TX_HASH,
-      index: xudtDeps.INDEX,
-    },
-    depType: xudtDeps.DEP_TYPE,
-  });
-
-  const targetOutput: Cell = {
-    cellOutput: {
-      capacity: '0x0',
-      lock: lockScript,
-      type: typeScript,
-    },
-    data: bytes.hexify(number.Uint128LE.pack(amount)),
-  };
-
-  // additional 0.001 ckb for tx fee
-  // the tx fee could calculated by tx size
-  // this is just a simple example
-  const capacity = helpers.minimalCellCapacity(targetOutput);
-  targetOutput.cellOutput.capacity = '0x' + capacity.toString(16);
-  const neededCapacity = BI.from(capacity.toString(10)).add(100000);
-  let collectedSum = BI.from(0);
-  const collected: Cell[] = [];
-  const collector = indexer.collector({ lock: lockScript, type: 'empty' });
-  for await (const cell of collector.collect()) {
-    collectedSum = collectedSum.add(cell.cellOutput.capacity);
-    collected.push(cell);
-    if (collectedSum.gte(neededCapacity)) break;
-  }
-
-  if (collectedSum.lt(neededCapacity)) {
-    throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
-  }
-
-  const changeOutput: Cell = {
-    cellOutput: {
-      capacity: collectedSum.sub(neededCapacity).toHexString(),
-      lock: lockScript,
-    },
-    data: '0x',
-  };
-
-  txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
-  txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(targetOutput, changeOutput));
-  
-  /* 65-byte zeros in hex */
-  const lockWitness =
-    '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-  const outputTypeWitness = xudtWitnessType.pack({ extension_data: [] });
-  const witnessArgs = blockchain.WitnessArgs.pack({ lock: lockWitness, outputType: outputTypeWitness });
-  const witness = bytes.hexify(witnessArgs);
-  txSkeleton = txSkeleton.update('witnesses', (witnesses) => witnesses.set(0, witness));
-
-  // signing
-  txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get('signingEntries').get(0)!.message;
-  const Sig = hd.key.signRecoverable(message!, privKey);
-  const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-  console.log(tx);
-
-  const hash = await rpc.sendTransaction(tx, 'passthrough');
-  console.log('The transaction hash is', hash);
-  return { hash, targetOutput };
+export async function capacityOf(address: string): Promise<bigint> {
+  const addr = await ccc.Address.fromString(address, cccClient);
+  let balance = await cccClient.getBalance([addr.script]);
+  return balance;
 }
 
-export async function queryIssuedTokenCells(xudtArgs: HexString) {
-  const xudtDeps = lumosConfig.SCRIPTS.XUDT;
-  const typeScript = {
-    codeHash: xudtDeps.CODE_HASH,
-    hashType: xudtDeps.HASH_TYPE,
-    args: xudtArgs,
-  };
+export async function issueToken(privKey: string, amount: string) {
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privKey);
+  const lockScript = (await signer.getAddressObjSecp256k1()).script;
+  const xudtArgs = lockScript.hash() + "00000000";
 
-  const collected: Cell[] = [];
-  const collector = indexer.collector({ type: typeScript });
-  for await (const cell of collector.collect()) {
+  const typeScript = await ccc.Script.fromKnownScript(
+    signer.client,
+    ccc.KnownScript.XUdt,
+    xudtArgs
+  );
+
+  // Build the full transaction
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: lockScript, type: typeScript }],
+    outputsData: [ccc.numLeToBytes(amount, 16)],
+  });
+
+  await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
+
+  // additional 0.001 ckb for tx fee
+  // Complete missing parts for transaction
+  await tx.completeInputsAll(signer);
+  await tx.completeFeeBy(signer, 1000);
+  const txHash = await signer.sendTransaction(tx);
+  console.log(
+    `Go to explorer to check the sent transaction https://pudge.explorer.nervos.org/transaction/${txHash}`
+  );
+
+  return { hash: txHash, targetOutput: tx.outputs[0] };
+}
+
+export async function queryIssuedTokenCells(xudtArgs: Hex) {
+  const typeScript = await ccc.Script.fromKnownScript(
+    cccClient,
+    ccc.KnownScript.XUdt,
+    xudtArgs
+  );
+
+  const collected: ccc.Cell[] = [];
+  const collector = cccClient.findCellsByType(typeScript, true);
+  for await (const cell of collector) {
     collected.push(cell);
   }
   return collected;
@@ -117,140 +75,51 @@ export async function transferTokenToAddress(
   udtIssuerArgs: string,
   senderPrivKey: string,
   amount: string,
-  receiverAddress: string,
+  receiverAddress: string
 ) {
-  const { lockScript: senderLockScript } = generateAccountFromPrivateKey(senderPrivKey);
-
-  const receiverLockScript = helpers.parseAddress(receiverAddress);
-
-  const xudtDeps = lumosConfig.SCRIPTS.XUDT;
-  const lockDeps = lumosConfig.SCRIPTS.SECP256K1_BLAKE160;
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, senderPrivKey);
+  const senderLockScript = (await signer.getAddressObjSecp256k1()).script;
+  const receiverLockScript = (
+    await ccc.Address.fromString(receiverAddress, cccClient)
+  ).script;
 
   const xudtArgs = udtIssuerArgs;
-  const typeScript = {
-    codeHash: xudtDeps.CODE_HASH,
-    hashType: xudtDeps.HASH_TYPE,
-    args: xudtArgs,
-  };
+  const xUdtType = await ccc.Script.fromKnownScript(
+    cccClient,
+    ccc.KnownScript.XUdt,
+    xudtArgs
+  );
 
-  let txSkeleton = helpers.TransactionSkeleton();
-  txSkeleton = addCellDep(txSkeleton, {
-    outPoint: {
-      txHash: lockDeps.TX_HASH,
-      index: lockDeps.INDEX,
-    },
-    depType: lockDeps.DEP_TYPE,
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: receiverLockScript, type: xUdtType }],
+    outputsData: [ccc.numLeToBytes(amount, 16)],
   });
-  txSkeleton = addCellDep(txSkeleton, {
-    outPoint: {
-      txHash: xudtDeps.TX_HASH,
-      index: xudtDeps.INDEX,
-    },
-    depType: xudtDeps.DEP_TYPE,
-  });
+  await tx.completeInputsByUdt(signer, xUdtType);
 
-  const targetOutput: Cell = {
-    cellOutput: {
-      capacity: '0x0',
-      lock: receiverLockScript,
-      type: typeScript,
-    },
-    data: bytes.hexify(number.Uint128LE.pack(amount)),
-  };
-
-  const capacity = helpers.minimalCellCapacity(targetOutput);
-  targetOutput.cellOutput.capacity = '0x' + capacity.toString(16);
-  // additional 0.001 ckb for tx fee
-  // the tx fee could calculated by tx size
-  // this is just a simple example
-  const neededCapacity = BI.from(capacity.toString(10)).add(100000);
-  let collectedSum = BI.from(0);
-  let collectedAmount = BI.from(0);
-  const collected: Cell[] = [];
-  const collector = indexer.collector({ lock: senderLockScript, type: typeScript });
-  for await (const cell of collector.collect()) {
-    collectedSum = collectedSum.add(cell.cellOutput.capacity);
-    collectedAmount = collectedAmount.add(number.Uint128LE.unpack(cell.data));
-    collected.push(cell);
-    if (collectedAmount >= BI.from(amount)) break;
+  const balanceDiff =
+    (await tx.getInputsUdtBalance(signer.client, xUdtType)) -
+    tx.getOutputsUdtBalance(xUdtType);
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput(
+      {
+        lock: senderLockScript,
+        type: xUdtType,
+      },
+      ccc.numLeToBytes(balanceDiff, 16)
+    );
   }
+  await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
 
-  let changeOutputTokenAmount = BI.from(0);
-  if (collectedAmount.gt(BI.from(amount))) {
-    changeOutputTokenAmount = collectedAmount.sub(BI.from(amount));
-  }
+  // Complete missing parts for transaction
+  await tx.completeInputsByCapacity(signer);
+  await tx.completeFeeBy(signer, 1000);
 
-  const changeOutput: Cell = {
-    cellOutput: {
-      capacity: '0x0',
-      lock: senderLockScript,
-      type: typeScript,
-    },
-    data: bytes.hexify(number.Uint128LE.pack(changeOutputTokenAmount.toString(10))),
-  };
-
-  const changeOutputNeededCapacity = BI.from(helpers.minimalCellCapacity(changeOutput));
-
-  const extraNeededCapacity = collectedSum.lt(neededCapacity)
-    ? neededCapacity.sub(collectedSum).add(changeOutputNeededCapacity)
-    : collectedSum.sub(neededCapacity).add(changeOutputNeededCapacity);
-
-  if (extraNeededCapacity.gt(0)) {
-    let extraCollectedSum = BI.from(0);
-    const extraCollectedCells: Cell[] = [];
-    const collector = indexer.collector({ lock: senderLockScript, type: 'empty' });
-    for await (const cell of collector.collect()) {
-      extraCollectedSum = extraCollectedSum.add(cell.cellOutput.capacity);
-      extraCollectedCells.push(cell);
-      if (extraCollectedSum >= extraNeededCapacity) break;
-    }
-
-    if (extraCollectedSum.lt(extraNeededCapacity)) {
-      throw new Error(`Not enough CKB for change, ${extraCollectedSum} < ${extraNeededCapacity}`);
-    }
-
-    txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...extraCollectedCells));
-
-    const change2Capacity = extraCollectedSum.sub(extraNeededCapacity);
-    if (change2Capacity.gt(61000000000)) {
-      changeOutput.cellOutput.capacity = changeOutputNeededCapacity.toHexString();
-      const changeOutput2: Cell = {
-        cellOutput: {
-          capacity: change2Capacity.toHexString(),
-          lock: senderLockScript,
-        },
-        data: '0x',
-      };
-      txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(changeOutput2));
-    } else {
-      changeOutput.cellOutput.capacity = extraCollectedSum.toHexString();
-    }
-  }
-
-  txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
-  txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(targetOutput, changeOutput));
-  /* 65-byte zeros in hex */
-  const lockWitness =
-    '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-
-  const inputTypeWitness = xudtWitnessType.pack({ extension_data: [] });
-  const outputTypeWitness = xudtWitnessType.pack({ extension_data: [] });
-  const witnessArgs = blockchain.WitnessArgs.pack({
-    lock: lockWitness,
-    inputType: inputTypeWitness,
-    outputType: outputTypeWitness,
-  });
-  const witness = bytes.hexify(witnessArgs);
-  txSkeleton = txSkeleton.update('witnesses', (witnesses) => witnesses.set(0, witness));
-
-  // signing
-  txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-  const message = txSkeleton.get('signingEntries').get(0)!.message;
-  const Sig = hd.key.signRecoverable(message!, senderPrivKey);
-  const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-  console.log('tx: ', tx);
-
-  const txHash = await rpc.sendTransaction(tx, 'passthrough');
-  console.log('The transaction hash is', txHash);
+  const txHash = await signer.sendTransaction(tx);
+  console.log("The transaction hash is", txHash);
   return { txHash, tx };
+}
+
+export function shannonToCKB(amount: bigint){
+  return amount / 100000000n;
 }

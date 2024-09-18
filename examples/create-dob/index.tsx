@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Script } from "@ckb-lumos/lumos";
 import {
   capacityOf,
   generateAccountFromPrivateKey,
   createSporeDOB,
   showSporeContent,
+  shannonToCKB,
 } from "./lib";
 import { hexStringToUint8Array } from "./helper";
 import { RawSporeData } from "@spore-sdk/core";
+import { Script } from "@ckb-ccc/core";
 const app = document.getElementById("root");
 ReactDOM.render(<App />, app);
 
@@ -31,11 +32,11 @@ export function App() {
 
   useEffect(() => {
     const updateFromInfo = async () => {
-      const { lockScript, address } = generateAccountFromPrivateKey(privKey);
+      const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
       const capacity = await capacityOf(address);
       setFromAddr(address);
       setFromLock(lockScript);
-      setBalance(capacity.toString());
+      setBalance(shannonToCKB(capacity).toString());
     };
 
     if (privKey) {
@@ -116,9 +117,9 @@ export function App() {
           <pre>{JSON.stringify(fromLock, null, 2)}</pre>
         </li>
 
-        <li>Total capacity: {(+balance).toLocaleString()}</li>
+        <li>Total capacity: {balance} CKB</li>
       </ul>
-      <small>Tx fee: 100,000 (0.001 CKB)</small>
+      <small>Tx fee: 0.001 CKB</small>
       <br />
       <br />
       <div>

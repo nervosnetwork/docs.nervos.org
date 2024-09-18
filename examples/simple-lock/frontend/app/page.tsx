@@ -1,9 +1,10 @@
 "use client";
 
 import offCKB from "@/offckb.config";
-import { Script } from "@ckb-lumos/lumos";
 import React, { useEffect, useState } from "react";
-import { capacityOf, generateAccount, unlock } from "./hash-lock";
+import { capacityOf, generateAccount, shannonToCKB, unlock, wait } from "./hash-lock";
+import Link from "next/link";
+import { Script } from "@ckb-ccc/core";
 
 export default function Home() {
   return (
@@ -18,14 +19,15 @@ export default function Home() {
 function HashLock() {
   // You can generate ckb blake2b_256 hash from https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25
   const [hash, setHash] = useState<string>(
-    "823d87112a54264ce2acb3fec0748172a833da3d3c7b65d0cd14aab40f1679ce"
+    "3376b3e62282513e03d78fc6c5bd555503d0c697bf394d55cd672cc96e6b0a2c"
   );
   const [fromAddr, setFromAddr] = useState("");
   const [fromLock, setFromLock] = useState<Script>();
   const [balance, setBalance] = useState("0");
 
   useEffect(() => {
-    if (hash && offCKB.lumosConfig.SCRIPTS["HASH_LOCK"] != null) {
+    if (hash && offCKB.myScripts["hash-lock"] != null) {
+      
       updateFromInfo();
     }
   }, [hash]);
@@ -35,29 +37,29 @@ function HashLock() {
     const capacity = await capacityOf(address);
     setFromAddr(address);
     setFromLock(lockScript);
-    setBalance(capacity.toString());
+    setBalance(shannonToCKB(capacity).toString());
   };
 
   // default value: second account address from offckb
   const [toAddr, setToAddr] = useState(
     "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew"
   );
-  // default value: 62 CKB
-  const [amount, setAmount] = useState("9900000000");
+  // default value: 99 CKB
+  const [amountInCKB, setAmountInCKB] = useState("99");
 
   const [isTransferring, setIsTransferring] = useState(false);
   const [txHash, setTxHash] = useState<string>();
 
   const onTransfer = async () => {
     setIsTransferring(true);
-    const txHash = await unlock(fromAddr, toAddr, amount).catch(alert);
+    const txHash = await unlock(fromAddr, toAddr, amountInCKB).catch(alert);
 
     // We can wait for this txHash to be on-chain so that we can trigger the UI/UX updates including balance.
     if (txHash) {
       setTxHash(txHash);
-      // Note: indexer.waitForSync has a bug, we use negative number to workaround.
-      // the negative number presents the block difference from current tip to wait
-      await offCKB.indexer.waitForSync(-1);
+      // wait 10 seconds for tx confirm
+      // the right way to do this is to use get_transaction rpc but here we just keep it simple
+      await wait(10);
       await updateFromInfo();
     }
 
@@ -65,14 +67,14 @@ function HashLock() {
   };
 
   const enabled =
-    +amount > 6100000000 &&
-    +balance > +amount &&
+    +amountInCKB > 61 &&
+    +balance > +amountInCKB &&
     toAddr.length > 0 &&
     !isTransferring;
   const amountTip =
-    amount.length > 0 && +amount < 6100000000 ? (
+    amountInCKB.length > 0 && +amountInCKB < 61 ? (
       <span>
-        amount must larger than 6,100,000,000(61 CKB), see{" "}
+        amount must larger than 61 CKB, see{" "}
         <a href="https://docs.nervos.org/docs/wallets/#requirements-for-ckb-transfers">
           why
         </a>
@@ -88,8 +90,8 @@ function HashLock() {
         <div className="text-xl font-bold">HASH_LOCK Script Info</div>
         <div>
           code_hash:{" "}
-          {offCKB.lumosConfig.SCRIPTS["HASH_LOCK"]?.CODE_HASH
-            ? offCKB.lumosConfig.SCRIPTS["HASH_LOCK"]?.CODE_HASH
+          {offCKB.myScripts["hash-lock"]?.codeHash
+            ? offCKB.myScripts["hash-lock"]?.codeHash
             : "Not Found, deploy script first."}
         </div>
       </div>
@@ -106,6 +108,7 @@ function HashLock() {
             className="w-full px-1 py-1"
           />
         </div>
+        <p>hints: Generate ckb blake2b_256 hash from <Link style={{color: "blue"}} href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">here</Link></p>
 
         <div className="my-4">
           Hash Lock:
@@ -116,7 +119,7 @@ function HashLock() {
               <pre>{JSON.stringify(fromLock, null, 2)}</pre>
             </li>
 
-            <li>Total capacity: {(+balance).toLocaleString()}</li>
+            <li>Total capacity: {balance} CKB</li>
           </ul>
         </div>
       </div>
@@ -140,12 +143,12 @@ function HashLock() {
           <input
             id="amount"
             type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            value={amountInCKB}
+            onChange={(e) => setAmountInCKB(e.target.value)}
             className="w-full px-1 py-1"
           />
         </div>
-        <small>Tx fee: 100,000 (0.001 CKB)</small>
+        <small>Tx fee: 0.001 CKB</small>
 
         <div>
           <small style={{ color: "red" }}>{amountTip}</small>

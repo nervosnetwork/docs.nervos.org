@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Cell, Script, Transaction, utils } from '@ckb-lumos/lumos';
-import { issueToken, queryIssuedTokenCells, transferTokenToAddress } from './lib';
-import { capacityOf, generateAccountFromPrivateKey, readTokenAmount } from './util';
+import { capacityOf, generateAccountFromPrivateKey, issueToken, queryIssuedTokenCells, shannonToCKB, transferTokenToAddress } from './lib';
+import { ccc, CellOutput, Script } from '@ckb-ccc/core';
 
 const app = document.getElementById('root');
 ReactDOM.render(<App />, app);
@@ -16,15 +15,15 @@ function IssuedToken() {
   // default token amount: 42
   const [amount, setAmount] = useState('42');
 
-  const [issuedTokenCell, setIssuedTokenCell] = useState<Cell>();
+  const [issuedTokenCell, setIssuedTokenCell] = useState<CellOutput>();
   const [txHash, setTxHash] = useState<string>();
 
   useEffect(() => {
     const updateFromInfo = async () => {
-      const { lockScript, address } = generateAccountFromPrivateKey(privKey);
+      const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
       const capacity = await capacityOf(address);
       setLockScript(lockScript);
-      setBalance(capacity.toString());
+      setBalance(shannonToCKB(capacity).toString());
     };
 
     if (privKey) {
@@ -54,12 +53,12 @@ function IssuedToken() {
       <label htmlFor="private-key">Private Key: </label>&nbsp;
       <input id="private-key" type="text" value={privKey} onChange={onInputPrivKey} />
       <ul>
-        <li>Balance(Total Capacity): {(+balance).toLocaleString()}</li>
+        <li>Balance(Total Capacity): {balance} CKB</li>
         <li>
           Lock Script:
           <pre>{JSON.stringify(lockScript, null, 2)}</pre>
         </li>
-        <li>Lock Script Hash: {lockScript && utils.computeScriptHash(lockScript)}</li>
+        <li>Lock Script Hash: {lockScript && lockScript.hash()}</li>
       </ul>
       <br />
       <label htmlFor="amount">Token Amount: </label>
@@ -85,7 +84,7 @@ function IssuedToken() {
             <h4>Result</h4>
             <li>Transaction hash: {txHash}</li>
             <li>
-              Token xUDT args: {issuedTokenCell.cellOutput.type.args}{' '}
+              Token xUDT args: {issuedTokenCell.type?.args}{' '}
               <strong>
                 {
                   '(Noticed that the xUDT args works like the unique id for your issued token, Think of it like an ERC20 contract address)'
@@ -93,7 +92,10 @@ function IssuedToken() {
               </strong>
             </li>
             <li>
-              Token cell: <pre>{JSON.stringify(issuedTokenCell, null, 2)}</pre>
+              Token cell: 
+                <p>Capacity: {issuedTokenCell.capacity.toString()}</p>
+                <p>Lock: {JSON.stringify(issuedTokenCell.lock, null, 2)}</p>
+                <p>Type: {JSON.stringify(issuedTokenCell.type, null, 2)}</p>
             </li>
           </>
         )}
@@ -104,10 +106,10 @@ function IssuedToken() {
 
 function ViewIssuedToken() {
   const [xudtArgs, setXudtArgs] = useState<string>();
-  const [cells, setCells] = useState<Cell[]>([]);
+  const [cells, setCells] = useState<ccc.Cell[]>([]);
 
   const onQuery = async () => {
-    const cells = await queryIssuedTokenCells(xudtArgs).catch(alert);
+    const cells = await queryIssuedTokenCells(xudtArgs as `0x{string}`).catch(alert);
     if(cells && cells.length > 0){
       setCells(cells);
     }else{
@@ -129,7 +131,7 @@ function ViewIssuedToken() {
       {cells.map((cell, index) => (
         <div key={index}>
           <p>Cell #{index}</p>
-          <li>Token amount: {readTokenAmount(cell.data).toNumber()}</li>
+          <li>Token amount: {ccc.numLeFromBytes(cell.outputData).toString()}</li>
           <li>Token xUDT args: {cell.cellOutput.type.args}</li>
           <li>Token holder's lock script args: {cell.cellOutput.lock.args}</li>
           <hr />
@@ -144,7 +146,7 @@ function TransferIssuedToken() {
   const [senderPrivkey, setSenderPrivkey] = useState<string>('');
   const [transferAmount, setTransferAmount] = useState('');
   const [receiverAddress, setReceiverAddress] = useState('');
-  const [tx, setTx] = useState<Transaction>();
+  const [tx, setTx] = useState<ccc.Transaction>();
 
   const onInputSenderPrivKey = (e: React.ChangeEvent<HTMLInputElement>) => {
     const priv = e.target.value;
@@ -195,7 +197,7 @@ function TransferIssuedToken() {
           <>
             <h4>Result</h4>
             <li>
-              Transaction: <pre>{JSON.stringify(tx, null, 2)}</pre>
+              Transaction: <pre>{tx.stringify()}</pre>
             </li>
           </>
         )}

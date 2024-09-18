@@ -89,123 +89,30 @@ export async function buildMessageTx(
 }
 ```
 
-As always, we first create a transaction skeleton:
+As always, we first create a transaction using CCC:
 
 ```ts
-let txSkeleton = helpers.TransactionSkeleton({});
-```
-
-Then we build the output Cell to store the message data by putting the hex format of the text message into the data field of the output Cell:
-
-```ts
-const fromAccount = generateAccountFromPrivateKey(privateKey);
-const onChainMemoHex: HexString = utf8ToHex(onChainMemo);
-
-const messageOutput: Cell = {
-  cellOutput: {
-    lock: fromAccount.lockScript,
-    capacity: "0x0",
-  },
-  data: onChainMemoHex,
-};
-const minimalCapacity = helpers.minimalCellCapacity(messageOutput);
-messageOutput.cellOutput.capacity = BI.from(minimalCapacity).toHexString();
-```
-
-Notice that we need to make sure the data stored in the Cell won't overflow the total size of the Cell's capacity. That's why we construct the content of the Cell and then use `helpers.minimalCellCapacity` to determine how much space we need for this Cell.
-
-Next, we add some transaction fees and calculate the total capacities we need and start collecting the input Cells:
-
-```ts
-const neededCapacity = BI.from(minimalCapacity).add(100000);
-let collectedSum = BI.from(0);
-const collected: Cell[] = [];
-const collector = indexer.collector({
-  lock: fromAccount.lockScript,
-  type: "empty",
-  // filter Cells by output data len range, [inclusive, exclusive)
-  // data length range: [0, 1), which means the data length is 0
-  outputDataLenRange: ["0x0", "0x1"],
+const onChainMemoHex = utf8ToHex(onChainMemo);
+const tx = ccc.Transaction.from({
+  outputs: [{ lock: signerAddress.script }],
+  outputsData: [onChainMemoHex],
 });
-for await (const cell of collector.collect()) {
-  collectedSum = collectedSum.add(cell.cellOutput.capacity);
-  collected.push(cell);
-  if (collectedSum.gte(neededCapacity)) break;
-}
-if (collectedSum.lt(neededCapacity)) {
-  throw new Error(`Not enough CKB, ${collectedSum} < ${neededCapacity}`);
-}
 ```
 
-Remember to build the change output Cell to save our capacities:
+Here we build the output Cell to store the message data by putting the hex format of the text message into the data field of the output Cell.
+
+Next, we ask CCC to complete the transaction for us with transaction fee:
 
 ```ts
-const changeOutput: Cell = {
-  cellOutput: {
-    capacity: collectedSum.sub(neededCapacity).toHexString(),
-    lock: fromAccount.lockScript,
-  },
-  data: "0x",
-};
+// Complete missing parts for transaction
+await tx.completeInputsAll(signer);
+await tx.completeFeeBy(signer, 1000);
 ```
 
-The next steps are just similar with the `view-and-transfer-balance` example. We build the `witnessArgs` for the transaction's witness and putting the signature in the witnessArgs:
+Lastly, we use signer to sign and broadcast the transaction to the blockchain network through rpc:
 
 ```ts
-const firstIndex = txSkeleton
-  .get("inputs")
-  .findIndex((input) =>
-    new ScriptValue(input.cellOutput.lock, { validate: false }).equals(
-      new ScriptValue(fromAccount.lockScript, { validate: false })
-    )
-  );
-if (firstIndex !== -1) {
-  while (firstIndex >= txSkeleton.get("witnesses").size) {
-    txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-      witnesses.push("0x")
-    );
-  }
-  let witness: string = txSkeleton.get("witnesses").get(firstIndex)!;
-  const newWitnessArgs: WitnessArgs = {
-    /* 65-byte zeros in hex */
-    lock: "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-  };
-  if (witness !== "0x") {
-    const witnessArgs = blockchain.WitnessArgs.unpack(bytes.bytify(witness));
-    const lock = witnessArgs.lock;
-    if (
-      !!lock &&
-      !!newWitnessArgs.lock &&
-      !bytes.equal(lock, newWitnessArgs.lock)
-    ) {
-      throw new Error(
-        "Lock field in first witness is set aside for signature!"
-      );
-    }
-    const inputType = witnessArgs.inputType;
-    if (inputType) {
-      newWitnessArgs.inputType = inputType;
-    }
-    const outputType = witnessArgs.outputType;
-    if (outputType) {
-      newWitnessArgs.outputType = outputType;
-    }
-  }
-  witness = bytes.hexify(blockchain.WitnessArgs.pack(newWitnessArgs));
-  txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-    witnesses.set(firstIndex, witness)
-  );
-}
-txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-const message = txSkeleton.get("signingEntries").get(0)!.message;
-const Sig = hd.key.signRecoverable(message!, privateKey);
-const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-```
-
-Lastly, we broadcast the transaction to the blockchain network through rpc:
-
-```ts
-const txHash = await rpc.sendTransaction(tx, "passthrough");
+const txHash = await signer.sendTransaction(tx);
 ```
 
 Therefore, the message is successfully stored on a Cell and lives in the blockchain.
@@ -225,11 +132,11 @@ For the way we built the transaction, we know that the Live Cell that carries th
 
 ```ts
 export async function readOnChainMessage(txHash: string, index = "0x0") {
-  const { cell } = await rpc.getLiveCell({ txHash, index }, true);
+  const cell = await cccClient.getCellLive({ txHash, index }, true);
   if (cell == null) {
     return alert("Cell not found, please retry later");
   }
-  const data = cell.data.content;
+  const data = cell.outputData;
   const msg = hexToUtf8(data);
   alert("read msg: " + msg);
   return msg;

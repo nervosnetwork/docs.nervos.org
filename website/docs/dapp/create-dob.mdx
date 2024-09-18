@@ -133,22 +133,20 @@ Check out the `showSporeContent` function:
 ```ts
 export async function showSporeContent(txHash: string, index = 0) {
   const indexHex = "0x" + index.toString(16);
-  const { cell } = await rpc.getLiveCell({ txHash, index: indexHex }, true);
+  const cell = await cccClient.getCellLive({ txHash, index: indexHex }, true);
   if (cell == null) {
-    return alert("Cell not found, please retry later");
+    return alert("cell not found, please retry later");
   }
-  const data = cell.data.content;
-  const msg = unpackToRawSporeData(data);
-  console.log("Spore data: ", msg);
-  return msg;
+  const sporeData = unpackToRawSporeData(cell.outputData);
+  console.log("spore data: ", sporeData);
+  return sporeData;
 }
 ```
 
-We locate the Spore Cell by accepting a outpoint parameter(`txHash` and `outputIndex`), and use `rpc.getLiveCell` to get the Live Cell. Then we unpack the data content from this Cell:
+We locate the Spore Cell by accepting a outpoint parameter(`txHash` and `outputIndex`), and use `cccClient.getCellLive` to get the Live Cell. Then we unpack the data content from this Cell:
 
 ```ts
-const data = cell.data.content;
-const msg = unpackToRawSporeData(data);
+const sporeData = unpackToRawSporeData(cell.outputData);
 ```
 
 To render the image from this raw data, check out the `renderSpore` function in the `index.tsx`:
@@ -158,6 +156,7 @@ const renderSpore = async () => {
   const res = await showSporeContent(txHash, outputIndex);
   if (!res) return;
   setRawSporeData(res);
+
   // Create Blob from binary data
   const buffer = hexStringToUint8Array(res.content.toString().slice(2));
   const blob = new Blob([buffer], { type: res.contentType });

@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ckb-lumos/lumos": "0.21.1",
-    "next": "14.2.10",
+    "@ckb-ccc/core": "^0.0.14-alpha.0",
+    "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
   },
