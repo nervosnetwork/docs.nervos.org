@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ckb-lumos/lumos": "0.21.1",
-    "next": "14.2.3",
+    "next": "14.2.10",
     "react": "^18",
     "react-dom": "^18"
   },
