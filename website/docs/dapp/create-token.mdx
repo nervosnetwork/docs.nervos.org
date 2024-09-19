@@ -58,16 +58,15 @@ Open the `lib.ts` file in your project and check out the `IssueToken` function:
 
 ```ts
 export async function issueToken(privKey: string, amount: string) {
-  const xudtDeps = lumosConfig.SCRIPTS.XUDT;
+  const signer = new ccc.SignerCkbPrivateKey(cccClient, privKey);
+  const lockScript = (await signer.getAddressObjSecp256k1()).script;
+  const xudtArgs = lockScript.hash() + "00000000";
 
-  const { lockScript } = generateAccountFromPrivateKey(privKey);
-  const xudtArgs = utils.computeScriptHash(lockScript) + '00000000';
-
-  const typeScript = {
-    codeHash: xudtDeps.CODE_HASH,
-    hashType: xudtDeps.HASH_TYPE,
-    args: xudtArgs,
-  };
+  const typeScript = await ccc.Script.fromKnownScript(
+    signer.client,
+    ccc.KnownScript.XUdt,
+    xudtArgs
+  );
   ...
 }
 ```
@@ -80,8 +79,8 @@ This function accepts two parameters:
 Note that we aim to create an output Cell whose <Tooltip>Type Script</Tooltip> is an xUDT Script. The args of this xUDT Script are the issuer's Lock Script Hash, which is why we include the following lines of code:
 
 ```ts
-const { lockScript } = generateAccountFromPrivateKey(privKey);
-const xudtArgs = utils.computeScriptHash(lockScript) + "00000000";
+const lockScript = (await signer.getAddressObjSecp256k1()).script;
+const xudtArgs = lockScript.hash() + "00000000";
 ```
 
 Also, note that the `00000000` here is just a placeholder. To unlock more capabilities of the xUDT Script, this placeholder can contain specific data. However, we don't need to concern ourselves with this detail at the moment.
@@ -89,61 +88,30 @@ Also, note that the `00000000` here is just a placeholder. To unlock more capabi
 Further down in the function, you'll see that the complete target output Cell of our custom token appears as follows:
 
 ```ts
-const targetOutput: Cell = {
-  cellOutput: {
-    capacity: "0x0",
-    lock: lockScript,
-    type: typeScript,
-  },
-  data: bytes.hexify(number.Uint128LE.pack(amount)),
-};
+const tx = ccc.Transaction.from({
+  outputs: [{ lock: lockScript, type: typeScript }],
+  outputsData: [ccc.numLeToBytes(amount, 16)],
+});
 ```
 
-Note that the `data` field is the amount of the custom token.
+Note that the `outputsData` field is the amount of the custom token.
 
 Next, to complete our `issueToken` function, we just use the `helpers.TransactionSkeleton` to build the transaction with our desired output Cells.
 
 ```ts
-let txSkeleton = helpers.TransactionSkeleton();
-txSkeleton = addCellDep(txSkeleton, {
-  outPoint: {
-    txHash: lockDeps.TX_HASH,
-    index: lockDeps.INDEX,
-  },
-  depType: lockDeps.DEP_TYPE,
-});
-...
-txSkeleton = txSkeleton.update('inputs', (inputs) => inputs.push(...collected));
-  txSkeleton = txSkeleton.update('outputs', (outputs) => outputs.push(targetOutput, changeOutput));
+  await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
+  // additional 0.001 ckb for tx fee
+  // Complete missing parts for transaction
+  await tx.completeInputsAll(signer);
+  await tx.completeFeeBy(signer, 1000);
 
 ...
 ```
 
-Lastly, we do the signing and witness data part, just like what we mentioned in the previous tutorial in the [Transfer CKB](/docs/dapp/transfer-ckb) example:
+Lastly, we do the signing and sending transaction:
 
 ```ts
-// prepare witness data
-/* 65-byte zeros in hex */
-const lockWitness =
-  "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-const outputTypeWitness = xudtWitnessType.pack({ extension_data: [] });
-const witnessArgs = blockchain.WitnessArgs.pack({
-  lock: lockWitness,
-  outputType: outputTypeWitness,
-});
-const witness = bytes.hexify(witnessArgs);
-txSkeleton = txSkeleton.update("witnesses", (witnesses) =>
-  witnesses.set(0, witness)
-);
-
-// signing
-txSkeleton = commons.common.prepareSigningEntries(txSkeleton);
-const message = txSkeleton.get("signingEntries").get(0)?.message;
-const Sig = hd.key.signRecoverable(message!, privKey);
-const tx = helpers.sealTransaction(txSkeleton, [Sig]);
-
-// submit transaction
-const hash = await rpc.sendTransaction(tx, "passthrough");
+const txHash = await signer.sendTransaction(tx);
 console.log("The transaction hash is", hash);
 ```
 
@@ -153,16 +121,15 @@ Since we have issued a custom token, the next step will be checking out this tok
 
 ```ts
 export async function queryIssuedTokenCells(xudtArgs: HexString) {
-  const xudtDeps = lumosConfig.SCRIPTS.XUDT;
-  const typeScript = {
-    codeHash: xudtDeps.CODE_HASH,
-    hashType: xudtDeps.HASH_TYPE,
-    args: xudtArgs,
-  };
+  const typeScript = await ccc.Script.fromKnownScript(
+    cccClient,
+    ccc.KnownScript.XUdt,
+    xudtArgs
+  );
 
-  const collected: Cell[] = [];
-  const collector = indexer.collector({ type: typeScript });
-  for await (const cell of collector.collect()) {
+  const collected: ccc.Cell[] = [];
+  const collector = cccClient.findCellsByType(typeScript, true);
+  for await (const cell of collector) {
     collected.push(cell);
   }
   return collected;
@@ -171,7 +138,7 @@ export async function queryIssuedTokenCells(xudtArgs: HexString) {
 
 Note that to query a custom token Cell, we must know its xUDTArgs. As explained in the high-level ideas for xUDT Scripts, this xUDTArgs functions like the unique ID for the token you issued.
 
-Thus, `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then construct a Type Script with this xudtArgs and use `indexer.collector({ type: typeScript });` to query the Live Cells that possess such a Type Script.
+Thus, `queryIssuedTokenCells` will accept only one parameter: xudtArgs. We then construct a Type Script with this xudtArgs and use `cccClient.findCellsByType(typeScript, true);` to query the Live Cells that possess such a Type Script.
 
 By identifying the Lock Scripts of these Live Cells, we can determine that those custom tokens now belong to the individual who can unlock this Lock Script. Consequently, we know who the token holders are.
 
@@ -197,105 +164,50 @@ The function use `udtIssuerArgs` to build the Type Script from the custom token.
 With all these Live Cells, we can build the transaction to produce custom token Cells with the required amount and the receiver's Lock Scripts from the input Cells.
 
 ```ts
-let txSkeleton = helpers.TransactionSkeleton();
-txSkeleton = addCellDep(txSkeleton, {
-  outPoint: {
-    txHash: lockDeps.TX_HASH,
-    index: lockDeps.INDEX,
-  },
-  depType: lockDeps.DEP_TYPE,
-});
-txSkeleton = addCellDep(txSkeleton, {
-  outPoint: {
-    txHash: xudtDeps.TX_HASH,
-    index: xudtDeps.INDEX,
-  },
-  depType: xudtDeps.DEP_TYPE,
-});
+const signer = new ccc.SignerCkbPrivateKey(cccClient, senderPrivKey);
+const senderLockScript = (await signer.getAddressObjSecp256k1()).script;
+const receiverLockScript = (
+  await ccc.Address.fromString(receiverAddress, cccClient)
+).script;
 
-const targetOutput: Cell = {
-  cellOutput: {
-    capacity: "0x0",
-    lock: receiverLockScript,
-    type: typeScript,
-  },
-  data: bytes.hexify(number.Uint128LE.pack(amount)),
-};
-
-const capacity = helpers.minimalCellCapacity(targetOutput);
-targetOutput.cellOutput.capacity = "0x" + capacity.toString(16);
-```
-
-You may notice that the `transferTokenToAddress` function is pretty long, while the core transfer logic above is quite simple. The problem is that we need to handle the capacity change in the `changeOutputCell`. If the change capacity is less than 61CKB, we need to add another Live Cell in our inputs to build the `changeOutputCell`. Also, we need to handle the changes in the token amount. If there is any token amount remaining, we need to return the change amount along with change capacities to the sender.
-
-```ts
-let changeOutputTokenAmount = BI.from(0);
-if (collectedAmount.gt(BI.from(amount))) {
-  changeOutputTokenAmount = collectedAmount.sub(BI.from(amount));
-}
-
-const changeOutput: Cell = {
-  cellOutput: {
-    capacity: "0x0",
-    lock: senderLockScript,
-    type: typeScript,
-  },
-  data: bytes.hexify(
-    number.Uint128LE.pack(changeOutputTokenAmount.toString(10))
-  ),
-};
-
-const changeOutputNeededCapacity = BI.from(
-  helpers.minimalCellCapacity(changeOutput)
+const xudtArgs = udtIssuerArgs;
+const xUdtType = await ccc.Script.fromKnownScript(
+  cccClient,
+  ccc.KnownScript.XUdt,
+  xudtArgs
 );
 
-const extraNeededCapacity = collectedSum.lt(neededCapacity)
-  ? neededCapacity.sub(collectedSum).add(changeOutputNeededCapacity)
-  : collectedSum.sub(neededCapacity).add(changeOutputNeededCapacity);
-
-if (extraNeededCapacity.gt(0)) {
-  let extraCollectedSum = BI.from(0);
-  const extraCollectedCells: Cell[] = [];
-  const collector = indexer.collector({
-    lock: senderLockScript,
-    type: "empty",
-  });
-  for await (const cell of collector.collect()) {
-    extraCollectedSum = extraCollectedSum.add(cell.cellOutput.capacity);
-    extraCollectedCells.push(cell);
-    if (extraCollectedSum >= extraNeededCapacity) break;
-  }
-
-  if (extraCollectedSum.lt(extraNeededCapacity)) {
-    throw new Error(
-      `Not enough CKB for change, ${extraCollectedSum} < ${extraNeededCapacity}`
-    );
-  }
-
-  txSkeleton = txSkeleton.update("inputs", (inputs) =>
-    inputs.push(...extraCollectedCells)
-  );
-
-  const change2Capacity = extraCollectedSum.sub(changeOutputNeededCapacity);
-  if (change2Capacity.gt(61000000000)) {
-    changeOutput.cellOutput.capacity = changeOutputNeededCapacity.toHexString();
-    const changeOutput2: Cell = {
-      cellOutput: {
-        capacity: change2Capacity.toHexString(),
-        lock: senderLockScript,
-      },
-      data: "0x",
-    };
-    txSkeleton = txSkeleton.update("outputs", (outputs) =>
-      outputs.push(changeOutput2)
-    );
-  } else {
-    changeOutput.cellOutput.capacity = extraCollectedSum.toHexString();
-  }
-}
+const tx = ccc.Transaction.from({
+  outputs: [{ lock: receiverLockScript, type: xUdtType }],
+  outputsData: [ccc.numLeToBytes(amount, 16)],
+});
+await tx.completeInputsByUdt(signer, xUdtType);
 ```
 
-All the extra logic here can be a little confusing at first time. However, the overall high-level process is quite simple and straightforward. We are also looking forward to some tools like [Lumos](https://github.com/ckb-js/lumos) to automatically cover such works in the future.
+Notice that If there is any token amount remaining, we need to return the change amount along with change capacities to the sender.
+
+```ts
+const balanceDiff =
+  (await tx.getInputsUdtBalance(signer.client, xUdtType)) -
+  tx.getOutputsUdtBalance(xUdtType);
+console.log("balanceDiff: ", balanceDiff);
+if (balanceDiff > ccc.Zero) {
+  tx.addOutput(
+    {
+      lock: senderLockScript,
+      type: xUdtType,
+    },
+    ccc.numLeToBytes(balanceDiff, 16)
+  );
+}
+await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
+
+// Complete missing parts for transaction
+await tx.completeInputsByCapacity(signer);
+await tx.completeFeeBy(signer, 1000);
+
+const txHash = await signer.sendTransaction(tx);
+```
 
 ---
 
