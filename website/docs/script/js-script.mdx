@@ -51,7 +51,11 @@ The `ckb-js-vm` is a binary that can be used both in the CLI and in the on-chain
 binary and give it a try to see if it works as expected.
 
 :::info
+<<<<<<< HEAD
 You will need `Clang ≥v18` to build the `ckb-js-vm` binary:
+=======
+You will need `clang 18+` to build the `ckb-js-vm` binary:
+>>>>>>> 97de069 (wip: update ckb-js-vm bin waitting for spawn ckb-std)
 :::
 
 ```sh
@@ -101,11 +105,10 @@ ckb-debugger --read-file tests/examples/hello.js --bin build/ckb-js-vm -- -r
 ```
 
 ```bash
-Run from file, local access enabled. For testing only.
-hello, world
+Script log: Run from file, local access enabled. For Testing only.
+Script log: hello, world
 Run result: 0
-Total cycles consumed: 30081070(2.9m)
-Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
+All cycles: 3016765(2.9M)
 ```
 
 ```mdx-code-block
@@ -116,7 +119,7 @@ Transfer cycles: 125121(122.2k), running cycles: 2955949(2.8m)
 With the `-r` option, `ckb-js-vm` will read a local JS file via CKB-Debugger. This function is
 intended for testing purposes and does not function in a production environment. However, we can see the
 running output, which includes a `hello, world` message. The run result is 0, indicating that the `hello.js` Script executes successfully.
-Also, you can see how many `cycles`(the overhead required to execute a Script) are needed to run the JS Script in the output as well.
+Also, you can see how many [cycles](/docs/script/vm-cycle-limits)(the overhead required to execute a Script) are needed to run the JS Script in the output as well.
 
 ## Integrate ckb-js-vm
 
@@ -205,12 +208,13 @@ cd my-first-script-workspace
 mkdir deps
 ```
 
-Copy the `ckb-js-vm` binary we built before into the `deps` folder. When you're done, it should look like this:
+Copy `ckb-js-vm/tools/compile.awk` and the `ckb-js-vm` binary we built before into the `deps` folder. When you're done, it should look like this:
 
 ```sh
 --build
 --contracts
 --deps
+    --compile.awk
     --ckb-js-vm
 ...
 ```
@@ -252,7 +256,13 @@ console.log("hello, ckb-js-script!");
 #### Compile the `hello.js` into binary with CKB-Debugger
 
 ```sh
-ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk '/Run result: 0/{exit} {print}' | xxd -r -p > js/build/hello.bc
+ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | awk -f deps/compile.awk | xxd -r -p > js/build/hello.bc
+```
+
+If you are using Mac, change `awk` to `gawk` which can be installed by `brew install gawk`:
+
+```sh
+ckb-debugger --read-file js/hello.js --bin deps/ckb-js-vm -- -c | gawk -f deps/compile.awk | xxd -r -p > js/build/hello.bc
 ```
 
 #### Write tests for the `hello.js` Script
@@ -443,7 +453,7 @@ cargo test -- --nocapture
 ```sh
 running 1 test
 [contract debug] hello, ckb-js-script!
-consume cycles: 3070458
+consume cycles: 2996560
 test tests::hello_script ... ok
 ```
 
