@@ -226,14 +226,6 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
-    title: "Nervos Scan",
-    description: "A CKB Explorer produced with love by 7774.bit",
-    href: "https://nervosscan.com/",
-    bannerSrc: "nervosscan",
-    tags: ["Explorer"],
-    links: [{ label: "website", link: "https://nervosscan.com/" }],
-  },
-  {
     title: "Neuron",
     description:
       "A versatile desktop wallet designed for securely managing CKB assets",
@@ -247,7 +239,17 @@ const ecoCardContents: EcoCardProps[] = [
       },
     ],
   },
-
+  {
+    title: "NervDAO",
+    description: "A Universal Wallet-Interfaced Nervos DAO Portal",
+    href: "https://www.nervdao.com/",
+    bannerSrc: "nervdao",
+    tags: ["DApp"],
+    links: [
+      { label: "website", link: "https://www.nervdao.com/" },
+      { label: "github", link: "https://github.com/ckb-ecofund/nervdao" },
+    ],
+  },
   {
     title: "CKBull",
     description:
