@@ -24,9 +24,9 @@ A Script can be one of two types:
 - **Lock Script** - Used to control ownership and access to a Cell.
 - **Type Script** - Used to control how a Cell is used in a transaction.
 
-In most cases, Lock Script works the same with Type Script. The difference is that, only the Lock Script from the input Cells will be executed in the transaction, while the Type Script from both the input Cells and output Cells will be executed in the transaction.
+In most cases, Lock Script and Type Script function similarly. The only key difference is that, the output Cells' Lock Scripts will NOT be executed in a transaction, whereas the input Cells' Lock Scripts, the input Cells' Type Scripts, and the output Cells' Type Scripts will be executed.
 
-This difference has lead to the different usecases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control owner ship of a Cell while Type Script defines what kinds of changes of a Cell is valid for the transaction.
+This difference has led to the different usecases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control owner ship of a Cell while Type Script defines what kinds of changes of a Cell is valid for the transaction.
 
 ## Script Structure
 
