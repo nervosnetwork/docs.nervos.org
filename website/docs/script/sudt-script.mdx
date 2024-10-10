@@ -1,0 +1,356 @@
+---
+id: sudt-script
+title: "Tutorial: Simple UDT"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import ScriptHeaders from "./ScriptHeaders.tsx";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./_ScriptTools.mdx";
+
+# Tutorial: Simple UDT Script
+
+<TutorialHeader
+  time={ScriptHeaders.basic.time}
+  topics={ScriptHeaders.basic.topics}
+  tools={ScriptHeaders.basic.tools}
+/>
+
+User Defined Token(UDT) is a fungible token standard on CKB blockchain.
+
+In this tutorial, we will create a UDT Script which is a simplify version of [XUDT standard](/docs/common-scripts/xudt)
+to helps you gain better understanding of how fungible token works on CKB.
+
+It is highly recommend to go through the dApp tutorial [Create a Fungible Token](/docs/dapp/create-token) first before writing your own UDT Script.
+
+The full code of the UDT Script in this tutorial can be found at [https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script)
+
+### Data Structure for simple UDT Cell
+
+```sh
+data:
+  <amount: uint128>
+type:
+  code_hash: sUDT type script
+  args: <owner lock script hash>
+lock: <user_defined>
+```
+
+Here the issuer's Lock Script Hash works like the unique ID for the custom token.
+Different Lock Script Hash means a different kind of token.
+It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
+For the more detail explanation of UDT idea please refer to [create-a-token](/docs/dapp/create-token) or [UDT RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md)
+
+OK, now our first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose.
+
+### Init a Script Project
+
+Now let's run the command to generate a new Script project called `sudt-script`:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+
+```bash
+alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
+create-ckb-scripts
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+
+```bash
+⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
+🤷   Project Name: sudt-script
+🔧   Destination: /tmp/sudt-script ...
+🔧   project-name: sudt-script ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/sudt-script`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/sudt-script
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+### Create a New Script
+
+Let’s create a new Script called `sudt`.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-a-new-script" label="Command">
+```
+
+```bash
+cd sudt-script
+make generate
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="create-a-new-script-result" label="Response">
+```
+
+```bash
+🤷   Project Name: sudt
+🔧   Destination: /tmp/sudt-script/contracts/sudt ...
+🔧   project-name: sudt ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/sudt-script/contracts/sudt`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/sudt-script/contracts/sudt
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Our project is successfully setup! You can run `tree .` to show the project structure:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="script-project-structure" label="Command">
+```
+
+```bash {5}
+tree .
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="script-project-structure-result" label="Response">
+```
+
+```bash
+.
+├── Cargo.lock
+├── Cargo.toml
+├── Makefile
+├── README.md
+├── contracts
+│   └── sudt
+│       ├── Cargo.toml
+│       ├── Makefile
+│       ├── README.md
+│       └── src
+│           └── main.rs
+├── scripts
+│   └── find_clang
+└── tests
+    ├── Cargo.toml
+    └── src
+        ├── lib.rs
+        └── tests.rs
+
+7 directories, 13 files
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Here's a little introduction: `contracts/sudt/src/main.rs` contains the source code of the sudt Script, while `tests/tests.rs` provides unit tests for our Scripts. We will introduce the tests after we write the Script.
+
+### Implement SUDT Script Logic
+
+The SUDT (Simple User Defined Token) script is implemented in `contracts/sudt/src/main.rs`. This script is designed to manage the transfer of UDTs on the CKB blockchain.
+
+Let's break down the high-level logic of how this script works:
+
+1. **Owner Mode Check**: The script first checks if it is being executed in owner mode. This is important because if the script is running in owner mode, it means the owner has special permissions, and the script can return success immediately without further checks.
+
+2. **Input and Output Amount Validation**: Next, the script collects the total amounts of UDTs from both input and output cells. It ensures that the total amount of UDTs being sent (outputs) does not exceed the amount being received (inputs). This is crucial for maintaining the integrity of the token transfers.
+
+Here’s a snippet of the code that illustrates these checks:
+
+```rust
+pub fn program_entry() -> i8 {
+    ckb_std::debug!("This is a sample UDT contract!");
+
+    let script = load_script().unwrap();
+    let args: Bytes = script.args().unpack();
+    ckb_std::debug!("script args is {:?}", args);
+
+    // Check if the script is in owner mode
+    if check_owner_mode(&args) {
+        return 0; // Success if in owner mode
+    }
+
+    // Collect amounts from input and output cells
+    let inputs_amount: u128 = match collect_inputs_amount() {
+        Ok(amount) => amount,
+        Err(err) => return err as i8,
+    };
+    let outputs_amount = match collect_outputs_amount() {
+        Ok(amount) => amount,
+        Err(err) => return err as i8,
+    };
+
+    // Validate that inputs are greater than or equal to outputs
+    if inputs_amount < outputs_amount {
+        return Error::InvalidAmount as i8; // Error if invalid amount
+    }
+
+    0 // Success
+}
+```
+
+3. **Error Handling**: The script also includes robust error handling. It defines a custom `Error` enum to manage various error conditions, such as when the input amount is invalid or when there are issues with encoding. This helps ensure that any problems are clearly communicated.
+
+This implementation ensures that UDT transactions are validated correctly, maintaining the integrity of token transfers on the CKB blockchain. By checking both the owner mode and the amounts, the script helps prevent errors and ensures smooth operation.
+
+### Collecting UDT Amount
+
+In the SUDT script, the functions `collect_inputs_amount` and `collect_outputs_amount` play a crucial role in gathering the total amounts of UDTs from the respective input and output cells.
+
+Here’s how they work:
+
+Both functions iterate through the relevant cells and collect the `cell_data` to calculate the total UDT amount. This is done using the following syscalls:
+
+- **`Source::GroupInput`**: This ensures that only input cells that belong to the same transaction group are considered. It helps in collecting the amounts from the input cells that are relevant to the current operation.
+- **`Source::GroupOutput`**: Similarly, this syscall is used to gather amounts from output cells that are part of the same transaction group. This prevents any discrepancies that might arise from different types of UDT cells.
+
+By using these specific sources, the script avoids issues related to different UDT cell types, ensuring that only the appropriate cells are processed. This is particularly important in a blockchain environment where multiple UDTs may exist, and we want to ensure that the calculations are accurate and relevant to the current UDT Script.
+
+Here’s a brief look at how these functions are implemented:
+
+```rust
+fn collect_inputs_amount() -> Result<u128, Error> {
+    let mut buf = [0u8; UDT_AMOUNT_LEN];
+
+    let udt_list = QueryIter::new(load_cell_data, Source::GroupInput)
+        .map(|data| {
+            if data.len() >= UDT_AMOUNT_LEN {
+                buf.copy_from_slice(&data);
+                Ok(u128::from_le_bytes(buf))
+            } else {
+                Err(Error::AmountEncoding)
+            }
+        })
+        .collect::<Result<Vec<_>, Error>>()?;
+    Ok(udt_list.into_iter().sum::<u128>())
+}
+
+fn collect_outputs_amount() -> Result<u128, Error> {
+    let mut buf = [0u8; UDT_AMOUNT_LEN];
+
+    let udt_list = QueryIter::new(load_cell_data, Source::GroupOutput)
+        .map(|data| {
+            if data.len() >= UDT_AMOUNT_LEN {
+                buf.copy_from_slice(&data);
+                Ok(u128::from_le_bytes(buf))
+            } else {
+                Err(Error::AmountEncoding)
+            }
+        })
+        .collect::<Result<Vec<_>, Error>>()?;
+    Ok(udt_list.into_iter().sum::<u128>())
+}
+```
+
+In summary, these functions are essential for accurately calculating the total UDT amounts involved in the transaction while ensuring that only the relevant cells are considered, thus maintaining the integrity of the UDT transfer process.
+
+Full code: [contracts/sudt/src/main.rs](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script/contracts/sudt/src/main.rs)
+
+### Writing Test For UDT Script
+
+Testing is a crucial part of developing any smart contract, including the SUDT script.
+The `test_transfer_sudt` test case is designed to simulate a transfer of UDTs from one address to another. It sets up the necessary environment, including creating input and output cells, and then invokes the SUDT script to perform the transfer. The test checks whether the transfer is successful and verifies that the amounts in the input and output cells are updated correctly.
+
+Here’s a simplified version of the `transfer_sudt` test case:
+
+```rust
+#[test]
+fn test_transfer_sudt() {
+    let mut context = Context::default();
+
+    // build lock script
+    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
+    let lock_script = context
+        .build_script(&always_success_out_point, Default::default())
+        .expect("script");
+    let lock_script_dep = CellDep::new_builder()
+        .out_point(always_success_out_point)
+        .build();
+
+    // prepare scripts
+    let contract_bin: Bytes = Loader::default().load_binary("sudt");
+    let out_point = context.deploy_cell(contract_bin);
+    let type_script = context
+        .build_script(&out_point, Bytes::from(vec![42]))
+        .expect("script");
+    let type_script_dep = CellDep::new_builder().out_point(out_point).build();
+
+    let input_token: u128 = 400;
+    let output_token1: u128 = 300;
+    let output_token2: u128 = 100;
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        input_token.to_le_bytes().to_vec().into(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point)
+        .build();
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .type_(Some(type_script.clone()).pack())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .type_(Some(type_script).pack())
+            .build(),
+    ];
+
+    let outputs_data = vec![
+        Bytes::from(output_token1.to_le_bytes().to_vec()),
+        Bytes::from(output_token2.to_le_bytes().to_vec()),
+    ];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .cell_dep(lock_script_dep)
+        .cell_dep(type_script_dep)
+        .build();
+    let tx = context.complete_tx(tx);
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, 10_000_000)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+
+In this test case:
+
+- We deploy the sudt Script we wrote and use it to build cell's type script.
+- We set up the initial conditions by defining the valid input and output amounts.
+- Finally, We build the full transaction and ensure that the transaction can be verified.
+
+Notice that in the type script args we use a random bytes which is 42 indicating that we are not under the `owner_mode` in the `test_transfer_sudt` test case.
+
+For ownermode testcase, you can checkout the [full tests code](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script/contracts/sudt/tests/src/tests.rs) for reference.
+
+By writing tests like `test_transfer_sudt`, we can ensure that our SUDT script behaves correctly under various scenarios, helping to catch any issues before deployment.
