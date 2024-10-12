@@ -48,13 +48,18 @@ A collection of CKB-VM syscalls. Also include relevant constant, such as return 
 
 These are the return codes used by the CKB-VM syscalls.
 
-| Const No. | C Example              | Description                                    |
-| --------- | ---------------------- | ---------------------------------------------- |
-| 0         | CKB_SUCCESS            | No error.                                      |
-| 1         | CKB_INDEX_OUT_OF_BOUND | Index out of bound. (e.g. No such input Cell.) |
-| 2         | CKB_ITEM_MISSING       | The requested resource does not exist.         |
-| 3         | CKB_LENGTH_NOT_ENOUGH  | The supplied memory buffer too small.          |
-| 4         | CKB_INVALID_DATA       | The data provided is invalid.                  |
+| Const No. | C Example              | Description                                              |
+| --------- | ---------------------- | -------------------------------------------------------- |
+| 0         | CKB_SUCCESS            | No error.                                                |
+| 1         | CKB_INDEX_OUT_OF_BOUND | Index out of bound. (e.g. No such input Cell.)           |
+| 2         | CKB_ITEM_MISSING       | The requested resource does not exist.                   |
+| 3         | CKB_LENGTH_NOT_ENOUGH  | The supplied memory buffer too small.                    |
+| 4         | CKB_INVALID_DATA       | The data provided is invalid.                            |
+| 5         | CKB_WAIT_FAILURE       | The file descriptor is invalid during syscall [Wait.     |
+| 6         | CKB_INVALID_FD         | The file descriptor is not owned by this process.        |
+| 7         | CKB_OTHER_END_CLOSED   | The other end of the pipe is closed.                     |
+| 8         | CKB_MAX_VMS_SPAWNED    | The maximum count of spawned processes has been reached. |
+| 9         | CKB_MAX_FDS_CREATED    | The maximum count of created pipes has been reached.     |
 
 ### Source
 
