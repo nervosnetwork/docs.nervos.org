@@ -13,9 +13,9 @@ import ScriptTools from "./_ScriptTools.mdx";
 # Tutorial: Simple UDT Script
 
 <TutorialHeader
-  time={ScriptHeaders.basic.time}
-  topics={ScriptHeaders.basic.topics}
-  tools={ScriptHeaders.basic.tools}
+  time={ScriptHeaders.sudt.time}
+  topics={ScriptHeaders.sudt.topics}
+  tools={ScriptHeaders.sudt.tools}
 />
 
 User Defined Token(UDT) is a fungible token standard on CKB blockchain.
@@ -25,7 +25,7 @@ to helps you gain better understanding of how fungible token works on CKB.
 
 It is highly recommend to go through the dApp tutorial [Create a Fungible Token](/docs/dapp/create-token) first before writing your own UDT Script.
 
-The full code of the UDT Script in this tutorial can be found at [https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script)
+The full code of the UDT Script in this tutorial can be found at [Github](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script).
 
 ### Data Structure for simple UDT Cell
 
@@ -33,21 +33,27 @@ The full code of the UDT Script in this tutorial can be found at [https://github
 data:
   <amount: uint128>
 type:
-  code_hash: sUDT type script
+  code_hash: UDT type script hash
   args: <owner lock script hash>
 lock: <user_defined>
 ```
 
-Here the issuer's Lock Script Hash works like the unique ID for the custom token.
-Different Lock Script Hash means a different kind of token.
-It is also used as a checkpoint to tell that a transaction is triggered by the token issuer or a regular token holder to apply different security validation.
-For the more detail explanation of UDT idea please refer to [create-a-token](/docs/dapp/create-token) or [UDT RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md)
+Here the issuer's `Lock Script Hash` works like the unique ID for the custom token.
+Different Lock Script Hash means a different kind of token issued by different owner.
+It is also used as a checkpoint to tell that a transaction is triggered by the token issuer
+or a regular token holder to apply different security validation.
 
-OK, now our first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose.
+- For the token owner, they can perform any operation.
+- For regular token holders, the UDT Script ensures that the amount in the output cells does not
+  exceed the amount in the input cells.
+  For the more detail explanation of UDT idea,
+  please refer to [create-a-token](/docs/dapp/create-token) or [sudt RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md)
+
+Now let's create a new project to build the UDT Script. We will use [offckb](https://github.com/ckb-ecofund/offckb) and [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose.
 
 ### Init a Script Project
 
-Now let's run the command to generate a new Script project called `sudt-script`:
+Let's run the command to generate a new Script project called `sudt-script`(shorthand for simple UDT):
 
 ```mdx-code-block
 <Tabs>
@@ -55,8 +61,7 @@ Now let's run the command to generate a new Script project called `sudt-script`:
 ```
 
 ```bash
-alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
-create-ckb-scripts
+offckb create --script sudt-script
 ```
 
 ```mdx-code-block
@@ -82,7 +87,7 @@ create-ckb-scripts
 
 ### Create a New Script
 
-Let’s create a new Script called `sudt`.
+Let’s create a new Script called `sudt` inside the project.
 
 ```mdx-code-block
 <Tabs>
@@ -132,26 +137,26 @@ tree .
 
 ```bash
 .
-├── Cargo.lock
 ├── Cargo.toml
 ├── Makefile
 ├── README.md
 ├── contracts
-│   └── sudt
-│       ├── Cargo.toml
-│       ├── Makefile
-│       ├── README.md
-│       └── src
-│           └── main.rs
+│   └── sudt
+│       ├── Cargo.toml
+│       ├── Makefile
+│       ├── README.md
+│       └── src
+│           └── main.rs
 ├── scripts
-│   └── find_clang
+│   ├── find_clang
+│   └── reproducible_build_docker
 └── tests
     ├── Cargo.toml
     └── src
         ├── lib.rs
         └── tests.rs
 
-7 directories, 13 files
+7 directories, 12 files
 ```
 
 ```mdx-code-block
@@ -159,11 +164,11 @@ tree .
 </Tabs>
 ```
 
-Here's a little introduction: `contracts/sudt/src/main.rs` contains the source code of the sudt Script, while `tests/tests.rs` provides unit tests for our Scripts. We will introduce the tests after we write the Script.
+Here's a little introduction: `contracts/sudt/src/main.rs` contains the source code of the sudt Script, while `tests/tests.rs` provides unit tests for our Scripts. We will introduce the tests after we wrote the Script.
 
 ### Implement SUDT Script Logic
 
-The SUDT (Simple User Defined Token) script is implemented in `contracts/sudt/src/main.rs`. This script is designed to manage the transfer of UDTs on the CKB blockchain.
+The sudt Script is implemented in [contracts/sudt/src/main.rs](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script/contracts/sudt/src/main.rs). This script is designed to manage the transfer of UDTs on the CKB blockchain.
 
 Let's break down the high-level logic of how this script works:
 
@@ -211,16 +216,16 @@ This implementation ensures that UDT transactions are validated correctly, maint
 
 ### Collecting UDT Amount
 
-In the SUDT script, the functions `collect_inputs_amount` and `collect_outputs_amount` play a crucial role in gathering the total amounts of UDTs from the respective input and output cells.
+In the sudt Script, the functions `collect_inputs_amount` and `collect_outputs_amount` play a crucial role in gathering the total amounts of UDTs from the respective input and output cells.
 
 Here’s how they work:
 
 Both functions iterate through the relevant cells and collect the `cell_data` to calculate the total UDT amount. This is done using the following syscalls:
 
-- **`Source::GroupInput`**: This ensures that only input cells that belong to the same transaction group are considered. It helps in collecting the amounts from the input cells that are relevant to the current operation.
-- **`Source::GroupOutput`**: Similarly, this syscall is used to gather amounts from output cells that are part of the same transaction group. This prevents any discrepancies that might arise from different types of UDT cells.
+- **`Source::GroupInput`**: This ensures that only the cells with the same script as the current running script are iterating
+- **`Source::GroupOutput`**: Similarly, this syscall only the cells with the same script as the current running script are iterating
 
-By using these specific sources, the script avoids issues related to different UDT cell types, ensuring that only the appropriate cells are processed. This is particularly important in a blockchain environment where multiple UDTs may exist, and we want to ensure that the calculations are accurate and relevant to the current UDT Script.
+By using these specific [sources](/docs/script/syscalls-for-script#source), the script avoids issues related to different UDT cell types, ensuring that only the appropriate cells are processed. This is particularly important in a blockchain environment where multiple UDTs may exist, and we want to ensure that the calculations are accurate and relevant to the current UDT Script.
 
 Here’s a brief look at how these functions are implemented:
 
@@ -264,10 +269,12 @@ Full code: [contracts/sudt/src/main.rs](https://github.com/nervosnetwork/docs.ne
 
 ### Writing Test For UDT Script
 
-Testing is a crucial part of developing any smart contract, including the SUDT script.
-The `test_transfer_sudt` test case is designed to simulate a transfer of UDTs from one address to another. It sets up the necessary environment, including creating input and output cells, and then invokes the SUDT script to perform the transfer. The test checks whether the transfer is successful and verifies that the amounts in the input and output cells are updated correctly.
+Testing is a crucial part of developing any smart contract, including the sudt script.
+The `test_transfer_sudt` test case is designed to simulate a transfer of UDTs from one address to another.
+It sets up the necessary environment, including creating input and output cells, and then invokes the sudt Script to perform the transfer.
+The test checks whether the transfer transaction is successfully verified.
 
-Here’s a simplified version of the `transfer_sudt` test case:
+Here’s a code of the `transfer_sudt` test case:
 
 ```rust
 #[test]
@@ -353,4 +360,24 @@ Notice that in the type script args we use a random bytes which is 42 indicating
 
 For ownermode testcase, you can checkout the [full tests code](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script/contracts/sudt/tests/src/tests.rs) for reference.
 
-By writing tests like `test_transfer_sudt`, we can ensure that our SUDT script behaves correctly under various scenarios, helping to catch any issues before deployment.
+By writing tests like `test_transfer_sudt`, we can ensure that our sudt script behaves correctly under various scenarios, helping to catch any issues before deployment.
+
+---
+
+## Congratulations!
+
+By following this tutorial so far, you have mastered how to write a simple UDT Script that brings fungible tokens to CKB.
+Here's a quick recap:
+
+- Use `offckb` and `ckb-script-templates` to init a Script project
+- Use `ckb_std` to leverage CKB syscalls `Source::GroupIuput`/`Source::GroupOutput` for performing relevant cells iteration.
+- Write unit tests to make sure the UDT Script works as expected.
+
+## Additional Resources
+
+- Full source code of this tutorial:
+  [sudt-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/sudt-script)
+- CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
+- Script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
