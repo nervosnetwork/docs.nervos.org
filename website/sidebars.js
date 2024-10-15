@@ -51,6 +51,7 @@ export default {
         "script/syscalls-for-script",
         "script/vm-cycle-limits",
         "script/minimal-script",
+        "script/sudt-script",
         "script/type-id",
         "script/js-script",
         "script/debug-script",
