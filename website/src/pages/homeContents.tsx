@@ -125,7 +125,7 @@ const devToolSectionContents: DevToolProps[] = [
     category: "SDK",
   },
   {
-    title: "Common Chain Connector (CCC)",
+    title: "Typescript",
     href: "/docs/sdk-and-devtool/ccc",
     category: "SDK",
   },
