@@ -125,7 +125,7 @@ const devToolSectionContents: DevToolProps[] = [
     category: "SDK",
   },
   {
-    title: "Typescript",
+    title: "TypeScript",
     href: "/docs/sdk-and-devtool/ccc",
     category: "SDK",
   },
