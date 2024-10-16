@@ -52,7 +52,7 @@ const homeCardContents: HomeCardProps[] = [
         label: "Tutorial: A Minimal Script",
         link: "/docs/script/minimal-script",
       },
-      { label: "Tutorial: Run JS on CKB", link: "/docs/script/js-script" },
+      { label: "Tutorial: Simple UDT", link: "/docs/script/sudt-script" },
     ],
     icon: "script",
   },
@@ -125,7 +125,7 @@ const devToolSectionContents: DevToolProps[] = [
     category: "SDK",
   },
   {
-    title: "Common Chain Connector (CCC)",
+    title: "TypeScript",
     href: "/docs/sdk-and-devtool/ccc",
     category: "SDK",
   },
