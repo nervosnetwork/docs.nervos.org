@@ -44,7 +44,7 @@ function IssuedToken() {
       );
     }
   };
-  const enabledIssue = +amount > 0 && +balance > 6100000000;
+  const enabledIssue = +amount > 0 && +balance > 61;
 
   return (
     <>
@@ -93,7 +93,7 @@ function IssuedToken() {
             </li>
             <li>
               Token cell: 
-                <p>Capacity: {issuedTokenCell.capacity.toString()}</p>
+                <p>Capacity: {ccc.fixedPointToString(issuedTokenCell.capacity)} CKB</p>
                 <p>Lock: {JSON.stringify(issuedTokenCell.lock, null, 2)}</p>
                 <p>Type: {JSON.stringify(issuedTokenCell.type, null, 2)}</p>
             </li>
