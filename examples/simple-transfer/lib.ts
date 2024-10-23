@@ -49,7 +49,7 @@ export async function transfer(
   });
 
   // Complete missing parts for transaction
-  await tx.completeInputsAll(signer);
+  await tx.completeInputsByCapacity(signer);
   await tx.completeFeeBy(signer, 1000);
   const txHash = await signer.sendTransaction(tx);
   console.log(

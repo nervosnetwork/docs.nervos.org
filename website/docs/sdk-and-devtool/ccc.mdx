@@ -347,7 +347,7 @@ return;
             });
 
             // Complete missing parts for transaction
-            await tx.completeInputsAll(signer);
+            await tx.completeInputsByCapacity(signer);
             // Change all balance to the first output
             await tx.completeFeeChangeToOutput(signer, 0, 1000);
             const amount = ccc.fixedPointToString(tx.outputs[0].capacity);
@@ -1396,7 +1396,7 @@ export default function Transfer() {
               ccc.KnownScript.NervosDao,
             );
 
-            await tx.completeInputsAll(signer);
+            await tx.completeInputsByCapacity(signer);
             await tx.completeFeeChangeToOutput(signer, 0, 1000);
 
             const amount = ccc.fixedPointToString(tx.outputs[0].capacity);

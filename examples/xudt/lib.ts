@@ -46,7 +46,7 @@ export async function issueToken(privKey: string, amount: string) {
 
   // additional 0.001 ckb for tx fee
   // Complete missing parts for transaction
-  await tx.completeInputsAll(signer);
+  await tx.completeInputsByCapacity(signer);
   await tx.completeFeeBy(signer, 1000);
   const txHash = await signer.sendTransaction(tx);
   console.log(
