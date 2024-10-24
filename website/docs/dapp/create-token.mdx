@@ -102,7 +102,7 @@ Next, to complete our `issueToken` function, we just use the `helpers.Transactio
   await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
   // additional 0.001 ckb for tx fee
   // Complete missing parts for transaction
-  await tx.completeInputsAll(signer);
+  await tx.completeInputsByCapacity(signer);
   await tx.completeFeeBy(signer, 1000);
 
 ...
