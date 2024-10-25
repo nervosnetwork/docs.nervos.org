@@ -247,7 +247,7 @@ const ecoCardContents: EcoCardProps[] = [
     tags: ["DApp"],
     links: [
       { label: "website", link: "https://www.nervdao.com/" },
-      { label: "github", link: "https://github.com/ckb-ecofund/nervdao" },
+      { label: "github", link: "https://github.com/ckb-devrel/nervdao" },
     ],
   },
   {
