@@ -224,7 +224,7 @@ export const ScriptHeaders: ScriptHeadersType = {
     tools: [
       <div>
         <a
-          href="https://github.com/ckb-ecofund/offckb"
+          href="https://github.com/ckb-devrel/offckb"
           target="_blank"
           rel="noopener noreferrer"
         >

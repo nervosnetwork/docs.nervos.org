@@ -49,7 +49,7 @@ const TRANSFEROVERVIEW: TutorialHeaderProps = {
         OffCKB
       </Link>
       {", version >= "}
-      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+      <Link href="https://github.com/ckb-devrel/offckb/releases/tag/v0.3.0-rc2">
         v0.3.0-rc2
       </Link>
     </div>,
@@ -99,7 +99,7 @@ const WRITEOVERVIEW: TutorialHeaderProps = {
         OffCKB
       </Link>
       {", version >= "}
-      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+      <Link href="https://github.com/ckb-devrel/offckb/releases/tag/v0.3.0-rc2">
         v0.3.0-rc2
       </Link>
     </div>,
@@ -152,7 +152,7 @@ const TOKENOVERVIEW: TutorialHeaderProps = {
         OffCKB
       </Link>
       {", version >= "}
-      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+      <Link href="https://github.com/ckb-devrel/offckb/releases/tag/v0.3.0-rc2">
         v0.3.0-rc2
       </Link>
     </div>,
@@ -205,7 +205,7 @@ const DOBOVERVIEW: TutorialHeaderProps = {
         OffCKB
       </Link>
       {", version >= "}
-      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+      <Link href="https://github.com/ckb-devrel/offckb/releases/tag/v0.3.0-rc2">
         v0.3.0-rc2
       </Link>
     </div>,
@@ -266,7 +266,7 @@ const LOCKOVERVIEW: TutorialHeaderProps = {
         OffCKB
       </Link>
       {", version >= "}
-      <Link href="https://github.com/ckb-ecofund/offckb/releases/tag/v0.3.0-rc2">
+      <Link href="https://github.com/ckb-devrel/offckb/releases/tag/v0.3.0-rc2">
         v0.3.0-rc2
       </Link>
     </div>,
