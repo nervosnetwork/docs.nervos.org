@@ -17,6 +17,10 @@
   margin: 0;
   padding-left: 2.5rem;
 }
+.details {
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+}
 .collapsibleHeader {
   margin-left: -1.125rem;
 }

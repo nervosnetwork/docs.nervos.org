@@ -7,21 +7,16 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
-import { DOBOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 # Create a Digital Object Using Spore Protocol
 
-<TutorialHeader
-  time={DOBOVERVIEW.time}
-  topics={DOBOVERVIEW.topics}
-  tools={DOBOVERVIEW.tools}
-/>
+<TutorialHeader time={"5 - 10 min"} tools={"dapp"} />
 
-## Spore Protocol on CKB
+## Tutorial Overview
 
-Spore is an on-chain <Tooltip>digital object (DOB)</Tooltip> protocol backed by CKB. An "on-chain" asset refers to a digital asset whose data is directly encoded onto the blockchain. A Spore Cell can hold any type of assets users want to store on-chain, the following data structure is used in the Spore Cell:
+Spore is an on-chain <Tooltip>digital object (DOB)</Tooltip> protocol backed by CKB. An “on-chain” asset refers to a digital asset with its data directly encoded on the blockchain. A Spore Cell can hold any type of asset users want to store on-chain. The data structure for a Spore Cell is as follows:
 
 ```js
 data:
@@ -37,9 +32,9 @@ lock:
     <user_defined>
 ```
 
-Notice that the data field of the Spore Cell contains `content-type` and `content`, which allow users to turn any content form into a digital object. All the fields in a Spore Cell are immutable once created.
+Notice that the data field of the Spore Cell contains `content-type` and `content`, which allow users to transform any content into a digital object. All fields in a Spore Cell are immutable once created.
 
-In this tutorial, we will build a simple dApp to turn a picture on your computer into a digital object on the blockchain using the Spore SDK.
+In this tutorial, you will learn how to build a simple dApp using the Spore SDK that converts a picture on your computer into a digital object on the blockchain.
 
 ## Setup Devnet & Run Example
 

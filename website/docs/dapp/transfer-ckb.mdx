@@ -7,23 +7,20 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
-import { TRANSFEROVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 # View and Transfer a CKB Balance
 
-<TutorialHeader
-  time={TRANSFEROVERVIEW.time}
-  topics={TRANSFEROVERVIEW.topics}
-  tools={TRANSFEROVERVIEW.tools}
-/>
+<TutorialHeader time={"2 - 5 min"} tools={"dapp"} />
+
+## Tutorial Overview
 
 CKB is based on a UTXO-like <Tooltip>Cell Model</Tooltip>. Every <Tooltip>Cell</Tooltip> has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously.
 
-Transfering balance in CKB involves consuming some input Cells from the sender's account and producing new output Cells which can be unlocked by the receiver's account. The amount transferred is equal to the total capacities of the coverting Cells.
+Transferring balance in CKB involves consuming some input Cells from the sender's account and producing new output Cells which can be unlocked by the receiver's account. The amount transferred is equal to the total capacity of the consumed Cells.
 
-In this tutorial, we will learn how to write a simple dApp to transfer CKB balance from one account to another.
+In this tutorial, you will learn how to write a simple dApp to transfer CKB balance from one account to another.
 
 ## Setup Devnet & Run Example
 
