@@ -110,6 +110,15 @@
               },
               "depType": "code"
             }
+          },
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x75be96e1871693f030db27ddae47890a28ab180e88e36ebb3575d9f1377d3da7",
+                "index": 0
+              },
+              "depType": "depGroup"
+            }
           }
         ]
       }
@@ -287,7 +296,6 @@
     },
     "secp256k1_blake160_multisig_all": {
       "name": "secp256k1_blake160_multisig_all",
-      "file": "Bundled(specs/cells/secp256k1_blake160_multisig_all)",
       "script": {
         "codeHash": "0x5c5069eb0857efc65e1bca0c07df34c31663b3622fd3876c876320fc9634e2a8",
         "hashType": "type",
@@ -335,6 +343,11 @@
                 "index": 0
               },
               "depType": "code"
+            },
+            "type": {
+              "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+              "hashType": "type",
+              "args": "0x44ec8b96663e06cc94c8c468a4d46d7d9af69eaf418f6390c9f11bb763dda0ae"
             }
           }
         ]
@@ -349,10 +362,24 @@
           {
             "cellDep": {
               "outPoint": {
+                "txHash": "0xf8de3bb47d055cdf460d93a2a6e1b05f7432f9777c8c474abf4eec1d4aee5d37",
+                "index": 0
+              },
+              "depType": "depGroup"
+            }
+          },
+          {
+            "cellDep": {
+              "outPoint": {
                 "txHash": "0xec18bf0d857c981c3d1f4e17999b9b90c484b303378e94de1a57b0872f5d4602",
                 "index": 0
               },
               "depType": "code"
+            },
+            "type": {
+              "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+              "hashType": "type",
+              "args": "0x761f51fc9cd6a504c32c6ae64b3746594d1af27629b427c5ccf6c9a725a89144"
             }
           }
         ]
@@ -567,10 +594,24 @@
           {
             "cellDep": {
               "outPoint": {
+                "txHash": "0x71a7ba8fc96349fea0ed3a5c47992e3b4084b031a42264a018e0072e8172e46c",
+                "index": 0
+              },
+              "depType": "depGroup"
+            }
+          },
+          {
+            "cellDep": {
+              "outPoint": {
                 "txHash": "0xc76edf469816aa22f416503c38d0b533d2a018e253e379f134c3985b3472c842",
                 "index": 0
               },
               "depType": "code"
+            },
+            "type": {
+              "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+              "hashType": "type",
+              "args": "0x855508fe0f0ca25b935b070452ecaee48f6c9f1d66cd15f046616b99e948236a"
             }
           }
         ]
