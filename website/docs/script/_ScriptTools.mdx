@@ -1,16 +1,9 @@
 :::info Tools You Need
 
-- [git](https://git-scm.com/), [make](https://www.tutorialspoint.com/unix_commands/make.htm), [sed](https://www.gnu.org/software/sed/), [bash](https://www.gnu.org/software/bash/), [sha256sum](https://linux.die.net/man/1/sha256sum) and others Unix utilities.
-- [Rust](https://www.rust-lang.org/) with `riscv64 target`: `rustup target add riscv64imac-unknown-none-elf`
-- [Clang 16+](https://releases.llvm.org/16.0.0/tools/clang/docs/ReleaseNotes.html)
+- [Make (≥v4.3), Sed (≥v4.7), Bash (≥v5.0), sha256sum (≥v9.0)](/docs/getting-started/installation-guide#1-make-sed-bash-sha256sum)
+- [Rust (≥v.1.71.1) and `riscv64` target](/docs/getting-started/installation-guide#2-rust-v1711-and-riscv64-target)
+- [Clang (≥v18)](/docs/getting-started/installation-guide#3-clang-18)
+- [cargo-generate (≥0.17.0)](/docs/getting-started/installation-guide#4-cargo-generate-0170)
 
-  - Debian / Ubuntu: ` wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && sudo./llvm.sh 16 && rm llvm.sh`
-  - Fedora 39+: `sudo dnf -y install clang`
-  - Archlinux: `sudo pacman --noconfirm -Syu clang`
-  - MacOS (with [Homebrew](https://brew.sh/)): `brew install llvm@16`
-  - Windows (with [Scoop](https://scoop.sh/)): `scoop install llvm yasm`
-
-- [Cargo-generate](https://github.com/cargo-generate/cargo-generate)
-
-Check out the `ckb-script-templates` for more [details](https://github.com/cryptape/ckb-script-templates/blob/main/README.md#dependencies).
+For detailed installation steps, refer to our [Installation Guide](/docs/getting-started/installation-guide)
 :::

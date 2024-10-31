@@ -5,7 +5,7 @@ title: "Tutorial: Run JS on CKB"
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
-import ScriptHeaders from "./ScriptHeaders.tsx";
+import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import ScriptTools from "./_ScriptTools.mdx";
@@ -13,26 +13,37 @@ import ScriptTools from "./_ScriptTools.mdx";
 # Tutorial: Run JavaScript Code on CKB
 
 <TutorialHeader
-  time={ScriptHeaders.basic.time}
-  topics={ScriptHeaders.basic.topics}
-  tools={ScriptHeaders.basic.tools}
+  time={"5 - 7 min"}
+  tools={"debug"}
+  customTools={[
+    <div key="ckb-js-vm">
+      <Link
+        to="/docs/getting-started/installation-guide#6-ckb-js-vm"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ckb-js-vm
+      </Link>
+    </div>,
+  ]}
 />
 
-## The High-Level Idea
+## Tutorial Overview
 
-As we have learned before, you can use any programming language to write a Script (Smart contract) for CKB.
-But does it really work in reality? This tutorial will show a full example of using JavaScript to
-write Scripts and execute them in the <Tooltip>CKB-VM</Tooltip>.
+As you have learned before, it's possible to use any programming language to write a Script (Smart contract) for CKB.
+But how practical is it in reality? In this tutorial, you will see a full example of using JavaScript to write and execute Scripts within the <Tooltip>CKB-VM</Tooltip>.
 
-The process is as follows: first we port a JavaScript engine as a base Script to CKB. Then, we write
-the business logic in JavaScript and execute this JS-powered Script within the base Script on top of CKB-VM.
+The process is as follows:
 
-It sounds like a of work. But thanks to the CKB VM team, we already have a fully runnable JavaScript
-engine called [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm). It is ported from
-[quick.js](https://quick.js.org) so that it is compatible with running on CKB-VM. We just need to take
-the ckb-js-vm and deploy it on-chain before we can run our JS Script.
+1. Port a JavaScript Engine: You will learn how to port a JavaScript engine as a base Script to run on CKB.
+2. Write Business Logic in JavaScript: You will learn how to build and execute JavaScript business logic within this base Script on the CKB-VM.
 
-Below is a step-by-step guide, and you can also clone the full code example from the [Github repo](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/ckb-js-script).
+This might sound complex, but thanks to the CKB-VM team, we already have a fully runnable JavaScript
+engine called [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm), which was ported from
+[quick.js](https://quick.js.org) and optimized for CKB-VM. We just need to take
+With ckb-js-vm, you simply deploy the engine on-chain and use it to run JavaScript-based Scripts on CKB.
+
+Follow the step-by-step guide below, or check out the [full code example on Github](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/ckb-js-script).
 
 ## Get ckb-js-vm Binary
 
@@ -40,7 +51,7 @@ The `ckb-js-vm` is a binary that can be used both in the CLI and in the on-chain
 binary and give it a try to see if it works as expected.
 
 :::info
-You will need `clang 16+` to build the `ckb-js-vm` binary:
+You will need `Clang ≥v18` to build the `ckb-js-vm` binary:
 :::
 
 ```sh
@@ -57,13 +68,16 @@ quick test.
 
 ### Install CKB-Debugger
 
-:::info
-To install, you need [Rust](https://www.rust-lang.org) and
-[cargo](https://doc.rust-lang.org/cargo)
-:::
+Install CKB-Debugger using [cargo](https://doc.rust-lang.org/cargo). We recommend using **≥v0.113.0**.
 
-```sh
+```bash
 cargo install --git https://github.com/nervosnetwork/ckb-standalone-debugger ckb-debugger
+```
+
+On **MacOS**, the `protoc` binary must be available to compile `ckb-vm-pprof-converter`. This can be installed via [Homebrew](https://brew.sh/):
+
+```bash
+brew install protobuf
 ```
 
 ### Quick Test with CKB-Debugger
@@ -110,7 +124,7 @@ Also, you can see how many `cycles`(the overhead required to execute a Script) a
 up a project and writing codes to integrate `ckb-js-vm` with JavaScript code to gain a deeper
 understanding.
 
-The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. You will need the following dependencies:
+The first step is to create a new Script project. We use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates) for this purpose. Make sure you have the following dependencies installed:
 
 <ScriptTools />
 

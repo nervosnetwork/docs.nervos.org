@@ -8,6 +8,7 @@ export default {
       items: [
         "getting-started/how-ckb-works",
         "getting-started/quick-start",
+        "getting-started/installation-guide",
         "getting-started/blockchain-networks",
         "getting-started/ckb-vs-btc",
       ],

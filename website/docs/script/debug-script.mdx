@@ -5,11 +5,26 @@ title: "Debug Script"
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
-import ScriptHeaders from "./ScriptHeaders.tsx";
+import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./_ScriptTools.mdx";
 
 # Debug Script
+
+<TutorialHeader
+  time={"5 - 10 min"}
+  customTools={[
+    <div key="debugger">
+      <Link
+        to="/docs/getting-started/installation-guide#5-ckb-debugger-01170"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CKB-Debugger (≥0.117.0)
+      </Link>
+    </div>,
+  ]}
+/>
 
 ## CKB-Debugger
 
@@ -17,7 +32,7 @@ Debugging Scripts on the Nervos CKB can be challenging without the right tools. 
 
 ## Install
 
-Install CKB-Debugger using [cargo](https://doc.rust-lang.org/cargo):
+Install CKB-Debugger using [cargo](https://doc.rust-lang.org/cargo). We recommend using **≥v0.113.0**.
 
 ```bash
 cargo install --git https://github.com/nervosnetwork/ckb-standalone-debugger ckb-debugger
