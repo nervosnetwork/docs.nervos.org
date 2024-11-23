@@ -23,13 +23,13 @@ pub fn program_entry() -> i8 {
 
 pub fn callee() -> Result<(), error::Error> {
     let argv = ckb_std::env::argv();
-    let mut std_fds: [u64; 2] = [0; 2];
-    ckb_std::syscalls::inherited_fds(&mut std_fds);
+    let mut to_parent_fds: [u64; 2] = [0; 2];
+    ckb_std::syscalls::inherited_fds(&mut to_parent_fds);
     let mut out = vec![];
     for arg in argv {
         out.extend_from_slice(arg.to_bytes());
     }
-    let len = ckb_std::syscalls::write(std_fds[1], &out)?;
+    let len = ckb_std::syscalls::write(to_parent_fds[1], &out)?;
     assert_eq!(len, 10);
     Ok(())
 }

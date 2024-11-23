@@ -25,8 +25,8 @@ pub fn program_entry() -> i8 {
 fn caller() -> Result<(), error::Error> {
     let (r1, w1) = ckb_std::syscalls::pipe()?;
     let (r2, w2) = ckb_std::syscalls::pipe()?;
-    let std_fds: [u64; 2] = [r1, w2]; 
-    let son_fds: [u64; 3] = [r2, w1, 0]; // must ends with 0
+    let to_parent_fds: [u64; 2] = [r1, w2]; 
+    let to_child_fds: [u64; 3] = [r2, w1, 0]; // must ends with 0
 
     let mut pid: u64 = 0;
     let place = 0; // 0 means read from cell data
@@ -40,7 +40,7 @@ fn caller() -> Result<(), error::Error> {
         argc,
         argv: argv.as_ptr(),
         process_id: &mut pid as *mut u64,
-        inherited_fds: son_fds.as_ptr(),
+        inherited_fds: to_child_fds.as_ptr(),
     };
     ckb_std::syscalls::spawn(
         0,
@@ -51,7 +51,7 @@ fn caller() -> Result<(), error::Error> {
     )?;
 
     let mut buf = [0; 256];
-    let len = ckb_std::syscalls::read(std_fds[0], &mut buf)?;
+    let len = ckb_std::syscalls::read(to_parent_fds[0], &mut buf)?;
     assert_eq!(len, 10);
     buf[len] = 0;
     assert_eq!(
