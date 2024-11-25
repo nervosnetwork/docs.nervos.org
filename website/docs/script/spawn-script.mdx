@@ -14,15 +14,15 @@ import ScriptTools from "./_ScriptTools.mdx";
 <TutorialHeader time={"5 - 7 min"} tools={"script"} />
 
 The design of the syscall spawn function draws inspiration from Unix and Linux, hence they share the same terminologies: process, pipe, and file descriptor.
-The spawn mechanism is used in ckb-vm to create new processes, which can then execute a different program or command independently of the parent process.
+The spawn mechanism is used in CKB-VM to create new processes, which can then execute a different program or command independently of the parent process.
 
-In the context of ckb-vm, a process represents the active execution of a RISC-V binary.
-This binary can be located within a cell. Additionally, a RISC-V binary can also be found within the witness during a syscall spawn.
+In the context of CKB-VM, a process represents the active execution of a RISC-V binary, which can be located within a Cell.
+Additionally, a RISC-V binary can also be found within the witness during a Spawn syscall.
 A pipe is established by associating two file descriptors, each linked to one of its ends.
 These file descriptors can't be duplicated and are exclusively owned by the process.
 Furthermore, the file descriptors can only be either read from or written to; they can't be both read from and written to simultaneously.
 
-In this tutorial, you will learn how to write a full Rust example using Spawn syscall to call a Script from a Script on CKB.
+In this tutorial, you will learn how to write a complete Rust example using Spawn syscall to call a Script from another on CKB.
 The full code of this tutorial can be found at [Github](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/spawn-script).
 
 ## Initialize a Script Project
@@ -57,7 +57,7 @@ offckb create --script spawn-script
 </Tabs>
 ```
 
-## Create two New Scripts
+## Create Two New Scripts
 
 Let’s create a new Script called `caller` inside the project.
 
@@ -124,9 +124,9 @@ make generate
 
 Our project is successfully setup now.
 
-## Implementing Caller
+## Implement Caller
 
-First, add a error handler module called `Error` in `error.rs`:
+First, add an error handler module called `Error` in `error.rs`:
 
 ```rust name="spawn-script/contracts/caller/src/error.rs"
 use ckb_std::error::SysError;
@@ -174,7 +174,7 @@ use ckb_std::syscalls::SpawnArgs;
 use core::ffi::CStr;
 ```
 
-Next, we will wrap the logic in a `caller` function and using this function in the `program_entry`:
+Next, we will wrap the logic in a `caller` function and use it in the `program_entry`:
 
 ```rust name="spawn-script/contracts/caller/src/main.rs"
 pub fn program_entry() -> i8 {
@@ -189,11 +189,11 @@ pub fn program_entry() -> i8 {
 fn caller() -> Result<(), error::Error> {}
 ```
 
-Now, let's implement the function of `caller`, which involved creating pipes and use spawn syscall to call another Script in a standalone process.
+Now, let's implement the `caller` function, which creates pipes and uses Spawn syscall to call another Script in a standalone process.
 
 The pipe is used as a one-direction data flow that carries data from one Script to another Script.
-We will pass two string as arguments to the callee Script and hopes it returns the concat result of those two string.
-We also assume that the callee Script is located at the first cell from the cellDeps of the transaction.
+We will pass two strings as arguments to the callee Script, expecting it to return their concatenated result.
+We also assume that the callee Script is located in the first Cell of the transaction's Cell Deps.
 
 ```rust name="spawn-script/contracts/caller/src/main.rs"
 fn caller() -> Result<(), error::Error> {
@@ -236,7 +236,7 @@ fn caller() -> Result<(), error::Error> {
 }
 ```
 
-One thing to be noted here is that each pipe we creating can only be either read from or written to. We create two pipes, one is for child process writing, parent process reading, one is the opposite.
+Note that each pipe can only be used for either reading or writing. To facilitate communication, we create two pipes: one for the child process to write and the parent process to read; the other does the reverse.
 
 ```rust
 let (r1, w1) = ckb_std::syscalls::pipe()?;
@@ -250,9 +250,9 @@ let to_child_fds: [u64; 3] = [r2, w1, 0]; // must ends with 0
 let len = ckb_std::syscalls::read(to_parent_fds[0], &mut buf)?;
 ```
 
-## Implementing Callee
+## Implement Callee
 
-We need to create the same thing here, a `error.rs` file and a `callee` function in the `main.rs`:
+We need to create the same components here: an `error.rs` file and a `callee` function in the `main.rs`:
 
 ```rust name="spawn-script/contracts/callee/src/error.rs"
 use ckb_std::error::SysError;
@@ -319,19 +319,19 @@ pub fn callee() -> Result<(), error::Error> {
 }
 ```
 
-The `callee` function logic is simpler.
-It received the arguments using `ckb_std::env::argv()` and inherited the pipe using `inherited_fds`.
+The `callee` function has a simpler logic.
+It receives arguments using `ckb_std::env::argv()` and inherits the pipe using `inherited_fds`.
 
-Then it use `write` syscall to write the concat result to the pipe:
+Then it uses the `write` syscall to write the concatenated result to the pipe:
 
 ```rust
 let len = ckb_std::syscalls::write(to_parent_fds[1], &out)?;
 ```
 
-## Writing Unit Tests
+## Write Unit Tests
 
 The Unit Test files are located in the `spawn-script/tests/src/tests.rs`.
-We only need one test for our Scripts, which will use `caller` as input lock Script and verify the Script in the transaction. The `callee` Script Cell will be pushed into cellDeps of the transaction too.
+We'll create one test for our Scripts that uses `caller` as the input Lock Script and verifies it in the transaction. The `callee` Script Cell will also be pushed into the Cell Deps of the transaction.
 
 ```rust name="spawn-script/tests/src/tests.rs"
 use crate::Loader;
@@ -417,17 +417,17 @@ First, build the Scripts:
 make build
 ```
 
-Running Tests:
+Then, run the tests:
 
 ```sh
 make test
 ```
 
-## Testing on Devnet
+## Test on Devnet
 
-After testing our Scripts, we feel more confident to test it on a more real environment.
+After testing our Scripts, we can be more confident to test them in a more realistic environment.
 
-We will use `offckb` to start a devnet and deploy the Scripts. Then we will test the Script by sending transaction to the devnet using `offckb` REPL.
+We will use `offckb` to start a devnet and deploy the Scripts, then test the Scripts by sending a transaction to the devnet using `offckb` REPL.
 
 1. Start the devnet
 
@@ -437,7 +437,7 @@ offckb node
 
 2. Deploy the Scripts
 
-Open a new terminal and `cd` into the root of the `spawn-script` project then run:
+Open a new terminal, navigate to the root of the `spawn-script` project, then run:
 
 ```mdx-code-block
 <Tabs>
@@ -495,9 +495,9 @@ done.
 </Tabs>
 ```
 
-3. Send a test Transaction
+3. Send a Test Transaction
 
-Open a new terminal and start a offckb REPL:
+Open a new terminal and start an offckb REPL:
 
 ```mdx-code-block
 <Tabs>
@@ -525,7 +525,7 @@ OffCKB >
 </Tabs>
 ```
 
-Next, we construct a transaction right in the offckb REPL:
+Next, we'll construct a transaction in the offckb REPL:
 
 ```sh
 OffCKB > let amountInCKB = ccc.fixedPointFrom(63);
@@ -552,7 +552,7 @@ OffCKB > await signer.sendTransaction(tx)
 '0x252305141e6b7db81f7da94b098493a36b756fe9d5d4436c9d7c966882bc0b38'
 ```
 
-We can re-run the tx with `offckb debug` for our Scripts:
+We can re-run the transaction with `offckb debug` to test our Scripts:
 
 ```sh
 offckb debug --tx-hash 0x252305141e6b7db81f7da94b098493a36b756fe9d5d4436c9d7c966882bc0b38
@@ -565,17 +565,20 @@ Run result: 0
 All cycles: 1646754(1.6M)
 ```
 
-## Note: the deployed Scripts are using `cargo build ---release` mode so all the log are removed from the Script binary to reduce size.
+##Note
+:::note
+The deployed Scripts use `cargo build --release` mode that removes all the logs from the Script binary to reduce the size.
+:::
 
 ## Congratulations!
 
-By following this tutorial so far, you have mastered how to write simple Spawn Scripts that brings passing data between them.
+By following this tutorial so far, you have mastered how to write simple Spawn Scripts that pass data between them.
 Here's a quick recap:
 
 - Use `offckb` and `ckb-script-templates` to init a Script project
-- Use `ckb_std` to leverage CKB syscalls to create pipes and calling spawn Script.
+- Use `ckb_std` to leverage CKB syscalls to create pipes and call Spawn Script.
 - Write unit tests to make sure the Spawn Scripts work as expected.
-- Use `offckb` REPL to send a testing transaction that verify the Spawn Scripts.
+- Use `offckb` REPL to send a testing transaction that verifies Spawn Scripts.
 
 ## Additional Resources
 
