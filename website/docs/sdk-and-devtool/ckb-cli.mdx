@@ -1,0 +1,83 @@
+---
+id: ckb-cli
+title: CKB-CLI
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Tooltip from "@components/Tooltip";
+
+# CKB-CLI
+
+[ckb-cli](https://github.com/nervosnetwork/ckb-cli) is a CKB command-line tool developed in Rust.
+
+If you need to interact with Mainnet blockchain from the command line, `ckb-cli` is an ideal choice to manage accounts, deploy Scripts and send Transactions.
+
+### Features
+
+```
+    rpc         Invoke RPC call to node
+    account     Manage accounts
+    mock-tx     Handle mock transactions (verify/send)
+    tx          Handle common sighash/multisig transaction
+    util        Utilities
+    molecule    Molecule encode/decode utilities
+    wallet      Transfer / query balance (with local index) / key utils
+    dao         Deposit / prepare / withdraw / query NervosDAO balance (with local index) / key utils
+```
+
+All second-level sub-commands are listed on the [wiki page](https://github.com/nervosnetwork/ckb-cli/wiki/Sub-Commands).
+
+### Install
+
+```
+git clone https://github.com/nervosnetwork/ckb-cli.git
+cd ckb-cli
+cargo install --path . -f --locked
+```
+
+### Usage
+
+Better export an env first (or give in argument)
+
+```
+export API_URL=http://127.0.0.1:8114
+```
+
+Directly go to **gorgeous** interactive mode:
+
+```
+ckb-cli
+```
+
+Show available commands
+
+```shell
+# Top level help doc
+ckb-cli --help
+# RPC help doc
+ckb-cli rpc --help
+```
+
+#### Example: Get Live Cell (JSON Output Format)
+
+```
+ckb-cli rpc get_live_cell --tx-hash 0x4ec75b5a8de8d180853d5046760a99285c73283a5dc528f81d6ee056f5335172 --index 0
+```
+
+**Response:**
+
+```json
+{
+  "cell": {
+    "capacity": "125000000000",
+    "lock": {
+      "args": ["0x64257f00b6b63e987609fa9be2d0c86d351020fb"],
+      "code_hash": "0x1892ea40d82b53c678ff88312450bbb17e164d7a3e0a90941aa58839f56f8df2",
+      "hash_type": "type"
+    },
+    "type": null
+  },
+  "status": "live"
+}
+```
