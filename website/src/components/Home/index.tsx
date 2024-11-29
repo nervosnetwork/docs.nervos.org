@@ -431,6 +431,36 @@ function DevLogSection(): JSX.Element {
   );
 }
 
+function HistorySection(): JSX.Element {
+  return (
+    <div
+      className={clsx(styles.section, styles.flexBetween, styles.devlogSection)}
+    >
+      <div className={styles.sectionGlow}>
+        <img src={`/svg/section-glow.svg`} width={400} height={400} />
+      </div>
+      <div className={clsx(styles.flexCol, styles.leftContainer)}>
+        <h1>Explore CKB History & Hard Forks</h1>
+        <div className={styles.description}>
+          Delve into the milestones and pivotal updates that have shaped CKB's
+          development. Gain detailed insights into each hard fork and understand
+          their impact on the evolution of the network.
+        </div>
+        <Button link={"/docs/history-and-hard-forks/intro-to-hard-fork"}>
+          Explore History & Hard Forks
+        </Button>
+      </div>
+      <div className={styles.illusContainer}>
+        <img
+          alt={"history and hardforks"}
+          loading="lazy"
+          src={"/svg/illus-history.svg"}
+        />
+      </div>
+    </div>
+  );
+}
+
 function CTASection(): JSX.Element {
   const [copied, setCopied] = useState(false);
 
@@ -535,6 +565,7 @@ export {
   ToolDisplay,
   ProjectDisplay,
   DevLogSection,
+  HistorySection,
   CTASection,
   FooterSection,
 };

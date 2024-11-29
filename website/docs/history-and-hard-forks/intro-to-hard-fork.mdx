@@ -1,0 +1,37 @@
+---
+id: intro-to-hard-fork
+title: "Intro to Hard Fork"
+---
+
+## What is a Hard Fork?
+
+A hard fork is a substantial update to the blockchain’s protocol that results in a permanent divergence from the previous version. It includes major changes that are not backward-compatible, requiring all nodes in the network to upgrade to maintain consensus.
+
+If most nodes upgrade smoothly by the specified epoch number, the hard fork is considered successfully deployed. After the upgrade, nodes running the old version will no longer connect to the network, as they follow the outdated rules.
+
+## Purpose of a Hard Fork
+
+Nervos CKB implements hard forks to drive essential improvements that support the network’s growth and security. Hardforks are introduced for:
+
+- **New functionalities**: Enabling new capabilities and features that enhance the utility of the Nervos CKB platform for developers and users by modifying data structures, introducing new RISC-V extensions, new syscalls, and more.
+- **Security upgrades**: Resolving critical issues, addressing critical bugs, and overcoming limitations in the current protocol that cannot be fixed through backward-compatible updates.
+
+## CKB Hard Fork Process
+
+The hard fork process for Nervos CKB involves 3 phases to ensure smooth deployment and network stability:
+
+| Phases                                       | Steps                                                                                                                                                             | Duration                                                                  |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Phase 1: Proposal and Discussion             | - Create proposal and gather feedback<br/>- Finalize as RFC<br/>- Start initial implementation and testing<br/>- Release hardfork-ready version for local preview | ~9 months (3 months for discussion, 6 months for development and testing) |
+| Phase 2: Public Preview & Testnet Deployment | - Deploy public preview network<br/>- Conduct stability testing<br/>- Release node binary & epoch number for Testnet<br/>- Activate at specified epoch number     | Variable, based on network stability                                      |
+| Phase 3: Mainnet Deployment                  | - Release node binary & epoch number for Mainnet<br/>- Provide a 3-month preparation period<br/>- Activate at specified epoch number                              | At least 3 months preparation time after announcement                     |
+
+## CKB Hard Fork Naming Tradition
+
+Nervos CKB’s naming tradition for hard forks gives each major update a distinct identity while maintaining consistency across the network. Each hard fork is called an “edition” and is named after a Dota hero, with the year also marked in the format: **CKB Edition \[Name\](Year).**
+
+Initially, Nervos CKB used different names for Mainnet (Lina) and Testnet (Aggron). However, starting with the 2nd hard fork, both networks adopted the same edition name, such as “**CKB Edition Meepo (2024**),” with suffixes like “Mainnet” or “Testnet” only added when necessary for distinction. This unified naming format has also been applied retroactively to past editions, creating a consistent naming tradition across all hard fork events.
+
+## Additional Resources
+
+- [CKB Hardfork RFC](https://github.com/nervosnetwork/rfcs/blob/3a6ae4fa5d59b6e33fa7bd563d336706d135c0d8/rfcs/0053-ckb-hardfork/0053-ckb-hardfork.md)

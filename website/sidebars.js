@@ -126,6 +126,13 @@ export default {
     },
     {
       type: "category",
+      label: "History & Hard Forks",
+      className: "category-history",
+      collapsible: false,
+      items: ["history-and-hard-forks/intro-to-hard-fork"],
+    },
+    {
+      type: "category",
       label: "Tech Explanation",
       className: "category-tech-explanation",
       collapsible: false,
