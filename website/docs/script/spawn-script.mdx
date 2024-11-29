@@ -1,0 +1,589 @@
+---
+id: spawn-script
+title: "Tutorial: Spawn Script"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./_ScriptTools.mdx";
+
+# Tutorial: Spawn Script
+
+<TutorialHeader time={"5 - 7 min"} tools={"script"} />
+
+The design of the syscall spawn function draws inspiration from Unix and Linux, hence they share the same terminologies: process, pipe, and file descriptor.
+The spawn mechanism is used in CKB-VM to create new processes, which can then execute a different program or command independently of the parent process.
+
+In the context of CKB-VM, a process represents the active execution of a RISC-V binary, which can be located within a Cell.
+Additionally, a RISC-V binary can also be found within the witness during a Spawn syscall.
+A pipe is established by associating two file descriptors, each linked to one of its ends.
+These file descriptors can't be duplicated and are exclusively owned by the process.
+Furthermore, the file descriptors can only be either read from or written to; they can't be both read from and written to simultaneously.
+
+In this tutorial, you will learn how to write a complete Rust example using Spawn syscall to call a Script from another on CKB.
+The full code of this tutorial can be found at [Github](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/spawn-script).
+
+## Initialize a Script Project
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+
+```bash
+offckb create --script spawn-script
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+
+```bash
+⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
+🤷   Project Name: spawn-script
+🔧   Destination: /tmp/spawn-script ...
+🔧   project-name: spawn-script ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/spawn-script`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/spawn-script
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Create Two New Scripts
+
+Let’s create a new Script called `caller` inside the project.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-a-new-script" label="Command">
+```
+
+```bash
+cd caller-script
+make generate
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="create-a-new-script-result" label="Response">
+```
+
+```bash
+🤷   Project Name: caller
+🔧   Destination: /tmp/spawn-script/contracts/caller ...
+🔧   project-name: caller ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/caller-script/contracts/caller`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/caller-script/contracts/caller
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+And create another new Script called `callee` inside the project.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-a-new-script" label="Command">
+```
+
+```bash
+make generate
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="create-a-new-script-result" label="Response">
+```
+
+```bash
+🤷   Project Name: callee
+🔧   Destination: /tmp/spawn-script/contracts/callee ...
+🔧   project-name: callee ...
+🔧   Generating template ...
+🔧   Moving generated files into: `/tmp/spawn-script/contracts/callee`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /tmp/spawn-script/contracts/callee
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Our project is successfully setup now.
+
+## Implement Caller
+
+First, add an error handler module called `Error` in `error.rs`:
+
+```rust name="spawn-script/contracts/caller/src/error.rs"
+use ckb_std::error::SysError;
+
+#[cfg(test)]
+extern crate alloc;
+
+#[repr(i8)]
+pub enum Error {
+    IndexOutOfBound = 1,
+    ItemMissing,
+    LengthNotEnough,
+    Encoding,
+    WaitFailure,
+    InvalidFD,
+    OtherEndClose,
+    MaxVmSpawned,
+    MaxFdCreated,
+    // Add customized errors here...
+}
+
+impl From<SysError> for Error {
+    fn from(err: SysError) -> Self {
+        match err {
+            SysError::IndexOutOfBound => Self::IndexOutOfBound,
+            SysError::ItemMissing => Self::ItemMissing,
+            SysError::LengthNotEnough(_) => Self::LengthNotEnough,
+            SysError::Encoding => Self::Encoding,
+            SysError::WaitFailure => Self::WaitFailure,
+            SysError::InvalidFd => Self::InvalidFD,
+            SysError::OtherEndClosed => Self::OtherEndClose,
+            SysError::MaxVmsSpawned => Self::MaxVmSpawned,
+            SysError::MaxFdsCreated => Self::MaxFdCreated,
+            SysError::Unknown(err_code) => panic!("unexpected sys error {}", err_code),
+        }
+    }
+}
+```
+
+Let's include the error module and necessary libs in the `main.rs` file:
+
+```rust name="spawn-script/contracts/caller/src/main.rs"
+mod error;
+use ckb_std::syscalls::SpawnArgs;
+use core::ffi::CStr;
+```
+
+Next, we will wrap the logic in a `caller` function and use it in the `program_entry`:
+
+```rust name="spawn-script/contracts/caller/src/main.rs"
+pub fn program_entry() -> i8 {
+    ckb_std::debug!("Enter caller contract!");
+
+    match caller() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
+}
+
+fn caller() -> Result<(), error::Error> {}
+```
+
+Now, let's implement the `caller` function, which creates pipes and uses Spawn syscall to call another Script in a standalone process.
+
+The pipe is used as a one-direction data flow that carries data from one Script to another Script.
+We will pass two strings as arguments to the callee Script, expecting it to return their concatenated result.
+We also assume that the callee Script is located in the first Cell of the transaction's Cell Deps.
+
+```rust name="spawn-script/contracts/caller/src/main.rs"
+fn caller() -> Result<(), error::Error> {
+    let (r1, w1) = ckb_std::syscalls::pipe()?;
+    let (r2, w2) = ckb_std::syscalls::pipe()?;
+    let to_parent_fds: [u64; 2] = [r1, w2];
+    let to_child_fds: [u64; 3] = [r2, w1, 0]; // must ends with 0
+
+    let mut pid: u64 = 0;
+    let place = 0; // 0 means read from cell data
+    let bounds = 0; // 0 means read to end
+    let argc: u64 = 2;
+    let argv = [
+        CStr::from_bytes_with_nul(b"hello\0").unwrap().as_ptr(),
+        CStr::from_bytes_with_nul(b"world\0").unwrap().as_ptr(),
+    ];
+    let mut spgs: SpawnArgs = SpawnArgs {
+        argc,
+        argv: argv.as_ptr(),
+        process_id: &mut pid as *mut u64,
+        inherited_fds: to_child_fds.as_ptr(),
+    };
+    ckb_std::syscalls::spawn(
+        0,
+        ckb_std::ckb_constants::Source::CellDep,
+        place,
+        bounds,
+        &mut spgs,
+    )?;
+
+    let mut buf = [0; 256];
+    let len = ckb_std::syscalls::read(to_parent_fds[0], &mut buf)?;
+    assert_eq!(len, 10);
+    buf[len] = 0;
+    assert_eq!(
+        CStr::from_bytes_until_nul(&buf).unwrap().to_str().unwrap(),
+        "helloworld"
+    );
+    Ok(())
+}
+```
+
+Note that each pipe can only be used for either reading or writing. To facilitate communication, we create two pipes: one for the child process to write and the parent process to read; the other does the reverse.
+
+```rust
+let (r1, w1) = ckb_std::syscalls::pipe()?;
+let (r2, w2) = ckb_std::syscalls::pipe()?;
+let to_parent_fds: [u64; 2] = [r1, w2];
+let to_child_fds: [u64; 3] = [r2, w1, 0]; // must ends with 0
+
+
+// ...
+
+let len = ckb_std::syscalls::read(to_parent_fds[0], &mut buf)?;
+```
+
+## Implement Callee
+
+We need to create the same components here: an `error.rs` file and a `callee` function in the `main.rs`:
+
+```rust name="spawn-script/contracts/callee/src/error.rs"
+use ckb_std::error::SysError;
+
+#[cfg(test)]
+extern crate alloc;
+
+#[repr(i8)]
+pub enum Error {
+    IndexOutOfBound = 1,
+    ItemMissing,
+    LengthNotEnough,
+    Encoding,
+    WaitFailure,
+    InvalidFD,
+    OtherEndClose,
+    MaxVmSpawned,
+    MaxFdCreated,
+    // Add customized errors here...
+}
+
+impl From<SysError> for Error {
+    fn from(err: SysError) -> Self {
+        match err {
+            SysError::IndexOutOfBound => Self::IndexOutOfBound,
+            SysError::ItemMissing => Self::ItemMissing,
+            SysError::LengthNotEnough(_) => Self::LengthNotEnough,
+            SysError::Encoding => Self::Encoding,
+            SysError::WaitFailure => Self::WaitFailure,
+            SysError::InvalidFd => Self::InvalidFD,
+            SysError::OtherEndClosed => Self::OtherEndClose,
+            SysError::MaxVmsSpawned => Self::MaxVmSpawned,
+            SysError::MaxFdsCreated => Self::MaxFdCreated,
+            SysError::Unknown(err_code) => panic!("unexpected sys error {}", err_code),
+        }
+    }
+}
+```
+
+```rust name="spawn-script/contracts/callee/src/error.rs"
+mod error;
+use alloc::vec;
+
+pub fn program_entry() -> i8 {
+    ckb_std::debug!("Enter callee contract!");
+
+    match callee() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
+}
+
+pub fn callee() -> Result<(), error::Error> {
+    let argv = ckb_std::env::argv();
+    let mut to_parent_fds: [u64; 2] = [0; 2];
+    ckb_std::syscalls::inherited_fds(&mut to_parent_fds);
+    let mut out = vec![];
+    for arg in argv {
+        out.extend_from_slice(arg.to_bytes());
+    }
+    let len = ckb_std::syscalls::write(to_parent_fds[1], &out)?;
+    assert_eq!(len, 10);
+    Ok(())
+}
+```
+
+The `callee` function has a simpler logic.
+It receives arguments using `ckb_std::env::argv()` and inherits the pipe using `inherited_fds`.
+
+Then it uses the `write` syscall to write the concatenated result to the pipe:
+
+```rust
+let len = ckb_std::syscalls::write(to_parent_fds[1], &out)?;
+```
+
+## Write Unit Tests
+
+The Unit Test files are located in the `spawn-script/tests/src/tests.rs`.
+We'll create one test for our Scripts that uses `caller` as the input Lock Script and verifies it in the transaction. The `callee` Script Cell will also be pushed into the Cell Deps of the transaction.
+
+```rust name="spawn-script/tests/src/tests.rs"
+use crate::Loader;
+use ckb_testtool::ckb_types::{
+    bytes::Bytes,
+    core::TransactionBuilder,
+    packed::*,
+    prelude::*,
+};
+use ckb_testtool::context::Context;
+
+// Include your tests here
+// See https://github.com/xxuejie/ckb-native-build-sample/blob/main/tests/src/tests.rs for more examples
+
+// generated unit test for contract caller
+#[test]
+fn test_spawn() {
+    // deploy contract
+    let mut context = Context::default();
+    let caller_contract_bin: Bytes = Loader::default().load_binary("caller");
+    let caller_out_point = context.deploy_cell(caller_contract_bin);
+    let callee_contract_bin: Bytes = Loader::default().load_binary("callee");
+    let callee_out_point = context.deploy_cell(callee_contract_bin);
+
+    // prepare scripts
+    let lock_script = context
+        .build_script(&caller_out_point, Bytes::from(vec![42]))
+        .expect("script");
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point)
+        .build();
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    let outputs_data = vec![Bytes::new(); 2];
+
+    // prepare cell deps
+    let callee_dep = CellDep::new_builder()
+        .out_point(callee_out_point)
+        .build();
+    let caller_dep = CellDep::new_builder()
+        .out_point(caller_out_point)
+        .build();
+    let cell_deps: Vec<CellDep> = vec![callee_dep, caller_dep];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .cell_deps(cell_deps)
+        .build();
+    let tx = context.complete_tx(tx);
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, 10_000_000)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+
+First, build the Scripts:
+
+```sh
+make build
+```
+
+Then, run the tests:
+
+```sh
+make test
+```
+
+## Test on Devnet
+
+After testing our Scripts, we can be more confident to test them in a more realistic environment.
+
+We will use `offckb` to start a Devnet and deploy the Scripts, then test the Scripts by sending a transaction to the Devnet using `offckb` REPL.
+
+1. Start the Devnet
+
+```sh
+offckb node
+```
+
+2. Deploy the Scripts
+
+Open a new terminal, navigate to the root of the `spawn-script` project, then run:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+
+```sh
+offckb deploy --target build/release/caller
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+
+```sh
+contract caller deployed, tx hash: 0x74bed00091f062e46225662fc90e460a4cc975478117eaa8570d454bf8dc58e9
+wait for tx confirmed on-chain...
+tx committed.
+caller deployment.toml file /Users/retric/Library/Application Support/offckb-nodejs/devnet/contracts/caller/deployment.toml generated successfully.
+caller migration json file /Users/retric/Library/Application Support/offckb-nodejs/devnet/contracts/caller/migrations/2024-11-23-133222.json generated successfully.
+done.
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+
+```sh
+offckb deploy --target build/release/callee
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+
+```sh
+contract callee deployed, tx hash: 0xdb91398beafb3c41b3e6f4c4a078a08aa1f4245b0d964b9d51913e8514f20b72
+wait for tx confirmed on-chain...
+tx committed.
+callee deployment.toml file /Users/retric/Library/Application Support/offckb-nodejs/devnet/contracts/callee/deployment.toml generated successfully.
+callee migration json file /Users/retric/Library/Application Support/offckb-nodejs/devnet/contracts/callee/migrations/2024-11-23-133257.json generated successfully.
+done.
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+3. Send a Test Transaction
+
+Open a new terminal and start an offckb REPL:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="init-script" label="Command">
+```
+
+```sh
+offckb repl -r
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="init-script-result" label="Response">
+```
+
+```sh
+Welcome to OffCKB REPL!
+[[ Default Network: devnet, enableProxyRPC: true, CCC SDK: 0.0.16-alpha.3 ]]
+Type 'help()' to learn how to use.
+OffCKB >
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Next, we'll construct a transaction in the offckb REPL:
+
+```sh
+OffCKB > let amountInCKB = ccc.fixedPointFrom(63);
+OffCKB > let caller = myScripts['caller'];
+OffCKB > let lockScript = new ccc.Script(caller.codeHash, caller.hashType, "0x00");
+OffCKB > let tx = ccc.Transaction.from({
+...   outputs: [
+...     {
+...       capacity: ccc.fixedPointFrom(amountInCKB),
+...       lock: lockScript,
+...     },
+...   ],
+...   cellDeps: [
+...     ...myScripts["callee"].cellDeps.map(c => c.cellDep),
+...     ...myScripts['caller'].cellDeps.map(c => c.cellDep),
+...   ]}
+... );
+OffCKB > let signer = new ccc.SignerCkbPrivateKey(client, accounts[0].privkey);
+OffCKB > await tx.completeInputsByCapacity(signer);
+1
+OffCKB > await tx.completeFeeBy(signer, 1000);
+[ 0, true ]
+OffCKB > await signer.sendTransaction(tx)
+'0x252305141e6b7db81f7da94b098493a36b756fe9d5d4436c9d7c966882bc0b38'
+```
+
+We can re-run the transaction with `offckb debug` to test our Scripts:
+
+```sh
+offckb debug --tx-hash 0x252305141e6b7db81f7da94b098493a36b756fe9d5d4436c9d7c966882bc0b38
+Dump transaction successfully
+
+******************************
+****** Input[0].Lock ******
+
+Run result: 0
+All cycles: 1646754(1.6M)
+```
+
+:::note
+The deployed Scripts use `cargo build --release` mode that removes all the logs from the Script binary to reduce the size.
+:::
+
+## Congratulations!
+
+By following this tutorial so far, you have mastered how to write simple Spawn Scripts that pass data between them.
+Here's a quick recap:
+
+- Use `offckb` and `ckb-script-templates` to init a Script project
+- Use `ckb_std` to leverage CKB syscalls to create pipes and call Spawn Script.
+- Write unit tests to make sure the Spawn Scripts work as expected.
+- Use `offckb` REPL to send a testing transaction that verifies Spawn Scripts.
+
+## Additional Resources
+
+- Full source code of this tutorial:
+  [spawn-script](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/spawn-script)
+- CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
+- Script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
+- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)

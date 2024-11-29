@@ -54,6 +54,7 @@ export default {
         "script/vm-cycle-limits",
         "script/minimal-script",
         "script/sudt-script",
+        "script/spawn-script",
         "script/type-id",
         "script/js-script",
         "script/debug-script",
