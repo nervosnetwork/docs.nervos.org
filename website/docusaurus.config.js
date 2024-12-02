@@ -187,6 +187,10 @@ const config = {
             ],
             to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
           },
+          {
+            from: "/docs/basics/tools#neuron-wallet",
+            to: "https://docs-old.nervos.org/docs/basics/tools#neuron-wallet",
+          },
         ],
         createRedirects(existingPath) {
           if (
