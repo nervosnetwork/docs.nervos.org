@@ -51,6 +51,7 @@ export default {
         "script/intro-to-script",
         "script/program-language-for-script",
         "script/syscalls-for-script",
+        "script/spawn-cross-script-calling",
         "script/vm-cycle-limits",
         "script/minimal-script",
         "script/sudt-script",
