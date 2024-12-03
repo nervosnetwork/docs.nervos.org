@@ -130,7 +130,10 @@ export default {
       label: "History & Hard Forks",
       className: "category-history",
       collapsible: false,
-      items: ["history-and-hard-forks/intro-to-hard-fork"],
+      items: [
+        "history-and-hard-forks/intro-to-hard-fork",
+        "history-and-hard-forks/ckb-hard-fork-history",
+      ],
     },
     {
       type: "category",
