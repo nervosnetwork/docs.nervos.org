@@ -46,7 +46,6 @@ const DAPP_HEADER: JSX.Element[] = [
 ];
 
 const SCRIPT_HEADER: JSX.Element[] = [
-  ...DAPP_HEADER,
   <div key="make">
     <Link
       to="/docs/getting-started/installation-guide#1-make-sed-bash-sha256sum"
