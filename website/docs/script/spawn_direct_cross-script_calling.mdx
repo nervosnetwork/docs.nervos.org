@@ -7,13 +7,13 @@ import Tooltip from "@components/Tooltip";
 
 # Spawn: Direct Cross-Script Calling
 
-The Meepo hardfork has introduced a range of enhancements into CKB Script development, with one major innovation being Spawn.
+The Meepo hard fork in 2024 has introduced a range of enhancements into CKB Script development, with one major innovation being Spawn.
 
-In [CKB Script](https://docs.nervos.org/docs/script/intro-to-script), Spawn refers to a concept and a set of syscalls for creating new processes. Unlike the [exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) introduced during [CKB’s first hard fork in 2022](https://archive.nervos.org/blog/nervos-layer-1-a-major-protocol-upgrade-is-rolling-out), Spawn enables **direct cross-script calls**, simplifying development process while offering greater control and optimization.
+In [CKB Script](/docs/script/intro-to-script), Spawn refers to a concept and a set of syscalls for creating new processes. Unlike the [exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) introduced during [CKB’s first hard fork in 2021](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), Spawn enables **direct cross-script calls**, simplifying development process while offering greater control and optimization.
 
 ## Why Spawn
 
-The exec syscall, introduced into <Tooltip>CKB-VM</Tooltip> during [CKB’s first hard fork](https://archive.nervos.org/blog/nervos-layer-1-a-major-protocol-upgrade-is-rolling-out), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When script A calls Script B using exec, Script A's context is lost, as illustrated below:
+The exec syscall, introduced into <Tooltip>CKB-VM</Tooltip> during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost, as illustrated below:
 
 ```
       +----------+   Exec   +----------+
@@ -43,7 +43,7 @@ The Spawn syscalls in the CKB-VM draw inspiration from Linux standards, offering
 
 :::note
 
-Please note that what "process" refers to in CKB-VM is different from that in an operating system: in CKB-VM, each running Script is considered a process, essentially an entity with its own independent execution space. However, at the OS level, CKB-VM remains a single-process, single-threaded program.
+The term "process" in CKB-VM differs from its meaning in an operating system: in CKB-VM, each running Script is considered a process, essentially an entity with its own independent execution space. However, at the OS level, CKB-VM remains a single-process, single-threaded program.
 
 :::
 
@@ -134,7 +134,7 @@ Like Linux, CKB-VM uses pipes and file descriptors to pass data between processe
 pub fn pipe() -> Result<(u64, u64), SysError>;
 ```
 
-The pipe() function creates a pipe—a unidirectional data channel used for interprocess communication. It returns a tuple of two file descriptors representing the pipe's ends. The first descriptor refers to the read end, while the second refers to the write end. When data is written to the write end, the CKB-VM buffers it until it's read from the read end.
+The `pipe()` function creates a pipe—a unidirectional data channel used for interprocess communication. It returns a tuple of two file descriptors representing the pipe's ends. The first descriptor refers to the read end, while the second refers to the write end. Data written to the write end is buffered by CKB-VM until it is read from the read end.
 
 ```
                 __------__
@@ -218,7 +218,7 @@ pub enum SysError {
 }
 ```
 
-Among these errors, a notable one is OtherEndClosed. It allows us to implement a function like `read_all(fd) -> Vec<u8>` to read all the data from the pipe at once. Many programming languages provide similar functions in their standard libraries, and you can easily implement this functionality yourself in the CKB-VM.
+Among these errors, a notable one is `OtherEndClosed`. This error allows us to implement a function like `read_all(fd) -> Vec<u8>` to read all the data from the pipe at once. Many programming languages provide similar functions in their standard libraries, and you can easily implement this functionality yourself in the CKB-VM.
 
 ```rust
 pub fn read_all(fd: u64) -> Result<Vec<u8>, SysError> {
@@ -282,7 +282,7 @@ pub unsafe extern "C" fn main() -> u64 {
 
 Since `spawn()` operates within its own memory space, independent of the parent process, it can mitigate certain security risks, particularly in scenarios involving sensitive data.
 
-While some other blockchain virtual machines, such as EVM, also offer cross-contract call functions, these calls tend to be quite expensive, especially when invoking child contracts repeatedly. This is primarily because it requires continuously creating and destroying a virtual machine to complete each call, pictured as below:
+While some other blockchain virtual machines, such as the EVM, also offer cross-contract call functions, these calls tend to be quite expensive, especially when invoking child contracts repeatedly. This is primarily because each call requires continuously creating and destroying a virtual machine, as illustrated below:
 
 ```rust
       +----------+
@@ -317,6 +317,6 @@ Spawn has several potential applications, and we believe it's particularly advan
 - **Public Library**: Spawn enables the development of common libraries, allowing different Scripts to reuse shared code. This approach simplifies Script development and substantially reduces deployment costs. For instance, we could publish diverse cryptographic algorithms on CKB as public libraries.
 - **Large Script Management**: When your Script's binary size exceeds 500K, it surpasses CKB's maximum transaction size limit for Script deployment. In such cases, you can leverage Spawn to divide and deploy your Script logic separately, effectively circumventing this limitation.
 
-#@ Conclusion
+## Conclusion
 
 The Spawn family of functions in the CKB-VM offers an efficient, flexible, and secure method for process creation, particularly in scenarios involving complex Scripts. Using Spawn can boost system performance and security. By mastering the use of `spawn()`, developers can more effectively manage Scripts while building decentralized applications, unlocking new possibilities in blockchain development.
