@@ -135,6 +135,7 @@ export default {
       items: [
         "history-and-hard-forks/intro-to-hard-fork",
         "history-and-hard-forks/ckb-hard-fork-history",
+        "history-and-hard-forks/rethinking-forks",
       ],
     },
     {
