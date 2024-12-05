@@ -8,10 +8,25 @@ import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import ScriptTools from "./_ScriptTools.mdx";
+import Link from "@docusaurus/Link";
 
 # Tutorial: Spawn Script
 
-<TutorialHeader time={"5 - 7 min"} tools={"script"} />
+<TutorialHeader
+  time={"5 - 7 min"}
+  tools={"script"}
+  customTools={[
+    <div key="offckb">
+      <Link
+        to="docs/sdk-and-devtool/offckb"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        offckb {">= 0.3.2"}
+      </Link>
+    </div>,
+  ]}
+/>
 
 The design of the syscall spawn function draws inspiration from Unix and Linux, hence they share the same terminologies: process, pipe, and file descriptor.
 The spawn mechanism is used in CKB-VM to create new processes, which can then execute a different program or command independently of the parent process.
