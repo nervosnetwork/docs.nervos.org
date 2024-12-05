@@ -52,6 +52,7 @@ export default {
         "script/program-language-for-script",
         "script/syscalls-for-script",
         "script/vm-cycle-limits",
+        "script/vm-selection",
         "script/type-id",
         "script/spawn-cross-script-calling",
         "script/debug-script",
