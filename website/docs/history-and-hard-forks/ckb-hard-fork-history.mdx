@@ -3,46 +3,28 @@ id: ckb-hard-fork-history
 title: "CKB Hard Fork History"
 ---
 
+import HardForkTime from "@components/HardForkTime";
+
 # CKB Hard Fork History
 
 This page contains a timeline of all the hard forks, and updates to the Nervos CKB.
 
 ## 2nd Hard Fork – CKB Edition Meepo (2024)
 
-<div
-  style={{
-    backgroundColor: "var(--surface-03)",
-    padding: "1rem 1.5rem",
-    borderRadius: "20px",
-  }}
->
-  📅 Date: TBD <br />
-  Epoch number: TBD
-</div>
+<HardForkTime />
 
 ### Meepo (2024) Summary
 
-The CKB Edition Meepo (2024) introduces groundbreaking features like the Spawn syscall and `data2` JSON representation, empowering developers to build more complex, efficient dApps while improving data precision.
+The CKB Edition Meepo (2024) introduces a range of enhancements into CKB Script development, with one major innovation being Spawn. Spawn enables direct cross-script calls, simplifying development process while offering greater control and optimization. This update significantly enhances the flexibility of CKB Script.
 
 ### Important Features
 
 <details>
   <summary>CKB-VM V2</summary>
 
-    - Added new syscalls Spawn, Get Memory Limit, and Set Content to give developers better control over memory and content management.
-    - Introduced the "A" Standard Extension to support atomic instructions, simplifying development and reducing the need for manual fixes.
+    - One notable addition is the inclusion of a new system call called "Spawn," which can be further explored in the [RFC50: CKB-VM Syscalls 3](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md). In essence, Spawn serves as an alternative to dynamic library calls and Exec. With Spawn, a Script can create a child Script with an independent memory area, and data can be passed between the parent and child Scripts without restriction.
     - Implemented more macro-op fusions to reduce cycle consumption, making Scripts run more efficiently.
-    - Used the `hash_type` field to smoothly manage different VM versions, ensuring a seamless upgrade path.
-
-</details>
-<details>
-  <summary>Spawn Syscall</summary>
-
-The Spawn syscall allows a Script to create a new, independent process—termed a child process—within the same execution context. This design employs familiar concepts such as processes, pipes, and file descriptors, facilitating a seamless development experience.
-
-In CKB-VM, a process represents the active execution of a RISC-V binary, which can reside within a Cell or be included in the `witness` during a Spawn syscall. The Spawn syscall enables a parent process to initiate a child process that executes a different program or command independently. Notably, the parent process remains unblocked during the child process's execution, allowing for concurrent operations.
-
-This functionality is particularly beneficial for developers aiming to build complex dependencies and sophisticated Script libraries. By leveraging the Spawn syscall, Scripts can execute other Scripts or programs within the same execution context, promoting modularity and reuse in dApps on the CKB platform. This advancement enhances the flexibility and scalability of dApp development, enabling more intricate and efficient contract interactions.
+    - Added a new `data2` value in the Script`hash_type` field to smoothly manage different VM versions, ensuring a seamless upgrade path.
 
 </details>
 
@@ -61,17 +43,12 @@ Coming soon...
 
 ## 1st Hard Fork – CKB Edition Mirana (2021)
 
-<div
-  style={{
-    backgroundColor: "var(--surface-03)",
-    padding: "1rem 1.5rem",
-    borderRadius: "20px",
-  }}
->
-  📅 Date: <strong>05/10/2022, 01:00 UTC </strong>
-  <br />
-  Epoch number: <strong>5414</strong>
-</div>
+<HardForkTime
+  mainnetDate={"May 10, 2022"}
+  mainnetEpoch={5414}
+  testnetDate={"Nov 24, 2021"}
+  testnetEpoch={3113}
+/>
 
 ### Mirana (2021) Summary
 
