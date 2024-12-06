@@ -1,0 +1,155 @@
+---
+id: ckb-hard-fork-history
+title: "CKB Hard Fork History"
+---
+
+import HardForkTime from "@components/HardForkTime";
+
+# CKB Hard Fork History
+
+This page contains a timeline of all the hard forks, and updates to the Nervos CKB.
+
+## 2nd Hard Fork – CKB Edition Meepo (2024)
+
+<HardForkTime />
+
+### Meepo (2024) Summary
+
+The CKB Edition Meepo (2024) introduces a range of enhancements into CKB Script development, with one major innovation being Spawn. Spawn enables direct cross-script calls, simplifying development process while offering greater control and optimization. This update significantly enhances the flexibility of CKB Script.
+
+### Important Features
+
+<details>
+  <summary>CKB-VM V2</summary>
+
+    - One notable addition is the inclusion of a new system call called "Spawn," which can be further explored in the [RFC50: CKB-VM Syscalls 3](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md). In essence, Spawn serves as an alternative to dynamic library calls and Exec. With Spawn, a Script can create a child Script with an independent memory area, and data can be passed between the parent and child Scripts without restriction.
+    - Implemented more macro-op fusions to reduce cycle consumption, making Scripts run more efficiently.
+    - Added a new `data2` value in the Script`hash_type` field to smoothly manage different VM versions, ensuring a seamless upgrade path.
+
+</details>
+
+### Tools & Upgrade Requirements
+
+Coming soon...
+
+### Resources
+
+- [CKB2023](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0051-ckb2023/0051-ckb2023.md)
+- [RFC48](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0048-remove-block-header-version-reservation-rule/0048-remove-block-header-version-reservation-rule.md): Remove Block Header Version Reservation Rule
+- [RFC49](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0049-ckb-vm-version-2/0049-ckb-vm-version-2.md): CKB VM version2
+- [RFC50](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md): CKB VM Syscalls 3
+
+---
+
+## 1st Hard Fork – CKB Edition Mirana (2021)
+
+<HardForkTime
+  mainnetDate={"May 10, 2022"}
+  mainnetEpoch={5414}
+  testnetDate={"Nov 24, 2021"}
+  testnetEpoch={3113}
+/>
+
+### Mirana (2021) Summary
+
+The CKB Edition Mirana (2021) introduces both new features and bug fixes. A major upgrade to the virtual machine, CKB-VM v1, was implemented, with Scripts now executing on this version by default unless specified otherwise. Additionally, a new extension field was added to block headers, reserved for future upgrades like Flyclient. Multiple consensus patches were also applied, fixing bugs and improving the network's robustness.
+
+### Important Features
+
+<details>
+  <summary>CKB-VM V1</summary>
+
+    A key feature of CKB-VM v1 is the support for the RISC-V B extension, which enables direct mapping of RISC-V instructions to native x86-64 CPU instructions. This enhancement significantly improves the efficiency of cryptographic algorithms, such as reducing the cycle consumption of BLS signature verification locks.
+
+    Additionally, CKB-VM v1 utilizes Macro-Operation Fusion (MOP) to merge adjacent instructions into single operations, further optimizing performance by exploiting modern CPU micro-architectures.
+
+    To manage multiple VM versions, CKB-VM v1 introduces a version selection mechanism utilizing the `hash_type` field in the Script structure. This mechanism allows developers to specify the desired VM version for script execution, facilitating a smooth transition to the updated virtual machine environment.
+
+    Different VM versions may result in varying cycle consumption and verification outcomes for the same transaction. To accommodate these differences, separate transaction relay protocols are proposed for each VM version, ensuring a seamless activation of CKB2021.
+
+</details>
+<details>
+    <summary>Extension Field</summary>
+
+    The hardfork introduces an optional variable-length field, termed the "extension field," into the block structure. Previously, the fixed-length block header lacked sufficient reserved bits to accommodate such extensions, and this addition addresses the need for incorporating new data into blocks.
+
+    The extension field is integrated into the block body, allowing nodes to synchronize the block header and this field concurrently without additional overhead. Post-activation of CKB2021, this field remains unparsed and unverified, serving as a placeholder for future soft forks to define its specific use cases. For instance, Flyclient can utilize the extension field to store its required hash data.
+
+</details>
+<details>
+    <summary>Consensus Patches</summary>
+
+    Several consensus patches were implemented to enhance the robustness and flexibility of the CKB:
+
+    - Simplified the `since` field by using block timestamps as the start time.
+    - Allowed multiple matches on dependency Cells via Type Script hash when Cells have identical data.
+    - Ensured the index is less than the length in the `since` field using epoch.
+    - Removed the header dependencies' immature rule, granting developers more flexibility.
+
+</details>
+
+### Tools & Upgrade Requirements
+
+To ensure your project is fully compatible with the new network rules, the following tools and libraries need to be updated:
+
+#### 1. Update your CKB Node & CKB Indexer Node
+
+| Tools            | Minimum version required                                        |
+| ---------------- | --------------------------------------------------------------- |
+| CKB Node         | [v0.103.0](https://github.com/nervosnetwork/ckb/releases)       |
+| CKB Indexer Node | [v0.3.2](https://github.com/nervosnetwork/ckb-indexer/releases) |
+
+Follow these steps to update your node:
+
+1. Download and decompress the latest stable binaries
+2. Shut down your node if it is running
+3. Replace the old binaries with the new binaries
+4. Start the node manually on the command line to complete the migration process, if necessary.
+5. Shut down and restart the node using your normal startup Script.
+
+:::note
+If the CKB node you are updating is running a version below **v0.100.0**, some code changes may be necessary to ensure compatibility. Breaking changes were introduced to the RPC, which are listed on the [release page](https://github.com/nervosnetwork/ckb/releases/tag/v0.100.0).
+:::
+
+#### 2. Update your supporting libraries
+
+| Tools          | Minimum version recommended                                                   |
+| -------------- | ----------------------------------------------------------------------------- |
+| PW-SDK         | [v0.4.1-alpha.1](https://www.npmjs.com/package/@jm9k/pw-core/v/0.4.1-alpha.1) |
+| Lumos          | [v0.18.0-rc6](https://github.com/ckb-js/lumos/releases)                       |
+| ckb-sdk-js     | [v0.102.3](https://github.com/nervosnetwork/ckb-sdk-js/releases)              |
+| ckb-sdk-java   | [v1.0.0](https://github.com/nervosnetwork/ckb-sdk-java/releases)              |
+| ckb-sdk-go     | [v1.0.0](https://github.com/nervosnetwork/ckb-sdk-go/releases)                |
+| ckb-sdk-ruby   | [v0.101.0](https://github.com/nervosnetwork/ckb-sdk-ruby/releases)            |
+| CKIT           | [v0.2.0](https://github.com/nervosnetwork/ckit/releases)                      |
+| ckb-js-toolkit | [v0.100.0-rc1](https://github.com/nervosnetwork/ckb-js-toolkit/releases)      |
+
+#### 3. Update to support CKB2021 Addresses
+
+The CKB2021 address format replaces both short and long addresses from the past, offering improved flexibility and reduced maintenance. While old addresses will still work, it’s recommended to use **CKB2021** for new features introduced in the CKB Edition Mirana (2021) hard fork.
+
+- [PW-SDK](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide/blob/master/pw-sdk.md) and [Lumos](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide/blob/master/lumos.md): Follow their respective guides to support new addresses.
+- Other libraries: refer to the [Lumos guide](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide/blob/master/lumos.md) and their official documentation.
+
+#### 4. Omnilock Migration
+
+After adding Omnilock support, users must migrate assets from their PW-Lock address to the new Omnilock address. While private keys remain unchanged, the addresses will be different.
+
+Developers should guide their users through the migration process and provide tools and instructions for asset migration. The [**PW-UP Asset Migration Tool**](https://pw-up.vercel.app/) (available on [GitHub](https://github.com/homura/pw-up)) can be used for migrating sUDT assets.
+
+- [PW-SDK](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide/blob/master/pw-sdk.md) and [Lumos](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide/blob/master/lumos.md): Follow their respective guides for Omnilock support.
+- Other libraries: refer to the [Lumos guide](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide/blob/master/lumos.md) and their official documentation.
+
+### Resources
+
+- [Migration Guide](https://github.com/jordanmack/nervos-ckb2021-hard-fork-migration-guide)
+- [CKB2021](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0037-ckb2021/0037-ckb2021.md): Overview
+- [RFC28](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0028-change-since-relative-timestamp/0028-change-since-relative-timestamp.md): Use Block Timestamp as Start Timestamp in Since.
+- [RFC29](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0029-allow-script-multiple-matches-on-identical-code/0029-allow-script-multiple-matches-on-identical-code.md): Allow multiple matches on dep cells via type script hash when these cells have the same data.
+- [RFC30](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0030-ensure-index-less-than-length-in-since/0030-ensure-index-less-than-length-in-since.md): Ensure that index is less than length in input since field using epoch.
+- [RFC31](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0031-variable-length-header-field/0031-variable-length-header-field.md): Add a variable length field in the block header.
+- [RFC32](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0032-ckb-vm-version-selection/0032-ckb-vm-version-selection.md): CKB VM version selection.
+- [RFC33](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0033-ckb-vm-version-1/0033-ckb-vm-version-1.md): CKB VM version1 changes.
+- [RFC34](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md): CKB VM syscalls bundle 2.
+- [RFC35](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0035-ckb2021-p2p-protocol-upgrade/0035-ckb2021-p2p-protocol-upgrade.md): P2P protocol upgrade.
+- [RFC36](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0036-remove-header-deps-immature-rule/0036-remove-header-deps-immature-rule.md): Remove header deps immature rule.
