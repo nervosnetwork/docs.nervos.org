@@ -3,17 +3,17 @@ id: vm-selection
 title: "VM Version Selection"
 ---
 
-When you wrote a Script, it is important to understand how this Script will be executed in a determined CKB-VM version. There are different CKB-VM versions in CKB network since it's essential to keep improving CKB-VM to for security, performance, bug fixings and new RISC-V extensions. However the upgrade should not break the old code, users must have the opt-in option to specify the VM version.
+When writing a Script, it is important to understand how the Script will be executed under a specific CKB-VM version. The CKB network has introduced various CKB-VM versions over time to enhance security, performance, bug fixes and support for new RISC-V extensions. However, the upgrade should not break the old code, and users must have the opt-in option to specify the VM version.
 
-This article explains the general mechanism that determines how the CKB node chooses the CKB-VM version for a transaction Script group based on [RPC-32](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0032-ckb-vm-version-selection/0032-ckb-vm-version-selection.md).
+This article explains the general mechanism that determines how a CKB node chooses the appropriate CKB-VM version for a transaction Script group, based on [RPC-32](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0032-ckb-vm-version-selection/0032-ckb-vm-version-selection.md).
 
 ## How It Works
 
 In CKB, each VM version has its bundled instruction set, syscalls and cost model.
 
-Typically, when a CKB Hard Fork takes effect from an epoch decided by the community consensus, all the transactions in the blocks before the activation epoch must run the previous CKB-VM version to verify all the Script groups.
+During a CKB hard fork, a specific activation epoch is determined through community consensus. Typically, transactions in blocks before the activation epoch are verified using the previous CKB-VM version.
 
-After the fork is activated, CKB nodes must choose the CKB-VM version for each Script group. This is done by checking the value of `hash_type` field in the Script Structure. The allowed values for the `hash_type` are 0, 1, 2 and 4. Cells are sorted into different groups if they have different `hash_type`.
+Once the fork is activated, CKB nodes determine the CKB-VM version for each Script group based on the `hash_type` field in the Script Structure. The allowed values for `hash_type` are 0, 1, 2 and 4. Cells with different `hash_type` are grouped separately.
 
 According to the value of `hash_type`:
 
@@ -33,13 +33,14 @@ The `hash_type` encoding pattern ensures that if a Script matches code via `type
 
 Cell owners can trade off between the determination and VM performance boost when creating the Cell. They should use `data hash` for determination, and `type hash` for the latest VM techniques.
 
-## **Rationale**
+## Rationale
 
-There are many other solutions to select VM versions. The current solution results from discussion and trade-off. Following are some example alternatives:
+Several solutions were discussed for VM version selection, but the current approach balances flexibility and determinism. Here are some of the alternatives and their drawbacks:
 
-- Consistently uses the latest VM version. The users cannot specify the VM versions for transactions, and the version selection will be non-determine cause it will depend on the chain state.
-- Depend on the Script code Cell epoch. Use the old VM version if the code Cell is deployed before the fork, and use the new one otherwise. The problem with this solution is that anyone can re-deploy the Cell and construct the transaction using the new code Cell to choose VM versions.
+- **Always use the latest VM version**: While straightforward, this approach would remove user control over version selections, making transaction executions non-deterministic as it will depend on the chain state.
+- **Depend on the Script code Cell epoch**: This approach would use the old VM version for code Cells deployed before the fork and the new one for later deployments. However, anyone could redeploy the Cell and force transactions to use a different VM version using a new code Cell, which reduces determinism. 
 
 ## Backward compatibility
 
-For Cell Scripts which reference codes via `data hash`, they will use the same VM before and after the hard fork. For those referenced by `type hash`, they will use the different VM versions. The dApps developers must ensure the compatibility of their Scripts and upgrade them if necessary.
+For Scripts referencing code via `data hash`, the VM version remains consistent before and after a hard fork. In contrast, Scripts referencing code via `type hash` will use different VM versions. 
+DApps developers must ensure the compatibility of their Scripts and upgrade them if necessary. By carefully selecting the appropriate `hash_type` and understanding its implications, developers can build robust dApps on CKB while leveraging the flexibility of VM version management. 
