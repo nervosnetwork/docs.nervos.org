@@ -1,0 +1,59 @@
+---
+id: rethinking-forks
+title: "Rethinking Forks"
+---
+
+# Rethinking Forks: The Philosophy Behind CKB's Network Upgrade Design
+
+> Originally wrote by Jan Xie
+
+## Soft fork, Hard fork, and Rice-noodle fork
+
+The discussions in the Bitcoin/Ethereum community about hard forks/soft forks have had a significant impact on CKB's design.
+Here're two pieces I can find immediately [[1]](https://vitalik.eth.limo/general/2017/03/14/forks_and_markets.html) [[2]](https://github.com/editor-Ajian/Personal-Work/blob/main/%EF%BC%882024.11%EF%BC%89%E5%86%B0%E5%B1%B1%E4%B9%8B%E4%B8%8B.pdf).
+
+At some point, I realized that the definitions of hard fork/soft fork themselves are very rough and primitive, unable to accurately depict the differences between various network upgrades.
+
+For example, "changing Bitcoin opcodes to work with 64-bit values" and "modifying the 21m hard cap" both require hard forks, but their nature is entirely different: the former is akin to expanding a government office building (which may require more budget leading to other side effects), while the latter is like amending a constitution.
+
+The reason we use these two terms to describe blockchain network upgrades everywhere is probably simply because there was only Bitcoin at the beginning, and distinguishing between hard fork/soft fork happened to address key questions about network upgrades:
+
+- How does an upgrade occur in a distributed network?
+- What are the difficulties of different upgrade methods?
+
+Clearly, soft forks are more convenient because they only need to convince part of the nodes to upgrade.
+
+However, this also imposes limitations on what can be done within an upgrade. In contrast is the hard fork.
+
+With these two concepts came further analysis such as whether soft forks can achieve what hard forks do, how upgrades affect existing users, if they coerce or not, how to signal/form consensus around upgrades etc., which has continued until today.
+
+But these are all completely different dimensions of considerations - whether network upgrades require partial or full node participation; which parts of protocol can be modified by an upgrade; through what governance process should it pass; whether it ensures current asset owner rights, etc.
+
+The simple binary division into hard/soft forks mixes considerations across different dimensions, resulting in conflict between upgrading versus coercion, limiting us within black-and-white options:
+
+- Opt for soft-fork, ensuring asset owner rights, while adding constraints onto networking evolution.
+- Choose hard-fork, facilitating forward evolution, while sacrificing guarantees towards existing asset owners, forcing users constantly choosing between upgrade and exit. (Theoretically leaving-users could form new networks, but its costs usually outweigh expected returns, making it practically infeasible.)
+
+Once realizing these distinct dimensions exist within network upgrades, one could separate & conquer, potentially find better alternatives. CKB does exactly this.
+
+To CKB, a store of assets, ensuring asset owner rights is a crucial design goal just as to Bitcoin, a Store-of-value. At the same time, UTXO model serve the goal well, because UTXOs are discrete state storage units. Each user holds independent state storage means that everyone can independently specifies his/her own asset store strategy, which make the network-evolution-vs-asset-preservation conflict disappear.
+
+Individuals can make independent decisions regarding adopting newer protocols or sticking to older ones, and stay in the same network. Forced network splits avoided. This is why CKB introduces data/data1/data2/... hash_type alongside VM version (more details here [[3]](https://talk.nervos.org/t/ckb-version-control-and-blockchain-evolution/4819)[[4]](https://talk.nervos.org/t/first-class-asset/405)[[5]](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0032-ckb-vm-version-selection/0032-ckb-vm-version-selection.md)).
+
+That leads to intrinsic differences between CKB Hard-forks and Ethereum hard-forks. Although CKB hard-forks could add instructions to CKB-VM, they don't affect existing asset owners' rights provided lock/type scripts used accordingly. Sometimes I feel like "Rice-noodle-fork" might suit better for CKB hard-forks - it's apparently different from "hard-fork", plus rice noodles taste great!
+
+As CKB ecosystem develops, I believe specifying scripts using `data` hash_type will see increasing use especially in high-security store-of-assets scenarios. To make better use of it also requires better tools and more explorations, like:
+
+- How to provide easy-to-use UX for data/type hash_type selection?
+- How to integrate data hash_type into script upgrade plan?
+- How to deploy script code in multiple cells without affecting developer usability?
+
+In any case, do not let hard-fork/soft-fork categorization limit your imagination.
+
+## Ref
+
+- [1] [https://vitalik.eth.limo/general/2017/03/14/forks_and_markets.html…](https://t.co/Pnrh7IV1j5)
+- [2] [https://github.com/editor-Ajian/Personal-Work/blob/main/%EF%BC%882024.11%EF%BC%89%E5%86%B0%E5%B1%B1%E4%B9%8B%E4%B8%8B.pdf…](https://t.co/rrlAOTpFvy)
+- [3] [https://talk.nervos.org/t/ckb-version-control-and-blockchain-evolution/4819…](https://t.co/GIABUpA7Wl)
+- [4] [https://talk.nervos.org/t/first-class-asset/405…](https://t.co/y59RuEUtXy)
+- [5] [https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0032-ckb-vm-version-selection/0032-ckb-vm-version-selection.md…](https://t.co/ckzcHIV4Vb)
