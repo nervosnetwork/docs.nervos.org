@@ -3,9 +3,9 @@ id: history-vm-version
 title: "History VM Version"
 ---
 
-Usually, a hard fork will bring a new CKB-VM version in CKB network history for better security, performance, bug fixings and new RISC-V extensions. This article lists all the version of CKB-VM from previous hard fork history.
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. This article lists all versions of the CKB-VM from previous hard fork events.
 
-One thing to be noted is that, even the hard fork brings upgrade to the network, it is important to prevent the hard fork from breaking the old Script codes. CKB makes best efforts to ensure users have the opt-in option to specify the VM version for their Script. For the specific mechanism that determines how the CKB node chooses the CKB-VM version for a transaction Script group, please refer to [vm-selection](/docs/script/vm-selection).
+It is important to note that, even though a hard fork upgrades the network, it is crucial to prevent the hard fork from breaking the old Script codes. CKB makes best effort to ensure users have the opt-in option to specify the VM version for their Script. For the specific mechanism that determines how the CKB node chooses the CKB-VM version for a transaction's Script group, please refer to [vm-selection](/docs/script/vm-selection).
 
 ## VM 0
 
@@ -41,14 +41,14 @@ Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0
 
 Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
 
-Specify the cycles needed by each CKB VM instructions or syscalls.
+Specify the cycles needed by each CKB-VM instructions or syscalls.
 
 1. Cycles for RISC-V instructions are determined based on real hardware that implement RISC-V ISA.
 2. Cycles for syscalls are measured based on real runtime performance metrics obtained while benchmarking current CKB implementation.
 
 **Initial Loading Cycles**
 
-For each byte loaded into CKB VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dapp developers to ship smaller smart contracts as well as preventing DDoS attacks using large binaries. Notice fractions will be rounded up here, so 30.25 cycles will become 31 cycles.
+For each byte loaded into CKB-VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dApp developers to ship smaller Scripts as well as preventing DDoS attacks using large binaries. Notice fractions will be rounded up here, so 30.25 cycles will become 31 cycles.
 
 **instructions Cycles**
 
@@ -103,11 +103,11 @@ All instructions consume 1 cycle except the following ones:
 
 As shown in the above chart, each syscall will have 500 initial cycle consumptions. This is based on real performance metrics gathered benchmarking CKB implementation, certain bookkeeping logics are required for each syscall here.
 
-In addition, for each byte loaded into CKB VM in the syscalls, 0.25 cycles will be charged. Notice fractions will also be rounded up here, so 30.25 cycles will become 31 cycles.
+In addition, for each byte loaded into CKB-VM in the syscalls, 0.25 cycles will be charged. Notice fractions will also be rounded up here, so 30.25 cycles will become 31 cycles.
 
 ## VM 1
 
-introduced from **1st Hard Fork – CKB Edition Mirana (2021)**
+Introduced since [1st Hard Fork – CKB Edition Mirana (2021)](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021)
 
 Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0033-ckb-vm-version-1/0033-ckb-vm-version-1.md#1-fixed-several-bugs)
 
@@ -153,7 +153,7 @@ No new added syscalls.
 
 ## VM 2
 
-**introduced from 2nd Hard Fork – CKB Edition Meepo (2024)**
+Introduced since [2nd Hard Fork – CKB Edition Meepo (2024)](/docs/history-and-hard-forks/ckb-hard-fork-history#2nd-hard-fork--ckb-edition-meepo-2024)
 
 Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0049-ckb-vm-version-2/0049-ckb-vm-version-2.md)
 
