@@ -1,0 +1,46 @@
+---
+id: vm-selection
+title: "VM Version Selection"
+---
+
+When writing a Script, it is important to understand how the Script will be executed under a specific CKB-VM version. The CKB network has introduced various CKB-VM versions over time to enhance security, performance, bug fixes and support for new RISC-V extensions. However, the upgrade should not break the old code, and users must have the opt-in option to specify the VM version.
+
+This article explains the general mechanism that determines how a CKB node chooses the appropriate CKB-VM version for a transaction Script group, based on [RPC-32](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0032-ckb-vm-version-selection/0032-ckb-vm-version-selection.md).
+
+## How It Works
+
+In CKB, each VM version has its bundled instruction set, syscalls and cost model.
+
+During a CKB hard fork, a specific activation epoch is determined through community consensus. Typically, transactions in blocks before the activation epoch are verified using the previous CKB-VM version.
+
+Once the fork is activated, CKB nodes determine the CKB-VM version for each Script group based on the `hash_type` field in the Script Structure. The allowed values for `hash_type` are 0, 1, 2 and 4. Cells with different `hash_type` are grouped separately.
+
+According to the value of `hash_type`:
+
+- When the `hash_type` is 0, the Script group matches code via `data hash` and will run the code using the CKB-VM version 0.
+- When the `hash_type` is 1, the Script group matches code via `type Script hash` and will run the code using the CKB-VM version 2.
+- When the `hash_type` is 2, the Script group matches code via `data hash` and will run the code using the CKB-VM version 1.
+- When the `hash_type` is 4, the Script group matches code via `data hash` and will run the code using the CKB-VM version 2.
+
+| `hash_type` | JSON Representation | Matched by          | VM Version |
+| ----------- | ------------------- | ------------------- | ---------- |
+| 0           | “data”              | Data hash (blake2b) | 0          |
+| 1           | “type”              | Type Script hash    | 2          |
+| 2           | “data1”             | Data hash (blake2b) | 1          |
+| 4           | “data2”             | Data hash (blake2b) | 2          |
+
+The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available version of VM depending when the Script is executed. But if the Script matches code via `data hash`, the VM version to execute is determined when the Cell is created.
+
+Cell owners can trade off between the determination and VM performance boost when creating the Cell. They should use `data hash` for determination, and `type hash` for the latest VM techniques.
+
+## Rationale
+
+Several solutions were discussed for VM version selection, but the current approach balances flexibility and determinism. Here are some of the alternatives and their drawbacks:
+
+- **Always use the latest VM version**: While straightforward, this approach would remove user control over version selections, making transaction executions non-deterministic as it will depend on the chain state.
+- **Depend on the Script code Cell epoch**: This approach would use the old VM version for code Cells deployed before the fork and the new one for later deployments. However, anyone could redeploy the Cell and force transactions to use a different VM version using a new code Cell, which reduces determinism.
+
+## Backward compatibility
+
+For Scripts referencing code via `data hash`, the VM version remains consistent before and after a hard fork. In contrast, Scripts referencing code via `type hash` will use different VM versions.
+DApps developers must ensure the compatibility of their Scripts and upgrade them if necessary. By carefully selecting the appropriate `hash_type` and understanding its implications, developers can build robust dApps on CKB while leveraging the flexibility of VM version management.
