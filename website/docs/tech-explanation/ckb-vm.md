@@ -17,6 +17,10 @@ Any programming language that can target RISC-V can be used natively for develop
 
 Nervos CKB offers native SDKs in several mainstream programming languages, such as JavaScript, Rust, Go, Java, and Ruby.
 
+## CKB-VM Version
+
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. To check out all versions of the CKB-VM from previous hard fork events, please visit [History VM Version](/docs/history-and-hard-forks/history-vm-version)
+
 ---
 
 For more information on CKB-VM, please refer to the [RFC CKB-VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md).

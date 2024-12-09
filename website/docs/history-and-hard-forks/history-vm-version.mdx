@@ -1,0 +1,212 @@
+---
+id: history-vm-version
+title: "History VM Version"
+---
+
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. This article lists all versions of the CKB-VM from previous hard fork events.
+
+It is important to note that, even though a hard fork upgrades the network, it is crucial to prevent the hard fork from breaking the old Script codes. CKB makes best effort to ensure users have the opt-in option to specify the VM version for their Script. For the specific mechanism that determines how the CKB node chooses the CKB-VM version for a transaction's Script group, please refer to [vm-selection](/docs/script/vm-selection).
+
+## VM 0
+
+Since the genesis of CKB network.
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md)
+
+### Instruction Set
+
+`rv64imc` architecture: based on core [RV64I](https://riscv.org/specifications/) ISA with M standard extension for integer multiplication and division, and C standard extension for RCV(RISC-V Compressed Instructions)
+
+### Syscalls
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
+
+- [Exit](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#exit)
+- [Load Transaction Hash](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-transaction-hash)
+- [Load Transaction](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-transaction)
+- [Load Script Hash](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-script-hash)
+- [Load Script](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-script)
+- [Load Cell](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell)
+- [Load Cell By Field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-by-field)
+- [Load Cell Data](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data)
+- [Load Cell Data As Code](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data-as_code)
+- [Load Input](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-input)
+- [Load Input By Field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-input-by-field)
+- [Load Header](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-header)
+- [Load Header By Field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-header-by-field)
+- [Load Witness](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-witness)
+- [Debug](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug)
+
+### Cost Model
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
+
+Specify the cycles needed by each CKB-VM instructions or syscalls.
+
+1. Cycles for RISC-V instructions are determined based on real hardware that implement RISC-V ISA.
+2. Cycles for syscalls are measured based on real runtime performance metrics obtained while benchmarking current CKB implementation.
+
+**Initial Loading Cycles**
+
+For each byte loaded into CKB-VM in the initial ELF loading phase, 0.25 cycles will be charged. This is to encourage dApp developers to ship smaller Scripts as well as preventing DDoS attacks using large binaries. Notice fractions will be rounded up here, so 30.25 cycles will become 31 cycles.
+
+**instructions Cycles**
+
+All instructions consume 1 cycle except the following ones:
+
+| Instruction | Cycles               |
+| ----------- | -------------------- |
+| JALR        | 3                    |
+| JAL         | 3                    |
+| J           | 3                    |
+| JR          | 3                    |
+| BEQ         | 3                    |
+| BNE         | 3                    |
+| BLT         | 3                    |
+| BGE         | 3                    |
+| BLTU        | 3                    |
+| BGEU        | 3                    |
+| BEQZ        | 3                    |
+| BNEZ        | 3                    |
+| LD          | 2                    |
+| SD          | 2                    |
+| LDSP        | 2                    |
+| SDSP        | 2                    |
+| LW          | 3                    |
+| LH          | 3                    |
+| LB          | 3                    |
+| LWU         | 3                    |
+| LHU         | 3                    |
+| LBU         | 3                    |
+| SW          | 3                    |
+| SH          | 3                    |
+| SB          | 3                    |
+| LWSP        | 3                    |
+| SWSP        | 3                    |
+| MUL         | 5                    |
+| MULW        | 5                    |
+| MULH        | 5                    |
+| MULHU       | 5                    |
+| MULHSU      | 5                    |
+| DIV         | 32                   |
+| DIVW        | 32                   |
+| DIVU        | 32                   |
+| DIVUW       | 32                   |
+| REM         | 32                   |
+| REMW        | 32                   |
+| REMU        | 32                   |
+| REMUW       | 32                   |
+| ECALL       | 500 (see note below) |
+| EBREAK      | 500 (see note below) |
+
+**Syscall Cycles**
+
+As shown in the above chart, each syscall will have 500 initial cycle consumptions. This is based on real performance metrics gathered benchmarking CKB implementation, certain bookkeeping logics are required for each syscall here.
+
+In addition, for each byte loaded into CKB-VM in the syscalls, 0.25 cycles will be charged. Notice fractions will also be rounded up here, so 30.25 cycles will become 31 cycles.
+
+## VM 1
+
+Introduced since [1st Hard Fork – CKB Edition Mirana (2021)](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021)
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0033-ckb-vm-version-1/0033-ckb-vm-version-1.md#1-fixed-several-bugs)
+
+### Instruction Set
+
+1. Added the RISC-V B extension (v1.0.0) [1](https://github.com/riscv/riscv-bitmanip). This extension aims at covering the four major categories of bit manipulation: counting, extracting, inserting and swapping.
+2. 10 [MOPs](https://en.wikichip.org/wiki/macro-operation_fusion) added:
+
+| Opcode                                                      | Origin                       |
+| ----------------------------------------------------------- | ---------------------------- |
+| ADC [2](https://github.com/nervosnetwork/ckb-vm/issues/169) | add + sltu + add + sltu + or |
+| SBB                                                         | sub + sltu + sub + sltu + or |
+| WIDE_MUL                                                    | mulh + mul                   |
+| WIDE_MULU                                                   | mulhu + mul                  |
+| WIDE_MULSU                                                  | mulhsu + mul                 |
+| WIDE_DIV                                                    | div + rem                    |
+| WIDE_DIVU                                                   | divu + remu                  |
+| FAR_JUMP_REL                                                | auipc + jalr                 |
+| FAR_JUMP_ABS                                                | lui + jalr                   |
+| LD_SIGN_EXTENDED_32_CONSTANT                                | lui + addiw                  |
+
+### Syscalls
+
+No new added syscalls.
+
+### Cost Model
+
+- For all B instructions, 1 cycle will be consumed.
+- 10 [MOPs](https://en.wikichip.org/wiki/macro-operation_fusion) cycle cost:
+
+| Opcode                                                      | Origin                       | Cycles            |
+| ----------------------------------------------------------- | ---------------------------- | ----------------- |
+| ADC [2](https://github.com/nervosnetwork/ckb-vm/issues/169) | add + sltu + add + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| SBB                                                         | sub + sltu + sub + sltu + or | 1 + 0 + 0 + 0 + 0 |
+| WIDE_MUL                                                    | mulh + mul                   | 5 + 0             |
+| WIDE_MULU                                                   | mulhu + mul                  | 5 + 0             |
+| WIDE_MULSU                                                  | mulhsu + mul                 | 5 + 0             |
+| WIDE_DIV                                                    | div + rem                    | 32 + 0            |
+| WIDE_DIVU                                                   | divu + remu                  | 32 + 0            |
+| FAR_JUMP_REL                                                | auipc + jalr                 | 0 + 3             |
+| FAR_JUMP_ABS                                                | lui + jalr                   | 0 + 3             |
+| LD_SIGN_EXTENDED_32_CONSTANT                                | lui + addiw                  | 1 + 0             |
+
+## VM 2
+
+Introduced since [2nd Hard Fork – CKB Edition Meepo (2024)](/docs/history-and-hard-forks/ckb-hard-fork-history#2nd-hard-fork--ckb-edition-meepo-2024)
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0049-ckb-vm-version-2/0049-ckb-vm-version-2.md)
+
+### Instruction Set
+
+5 [MOPs](https://en.wikichip.org/wiki/macro-operation_fusion) added:
+
+| Opcode | Origin           | Description                                                        |
+| ------ | ---------------- | ------------------------------------------------------------------ |
+| ADCS   | add + sltu       | Overflowing addition                                               |
+| SBBS   | sub + sltu       | Borrowing subtraction                                              |
+| ADD3A  | add + sltu + add | Overflowing addition and add the overflow flag to the third number |
+| ADD3B  | add + sltu + add | Similar to ADD3A but the registers order is different              |
+| ADD3C  | add + sltu + add | Similar to ADD3A but the registers order is different              |
+
+### Syscalls
+
+Added 8 spawn-related syscalls and one block-related syscall:
+
+- [Spawn](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#spawn)
+- [Pipe](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#pipe)
+- [Inherited File Descriptors](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#inherited-file-descriptors)
+- [Read](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#read)
+- [Write](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#write)
+- [Close](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#close)
+- [Wait](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#wait)
+- [Process ID](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#process-id)
+- [Load Block Extension](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#load-block-extension)
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/tree/master/rfcs/0050-vm-syscalls-3)
+
+### Cost Model
+
+- 5 [MOPs](https://en.wikichip.org/wiki/macro-operation_fusion) cycle cost:
+
+| Opcode | Origin           | Cycles    |
+| ------ | ---------------- | --------- |
+| ADCS   | add + sltu       | 1 + 0     |
+| SBBS   | sub + sltu       | 1 + 0     |
+| ADD3A  | add + sltu + add | 1 + 0 + 0 |
+| ADD3B  | add + sltu + add | 1 + 0 + 0 |
+| ADD3C  | add + sltu + add | 1 + 0 + 0 |
+
+- Spawn syscall cycles:
+
+| Syscall Name         | Cycles Charge                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| spawn                | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES + SPAWN_EXTRA_CYCLES_BASE |
+| pipe                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| inherited_fd         | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| read                 | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES                           |
+| write                | 500 + SPAWN_YIELD_CYCLES_BASE + BYTES_TRANSFERRED_CYCLES                           |
+| close                | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| wait                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
+| process_id           | 500                                                                                |
+| load block extension | 500 + BYTES_TRANSFERRED_CYCLES                                                     |
