@@ -38,9 +38,9 @@ Cell owners can trade off between the determination and VM performance boost whe
 Several solutions were discussed for VM version selection, but the current approach balances flexibility and determinism. Here are some of the alternatives and their drawbacks:
 
 - **Always use the latest VM version**: While straightforward, this approach would remove user control over version selections, making transaction executions non-deterministic as it will depend on the chain state.
-- **Depend on the Script code Cell epoch**: This approach would use the old VM version for code Cells deployed before the fork and the new one for later deployments. However, anyone could redeploy the Cell and force transactions to use a different VM version using a new code Cell, which reduces determinism. 
+- **Depend on the Script code Cell epoch**: This approach would use the old VM version for code Cells deployed before the fork and the new one for later deployments. However, anyone could redeploy the Cell and force transactions to use a different VM version using a new code Cell, which reduces determinism.
 
 ## Backward compatibility
 
-For Scripts referencing code via `data hash`, the VM version remains consistent before and after a hard fork. In contrast, Scripts referencing code via `type hash` will use different VM versions. 
-DApps developers must ensure the compatibility of their Scripts and upgrade them if necessary. By carefully selecting the appropriate `hash_type` and understanding its implications, developers can build robust dApps on CKB while leveraging the flexibility of VM version management. 
+For Scripts referencing code via `data hash`, the VM version remains consistent before and after a hard fork. In contrast, Scripts referencing code via `type hash` will use different VM versions.
+DApps developers must ensure the compatibility of their Scripts and upgrade them if necessary. By carefully selecting the appropriate `hash_type` and understanding its implications, developers can build robust dApps on CKB while leveraging the flexibility of VM version management.
