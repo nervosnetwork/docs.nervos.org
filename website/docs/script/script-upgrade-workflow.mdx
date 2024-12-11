@@ -1,0 +1,68 @@
+---
+id: script-upgrade-workflow
+title: "Script Upgrades Workflow"
+---
+
+# Recommended Workflow for Script Upgrades
+
+> This article is based on ideas presented in [this talk](https://blog.cryptape.com/reaching-design-consensus-on-ckb-script-execution-model) by Xuejie Xiao
+
+We have introduced the [`Type ID` upgradable code mechanism](/doc/script/type-id) that enables us to build a Cell with a unique Type Script across all CKB live Cells while maintaining the possibility to make changes to this Cell.
+
+This article discusses the recommended flow for using Type ID Cells, aligning with the original principles of on-chain Script upgrades.
+
+## Workflow: Type ID + Lock Script
+
+![/img/script-upgrade-workflow/typeid-with-different-lock.jpeg](/img/script-upgrade-workflow/typeid-with-different-lock.jpeg)
+
+The key observation is Lock Scripts can be changed in a Type ID Cell. This flexibility means that you don’t always have to use the same Lock Script. When upgrading a Type ID Cell, you can change the lock to leverage its flexibility.
+
+The recommended workflow aligns well with the typical upgrade process outlined below:
+
+1. **Initial Deployment**
+
+When a piece of code is deployed for the first time, it’s unclear if it is free of bugs or more features will be requested with further interaction with the Script. At this stage, deploying the code with Type ID is preferable, which allows for future upgrades. A multi-sig lock can be used at this point.
+
+2. **Iterative** **Upgrade**
+
+As development goes, the deployed code may undergo several upgrades using the “Type ID” design, addressing bug fixes and new features.
+
+3. **Final Code Freezing**
+
+Eventually we might reach a state where freezing the code is desirable, due to reasons like:
+
+- Quirks in the deployed code have been sufficiently understood with enough confidence gained in the code stability
+- A significant amount of assets are controlled by the code, bringing high risk if the code is changeable.
+
+At this stage, one can perform a final upgrade on the Cell by simply altering the Lock Script to “unlockable”—to freeze the code. This way, even though the Type ID setup is still present, the Cell can no longer be modified. Put differently, **Type ID alone does not necessarily mean that the stored code is mutable—the Lock Script also plays a role here**.
+
+This recommend workflow distinguishes between two issues:
+
+- **For Script developer**: A Script developer can choose to deploy a piece of code in an upgradable Cell using the "Type ID" Script.
+- **For dApp developer**: However, it is entirely up to the actual dApp developer to decide if they want to reference the deployed code using the "Type ID" way.
+
+These two are completely independent for each role, offering flexibility in how upgrades and references are managed within the system.
+
+## An Example
+
+Assume someone deployed UDT (User-Defined Token) code with Type ID setup on-chain. Suppose two tokens are issued using this UDT code, where:
+
+- **UDT A** uses a Type Script with "type" as its `hash_type`.
+- **UDT B** uses a Type Script with "data2" (a data variant) as its `hash_type`.
+
+If the UDT developer chooses to upgrade the UDT code from Version 1 to Version 2, then:
+
+- **UDT A** will immediately pick up the new Version 2
+- **UDT B** continues with Version 1, ignoring the fact that the UDT developer ships a new version of the code.
+
+![/img/script-upgrade-workflow/typeid-can-be-ignored.jpeg](/img/script-upgrade-workflow/typeid-can-be-ignored.jpeg)
+
+One might say that Version 1 is no longer present in a live Cell, but that does not mean Version 1 is unusable. There are several options here: one can find the original Version 1 of the UDT code by tracking CKB chain history, then redeploy the Version 1 code in a new Cell, and use it in later operations.
+
+![/img/script-upgrade-workflow/redeploy-lost-cells.jpeg](/img/script-upgrade-workflow/redeploy-lost-cells.jpeg)
+
+A fully developed ecosystem might also have a lending system aiding these requirements. And there is another interesting possibility: while right now a Script can only locate code within a dep Cell, historically there has been discussion that a CKB transaction should be able to keep temporary code in one of the witness structures. If there's enough interest, CKB might be able to bring this feature back.
+
+## Conclusion
+
+This article introduced the original design workflow for implementing an upgradable Script using Type ID. By leveraging Lock Scripts strategically, developers can establish a structured and iterative approach to building decentralized Scripts on CKB, ensuring both flexibility and security.
