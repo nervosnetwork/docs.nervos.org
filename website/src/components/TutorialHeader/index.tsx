@@ -36,11 +36,11 @@ const DAPP_HEADER: JSX.Element[] = [
   <div key="ccc">
     JavaScript SDK:{" "}
     <Link
-      to="/docs/getting-started/installation-guide#2-ccc-v010-alpha4"
+      to="/docs/getting-started/installation-guide#2-ccc-v0014-alpha0"
       target="_blank"
       rel="noopener noreferrer"
     >
-      CCC (≥v0.1.0-alpha.4)
+      CCC (≥v0.0.14-alpha.0)
     </Link>
   </div>,
 ];
