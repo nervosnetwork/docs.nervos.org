@@ -57,13 +57,14 @@ If the UDT developer upgrades the UDT code from Version 1 to Version 2, then:
 
 ![/img/script-upgrade-workflow/typeid-can-be-ignored.jpeg](/img/script-upgrade-workflow/typeid-can-be-ignored.jpeg)
 
-One might say that Version 1 is no longer present in a Live Cell, but that does not mean Version 1 is unusable. There are several options for retaining access to Version 1: 
+One might say that Version 1 is no longer present in a Live Cell, but that does not mean Version 1 is unusable. There are several options for retaining access to Version 1:
+
 - By tracking the CKB chain history, one can locate the original Version 1 of the UDT code, redeploy it in a new Cell, and use it for subsequent operations.
 
 ![/img/script-upgrade-workflow/redeploy-lost-cells.jpeg](/img/script-upgrade-workflow/redeploy-lost-cells.jpeg)
 
-- A fully developed ecosystem might also have a lending system aiding these requirements. 
-Additionally, there is an interesting possibility to consider: While a Script currently locates code within a dep Cell, there has been historical discussion around allowing a CKB transaction to temporarily store code within the `witness` structures. If there is enough interest in this idea, CKB could potentially reintroduce this feature in the future.
+- A fully developed ecosystem might also have a lending system aiding these requirements.
+  Additionally, there is an interesting possibility to consider: While a Script currently locates code within a dep Cell, there has been historical discussion around allowing a CKB transaction to temporarily store code within the `witness` structures. If there is enough interest in this idea, CKB could potentially reintroduce this feature in the future.
 
 ## Conclusion
 
