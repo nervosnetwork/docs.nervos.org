@@ -56,6 +56,7 @@ export default {
         "script/type-id",
         "script/spawn-cross-script-calling",
         "script/debug-script",
+        "script/script-upgrade-workflow",
         "script/common-script-error-code",
         "script/minimal-script",
         "script/sudt-script",
