@@ -98,6 +98,7 @@ export default {
         "node/run-testnet-node",
         "node/run-devnet-node",
         "node/run-public-rpc-node",
+        "node/turn-on-fee-estimator",
       ],
     },
     {
@@ -146,6 +147,7 @@ export default {
       className: "category-tech-explanation",
       collapsible: false,
       items: [
+        "tech-explanation/fee-estimator",
         "tech-explanation/nervos-blockchain",
         "tech-explanation/cell",
         "tech-explanation/cell-model",
