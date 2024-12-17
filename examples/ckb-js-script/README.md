@@ -12,8 +12,8 @@ In this project, we show different ways to integrate CKB-js-vm into your smart c
 called spawn, where you can call CKB-js-vm from your script use `ckb_spawn` systcall and one is to
 use Script structure to load and execute your JavaScript script in a live cell.
 
-There is also a full tutorial covering all the details for yout to run JavaScript smart contracts
-on CKB in the official docs webesite: [docs.nervos.org](https://docs.nervos.org).
+There is also a full tutorial covering all the details for you to run JavaScript smart contracts
+on CKB in the official docs website: [docs.nervos.org](https://docs.nervos.org).
 
 *This project was bootstrapped with [ckb-script-templates].*
 

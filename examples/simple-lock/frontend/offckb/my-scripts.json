@@ -1,5 +1,126 @@
 {
-  "devnet": {},
+  "devnet": {
+    "ckb-js-vm": {
+      "codeHash": "0x0f5af28d9b049d341397991fd53d6e1bf4d9819dddc6a93fd0e13328dde9d573",
+      "hashType": "data1",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x01a0b6c271bd9fca29d6312037c31343707c69e0f39a5bf95ed75db38d9c5c54",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "fib.bc": {
+      "codeHash": "0x3ec9f6344eedbfaabeabb7c7d4c9ca6f30a8bbc1a97b7dfe2bdd761a01199ec4",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xcc8d2cd2cb51c0f89d91280f0dcc009e5fb30814192852c37200282c021e6cea",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "hash-lock": {
+      "codeHash": "0xe72cbf476f4301fc4c7b79a5072069a2ba4d826755318288025cb1cf8fa19db9",
+      "hashType": "data1",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x53b920085b0727fb0524903b91cec924d11b43c862838559ee2b98fdd534ed27",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "hello.bc": {
+      "codeHash": "0xee651f5f8a34182329fb84edb5ba1b4f9216e306bd6505d674e31b6bc90fdbc6",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xcc7a322a520a27a150f97bc570c09e8dba7082f957215e026517500df80bb370",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "nostr-binding": {
+      "codeHash": "0x2e393f3d1ea99d5dbc339fcf09118cab747adb81c41c7d4a49938b3633a4b623",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x54cba84233f57aa841386997dc8c67987d80736b2506b2cac7c89b876ccb1788",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "nostr-lock": {
+      "codeHash": "0x35880e57ca540cf954489e997efe50311ec16d65cae74316292459a5a0f2110c",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xdda674cebb6cdaae8a9fcba7beb534f7beae5ece6c906a92a7379b3670e9acbe",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "run-js": {
+      "codeHash": "0x1da2844ec7aaf9cf093b8057abd9365620418ef657702619ecbad94de8561d91",
+      "hashType": "data1",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0x77597fdf0087e09cf20227e21869a79eda582493476732016b41d2f0af7d84be",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "sudt.bc": {
+      "codeHash": "0x8ce2540966078e998bde2ea96bad036346a996b3dbae92f4b519a57e938663e4",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xc75788a5e0570fe5f4d839a0728eb2e031d75aab73dd7f325268520f4f8c40fa",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    }
+  },
   "testnet": {},
   "mainnet": {}
 }

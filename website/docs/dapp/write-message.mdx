@@ -7,21 +7,16 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
-import { WRITEOVERVIEW } from "./TutorialOverview.tsx";
 import SetupProject from "./SetupProject.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 
 # Store Data on Cell
 
-<TutorialHeader
-  time={WRITEOVERVIEW.time}
-  topics={WRITEOVERVIEW.topics}
-  tools={WRITEOVERVIEW.tools}
-/>
+<TutorialHeader time={"2 - 5 min"} tools={"dapp"} />
 
-## Store & Retrieve Cell Data
+## Tutorial Overview
 
-In this tutorial, you'll learn how to tuck a nifty message - "**Hello CKB!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
+In this tutorial, you will learn how to tuck a nifty message - "**Hello CKB!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
 As you have learned from the first tutorial [Transfer CKB](/docs/dapp/transfer-ckb), the Cell can store any type of data in the data field of Cell structure. Here we will put a text message encoding in hex string format and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll then get the hex string from the same Cell back and then decode them to the original text message. the method of encoding and decoding is totally up to your favorite, we use the `TextDecoder` for simplicity through the tutorial.
 

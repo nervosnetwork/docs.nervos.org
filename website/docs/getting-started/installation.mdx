@@ -1,0 +1,370 @@
+---
+id: installation-guide
+title: Installation Guide
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Installation Guide
+
+This installation guide provides a step-by-step setup of all essential tools needed for completing every tutorial across the documentation.
+
+## CKB Basic Development
+
+This section covers the essential tools you need to develop CKB applications, including setting up the local development environment and JavaScript SDK.
+
+### 1. OffCKB (≥v0.3.0)
+
+OffCKB sets up a local CKB Devnet, allowing you to test dApps without connecting to the main network. We recommend using **≥v0.3.0**.
+
+```bash
+npm install -g @offckb/cli
+```
+
+### 2. CCC (≥v0.0.14-alpha.0)
+
+CCC is the JavaScript SDK used for interacting with CKB, helping you build transactions and interact with the blockchain.
+This website's documentation assumes a minimum version of **≥v0.0.14-alpha.0**.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="nodejs" label="NodeJS" >
+```
+
+```bash
+npm install @ckb-ccc/core
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="customui" label="Custom UI">
+```
+
+```bash
+npm install @ckb-ccc/ccc
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="web-component" label="Web Component">
+```
+
+```bash
+npm install @ckb-ccc/connector
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="react" label="React">
+```
+
+```bash
+npm install @ckb-ccc/connector-react
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+## Script Development-Specific Tools
+
+This section covers additional tools needed for Script development on CKB, focusing on compiling and cross-compiling setups.
+
+### 1. Make, Sed, Bash, sha256sum
+
+These tools are often pre-installed on Unix-based systems but can be installed manually if needed. We recommend using Make (≥v4.3), Sed (≥v4.7), Bash (≥v5.0), and sha256sum (≥v9.0)
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="install-unix-mac" label="MacOS">
+```
+
+First, install Homebrew if you haven't already:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then, install:
+
+```bash
+brew install make gnu-sed bash coreutils
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-unix-linux" label="Linux">
+```
+
+```bash
+sudo apt install make sed bash coreutils  # Debian/Ubuntu
+sudo dnf install make sed bash coreutils  # Fedora
+sudo pacman -S make sed bash coreutils    # ArchLinux
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-unix-windows" label="Windows">
+```
+
+Install using [WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/)
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+### 2. Rust (≥v1.71.1) and riscv64 Target
+
+Ensure Rust is set up with the riscv64imac-unknown-none-elf target:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="install-rust-mac" label="MacOS">
+```
+
+First, install Homebrew if you haven't already:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then, install Rust:
+
+```bash
+brew install rustup
+```
+
+We recommend using **≥v1.71.1**. You will need to add the `riscv64` target:
+
+```bash
+rustup target add riscv64imac-unknown-none-elf
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-unix-linux" label="Linux">
+```
+
+First, install Rust using the Rust installer:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+We recommend using **≥v1.71.1**. You will need to add the `riscv64` target:
+
+```bash
+rustup target add riscv64imac-unknown-none-elf
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-rust-windows" label="Windows">
+```
+
+First, open your terminal and run the following command to enable script execution and install Scoop:
+
+```bash
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+iwr -useb get.scoop.sh | iex
+```
+
+After installing Scoop, you can install Rust:
+
+```bash
+scoop install rust
+```
+
+We recommend using **≥v1.71.1**. You will need to add the `riscv64` target:
+
+```bash
+rustup target add riscv64imac-unknown-none-elf
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+### 3. Clang (≥v18)
+
+Clang is a compiler essential for building and running CKB Scripts. You must install **≥v18** to ensure compatibility with the latest tools and libraries.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="install-clang-mac" label="MacOS">
+```
+
+First, install Homebrew if you haven't already:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then, install Clang (≥v18):
+
+```bash
+brew install llvm@18
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-clang-linux" label="Linux">
+```
+
+```bash
+wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && sudo ./llvm.sh 18 && rm llvm.sh  # Debian/Ubuntu
+sudo dnf -y install clang  # Fedora
+sudo pacman --noconfirm -Syu clang  # ArchLinux
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-clang-windows" label="Windows">
+```
+
+First, open your terminal and run the following command to enable script execution and install Scoop
+
+```bash
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+iwr -useb get.scoop.sh | iex
+```
+
+After installing Scoop, you can install Clang (≥v18):
+
+```bash
+scoop install llvm yasm
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+### 4. Cargo-generate (≥0.17.0)
+
+Cargo-generate creates new Rust projects from pre-defined templates, helping set up project structure quickly and consistently. We recommend using **≥0.17.0**.
+
+```bash
+cargo install cargo-generate
+```
+
+### 5. CKB-Debugger (≥0.113.0)
+
+CKB-Debugger is a CLI tool that enables off-chain Script development and testing. We recommend using **≥0.113.0**.
+
+```bash
+cargo install --git https://github.com/nervosnetwork/ckb-standalone-debugger ckb-debugger
+```
+
+### 6. ckb-js-vm
+
+Built from the lightweight QuickJS engine, `ckb-js-vm` enables you to write and execute Scripts within the CKB-VM environment.
+
+```bash
+git clone https://github.com/nervosnetwork/ckb-js-vm
+cd ckb-js-vm
+git submodule update --init
+make all
+```
+
+## Other Tools
+
+This section lists additional tools commonly used in development environments. You may already have these installed, but just in case you still need them, here are installation instructions for each operating system.
+
+### 1. npm (Node.js v20.18.0 LTS)
+
+npm is a package manager included with Node.js, which helps to manage dependencies. We recommend using the **v20.18.0 LTS** version.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="install-npm-mac" label="MacOS">
+```
+
+First, install Homebrew if you haven't already:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then, install Node.js
+
+```bash
+brew install node@20.18.0
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-npm-linux" label="Linux">
+```
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-npm-windows" label="Windows">
+```
+
+[Download Node.js v20.18.0 LTS](https://nodejs.org/en)
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+### 2. Yarn (≥1.22.0)
+
+Yarn is a package manager for JavaScript projects. We recommend using **≥v1.22.0**.
+After installing npm, you can run the following command on any operating system to install Yarn:
+
+```bash
+npm install --global yarn
+```
+
+### 3. Git (≥2.40.0)
+
+Git is a version control system for managing and tracking code changes. We recommend using **≥v2.40.0**.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="install-git-mac" label="MacOS">
+```
+
+First, install Homebrew if you haven't already:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then, install Git:
+
+```bash
+brew install git
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-git-linux" label="Linux">
+```
+
+```bash
+sudo apt install git
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="install-git-windows" label="Windows">
+```
+
+[Download Git for Windows](https://git-scm.com/downloads/win)
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```

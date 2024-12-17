@@ -9,6 +9,7 @@ import {
   WalletDisplay,
   ToolDisplay,
   DevLogSection,
+  HistorySection,
   ProjectDisplay,
   FooterSection,
   CTASection,
@@ -72,9 +73,12 @@ export default function Home() {
         )}
       >
         <div className={clsx(styles.header2, styles.titleBtm)}>
-          Unveil <span className={styles.textHighlight}>Latest Update</span>
+          Unveil{" "}
+          <span className={styles.textHighlight}>Updates and Evolution</span>
         </div>
         <DevLogSection />
+        <div className={styles.titleBtm}></div>
+        <HistorySection />
       </div>
       <div className={styles.sectionContainer}>
         <div className={styles.header2}>Ready to Dive In?</div>

@@ -6,7 +6,6 @@ title: Build a Simple Lock
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
-import { LOCKOVERVIEW } from "./TutorialOverview.tsx";
 import SwitchToTestnet from "./_SwitchToTestnet.mdx";
 import StartDevnet from "./_StartDevnet.mdx";
 import useBaseUrl from "@docusaurus/useBaseUrl";
@@ -16,20 +15,18 @@ import CodeTabs from "./_CodeTabs.mdx";
 
 # Build a Simple Lock
 
-<TutorialHeader
-  time={LOCKOVERVIEW.time}
-  topics={LOCKOVERVIEW.topics}
-  tools={LOCKOVERVIEW.tools}
-/>
+<TutorialHeader time={"10 - 15 min"} tools={"script"} />
 
-In this tutorial, we'll show you how to create a full-stack dApp, including both the frontend and the Script, to help you better understand CKB blockchain development.
+## Tutorial Overview
 
-Our example dApp will use a simple toy lock. We'll create a <Tooltip>Lock Script</Tooltip> named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
+In this tutorial, you will learn how to create a full-stack dApp, including both the frontend and the Script, to deepen your understanding of CKB blockchain development.
 
-The `hash_lock` project involves specifying a hash in the Script's <Tooltip>script_args</Tooltip>. To unlock it, users must provide the preimage that matches the hash.
+Our example dApp will use a simple toy lock. You will create a <Tooltip>Lock Script</Tooltip> named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
+
+The `hash_lock` project involves specifying a hash in the Script's <Tooltip>script_args</Tooltip>. To unlock it, users must provide the preimage that matches this hash.
 
 :::note
-This toy lock example isn't intended for production, You should ONLY use it in Testnet as an starting point for learning the basics.
+This toy lock example isn't intended for production. Use it ONLY n Testnet as an starting point for learning the basics.
 :::
 
 ## Setup Devnet & Run Example

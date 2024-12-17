@@ -13,7 +13,7 @@ In addition to the rules defined by the CKB protocol, verification based on the 
 Script: {
   code_hash: HexString
   args: HexString
-  hash_type: Uint8, there are 4 allowed values: {0: "data", 1: "type", 2: "data1", 3: "data2"}
+  hash_type: Uint8, there are 4 allowed values: {0: "data", 1: "type", 2: "data1", 4: "data2"}
 }
 ```
 

@@ -5,17 +5,27 @@ title: "Tutorial: Simple UDT"
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
-import ScriptHeaders from "./ScriptHeaders.tsx";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import ScriptTools from "./_ScriptTools.mdx";
+import Link from "@docusaurus/Link";
 
 # Tutorial: Simple UDT Script
 
 <TutorialHeader
-  time={ScriptHeaders.sudt.time}
-  topics={ScriptHeaders.sudt.topics}
-  tools={ScriptHeaders.sudt.tools}
+  time={"5 - 7 min"}
+  tools={"script"}
+  customTools={[
+    <div key="offckb">
+      <Link
+        to="docs/sdk-and-devtool/offckb"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        offckb {">= 0.3.2"}
+      </Link>
+    </div>,
+  ]}
 />
 
 User-Defined Token (UDT) is a fungible token standard on CKB blockchain.

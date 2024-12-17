@@ -5,19 +5,34 @@ title: "Debug Script"
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
-import ScriptHeaders from "./ScriptHeaders.tsx";
+import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./_ScriptTools.mdx";
 
 # Debug Script
 
-## CKB-Debugger
+<TutorialHeader
+  time={"5 - 10 min"}
+  customTools={[
+    <div key="debugger">
+      <Link
+        to="/docs/getting-started/installation-guide#5-ckb-debugger-01170"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CKB-Debugger (≥0.117.0)
+      </Link>
+    </div>,
+  ]}
+/>
+
+## Debug With CKB-Debugger
 
 Debugging Scripts on the Nervos CKB can be challenging without the right tools. We recommend using the [CKB-Debugger](https://github.com/nervosnetwork/ckb-standalone-debugger), a powerful standalone command-line tool designed for off-chain Script development. With CKB-Debugger, you can efficiently identify and resolve issues in your Scripts, ensuring smooth execution and optimal performance.
 
-## Install
+### Install
 
-Install CKB-Debugger using [cargo](https://doc.rust-lang.org/cargo):
+Install CKB-Debugger using [cargo](https://doc.rust-lang.org/cargo). We recommend using **≥v0.113.0**.
 
 ```bash
 cargo install --git https://github.com/nervosnetwork/ckb-standalone-debugger ckb-debugger
@@ -29,7 +44,7 @@ On **MacOS**, the `protoc` binary must be available to compile `ckb-vm-pprof-con
 brew install protobuf
 ```
 
-## Usage
+### Usage
 
 ```bash
 ckb-debugger 0.113.0
@@ -70,7 +85,7 @@ ARGS:
     <args>...
 ```
 
-## Examples
+### Examples
 
 ### 1. Execute Transactions Locally
 
@@ -166,7 +181,95 @@ $ (gdb) c
 
 At the Breakpoint 1, we see that `fib (n=5)` at `fib.c:2`.
 
-#### 4. Profiling Data with Flamegraph Visualization Tool
+### 4. Debug Script with GDB in VSCode
+
+Script debugging can be done in an IDE using `ckb-debugger`, which supports a `gdbserver` mode enabled with `--mode=gdb`. VSCode allows debugging via debugger extensions. Below, we explain how to use [NativeDebug](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) and [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) for CKB Script debugging.
+
+For testing, refer to [this project](https://github.com/joii2020/ckb-llvm-examples).
+
+This guide uses Rust for demonstration. Similar principles apply to other languages as well.
+
+#### Preparation
+
+- `ckb-debugger` supports older versions of GDB. For LLDB, version 18 or higher is required (older versions lack robust RISC-V support).
+- For CodeLLDB, ensure the version is at least `v1.11`.
+- For LLDB, use `ckb-debugger` version `0.118` or above.
+
+:::note
+
+Compilation may involve some LLVM commands. Just ensure the LLVM version is not too old.
+
+:::
+
+#### Compilation
+
+:::note
+If your project was created using `ckb-script-templates`, the following steps are likely already done. You can skip this section.
+:::
+
+Due to CKB's memory constraints, by default, Scripts are compiled in Release mode without debug information. To enable debugging, update your `Cargo.toml` file with these settings for the release build:
+
+```toml
+[profile.release]
+overflow-checks = true
+strip = false
+codegen-units = 1
+debug = true
+```
+
+After compilation, use the following commands to prepare the Scripts for deployment and debugging:
+
+```shell
+cp <script_file> <script_file>.debug
+llvm-objcopy --strip-debug --strip-all <script_file>
+```
+
+This produces two files:
+
+- `<script_file>`: The actual Script for testing and release.
+- `<script_file>.debug`: A debug version with symbols. It is for debugging only due to the large size impossible to be executed as a Script.
+
+#### VSCode Configuration
+
+VSCode tasks are configured in `tasks.json`. Here you have two tasks: one to start `ckb-debugger`, the other to stop it.
+
+```json
+{
+    "label": "StartDbg-Rust",
+    "isBackground": true,
+    "type": "process",
+    "command": "ckb-debugger",
+    "args": [
+        "--bin=rust/build/release/ckb-c1.debug",
+        "--mode=gdb",
+        "--gdb-listen=127.0.0.1:8000"
+    ],
+    "options": {
+        "cwd": "${workspaceRoot}"
+    },
+},
+{
+    "label": "StopCkbDebugger",
+    "type": "shell",
+    "command": "killall ckb-debugger || true"
+}
+```
+
+Explanation of the fields:
+
+- `label` : Customizable task name
+- `StartDbg-Rust`: Background-enabled task (`isBackground` set to true)
+- `--bin` : Path to the Script file
+- `—gdb-listen` : Listening address and port (e.g., `8000` in this example, but it can be different).
+- `StopCkbDebugger`: Stops the `ckb-debugger` after a debug session. This is needed because `ckb-debugger` doesn’t exit automatically after debugging, but waits for the next execution instead.
+
+:::note
+
+If multiple Scripts are debugged simultaneously, stopping one session may terminate others.
+
+:::
+
+### 5. Profiling Data with Flamegraph Visualization Tool
 
 Use `ckb-debugger` to profile data for flamegraph visualization:
 
@@ -189,6 +292,164 @@ $ cat fib.pprof | inferno-flamegraph > fib.svg
 Open the resulting SVG file to view the flamegraph:
 
 ![img](/img/debug-script/ckb-debugger-flamegraph.jpg)
+
+## Debug With Native Simulator
+
+CKB Scripts follow the RISC-V specification and include APIs related to [VM syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md), making them incompatible to execute on common devices. Previously, many projects addressed this limitation by isolating the code unrelated to VM syscalls into separate libraries for development and testing. Some even implemented a rudimentary version of VM syscalls.
+
+Native Simulator addresses this issue, allowing for compilation and debugging on the native platform, as well as contract-related APIs simulation. For the code unrelated to VM syscalls and thus not executable on RISC-V, it can be compiled into a native executable for the host platform and debugged, while the VM syscalls part is managed by the [ckb-x64-simulator](https://github.com/nervosnetwork/ckb-x64-simulator), which simulates the required APIs. With both parts are covered, you can proceed with project management and testing. These functionalities have been integrated into `ckb-script-templates` and `ckb-testtool`.
+
+Below, we explain how to incorporate the Native Simulator into existing projects via `ckb-script-templates` or manually.
+
+### Preparation
+
+- The `ckb-std` version must be at least 0.16.3 (While the support was introduced since v0.16.1, but the features were not fully developed.).
+- Testing with `ckb-testtool` is recommended to save effort. For new projects, consider using `ckb-script-templates` for project management. For project already under development, evaluate the situation and decide on a case-by-case basis.
+
+### Create with ckb-script-templates
+
+For projects created with the latest version of `ckb-script-templates`, initialize Native Simulator with the following command:
+
+```shell
+make generate-native-simulator CRATE=<Existing Script>
+```
+
+where `CRATE` must be an existing Script.
+
+Once created, run `make build` to compile. If custom code causes errors, use `#[cfg(feature = "native-simulator")]` to handle them.
+
+### Create Manually
+
+If `ckb-script-templates` is unavailable, manually integrate the Native Simulator as follows:
+
+#### Step 1. Set Up the Project
+
+a. Add a [`lib.rs`](http://lib.rs) file in the Scrip's `src` directory with the following content:
+
+```rust
+#![cfg_attr(not(feature = "native-simulator"), no_std)]
+#![allow(special_module_name)]
+#![allow(unused_attributes)]
+#[cfg(feature = "native-simulator")]
+mod main;
+#[cfg(feature = "native-simulator")]
+pub use main::program_entry;
+```
+
+b. Add a `native-simulator` feature in the `Cargo.toml`:
+
+```toml
+native-simulator = ["ckb-std/native-simulator"]
+```
+
+c. Update [`main.rs`](http://main.rs) to conditionally enable `no_std`, `no_main`, `ckb_std::entry!`, `(program_entry)`, and `ckb_std::default_alloc!()` for `native-simulator`:
+
+```rust
+#![cfg_attr(not(any(feature = "native-simulator", test)), no_std)]
+#![cfg_attr(not(test), no_main)]
+
+#[cfg(any(feature = "native-simulator", test))]
+extern crate alloc;
+
+#[cfg(not(any(feature = "native-simulator", test)))]
+ckb_std::entry!(program_entry);
+#[cfg(not(any(feature = "native-simulator", test)))]
+ckb_std::default_alloc!();
+
+pub fn program_entry() -> i8 {
+    ...
+    0
+}
+```
+
+#### Step 2. Create and Configure a Library
+
+Create a Rust lib `<contract_name>-sim` under `./native-simulator/`. There is no naming convention required here, it's just a recommended format. Add this lib to `Cargo.toml`.
+
+a. Include `ckb-std` and the Script in Step 1 as dependencies in `Cargo.toml`, with the `native-simulator` feature enabled, and ensure the lib type is `cdylib`:
+
+```toml
+[dependencies]
+contract = { path = "../../contracts/contract", features = ["native-simulator"] }
+ckb-std = { version = "0.16.3", features = ["native-simulator"] }
+[lib]
+crate-type = ["cdylib"]
+```
+
+b. Add the following code into lib.rs：
+
+```rust
+ckb_std::entry_simulator!(<contrace_name>::program_entry);
+```
+
+#### Step 3. Compile For Native Platform
+
+Compile the code for the native platform. Address compatibility issues using `#[cfg(not(any(feature = "native-simulator", test)))]`.
+
+#### Step 4. Debug and Develop
+
+Once the project is setup, use `ckb-testtool` (version 0.13.1 or higher) for testing. Refer to [this example](https://github.com/nervosnetwork/ckb-x64-simulator/blob/main/tests/tests/src/tests.rs#L19).
+
+The newly added `Context::add_contract_dir()` function allows you to set up the Script and the Native Simulator directory.
+
+To facilitate usage, add a `native-simulator` feature into the `tests`:
+
+```toml
+native-simulator = [ "ckb-testtool/native-simulator" ]
+```
+
+#### Step 5. Compile Script and Simulator Before Use
+
+When the `native-simulator` feature is enabled, the Script will use the Native Simulator. At this point, you can use IDE debugging tools to set breakpoints within the Script for debugging.
+
+### How It Works
+
+For the Script, `ckb-std` uses [ckb-x64-simulator](https://github.com/nervosnetwork/ckb-x64-simulator/tree/main) to simulate on-chain data. This simulator receives the file paths of the transaction data required via two environment variables: `CKB_TX_FILE` and `CKB_RUNNING_SETUP`, where:
+
+- `CKB_TX_FILE` contains transaction information
+- `CKB_RUNNING_SETUP` contains miscellaneous data related to the transaction
+
+One key item in `CKB_RUNNING_SETUP` is `native_binaries`. It maps the Script to its corresponding Native Simulator, primarily used in [exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) and [Spawn](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#spawn).
+
+In the `native-simulator`, `ckb-std` provides a macro: [`entry_simulator`](https://github.com/nervosnetwork/ckb-std/blob/master/src/entry.rs#L64) (similar to `entry`). This macro exports two C functions: `__ckb_std_main` and `__set_script_info`, as shown below:
+
+```toml
+unsafe extern "C" fn __ckb_std_main(
+            argc: core::ffi::c_int,
+            // Arg is the same as *const c_char ABI wise.
+            argv: *const $crate::env::Arg,
+        ) -> i8 { ... }
+unsafe extern "C" fn __set_script_info(
+            ptr: *mut core::ffi::c_void,
+            tx_ctx_id: u64,
+            proc_ctx_id: u64,
+        ) { ... }
+```
+
+where:
+
+- `__ckb_std_main`: the entry function. When executed, it dynamically loads the lib and runs this function. The transaction information of the Script is passed through the two above-mentioned environment variables.
+- `__set_script_info`: responsible for passing the global state necessary for `exec` and `spawn`.
+
+:::Attention
+
+- The separate crate `$crate::env::Arg` is used to prevent project complexity, as combining these two functions would complicate maintenance.
+- For developers wishing to use this feature, we recommend to use `ckb-testtool` for development and testing to simplify work.
+- Script and Native Simulator are bound one-to-one. If `ckb-testtool` cannot locate the corresponding Native Simulator, it will automatically execute the Script's results.
+- Native Simulator is exclusively for debugging and cannot execute in CKB-VM. Be mindful when deploying Script on-chain.
+- Native Simulator simulates Script execution, but cannot guarantee identical result to a real environment. Therefore, it should be used only for development.
+  :::
+
+## Which Method to Choose
+
+These two debugging methods have their pros and cons. We recommend choosing based on the stage of your project (new or in maintenance) and your priority (compatibility or efficiency).
+
+| Feature       | **CKB-debugger + VSCode**                                                                                                                                   | **Native Simulator**                                                                                                                                                                                                                               |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Pros**      | -High compatibility, ready for earlier projects. <br /> - No discrepancies after deployment because CKB-VM and on-chain data retrieval are shared with CKB. | - High execution efficiency. <br /> - Advanced debugging tools (e.g., memory inspection).                                                                                                                                                          |
+| **Cons**      |                                                                                                                                                             | - Subtle differences from actual script execution. <br /> - Requires a recent version `ckb-std` and some additional code.                                                                                                                          |
+| **Ideal for** | Projects in maintenance mode where minimal disruption is desired.                                                                                           | New projects or projects undergoing major modification that require extensive debugging.                                                                                                                                                           |
+| **Tips**      |                                                                                                                                                             | - Use with `ckb-script-templates` and `ckb-testtool`. <br /> - Avoid enabling Native Simulator in CI ([Continuous Integration](https://docs.github.com/en/actions/about-github-actions/about-continuous-integration-with-github-actions)) testing. |
 
 ---
 
