@@ -19,7 +19,7 @@ Nervos CKB offers native SDKs in several mainstream programming languages, such 
 
 ## CKB-VM Version
 
-The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. To check out all versions of the CKB-VM from previous hard fork events, please visit [History VM Version](/docs/history-and-hard-forks/history-vm-version)
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. To check out all versions of the CKB-VM from previous hard fork events, please visit [VM Version History](/docs/history-and-hard-forks/history-vm-version)
 
 ---
 
