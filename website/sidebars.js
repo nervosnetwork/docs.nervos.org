@@ -114,6 +114,7 @@ export default {
         "serialization/schema-language",
         "serialization/encoding-specs",
         "serialization/example-role-playing-game",
+        "serialization/ccc-molecule",
       ],
     },
     {
