@@ -1,26 +1,4 @@
-import {
-  Bytes,
-  bytesFrom,
-  BytesLike,
-  ccc,
-  HashTypeCodec,
-  mol,
-  NumLike,
-} from "@ckb-ccc/shell";
-import { Buffer } from "buffer";
-
-// basic usage
-console.log(ccc.mol.Bool.decode("0x01")); // true
-console.log(ccc.mol.Bool.encode(true).toString()); // 1
-console.log(ccc.mol.Bytes.encode(Buffer.from("hello")).toString().toString());
-
-const i = mol.table({
-  codeHash: mol.Byte32,
-  hashType: HashTypeCodec,
-  args: mol.Bytes,
-});
-i.encode({ codeHash: "0x01", hashType: "type", args: "0x01" }).toString();
-i.decode(Buffer.from("0x010101", "hex")).toString();
+import { Bytes, bytesFrom, BytesLike, mol, NumLike } from "@ckb-ccc/shell";
 
 // As an more advance example, we’ve developed a role-playing game consisting of 4 schema files:
 //
@@ -28,6 +6,7 @@ i.decode(Buffer.from("0x010101", "hex")).toString();
 // - Attributes
 // - Roles
 // - Skills
+//
 // ref: https://docs.nervos.org/docs/serialization/example-role-playing-game
 
 /* ```common/basic_types.mol
@@ -441,3 +420,28 @@ export const MonsterCodec: mol.Codec<MonsterLike, Monster> = mol.table({
   hp: mol.Uint16,
   damage: mol.Uint16,
 });
+
+
+// usage
+const hero123: Hero = {
+  class: 1,
+  level: 1,
+  experiences: 0,
+  hp: 100,
+  mp: 100,
+  baseDamage: 10,
+  attrs: {
+    strength: 10,
+    dexterity: 10,
+    endurance: 10,
+    speed: 10,
+    intelligence: 10,
+    wisdom: 10,
+    perception: 10,
+    concentration: 10,
+  },
+  skills: [1, 2, 3, 4, 5],
+};
+
+const hero123Bytes = HeroCodec.encode(hero123);
+console.log(HeroCodec.decode(hero123Bytes));
