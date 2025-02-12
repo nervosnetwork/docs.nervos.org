@@ -1,4 +1,4 @@
-import { ccc } from "@ckb-ccc/shell";
+import { ccc, Script } from "@ckb-ccc/shell";
 import { Buffer } from "buffer";
 
 // Basic Usage

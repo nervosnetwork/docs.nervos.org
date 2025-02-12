@@ -238,28 +238,28 @@ export type MercantileLike = SkillLevelLike;
 export type SurvivalLike = SkillLevelLike;
 
 export type Skill =
-  | ArmorLight
-  | ArmorHeavy
-  | ArmorShields
-  | WeaponSwords
-  | WeaponBows
-  | WeaponBlunt
-  | Dodge
-  | PickLocks
-  | Mercantile
-  | Survival;
+  | {type: "ArmorLight"; value: ArmorLight | undefined | null}
+  | {type: "ArmorHeavy"; value: ArmorHeavy | undefined | null}
+  | {type: "ArmorShields"; value: ArmorShields | undefined | null}
+  | {type: "WeaponSwords"; value: WeaponSwords | undefined | null}
+  | {type: "WeaponBows"; value: WeaponBows | undefined | null}
+  | {type: "WeaponBlunt"; value: WeaponBlunt | undefined | null}
+  | {type: "Dodge"; value: Dodge | undefined | null}
+  | {type: "PickLocks"; value: PickLocks | undefined | null}
+  | {type: "Mercantile"; value: Mercantile | undefined | null}
+  | {type: "Survival"; value: Survival | undefined | null};
 
 export type SkillLike =
-  | ArmorLightLike
-  | ArmorHeavyLike
-  | ArmorShieldsLike
-  | WeaponSwordsLike
-  | WeaponBowsLike
-  | WeaponBluntLike
-  | DodgeLike
-  | PickLocksLike
-  | MercantileLike
-  | SurvivalLike;
+| {type: "ArmorLight"; value: ArmorLightLike | undefined | null}
+| {type: "ArmorHeavy"; value: ArmorHeavyLike | undefined | null}
+| {type: "ArmorShields"; value: ArmorShieldsLike | undefined | null}
+| {type: "WeaponSwords"; value: WeaponSwordsLike | undefined | null}
+| {type: "WeaponBows"; value: WeaponBowsLike | undefined | null}
+| {type: "WeaponBlunt"; value: WeaponBluntLike | undefined | null}
+| {type: "Dodge"; value: DodgeLike | undefined | null}
+| {type: "PickLocks"; value: PickLocksLike | undefined | null}
+| {type: "Mercantile"; value: MercantileLike | undefined | null}
+| {type: "Survival"; value: SurvivalLike | undefined | null};
 
 export type Skills = Skill[];
 export type SkillsLike = SkillLike[];
@@ -305,7 +305,7 @@ export const SurvivalCodec: mol.Codec<
   Survival | undefined | null
 > = mol.option(SkillLevelCodec);
 
-export const SkillCodec = mol.union({
+export const SkillCodec: mol.Codec<SkillLike, Skill> = mol.union({
   ArmorLight: ArmorLightCodec,
   ArmorHeavy: ArmorHeavyCodec,
   ArmorShields: ArmorShieldsCodec,
@@ -318,7 +318,7 @@ export const SkillCodec = mol.union({
   Survival: SurvivalCodec,
 });
 
-export const SkillsCodec = mol.vector(SkillCodec);
+export const SkillsCodec: mol.Codec<SkillsLike, Skills> = mol.vector(SkillCodec);
 
 /* ```roles.mol
 / We have only 3 classes: Fighter, Ranger and Mage. A `byte` is enough.
@@ -403,7 +403,7 @@ export const HeroCodec: mol.Codec<HeroLike, Hero> = mol.table({
   mp: mol.Uint16,
   baseDamage: mol.Uint16,
   attrs: AttributesCodec,
-  skills: mol.vector(SkillLevelCodec),
+  skills: SkillsCodec
 });
 
 export interface Monster {
@@ -422,8 +422,8 @@ export const MonsterCodec: mol.Codec<MonsterLike, Monster> = mol.table({
 });
 
 
-// usage
-const hero123: Hero = {
+// Basic Usage
+const myHero: Hero = {
   class: 1,
   level: 1,
   experiences: 0,
@@ -440,8 +440,23 @@ const hero123: Hero = {
     perception: 10,
     concentration: 10,
   },
-  skills: [1, 2, 3, 4, 5],
+  skills: [{type: "ArmorLight", value: 1}],
 };
 
-const hero123Bytes = HeroCodec.encode(hero123);
-console.log(HeroCodec.decode(hero123Bytes));
+const myHeroBytes = HeroCodec.encode(myHero);
+console.log(HeroCodec.decode(myHeroBytes));
+
+// advance usage
+@mol.codec(MonsterCodec)
+export class Monster extends mol.Entity.Base<MonsterLike, Monster>() {
+  constructor(public monster: MonsterLike){
+    super();
+  }
+  customMethod(){
+    console.log("calling custom method");
+  }
+}
+
+const myMonster = new Monster({hp: 100, damage: 10});
+myMonster.customMethod();
+console.log(myMonster.toBytes())
