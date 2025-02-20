@@ -1,4 +1,4 @@
-import { Bytes, bytesFrom, BytesLike, mol, NumLike } from "@ckb-ccc/shell";
+import { ccc, Bytes, bytesFrom, BytesLike, mol, NumLike } from "@ckb-ccc/shell";
 
 // As an more advance example, we’ve developed a role-playing game consisting of 4 schema files:
 //
@@ -421,8 +421,11 @@ export const MonsterCodec: mol.Codec<MonsterLike, Monster> = mol.table({
   damage: mol.Uint16,
 });
 
-
-// Basic Usage
+// USAGE
+// after we have defined all the schema files, 
+// we can use them in our code pretty easily.
+// 
+// 1. Basic Usage
 const myHero: Hero = {
   class: 1,
   level: 1,
@@ -444,19 +447,30 @@ const myHero: Hero = {
 };
 
 const myHeroBytes = HeroCodec.encode(myHero);
-console.log(HeroCodec.decode(myHeroBytes));
+console.log("Hero mol serialized:", myHeroBytes);
+console.log("Hero mol deserialized:", HeroCodec.decode(myHeroBytes));
 
-// advance usage
+// 2. advance usage
+// ccc-molecule also supports decorators to generate classes
+// from the schema files.
+//
+// For example, we can generate a class from the Monster schema file.
+// using @mol.codec(MonsterCodec)
+// You can also injecting custom methods
+// for the generated classes.
 @mol.codec(MonsterCodec)
 export class Monster extends mol.Entity.Base<MonsterLike, Monster>() {
-  constructor(public monster: MonsterLike){
+  constructor(monster: MonsterLike){
     super();
+
+    this.hp = +ccc.numFrom(monster.hp).toString(10);
+    this.damage = +ccc.numFrom(monster.damage).toString(10);
   }
   customMethod(){
-    console.log("calling custom method");
+    console.log("calling monster custom method");
   }
 }
 
 const myMonster = new Monster({hp: 100, damage: 10});
 myMonster.customMethod();
-console.log(myMonster.toBytes())
+console.log("monster mol serialized: ", myMonster.toBytes())
