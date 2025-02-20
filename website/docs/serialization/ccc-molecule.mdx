@@ -1,0 +1,266 @@
+---
+id: ccc-molecule
+title: JavaScript SDK with Molecule
+---
+
+import Tooltip from "@components/Tooltip";
+
+# CCC Molecule: JavaScript SDK with serialization
+
+When working with your dApp development,
+the JavaScript SDK CCC provide the all-in-one Molecule module
+to help you serialize and deserialize data in Molecule format.
+
+You can import the Molecule module from the SDK and use it to serialize and deserialize data.
+
+```javascript
+import { mol } from "@ckb-ccc/core";
+```
+
+In the following sections, we will show you how to use the CCC Molecule
+module with basic examples and advanced examples.
+The full code of this tutorial is available on [GitHub](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/ccc-molecule)
+
+## Basic Usages
+
+Working with Molecule basic data types are quite simple.
+CCC Molecule provides straightforward APIs for such types.
+
+### Basic Data Types
+
+```javascript
+import { ccc } from "@ckb-ccc/shell";
+
+// Basic Usage
+
+// Molecule Basic Types
+// There is only one built-in primitive type in Molecule: byte.
+
+// First usage:
+//  - We can use ccc.mol.Bytes to represent a byte array.
+console.log(ccc.mol.Bytes.encode("0x1234567890").toString());
+console.log(
+  ccc.mol.Bytes.decode(
+    ccc.bytesFrom([5, 0, 0, 0, 18, 52, 86, 120, 144])
+  ).toString()
+);
+
+// Composite Types
+// array: An array consists of an item type and an unsigned integer.
+console.log(
+  ccc.mol
+    .array(ccc.mol.Byte4, 2)
+    .encode(["0x12345678", "0x12345678"])
+    .toString()
+);
+console.log(
+  ccc.mol.array(ccc.mol.Byte4, 2).decode("0x1234567812345678").toString()
+);
+
+// struct: A struct consists of a set of named and typed fields.
+console.log(
+  ccc.mol
+    .struct({ a: ccc.mol.Byte4, b: ccc.mol.Byte4 })
+    .encode({ a: "0x12345678", b: "0x12345678" })
+    .toString()
+);
+console.log(
+  ccc.mol
+    .struct({ a: ccc.mol.Byte4, b: ccc.mol.Byte4 })
+    .decode(ccc.bytesFrom([18, 52, 86, 120, 18, 52, 86, 120]))
+);
+
+// table: A table consists of a set of named and typed fields, same as struct.
+console.log(
+  ccc.mol
+    .table({ a: ccc.mol.Byte4, b: ccc.mol.Byte4 })
+    .encode({ a: "0x12345678", b: "0x12345678" })
+    .toString()
+);
+console.log(
+  ccc.mol
+    .table({ a: ccc.mol.Byte4, b: ccc.mol.Byte4 })
+    .decode(
+      ccc.bytesFrom([
+        20, 0, 0, 0, 12, 0, 0, 0, 16, 0, 0, 0, 18, 52, 86, 120, 18, 52, 86, 120,
+      ])
+    )
+);
+
+// vector: A vector contains only one item type.
+console.log(
+  ccc.mol.vector(ccc.mol.Byte4).encode(["0x12345678", "0x12345678"]).toString()
+);
+console.log(
+  ccc.mol
+    .vector(ccc.mol.Byte4)
+    .decode(ccc.bytesFrom([2, 0, 0, 0, 18, 52, 86, 120, 18, 52, 86, 120]))
+);
+
+// option: An option contains only an item type.
+console.log(ccc.mol.option(ccc.mol.Bytes).encode("0x68656c6c6f").toString());
+console.log(
+  ccc.mol.option(ccc.mol.Bytes).decode([5, 0, 0, 0, 104, 101, 108, 108, 111])
+);
+
+// union: A union contains a set of item types.
+console.log(
+  ccc.mol
+    .union({ a: ccc.mol.Bytes, b: ccc.mol.Bytes })
+    .encode({ type: "a", value: "0x12345678" })
+    .toString()
+);
+console.log(
+  ccc.mol
+    .union({ a: ccc.mol.Bytes, b: ccc.mol.Bytes })
+    .decode([0, 0, 0, 0, 4, 0, 0, 0, 18, 52, 86, 120])
+);
+```
+
+### CCC built-in Types
+
+Besides the basic data types, CCC Molecule also provides some common data structures:
+
+```JavaScript
+// CCC built-in types
+console.log(ccc.mol.Bool.decode("0x01")); // true
+console.log(ccc.mol.Bool.encode(true).toString()); // 1
+
+// All kinds of bytes
+console.log(ccc.mol.Byte16.encode("0x12345678901234567890123456789012"));
+console.log(ccc.mol.Byte16.decode(ccc.bytesFrom([18,52,86,120,144,18,52,86,120,144,18,52,86,120,144,18])));
+console.log(ccc.mol.Byte32.encode("0x1234567890123456789012345678901212345678901234567890123456789012"));
+console.log(ccc.mol.Byte32.decode(ccc.bytesFrom([18,52,86,120,144,18,52,86,120,144,18,52,86,120,144,18,18,52,86,120,144,18,52,86,120,144,18,52,86,120,144,18])));
+
+// All kinds of numbers
+console.log(ccc.mol.Uint8.encode(1).toString()); // 0x01
+console.log(ccc.mol.Uint8.decode("0x01")); // 1
+console.log(ccc.mol.Uint128LE.decode("0x01000000000000000000000000000000")); // 1
+console.log(ccc.mol.Uint128LE.encode(1).toString()); // 0x01000000000000000000000000000000
+```
+
+## Advanced Examples
+
+We have provide [a full Molecule example](/docs/serialization/example-role-playing-game) of a role-playing game consisting of 4 schema files.
+
+In the advance usage of CCC Molecule, we will show you how to use the Molecule module to serialize and deserialize the full data in the role-playing game example.
+
+### Define Basic Data Types
+
+The basic data type in the game example is a `AttrValue`:
+
+```common/basic_types.mol
+// AttrValue is an alias of `byte`.
+//
+// Since Molecule data are strongly-typed, it can gives compile time guarantees
+// that the right type of value is supplied to a method.
+//
+// In this example, we use this alias to define an unsigned integer which
+// has an upper limit: 100.
+// So it's easy to distinguish between this type and a real `byte`.
+// Of course, the serialization wouldn't do any checks for this upper limit
+// automatically. You have to implement it by yourself.
+//
+// **NOTE**:
+// - This feature is dependent on the exact implementation.
+//   In official Rust generated code, we use new type to implement this feature.
+
+array AttrValue [byte; 1];
+```
+
+With CCC, we can define the `AttrValue` type with simple codec bindings:
+
+```javascript
+import { Bytes, bytesFrom, BytesLike, mol, NumLike } from "@ckb-ccc/core";
+
+export type AttrValue = number;
+export type AttrValueLike = NumLike;
+export const AttrValueCodec: mol.Codec<AttrValueLike, AttrValue> =
+  mol.Codec.from({
+    byteLength: 1,
+    encode: attrValueToBytes,
+    decode: attrValueFromBytes,
+  });
+
+export function attrValueFrom(val: AttrValueLike): AttrValue {
+  if (typeof val === "number") {
+    if (val > 100) {
+      throw new Error(`Invalid attr value ${val}`);
+    }
+    return val;
+  }
+
+  if (typeof val === "bigint") {
+    if (val > BigInt(100)) {
+      throw new Error(`Invalid attr value ${val}`);
+    }
+    return Number(val);
+  }
+
+  if (typeof val === "string") {
+    const num = parseInt(val);
+    if (num > 100) {
+      throw new Error(`Invalid attr value ${val}`);
+    }
+    return num;
+  }
+
+  throw new Error(`Invalid attr value ${val}`);
+}
+
+export function attrValueToBytes(val: AttrValueLike): Bytes {
+  return bytesFrom([attrValueFrom(val)]);
+}
+
+export function attrValueFromBytes(bytes: BytesLike): AttrValue {
+  return attrValueFrom(bytesFrom(bytes)[0]);
+}
+```
+
+Notice that in the above code we also implement the upper limit check for the `AttrValue` type.
+
+And with the codec bindings, we can easily serialize and deserialize the `AttrValue` type:
+
+```javascript
+AttrValueCodec.encode(80).toString();
+AttrValueCodec.decode(Buffer.from("50", "hex")).toString();
+```
+
+Since we implement the upper limit check in the codec bindings,
+it is also possible to validate the input data before de/serialization.
+
+```javascript
+AttrValueCodec.encode(101).toString();
+
+// this will throw an error
+// since it is out of the upper limit
+```
+
+In the same way, we can define the rest data types in the role-playing game example:
+
+Check the [full code](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/ccc-molecule/src/full-example.ts) for the game example.
+
+### Create Class with Decorator
+
+Another util CCC provides is the decorator `@mol.codec` to simplify the codec bindings when working with javascript Objects.
+You can easily generate a corresponding class for your interface based on the `mol.Entity.Base` base class.
+You can also add custom methods to manipulate the data structure as you like.
+
+```javascript
+@mol.codec(MonsterCodec)
+export class Monster extends mol.Entity.Base<MonsterLike, Monster>() {
+  constructor(monster: MonsterLike){
+    super();
+
+    this.hp = +ccc.numFrom(monster.hp).toString(10);
+    this.damage = +ccc.numFrom(monster.damage).toString(10);
+  }
+  customMethod(){
+    console.log("calling monster custom method");
+  }
+}
+
+const myMonster = new Monster({hp: 100, damage: 10});
+myMonster.customMethod();
+console.log("monster mol serialized: ", myMonster.toBytes())
+```

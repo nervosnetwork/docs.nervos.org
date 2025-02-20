@@ -94,6 +94,10 @@ offckb create --script sudt-script
 </Tabs>
 ```
 
+:::note
+This command sets up a boilerplate project called `sudt-script` and does not automatically generate an sUDT Script.
+:::
+
 ### Create a New Script
 
 Let’s create a new Script called `sudt` inside the project.
@@ -128,7 +132,9 @@ make generate
 </Tabs>
 ```
 
-Our project is successfully setup. You can run `tree .` to view the project structure:
+After running the `make generate`, the boilerplate for the sUDT Script is generated inside the project.
+
+Now our project is successfully setup. You can run `tree .` to view the project structure:
 
 ```mdx-code-block
 <Tabs>
