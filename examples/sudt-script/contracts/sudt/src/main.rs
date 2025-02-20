@@ -113,6 +113,11 @@ pub enum Error {
     IndexOutOfBound = 1,
     ItemMissing,
     LengthNotEnough,
+    WaitFailure,
+    InvalidFd,
+    OtherEndClosed,
+    MaxVmsSpawned,
+    MaxFdsCreated,
     // write our custom error code below
     AmountEncoding = 12,
     InvalidAmount,
@@ -125,6 +130,11 @@ impl From<SysError> for Error {
             IndexOutOfBound => Self::IndexOutOfBound,
             ItemMissing => Self::ItemMissing,
             LengthNotEnough(_) => Self::LengthNotEnough,
+            WaitFailure => Self::WaitFailure,
+            InvalidFd => Self::InvalidFd,
+            OtherEndClosed => Self::OtherEndClosed,
+            MaxVmsSpawned => Self::MaxVmsSpawned,
+            MaxFdsCreated => Self::MaxFdsCreated,
             Encoding => Self::AmountEncoding,
             Unknown(err_code) => panic!("unexpected sys error {}", err_code),
         }
