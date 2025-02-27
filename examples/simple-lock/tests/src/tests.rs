@@ -168,7 +168,7 @@ fn test_invalid_hash_lock() {
 
     // run
     let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();
-    assert_script_error(err, 6);
+    assert_script_error(err, 11);
 }
 
 fn assert_script_error(err: Error, err_code: i8) {
