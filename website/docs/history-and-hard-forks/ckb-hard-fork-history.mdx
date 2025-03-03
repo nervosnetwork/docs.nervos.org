@@ -30,31 +30,39 @@ The CKB Edition Meepo (2024) introduces a range of enhancements into CKB Script 
 
 ### Tools & Upgrade Requirements
 
-Below is a comprehensive checklist for updating tools, libraries, and SDKs related to the Meepo hardfork. Ensure all components are updated and tested as per the specified versions and notes below.
+Below is a comprehensive checklist for updating tools, libraries, and SDKs related to the Meepo hardfork. If you rely on any of these, we recommend upgrading to a recent version with the minimum recommended specified below.
+
+#### CKB Node
+
+- CKB Binary for Testnet: [v0.119.0](https://github.com/nervosnetwork/ckb/releases/tag/v0.119.0)
+- CKB Binary for Mainnet: TBD
 
 #### Core Components
 
-- [ckb](https://crates.io/crates/ckb-verification) (crate): v0.119.0 (supports data2 and Spawn)
+- ckb (crate): [v0.119.0](https://crates.io/crates/ckb-verification/0.119.0)
+- ckb-vm: [v0.24.12](https://github.com/nervosnetwork/ckb-vm/releases/tag/v0.24.12)
 
 #### Standard Libraries
 
-- [ckb-std](https://github.com/nervosnetwork/ckb-std/releases): v0.16.1
+- ckb-std: [v0.16.1](https://github.com/nervosnetwork/ckb-std/releases/tag/v0.16.1)
 - [ckb-c-stdlib](https://github.com/nervosnetwork/ckb-c-stdlib)
   - https://github.com/nervosnetwork/ckb-c-stdlib/pull/63
   - https://github.com/nervosnetwork/ckb-c-stdlib/pull/59
 
 #### SDKs
 
-- [ckb-rust-sdk](https://github.com/nervosnetwork/ckb-sdk-rust/releases): v3.4.1 (supports data2 and CKB preview)
-- [ckb-go-sdk](https://github.com/nervosnetwork/ckb-sdk-go/releases): v2.3.0
-- [ckb-sdk-java](https://github.com/nervosnetwork/ckb-sdk-java/releases): https://github.com/nervosnetwork/ckb-sdk-java/pull/683
+- ckb-rust-sdk: [v3.4.1](https://github.com/nervosnetwork/ckb-sdk-rust/releases/tag/v3.4.1)
+- ckb-go-sdk: [v2.3.0](https://github.com/nervosnetwork/ckb-sdk-go/releases/tag/v2.3.0)
+- ckb-sdk-java: [v3.0.0](https://github.com/nervosnetwork/ckb-sdk-java/releases/tag/rc%2Fv3.0.0)
+- ckb-sdk-js: [v0.109.2](https://github.com/ckb-js/ckb-sdk-js/releases/tag/v0.109.2)
+- CCC (the new recommended ckb js sdk): [v0.0.2](https://github.com/ckb-devrel/ccc/releases/tag/v0.0.2)
+- lumos (another ckb js sdk): [v0.24.0-next.2](https://github.com/ckb-js/lumos/releases/tag/v0.24.0-next.2)
 
 #### Development Tools
 
-- [ckb-cli](https://github.com/nervosnetwork/ckb-cli/releases): v1.6.0 (supports data2 and CKB preview)
-- [ccc](https://github.com/ckb-devrel/ccc/deployments) (common chain connector): v0.0.2
-- [ckb-testtool](https://github.com/nervosnetwork/ckb-testtool): v0.14.0
-- [ckb-standalone-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/releases): v0.119.0
+- ckb-cli: [v1.6.0](https://github.com/nervosnetwork/ckb-cli/releases/tag/v1.6.0)
+- ckb-testtool: [v0.14.0](https://github.com/nervosnetwork/ckb-testtool/releases/tag/v0.14.0)
+- ckb-standalone-debugger: [v0.119.0](https://github.com/nervosnetwork/ckb-standalone-debugger/releases/tag/v0.119.0)
 - ckb-script-template: https://github.com/cryptape/ckb-script-templates/pull/14
 
 #### Virtual Machines
