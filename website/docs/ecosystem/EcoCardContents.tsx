@@ -20,6 +20,23 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
+    title: "Fiber Network",
+    description: "A scalable, privacy-by-default payment & swap network",
+    href: "https://www.fiber.world/",
+    bannerSrc: "fiber",
+    tags: ["Protocol", "RGB++", "Tools & Infra"],
+    links: [
+      {
+        label: "website",
+        link: "https://www.fiber.world/",
+      },
+      {
+        label: "github",
+        link: "https://github.com/nervosnetwork/fiber",
+      },
+    ],
+  },
+  {
     title: "Spore",
     description: "Craft, Secure, Distribute, and Monetize DOBs",
     href: "https://spore.pro/",
