@@ -96,7 +96,7 @@ If you want to test them in devnet/testnet blockchain, then `offckb` might be th
 
 ```sh
 cd frontend
-offckb deploy --network devnet
+offckb deploy -t --network devnet
 ```
 
 If successfully deployed, you will see the deploy script info for your smart contract recorded in the `offckb.config.ts` file. You can then directly import and use your smart contract in your frontend Dapp like this:
