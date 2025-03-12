@@ -20,7 +20,9 @@ Note even though I believe CKB's programming model is quite stable now, developm
 
 Below illustrates a real transaction on CKB:
 
+<p align="center">
 ![Transaction Example](/img/blog/tx.svg)
+</p>
 
 There are a lot of things going on in this graph, and we will come back to this graph again in later posts. Today, we will just focus on 2 entities in the cell data structure: `lock` and `type`.
 
@@ -77,7 +79,9 @@ Now let's see when lock and type scripts are executed.
 
 Here's the transaction we see earlier again:
 
+<p align="center">
 ![Transaction Example](/img/blog/tx.svg)
+</p>
 
 For this example, the execution flow is as follows:
 

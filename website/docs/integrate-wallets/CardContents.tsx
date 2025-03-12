@@ -42,6 +42,11 @@ const walletCardContents: WalletCardProps[] = [
     tags: ["Mobile", "Desktop", "Hardware"],
   },
   {
+    title: "UTXO Global",
+    href: "https://utxo.global/",
+    tags: ["Browser Extension", "Multi-Sig"],
+  },
+  {
     title: "Rei Wallet",
     href: "https://reiwallet.io/#home",
     tags: ["Browser Extension"],
