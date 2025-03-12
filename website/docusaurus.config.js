@@ -88,7 +88,7 @@ const config = {
           // editUrl: 'https://github.com/facebook/docusaurus/edit/main/website/',
           // Advanced use-case: functional editUrl
           editUrl: ({ locale, blogDirPath, blogPath, permalink }) =>
-            `https://github.com/facebook/docusaurus/edit/main/website/${blogDirPath}/${blogPath}`,
+            `https://github.com/nervosnetwork/docs-new/tree/develop/website/${blogDirPath}/${blogPath}`,
           editLocalizedFiles: false,
           blogTitle: "Nervos Blog",
           blogDescription: "Blog Posts About Nervos Blockchain",
@@ -243,8 +243,55 @@ const config = {
           to: "/docs/getting-started/how-ckb-works",
           label: "Docs",
           position: "left",
-        }, // or position: 'right'
-        { to: "blog", label: "Blog", position: "left" }, // or position: 'right'
+          activeBaseRegex:
+            "/(getting-started|script|common-scripts|how-tos|tech-explanation|serialization|integrate-wallets|dapp|sdk-and-devtool)/",
+        },
+        {
+          to: "/docs/node/rpcs",
+          label: "Nodes & Mining",
+          position: "left",
+          activeBaseRegex: "/(node|mining)/",
+        },
+        {
+          to: "/docs/ecosystem/projects",
+          label: "Ecosystem",
+          position: "left",
+          activeBaseRegex: "/ecosystem/",
+        },
+        {
+          to: "/docs/history-and-hard-forks/intro-to-hard-fork",
+          label: "History & Hard Forks",
+          position: "left",
+          activeBaseRegex: "/history-and-hard-forks/",
+        },
+        {
+          type: "dropdown",
+          label: "Resources",
+          position: "left",
+          items: [
+            {
+              label: "Positioning Paper",
+              href: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md",
+            },
+            {
+              label: "CKB RFCs",
+              href: "https://github.com/nervosnetwork/rfcs",
+            },
+            {
+              label: "CKB Dev Log",
+              href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
+            },
+            {
+              label: "CKB Academy",
+              href: "https://academy.ckb.dev/",
+            },
+            {
+              label: "CKB Cookbook",
+              href: "https://cookbook.ckbdapps.com/",
+            },
+          ],
+        },
+        { to: "blog", label: "Blog", position: "left" },
         {
           type: "search",
           position: "right",
