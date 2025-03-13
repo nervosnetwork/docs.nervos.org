@@ -1,5 +1,5 @@
 export default {
-  tutorial: [
+  docs: [
     {
       type: "category",
       label: "Getting Started",
@@ -89,20 +89,6 @@ export default {
     },
     {
       type: "category",
-      label: "Network & Nodes",
-      className: "category-node",
-      collapsible: false,
-      items: [
-        "node/rpcs",
-        "node/run-mainnet-node",
-        "node/run-testnet-node",
-        "node/run-devnet-node",
-        "node/run-public-rpc-node",
-        "node/turn-on-fee-estimator",
-      ],
-    },
-    {
-      type: "category",
       label: "Serialization (Molecule)",
       className: "category-molecule",
       collapsible: false,
@@ -130,18 +116,7 @@ export default {
         "how-tos/how-to-calculate-code-hash",
       ],
     },
-    {
-      type: "category",
-      label: "History & Hard Forks",
-      className: "category-history",
-      collapsible: false,
-      items: [
-        "history-and-hard-forks/intro-to-hard-fork",
-        "history-and-hard-forks/ckb-hard-fork-history",
-        "history-and-hard-forks/history-vm-version",
-        "history-and-hard-forks/rethinking-forks",
-      ],
-    },
+
     {
       type: "category",
       label: "Tech Explanation",
@@ -188,6 +163,31 @@ export default {
         "tech-explanation/glossary",
       ],
     },
+  ],
+  ecosystem: [
+    {
+      type: "category",
+      label: "Ecosystem",
+      className: "category-ecosystem",
+      collapsible: false,
+      items: ["ecosystem/projects", "ecosystem/organizations"],
+    },
+  ],
+  "Nodes & Mining": [
+    {
+      type: "category",
+      label: "Network & Nodes",
+      className: "category-node",
+      collapsible: false,
+      items: [
+        "node/rpcs",
+        "node/run-mainnet-node",
+        "node/run-testnet-node",
+        "node/run-devnet-node",
+        "node/run-public-rpc-node",
+        "node/turn-on-fee-estimator",
+      ],
+    },
     {
       type: "category",
       label: "Mining",
@@ -204,44 +204,18 @@ export default {
         "mining/info-stats",
       ],
     },
+  ],
+  "History & Hard Forks": [
     {
       type: "category",
-      label: "Ecosystem",
-      className: "category-ecosystem",
-      collapsible: false,
-      items: ["ecosystem/projects", "ecosystem/organizations"],
-    },
-    {
-      type: "category",
-      label: "Resources",
-      className: "category-resources",
+      label: "History & Hard Forks",
+      className: "category-history",
       collapsible: false,
       items: [
-        {
-          type: "link",
-          label: "Positioning Paper",
-          href: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md",
-        },
-        {
-          type: "link",
-          label: "CKB RFCs",
-          href: "https://github.com/nervosnetwork/rfcs",
-        },
-        {
-          type: "link",
-          label: "CKB Dev Log",
-          href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
-        },
-        {
-          type: "link",
-          label: "CKB Academy",
-          href: "https://academy.ckb.dev/",
-        },
-        {
-          type: "link",
-          label: "CKB Cookbook",
-          href: "https://cookbook.ckbdapps.com/",
-        },
+        "history-and-hard-forks/intro-to-hard-fork",
+        "history-and-hard-forks/ckb-hard-fork-history",
+        "history-and-hard-forks/history-vm-version",
+        "history-and-hard-forks/rethinking-forks",
       ],
     },
   ],
