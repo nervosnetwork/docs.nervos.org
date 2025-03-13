@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@ckb-ccc/core": "^0.0.14-alpha.0",
+    "@ckb-ccc/core": "^1.5.3",
     "@spore-sdk/core": "0.2.0-beta.3",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",

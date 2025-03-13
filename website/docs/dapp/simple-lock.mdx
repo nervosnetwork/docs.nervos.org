@@ -63,7 +63,7 @@ Copying binary hash-lock to build directory`}
 Deploy the Script binary to the Devnet:
 
 <CodeTabs
-  cmd={`cd frontend && offckb deploy --network devnet`}
+  cmd={`cd frontend && offckb deploy -t --network devnet`}
   response={`contract HASH-LOCK deployed, tx hash: 0x9f55da2b555cdc4412945ff8827b7e77508c84f0b85d82b027d31418e6a9b5d9
 wait 4 blocks..
 done.
@@ -100,7 +100,7 @@ Now, the app is running in http://localhost:3000
 With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some <Tooltip>Live Cells</Tooltip> that use this Script as their Lock Script. This preparation process is known as **deposit**. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 100 CKB into a specific address:
 
 <CodeTabs
-  cmd={`offckb deposit --network devnet ckt1qry2mh3j5cylve2tl2sjpg3zhp9wjeq2l92rvxtd2scsx4jks500xpqrnm4k4g7j8nlnyc0j3y3z5q6s5ns29k8wx9prkn8ff09mhepmagkhur6h 10000000000`}
+  cmd={`offckb deposit --network devnet ckt1qry2mh3j5cylve2tl2sjpg3zhp9wjeq2l92rvxtd2scsx4jks500xpqrnm4k4g7j8nlnyc0j3y3z5q6s5ns29k8wx9prkn8ff09mhepmagkhur6h 100`}
   response={`tx hash:  0x0668292c875ee31906e48651a553a16158307c02f2e91d24be75166ca080e1fd`}
 />
 

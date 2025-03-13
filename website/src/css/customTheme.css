@@ -75,6 +75,25 @@
   align-items: center;
   padding: 0 1.5rem;
 }
+.dropdown__menu {
+  background-color: var(--surface-03);
+}
+
+ul.dropdown__menu {
+  margin-top: 0;
+}
+
+@media (max-width: 1280px) {
+  .navbar__item {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .navbar__toggle {
+    display: inherit;
+  }
+}
 
 /*Search bar - deprecated*/
 .navbar-search .DocSearch-Button {

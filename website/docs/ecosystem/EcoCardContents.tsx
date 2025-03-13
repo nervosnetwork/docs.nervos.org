@@ -20,6 +20,23 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
+    title: "Fiber Network",
+    description: "A scalable, privacy-by-default payment & swap network",
+    href: "https://www.fiber.world/",
+    bannerSrc: "fiber",
+    tags: ["Protocol", "RGB++", "Tools & Infra"],
+    links: [
+      {
+        label: "website",
+        link: "https://www.fiber.world/",
+      },
+      {
+        label: "github",
+        link: "https://github.com/nervosnetwork/fiber",
+      },
+    ],
+  },
+  {
     title: "Spore",
     description: "Craft, Secure, Distribute, and Monetize DOBs",
     href: "https://spore.pro/",
@@ -28,6 +45,17 @@ const ecoCardContents: EcoCardProps[] = [
     links: [
       { label: "website", link: "https://spore.pro/" },
       { label: "doc", link: "https://docs.spore.pro/" },
+    ],
+  },
+  {
+    title: "Fiber Network",
+    description: "A scalable, privacy-by-default payment & swap network",
+    href: "https://www.fiber.world/",
+    bannerSrc: "fiber",
+    tags: ["Protocol"],
+    links: [
+      { label: "website", link: "https://fiber.world/" },
+      { label: "github", link: "https://github.com/nervosnetwork/fiber" },
     ],
   },
   {
@@ -58,6 +86,18 @@ const ecoCardContents: EcoCardProps[] = [
     links: [{ label: "website", link: "https://haste.pro/" }],
   },
   {
+    title: "Mobit",
+    description:
+      "Effortlessly and securely transfer assets between Bitcoin and CKB",
+    href: "https://mobit.app/",
+    bannerSrc: "mobit",
+    tags: ["RGB++", "DApp"],
+    links: [
+      { label: "website", link: "https://mobit.app/" },
+      { label: "github", link: "https://github.com/unistate-io/mobit" },
+    ],
+  },
+  {
     title: "UTXO Swap",
     description:
       "An AMM DEX that trades assets within the RGB++ and CKB ecosystems",
@@ -78,42 +118,12 @@ const ecoCardContents: EcoCardProps[] = [
     links: [{ label: "website", link: "https://www.stablepp.xyz/" }],
   },
   {
-    title: "Unicorn",
-    description: "The First DOBs on CKB",
-    href: "https://unidob.xyz/",
-    bannerSrc: "unicorn",
-    tags: ["DOB"],
-    links: [
-      { label: "website", link: "https://unidob.xyz/" },
-      {
-        label: "doc",
-        link: "https://unicorns-organization.gitbook.io/unicorn-cao-zuo-shou-ce",
-      },
-    ],
-  },
-  {
     title: "Dobby market",
     description: "The platform for Digital Objects on Bitcoin",
     href: "https://app.dobby.market/",
     bannerSrc: "dobby",
     tags: ["DOB", "DEX", "DApp"],
     links: [{ label: "website", link: "https://app.dobby.market/" }],
-  },
-  {
-    title: "World3",
-    description: "AI-powered autonomous world on Bitcoin",
-    href: "https://world3.ai/",
-    bannerSrc: "world3",
-    tags: ["AIW"],
-    links: [{ label: "website", link: "https://world3.ai/" }],
-  },
-  {
-    title: "Cellula",
-    description: "A fully on-chain artificial life simulation game",
-    href: "https://www.cellula.life/",
-    bannerSrc: "cellula",
-    tags: ["AIW"],
-    links: [{ label: "website", link: "https://www.cellula.life/" }],
   },
   {
     title: ".bit",
@@ -136,7 +146,7 @@ const ecoCardContents: EcoCardProps[] = [
       "The 1st inscription protocol established on Nervos $CKB blockchain",
     href: "https://omiga.io/",
     bannerSrc: "omiga",
-    tags: ["Protocol", "DOB", "DEX", "DApp"],
+    tags: ["DOB", "DEX", "DApp"],
     links: [
       { label: "website", link: "https://omiga.io/" },
       { label: "doc", link: "https://docs.omiga.io/" },
@@ -156,14 +166,13 @@ const ecoCardContents: EcoCardProps[] = [
       },
     ],
   },
-
   {
     title: "Nervape",
     description:
-      "A Metaverse with an ongoing Story and NFTs Shaped by the Community",
+      "A Metaverse with an ongoing Story and DOBs Shaped by the Community",
     href: "https://nervape.com/",
     bannerSrc: "nervape",
-    tags: ["NFT"],
+    tags: ["DOB"],
     links: [
       { label: "website", link: "https://nervape.com/" },
       { label: "github", link: "https://github.com/nervape" },
@@ -210,6 +219,36 @@ const ecoCardContents: EcoCardProps[] = [
         link: "https://nftnation.gitbook.io/nftnation-explained",
       },
     ],
+  },
+  {
+    title: "Unicorn",
+    description: "The First DOBs on CKB",
+    href: "https://unidob.xyz/",
+    bannerSrc: "unicorn",
+    tags: ["DOB"],
+    links: [
+      { label: "website", link: "https://unidob.xyz/" },
+      {
+        label: "doc",
+        link: "https://unicorns-organization.gitbook.io/unicorn-cao-zuo-shou-ce",
+      },
+    ],
+  },
+  {
+    title: "World3",
+    description: "AI-powered autonomous world on Bitcoin",
+    href: "https://world3.ai/",
+    bannerSrc: "world3",
+    tags: ["AIW"],
+    links: [{ label: "website", link: "https://world3.ai/" }],
+  },
+  {
+    title: "Cellula",
+    description: "A fully on-chain artificial life simulation game",
+    href: "https://www.cellula.life/",
+    bannerSrc: "cellula",
+    tags: ["AIW"],
+    links: [{ label: "website", link: "https://www.cellula.life/" }],
   },
   {
     title: "CKB Explorer",
@@ -286,6 +325,25 @@ const ecoCardContents: EcoCardProps[] = [
       {
         label: "doc",
         link: "https://medium.com/imtoken/imtoken-2-5-0-now-with-nervos-tron-bch-ltc-support-14d7171ccf4",
+      },
+    ],
+  },
+  {
+    title: "UTXO Global Wallet",
+    description:
+      "UTXO Global is a revolutionary wallet for the CKB ecosystem. It delivers the robust security guarantees of the UTXO model while addressing its limitations in scalability and interoperability.",
+    href: "https://utxo.global/",
+    bannerSrc: "utxoglobal",
+    tags: ["RGB++", "Wallet", "Multi-Sig"],
+    links: [
+      { label: "website", link: "https://utxo.global/" },
+      {
+        label: "github",
+        link: "https://github.com/UTXO-Global/utxo-wallet-extension",
+      },
+      {
+        label: "doc",
+        link: "https://utxo-global.gitbook.io/utxo-global",
       },
     ],
   },
