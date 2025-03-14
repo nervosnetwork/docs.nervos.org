@@ -1,0 +1,137 @@
+---
+id: playground
+title: Online Debugger(CCC Playground)
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Tooltip from "@components/Tooltip";
+
+# Online Debugger(CCC Playground)
+
+## Introduction
+
+CCC Playground (https://live.ckbccc.com/) is an interactive development environment designed for CKB developers. It provides a powerful platform for testing, debugging, and experimenting with CKB transactions and scripts in real-time.
+
+![ccc-playground-preview](/img/devtools/ccc-playground-preview.png)
+
+## Key Features
+
+### **Interactive Code Editor**
+
+- Syntax highlighting for TypeScript
+- Real-time code execution
+- Line-by-line debugging capabilities
+- Built-in error reporting and console output
+
+### **Transaction Visualization**
+
+- Real-time transaction preview
+- Visual representation of:
+  - Inputs and outputs
+  - Cell dependencies
+  - Witness data
+  - Transaction structure
+
+### **Multi-Tab Interface**
+
+- Transaction: View and analyze transaction details
+- Scripts: Manage and edit CKB scripts
+- Console: Real-time output and debugging information
+- About: Documentation and playground information
+
+### **Development Tools**
+
+- Step-by-step execution
+- Transaction state inspection
+- Built-in console for logging and debugging
+- Support for both Testnet and Mainnet environments
+
+### **Code Sharing**
+
+- Share code snippets via Nostr protocol
+- Generate shareable links for collaboration
+
+## How to Use
+
+### Writing Code
+
+The CCC Playground provides multiple ways to write and share code:
+
+1. **Direct Editor Usage**
+
+```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { render, signer } from "@ckb-ccc/playground";
+
+console.log("Welcome to CCC Playground!");
+// TODO: Add your code here
+```
+
+2. **Loading External Code**
+
+- **[GitHub Source](<https://live.ckbccc.com/?src=https://raw.githubusercontent.com/sporeprotocol/dob-cookbook/refs/heads/main/examples/dob1/2.nervape-genesis(btcfs_bg_btcfs_icon).ts>)**: You can load code directly from GitHub or any raw source by appending ?src= parameter to the playground URL:
+  ```bash
+  https://live.ckbccc.com/?src=https://raw.githubusercontent.com/your-repo/your-file.ts
+  ```
+  Example:
+  ```bash
+  https://live.ckbccc.com/?src=https://raw.githubusercontent.com/sporeprotocol/dob-cookbook/refs/heads/main/examples/dob1/2.nervape-genesis(btcfs_bg_btcfs_icon).ts
+  ```
+- **[Nostr Share Links](https://live.ckbccc.com/?src=nostr:nevent1qqsx9g2fyamqm65tmap0upjnyum0232pzysng3dkaz5sjl92mm5dmmspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqg4waehxw309ac82unsd3jhyetvv9ujucm0d5q32amnwvaz7tmjv4kxz7fwdehhxarj9ehx2aqpz3mhxue69uhkummnw3ezummcw3ezuer9wcq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k79fzrjp)**: The CCC Playground supports code sharing through the Nostr protocol.
+
+  - **Sharing Your Code**: After click the "Share" button in the bottom-left corner of the playground, a Nostr event will be created containing your code, after all, a shareable link in the format `https://live.ckbccc.com/?src=nostr:...` will be generated.
+  - **Opening Shared Code**: Use a URL with the `?src=nostr:...` parameter, the playground will fetch the code from Nostr relays, then load it into the editor for viewing and modification.
+
+  Example:
+
+  ```bash
+  https://live.ckbccc.com/?src=nostr:nevent1qqsx9g2fyamqm65tmap0upjnyum0232pzysng3dkaz5sjl92mm5dmmspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqg4waehxw309ac82unsd3jhyetvv9ujucm0d5q32amnwvaz7tmjv4kxz7fwdehhxarj9ehx2aqpz3mhxue69uhkummnw3ezummcw3ezuer9wcq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k79fzrjp
+  ```
+
+  :::note
+  This sharing feature serves as a powerful collaborative tool in the CKB development ecosystem. It facilitates seamless team collaboration during transaction development, enables efficient code review and debugging sessions, provides a platform for sharing reproducible examples of issues or implementations. These capabilities make it an invaluable asset for both development teams and individual developers working on CKB projects.  
+  :::
+
+### Debugging Code
+
+The playground provides a comprehensive debugging environment that enhances your development experience. You can utilize `console.log()` for output monitoring while stepping through code execution using the "Step" button to analyze your code's behavior. During the debugging process, you can inspect the transaction state at each step, allowing for detailed analysis of your transaction's lifecycle. The system also features real-time error reporting and stack traces, making it easier to identify and resolve issues quickly and efficiently.
+
+## Tips for Effective Usage
+
+### **1. Transaction Development**
+
+- Start with example templates
+- Use step-by-step execution for complex transactions
+- Monitor console output for debugging
+
+### **2. Debugging**
+
+- Set breakpoints using `playground.render()`
+- Use console logging for state inspection
+- Check transaction preview for validation
+
+### **3. Code Organization**
+
+- Structure code in logical segments
+- Use comments for clarity
+- Leverage TypeScript features for better type safety
+
+### **4. Testing**
+
+- Test on testnet first
+- Verify all transaction parameters
+- Check cell dependencies and capacity calculations
+
+:::note Network Safety
+Always verify which network (Testnet or Mainnet) you are currently connected to before testing or sending transactions. You can switch between Testnet and Mainnet by clicking the network name in the bottom-left corner of the playground. This helps prevent accidental asset loss from using the Mainnet as a testing environment.
+![ccc-playground-switch-network](/img/devtools/ccc-playground-switch-network.jpg)
+:::
+
+👉 **[Try CCC Playground Now](https://live.ckbccc.com/)**
+
+## Additional Resources
+
+- [CCC Demo](https://app.ckbccc.com/)
+- [CCC Docs](http://docs.ckbccc.com/)
+- [CCC Github Repository](https://github.com/ckb-devrel/ccc)

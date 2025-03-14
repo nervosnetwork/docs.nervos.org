@@ -23,6 +23,7 @@ export default {
         "sdk-and-devtool/go",
         "sdk-and-devtool/java",
         "sdk-and-devtool/ccc",
+        "sdk-and-devtool/playground",
         "sdk-and-devtool/lumos",
         "sdk-and-devtool/ckb-cli",
         "sdk-and-devtool/offckb",
