@@ -166,6 +166,8 @@ export default function Sign() {
 }
 ```
 
+[Live demo](https://app.ckbccc.com/connected/Sign) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/Sign/page.tsx>)
+
 </details>
 
 ### Calculate CKB Hash of Any Message
@@ -176,99 +178,41 @@ export default function Sign() {
 ```tsx
 "use client";
 
-import React, { useState } from "react";
-import { TextInput } from "@/src/components/Input";
-import { Button } from "@/src/components/Button";
 import { ccc } from "@ckb-ccc/connector-react";
-import { Textarea } from "@/src/components/Textarea";
-import { useGetExplorerLink } from "@/src/utils";
+import React, { useState } from "react";
+import { Button } from "@/src/components/Button";
+import { TextInput } from "@/src/components/Input";
 import { useApp } from "@/src/context";
 import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 
-export default function TransferXUdt() {
-  const { signer, createSender } = useApp();
-  const { log } = createSender("Transfer xUDT");
+export default function Hash() {
+  const { createSender } = useApp();
+  const { log } = createSender("Hash");
 
-  const { explorerTransaction } = useGetExplorerLink();
-
-  const [xUdtArgs, setXUdtArgs] = useState<string>("");
-  const [transferTo, setTransferTo] = useState<string>("");
-  const [amount, setAmount] = useState<string>("");
+  const [messageToHash, setMessageToHash] = useState<string>("");
 
   return (
     <div className="flex w-full flex-col items-stretch">
       <TextInput
-        label="Args"
-        placeholder="xUdt args to transfer"
-        state={[xUdtArgs, setXUdtArgs]}
-      />
-      <Textarea
-        label="Address"
-        placeholder="Addresses to transfer to, separated by lines"
-        state={[transferTo, setTransferTo]}
-      />
-      <TextInput
-        label="amount"
-        placeholder="Amount to transfer for each"
-        state={[amount, setAmount]}
+        label="Message"
+        placeholder="Message to hash"
+        state={[messageToHash, setMessageToHash]}
       />
       <ButtonsPanel>
         <Button
-          className="self-center"
           onClick={async () => {
-            if (!signer) {
-              return;
-            }
-            const toAddresses = await Promise.all(
-              transferTo
-                .split("\n")
-                .map((addr) => ccc.Address.fromString(addr, signer.client))
-            );
-            const { script: change } = await signer.getRecommendedAddressObj();
-
-            const xUdtType = await ccc.Script.fromKnownScript(
-              signer.client,
-              ccc.KnownScript.XUdt,
-              xUdtArgs
-            );
-
-            const tx = ccc.Transaction.from({
-              outputs: toAddresses.map(({ script }) => ({
-                lock: script,
-                type: xUdtType,
-              })),
-              outputsData: Array.from(Array(toAddresses.length), () =>
-                ccc.numLeToBytes(amount, 16)
-              ),
-            });
-            await tx.completeInputsByUdt(signer, xUdtType);
-            const balanceDiff =
-              (await tx.getInputsUdtBalance(signer.client, xUdtType)) -
-              tx.getOutputsUdtBalance(xUdtType);
-            if (balanceDiff > ccc.Zero) {
-              tx.addOutput(
-                {
-                  lock: change,
-                  type: xUdtType,
-                },
-                ccc.numLeToBytes(balanceDiff, 16)
-              );
-            }
-            await tx.addCellDepsOfKnownScripts(
-              signer.client,
-              ccc.KnownScript.XUdt
-            );
-            await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeBy(signer, 1000);
-
-            // Sign and send the transaction
-            log(
-              "Transaction sent:",
-              explorerTransaction(await signer.sendTransaction(tx))
-            );
+            log("Hash:", ccc.hashCkb(ccc.bytesFrom(messageToHash, "utf8")));
           }}
         >
-          Transfer
+          Hash as UTF-8
+        </Button>
+        <Button
+          className="ml-2"
+          onClick={async () => {
+            log("Hash:", ccc.hashCkb(messageToHash));
+          }}
+        >
+          Hash as hex
         </Button>
       </ButtonsPanel>
     </div>
@@ -276,9 +220,11 @@ export default function TransferXUdt() {
 }
 ```
 
+[Live demo](https://app.ckbccc.com/utils/Hash) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/utils/(tools)/Hash/page.tsx>)
+
 </details>
 
-### Transfer CKB Tokens
+### Transfer CKB Tokens ⭐️
 
 <details>
   <summary>Toggle to view code</summary>
@@ -297,15 +243,13 @@ import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 export default function Transfer() {
   const { signer, createSender } = useApp();
   const { log, error } = createSender("Transfer");
-
-const { explorerTransaction } = useGetExplorerLink();
+  const { explorerTransaction } = useGetExplorerLink();
 
 const [transferTo, setTransferTo] = useState<string>("");
 const [amount, setAmount] = useState<string>("");
 const [data, setData] = useState<string>("");
 
 return (
-
 <div className="flex w-full flex-col items-stretch">
 <Textarea
 label="Address"
@@ -324,6 +268,7 @@ placeholder="Leave empty if you don't know what this is. Data in the first outpu
 />
 <ButtonsPanel>
 <Button
+variant="info"
 onClick={async () => {
 if (!signer) {
 return;
@@ -347,9 +292,10 @@ return;
             });
 
             // Complete missing parts for transaction
-            await tx.completeInputsByCapacity(signer);
+            await tx.completeInputsAll(signer);
+
             // Change all balance to the first output
-            await tx.completeFeeChangeToOutput(signer, 0, 1000);
+            await tx.completeFeeChangeToOutput(signer, 0, 2000);
             const amount = ccc.fixedPointToString(tx.outputs[0].capacity);
             log("You can transfer at most", amount, "CKB");
             setAmount(amount);
@@ -386,13 +332,13 @@ return;
 
             // Complete missing parts for transaction
             await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeBy(signer, 1000);
+            await tx.completeFeeBy(signer, 2000);
 
             // Sign and send the transaction
-            log(
-              "Transaction sent:",
-              explorerTransaction(await signer.sendTransaction(tx)),
-            );
+            const txHash = await signer.sendTransaction(tx);
+            log("Transaction sent:", explorerTransaction(txHash));
+            await signer.client.waitTransaction(txHash);
+            log("Transaction committed:", explorerTransaction(txHash));
           }}
         >
           Transfer
@@ -404,6 +350,8 @@ return;
 }
 
 ````
+[Live demo](https://app.ckbccc.com/connected/Transfer) | [View code on Github](https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/Transfer/page.tsx)
+
 </details>
 
 ### Transfer Native CKB Tokens With Lumos SDK
@@ -438,115 +386,115 @@ export default function TransferLumos() {
   const [amount, setAmount] = useState<string>("");
   const [data, setData] = useState<string>("");
   return (
-    <>
-      <div className="flex w-full flex-col items-stretch">
-        <TextInput
-          label="Address"
-          placeholder="Address to transfer to"
-          state={[transferTo, setTransferTo]}
-        />
-        <TextInput
-          label="Amount"
-          placeholder="Amount to transfer"
-          state={[amount, setAmount]}
-        />
-        <Textarea
-          label="Output Data(options)"
-          state={[data, setData]}
-          placeholder="Data in the cell. Hex string will be parsed."
-        />
-        <ButtonsPanel>
-          <Button
-            className="self-center"
-            onClick={async () => {
-              if (!signer) {
-                return;
-              }
-              // Verify destination address
-              await ccc.Address.fromString(transferTo, signer.client);
+    <div className="flex w-full flex-col items-stretch">
+      <TextInput
+        label="Address"
+        placeholder="Address to transfer to"
+        state={[transferTo, setTransferTo]}
+      />
+      <TextInput
+        label="Amount"
+        placeholder="Amount to transfer"
+        state={[amount, setAmount]}
+      />
+      <Textarea
+        label="Output Data(options)"
+        state={[data, setData]}
+        placeholder="Data in the cell. Hex string will be parsed."
+      />
+      <ButtonsPanel>
+        <Button
+          className="self-center"
+          onClick={async () => {
+            if (!signer) {
+              return;
+            }
+            // Verify destination address
+            await ccc.Address.fromString(transferTo, signer.client);
 
-              const fromAddresses = await signer.getAddresses();
-              // === Composing transaction with Lumos ===
-              registerCustomLockScriptInfos(generateDefaultScriptInfos());
-              const indexer = new Indexer(
-                signer.client.url
-                  .replace("wss://", "https://")
-                  .replace("ws://", "http://")
-                  .replace(new RegExp("/ws/?$"), "/"),
-              );
-              let txSkeleton = new TransactionSkeleton({
-                cellProvider: indexer,
-              });
-              txSkeleton = await common.transfer(
-                txSkeleton,
-                fromAddresses,
-                transferTo,
-                ccc.fixedPointFrom(amount),
-                undefined,
-                undefined,
-                {
-                  config:
-                    signer.client.addressPrefix === "ckb"
-                      ? predefined.LINA
-                      : predefined.AGGRON4,
-                },
-              );
-              txSkeleton = await common.payFeeByFeeRate(
-                txSkeleton,
-                fromAddresses,
-                BigInt(3600),
-                undefined,
-                {
-                  config:
-                    signer.client.addressPrefix === "ckb"
-                      ? predefined.LINA
-                      : predefined.AGGRON4,
-                },
-              );
-              // ======
+            const fromAddresses = await signer.getAddresses();
+            // === Composing transaction with Lumos ===
+            registerCustomLockScriptInfos(generateDefaultScriptInfos());
+            const indexer = new Indexer(
+              signer.client.url
+                .replace("wss://", "https://")
+                .replace("ws://", "http://")
+                .replace(new RegExp("/ws/?$"), "/"),
+            );
+            let txSkeleton = new TransactionSkeleton({
+              cellProvider: indexer,
+            });
+            txSkeleton = await common.transfer(
+              txSkeleton,
+              fromAddresses,
+              transferTo,
+              ccc.fixedPointFrom(amount),
+              undefined,
+              undefined,
+              {
+                config:
+                  signer.client.addressPrefix === "ckb"
+                    ? predefined.LINA
+                    : predefined.AGGRON4,
+              },
+            );
+            txSkeleton = await common.payFeeByFeeRate(
+              txSkeleton,
+              fromAddresses,
+              BigInt(3600),
+              undefined,
+              {
+                config:
+                  signer.client.addressPrefix === "ckb"
+                    ? predefined.LINA
+                    : predefined.AGGRON4,
+              },
+            );
+            // ======
 
-              const tx = ccc.Transaction.fromLumosSkeleton(txSkeleton);
+            const tx = ccc.Transaction.fromLumosSkeleton(txSkeleton);
 
-              // CCC transactions are easy to be edited
-              const dataBytes = (() => {
-                try {
-                  return ccc.bytesFrom(data);
-                } catch (e) {}
+            // CCC transactions are easy to be edited
+            const dataBytes = (() => {
+              try {
+                return ccc.bytesFrom(data);
+              } catch (e) {}
 
-                return ccc.bytesFrom(data, "utf8");
-              })();
-              if (
-                tx.outputs[0].capacity < ccc.fixedPointFrom(dataBytes.length)
-              ) {
-                error("Insufficient capacity to store data");
-                return;
-              }
-              tx.outputsData[0] = ccc.hexFrom(dataBytes);
+              return ccc.bytesFrom(data, "utf8");
+            })();
+            if (
+              tx.outputs[0].capacity < ccc.fixedPointFrom(dataBytes.length)
+            ) {
+              error("Insufficient capacity to store data");
+              return;
+            }
+            tx.outputsData[0] = ccc.hexFrom(dataBytes);
 
-              // Sign and send the transaction
-              log(
-                "Transaction sent:",
-                explorerTransaction(await signer.sendTransaction(tx)),
-              );
-            }}
-          >
-            Transfer
-          </Button>
-        </ButtonsPanel>
-      </div>
-    </>
+            // Sign and send the transaction
+            log(
+              "Transaction sent:",
+              explorerTransaction(await signer.sendTransaction(tx)),
+            );
+          }}
+        >
+          Transfer
+        </Button>
+      </ButtonsPanel>
+    </div>
   );
 }
 ````
 
+[Live demo](https://app.ckbccc.com/connected/TransferLumos) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/TransferLumos/page.tsx>)
+
 </details>
 
-### Issue xUDT Tokens With Single-Use Lock
+### Issue xUDT Tokens With Single-Use Lock ⭐️
 
 <details>
   <summary>Toggle to view code</summary>
-  ```tsx
-  "use client";
+```tsx
+"use client";
 
 import { useState } from "react";
 import { TextInput } from "@/src/components/Input";
@@ -557,179 +505,178 @@ import { Message } from "@/src/components/Message";
 import React from "react";
 import { useApp } from "@/src/context";
 import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+import Link from "next/link";
 
 export default function IssueXUdtSul() {
   const { signer, createSender } = useApp();
   const { log, error } = createSender("Issue xUDT (SUS)");
-
-const { explorerTransaction } = useGetExplorerLink();
+  const { explorerTransaction } = useGetExplorerLink();
 
 const [amount, setAmount] = useState<string>("");
 const [decimals, setDecimals] = useState<string>("");
 const [name, setName] = useState<string>("");
 const [symbol, setSymbol] = useState<string>("");
-return (
 
-<>
+return (
 <div className="flex w-full flex-col items-stretch">
 <Message title="Hint" type="info">
 You will need to sign two or three transactions.
 </Message>
 
-        <TextInput
-          label="Amount"
-          placeholder="Amount to issue"
-          state={[amount, setAmount]}
-        />
-        <TextInput
-          label="Decimals"
-          placeholder="Decimals of the token"
-          state={[decimals, setDecimals]}
-        />
-        <TextInput
-          label="Symbol"
-          placeholder="Symbol of the token"
-          state={[symbol, setSymbol]}
-        />
-        <TextInput
-          label="Name"
-          placeholder="Name of the token, same as symbol if empty"
-          state={[name, setName]}
-        />
+      <TextInput
+        label="Amount"
+        placeholder="Amount to issue"
+        state={[amount, setAmount]}
+      />
+      <TextInput
+        label="Decimals"
+        placeholder="Decimals of the token"
+        state={[decimals, setDecimals]}
+      />
+      <TextInput
+        label="Symbol"
+        placeholder="Symbol of the token"
+        state={[symbol, setSymbol]}
+      />
+      <TextInput
+        label="Name"
+        placeholder="Name of the token, same as symbol if empty"
+        state={[name, setName]}
+      />
 
-        <ButtonsPanel>
-          <Button
-            className="self-center"
-            onClick={async () => {
-              if (!signer) {
-                return;
-              }
-              if (decimals === "" || symbol === "") {
-                error("Invalid token info");
-                return;
-              }
+      <ButtonsPanel>
+        <Button
+          className="self-center"
+          onClick={async () => {
+            if (!signer) {
+              return;
+            }
+            if (decimals === "" || symbol === "") {
+              error("Invalid token info");
+              return;
+            }
 
-              const { script } = await signer.getRecommendedAddressObj();
+            const { script } = await signer.getRecommendedAddressObj();
 
-              const susTx = ccc.Transaction.from({
-                outputs: [
-                  {
-                    lock: script,
-                  },
-                ],
-              });
-              await susTx.completeInputsByCapacity(signer);
-              await susTx.completeFeeBy(signer, 1000);
-              const susTxHash = await signer.sendTransaction(susTx);
-              log("Transaction sent:", explorerTransaction(susTxHash));
-              await signer.client.cache.markUnusable({
+            const susTx = ccc.Transaction.from({
+              outputs: [
+                {
+                  lock: script,
+                },
+              ],
+            });
+            await susTx.completeInputsByCapacity(signer);
+            await susTx.completeFeeBy(signer);
+            const susTxHash = await signer.sendTransaction(susTx);
+            log("Transaction sent:", explorerTransaction(susTxHash));
+            await signer.client.cache.markUnusable({
+              txHash: susTxHash,
+              index: 0,
+            });
+
+            const singleUseLock = await ccc.Script.fromKnownScript(
+              signer.client,
+              ccc.KnownScript.SingleUseLock,
+              ccc.OutPoint.from({
                 txHash: susTxHash,
                 index: 0,
-              });
+              }).toBytes(),
+            );
+            const lockTx = ccc.Transaction.from({
+              outputs: [
+                // Owner cell
+                {
+                  lock: singleUseLock,
+                },
+              ],
+            });
+            await lockTx.completeInputsByCapacity(signer);
+            await lockTx.completeFeeBy(signer);
+            const lockTxHash = await signer.sendTransaction(lockTx);
+            log("Transaction sent:", explorerTransaction(lockTxHash));
 
-              const singleUseLock = await ccc.Script.fromKnownScript(
-                signer.client,
-                ccc.KnownScript.SingleUseLock,
-                ccc.OutPoint.from({
-                  txHash: susTxHash,
-                  index: 0,
-                }).toBytes(),
-              );
-              const lockTx = ccc.Transaction.from({
-                outputs: [
-                  // Owner cell
-                  {
-                    lock: singleUseLock,
+            const mintTx = ccc.Transaction.from({
+              inputs: [
+                // SUS
+                {
+                  previousOutput: {
+                    txHash: susTxHash,
+                    index: 0,
                   },
-                ],
-              });
-              await lockTx.completeInputsByCapacity(signer);
-              await lockTx.completeFeeBy(signer, 1000);
-              const lockTxHash = await signer.sendTransaction(lockTx);
-              log("Transaction sent:", explorerTransaction(lockTxHash));
-
-              const mintTx = ccc.Transaction.from({
-                inputs: [
-                  // SUS
-                  {
-                    previousOutput: {
-                      txHash: susTxHash,
-                      index: 0,
-                    },
+                },
+                // Owner cell
+                {
+                  previousOutput: {
+                    txHash: lockTxHash,
+                    index: 0,
                   },
-                  // Owner cell
-                  {
-                    previousOutput: {
-                      txHash: lockTxHash,
-                      index: 0,
-                    },
-                  },
-                ],
-                outputs: [
-                  // Issued xUDT
-                  {
-                    lock: script,
-                    type: await ccc.Script.fromKnownScript(
-                      signer.client,
-                      ccc.KnownScript.XUdt,
-                      singleUseLock.hash(),
-                    ),
-                  },
-                  // xUDT Info
-                  {
-                    lock: script,
-                    type: await ccc.Script.fromKnownScript(
-                      signer.client,
-                      ccc.KnownScript.UniqueType,
-                      "00".repeat(32),
-                    ),
-                  },
-                ],
-                outputsData: [
-                  ccc.numLeToBytes(amount, 16),
-                  tokenInfoToBytes(decimals, symbol, name),
-                ],
-              });
-              await mintTx.addCellDepsOfKnownScripts(
-                signer.client,
-                ccc.KnownScript.SingleUseLock,
-                ccc.KnownScript.XUdt,
-                ccc.KnownScript.UniqueType,
-              );
-              await mintTx.completeInputsByCapacity(signer);
-              if (!mintTx.outputs[1].type) {
-                error("Unexpected disappeared output");
-                return;
-              }
-              mintTx.outputs[1].type!.args = ccc.hexFrom(
-                ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 1)).slice(0, 20),
-              );
-              await mintTx.completeFeeBy(signer, 1000);
-              log(
-                "Transaction sent:",
-                explorerTransaction(await signer.sendTransaction(mintTx)),
-              );
-            }}
-          >
-            Issue
-          </Button>
-        </ButtonsPanel>
-      </div>
-    </>
+                },
+              ],
+              outputs: [
+                // Issued xUDT
+                {
+                  lock: script,
+                  type: await ccc.Script.fromKnownScript(
+                    signer.client,
+                    ccc.KnownScript.XUdt,
+                    singleUseLock.hash(),
+                  ),
+                },
+                // xUDT Info
+                {
+                  lock: script,
+                  type: await ccc.Script.fromKnownScript(
+                    signer.client,
+                    ccc.KnownScript.UniqueType,
+                    "00".repeat(32),
+                  ),
+                },
+              ],
+              outputsData: [
+                ccc.numLeToBytes(amount, 16),
+                tokenInfoToBytes(decimals, symbol, name),
+              ],
+            });
+            await mintTx.addCellDepsOfKnownScripts(
+              signer.client,
+              ccc.KnownScript.SingleUseLock,
+              ccc.KnownScript.XUdt,
+              ccc.KnownScript.UniqueType,
+            );
+            await mintTx.completeInputsByCapacity(signer);
+            if (!mintTx.outputs[1].type) {
+              error("Unexpected disappeared output");
+              return;
+            }
+            mintTx.outputs[1].type!.args = ccc.hexFrom(
+              ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 1)).slice(0, 20),
+            );
+            await mintTx.completeFeeBy(signer);
+            const mintTxHash = await signer.sendTransaction(mintTx);
+            log("Transaction sent:", explorerTransaction(mintTxHash));
+            await signer.client.waitTransaction(mintTxHash);
+            log("Transaction committed:", explorerTransaction(mintTxHash));
+          }}
+        >
+          Issue
+        </Button>
+      </ButtonsPanel>
+    </div>
 
 );
 }
 
 ````
+[Live demo](https://app.ckbccc.com/connected/IssueXUdtSus) | [View code on Github](https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/IssueXUdtSus/page.tsx)
 </details>
 
-### Issue xUDT Tokens Controlled by a Type ID Cell
+### Issue xUDT Tokens Controlled by a Type ID Cell ⭐️
 
 <details>
   <summary>Toggle to view code</summary>
 
-  ```tsx
-  "use client";
+```tsx
+"use client";
 
 import React, { useState } from "react";
 import { TextInput } from "@/src/components/Input";
@@ -739,6 +686,7 @@ import { tokenInfoToBytes, useGetExplorerLink } from "@/src/utils";
 import { Message } from "@/src/components/Message";
 import { useApp } from "@/src/context";
 import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+import Link from "next/link";
 
 export default function IssueXUdtTypeId() {
   const { signer, createSender } = useApp();
@@ -751,194 +699,195 @@ export default function IssueXUdtTypeId() {
   const [decimals, setDecimals] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [symbol, setSymbol] = useState<string>("");
+
   return (
-    <>
-      <div className="flex w-full flex-col items-stretch">
-        <Message title="Hint" type="info">
-          You will need to sign two or three transactions.
-        </Message>
-        <TextInput
-          label="Type ID(options)"
-          placeholder="Type ID args, empty to create new"
-          state={[typeIdArgs, setTypeIdArgs]}
-        />
-        <TextInput
-          label="Amount"
-          placeholder="Amount to issue"
-          state={[amount, setAmount]}
-        />
-        <TextInput
-          label="Decimals"
-          placeholder="Decimals of the token"
-          state={[decimals, setDecimals]}
-        />
-        <TextInput
-          label="Symbol"
-          placeholder="Symbol of the token"
-          state={[symbol, setSymbol]}
-        />
-        <TextInput
-          label="Name (options)"
-          placeholder="Name of the token, same as symbol if empty"
-          state={[name, setName]}
-        />
-        <ButtonsPanel>
-          <Button
-            className="self-center"
-            onClick={async () => {
-              if (!signer) {
-                return;
-              }
-              const { script } = await signer.getRecommendedAddressObj();
-              if (decimals === "" || symbol === "") {
-                error("Invalid token info");
-                return;
-              }
+    <div className="flex w-full flex-col items-stretch">
+      <Message title="Hint" type="info">
+        You will need to sign two or three transactions.
+      </Message>
+      <TextInput
+        label="Type ID(options)"
+        placeholder="Type ID args, empty to create new"
+        state={[typeIdArgs, setTypeIdArgs]}
+      />
+      <TextInput
+        label="Amount"
+        placeholder="Amount to issue"
+        state={[amount, setAmount]}
+      />
+      <TextInput
+        label="Decimals"
+        placeholder="Decimals of the token"
+        state={[decimals, setDecimals]}
+      />
+      <TextInput
+        label="Symbol"
+        placeholder="Symbol of the token"
+        state={[symbol, setSymbol]}
+      />
+      <TextInput
+        label="Name (options)"
+        placeholder="Name of the token, same as symbol if empty"
+        state={[name, setName]}
+      />
+      <ButtonsPanel>
+        <Button
+          className="self-center"
+          onClick={async () => {
+            if (!signer) {
+              return;
+            }
+            const { script } = await signer.getRecommendedAddressObj();
+            if (decimals === "" || symbol === "") {
+              error("Invalid token info");
+              return;
+            }
 
-              const typeId = await (async () => {
-                if (typeIdArgs !== "") {
-                  return ccc.Script.fromKnownScript(
-                    signer.client,
-                    ccc.KnownScript.TypeId,
-                    typeIdArgs,
-                  );
-                }
-                const typeIdTx = ccc.Transaction.from({
-                  outputs: [
-                    {
-                      lock: script,
-                      type: await ccc.Script.fromKnownScript(
-                        signer.client,
-                        ccc.KnownScript.TypeId,
-                        "00".repeat(32),
-                      ),
-                    },
-                  ],
-                });
-                await typeIdTx.completeInputsByCapacity(signer);
-                if (!typeIdTx.outputs[0].type) {
-                  error("Unexpected disappeared output");
-                  return;
-                }
-                typeIdTx.outputs[0].type.args = ccc.hashTypeId(
-                  typeIdTx.inputs[0],
-                  0,
+            const typeId = await (async () => {
+              if (typeIdArgs !== "") {
+                return ccc.Script.fromKnownScript(
+                  signer.client,
+                  ccc.KnownScript.TypeId,
+                  typeIdArgs,
                 );
-                await typeIdTx.completeFeeBy(signer, 1000);
-                log(
-                  "Transaction sent:",
-                  explorerTransaction(await signer.sendTransaction(typeIdTx)),
-                );
-                log("Type ID created: ", typeIdTx.outputs[0].type.args);
-                return typeIdTx.outputs[0].type;
-              })();
-              if (!typeId) {
-                return;
               }
-
-              const outputTypeLock = await ccc.Script.fromKnownScript(
-                signer.client,
-                ccc.KnownScript.OutputTypeProxyLock,
-                typeId.hash(),
-              );
-              const lockTx = ccc.Transaction.from({
+              const typeIdTx = ccc.Transaction.from({
                 outputs: [
-                  // Owner cell
-                  {
-                    lock: outputTypeLock,
-                  },
-                ],
-              });
-              await lockTx.completeInputsByCapacity(signer);
-              await lockTx.completeFeeBy(signer, 1000);
-              const lockTxHash = await signer.sendTransaction(lockTx);
-              log("Transaction sent:", explorerTransaction(lockTxHash));
-
-              const typeIdCell =
-                await signer.client.findSingletonCellByType(typeId);
-              if (!typeIdCell) {
-                error("Type ID cell not found");
-                return;
-              }
-              const mintTx = ccc.Transaction.from({
-                inputs: [
-                  // Type ID
-                  {
-                    previousOutput: typeIdCell.outPoint,
-                  },
-                  // Owner cell
-                  {
-                    previousOutput: {
-                      txHash: lockTxHash,
-                      index: 0,
-                    },
-                  },
-                ],
-                outputs: [
-                  // Keep the Type ID cell
-                  typeIdCell.cellOutput,
-                  // Issued xUDT
                   {
                     lock: script,
                     type: await ccc.Script.fromKnownScript(
                       signer.client,
-                      ccc.KnownScript.XUdt,
-                      outputTypeLock.hash(),
-                    ),
-                  },
-                  // xUDT Info
-                  {
-                    lock: script,
-                    type: await ccc.Script.fromKnownScript(
-                      signer.client,
-                      ccc.KnownScript.UniqueType,
+                      ccc.KnownScript.TypeId,
                       "00".repeat(32),
                     ),
                   },
                 ],
-                outputsData: [
-                  typeIdCell.outputData,
-                  ccc.numLeToBytes(amount, 16),
-                  tokenInfoToBytes(decimals, symbol, name),
-                ],
               });
-              await mintTx.addCellDepsOfKnownScripts(
-                signer.client,
-                ccc.KnownScript.OutputTypeProxyLock,
-                ccc.KnownScript.XUdt,
-                ccc.KnownScript.UniqueType,
-              );
-              await mintTx.completeInputsByCapacity(signer);
-              if (!mintTx.outputs[2].type) {
-                throw new Error("Unexpected disappeared output");
+              await typeIdTx.completeInputsByCapacity(signer);
+              if (!typeIdTx.outputs[0].type) {
+                error("Unexpected disappeared output");
+                return;
               }
-              mintTx.outputs[2].type!.args = ccc.hexFrom(
-                ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 2)).slice(0, 20),
+              typeIdTx.outputs[0].type.args = ccc.hashTypeId(
+                typeIdTx.inputs[0],
+                0,
               );
-              await mintTx.completeFeeBy(signer, 1000);
+              await typeIdTx.completeFeeBy(signer);
               log(
                 "Transaction sent:",
-                explorerTransaction(await signer.sendTransaction(mintTx)),
+                explorerTransaction(await signer.sendTransaction(typeIdTx)),
               );
-            }}
-          >
-            Issue
-          </Button>
-        </ButtonsPanel>
-      </div>
-    </>
+              log("Type ID created: ", typeIdTx.outputs[0].type.args);
+              return typeIdTx.outputs[0].type;
+            })();
+            if (!typeId) {
+              return;
+            }
+
+            const outputTypeLock = await ccc.Script.fromKnownScript(
+              signer.client,
+              ccc.KnownScript.OutputTypeProxyLock,
+              typeId.hash(),
+            );
+            const lockTx = ccc.Transaction.from({
+              outputs: [
+                // Owner cell
+                {
+                  lock: outputTypeLock,
+                },
+              ],
+            });
+            await lockTx.completeInputsByCapacity(signer);
+            await lockTx.completeFeeBy(signer);
+            const lockTxHash = await signer.sendTransaction(lockTx);
+            log("Transaction sent:", explorerTransaction(lockTxHash));
+
+            const typeIdCell =
+              await signer.client.findSingletonCellByType(typeId);
+            if (!typeIdCell) {
+              error("Type ID cell not found");
+              return;
+            }
+            const mintTx = ccc.Transaction.from({
+              inputs: [
+                // Type ID
+                {
+                  previousOutput: typeIdCell.outPoint,
+                },
+                // Owner cell
+                {
+                  previousOutput: {
+                    txHash: lockTxHash,
+                    index: 0,
+                  },
+                },
+              ],
+              outputs: [
+                // Keep the Type ID cell
+                typeIdCell.cellOutput,
+                // Issued xUDT
+                {
+                  lock: script,
+                  type: await ccc.Script.fromKnownScript(
+                    signer.client,
+                    ccc.KnownScript.XUdt,
+                    outputTypeLock.hash(),
+                  ),
+                },
+                // xUDT Info
+                {
+                  lock: script,
+                  type: await ccc.Script.fromKnownScript(
+                    signer.client,
+                    ccc.KnownScript.UniqueType,
+                    "00".repeat(32),
+                  ),
+                },
+              ],
+              outputsData: [
+                typeIdCell.outputData,
+                ccc.numLeToBytes(amount, 16),
+                tokenInfoToBytes(decimals, symbol, name),
+              ],
+            });
+            await mintTx.addCellDepsOfKnownScripts(
+              signer.client,
+              ccc.KnownScript.OutputTypeProxyLock,
+              ccc.KnownScript.XUdt,
+              ccc.KnownScript.UniqueType,
+            );
+            await mintTx.completeInputsByCapacity(signer);
+            if (!mintTx.outputs[2].type) {
+              throw new Error("Unexpected disappeared output");
+            }
+            mintTx.outputs[2].type!.args = ccc.hexFrom(
+              ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 2)).slice(0, 20),
+            );
+            await mintTx.completeFeeBy(signer);
+            const mintTxHash = await signer.sendTransaction(mintTx);
+            log("Transaction sent:", explorerTransaction(mintTxHash));
+            await signer.client.waitTransaction(mintTxHash);
+            log("Transaction committed:", explorerTransaction(mintTxHash));
+          }}
+        >
+          Issue
+        </Button>
+      </ButtonsPanel>
+    </div>
   );
 }
 ````
 
+[Live demo](https://app.ckbccc.com/connected/IssueXUdtTypeId) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/IssueXUdtTypeId/page.tsx>)
+
 </details>
 
-### Transfer xUDT Tokens
+### Transfer xUDT Tokens ⭐️
 
 <details>
   <summary>Toggle to view code</summary>
-  ```tsx
-  "use client";
+```tsx
+"use client";
 
 import React, { useState } from "react";
 import { TextInput } from "@/src/components/Input";
@@ -952,14 +901,12 @@ import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 export default function TransferXUdt() {
   const { signer, createSender } = useApp();
   const { log } = createSender("Transfer xUDT");
-
-const { explorerTransaction } = useGetExplorerLink();
+  const { explorerTransaction } = useGetExplorerLink();
 
 const [xUdtArgs, setXUdtArgs] = useState<string>("");
 const [transferTo, setTransferTo] = useState<string>("");
 const [amount, setAmount] = useState<string>("");
 return (
-
 <div className="flex w-full flex-col items-stretch">
 <TextInput
 label="Args"
@@ -1023,7 +970,7 @@ const { script: change } = await signer.getRecommendedAddressObj();
               ccc.KnownScript.XUdt,
             );
             await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeBy(signer, 1000);
+            await tx.completeFeeBy(signer, 2000);
 
             // Sign and send the transaction
             log(
@@ -1043,13 +990,228 @@ const { script: change } = await signer.getRecommendedAddressObj();
 ````
 </details>
 
+### Create DOB Cluster ⭐️
+<details>
+  <summary>Toggle to view code</summary>
+```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { client, signer } from "@ckb-ccc/playground";
+
+function getExplorerTxUrl(txHash: string) {
+  const isMainnet = client.addressPrefix === 'ckb';
+  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+
+  return `${baseUrl}/transaction/${txHash}`
+}
+
+/**
+ * Generate cluster description
+ */
+function generateClusterDescriptionUnderDobProtocol() {
+  const clusterDescription = "A simple loot cluster";
+  const dob0Pattern: ccc.spore.dob.PatternElementDob0[] = [
+    {
+      traitName: "BackgroundColor",
+      dobType: "String",
+      dnaOffset: 0,
+      dnaLength: 1,
+      patternType: "options",
+      traitArgs: ["red", "blue", "green", "black", "white"],
+    },
+    {
+      traitName: "Type",
+      dobType: "Number",
+      dnaOffset: 1,
+      dnaLength: 1,
+      patternType: "range",
+      traitArgs: [10, 50],
+    },
+    {
+      traitName: "Timestamp",
+      dobType: "Number",
+      dnaOffset: 2,
+      dnaLength: 4,
+      patternType: "rawNumber",
+    },
+  ];
+
+  const dob0: ccc.spore.dob.Dob0 = {
+    description: clusterDescription,
+    dob: {
+      ver: 0,
+      decoder: ccc.spore.dob.getDecoder(client, "dob0"),
+      pattern: dob0Pattern,
+    },
+  };
+
+  return ccc.spore.dob.encodeClusterDescriptionForDob0(dob0);
+}
+
+/**
+ * create cluster
+ */
+const { tx: clusterTx, id: clusterId } = await ccc.spore.createSporeCluster({
+  signer,
+  data: {
+    name: "Simple loot",
+    description: generateClusterDescriptionUnderDobProtocol(),
+  },
+});
+await clusterTx.completeFeeBy(signer, 2000n);
+const clusterTxHash = await signer.sendTransaction(clusterTx);
+console.log("Create cluster tx sent:", clusterTxHash, `Cluster ID: ${clusterId}`);
+await signer.client.waitTransaction(clusterTxHash);
+console.log("Create cluster tx committed:", getExplorerTxUrl(clusterTxHash), `Cluster ID: ${clusterId}`);
+```
+
+[RUN it on CCC Playground](https://live.ckbccc.com/?src=https://raw.githubusercontent.com/sporeprotocol/dob-cookbook/refs/heads/main/examples/dob0/0.basic-loot.ts) | [View code on Github](https://github.com/sporeprotocol/dob-cookbook/blob/main/examples/dob0/0.basic-loot.ts)
+</details>
+
+### Create Spore ⭐️
+
+<details>
+  <summary>Toggle to view code</summary>
+```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { client, signer } from "@ckb-ccc/playground";
+
+function getExplorerTxUrl(txHash: string) {
+  const isMainnet = client.addressPrefix === 'ckb';
+  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+
+  return `${baseUrl}/transaction/${txHash}`
+}
+
+function generateSimpleDNA(length: number): string {
+  return Array.from(
+    { length },
+    () => Math.floor(Math.random() * 16).toString(16)
+  ).join('');
+}
+
+// TODO: Replace with your cluster ID
+const clusterId = "{your cluster id}";
+
+/**
+ * create spore
+ */
+const { tx: sporeTx, id: sporeId } = await ccc.spore.createSpore({
+  signer,
+  data: {
+    contentType: "dob/0",
+    content: ccc.bytesFrom(`{ "dna": "${generateSimpleDNA(16)}" }`, "utf8"),
+    clusterId: clusterId,
+  },
+  clusterMode: "clusterCell",
+});
+
+await sporeTx.completeFeeBy(signer, 2000n);
+const sporeTxHash = await signer.sendTransaction(sporeTx);
+console.log("Mint DOB tx sent:", sporeTxHash, `Spore ID: ${sporeId}`);
+await signer.client.waitTransaction(sporeTxHash);
+console.log("Mint DOB tx committed:", getExplorerTxUrl(sporeTxHash), `Spore ID: ${sporeId}`);
+```
+
+[RUN it on CCC Playground](https://live.ckbccc.com/?src=https://raw.githubusercontent.com/sporeprotocol/dob-cookbook/refs/heads/main/examples/dob0/0.basic-loot.ts) | [View code on Github](https://github.com/sporeprotocol/dob-cookbook/blob/main/examples/dob0/0.basic-loot.ts)
+</details>
+
+### Transfer Spore ⭐️
+<details>
+  <summary>Toggle to view code</summary>
+```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { render, signer } from "@ckb-ccc/playground";
+
+function getExplorerTxUrl(txHash: string) {
+  const isMainnet = signer.client.addressPrefix === 'ckb';
+  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+
+  return `${baseUrl}/transaction/${txHash}`
+}
+
+// The receiver is the signer itself on mainnet
+const receiver = signer.client.addressPrefix === "ckb" ?
+  await signer.getRecommendedAddress() :
+  "ckt1qrfrwcdnvssswdwpn3s9v8fp87emat306ctjwsm3nmlkjg8qyza2cqgqq8tfmtd3hl2gj0haq54t24kgwtdpz5ffzukkny82";
+console.log(receiver);
+
+const { script: to } = await ccc.Address.fromString(
+  receiver,
+  signer.client,
+);
+
+// Replace with your spore id
+const sporeId = "0x39b78c12f632742d53fb009a4c9b25fbcf8ea0891fea1a180eeac97299ab158f";
+
+// Build transaction
+const { tx } = await ccc.spore.transferSpore({
+  signer,
+  id: sporeId,
+  to,
+});
+await render(tx);
+
+// Complete missing parts: Pay fee
+await tx.completeFeeBy(signer, 1000);
+await render(tx);
+
+// Send transaction
+const txHash = await signer.sendTransaction(tx);
+console.log("Transaction sent:", getExplorerTxUrl(txHash));
+await signer.client.waitTransaction(txHash);
+// https://testnet.explorer.nervos.org/transaction/0x8ab5a1e5d6bec881b4535ae02b0c39f7adabb1970dffb18e7b5aa16f9a89a289
+console.log("Transaction committed:", getExplorerTxUrl(txHash));
+await render(tx);
+```
+[RUN it on CCC Playground](https://live.ckbccc.com/?src=nostr:nevent1qqswfderscp808uh8ey8nwfx033qesh7javqxpa5sajwce3ea4wlauspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqg4waehxw309ac82unsd3jhyetvv9ujucm0d5q32amnwvaz7tmjv4kxz7fwdehhxarj9ehx2aqpz3mhxue69uhkummnw3ezummcw3ezuer9wcq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k76seux8)
+</details>
+
+### Melt Spore ⭐️
+
+<details>
+  <summary>Toggle to view code</summary>
+```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { render, signer } from "@ckb-ccc/playground";
+
+function getExplorerTxUrl(txHash: string) {
+  const isMainnet = signer.client.addressPrefix === 'ckb';
+  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+
+  return `${baseUrl}/transaction/${txHash}`
+}
+
+// Replace with your spore id
+const sporeId = "0x949c8c2182d6b44c134fe8aaa6e5a7a9701b1bb3bd6d04687ac8575331ca65db";
+
+// Build transaction
+const { tx } = await ccc.spore.meltSpore({
+  signer,
+  id: sporeId,
+});
+await render(tx);
+
+// Complete missing parts: Pay fee
+await tx.completeFeeBy(signer, 1000);
+await render(tx);
+
+// Send transaction
+const txHash = await signer.sendTransaction(tx);
+console.log("Transaction sent:", getExplorerTxUrl(txHash));
+await signer.client.waitTransaction(txHash);
+// https://testnet.explorer.nervos.org/transaction/0x0362d2ddf2cfe0ffbb3615ab64ae8b6dbd8f60c8c3455dc386c611b1b4bc39de
+console.log("Transaction committed:", getExplorerTxUrl(txHash));
+await render(tx);
+```
+[RUN it on CCC Playground](https://live.ckbccc.com/?src=nostr:nevent1qqsynmj9sey8e6s52yjwgpwj7lmmpr0eveq8hu8nd7l5teqjt8pzwegpz4mhxue69uhhqatjwpkx2un9d3shjtnrdaksz9thwden5te0wfjkccte9ehx7um5wghxuet5qy28wumn8ghj7mn0wd68ytn00p68ytnyv4mqz9rhwden5te0wfjkccte9ejxzmt4wvhxjmc7u7klm)
+</details>
+
 ### Manage NervosDAO
 
 <details>
   <summary>Toggle to view code</summary>
-
-  ```tsx
-  "use client";
+```tsx
+"use client";
 
 import React, { useEffect, useMemo, useState } from "react";
 import { TextInput } from "@/src/components/Input";
@@ -1105,6 +1267,7 @@ function getClaimEpoch(
       depositEpoch[2],
     ];
   }
+
   return [
     depositEpoch[0] + (intDiff / ccc.numFrom(180)) * ccc.numFrom(180),
     depositEpoch[1],
@@ -1139,18 +1302,13 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
       const tipHeader = await signer.client.getTipHeader();
       setTip(tipHeader);
 
-      const previousTx = await signer.client.getTransaction(
+      const previousTxRes = await signer.client.getTransactionWithHeader(
         dao.outPoint.txHash,
       );
-      if (!previousTx?.blockHash) {
+      if (!previousTxRes || !previousTxRes.header) {
         return;
       }
-      const previousHeader = await signer.client.getHeaderByHash(
-        previousTx.blockHash,
-      );
-      if (!previousHeader) {
-        return;
-      }
+      const { transaction: previousTx, header: previousHeader } = previousTxRes;
 
       const claimInfo = await (async (): Promise<typeof infos> => {
         if (isNew) {
@@ -1160,17 +1318,13 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
         const depositTxHash =
           previousTx.transaction.inputs[Number(dao.outPoint.index)]
             .previousOutput.txHash;
-        const depositTx = await signer.client.getTransaction(depositTxHash);
-        if (!depositTx?.blockHash) {
+        const depositTxRes =
+          await signer.client.getTransactionWithHeader(depositTxHash);
+        if (!depositTxRes || !depositTxRes.header) {
           return;
         }
-        const depositHeader = await signer.client.getHeaderByHash(
-          depositTx.blockHash,
-        );
+        const { transaction: depositTx, header: depositHeader } = depositTxRes;
 
-        if (!depositHeader) {
-          return;
-        }
         return [
           getProfit(dao, depositHeader, previousHeader),
           depositTx,
@@ -1191,6 +1345,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
       }
     })();
   }, [dao, signer, isNew]);
+
   return (
     <BigButton
       key={ccc.hexFrom(dao.outPoint.toBytes())}
@@ -1227,7 +1382,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
             );
 
             await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeBy(signer, 1000);
+            await tx.completeFeeBy(signer);
           } else {
             if (!infos[3]) {
               error("Unexpected no found deposit info");
@@ -1235,7 +1390,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
             }
             const [withdrawTx, withdrawHeader] = infos[3];
             if (!withdrawTx?.blockHash) {
-              error("Unexpected empty withdraw tx block info");
+              error("Unexpected empty redeem tx block info");
               return;
             }
             if (!depositTx.blockHash) {
@@ -1251,10 +1406,8 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
                   since: {
                     relative: "absolute",
                     metric: "epoch",
-                    value: ccc.numLeFromBytes(
-                      ccc.epochToHex(
-                        getClaimEpoch(depositHeader, withdrawHeader),
-                      ),
+                    value: ccc.epochToHex(
+                      getClaimEpoch(depositHeader, withdrawHeader),
                     ),
                   },
                 },
@@ -1276,15 +1429,15 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
             );
 
             await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeChangeToOutput(signer, 0, 1000);
+            await tx.completeFeeChangeToOutput(signer, 0);
             tx.outputs[0].capacity += profit;
           }
 
           // Sign and send the transaction
-          log(
-            "Transaction sent:",
-            explorerTransaction(await signer.sendTransaction(tx)),
-          );
+          const txHash = await signer.sendTransaction(tx);
+          log("Transaction sent:", explorerTransaction(txHash));
+          await signer.client.waitTransaction(txHash);
+          log("Transaction committed:", explorerTransaction(txHash));
         })();
       }}
       className={`align-center ${isNew ? "text-yellow-400" : "text-orange-400"}`}
@@ -1318,7 +1471,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
             epoch
           </div>
         ) : undefined}
-        <span>{isNew ? "Withdraw" : "Claim"}</span>
+        <span>{isNew ? "Redeem" : "Withdraw"}</span>
       </div>
     </BigButton>
   );
@@ -1331,6 +1484,7 @@ export default function Transfer() {
   const { explorerTransaction } = useGetExplorerLink();
 
   const [amount, setAmount] = useState<string>("");
+  const [feeRate, setFeeRate] = useState<undefined | ccc.Num>();
   const [daos, setDaos] = useState<ccc.Cell[]>([]);
 
   useEffect(() => {
@@ -1357,6 +1511,7 @@ export default function Transfer() {
       }
     })();
   }, [signer]);
+
   return (
     <div className="flex w-full flex-col items-stretch">
       <TextInput
@@ -1396,8 +1551,10 @@ export default function Transfer() {
               ccc.KnownScript.NervosDao,
             );
 
-            await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeChangeToOutput(signer, 0, 1000);
+            await tx.completeInputsAll(signer);
+            const feeRate = await signer.client.getFeeRate();
+            setFeeRate(feeRate);
+            await tx.completeFeeChangeToOutput(signer, 0, feeRate);
 
             const amount = ccc.fixedPointToString(tx.outputs[0].capacity);
             log("You can deposit at most", amount, "CKB");
@@ -1444,13 +1601,13 @@ export default function Transfer() {
             tx.outputs[0].capacity = ccc.fixedPointFrom(amount);
 
             await tx.completeInputsByCapacity(signer);
-            await tx.completeFeeBy(signer, 1000);
+            await tx.completeFeeBy(signer, feeRate);
 
             // Sign and send the transaction
-            log(
-              "Transaction sent:",
-              explorerTransaction(await signer.sendTransaction(tx)),
-            );
+            const txHash = await signer.sendTransaction(tx);
+            log("Transaction sent:", explorerTransaction(txHash));
+            await signer.client.waitTransaction(txHash);
+            log("Transaction committed:", explorerTransaction(txHash));
           }}
         >
           Deposit
@@ -1461,6 +1618,8 @@ export default function Transfer() {
 }
 ````
 
+[Live demo](https://app.ckbccc.com/connected/NervosDao) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/NervosDao/page.tsx>)
+
 </details>
 
 ### Generate Mnemonics & Keypairs and Encrypt to a Keystore
@@ -1468,11 +1627,11 @@ export default function Transfer() {
 <details>
   <summary>Toggle to view code</summary>
   
-  ```tsx
-  "use client";
+```tsx
+"use client";
 
 import { ccc } from "@ckb-ccc/connector-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/src/components/Button";
 import { TextInput } from "@/src/components/Input";
 import * as bip39 from "@scure/bip39";
@@ -1505,7 +1664,32 @@ path: string;
 
 );
 
-useEffect(() => setAccount([]), [mnemonic]);
+const moreAccounts = useCallback(async () => {
+const count = parseInt(countStr, 10);
+const seed = await bip39.mnemonicToSeed(mnemonic);
+const hdKey = HDKey.fromMasterSeed(seed);
+setAccount((accounts) => [
+...accounts,
+...Array.from(new Array(count), (_, i) => {
+const path = `m/44'/309'/0'/0/${i + accounts.length}`;
+const derivedKey = hdKey.derive(path);
+return {
+publicKey: ccc.hexFrom(derivedKey.publicKey!),
+privateKey: ccc.hexFrom(derivedKey.privateKey!),
+path,
+address: "",
+};
+}),
+]);
+}, [countStr, mnemonic]);
+
+useEffect(() => {
+setAccount([]);
+if (isValid) {
+moreAccounts();
+}
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [mnemonic]);
 
 useEffect(() => {
 (async () => {
@@ -1528,8 +1712,8 @@ setAccount(newAccounts);
 }
 })();
 }, [client, accounts]);
-return (
 
+return (
 <div className="mb-1 flex w-9/12 flex-col items-stretch">
 <TextInput
 label="Mnemonic"
@@ -1543,7 +1727,7 @@ state={[countStr, setCountStr]}
 />
 <TextInput
 label="Password"
-placeholder="Password"
+placeholder="Set password for Keystore"
 state={[password, setPassword]}
 />
 {accounts.length !== 0 ? (
@@ -1565,24 +1749,7 @@ Random Mnemonic
 </Button>
 <Button
 className="ml-2"
-onClick={async () => {
-const count = parseInt(countStr, 10);
-const seed = await bip39.mnemonicToSeed(mnemonic);
-const hdKey = HDKey.fromMasterSeed(seed);
-setAccount([
-...accounts,
-...Array.from(new Array(count), (_, i) => {
-const path = `m/44'/309'/0'/0/${i}`;
-const derivedKey = hdKey.derive(path);
-return {
-publicKey: ccc.hexFrom(derivedKey.publicKey!),
-privateKey: ccc.hexFrom(derivedKey.privateKey!),
-path,
-address: "",
-};
-}),
-]);
-}}
+onClick={moreAccounts}
 disabled={!isValid || Number.isNaN(parseInt(countStr, 10))} >
 More accounts
 </Button>
@@ -1621,16 +1788,18 @@ Save as CSV
 }
 
 ````
+[Live demo](https://app.ckbccc.com/utils/Mnemonic) | [View code on Github](https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/utils/(tools)/Mnemonic/page.tsx)
 </details>
 
 ### Decrypt a Keystore
+
 <details>
-<summary>Toggle to view code</summary>
+  <summary>Toggle to view code</summary>
 ```tsx
 "use client";
 
 import { ccc } from "@ckb-ccc/connector-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@/src/components/Button";
 import { TextInput } from "@/src/components/Input";
 import { HDKey } from "@scure/bip32";
@@ -1639,138 +1808,148 @@ import { useApp } from "@/src/context";
 import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 
 export default function Keystore() {
-const { client } = ccc.useCcc();
-const { createSender } = useApp();
-const { log, error } = createSender("Keystore");
+  const { client } = ccc.useCcc();
+  const { createSender } = useApp();
+  const { log, error } = createSender("Keystore");
 
-const [keystore, setKeystore] = useState<string>("");
-const [password, setPassword] = useState<string>("");
-const [countStr, setCountStr] = useState<string>("10");
-const [accounts, setAccount] = useState<
-  {
-    publicKey: string;
-    privateKey: string;
-    address: string;
-    path: string;
-  }[]
->([]);
-const [hdKey, setHdKey] = useState<HDKey | undefined>(undefined);
-
-useEffect(() => {
-  setAccount([]);
-  setHdKey(undefined);
-}, [keystore, password]);
-
-useEffect(() => {
-  (async () => {
-    let modified = false;
-    const newAccounts = await Promise.all(
-      accounts.map(async (acc) => {
-        const address = await new ccc.SignerCkbPublicKey(
-          client,
-          acc.publicKey,
-        ).getRecommendedAddress();
-        if (address !== acc.address) {
-          modified = true;
-        }
-        acc.address = address;
-        return acc;
-      }),
-    );
-    if (modified) {
-      setAccount(newAccounts);
+  const [keystore, setKeystore] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [countStr, setCountStr] = useState<string>("10");
+  const [accounts, setAccount] = useState<
+    {
+      publicKey: string;
+      privateKey: string;
+      address: string;
+      path: string;
+    }[]
+  >([]);
+  const [hdKey, setHdKey] = useState<HDKey | undefined>(undefined);
+  const moreAccounts = useCallback(async () => {
+    if (!hdKey) {
+      return;
     }
-  })();
-}, [client, accounts]);
-return (
-  <div className="flex w-full flex-col items-stretch">
-    <Textarea
-      label="keystore"
-      placeholder="Keystore"
-      state={[keystore, setKeystore]}
-    />
-    <TextInput
-      label="Accounts count"
-      placeholder="Accounts count"
-      state={[countStr, setCountStr]}
-    />
-    <TextInput
-      label="Password"
-      placeholder="Password"
-      state={[password, setPassword]}
-    />
-    {accounts.length !== 0 ? (
-      <div className="mt-1 w-full overflow-scroll whitespace-nowrap">
-        <p>path, address, private key</p>
-        {accounts.map(({ privateKey, address, path }) => (
-          <p key={path}>
-            {path}, {address}, {privateKey}
-          </p>
-        ))}
-      </div>
-    ) : undefined}
-    <ButtonsPanel>
-      <Button
-        onClick={async () => {
-          try {
-            const { privateKey, chainCode } = await ccc.keystoreDecrypt(
-              JSON.parse(keystore),
-              password,
-            );
-            setHdKey(new HDKey({ privateKey, chainCode }));
-          } catch (err) {
-            error("Invalid");
-            throw err;
+    const count = parseInt(countStr, 10);
+    setAccount((accounts) => [
+      ...accounts,
+      ...Array.from(new Array(count), (_, i) => {
+        const path = `m/44'/309'/0'/0/${i + accounts.length}`;
+        const derivedKey = hdKey.derive(path);
+        return {
+          publicKey: ccc.hexFrom(derivedKey.publicKey!),
+          privateKey: ccc.hexFrom(derivedKey.privateKey!),
+          path,
+          address: "",
+        };
+      }),
+    ]);
+  }, [hdKey, countStr]);
+  useEffect(() => {
+    setAccount([]);
+    moreAccounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hdKey]);
+
+  useEffect(() => {
+    setAccount([]);
+    setHdKey(undefined);
+  }, [keystore, password]);
+
+  useEffect(() => {
+    (async () => {
+      let modified = false;
+      const newAccounts = await Promise.all(
+        accounts.map(async (acc) => {
+          const address = await new ccc.SignerCkbPublicKey(
+            client,
+            acc.publicKey,
+          ).getRecommendedAddress();
+          if (address !== acc.address) {
+            modified = true;
           }
-          log("Valid");
-        }}
-      >
-        Verify Keystore
-      </Button>
-      <Button
-        className="ml-2"
-        onClick={async () => {
-          if (!hdKey) {
-            return;
-          }
-          const count = parseInt(countStr, 10);
-          setAccount([
-            ...accounts,
-            ...Array.from(new Array(count), (_, i) => {
-              const path = `m/44'/309'/0'/0/${i}`;
-              const derivedKey = hdKey.derive(path);
-              return {
-                publicKey: ccc.hexFrom(derivedKey.publicKey!),
-                privateKey: ccc.hexFrom(derivedKey.privateKey!),
-                path,
-                address: "",
-              };
-            }),
-          ]);
-        }}
-        disabled={!hdKey || Number.isNaN(parseInt(countStr, 10))}
-      >
-        More accounts
-      </Button>
+          acc.address = address;
+          return acc;
+        }),
+      );
+      if (modified) {
+        setAccount(newAccounts);
+      }
+    })();
+  }, [client, accounts]);
+
+  return (
+    <div className="flex w-full flex-col items-stretch">
+      <Textarea
+        label="keystore"
+        placeholder="Keystore"
+        state={[keystore, setKeystore]}
+      />
+      <TextInput
+        label="Accounts count"
+        placeholder="Accounts count"
+        state={[countStr, setCountStr]}
+      />
+      <TextInput
+        label="Password"
+        placeholder="Password"
+        state={[password, setPassword]}
+      />
       {accounts.length !== 0 ? (
-        <Button
-          as="a"
-          className="mt-2"
-          href={`data:application/octet-stream,path%2C%20address%2C%20private%20key%0A${accounts
-            .map(({ privateKey, address, path }) =>
-              encodeURIComponent(`${path}, ${address}, ${privateKey}`),
-            )
-            .join("\n")}`}
-          download={`ckb_accounts_${Date.now()}.csv`}
-        >
-          Save as CSV
-        </Button>
+        <div className="mt-1 w-full overflow-scroll whitespace-nowrap bg-white">
+          <p>path, address, private key</p>
+          {accounts.map(({ privateKey, address, path }) => (
+            <p key={path}>
+              {path}, {address}, {privateKey}
+            </p>
+          ))}
+        </div>
       ) : undefined}
-    </ButtonsPanel>
-  </div>
-);
+      <ButtonsPanel>
+        <Button
+          variant="success"
+          onClick={async () => {
+            try {
+              const { privateKey, chainCode } = await ccc.keystoreDecrypt(
+                JSON.parse(keystore),
+                password,
+              );
+              setHdKey(new HDKey({ privateKey, chainCode }));
+            } catch (err) {
+              error("Invalid");
+              throw err;
+            }
+            log("Valid");
+          }}
+        >
+          Verify Keystore
+        </Button>
+        <Button
+          className="ml-2"
+          onClick={moreAccounts}
+          disabled={!hdKey || Number.isNaN(parseInt(countStr, 10))}
+        >
+          More accounts
+        </Button>
+        {accounts.length !== 0 ? (
+          <Button
+            as="a"
+            className="ml-2"
+            href={`data:application/octet-stream,path%2C%20address%2C%20private%20key%0A${accounts
+              .map(({ privateKey, address, path }) =>
+                encodeURIComponent(`${path}, ${address}, ${privateKey}`),
+              )
+              .join("\n")}`}
+            download={`ckb_accounts_${Date.now()}.csv`}
+          >
+            Save as CSV
+          </Button>
+        ) : undefined}
+      </ButtonsPanel>
+    </div>
+  );
 }
 ````
+
+[Live demo](https://app.ckbccc.com/utils/Keystore) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/utils/(tools)/Keystore/page.tsx>)
 
 </details>
 
