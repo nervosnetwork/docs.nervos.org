@@ -73,7 +73,6 @@ export default {
       items: [
         "integrate-wallets/intro-to-wallets",
         "integrate-wallets/ccc-wallet",
-        "integrate-wallets/joyid",
       ],
     },
     {
