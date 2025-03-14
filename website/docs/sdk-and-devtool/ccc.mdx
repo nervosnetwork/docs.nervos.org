@@ -228,6 +228,7 @@ export default function Hash() {
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 "use client";
 
@@ -245,44 +246,44 @@ export default function Transfer() {
   const { log, error } = createSender("Transfer");
   const { explorerTransaction } = useGetExplorerLink();
 
-const [transferTo, setTransferTo] = useState<string>("");
-const [amount, setAmount] = useState<string>("");
-const [data, setData] = useState<string>("");
+  const [transferTo, setTransferTo] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [data, setData] = useState<string>("");
 
-return (
-<div className="flex w-full flex-col items-stretch">
-<Textarea
-label="Address"
-placeholder="Addresses to transfer to, separated by lines"
-state={[transferTo, setTransferTo]}
-/>
-<TextInput
-label="Amount"
-placeholder="Amount to transfer for each"
-state={[amount, setAmount]}
-/>
-<Textarea
-label="Output Data(Options)"
-state={[data, setData]}
-placeholder="Leave empty if you don't know what this is. Data in the first output. Hex string will be parsed."
-/>
-<ButtonsPanel>
-<Button
-variant="info"
-onClick={async () => {
-if (!signer) {
-return;
-}
-if (transferTo.split("\n").length !== 1) {
-error("Only one destination is allowed for max amount");
-return;
-}
+  return (
+    <div className="flex w-full flex-col items-stretch">
+      <Textarea
+        label="Address"
+        placeholder="Addresses to transfer to, separated by lines"
+        state={[transferTo, setTransferTo]}
+      />
+      <TextInput
+        label="Amount"
+        placeholder="Amount to transfer for each"
+        state={[amount, setAmount]}
+      />
+      <Textarea
+        label="Output Data(Options)"
+        state={[data, setData]}
+        placeholder="Leave empty if you don't know what this is. Data in the first output. Hex string will be parsed."
+      />
+      <ButtonsPanel>
+        <Button
+          variant="info"
+          onClick={async () => {
+            if (!signer) {
+              return;
+            }
+            if (transferTo.split("\n").length !== 1) {
+              error("Only one destination is allowed for max amount");
+              return;
+            }
 
             log("Calculating the max amount...");
             // Verify destination address
             const { script: toLock } = await ccc.Address.fromString(
               transferTo,
-              signer.client,
+              signer.client
             );
 
             // Build the full transaction to estimate the fee
@@ -313,7 +314,7 @@ return;
             const toAddresses = await Promise.all(
               transferTo
                 .split("\n")
-                .map((addr) => ccc.Address.fromString(addr, signer.client)),
+                .map((addr) => ccc.Address.fromString(addr, signer.client))
             );
 
             const tx = ccc.Transaction.from({
@@ -345,20 +346,21 @@ return;
         </Button>
       </ButtonsPanel>
     </div>
-
-);
+  );
 }
+```
 
-````
-[Live demo](https://app.ckbccc.com/connected/Transfer) | [View code on Github](https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/Transfer/page.tsx)
+[Live demo](https://app.ckbccc.com/connected/Transfer) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/Transfer/page.tsx>)
 
 </details>
 
 ### Transfer Native CKB Tokens With Lumos SDK
+
 <details>
   <summary>Toggle to view code</summary>
-  ```tsx
-  "use client";
+
+```tsx
+"use client";
 
 import React, { useState } from "react";
 import { TextInput } from "@/src/components/Input";
@@ -419,7 +421,7 @@ export default function TransferLumos() {
               signer.client.url
                 .replace("wss://", "https://")
                 .replace("ws://", "http://")
-                .replace(new RegExp("/ws/?$"), "/"),
+                .replace(new RegExp("/ws/?$"), "/")
             );
             let txSkeleton = new TransactionSkeleton({
               cellProvider: indexer,
@@ -436,7 +438,7 @@ export default function TransferLumos() {
                   signer.client.addressPrefix === "ckb"
                     ? predefined.LINA
                     : predefined.AGGRON4,
-              },
+              }
             );
             txSkeleton = await common.payFeeByFeeRate(
               txSkeleton,
@@ -448,7 +450,7 @@ export default function TransferLumos() {
                   signer.client.addressPrefix === "ckb"
                     ? predefined.LINA
                     : predefined.AGGRON4,
-              },
+              }
             );
             // ======
 
@@ -462,9 +464,7 @@ export default function TransferLumos() {
 
               return ccc.bytesFrom(data, "utf8");
             })();
-            if (
-              tx.outputs[0].capacity < ccc.fixedPointFrom(dataBytes.length)
-            ) {
+            if (tx.outputs[0].capacity < ccc.fixedPointFrom(dataBytes.length)) {
               error("Insufficient capacity to store data");
               return;
             }
@@ -473,7 +473,7 @@ export default function TransferLumos() {
             // Sign and send the transaction
             log(
               "Transaction sent:",
-              explorerTransaction(await signer.sendTransaction(tx)),
+              explorerTransaction(await signer.sendTransaction(tx))
             );
           }}
         >
@@ -483,7 +483,7 @@ export default function TransferLumos() {
     </div>
   );
 }
-````
+```
 
 [Live demo](https://app.ckbccc.com/connected/TransferLumos) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/TransferLumos/page.tsx>)
 
@@ -493,6 +493,7 @@ export default function TransferLumos() {
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 "use client";
 
@@ -510,164 +511,176 @@ import Link from "next/link";
 export default function IssueXUdtSul() {
   const { signer, createSender } = useApp();
   const { log, error } = createSender("Issue xUDT (SUS)");
+
   const { explorerTransaction } = useGetExplorerLink();
 
-const [amount, setAmount] = useState<string>("");
-const [decimals, setDecimals] = useState<string>("");
-const [name, setName] = useState<string>("");
-const [symbol, setSymbol] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [decimals, setDecimals] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [symbol, setSymbol] = useState<string>("");
 
-return (
-<div className="flex w-full flex-col items-stretch">
-<Message title="Hint" type="info">
-You will need to sign two or three transactions.
-</Message>
+  return (
+    <>
+      <div className="flex w-full flex-col items-stretch">
+        <Message title="Hint" type="info">
+          You will need to sign two or three transactions.
+          <br />
+          Learn more on{" "}
+          <Link
+            className="underline"
+            href="https://talk.nervos.org/t/en-cn-misc-single-use-seals/8279"
+            target="_blank"
+          >
+            [EN/CN] Misc: Single-Use-Seals - 杂谈：一次性密封
+          </Link>
+        </Message>
 
-      <TextInput
-        label="Amount"
-        placeholder="Amount to issue"
-        state={[amount, setAmount]}
-      />
-      <TextInput
-        label="Decimals"
-        placeholder="Decimals of the token"
-        state={[decimals, setDecimals]}
-      />
-      <TextInput
-        label="Symbol"
-        placeholder="Symbol of the token"
-        state={[symbol, setSymbol]}
-      />
-      <TextInput
-        label="Name"
-        placeholder="Name of the token, same as symbol if empty"
-        state={[name, setName]}
-      />
+        <TextInput
+          label="Amount"
+          placeholder="Amount to issue"
+          state={[amount, setAmount]}
+        />
+        <TextInput
+          label="Decimals"
+          placeholder="Decimals of the token"
+          state={[decimals, setDecimals]}
+        />
+        <TextInput
+          label="Symbol"
+          placeholder="Symbol of the token"
+          state={[symbol, setSymbol]}
+        />
+        <TextInput
+          label="Name"
+          placeholder="Name of the token, same as symbol if empty"
+          state={[name, setName]}
+        />
 
-      <ButtonsPanel>
-        <Button
-          className="self-center"
-          onClick={async () => {
-            if (!signer) {
-              return;
-            }
-            if (decimals === "" || symbol === "") {
-              error("Invalid token info");
-              return;
-            }
+        <ButtonsPanel>
+          <Button
+            className="self-center"
+            onClick={async () => {
+              if (!signer) {
+                return;
+              }
+              if (decimals === "" || symbol === "") {
+                error("Invalid token info");
+                return;
+              }
 
-            const { script } = await signer.getRecommendedAddressObj();
+              const { script } = await signer.getRecommendedAddressObj();
 
-            const susTx = ccc.Transaction.from({
-              outputs: [
-                {
-                  lock: script,
-                },
-              ],
-            });
-            await susTx.completeInputsByCapacity(signer);
-            await susTx.completeFeeBy(signer);
-            const susTxHash = await signer.sendTransaction(susTx);
-            log("Transaction sent:", explorerTransaction(susTxHash));
-            await signer.client.cache.markUnusable({
-              txHash: susTxHash,
-              index: 0,
-            });
-
-            const singleUseLock = await ccc.Script.fromKnownScript(
-              signer.client,
-              ccc.KnownScript.SingleUseLock,
-              ccc.OutPoint.from({
+              const susTx = ccc.Transaction.from({
+                outputs: [
+                  {
+                    lock: script,
+                  },
+                ],
+              });
+              await susTx.completeInputsByCapacity(signer);
+              await susTx.completeFeeBy(signer);
+              const susTxHash = await signer.sendTransaction(susTx);
+              log("Transaction sent:", explorerTransaction(susTxHash));
+              await signer.client.cache.markUnusable({
                 txHash: susTxHash,
                 index: 0,
-              }).toBytes(),
-            );
-            const lockTx = ccc.Transaction.from({
-              outputs: [
-                // Owner cell
-                {
-                  lock: singleUseLock,
-                },
-              ],
-            });
-            await lockTx.completeInputsByCapacity(signer);
-            await lockTx.completeFeeBy(signer);
-            const lockTxHash = await signer.sendTransaction(lockTx);
-            log("Transaction sent:", explorerTransaction(lockTxHash));
+              });
 
-            const mintTx = ccc.Transaction.from({
-              inputs: [
-                // SUS
-                {
-                  previousOutput: {
-                    txHash: susTxHash,
-                    index: 0,
+              const singleUseLock = await ccc.Script.fromKnownScript(
+                signer.client,
+                ccc.KnownScript.SingleUseLock,
+                ccc.OutPoint.from({
+                  txHash: susTxHash,
+                  index: 0,
+                }).toBytes()
+              );
+              const lockTx = ccc.Transaction.from({
+                outputs: [
+                  // Owner cell
+                  {
+                    lock: singleUseLock,
                   },
-                },
-                // Owner cell
-                {
-                  previousOutput: {
-                    txHash: lockTxHash,
-                    index: 0,
-                  },
-                },
-              ],
-              outputs: [
-                // Issued xUDT
-                {
-                  lock: script,
-                  type: await ccc.Script.fromKnownScript(
-                    signer.client,
-                    ccc.KnownScript.XUdt,
-                    singleUseLock.hash(),
-                  ),
-                },
-                // xUDT Info
-                {
-                  lock: script,
-                  type: await ccc.Script.fromKnownScript(
-                    signer.client,
-                    ccc.KnownScript.UniqueType,
-                    "00".repeat(32),
-                  ),
-                },
-              ],
-              outputsData: [
-                ccc.numLeToBytes(amount, 16),
-                tokenInfoToBytes(decimals, symbol, name),
-              ],
-            });
-            await mintTx.addCellDepsOfKnownScripts(
-              signer.client,
-              ccc.KnownScript.SingleUseLock,
-              ccc.KnownScript.XUdt,
-              ccc.KnownScript.UniqueType,
-            );
-            await mintTx.completeInputsByCapacity(signer);
-            if (!mintTx.outputs[1].type) {
-              error("Unexpected disappeared output");
-              return;
-            }
-            mintTx.outputs[1].type!.args = ccc.hexFrom(
-              ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 1)).slice(0, 20),
-            );
-            await mintTx.completeFeeBy(signer);
-            const mintTxHash = await signer.sendTransaction(mintTx);
-            log("Transaction sent:", explorerTransaction(mintTxHash));
-            await signer.client.waitTransaction(mintTxHash);
-            log("Transaction committed:", explorerTransaction(mintTxHash));
-          }}
-        >
-          Issue
-        </Button>
-      </ButtonsPanel>
-    </div>
+                ],
+              });
+              await lockTx.completeInputsByCapacity(signer);
+              await lockTx.completeFeeBy(signer);
+              const lockTxHash = await signer.sendTransaction(lockTx);
+              log("Transaction sent:", explorerTransaction(lockTxHash));
 
-);
+              const mintTx = ccc.Transaction.from({
+                inputs: [
+                  // SUS
+                  {
+                    previousOutput: {
+                      txHash: susTxHash,
+                      index: 0,
+                    },
+                  },
+                  // Owner cell
+                  {
+                    previousOutput: {
+                      txHash: lockTxHash,
+                      index: 0,
+                    },
+                  },
+                ],
+                outputs: [
+                  // Issued xUDT
+                  {
+                    lock: script,
+                    type: await ccc.Script.fromKnownScript(
+                      signer.client,
+                      ccc.KnownScript.XUdt,
+                      singleUseLock.hash()
+                    ),
+                  },
+                  // xUDT Info
+                  {
+                    lock: script,
+                    type: await ccc.Script.fromKnownScript(
+                      signer.client,
+                      ccc.KnownScript.UniqueType,
+                      "00".repeat(32)
+                    ),
+                  },
+                ],
+                outputsData: [
+                  ccc.numLeToBytes(amount, 16),
+                  tokenInfoToBytes(decimals, symbol, name),
+                ],
+              });
+              await mintTx.addCellDepsOfKnownScripts(
+                signer.client,
+                ccc.KnownScript.SingleUseLock,
+                ccc.KnownScript.XUdt,
+                ccc.KnownScript.UniqueType
+              );
+              await mintTx.completeInputsByCapacity(signer);
+              if (!mintTx.outputs[1].type) {
+                error("Unexpected disappeared output");
+                return;
+              }
+              mintTx.outputs[1].type!.args = ccc.hexFrom(
+                ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 1)).slice(0, 20)
+              );
+              await mintTx.completeFeeBy(signer);
+              const mintTxHash = await signer.sendTransaction(mintTx);
+              log("Transaction sent:", explorerTransaction(mintTxHash));
+              await signer.client.waitTransaction(mintTxHash);
+              log("Transaction committed:", explorerTransaction(mintTxHash));
+            }}
+          >
+            Issue
+          </Button>
+        </ButtonsPanel>
+      </div>
+    </>
+  );
 }
+```
 
-````
-[Live demo](https://app.ckbccc.com/connected/IssueXUdtSus) | [View code on Github](https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/IssueXUdtSus/page.tsx)
+[Live demo](https://app.ckbccc.com/connected/IssueXUdtSus) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/IssueXUdtSus/page.tsx>)
+
 </details>
 
 ### Issue xUDT Tokens Controlled by a Type ID Cell ⭐️
@@ -748,7 +761,7 @@ export default function IssueXUdtTypeId() {
                 return ccc.Script.fromKnownScript(
                   signer.client,
                   ccc.KnownScript.TypeId,
-                  typeIdArgs,
+                  typeIdArgs
                 );
               }
               const typeIdTx = ccc.Transaction.from({
@@ -758,7 +771,7 @@ export default function IssueXUdtTypeId() {
                     type: await ccc.Script.fromKnownScript(
                       signer.client,
                       ccc.KnownScript.TypeId,
-                      "00".repeat(32),
+                      "00".repeat(32)
                     ),
                   },
                 ],
@@ -770,12 +783,12 @@ export default function IssueXUdtTypeId() {
               }
               typeIdTx.outputs[0].type.args = ccc.hashTypeId(
                 typeIdTx.inputs[0],
-                0,
+                0
               );
               await typeIdTx.completeFeeBy(signer);
               log(
                 "Transaction sent:",
-                explorerTransaction(await signer.sendTransaction(typeIdTx)),
+                explorerTransaction(await signer.sendTransaction(typeIdTx))
               );
               log("Type ID created: ", typeIdTx.outputs[0].type.args);
               return typeIdTx.outputs[0].type;
@@ -787,7 +800,7 @@ export default function IssueXUdtTypeId() {
             const outputTypeLock = await ccc.Script.fromKnownScript(
               signer.client,
               ccc.KnownScript.OutputTypeProxyLock,
-              typeId.hash(),
+              typeId.hash()
             );
             const lockTx = ccc.Transaction.from({
               outputs: [
@@ -802,8 +815,9 @@ export default function IssueXUdtTypeId() {
             const lockTxHash = await signer.sendTransaction(lockTx);
             log("Transaction sent:", explorerTransaction(lockTxHash));
 
-            const typeIdCell =
-              await signer.client.findSingletonCellByType(typeId);
+            const typeIdCell = await signer.client.findSingletonCellByType(
+              typeId
+            );
             if (!typeIdCell) {
               error("Type ID cell not found");
               return;
@@ -831,7 +845,7 @@ export default function IssueXUdtTypeId() {
                   type: await ccc.Script.fromKnownScript(
                     signer.client,
                     ccc.KnownScript.XUdt,
-                    outputTypeLock.hash(),
+                    outputTypeLock.hash()
                   ),
                 },
                 // xUDT Info
@@ -840,7 +854,7 @@ export default function IssueXUdtTypeId() {
                   type: await ccc.Script.fromKnownScript(
                     signer.client,
                     ccc.KnownScript.UniqueType,
-                    "00".repeat(32),
+                    "00".repeat(32)
                   ),
                 },
               ],
@@ -854,14 +868,14 @@ export default function IssueXUdtTypeId() {
               signer.client,
               ccc.KnownScript.OutputTypeProxyLock,
               ccc.KnownScript.XUdt,
-              ccc.KnownScript.UniqueType,
+              ccc.KnownScript.UniqueType
             );
             await mintTx.completeInputsByCapacity(signer);
             if (!mintTx.outputs[2].type) {
               throw new Error("Unexpected disappeared output");
             }
             mintTx.outputs[2].type!.args = ccc.hexFrom(
-              ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 2)).slice(0, 20),
+              ccc.bytesFrom(ccc.hashTypeId(mintTx.inputs[0], 2)).slice(0, 20)
             );
             await mintTx.completeFeeBy(signer);
             const mintTxHash = await signer.sendTransaction(mintTx);
@@ -876,7 +890,7 @@ export default function IssueXUdtTypeId() {
     </div>
   );
 }
-````
+```
 
 [Live demo](https://app.ckbccc.com/connected/IssueXUdtTypeId) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/IssueXUdtTypeId/page.tsx>)
 
@@ -886,6 +900,7 @@ export default function IssueXUdtTypeId() {
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 "use client";
 
@@ -903,44 +918,45 @@ export default function TransferXUdt() {
   const { log } = createSender("Transfer xUDT");
   const { explorerTransaction } = useGetExplorerLink();
 
-const [xUdtArgs, setXUdtArgs] = useState<string>("");
-const [transferTo, setTransferTo] = useState<string>("");
-const [amount, setAmount] = useState<string>("");
-return (
-<div className="flex w-full flex-col items-stretch">
-<TextInput
-label="Args"
-placeholder="xUdt args to transfer"
-state={[xUdtArgs, setXUdtArgs]}
-/>
-<Textarea
-label="Address"
-placeholder="Addresses to transfer to, separated by lines"
-state={[transferTo, setTransferTo]}
-/>
-<TextInput
-label="amount"
-placeholder="Amount to transfer for each"
-state={[amount, setAmount]}
-/>
-<ButtonsPanel>
-<Button
-className="self-center"
-onClick={async () => {
-if (!signer) {
-return;
-}
-const toAddresses = await Promise.all(
-transferTo
-.split("\n")
-.map((addr) => ccc.Address.fromString(addr, signer.client)),
-);
-const { script: change } = await signer.getRecommendedAddressObj();
+  const [xUdtArgs, setXUdtArgs] = useState<string>("");
+  const [transferTo, setTransferTo] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+
+  return (
+    <div className="flex w-full flex-col items-stretch">
+      <TextInput
+        label="Args"
+        placeholder="xUdt args to transfer"
+        state={[xUdtArgs, setXUdtArgs]}
+      />
+      <Textarea
+        label="Address"
+        placeholder="Addresses to transfer to, separated by lines"
+        state={[transferTo, setTransferTo]}
+      />
+      <TextInput
+        label="amount"
+        placeholder="Amount to transfer for each"
+        state={[amount, setAmount]}
+      />
+      <ButtonsPanel>
+        <Button
+          className="self-center"
+          onClick={async () => {
+            if (!signer) {
+              return;
+            }
+            const toAddresses = await Promise.all(
+              transferTo
+                .split("\n")
+                .map((addr) => ccc.Address.fromString(addr, signer.client))
+            );
+            const { script: change } = await signer.getRecommendedAddressObj();
 
             const xUdtType = await ccc.Script.fromKnownScript(
               signer.client,
               ccc.KnownScript.XUdt,
-              xUdtArgs,
+              xUdtArgs
             );
 
             const tx = ccc.Transaction.from({
@@ -949,7 +965,7 @@ const { script: change } = await signer.getRecommendedAddressObj();
                 type: xUdtType,
               })),
               outputsData: Array.from(Array(toAddresses.length), () =>
-                ccc.numLeToBytes(amount, 16),
+                ccc.numLeToBytes(amount, 16)
               ),
             });
             await tx.completeInputsByUdt(signer, xUdtType);
@@ -962,12 +978,12 @@ const { script: change } = await signer.getRecommendedAddressObj();
                   lock: change,
                   type: xUdtType,
                 },
-                ccc.numLeToBytes(balanceDiff, 16),
+                ccc.numLeToBytes(balanceDiff, 16)
               );
             }
             await tx.addCellDepsOfKnownScripts(
               signer.client,
-              ccc.KnownScript.XUdt,
+              ccc.KnownScript.XUdt
             );
             await tx.completeInputsByCapacity(signer);
             await tx.completeFeeBy(signer, 2000);
@@ -975,7 +991,7 @@ const { script: change } = await signer.getRecommendedAddressObj();
             // Sign and send the transaction
             log(
               "Transaction sent:",
-              explorerTransaction(await signer.sendTransaction(tx)),
+              explorerTransaction(await signer.sendTransaction(tx))
             );
           }}
         >
@@ -983,25 +999,28 @@ const { script: change } = await signer.getRecommendedAddressObj();
         </Button>
       </ButtonsPanel>
     </div>
-
-);
+  );
 }
+```
 
-````
 </details>
 
 ### Create DOB Cluster ⭐️
+
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 import { ccc } from "@ckb-ccc/ccc";
 import { client, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
-  const isMainnet = client.addressPrefix === 'ckb';
-  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+  const isMainnet = client.addressPrefix === "ckb";
+  const baseUrl = isMainnet
+    ? "https://explorer.nervos.org"
+    : "https://testnet.explorer.nervos.org";
 
-  return `${baseUrl}/transaction/${txHash}`
+  return `${baseUrl}/transaction/${txHash}`;
 }
 
 /**
@@ -1059,34 +1078,45 @@ const { tx: clusterTx, id: clusterId } = await ccc.spore.createSporeCluster({
 });
 await clusterTx.completeFeeBy(signer, 2000n);
 const clusterTxHash = await signer.sendTransaction(clusterTx);
-console.log("Create cluster tx sent:", clusterTxHash, `Cluster ID: ${clusterId}`);
+console.log(
+  "Create cluster tx sent:",
+  clusterTxHash,
+  `Cluster ID: ${clusterId}`
+);
 await signer.client.waitTransaction(clusterTxHash);
-console.log("Create cluster tx committed:", getExplorerTxUrl(clusterTxHash), `Cluster ID: ${clusterId}`);
+console.log(
+  "Create cluster tx committed:",
+  getExplorerTxUrl(clusterTxHash),
+  `Cluster ID: ${clusterId}`
+);
 ```
 
 [RUN it on CCC Playground](https://live.ckbccc.com/?src=https://raw.githubusercontent.com/sporeprotocol/dob-cookbook/refs/heads/main/examples/dob0/0.basic-loot.ts) | [View code on Github](https://github.com/sporeprotocol/dob-cookbook/blob/main/examples/dob0/0.basic-loot.ts)
+
 </details>
 
 ### Create Spore ⭐️
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 import { ccc } from "@ckb-ccc/ccc";
 import { client, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
-  const isMainnet = client.addressPrefix === 'ckb';
-  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+  const isMainnet = client.addressPrefix === "ckb";
+  const baseUrl = isMainnet
+    ? "https://explorer.nervos.org"
+    : "https://testnet.explorer.nervos.org";
 
-  return `${baseUrl}/transaction/${txHash}`
+  return `${baseUrl}/transaction/${txHash}`;
 }
 
 function generateSimpleDNA(length: number): string {
-  return Array.from(
-    { length },
-    () => Math.floor(Math.random() * 16).toString(16)
-  ).join('');
+  return Array.from({ length }, () =>
+    Math.floor(Math.random() * 16).toString(16)
+  ).join("");
 }
 
 // TODO: Replace with your cluster ID
@@ -1109,39 +1139,47 @@ await sporeTx.completeFeeBy(signer, 2000n);
 const sporeTxHash = await signer.sendTransaction(sporeTx);
 console.log("Mint DOB tx sent:", sporeTxHash, `Spore ID: ${sporeId}`);
 await signer.client.waitTransaction(sporeTxHash);
-console.log("Mint DOB tx committed:", getExplorerTxUrl(sporeTxHash), `Spore ID: ${sporeId}`);
+console.log(
+  "Mint DOB tx committed:",
+  getExplorerTxUrl(sporeTxHash),
+  `Spore ID: ${sporeId}`
+);
 ```
 
 [RUN it on CCC Playground](https://live.ckbccc.com/?src=https://raw.githubusercontent.com/sporeprotocol/dob-cookbook/refs/heads/main/examples/dob0/0.basic-loot.ts) | [View code on Github](https://github.com/sporeprotocol/dob-cookbook/blob/main/examples/dob0/0.basic-loot.ts)
+
 </details>
 
 ### Transfer Spore ⭐️
+
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 import { ccc } from "@ckb-ccc/ccc";
 import { render, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
-  const isMainnet = signer.client.addressPrefix === 'ckb';
-  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+  const isMainnet = signer.client.addressPrefix === "ckb";
+  const baseUrl = isMainnet
+    ? "https://explorer.nervos.org"
+    : "https://testnet.explorer.nervos.org";
 
-  return `${baseUrl}/transaction/${txHash}`
+  return `${baseUrl}/transaction/${txHash}`;
 }
 
 // The receiver is the signer itself on mainnet
-const receiver = signer.client.addressPrefix === "ckb" ?
-  await signer.getRecommendedAddress() :
-  "ckt1qrfrwcdnvssswdwpn3s9v8fp87emat306ctjwsm3nmlkjg8qyza2cqgqq8tfmtd3hl2gj0haq54t24kgwtdpz5ffzukkny82";
+const receiver =
+  signer.client.addressPrefix === "ckb"
+    ? await signer.getRecommendedAddress()
+    : "ckt1qrfrwcdnvssswdwpn3s9v8fp87emat306ctjwsm3nmlkjg8qyza2cqgqq8tfmtd3hl2gj0haq54t24kgwtdpz5ffzukkny82";
 console.log(receiver);
 
-const { script: to } = await ccc.Address.fromString(
-  receiver,
-  signer.client,
-);
+const { script: to } = await ccc.Address.fromString(receiver, signer.client);
 
 // Replace with your spore id
-const sporeId = "0x39b78c12f632742d53fb009a4c9b25fbcf8ea0891fea1a180eeac97299ab158f";
+const sporeId =
+  "0x39b78c12f632742d53fb009a4c9b25fbcf8ea0891fea1a180eeac97299ab158f";
 
 // Build transaction
 const { tx } = await ccc.spore.transferSpore({
@@ -1163,26 +1201,32 @@ await signer.client.waitTransaction(txHash);
 console.log("Transaction committed:", getExplorerTxUrl(txHash));
 await render(tx);
 ```
+
 [RUN it on CCC Playground](https://live.ckbccc.com/?src=nostr:nevent1qqswfderscp808uh8ey8nwfx033qesh7javqxpa5sajwce3ea4wlauspzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgqg4waehxw309ac82unsd3jhyetvv9ujucm0d5q32amnwvaz7tmjv4kxz7fwdehhxarj9ehx2aqpz3mhxue69uhkummnw3ezummcw3ezuer9wcq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k76seux8)
+
 </details>
 
 ### Melt Spore ⭐️
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 import { ccc } from "@ckb-ccc/ccc";
 import { render, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
-  const isMainnet = signer.client.addressPrefix === 'ckb';
-  const baseUrl = isMainnet ? 'https://explorer.nervos.org' : 'https://testnet.explorer.nervos.org';
+  const isMainnet = signer.client.addressPrefix === "ckb";
+  const baseUrl = isMainnet
+    ? "https://explorer.nervos.org"
+    : "https://testnet.explorer.nervos.org";
 
-  return `${baseUrl}/transaction/${txHash}`
+  return `${baseUrl}/transaction/${txHash}`;
 }
 
 // Replace with your spore id
-const sporeId = "0x949c8c2182d6b44c134fe8aaa6e5a7a9701b1bb3bd6d04687ac8575331ca65db";
+const sporeId =
+  "0x949c8c2182d6b44c134fe8aaa6e5a7a9701b1bb3bd6d04687ac8575331ca65db";
 
 // Build transaction
 const { tx } = await ccc.spore.meltSpore({
@@ -1203,13 +1247,16 @@ await signer.client.waitTransaction(txHash);
 console.log("Transaction committed:", getExplorerTxUrl(txHash));
 await render(tx);
 ```
+
 [RUN it on CCC Playground](https://live.ckbccc.com/?src=nostr:nevent1qqsynmj9sey8e6s52yjwgpwj7lmmpr0eveq8hu8nd7l5teqjt8pzwegpz4mhxue69uhhqatjwpkx2un9d3shjtnrdaksz9thwden5te0wfjkccte9ehx7um5wghxuet5qy28wumn8ghj7mn0wd68ytn00p68ytnyv4mqz9rhwden5te0wfjkccte9ejxzmt4wvhxjmc7u7klm)
+
 </details>
 
 ### Manage NervosDAO
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 "use client";
 
@@ -1233,10 +1280,10 @@ function parseEpoch(epoch: ccc.Epoch): ccc.FixedPoint {
 function getProfit(
   dao: ccc.Cell,
   depositHeader: ccc.ClientBlockHeader,
-  withdrawHeader: ccc.ClientBlockHeader,
+  withdrawHeader: ccc.ClientBlockHeader
 ): ccc.Num {
   const occupiedSize = ccc.fixedPointFrom(
-    dao.cellOutput.occupiedSize + ccc.bytesFrom(dao.outputData).length,
+    dao.cellOutput.occupiedSize + ccc.bytesFrom(dao.outputData).length
   );
   const profitableSize = dao.cellOutput.capacity - occupiedSize;
 
@@ -1248,7 +1295,7 @@ function getProfit(
 
 function getClaimEpoch(
   depositHeader: ccc.ClientBlockHeader,
-  withdrawHeader: ccc.ClientBlockHeader,
+  withdrawHeader: ccc.ClientBlockHeader
 ): ccc.Epoch {
   const depositEpoch = depositHeader.epoch;
   const withdrawEpoch = withdrawHeader.epoch;
@@ -1287,7 +1334,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
         ccc.Num,
         ccc.ClientTransactionResponse,
         ccc.ClientBlockHeader,
-        [undefined | ccc.ClientTransactionResponse, ccc.ClientBlockHeader],
+        [undefined | ccc.ClientTransactionResponse, ccc.ClientBlockHeader]
       ]
     | undefined
   >();
@@ -1303,7 +1350,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
       setTip(tipHeader);
 
       const previousTxRes = await signer.client.getTransactionWithHeader(
-        dao.outPoint.txHash,
+        dao.outPoint.txHash
       );
       if (!previousTxRes || !previousTxRes.header) {
         return;
@@ -1318,8 +1365,9 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
         const depositTxHash =
           previousTx.transaction.inputs[Number(dao.outPoint.index)]
             .previousOutput.txHash;
-        const depositTxRes =
-          await signer.client.getTransactionWithHeader(depositTxHash);
+        const depositTxRes = await signer.client.getTransactionWithHeader(
+          depositTxHash
+        );
         if (!depositTxRes || !depositTxRes.header) {
           return;
         }
@@ -1361,7 +1409,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
           if (!depositTx.blockHash || !depositTx.blockNumber) {
             error(
               "Unexpected empty block info for",
-              explorerTransaction(dao.outPoint.txHash),
+              explorerTransaction(dao.outPoint.txHash)
             );
             return;
           }
@@ -1378,7 +1426,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
 
             await tx.addCellDepsOfKnownScripts(
               signer.client,
-              ccc.KnownScript.NervosDao,
+              ccc.KnownScript.NervosDao
             );
 
             await tx.completeInputsByCapacity(signer);
@@ -1407,7 +1455,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
                     relative: "absolute",
                     metric: "epoch",
                     value: ccc.epochToHex(
-                      getClaimEpoch(depositHeader, withdrawHeader),
+                      getClaimEpoch(depositHeader, withdrawHeader)
                     ),
                   },
                 },
@@ -1425,7 +1473,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
             });
             await tx.addCellDepsOfKnownScripts(
               signer.client,
-              ccc.KnownScript.NervosDao,
+              ccc.KnownScript.NervosDao
             );
 
             await tx.completeInputsByCapacity(signer);
@@ -1440,13 +1488,15 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
           log("Transaction committed:", explorerTransaction(txHash));
         })();
       }}
-      className={`align-center ${isNew ? "text-yellow-400" : "text-orange-400"}`}
+      className={`align-center ${
+        isNew ? "text-yellow-400" : "text-orange-400"
+      }`}
     >
       <div className="text-md flex flex-col">
         <span>
           {ccc.fixedPointToString(
             (dao.cellOutput.capacity / ccc.fixedPointFrom("0.01")) *
-              ccc.fixedPointFrom("0.01"),
+              ccc.fixedPointFrom("0.01")
           )}
         </span>
         {infos ? (
@@ -1454,7 +1504,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
             +
             {ccc.fixedPointToString(
               (infos[0] / ccc.fixedPointFrom("0.0001")) *
-                ccc.fixedPointFrom("0.0001"),
+                ccc.fixedPointFrom("0.0001")
             )}
           </span>
         ) : undefined}
@@ -1466,7 +1516,7 @@ function DaoButton({ dao }: { dao: ccc.Cell }) {
               ((parseEpoch(getClaimEpoch(infos[2], infos[3][1])) -
                 parseEpoch(tip.epoch)) /
                 ccc.fixedPointFrom("0.001")) *
-                ccc.fixedPointFrom("0.001"),
+                ccc.fixedPointFrom("0.001")
             )}{" "}
             epoch
           </div>
@@ -1499,12 +1549,12 @@ export default function Transfer() {
           script: await ccc.Script.fromKnownScript(
             signer.client,
             ccc.KnownScript.NervosDao,
-            "0x",
+            "0x"
           ),
           scriptLenRange: [33, 34],
           outputDataLenRange: [8, 9],
         },
-        true,
+        true
       )) {
         daos.push(cell);
         setDaos(daos);
@@ -1540,7 +1590,7 @@ export default function Transfer() {
                   type: await ccc.Script.fromKnownScript(
                     signer.client,
                     ccc.KnownScript.NervosDao,
-                    "0x",
+                    "0x"
                   ),
                 },
               ],
@@ -1548,7 +1598,7 @@ export default function Transfer() {
             });
             await tx.addCellDepsOfKnownScripts(
               signer.client,
-              ccc.KnownScript.NervosDao,
+              ccc.KnownScript.NervosDao
             );
 
             await tx.completeInputsAll(signer);
@@ -1579,7 +1629,7 @@ export default function Transfer() {
                   type: await ccc.Script.fromKnownScript(
                     signer.client,
                     ccc.KnownScript.NervosDao,
-                    "0x",
+                    "0x"
                   ),
                 },
               ],
@@ -1587,14 +1637,14 @@ export default function Transfer() {
             });
             await tx.addCellDepsOfKnownScripts(
               signer.client,
-              ccc.KnownScript.NervosDao,
+              ccc.KnownScript.NervosDao
             );
 
             if (tx.outputs[0].capacity > ccc.fixedPointFrom(amount)) {
               error(
                 "Insufficient capacity at output, min",
                 ccc.fixedPointToString(tx.outputs[0].capacity),
-                "CKB",
+                "CKB"
               );
               return;
             }
@@ -1616,7 +1666,7 @@ export default function Transfer() {
     </div>
   );
 }
-````
+```
 
 [Live demo](https://app.ckbccc.com/connected/NervosDao) | [View code on Github](<https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/connected/(tools)/NervosDao/page.tsx>)
 
@@ -1788,6 +1838,7 @@ Save as CSV
 }
 
 ````
+
 [Live demo](https://app.ckbccc.com/utils/Mnemonic) | [View code on Github](https://github.com/ckb-devrel/ccc/blob/master/packages/demo/src/app/utils/(tools)/Mnemonic/page.tsx)
 </details>
 
@@ -1795,6 +1846,7 @@ Save as CSV
 
 <details>
   <summary>Toggle to view code</summary>
+
 ```tsx
 "use client";
 
