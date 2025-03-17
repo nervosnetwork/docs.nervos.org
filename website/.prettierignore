@@ -19,3 +19,7 @@ yarn.lock
 *.jpeg
 *.gif
 *.webp
+
+# Ignore specific directories
+# since it has a bug for mdx tsx code block
+docs/sdk-and-devtool/ccc.mdx
