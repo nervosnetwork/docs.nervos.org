@@ -56,14 +56,222 @@ import { generateDefaultScriptInfos } from "@ckb-ccc/lumos-patches";
 registerCustomLockScriptInfos(generateDefaultScriptInfos());
 ```
 
+## Quick Start with create-ccc-app
+
+The fastest way to get started with CCC is to use `create-ccc-app`. This CLI tool helps you quickly create a new CCC-enabled dApp with built-in wallet connection support.
+
+### Creating a New Project
+
+You can create a new project using any of the following methods:
+
+```bash
+yarn create ccc-app
+# or
+pnpm create ccc-app
+# or
+bunx create-ccc-app
+# or
+npx create-ccc-app@latest
+```
+
+The CLI will guide you through the setup process, allowing you to choose:
+
+- Project name
+- Framework template (Next.js, React or NestJs)
+- Use TypeScript or JavaScript
+
+### Project Structure
+
+After creation, your project will have the following structure (for example, `my-ckb-app` is a React project):
+
+```
+my-ckb-app/
+├── src/
+│   ├── components/
+│   │   └── WalletConnector.tsx    # Pre-configured CCC wallet connector
+│   ├── styles/
+│   ├── utils/
+│   │   └── stringUtils.ts         # Utility functions for string operations
+│   ├── App.tsx                    # Main app component
+│   ├── index.tsx                  # Main entry point
+│   ├── layoutProvider.tsx         # Layout provider
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+### Running the Project
+
+1. Navigate to your project directory:
+
+```bash
+cd my-ckb-app
+```
+
+2. Install dependencies:
+
+```bash
+pnpm install
+```
+
+3. Start the development server:
+
+```bash
+pnpm run dev
+```
+
+Your new CCC-enabled dApp will be running at `http://localhost:3000`
+
+### Using the Wallet Connector
+
+The project comes with a pre-configured wallet connector as following:
+
+<details>
+  <summary>Toggle to view the ConnectWallet component</summary>
+```typescript
+/* eslint-disable*/
+import React, { useEffect, useState } from "react";
+import { ccc } from "@ckb-ccc/connector-react";
+import { truncateAddress } from "../utils/stringUtils";
+
+const ConnectWallet: React.FC = () => {
+const { open, wallet } = ccc.useCcc();
+const [balance, setBalance] = useState<string>("");
+const [address, setAddress] = useState<string>("");
+const signer = ccc.useSigner();
+
+    useEffect(() => {
+        if (!signer) {
+            return;
+          }
+
+          (async () => {
+            const addr = await signer.getRecommendedAddress();
+            setAddress(addr);
+          })();
+
+          (async () => {
+            const capacity = await signer.getBalance();
+            setBalance(ccc.fixedPointToString(capacity));
+          })();
+
+        return () => {
+
+        };
+    }, [signer]);
+
+    const renderConnectWalletBtn = () => {
+        return <div className="cursor-pointer rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base font-bold h-10 sm:h-12 px-4 sm:px-5"
+            onClick={open} >
+            Connect Wallet
+        </div>
+    }
+
+    const renderConnectedWalletInfo = () => {
+        return <div className="cursor-pointer rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        onClick={open} >
+            <div className="rounded-full mr-2">
+          {wallet && <img src={wallet.icon} alt="avatar" className="w-6 h-6" />}
+        </div>
+        <div>
+          <h2 className="text-sm font-semibold">
+            {balance} CKB
+          </h2>
+          <p className="text-xs flex items-center gap-2">
+            {truncateAddress(address, 10, 6)}
+          </p>
+        </div>
+    </div>
+    }
+
+    return (
+        <div className="flex">
+            {wallet ? renderConnectedWalletInfo() : renderConnectWalletBtn()}
+        </div>
+    );
+
+};
+
+export default ConnectWallet;
+```
+</details>
+
+Here's how to use it:
+
+```tsx
+import React from "react";
+import ConnectWallet from "@/src/components/ConnectWallet";
+
+function App() {
+  return <ConnectWallet />;
+}
+```
+
+### Customizing the Wallet Connection
+
+You can customize which wallets to support by modifying the connector configuration. Here's an example:
+
+```typescript
+import React from "react";
+import { ccc } from "@ckb-ccc/connector-react";
+import { CSSProperties } from "react";
+
+export function LayoutProvider({ children }: { children: React.ReactNode }) {
+  const defaultClient = React.useMemo(() => {
+    return process.env.REACT_APP_IS_MAINNET === "true"
+      ? new ccc.ClientPublicMainnet()
+      : new ccc.ClientPublicTestnet();
+  }, []);
+
+  return (
+    <ccc.Provider
+      connectorProps={{
+        style: {
+          "--background": "#232323",
+          "--divider": "rgba(255, 255, 255, 0.1)",
+          "--btn-primary": "#2D2F2F",
+          "--btn-primary-hover": "#515151",
+          "--btn-secondary": "#2D2F2F",
+          "--btn-secondary-hover": "#515151",
+          "--icon-primary": "#FFFFFF",
+          "--icon-secondary": "rgba(255, 255, 255, 0.6)",
+          color: "#ffffff",
+          "--tip-color": "#666",
+        } as CSSProperties,
+      }}
+      defaultClient={defaultClient}
+      clientOptions={[
+        {
+          name: "CKB Testnet",
+          client: new ccc.ClientPublicTestnet(),
+        },
+        {
+          name: "CKB Mainnet",
+          client: new ccc.ClientPublicMainnet(),
+        },
+      ]}
+    >
+      {children}
+    </ccc.Provider>
+  );
+}
+```
+
 ## Examples
 
-CCC demo
+### CCC demo
 
 - online preview: [https://app.ckbccc.com/](https://app.ckbccc.com/)
 - source code: [https://github.com/ckb-devrel/ccc/tree/master/packages/demo](https://github.com/ckb-devrel/ccc/tree/master/packages/demo)
 
-offckb dApp boilerplate also integrated with CCC for wallet connection:
+### NervosDAO
+
+- online preview: [https://www.nervdao.com/](https://www.nervdao.com/)
+- source code: [https://github.com/ckb-devrel/nervdao](https://github.com/ckb-devrel/nervdao)
+
+### offckb dApp boilerplate
+
+The `offckb` dApp boilerplate also integrated with CCC for wallet connection:
 
 - guide: [/docs/getting-started/quick-start#run-the-dapp-project](/docs/getting-started/quick-start#run-the-dapp-project)
 - source code: [nextjs](https://github.com/ckb-devrel/offckb/tree/master/templates/next-js-template/frontend)

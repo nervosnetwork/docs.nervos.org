@@ -48,17 +48,6 @@ const ecoCardContents: EcoCardProps[] = [
     ],
   },
   {
-    title: "Fiber Network",
-    description: "A scalable, privacy-by-default payment & swap network",
-    href: "https://www.fiber.world/",
-    bannerSrc: "fiber",
-    tags: ["Protocol"],
-    links: [
-      { label: "website", link: "https://fiber.world/" },
-      { label: "github", link: "https://github.com/nervosnetwork/fiber" },
-    ],
-  },
-  {
     title: "JoyID",
     description: "A web-based passwordless and mnemonic-free wallet solution",
     href: "https://joy.id/",
