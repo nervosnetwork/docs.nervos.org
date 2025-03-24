@@ -1,5 +1,5 @@
 export default {
-  docs: [
+  "Getting Started": [
     {
       type: "category",
       label: "Getting Started",
@@ -45,46 +45,12 @@ export default {
     },
     {
       type: "category",
-      label: "Scripts (Smart Contracts)",
-      className: "category-script",
-      collapsible: false,
-      items: [
-        "script/intro-to-script",
-        "script/program-language-for-script",
-        "script/syscalls-for-script",
-        "script/vm-cycle-limits",
-        "script/vm-selection",
-        "script/type-id",
-        "script/spawn-cross-script-calling",
-        "script/debug-script",
-        "script/script-upgrade-workflow",
-        "script/common-script-error-code",
-        "script/minimal-script",
-        "script/sudt-script",
-        "script/spawn-script",
-        "script/js-script",
-      ],
-    },
-    {
-      type: "category",
       label: "Integrate Wallets",
       className: "category-integrate-wallets",
       collapsible: false,
       items: [
         "integrate-wallets/intro-to-wallets",
         "integrate-wallets/ccc-wallet",
-      ],
-    },
-    {
-      type: "category",
-      label: "Common Scripts",
-      className: "category-common-scripts",
-      collapsible: false,
-      items: [
-        "common-scripts/omnilock",
-        "common-scripts/xudt",
-        "common-scripts/spore-protocol",
-        "common-scripts/spore-dob-0",
       ],
     },
     {
@@ -116,7 +82,70 @@ export default {
         "how-tos/how-to-calculate-code-hash",
       ],
     },
-
+  ],
+  "Scripts (Smart Contracts)": [
+    {
+      type: "category",
+      label: "Scripts (Smart Contracts)",
+      className: "category-script",
+      collapsible: false,
+      items: [
+        "script/intro-to-script",
+        "script/program-language-for-script",
+        "script/syscalls-for-script",
+        "script/vm-cycle-limits",
+        "script/vm-selection",
+        "script/type-id",
+        "script/spawn-cross-script-calling",
+        "script/debug-script",
+        "script/script-upgrade-workflow",
+        "script/common-script-error-code",
+      ],
+    },
+    {
+      type: "category",
+      label: "Script Tutorial",
+      className: "category-script-tutorial",
+      collapsible: false,
+      items: [
+        "script/minimal-script",
+        "script/sudt-script",
+        "script/spawn-script",
+        "script/js-script",
+      ],
+    },
+    {
+      type: "category",
+      label: "Common Scripts",
+      className: "category-common-scripts",
+      collapsible: false,
+      items: [
+        "common-scripts/omnilock",
+        "common-scripts/xudt",
+        "common-scripts/spore-protocol",
+        "common-scripts/spore-dob-0",
+      ],
+    },
+    {
+      type: "category",
+      label: "Script Development Course",
+      className: "category-full-script-development-series",
+      collapsible: false,
+      items: [
+        "script-course/intro-to-script-1",
+        "script-course/intro-to-script-2",
+        "script-course/intro-to-script-3",
+        "script-course/intro-to-script-4",
+        "script-course/intro-to-script-5",
+        "script-course/intro-to-script-6",
+        "script-course/intro-to-script-7",
+        "script-course/intro-to-script-8",
+        "script-course/intro-to-script-9",
+        "script-course/intro-to-script-10",
+      ],
+    },
+  ],
+  "Tech Explanation": [
     {
       type: "category",
       label: "Tech Explanation",
@@ -164,13 +193,58 @@ export default {
       ],
     },
   ],
-  ecosystem: [
+  Ecosystem: [
     {
       type: "category",
       label: "Ecosystem",
       className: "category-ecosystem",
       collapsible: false,
       items: ["ecosystem/projects", "ecosystem/organizations"],
+    },
+    {
+      type: "category",
+      label: "History & Hard Forks",
+      className: "category-history",
+      collapsible: false,
+      items: [
+        "history-and-hard-forks/intro-to-hard-fork",
+        "history-and-hard-forks/ckb-hard-fork-history",
+        "history-and-hard-forks/history-vm-version",
+        "history-and-hard-forks/rethinking-forks",
+      ],
+    },
+    {
+      type: "category",
+      label: "Resources",
+      className: "category-resources",
+      collapsible: false,
+      items: [
+        {
+          type: "link",
+          label: "Positioning Paper",
+          href: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md",
+        },
+        {
+          type: "link",
+          label: "CKB RFCs",
+          href: "https://github.com/nervosnetwork/rfcs",
+        },
+        {
+          type: "link",
+          label: "CKB Dev Log",
+          href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
+        },
+        {
+          type: "link",
+          label: "CKB Academy",
+          href: "https://academy.ckb.dev/",
+        },
+        {
+          type: "link",
+          label: "CKB Cookbook",
+          href: "https://cookbook.ckbdapps.com/",
+        },
+      ],
     },
   ],
   "Nodes & Mining": [
@@ -202,20 +276,6 @@ export default {
         "mining/hardware",
         "mining/guide",
         "mining/info-stats",
-      ],
-    },
-  ],
-  "History & Hard Forks": [
-    {
-      type: "category",
-      label: "History & Hard Forks",
-      className: "category-history",
-      collapsible: false,
-      items: [
-        "history-and-hard-forks/intro-to-hard-fork",
-        "history-and-hard-forks/ckb-hard-fork-history",
-        "history-and-hard-forks/history-vm-version",
-        "history-and-hard-forks/rethinking-forks",
       ],
     },
   ],
