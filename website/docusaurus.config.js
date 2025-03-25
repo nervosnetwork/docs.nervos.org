@@ -253,7 +253,7 @@ const config = {
           activeBaseRegex: "/(script|common-scripts|script-course)/",
         },
         {
-          to: "/docs/tech-explanation/fee-estimator",
+          to: "/docs/tech-explanation/nervos-blockchain",
           label: "Tech Explanation",
           position: "left",
           activeBaseRegex: "/(tech-explanation)/",
