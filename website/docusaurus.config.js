@@ -250,7 +250,7 @@ const config = {
           to: "/docs/script/intro-to-script",
           label: "Scripts (Smart Contracts)",
           position: "left",
-          activeBaseRegex: "/(script)/",
+          activeBaseRegex: "/(script|common-scripts|script-course)/",
         },
         {
           to: "/docs/tech-explanation/fee-estimator",
@@ -268,7 +268,7 @@ const config = {
           to: "/docs/ecosystem/projects",
           label: "Ecosystem",
           position: "left",
-          activeBaseRegex: "/ecosystem/",
+          activeBaseRegex: "/(ecosystem|history-and-hard-forks)/",
         },
         {
           type: "search",
