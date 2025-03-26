@@ -97,6 +97,7 @@ export default {
         "script/vm-selection",
         "script/type-id",
         "script/spawn-cross-script-calling",
+        "script/ckb-script-ipc",
         "script/debug-script",
         "script/script-upgrade-workflow",
         "script/common-script-error-code",
