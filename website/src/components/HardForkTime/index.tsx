@@ -8,7 +8,7 @@ export interface HardForkTimeProps {
 }
 
 export default function HardForkTime({
-  mainnetDate = "July 1, 2025",
+  mainnetDate = "TBD",
   mainnetEpoch = "12293",
   testnetDate = "Oct 25, 2024",
   testnetEpoch = "9690",
