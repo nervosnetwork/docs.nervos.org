@@ -8,10 +8,10 @@ export interface HardForkTimeProps {
 }
 
 export default function HardForkTime({
-  mainnetDate = "TBD",
-  mainnetEpoch = "TBD",
-  testnetDate = "TBD",
-  testnetEpoch = "TBD",
+  mainnetDate = "July 1, 2025",
+  mainnetEpoch = "12293",
+  testnetDate = "Oct 25, 2024",
+  testnetEpoch = "9690",
 }: HardForkTimeProps): JSX.Element {
   return (
     <div className={styles.box}>
