@@ -259,6 +259,7 @@ export default {
         "node/run-mainnet-node",
         "node/run-testnet-node",
         "node/run-devnet-node",
+        "node/run-light-client-node",
         "node/run-public-rpc-node",
         "node/turn-on-fee-estimator",
       ],

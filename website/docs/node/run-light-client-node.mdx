@@ -1,0 +1,117 @@
+---
+id: run-light-client-node
+title: Run a Light Client Node
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Run a Light Client Node
+
+## Why Light Client?
+
+Running a light client is fundamental to maintaining blockchain decentralization and trustlessness.
+While light clients don't store the entire blockchain, they independently verify transactions and blocks,
+embodying the core principle of blockchain: "Don't trust, verify." By lowering the barriers of running a light client,
+we can encourage broader participation in the network, thereby strengthening its decentralization.
+
+Light clients strike an optimal balance between resource requirements and security, making blockchain verification accessible to more users. This widespread verification is crucial for maintaining the integrity and trustless nature of the network.
+
+Compare to traditional light client, CKB has a more efficient [FlyClient-based](https://talk.nervos.org/t/flyclient-on-ckb/5973) light client protocol.
+It uses a sampling protocol tailored for [NC-Max](https://docs-new.nervos.org/docs/tech-explanation/consensus#nc-max-consensus-algorithm) difficulty adjustment algorithm.
+It requires downloading only a logarithmic number of block headers while storing only a single block header between executions.
+
+CKB’s Light Client is not only lightweight but also compatible with WebAssembly (WASM), ideal for use in mobile applications, browsers, and resource-constrained environments.
+
+## Step 1: Build or Download CKB Light Client Binary
+
+Get the latest CKB Light Client binary from [Github releases](https://github.com/nervosnetwork/ckb-light-client/releases).
+
+Or build from the source:
+
+```bash
+  git clone https://github.com/nervosnetwork/ckb-light-client.git
+  cd ckb-light-client
+  cargo build --release
+```
+
+## Step 2: Navigate to Light Client Directory
+
+Copy the `ckb-light-client` binary and the `config/mainnet.toml` to a new folder. Open your terminal or command line, and navigate to the directory:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+```bash
+  cd /Users/(NAME)/Documents/(YOUR_FOLDER_NAME)
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+```bash
+  cd C:/(YOUR_FOLDER_NAME)
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 3: Start the Light Client
+
+Edit the `mainnet.toml` to set your preferred settings, including:
+
+- Network connection parameters
+- RPC port
+- Storage location
+- bootnodes
+
+You can leave the file unchanged if satisfied with the default settings.
+
+Start the light client:
+
+```bash
+  RUST_LOG=info,ckb_light_client=info ./ckb-light-client run --config-file ./mainnet.toml
+```
+
+By default, the light client will be available on `http://localhost:9000/`.
+
+## Step 4: Interact with the Light Client
+
+You can interact with your light client using JSON-RPC calls. Here are some common examples:
+
+### 1. Get the current tip header
+
+```bash
+curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "get_tip_header", "params": [], "id": 1}'
+```
+
+### 2. Set scripts to filter
+
+```bash
+curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method":"set_scripts", "params": [[{"script": {"code_hash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8", "hash_type": "type", "args": "0x64257f00b6b63e987609fa9be2d0c86d351020fb"}, "script_type": "lock", "block_number": "0x0"}]], "id": 1}'
+```
+
+### 3. Get filtered scripts
+
+```bash
+curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method":"get_scripts", "params": [], "id": 1}'
+```
+
+## WASM Version for Browsers
+
+For browser environments, the CKB Light Client is also available as a WebAssembly package. Please refer to the [wasm](https://github.com/nervosnetwork/ckb-light-client/tree/develop/wasm) folder in the repository for implementation details.
+
+You can also check out the NPM package [ckb-light-client-js](https://www.npmjs.com/package/ckb-light-client-js) for browser usage.
+
+## More Resources
+
+- [CKB Light Client Repository](https://github.com/nervosnetwork/ckb-light-client)
+- [CKB Light Client Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0044-ckb-light-client/0044-ckb-light-client.md)
+- [CKB Client Side Block Filter Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0045-client-block-filter/0045-client-block-filter.md)
