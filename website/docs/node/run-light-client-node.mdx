@@ -11,24 +11,24 @@ import TabItem from "@theme/TabItem";
 
 ## Why Light Client?
 
-Running a light client is fundamental to maintaining blockchain decentralization and trustless.
+Running a light client is fundamental to maintaining blockchain decentralization and trustlessness.
 While light clients don't store the entire blockchain, they independently verify transactions and blocks,
-embodying the core blockchain principle of "don't trust, verify." If we can lower the barrier to run a light client,
-it will be easier for more people to participate in the network thus making the network more decentralized.
+embodying the core principle of blockchain: "Don't trust, verify." By lowering the barriers of running a light client,
+we can encourage broader participation in the network, thereby strengthening its decentralization.
 
-Light clients strike an optimal balance between resource requirements and security, making blockchain verification accessible to everyone. This widespread verification capability is crucial for maintaining the network's integrity and trustless nature.
+Light clients strike an optimal balance between resource requirements and security, making blockchain verification accessible to more users. This widespread verification is crucial for maintaining the integrity and trustless nature of the network.
 
-Compare to normal light client, CKB has a more efficient FlyClient-based light client protocol.
-It uses a sampling protocol tailored for NC-Max difficulty adjustment algorithm.
+Compare to traditional light client, CKB has a more efficient [FlyClient-based](https://talk.nervos.org/t/flyclient-on-ckb/5973) light client protocol.
+It uses a sampling protocol tailored for [NC-Max](https://docs-new.nervos.org/docs/tech-explanation/consensus#nc-max-consensus-algorithm) difficulty adjustment algorithm.
 It requires downloading only a logarithmic number of block headers while storing only a single block header between executions.
 
-CKB Light Client is not only tiny but also wasm-compatible, which makes it ideal for mobile applications, browsers, and resource-constrained environments.
+CKB’s Light Client is not only lightweight but also compatible with WebAssembly (WASM), ideal for use in mobile applications, browsers, and resource-constrained environments.
 
 ## Step 1: Build or Download CKB Light Client Binary
 
 Get the latest CKB Light Client binary from [Github releases](https://github.com/nervosnetwork/ckb-light-client/releases).
 
-Or build it from source:
+Or build from the source:
 
 ```bash
   git clone https://github.com/nervosnetwork/ckb-light-client.git
@@ -38,7 +38,7 @@ Or build it from source:
 
 ## Step 2: Navigate to Light Client Directory
 
-Copy the `ckb-light-client` binary and `config/mainnet.toml` to a new folder, Open your terminal/command line and navigate to the directory:
+Copy the `ckb-light-client` binary and the `config/mainnet.toml` to a new folder. Open your terminal or command line, and navigate to the directory:
 
 ```mdx-code-block
 <Tabs>
@@ -72,7 +72,7 @@ Edit the `mainnet.toml` to set your preferred settings, including:
 - Storage location
 - bootnodes
 
-You can leave it if satisfied with the default settings.
+You can leave the file unchanged if satisfied with the default settings.
 
 Start the light client:
 
