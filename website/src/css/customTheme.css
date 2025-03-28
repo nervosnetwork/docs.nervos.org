@@ -333,6 +333,12 @@ ul.dropdown__menu {
   width: 1.125rem;
   height: 1.125rem;
 }
+.category-rust > div > a:before {
+  content: url("/svg/icon-sidebar-script.svg");
+  margin-right: 0.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
 
 /* Footer */
 .footer > .container {

@@ -117,6 +117,19 @@ export default {
     },
     {
       type: "category",
+      label: "Rust",
+      className: "category-rust",
+      collapsible: false,
+      items: [
+        "script/rust/rust-quick-start",
+        "script/rust/rust-debug",
+        "script/rust/rust-test",
+        "script/rust/rust-api",
+        "script/rust/rust-examples",
+      ],
+    },
+    {
+      type: "category",
       label: "Common Scripts",
       className: "category-common-scripts",
       collapsible: false,
