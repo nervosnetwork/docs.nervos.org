@@ -1,0 +1,559 @@
+---
+id: rust-quick-start
+title: "Quick Start"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Quick Start
+
+<TutorialHeader
+  time={" 5 - 15min "}
+  tools={"script"}
+  customTools={[
+    <div key="debugger">
+      <Link
+        to="/docs/getting-started/installation-guide#5-ckb-debugger-01170"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CKB-Debugger (≥0.117.0)
+      </Link>
+    </div>,
+  ]}
+/>
+
+This chapter focuses on "How to Develop Contracts with Rust" and walks through the entire development process using some examples. As this is a "Quick Start" guide, it will not delve too deeply into details. For a more details, please refer to the subsequent chapters.
+
+:::note
+Before, familiarity with the following concepts is required:
+
+- CKB basic and transaction structure.
+- Rust.
+- `make` command.
+  :::
+
+Rust is widely used in developing core components of CKB due to its high performance and ease of use. Scripts often involve operations like signatures, hashing, and large number. Rust’s superior performance helps reduce Cycles consumption. Furthermore, as scripts are critical for asset management, Rust’s memory safety features help minimize vulnerabilities, making it a **recommended choice for script development** .
+
+This chapter will demonstrate the complete process of developing CKB scripts with Rust using two examples. The key steps include:
+
+- Project creation and management.
+- Scirpts building.
+- Testing methods
+
+[Here](TODO) is the source code of the demo.
+
+:::note
+In previous documentation, the term `Script` is generally used to refer to CKB smart contracts. However, in real-world development, various types of scripts may be involved, (e.g. Shell scripts). To avoid confusion, this section will use `Contract` to specifically refer to CKB smart contracts.
+:::
+
+## Hello World
+
+This section introduces the simplest contract, "Hello World," covering:
+
+- Creating a project and contract
+- Common commands for projects
+- Run contract
+
+### Create & Build
+
+To create a project, we use [`ckb-script-templates`](https://github.com/cryptape/ckb-script-templates) :
+
+```shell
+cargo generate gh:cryptape/ckb-script-templates workspace --name rust-script-examples
+```
+
+:::note
+If `--name [Project Name]` is not provided, you will be prompted to enter the project name during the setup.
+:::
+
+Successful execution, a Rust project will be created in the `rust-script-examples` directory. The generated project includes:
+
+- An empty Rust project
+- `tests` project (A basic testing framework)
+- `Makefile` to execute common tasks using `make`
+- `scripts` directory for storing utility scripts
+
+### Create Contract
+
+The initialized project does not include a contract by default, so we need to generate one manually using `make generate`:
+
+```shell
+cd rust-script-examples
+make generate CRATE=hello-world
+```
+
+:::note
+`CRATE=[Contract Name]` is not provided, you will be prompted to enter the project name during the setup.
+:::
+This command creates a `hello-world` subproject inside the `contracts` directory and automatically adds a `test_hello_world` function in `tests/src/tests.rs`.
+
+The contract's entry function, `program_entry` (similar to main), is located in `contracts/hello-world/src/main.rs`.
+By default, the contract depends on `ckb-std`, which provides instruction support.
+
+Insert the following code into `program_entry`:
+
+```rust
+ckb_std::debug!("Hello World!");
+```
+
+(similar to `println` in the rust std).
+
+After implementing the code, compile all contracts using:
+
+```shell
+make build
+```
+
+The compiled contracts will be stored in the `build/release` directory, including:
+
+- A CKB contract file with the contract name.
+- Files ending with `.debug` are contracts with debug information. which is larger and not suitable for testing or deployment.
+- A debug file (ending in .debug), which is larger and not suitable for testing or deployment.
+
+### Run & Test
+
+Contracts can typically be executed in three ways:
+
+- Deploying on-chain and executing via an SDK ([See here](./../../dapp/simple-lock) for reference)
+- Using `ckb-debugger`
+- Simulating an on-chain environment with `ckb-testtool`
+
+This section covers the latter two methods: `ckb-debugger` and `ckb-testtool`.
+
+#### Running with `ckb-debugger`:
+
+```shell
+ckb-debugger --bin build/release/hello-world
+```
+
+Output:
+
+```text
+Script log: Hello World!
+Run result: 0
+All cycles: 7366(7.2K)
+```
+
+#### Running Tests
+
+Run the `test_hello_world` test ( Rust unit test):
+
+```shell
+cargo test -- tests::test_hello_world --nocapture
+```
+
+or
+
+```shell
+make test CARGO_ARGS="-- tests::test_hello_world --nocapture"
+```
+
+Output:
+
+```text
+---- tests::test_hello_world stdout ----
+[contract debug] Hello World!
+consume cycles: 7366
+```
+
+:::note
+Formal contracts will get transaction information or on-chain data. For proper testing, it's best to script a complete transaction within tests. This will be covered in later chapters.
+:::
+
+## Simple Script (Print args data)
+
+In real contracts, typically need to access transaction information or on-chain data. To improve upon the previous example, we introduce:
+
+- `ckb-testtool`: Adding logic code to existing tests.
+- `ckb-debugger`: Using `--tx-file` (or `-f`) to provide transaction data.
+
+The advantage of `ckb-testtool` is the flexibility to modify transaction details, making testing more convenient.
+Additionally, since `ckb-testtool` shares the same underlying code as `CKB`, it closely resembles the actual Nervos network.
+
+Conversely, `ckb-debugger` allows direct command-line execution and supports debugging via `--mode gdb`. However, it requires manually constructing a transaction.
+
+A common workflow is to prioritize `ckb-testtool` for testing. If encountering complex bugs or other issues, transactions can be dumped and analyzed using ckb-debugger.
+
+### Code
+
+Generate the contract using:
+
+```shell
+make generate CRATE=simple-print-args
+```
+
+Modify `main.rs`:
+
+```rust
+pub fn program_entry() -> i8 {
+    let script = ckb_std::high_level::load_script();
+    match script {
+        Ok(script) => {
+            let args = script.args().raw_data().to_vec();
+            ckb_std::debug!("Args Len: {}", args.len());
+            ckb_std::debug!("Args Data: {:02x?}", args);
+            0
+        }
+        Err(err) => {
+            ckb_std::debug!("load script failed: {:?}", err);
+            -1
+        }
+    }
+}
+```
+
+This code get args via `ckb_std::high_level::load_script` and prints them.
+
+### Run With [ckb-testtool](https://crates.io/crates/ckb-testtool)
+
+Executing `test_simple_print_args` will output:
+
+```text
+[contract debug] Args Len: 1
+[contract debug] Args Data: [2a]
+```
+
+In the automatically generated code, args is set to `[42]`.
+
+If we modify this section:
+
+```rust
+// prepare scripts
+let lock_script = context
+    .build_script(&out_point, Bytes::from(vec![42]))
+    .expect("script");
+```
+
+to:
+
+```rust
+// prepare scripts
+let args_data = ckb_testtool::context::random_hash().as_bytes();
+let lock_script = context.build_script(&out_point, args_data).unwrap();
+```
+
+Output:
+
+```text
+[contract debug] Args Len: 32
+[contract debug] Args Data: [3a, b5, fb, 71, 5f, 11, 7a, 54, cf, 90, 7f, cf, 5d, d8, 5c, 05, 5a, 31, 8d, b5, b2, 7e, 2e, 41, 90, 57, 96, cd, 0b, de, b2, 60]
+```
+
+Here, we use `ckb_testtool::context::random_hash()` to generate a 32-byte random value, which is passed as an argument to the contract.
+
+### Run with ckb-debugger
+
+Since this contract requires transaction, executing it like before:
+
+```shell
+ckb-debugger --bin build/release/simple-print-args
+```
+
+Output
+
+```
+Script log: Args Len: 0
+Script log: Args Data: []
+Run result: 0
+All cycles: 18769(18.3K)
+```
+
+To resolve this, use `--tx-file` (or `-f`) to provide a transaction file.
+Since manually creating a transaction is cumbersome, we use ckb-testtool's `dump_tx` feature to generate one:
+
+Before executing `test_simple_print_args` :
+
+```rust
+// run
+let cycles = context
+    .verify_tx(&tx, 10_000_000)
+    .expect("pass verification");
+println!("consume cycles: {}", cycles);
+```
+
+add code
+
+```rust
+println!(
+    "{}",
+    &serde_json::to_string(&context.dump_tx(&tx).expect("dump tx info"))
+        .expect("tx format json")
+);
+```
+
+This outputs a JSON transaction:
+
+```json
+{
+  "mock_info": {
+    "inputs": [
+      {
+        "input": {
+          "since": "0x0",
+          "previous_output": {
+            "tx_hash": "0x13f0197e4b72ad3c60e229dc0043661dbd7dc9e569a2a94672da6494e52241f7",
+            "index": "0x0"
+          }
+        },
+        "output": {
+          "capacity": "0x3e8",
+          "lock": {
+            "code_hash": "0x3bb06b94457b32e22b874951710c100258a480321e31c709cb0cb176edee4fcb",
+            "hash_type": "type",
+            "args": "0xefc0aa60c7af052a4aec89d0196905e77b10d07bbbeceef824f2d905ee5b71b4"
+          },
+          "type": null
+        },
+        "data": "0x",
+        "header": null
+      }
+    ],
+    "cell_deps": [
+      {
+        "cell_dep": {
+          "out_point": {
+            "tx_hash": "0xbb0ff58103ed8a6dfd16480c0e736dbc469a5cf38d111778e29d91d0e01cd9da",
+            "index": "0x0"
+          },
+          "dep_type": "code"
+        },
+        "output": {
+          "capacity": "0x3cb0b21aa00",
+          "lock": {
+            "code_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "hash_type": "data",
+            "args": "0x"
+          },
+          "type": {
+            "code_hash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+            "hash_type": "type",
+            "args": "0xa252bd68ecb370ab0005e7ddb4696792cbc51bd1c10ec3cc9079d08cd224b645"
+          }
+        },
+        "data": "...",
+        "header": null
+      }
+    ],
+    "header_deps": [],
+    "extensions": []
+  },
+  "tx": {
+    "version": "0x0",
+    "cell_deps": [
+      {
+        "out_point": {
+          "tx_hash": "0xbb0ff58103ed8a6dfd16480c0e736dbc469a5cf38d111778e29d91d0e01cd9da",
+          "index": "0x0"
+        },
+        "dep_type": "code"
+      }
+    ],
+    "header_deps": [],
+    "inputs": [
+      {
+        "since": "0x0",
+        "previous_output": {
+          "tx_hash": "0x13f0197e4b72ad3c60e229dc0043661dbd7dc9e569a2a94672da6494e52241f7",
+          "index": "0x0"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "capacity": "0x1f4",
+        "lock": {
+          "code_hash": "0x3bb06b94457b32e22b874951710c100258a480321e31c709cb0cb176edee4fcb",
+          "hash_type": "type",
+          "args": "0xefc0aa60c7af052a4aec89d0196905e77b10d07bbbeceef824f2d905ee5b71b4"
+        },
+        "type": null
+      },
+      {
+        "capacity": "0x1f4",
+        "lock": {
+          "code_hash": "0x3bb06b94457b32e22b874951710c100258a480321e31c709cb0cb176edee4fcb",
+          "hash_type": "type",
+          "args": "0xefc0aa60c7af052a4aec89d0196905e77b10d07bbbeceef824f2d905ee5b71b4"
+        },
+        "type": null
+      }
+    ],
+    "outputs_data": ["0x", "0x"],
+    "witnesses": []
+  }
+}
+```
+
+:::note
+The `data` field contains the contract binary, which is too long to display here (this documentation), is replaced by `...`.
+:::
+
+Save this JSON as a file and execute the contract with `ckb-debugger`:
+
+```shell
+ckb-debugger -f tests/test-vectors/test_simple_print_args.json
+```
+
+Output
+
+```text
+The cell_index is not specified. Assume --cell-index = 0
+Script log: Args Len: 32
+Script log: Args Data: [ef, c0, aa, 60, c7, af, 05, 2a, 4a, ec, 89, d0, 19, 69, 05, e7, 7b, 10, d0, 7b, bb, ec, ee, f8, 24, f2, d9, 05, ee, 5b, 71, b4]
+Run result: 0
+All cycles: 49239(48.1K)
+```
+
+To avoid manually updating the transaction file every time the contract is modified, use macros:
+
+```
+"data": "0x{{ data ../../build/release/simple-print-args }}",
+```
+
+This converts the compiled contract into data.
+
+Similarly, replace the `Type Script` definition with:
+
+```
+"type": "{{ def_type simple-print-args }}"
+```
+
+and reference the `code_hash` using:
+
+```
+"output": {
+    "capacity": "0x3e8",
+    "lock": {
+        "code_hash": "0x{{ ref_type simple-print-args }}",
+        "hash_type": "type",
+        "args": "0x11223344556677889900aabbccddeeff"
+    },
+    "type": null
+},
+```
+
+This approach eliminates the need to update transaction details manually after each modification.
+
+The transaction file:
+
+```json
+{
+  "mock_info": {
+    "inputs": [
+      {
+        "input": {
+          "since": "0x0",
+          "previous_output": {
+            "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000001",
+            "index": "0x0"
+          }
+        },
+        "output": {
+          "capacity": "0x3e8",
+          "lock": {
+            "code_hash": "0x{{ ref_type simple-print-args }}",
+            "hash_type": "type",
+            "args": "0x11223344556677889900aabbccddeeff"
+          },
+          "type": null
+        },
+        "data": "0x",
+        "header": null
+      }
+    ],
+    "cell_deps": [
+      {
+        "cell_dep": {
+          "out_point": {
+            "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000002",
+            "index": "0x0"
+          },
+          "dep_type": "code"
+        },
+        "output": {
+          "capacity": "0x3cb0b21aa00",
+          "lock": {
+            "code_hash": "0x0000000000000000000000000000000000000000000000000000000000000003",
+            "hash_type": "data",
+            "args": "0x"
+          },
+          "type": "{{ def_type simple-print-args }}"
+        },
+        "data": "0x{{ data ../../build/release/simple-print-args }}",
+        "header": null
+      }
+    ],
+    "header_deps": [],
+    "extensions": []
+  },
+  "tx": {
+    "version": "0x0",
+    "cell_deps": [
+      {
+        "out_point": {
+          "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000002",
+          "index": "0x0"
+        },
+        "dep_type": "code"
+      }
+    ],
+    "header_deps": [],
+    "inputs": [
+      {
+        "since": "0x0",
+        "previous_output": {
+          "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000001",
+          "index": "0x0"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "capacity": "0x1f4",
+        "lock": {
+          "code_hash": "0x{{ ref_type simple-print-args }}",
+          "hash_type": "data2",
+          "args": "0x"
+        },
+        "type": null
+      }
+    ],
+    "outputs_data": ["0x"],
+    "witnesses": []
+  }
+}
+```
+
+Execute with ckb-debugger:
+
+```shell
+ckb-debugger -f tests/test-vectors/test_simple_print_args.json
+```
+
+Output:
+
+```
+The cell_index is not specified. Assume --cell-index = 0
+Script log: Args Len: 16
+Script log: Args Data: [11, 22, 33, 44, 55, 66, 77, 88, 99, 00, aa, bb, cc, dd, ee, ff]
+Run result: 0
+All cycles: 38030(37.1K)
+```
+
+:::note
+To improve the readability of this JSON, the following modifications have been made:
+
+- The random value for `Args` has been changed to `0x11223344556677889900aabbccddeeff`.
+- The random `tx_hash` has been replaced with a more structured value, such as `0x0000000000000000000000000000000000000000000000000000000000000002`.
+
+These changes do not affect the actual execution results.
+:::
+
+## The End
+
+These two examples provide a simplified introduction to developing CKB scripts with Rust. Many details, such as additional `ckb-std` APIs and using gdb for debugging in `ckb-debugger`, have been omitted. These topics will be covered in later chapters.
