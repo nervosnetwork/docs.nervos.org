@@ -1,0 +1,207 @@
+---
+id: ckb-script-ipc
+title: "ckb-script-ipc: Simplifying IPC with Spawn"
+---
+
+# ckb-script-ipc: Simplifying IPC with Spawn
+
+Inter-Process Communication (IPC) allows processes within a system to exchange data and coordinate actions. With the introduction of the [`Spawn` syscall](https://docs.nervos.org/docs/script/spawn-cross-script-calling) in CKB, IPC functionality can now be integrated into CKB on-chain scripts.
+
+To simplify the Implementation of IPC using `Spawn`, we developed `ckb-script-ipc`, a library that streamlines the process of adding IPC to CKB scripts. By abstracting away the complexities of serialization, message passing, and error management internally, it significantly reduces development complexity, allowing developers to easily build modular, reusable, and sophisticated on-chain applications. `ckb-script-ipc` unlocks new possibilities for building advanced applications within the CKB ecosystem.
+
+## Implementation Steps
+
+### Step 1 Add required dependencies
+
+Add the required dependencies to your `Cargo.toml`
+
+```toml
+ckb-script-ipc = { version = "..." }
+ckb-script-ipc-common = { version = "..." }
+serde = { version = "...", default-features = false, features = ["derive"] }
+
+```
+
+Remember to replace `“…”` with the latest available versions of these crates.
+
+### Step 2 Define the IPC interface
+
+Define the IPC interface using a trait decorated with our service attribute:
+
+```rust
+#[ckb_script_ipc::service]
+pub trait World {
+    fn hello(name: String) -> Result<String, u64>;
+}
+
+```
+
+This trait should be placed in a shared library accessible to both client and server scripts. The `#[ckb_script_ipc::service]` attribute macro automatically generates the necessary implementations for IPC communication.
+
+### Step 3 Initialize the server
+
+Initialize the server by creating communication pipes:
+
+```rust
+use ckb_script_ipc_common::spawn::spawn_server;
+
+let (read_pipe, write_pipe) = spawn_server(
+    0,
+    Source::CellDep,
+    &[CString::new("demo").unwrap().as_ref()],
+)?;
+
+```
+
+### Step 4 Implement the service logic and start the server
+
+```rust
+use crate::def::World;
+use ckb_script_ipc_common::spawn::run_server;
+
+struct WorldServer;
+
+impl World for WorldServer {
+    fn hello(&mut self, name: String) -> Result<String, u64> {
+        if name == "error" {
+            Err(1)
+        } else {
+            Ok(format!("hello, {}", name))
+        }
+    }
+}
+
+run_server(WorldServer.server()).map_err(|_| Error::ServerError)
+
+```
+
+Note that `run_server` operates as an infinite loop to handle incoming requests. The `server()` method is automatically implemented by our proc-macro.
+
+### Step 5 Set up and interact with the client
+
+```rust
+use crate::def::WorldClient;
+let mut client = WorldClient::new(read_pipe, write_pipe);
+let ret = client.hello("world".into()).unwrap();
+
+```
+
+The client uses the pipe handles obtained during server initialization to communicate with the server. For a complete working example, you can explore our [ckb-script-ipc-demo](https://github.com/XuJiandong/ckb-script-ipc/tree/main/contracts/ckb-script-ipc-demo) repository.
+
+## Key Components: Procedural Macros and Wire Format
+
+### Procedural Macros
+
+The implementation of client-server communication in `ckb-script-ipc` heavily relies on Rust’s procedural macros to eliminate boilerplate code. The `#[ckb_script_ipc::service]` attribute macro is particularly powerful, automatically generating the necessary code for client, server, and communication handling.
+
+Let’s examine how this macro transforms a simple service definition into production-ready code:
+
+First, define your service interface:
+
+```rust
+#[ckb_script_ipc::service]
+pub trait World {
+    fn hello(name: String) -> Result<String, u64>;
+}
+
+```
+
+The macro then generates the required implementation code, including client-side methods, request and response types, and communication handling.
+
+Here’s a simplified version of the generated client code:
+
+```rust
+impl<R, W> WorldClient<R, W>
+where
+    R: ckb_script_ipc_common::io::Read,
+    W: ckb_script_ipc_common::io::Write,
+{
+    pub fn hello(&mut self, name: String) -> Result<String, u64> {
+        let request = WorldRequest::Hello { name };
+        let resp: Result<_, ckb_script_ipc_common::error::IpcError> = self
+            .channel
+            .call::<_, WorldResponse>("World.hello", request);
+        match resp {
+            Ok(WorldResponse::Hello(ret)) => ret,
+            Err(e) => {
+                // Error handling code
+            }
+        }
+    }
+}
+
+```
+
+Here is a simplified version of generated server code:
+
+```rust
+impl<S> ckb_script_ipc_common::ipc::Serve for ServeWorld<S>
+where
+    S: World,
+{
+    type Req = WorldRequest;
+    type Resp = WorldResponse;
+    fn serve(
+        &mut self,
+        req: WorldRequest,
+    ) -> ::core::result::Result<
+        WorldResponse,
+        ckb_script_ipc_common::error::IpcError,
+    > {
+        match req {
+            WorldRequest::Hello { name } => {
+                let ret = self.service.hello(name);
+                Ok(WorldResponse::Hello(ret))
+            }
+        }
+    }
+}
+
+```
+
+The generated code handles several aspects:
+
+- Type-safe request and response structures
+- Proper error handling and propagation
+- Serialization and deserialization of parameters
+- Method routing and dispatch
+
+This automatic code generation significantly reduces development time and potential errors while ensuring consistent implementation patterns across different services.
+
+### Wire Format
+
+Another key component of `ckb-script-ipc` is its wire format, which defines how data is transmitted between processes. While the `spawn` syscall provides basic `read`/`write` stream operations, we needed a more structured approach to handle complex inter-process communications. This led us to implement a packet-based protocol.
+
+We use [Variable-length quantity (VLQ)](https://en.wikipedia.org/wiki/Variable-length_quantity) to define the length information in the packet header. Compared to fixed-length representations, VLQ is more compact and suitable for this scenario. Packets are divided into the following two categories: Request and Response.
+
+The `Request` contains the following fields without any format. That is, all fields are directly arranged without any additional header. Therefore, in the shortest case, version + method id + length only occupies 3 bytes. The complete structure includes:
+
+- version (VLQ)
+- method id (VLQ)
+- length (VLQ)
+- payload (variable length data)
+
+The `Response` contains the following fields:
+
+- version (VLQ)
+- error code (VLQ)
+- length (VLQ)
+- payload (variable length data)
+
+Let’s examine each field in detail:
+
+| FIELD      | PURPOSE                                             | VALUE     | FORMAT                                         | NOTE                                                                                                           |
+| ---------- | --------------------------------------------------- | --------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Version    | Indicates the protocol version                      | 0         | VLQ encoded                                    |                                                                                                                |
+| Length     | Specifies the size of the payload that follows      | 0 to 2^64 | VLQ encoded                                    |                                                                                                                |
+| Method ID  | Identifies the specific service method being called | 0 to 2^64 | VLQ encoded                                    | Only present in Request packets.                                                                               |
+| Error Code | Indicates success/failure status of the operation   | 0 to 2^64 | VLQ encoded                                    | Only present in Response packets.                                                                              |
+| Payload    | Contains the actual data being transmitted          | N/A       | Dynamic array with size specified by `Length`. | Default serialization: JSON; Can include method parameters, return values, or any other service-specific data. |
+
+All numeric fields (version, length, method_id, error_code) use VLQ encoding for efficient space utilization while supporting values up to 2^64. This provides a good balance between compact representation for common small values while maintaining support for larger values when needed.
+
+For serialization and deserialization, we utilize `serde_json` as our primary library. This means any Rust structure that implements the `Serialize` and `Deserialize` traits (which can be automatically derived using the `#[derive(Serialize, Deserialize)]` attribute macro) can be seamlessly used as parameters and return values in your IPC communications. This provides great flexibility in the types of data you can transmit between processes while maintaining type safety. JSON is not the only option—any Serde framework that supports the `Serialize` and `Deserialize` traits can be used.
+
+## Potentiality Beyond On-Chain Communication
+
+While `ckb-script-ipc` primarily focuses on facilitating communication between on-chain scripts, its potential extends beyond that. One possibility is bridging the gap between on-chain scripts and native off-chain machine code, enabling off-chain services to interact with on-chain functionality.

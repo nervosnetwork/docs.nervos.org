@@ -241,10 +241,22 @@ const config = {
       items: [
         {
           to: "/docs/getting-started/how-ckb-works",
-          label: "Docs",
+          label: "Getting Started",
           position: "left",
           activeBaseRegex:
-            "/(getting-started|script|common-scripts|how-tos|tech-explanation|serialization|integrate-wallets|dapp|sdk-and-devtool)/",
+            "/(getting-started|how-tos|serialization|integrate-wallets|dapp|sdk-and-devtool)/",
+        },
+        {
+          to: "/docs/script/intro-to-script",
+          label: "Scripts (Smart Contracts)",
+          position: "left",
+          activeBaseRegex: "/(script|common-scripts|script-course)/",
+        },
+        {
+          to: "/docs/tech-explanation/nervos-blockchain",
+          label: "Tech Explanation",
+          position: "left",
+          activeBaseRegex: "/(tech-explanation)/",
         },
         {
           to: "/docs/node/rpcs",
@@ -256,42 +268,8 @@ const config = {
           to: "/docs/ecosystem/projects",
           label: "Ecosystem",
           position: "left",
-          activeBaseRegex: "/ecosystem/",
+          activeBaseRegex: "/(ecosystem|history-and-hard-forks)/",
         },
-        {
-          to: "/docs/history-and-hard-forks/intro-to-hard-fork",
-          label: "History & Hard Forks",
-          position: "left",
-          activeBaseRegex: "/history-and-hard-forks/",
-        },
-        {
-          type: "dropdown",
-          label: "Resources",
-          position: "left",
-          items: [
-            {
-              label: "Positioning Paper",
-              href: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md",
-            },
-            {
-              label: "CKB RFCs",
-              href: "https://github.com/nervosnetwork/rfcs",
-            },
-            {
-              label: "CKB Dev Log",
-              href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
-            },
-            {
-              label: "CKB Academy",
-              href: "https://academy.ckb.dev/",
-            },
-            {
-              label: "CKB Cookbook",
-              href: "https://cookbook.ckbdapps.com/",
-            },
-          ],
-        },
-        { to: "blog", label: "Blog", position: "left" },
         {
           type: "search",
           position: "right",
