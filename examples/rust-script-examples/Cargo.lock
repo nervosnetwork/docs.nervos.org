@@ -807,6 +807,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "error"
+version = "0.1.0"
+dependencies = [
+ "ckb-std",
+]
+
+[[package]]
 name = "faster-hex"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
