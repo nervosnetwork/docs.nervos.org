@@ -1,0 +1,81 @@
+---
+id: rust-build
+title: "Build"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Build
+
+In the [Quick Start](./rust-quick-start), we briefly introduced how to create and compile CKB Rust projects, which is sufficient for most daily development scenarios. This article delves deeper into the technical details of building Rust scripts. If you don't need an in-depth understanding for now, feel free to skip this section.
+
+## Early Rust Support
+
+The Rust compiler depends on LLVM. Although LLVM added RISC-V support relatively early, it wasn't until version 16.0 that most official support became available (allowing scripts to be compiled with the [official release](https://releases.llvm.org/)). As a result, Rust only achieved complete RISC-V support around 2023.
+
+The first version of `ckb-std` was released around 2020. During that period, developers needed to compile using a custom GNU toolchain. Due to the significant build workload, precompiled packages were not provided for every platform; instead, Docker images were used for distribution. Project management was handled with `capsule`, and the build command looked like this:
+
+```shell
+capsule build
+```
+
+Examples of projects using Capsule:
+
+- [Spore Contract](https://github.com/sporeprotocol/spore-contract)
+- ...
+
+This is just a brief introduction. For detailed usage, refer to Capsule's [README](https://github.com/nervosnetwork/capsule).
+
+:::note
+Capsule has stopped developing. Its functionality has been split into two parts:
+
+- `capsule` has been replaced by [ckb-script-templates](https://github.com/cryptape/ckb-script-templates).
+- `crates/testtool` has been moved to [ckb-testtool](https://github.com/nervosnetwork/ckb-testtool) and is still actively maintained.
+  :::
+
+## Compilation
+
+Current version of Rust offer solid RISC-V support, and developers can now directly use the latest stable Rust releases.
+
+:::note
+There are the following benefits of using the latest compiler:
+
+- Better performance optimization
+- More rigorous safety checks, helping catch potential bugs
+- Security fixes for vulnerabilities present in older versions
+  :::
+
+At this point, compiling a Rust script is very straightforward:
+
+```shell
+cargo build --target=riscv64imac-unknown-none-elf --release
+```
+
+Note that using a debug build (`cargo build` without `--release`) can cause issues for scripts:
+
+- The script size may exceed the 4 MB memory limit of `ckb-vm`, leading to execution failures.
+- Some problems may only happen under Release.
+
+Therefore, `--release` is strongly recommended.
+
+The `--target=riscv64imac-unknown-none-elf` flag specifies:
+
+- `i`: Supports the base integer instruction set (RV32I or RV64I).
+- `m`: Supports multiplication and division instructions (M extension).
+- `a`: Supports atomic operations (A extension), typically used for multi-core concurrent programming.
+- `c`: Supports the compressed instruction set (C extension) to reduce code size and improve performance.
+- `unknown`: Indicates an unknown system environment, typically for bare-metal development.
+- `none`: No operating system (no OS).
+- `elf`: Outputs binaries in the ELF (Executable and Linkable Format) format, commonly used in Linux and bare-metal development.
+
+## Reproducible Build
+
+For security reasons, we want the same source code to always produce byte-for-byte identical contract binaries. However, local builds are heavily influenced by the environment. To address this, we recommend building inside a Docker container using a specified image.
+
+In early projects, the build process was often manually scripted into a Makefile (for example, see the [`make all-via-docker`](https://github.com/nervosnetwork/ckb-auth/blob/main/Makefile#L38) target in the `ckb-auth` project) or handled through Capsule.
+
+In early projects, the build process was often manually scripted into a Makefile (for example, see the [`make all-via-docker`](https://github.com/nervosnetwork/ckb-auth/blob/main/Makefile#L38) target in the `ckb-auth` project) or handled through Capsule.
