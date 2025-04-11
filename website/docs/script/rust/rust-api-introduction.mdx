@@ -1,0 +1,84 @@
+---
+id: rust-api-introduction
+title: "API (Introduction)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# ckb-std
+
+CKB scripts run in a bare-metal environment (without relying on an operating system), meaning they lack support for commonly used development features like memory management, multi-threading/multi-processing scheduling, and I/O operations.
+
+To address these issues, developers typically use [ckb-std](https://crates.io/crates/ckb-std).
+
+In the following sections, we will explain the details of ckb-std, and developers can refer to them according to their needs.
+
+Below is a summary of the chapters and their corresponding APIs:
+
+## Entry & Allocator
+
+This chapter covers the tasks that need to be completed before the entry function (similar to the `main` function) is called, such as registering the entry function and creating a memory allocator.
+
+Includes:
+
+- `entry!` macro: Defines the contract entry point.
+- `default_alloc!` macro: Defines the global allocator for no-std Rust.
+- `env`: The `Arg` parameter of the entry function. (only spawn or exec)
+
+## Syscalls
+
+[VM syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md) defines additional capabilities provided by the CKB VM beyond the RISC-V instruction set. This chapter explains the details of these interfaces in ckb-std, as well as some higher-level abstractions that align with Rust style (found in `high_level`).
+
+Include:
+
+- `syscalls`: Defines low level CKB syscalls.
+- `ckb_constants`: Static constants used in syscalls
+- `high_level`: Defines high level syscall API.
+
+## Error
+
+This chapter introduces the possible error values that may be returned when functions in ckb-std fail.
+
+Include:
+
+- `error`
+
+## Logger
+
+During script development, logging can be used to assist with debugging.
+
+Include:
+
+- `debug!`: A `println!` like macro helps debugging
+- `logger`: Advanced logging system.
+
+## Utils
+
+This chapter introduces some utility functions.
+
+Include:
+
+- `type_id`
+- `since`: Transaction input's since field.
+
+## Dynamic loading & Exec
+
+This chapter covers the usage of Dynamic Loading and Exec, along with more internal details.
+
+- `exec syscalls`: [VM syscalls 2](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md)
+- `dynamic_loading`
+
+## Spawn
+
+The `spawn` API series implements a relatively complex IPC mechanism. This chapter will explain it in detail.
+
+- `spawn`: [VM Syscalls 3](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md)
+
+## Others
+
+- `native-simulator`Used to simulate CKB transactions in a native environment, which will be discussed in the [Debug](./rust-debug) chapter.
+- `dummy_atomic`: Some Rust code can be compiled into atomic instructions for the RISC-V target. However, these atomic instructions are not supported on ckb-vm. To address this issue, this module has been introduced.
