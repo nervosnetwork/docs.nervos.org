@@ -19,7 +19,7 @@ In the following sections, we will explain the details of ckb-std, and developer
 
 Below is a summary of the chapters and their corresponding APIs:
 
-## Entry & Allocator
+## [Entry & Allocator](./rust-api-entry)
 
 This chapter covers the tasks that need to be completed before the entry function (similar to the `main` function) is called, such as registering the entry function and creating a memory allocator.
 
@@ -27,9 +27,8 @@ Includes:
 
 - `entry!` macro: Defines the contract entry point.
 - `default_alloc!` macro: Defines the global allocator for no-std Rust.
-- `env`: The `Arg` parameter of the entry function. (only spawn or exec)
 
-## Syscalls
+## [Syscalls](./rust-api-syscalls)
 
 [VM syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md) defines additional capabilities provided by the CKB VM beyond the RISC-V instruction set. This chapter explains the details of these interfaces in ckb-std, as well as some higher-level abstractions that align with Rust style (found in `high_level`).
 
@@ -39,7 +38,7 @@ Include:
 - `ckb_constants`: Static constants used in syscalls
 - `high_level`: Defines high level syscall API.
 
-## Error
+## [Error](./rust-api-error)
 
 This chapter introduces the possible error values that may be returned when functions in ckb-std fail.
 
@@ -70,6 +69,7 @@ Include:
 This chapter covers the usage of Dynamic Loading and Exec, along with more internal details.
 
 - `exec syscalls`: [VM syscalls 2](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md)
+- `env`: The `Arg` parameter of the entry function. (only spawn or exec)
 - `dynamic_loading`
 
 ## Spawn
