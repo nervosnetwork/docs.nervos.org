@@ -15,6 +15,9 @@ use std::str::FromStr;
 mod tests;
 
 #[cfg(test)]
+mod test_syscalls;
+
+#[cfg(test)]
 mod tests_error;
 
 // The exact same Loader code from capsule's template, except that
