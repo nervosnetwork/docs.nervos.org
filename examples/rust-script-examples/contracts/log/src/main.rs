@@ -20,7 +20,7 @@ pub fn program_entry() -> i8 {
 
     ckb_std::logger::init().unwrap();
 
-    use ckb_std::log::{ trace, debug, info, warn, error};
+    use ckb_std::log::{debug, error, info, trace, warn};
 
     trace!("Trace Message");
     debug!("debug Message");

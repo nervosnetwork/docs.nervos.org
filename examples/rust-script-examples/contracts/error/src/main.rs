@@ -65,7 +65,7 @@ fn demo_length_not_enough() {
 
 fn main() -> Result<(), SysError> {
     let args = ckb_std::high_level::load_script()?.args();
-    if args.len() < 1 {
+    if args.is_empty() {
         debug!("args len ({}) error", args.len());
         return Err(SysError::Unknown(0x100000u64));
     }
