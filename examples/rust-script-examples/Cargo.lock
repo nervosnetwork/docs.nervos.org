@@ -366,7 +366,7 @@ version = "0.200.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d1386124f2e4742eccb7ab85922e55eae3a5574b77ebf7d0cd943204b92a2397"
 dependencies = [
- "log",
+ "log 0.4.27",
 ]
 
 [[package]]
@@ -430,7 +430,7 @@ dependencies = [
  "ckb-hash",
  "ckb-types",
  "eaglesong",
- "log",
+ "log 0.4.27",
  "serde",
 ]
 
@@ -489,6 +489,7 @@ dependencies = [
  "ckb-gen-types",
  "ckb-x64-simulator",
  "gcd",
+ "log 0.4.27",
 ]
 
 [[package]]
@@ -986,7 +987,7 @@ version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d20fd25aa456527ce4f544271ae4fea65d2eda4a6561ea56f39fb3ee4f7e3884"
 dependencies = [
- "log",
+ "log 0.4.27",
  "plain",
  "scroll",
 ]
@@ -997,7 +998,7 @@ version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "532a09cd3df2c6bbfc795fb0434bff8f22255d1d07328180e918a2e6ce122d4d"
 dependencies = [
- "log",
+ "log 0.4.27",
  "plain",
  "scroll",
 ]
@@ -1115,6 +1116,13 @@ name = "linux-raw-sys"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fe7db12097d22ec582439daf8618b8fdd1a7bef6270e9af3b1ebcd30893cf413"
+
+[[package]]
+name = "log"
+version = "0.1.0"
+dependencies = [
+ "ckb-std",
+]
 
 [[package]]
 name = "log"
@@ -1850,7 +1858,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f0a0651a5c2bc21487bde11ee802ccaf4c51935d0d3d42a6101f98161700bc6"
 dependencies = [
  "bumpalo",
- "log",
+ "log 0.4.27",
  "proc-macro2",
  "quote",
  "syn 2.0.100",
