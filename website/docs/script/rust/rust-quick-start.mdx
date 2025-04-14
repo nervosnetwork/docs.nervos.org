@@ -6,6 +6,7 @@ title: "Quick Start"
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import Link from "@docusaurus/Link";
+import Tooltip from "@components/Tooltip";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
 
@@ -27,28 +28,30 @@ import ScriptTools from "./../_ScriptTools.mdx";
   ]}
 />
 
-This chapter focuses on "How to Develop Contracts with Rust" and walks through the entire development process using some examples. As this is a "Quick Start" guide, it will not delve too deeply into details. For a more details, please refer to the subsequent chapters.
+This chapter provides a step-by-step guide on developing contracts with Rust on CKB with several examples. As a "Quick Start" guide, it will not diving into in-depth details. For a more comprehensive understanding, please refer to the subsequent chapters.
 
 :::note
-Before, familiarity with the following concepts is required:
+Before proceeding, you should be familiar with:
 
-- CKB basic and transaction structure.
-- Rust.
-- `make` command.
+- CKB basics and the transaction structures
+- Rust
+- The `make` command
   :::
 
-Rust is widely used in developing core components of CKB due to its high performance and ease of use. Scripts often involve operations like signatures, hashing, and large number. Rust’s superior performance helps reduce Cycles consumption. Furthermore, as scripts are critical for asset management, Rust’s memory safety features help minimize vulnerabilities, making it a **recommended choice for script development** .
+## Why Rust for CKB Contracts?
 
-This chapter will demonstrate the complete process of developing CKB scripts with Rust using two examples. The key steps include:
+Rust is widely used in developing core components of CKB due to its high performance and ease of use. Scripts often involve operations like signing, hashing, and handling large numbers. Rust’s superior performance helps reduce <Tooltip>Cycles</Tooltip> consumption. Furthermore, as Scripts are critical for asset management, Rust’s memory safety features help minimize vulnerabilities, making it a **recommended choice for Script development** .
 
-- Project creation and management.
-- Scirpts building.
+This chapter will demonstrate the complete process of developing CKB Scripts with Rust using two examples. Key steps include:
+
+- Project creation and management
+- Building Scripts
 - Testing methods
 
 [Here](TODO) is the source code of the demo.
 
 :::note
-In previous documentation, the term `Script` is generally used to refer to CKB smart contracts. However, in real-world development, various types of scripts may be involved, (e.g. Shell scripts). To avoid confusion, this section will use `Contract` to specifically refer to CKB smart contracts.
+In previous documentation, the term `Script` refers to CKB smart contracts. However, in development, various types of Scripts (e.g., Shell scripts) may be involved. To avoid confusion, this section will use `Contract` to specifically refer to CKB smart contract
 :::
 
 ## Hello World
@@ -56,12 +59,12 @@ In previous documentation, the term `Script` is generally used to refer to CKB s
 This section introduces the simplest contract, "Hello World," covering:
 
 - Creating a project and contract
-- Common commands for projects
-- Run contract
+- Common project commands
+- Running the contract
 
 ### Create & Build
 
-To create a project, we use [`ckb-script-templates`](https://github.com/cryptape/ckb-script-templates) :
+To create a project, use [`ckb-script-templates`](https://github.com/cryptape/ckb-script-templates) :
 
 ```shell
 cargo generate gh:cryptape/ckb-script-templates workspace --name rust-script-examples
@@ -71,14 +74,14 @@ cargo generate gh:cryptape/ckb-script-templates workspace --name rust-script-exa
 If `--name [Project Name]` is not provided, you will be prompted to enter the project name during the setup.
 :::
 
-Successful execution, a Rust project will be created in the `rust-script-examples` directory. The generated project includes:
+Upon successful execution, a Rust project will be created in the `rust-script-examples` directory. The generated project includes:
 
 - An empty Rust project
-- `tests` project (A basic testing framework)
-- `Makefile` to execute common tasks using `make`
-- `scripts` directory for storing utility scripts
+- A `tests` project: A basic testing framework
+- A `Makefile`: to execute common tasks using `make`
+- A `scripts` directory: for storing utility Scripts
 
-### Create Contract
+### Create a Contract
 
 The initialized project does not include a contract by default, so we need to generate one manually using `make generate`:
 
@@ -92,7 +95,7 @@ make generate CRATE=hello-world
 :::
 This command creates a `hello-world` subproject inside the `contracts` directory and automatically adds a `test_hello_world` function in `tests/src/tests.rs`.
 
-The contract's entry function, `program_entry` (similar to main), is located in `contracts/hello-world/src/main.rs`.
+The contract's entry function, `program_entry` (similar to `main` in Rust), is located in `contracts/hello-world/src/main.rs`.
 By default, the contract depends on `ckb-std`, which provides instruction support.
 
 Insert the following code into `program_entry`:
@@ -101,7 +104,7 @@ Insert the following code into `program_entry`:
 ckb_std::debug!("Hello World!");
 ```
 
-(similar to `println` in the rust std).
+(Similar to `println` in the `Rust Standard Library`).
 
 After implementing the code, compile all contracts using:
 
@@ -111,9 +114,8 @@ make build
 
 The compiled contracts will be stored in the `build/release` directory, including:
 
-- A CKB contract file with the contract name.
-- Files ending with `.debug` are contracts with debug information. which is larger and not suitable for testing or deployment.
-- A debug file (ending in .debug), which is larger and not suitable for testing or deployment.
+- A CKB contract file named after the contract
+- Files with `.debug` ending: They are contracts with debug information, which are larger and not suitable for testing or deployment.
 
 ### Run & Test
 
@@ -141,13 +143,13 @@ All cycles: 7366(7.2K)
 
 #### Running Tests
 
-Run the `test_hello_world` test ( Rust unit test):
+Run the `test_hello_world` test (Rust unit test):
 
 ```shell
 cargo test -- tests::test_hello_world --nocapture
 ```
 
-or
+or use `make`:
 
 ```shell
 make test CARGO_ARGS="-- tests::test_hello_world --nocapture"
@@ -167,19 +169,28 @@ Formal contracts will get transaction information or on-chain data. For proper t
 
 ## Simple Script (Print args data)
 
-In real contracts, typically need to access transaction information or on-chain data. To improve upon the previous example, we introduce:
+Real-world contracts often need to access transaction information or on-chain data. To build on the previous example, this section covers.
 
 - `ckb-testtool`: Adding logic code to existing tests.
 - `ckb-debugger`: Using `--tx-file` (or `-f`) to provide transaction data.
 
-The advantage of `ckb-testtool` is the flexibility to modify transaction details, making testing more convenient.
-Additionally, since `ckb-testtool` shares the same underlying code as `CKB`, it closely resembles the actual Nervos network.
+**The advantage of `ckb-testtool`**:
 
-Conversely, `ckb-debugger` allows direct command-line execution and supports debugging via `--mode gdb`. However, it requires manually constructing a transaction.
+- Allows modifying transaction details flexibly, making testing more convenient.
+- `ckb-testtool` shares the same underlying code as `CKB`, closely resembling the actual Nervos Network
 
-A common workflow is to prioritize `ckb-testtool` for testing. If encountering complex bugs or other issues, transactions can be dumped and analyzed using ckb-debugger.
+**The advantage of `ckb-testtool`**:
 
-### Code
+- Allows direct command-line execution
+- Supports debugging via `--mode gdb`
+  However, `ckb-debugger` requires manually constructing a transaction.
+
+**Recommended workflow**:
+
+- Use `ckb-testtool` for regular testing
+- If issues arise, use `ckb-debugger` to analyze transactions
+
+### Generate the Contract
 
 Generate the contract using:
 
@@ -207,11 +218,11 @@ pub fn program_entry() -> i8 {
 }
 ```
 
-This code get args via `ckb_std::high_level::load_script` and prints them.
+This code retrieves and prints the contract args via `ckb_std::high_level::load_script`
 
 ### Run With [ckb-testtool](https://crates.io/crates/ckb-testtool)
 
-Executing `test_simple_print_args` will output:
+Executing `test_simple_print_args` produces:
 
 ```text
 [contract debug] Args Len: 1
@@ -248,7 +259,7 @@ Here, we use `ckb_testtool::context::random_hash()` to generate a 32-byte random
 
 ### Run with ckb-debugger
 
-Since this contract requires transaction, executing it like before:
+Since this contract requires a transaction, executing it as before with:
 
 ```shell
 ckb-debugger --bin build/release/simple-print-args
@@ -276,7 +287,7 @@ let cycles = context
 println!("consume cycles: {}", cycles);
 ```
 
-add code
+add the code
 
 ```rust
 println!(
@@ -286,7 +297,7 @@ println!(
 );
 ```
 
-This outputs a JSON transaction:
+This outputs a JSON representation of the transaction:
 
 ```json
 {
@@ -390,7 +401,7 @@ This outputs a JSON transaction:
 ```
 
 :::note
-The `data` field contains the contract binary, which is too long to display here (this documentation), is replaced by `...`.
+The `data` field contains the contract binary, which is too long to display in this documentation; therefore, it is replaced by `...`.
 :::
 
 Save this JSON as a file and execute the contract with `ckb-debugger`:
@@ -408,6 +419,8 @@ Script log: Args Data: [ef, c0, aa, 60, c7, af, 05, 2a, 4a, ec, 89, d0, 19, 69, 
 Run result: 0
 All cycles: 49239(48.1K)
 ```
+
+### Automating Transaction Updates
 
 To avoid manually updating the transaction file every time the contract is modified, use macros:
 
@@ -439,7 +452,9 @@ and reference the `code_hash` using:
 
 This approach eliminates the need to update transaction details manually after each modification.
 
-The transaction file:
+### Final Execution
+
+With the updated transaction file below:
 
 ```json
 {
@@ -529,7 +544,7 @@ The transaction file:
 }
 ```
 
-Execute with ckb-debugger:
+Execute with `ckb-debugger`:
 
 ```shell
 ckb-debugger -f tests/test-vectors/test_simple_print_args.json
@@ -556,4 +571,4 @@ These changes do not affect the actual execution results.
 
 ## The End
 
-These two examples provide a simplified introduction to developing CKB scripts with Rust. Many details, such as additional `ckb-std` APIs and using gdb for debugging in `ckb-debugger`, have been omitted. These topics will be covered in later chapters.
+These two examples provide a simplified introduction to developing CKB Scripts with Rust. More advanced methods, such as additional `ckb-std` APIs and using `gdb` for debugging with `ckb-debugger`, are not covered here but will be explored in future chapters.
