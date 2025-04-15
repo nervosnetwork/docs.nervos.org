@@ -129,6 +129,7 @@ export default {
         "script/rust/rust-api-syscalls",
         "script/rust/rust-api-error",
         "script/rust/rust-api-logger",
+        "script/rust/rust-test",
       ],
     },
     {
