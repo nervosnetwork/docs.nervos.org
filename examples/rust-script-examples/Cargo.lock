@@ -487,6 +487,7 @@ dependencies = [
  "buddy-alloc",
  "cc",
  "ckb-gen-types",
+ "ckb-hash",
  "ckb-x64-simulator",
  "gcd",
  "log 0.4.27",
@@ -1783,6 +1784,13 @@ name = "tx-hash"
 version = "0.1.0"
 dependencies = [
  "blake2b-ref",
+ "ckb-std",
+]
+
+[[package]]
+name = "type-id"
+version = "0.1.0"
+dependencies = [
  "ckb-std",
 ]
 
