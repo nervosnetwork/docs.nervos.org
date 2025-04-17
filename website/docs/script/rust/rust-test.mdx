@@ -184,6 +184,22 @@ pub fn random_out_point() -> OutPoint
 pub fn random_type_id_script() -> Script
 ```
 
+### Deterministic tx
+
+During development, it's often useful to work with fixed transactions when testing CKB Scripts—for example, when optimizing contract performance or debugging issues.
+
+While exporting a transaction using `dump_tx` and running it with `ckb-debugger` is one option, it tends to be inflexible. Here's a more convenient alternative:
+
+```rust
+Context::new_with_deterministic_rng()
+```
+
+A `Context` created with this method will generate relatively fix data when using `deploy_cell`.
+
+:::note
+When using `create_cell`, the generated `out_point` is still randomized. To create a cell with a fixed `out_point`, use `create_cell_with_out_point` instead
+:::
+
 ## Summary
 
 This section introduced how to write and run CKB smart contract tests in a local environment using Rust. It covered transaction construction, signature verification, and the core features of the `ckb-testtool` library. Mastering these techniques will help developers write robust and reliable CKB smart contract tests efficiently.
