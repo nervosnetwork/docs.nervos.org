@@ -216,3 +216,84 @@ fn test_log() {
         .expect("pass verification");
     println!("consume cycles: {}", cycles);
 }
+
+#[test]
+fn test_spawn() {
+    let mut context = Context::default();
+
+    // deploy contract
+    let (parent_out_point, child_out_point) = {
+        let loader = Loader::default();
+        let parent_contract_bin: Bytes = loader.load_binary("spawn-parent");
+        let child_contract_bin: Bytes = loader.load_binary("spawn-child");
+        (
+            context.deploy_cell(parent_contract_bin),
+            context.deploy_cell(child_contract_bin),
+        )
+    };
+
+    // get child type id
+    let (cell, _) = context.get_cell(&child_out_point).unwrap();
+    let code_hash = cell.type_().to_opt().unwrap().calc_script_hash();
+
+    // prepare scripts
+    let lock_script = context
+        .build_script(
+            &parent_out_point,
+            Bytes::from(
+                vec![
+                    code_hash.as_slice(),
+                    &[ckb_testtool::ckb_types::core::ScriptHashType::Type.into()],
+                ]
+                .concat(),
+            ),
+        )
+        .expect("script");
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point)
+        .build();
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    let outputs_data = vec![Bytes::new(); 2];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+    let tx = context.complete_tx(tx);
+    let tx = tx
+        .as_advanced_builder()
+        .cell_dep({
+            CellDep::new_builder()
+                .out_point(child_out_point)
+                .dep_type(ckb_testtool::ckb_types::core::DepType::Code.into())
+                .build()
+        })
+        .build();
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, 10_000_000)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}

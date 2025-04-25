@@ -1657,6 +1657,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "spawn-child"
+version = "0.1.0"
+dependencies = [
+ "ckb-std",
+]
+
+[[package]]
+name = "spawn-parent"
+version = "0.1.0"
+dependencies = [
+ "ckb-std",
+]
+
+[[package]]
 name = "ssri"
 version = "9.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
