@@ -1,0 +1,204 @@
+---
+id: rust-api-spawn
+title: "API (Spawn & IPC)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import Tooltip from "@components/Tooltip";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# ckb-std spawn & IPC
+
+The mechanisms behind `spawn` and IPC are described in detail in [ckb-script-ipc](./ckb-script-ipc). This section focuses only on the related APIs.
+
+## high_level::spawn_cell
+
+Spawn a cell in cell dep.
+
+### Syntax
+
+```rust
+pub fn spawn_cell(
+    code_hash: &[u8],
+    hash_type: ScriptHashType,
+    argv: &[&CStr],
+    inherited_fds: &[u64],
+) -> Result<u64, SysError>;
+```
+
+### Parameters
+
+`code_hash`: the code hash to search cell in cell deps. 定长 32 bytes
+
+`hash_type`: the hash-type to search cell in cell deps.
+
+`argv`: subprocess arguments. In most cases two types of parameters can be accepted:
+
+- if the parameter you want to pass can be represented by a string:
+- CStr::from_bytes_with_nul(b"arg0\0").unwrap();
+- CString::new("arg0").unwrap().as_c_str();
+- if you want to pass a piece of bytes data, you may encode it to hexadecimal string or other format:
+- high_level::encode_hex(&vec![0xff, 0xfe, 0xfd]);
+
+`inherited_fds`: the fd list to be passed to the child process.
+
+- Once successfully, the parent loses the ability to `read`, `write`, or `close` these fds.
+- In `syscalls::spawn_cell`, this list must end with `0`.
+
+### Return
+
+If the function succeeds, returns subprocess ID.
+
+If the function fails, return [SysError](./rust-api-error).
+
+## high_level::inherited_fds
+
+Get inherited file descriptors.
+
+### Syntax
+
+```rust
+pub fn inherited_fds() -> Vec<u64>
+```
+
+### Parameters
+
+None
+
+### Return
+
+Only available within child processes. Returns the list of file descriptors inherited via `spawn_cell`.
+Never returns `Err`; returns an empty `Vec` if nothing is inherited.
+
+## syscalls::process_id()
+
+This syscall is used to get the current process id. Root process ID is 0.
+
+### Syntax
+
+```rust
+pub fn process_id() -> u64
+```
+
+### Parameters
+
+None
+
+### Return
+
+Process ID
+
+- Each script in a transaction is treated as a separate process, starting from ID `0`.
+
+## syscalls::pipe
+
+This syscall create a pipe with read-write pair of file descriptions
+
+### Syntax
+
+```rust
+pub fn pipe() -> Result<(u64, u64), SysError>
+```
+
+### Parameters
+
+None
+
+### Return
+
+If the function succeeds, The file descriptor with read permission is located at fds[0], and the corresponding file descriptor with write permission is located at fds[1].
+
+If the function fails, return [SysError](./rust-api-error).
+
+## syscalls::read
+
+This syscall reads data from a pipe via a file descriptor. The syscall Read attempts to read up to value pointed by length bytes from file descriptor fd into the buffer, and the actual length of data read is returned.
+
+### Syntax
+
+```rust
+pub fn read(fd: u64, buffer: &mut [u8]) -> Result<usize, SysError>
+```
+
+### Parameters
+
+`fd`: File descriptor created by `pipe` or obtained via `inherited_fds`, must have read permission.
+
+`buffer`: The buffer into which data will be read.
+
+### Return
+
+If the function succeeds, 返回所读取的长度。
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+If the buffer is not fully drained, the subprocess will not release.
+
+## syscalls::write
+
+This syscall writes data to a pipe via a file descriptor. The syscall Write writes up to value pointed by length bytes from the buffer, and the actual length of data written is returned.
+
+If buffer is empty and fd is avaliable, then write() can still succeed: A data with a length of 0 is written to the pipe. The peer needs to use a read() syscall to consume the empty data, and read() will returns Ok(0).
+
+### Syntax
+
+```rust
+pub fn write(fd: u64, buffer: &[u8]) -> Result<usize, SysError>
+```
+
+### Parameters
+
+`fd`: File descriptor created by `pipe` or obtained via `inherited_fds`, must have write permission.
+
+`buffer`: The data to write.
+
+### Return
+
+If the function succeeds, returns the number of bytes written.
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+As with `read`, if the pipe's buffer isn't fully written and consumed, the subprocess won't terminate.
+
+## syscalls::close
+
+This syscall manually closes a file descriptor. After calling this, any attempt to read/write the file descriptor pointed to the other end would fail.
+
+### Syntax
+
+```rust
+pub fn close(fd: u64) -> Result<(), SysError>
+```
+
+### Parameters
+
+`fd`: File descriptor created by `pipe` or obtained via `inherited_fds`.
+
+### Return
+
+If the function succeeds, return `Ok(())`
+
+If the function fails, return [SysError](./rust-api-error).
+
+## ckb_script_ipc::service
+
+The compiler can provide some basic implementations of ckb spawn for a trait through the `service` attribute.
+
+This trait should be placed in a shared library accessible to both client and server scripts. The #[ckb_script_ipc::service] attribute macro automatically generates the necessary implementations for IPC communication.
+
+### Syntax
+
+```rust
+pub fn service(_attr: TokenStream, input: TokenStream) -> TokenStream
+```
+
+### Example
+
+[A Simplified IPC Solution](http://localhost:3000/docs/script/ckb-script-ipc#introducing-ckb-script-ipc-a-simplified-ipc-solution)
