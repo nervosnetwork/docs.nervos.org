@@ -19,7 +19,7 @@ use ckb_std::ckb_constants::Source;
 use ckb_std::ckb_types::prelude::Pack;
 use ckb_std::error::SysError;
 
-fn main() -> Result<(), ckb_std::error::SysError> {
+fn ckb_main() -> Result<(), ckb_std::error::SysError> {
     let script = ckb_std::high_level::load_script()?;
     let script_hash = ckb_std::high_level::load_script_hash()?;
 
@@ -53,7 +53,7 @@ fn main() -> Result<(), ckb_std::error::SysError> {
 }
 
 pub fn program_entry() -> i8 {
-    let ret = main();
+    let ret = ckb_main();
     match ret {
         Ok(_) => 0,
         Err(error) => {

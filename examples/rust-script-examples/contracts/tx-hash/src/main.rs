@@ -33,7 +33,7 @@ fn ckb_hash(data: &[u8]) -> [u8; 32] {
     hash
 }
 
-fn program_entry2() -> Result<(), ckb_std::error::SysError> {
+fn ckb_main() -> Result<(), ckb_std::error::SysError> {
     let tx_hash = ckb_std::high_level::load_tx_hash()?;
     debug!("tx hash by load_tx_hash : {:02x?}", tx_hash);
 
@@ -51,7 +51,7 @@ fn program_entry2() -> Result<(), ckb_std::error::SysError> {
 }
 
 pub fn program_entry() -> i8 {
-    let res = program_entry2();
+    let res = ckb_main();
     match res {
         Ok(()) => 0,
         Err(err) => {

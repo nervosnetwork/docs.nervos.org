@@ -19,7 +19,7 @@ use ckb_std::debug;
 use ckb_std::error::SysError;
 use ckb_std::high_level::load_script_hash;
 
-fn main() -> Result<(), SysError> {
+fn ckb_main() -> Result<(), SysError> {
     ckb_std::type_id::check_type_id(32)?;
 
     debug!("Script Hash: {:02x?}", load_script_hash()?);
@@ -28,7 +28,7 @@ fn main() -> Result<(), SysError> {
 }
 
 pub fn program_entry() -> i8 {
-    match main() {
+    match ckb_main() {
         Ok(_) => 0,
         Err(err) => {
             debug!("Error: {:?}", err);

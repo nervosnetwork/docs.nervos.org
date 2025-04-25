@@ -63,7 +63,7 @@ fn demo_length_not_enough() {
     }
 }
 
-fn main() -> Result<(), SysError> {
+fn ckb_main() -> Result<(), SysError> {
     let args = ckb_std::high_level::load_script()?.args();
     if args.is_empty() {
         debug!("args len ({}) error", args.len());
@@ -85,7 +85,7 @@ fn main() -> Result<(), SysError> {
 pub fn program_entry() -> i8 {
     debug!("This is a sample contract!");
 
-    match main() {
+    match ckb_main() {
         Ok(_) => 0,
         Err(err) => {
             debug!("Error: {:?}", err);
