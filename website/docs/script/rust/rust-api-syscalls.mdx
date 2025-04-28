@@ -1,0 +1,243 @@
+---
+id: rust-api-syscalls
+title: "API (Syscalls)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# ckb-std syscalls
+
+> CKB VM syscalls are used to implement communications between the RISC-V based CKB VM, and the main CKB process, allowing scripts running in the VM to read current transaction information as well as general blockchain information from CKB. Leveraging syscalls instead of custom instructions allow us to maintain a standard compliant RISC-V implementation which can embrace the broadest industrial support.
+
+Quoted from [CKB RFC vm-syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md).
+
+When developing script, you will inevitably use these assembly instructions. If you call them directly in Rust, it looks like this:
+
+```rust
+let c_str = b"hello world\0";
+core::arch::asm!(
+    "ecall",
+    inout("a0") _a0,
+    in("a1") 0,
+    in("a2") 0,
+    in("a3") 0,
+    in("a4") 0,
+    in("a5") 0,
+    in("a6") 0,
+    in("a7") 2177, // const SYS_DEBUG: u64 = 2177;
+);
+```
+
+Fortunately, `ckb-std` already wraps these instructions:
+
+- `syscalls` mod: Wraps raw assembly instructions into basic Rust-style functions.
+- `high_level` mod: Further wraps the `syscalls` to provide more developer-friendly interfaces.
+
+## Syscalls (Native)
+
+In [native.rs](https://github.com/nervosnetwork/ckb-std/blob/master/src/syscalls/native.rs), `ckb-std` provides simple, Rust-style syscall wrappers. Each wrapper corresponds to a syscall defined in the RFC, so we won’t repeat the details here (generally not used) .
+
+## high_level::load_tx_hash
+
+Load [Transaction](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md) Hash.
+
+### Syntax
+
+```rust
+pub fn load_tx_hash() -> Result<[u8; 32], SysError>
+```
+
+### Parameters
+
+None
+
+### Return
+
+If the function succeeds, returns a 32-byte transaction hash.
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+Loads the hash of the current transaction (excluding the Witnesses field).  
+Since some transaction components are consumed upon execution (e.g., cells in Inputs), the transaction hash is unique.
+
+This uniqueness can be leveraged in certain cases. For example, CKB’s default lock script, Secp256k1, includes the `tx_hash` in the message when verifying a signature during unlocking.
+
+### Example
+
+See the example in `rust-script-examples/tx-hash`. It demonstrates how to get the `tx_hash`, pass it through the witness, and verify it.
+
+:::note
+In testing, you can manually modify the `tx_hash` to simulate extreme situations.
+Normally, this is only used in tests.
+:::
+
+## high_level::load_script_hash
+
+Load script hash
+
+### Syntax
+
+```rust
+pub fn load_script_hash() -> Result<[u8; 32], SysError>
+```
+
+### Parameters
+
+None
+
+### Return
+
+If the function succeeds, returns a 32-byte script hash.
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+Loads the **Script Hash** of the current script (note: this is the _Script Hash_, not the _Code Hash_).
+
+### Example
+
+See the example in `rust-script-examples/script-hash`:
+
+- Calculating the script hash by calling `load_script` and comparing it with the value returned by `load_script_hash`.
+- Using `load_cell_lock_hash` and `load_cell_type_hash` to load the lock and type script hashes of `GroupInput[0]` and `GroupOutput[0]`, to determine the script's location.
+
+## high_level::QueryIter
+
+A advanced iterator to manipulate cells/inputs/headers/witnesses
+
+### Example
+
+```rust
+use high_level::load_cell_capacity;
+// calculate all inputs capacity
+let inputs_capacity = QueryIter::new(load_cell_capacity, Source::Input)
+    .map(|capacity| capacity.unwrap_or(0))
+    .sum::<u64>();
+
+// calculate all outputs capacity
+let outputs_capacity = QueryIter::new(load_cell_capacity, Source::Output)
+    .map(|capacity| capacity.unwrap_or(0))
+    .sum::<u64>();
+assert_eq!(inputs_capacity, outputs_capacity);
+```
+
+## Load Cells info
+
+The following functions are used to load transaction information.
+
+### Syntax
+
+```rust
+pub fn load_cell(index: usize, source: Source) -> Result<CellOutput, SysError>;
+pub fn load_input(index: usize, source: Source) -> Result<CellInput, SysError>;
+pub fn load_header(index: usize, source: Source) -> Result<Header, SysError>;
+pub fn load_witness(index: usize, source: Source) -> Result<Vec<u8>, SysError>;
+pub fn load_witness_args(index: usize, source: Source) -> Result<WitnessArgs, SysError>;
+pub fn load_cell_capacity(index: usize, source: Source) -> Result<u64, SysError>;
+pub fn load_cell_occupied_capacity(index: usize, source: Source) -> Result<u64, SysError>;
+pub fn load_cell_data_hash(index: usize, source: Source) -> Result<[u8; 32], SysError>;
+pub fn load_cell_lock_hash(index: usize, source: Source) -> Result<[u8; 32], SysError>;
+pub fn load_cell_type_hash(index: usize, source: Source) -> Result<Option<[u8; 32]>, SysError>;
+pub fn load_cell_lock(index: usize, source: Source) -> Result<Script, SysError>;
+pub fn load_cell_type(index: usize, source: Source) -> Result<Option<Script>, SysError>;
+pub fn load_header_epoch_number(index: usize, source: Source) -> Result<u64, SysError>;
+pub fn load_header_epoch_start_block_number(index: usize, source: Source) -> Result<u64, SysError>;
+pub fn load_header_epoch_length(index: usize, source: Source) -> Result<u64, SysError>;
+pub fn load_input_since(index: usize, source: Source) -> Result<u64, SysError>;
+pub fn load_input_out_point(index: usize, source: Source) -> Result<OutPoint, SysError>;
+pub fn load_cell_data(index: usize, source: Source) -> Result<Vec<u8>, SysError>;
+```
+
+### Parameters
+
+index: an index value denoting the index of entries to read.
+
+source: a flag denoting the source of cells to locate.
+
+### Return
+
+If the function succeeds, Return the get value.
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+All these functions can be used with `QueryIter`.
+
+## high_level::find_cell_by_data_hash
+
+Find cell by data_hash
+
+### Syntax
+
+```rust
+pub fn find_cell_by_data_hash(data_hash: &[u8], source: Source) -> Result<Option<usize>, SysError>
+```
+
+### Parameters
+
+`data_hash`: A 32-byte cell data hash
+`source`: a flag denoting the source of cells to locate.
+
+### Return
+
+If the function succeeds, Return `Option<usize>` (index)
+
+If the function fails, return [SysError](./rust-api-error).
+
+## high_level::look_for_dep_with_data_hash
+
+### Syntax
+
+```rust
+pub fn look_for_dep_with_data_hash(data_hash: &[u8]) -> Result<usize, SysError>
+```
+
+### Parameters
+
+data_hash: A 32-byte data hash.
+
+### Return
+
+If the function succeeds, Return `usize` (index)
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+与 look_for_dep_with_hash2(code_hash, ScriptHashType::Data); 相同。
+
+## high_level::look_for_dep_with_hash2
+
+Look for a dep cell with specific code hash, code_hash should be a buffer with 32 bytes.
+
+### Syntax
+
+```rust
+pub fn look_for_dep_with_hash2(
+    code_hash: &[u8],
+    hash_type: ScriptHashType,
+) -> Result<usize, SysError>
+```
+
+### Parameters
+
+code_hash: The script Code Hash. (not a script hash)
+hash_type: Script hash type.
+
+### Return
+
+If the function succeeds, Return `usize` (index)
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+If the dep cell is not found, the function returns `SysError::IndexOutOfBound`.

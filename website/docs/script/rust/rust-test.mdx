@@ -1,0 +1,205 @@
+---
+id: rust-test
+title: "Test"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Test
+
+Since CKB contracts are often closely tied to asset security, extensive testing is essential to ensure correctness. This section explains how to write contract tests using Rust.
+
+Contracts need to be deployed on-chain and executed in the `ckb-vm`. However, testing directly on-chain is costly and inefficient. Therefore, we usually simulate a local environment that closely resembles CKB, build a transaction, and execute it directly using `ckb-vm`. This also allows us to test edge cases that are difficult to reproduce on-chain.
+
+:::note
+As CKB itself is written in Rust and Rust offers high performance, we recommend writing contract tests in Rust.
+:::
+
+Initially, we used libraries like `ckb-types` and `ckb-script` directly to simulate the on-chain environment (still running on `ckb-vm` under the hood). Later, to encapsulate common testing utilities, the [`ckb-testtool`](https://github.com/nervosnetwork/ckb-testtool) library was created. It was originally part of the [`capsule`](https://github.com/nervosnetwork/capsule) project but has since been split out as a standalone library.
+
+`ckb-testtool` **re-exports** nearly all [CKB-related](https://github.com/nervosnetwork/ckb) libraries to avoid compatibility issues caused by version mismatches:
+
+```rust
+// re-exports
+pub use ckb_chain_spec;
+pub use ckb_crypto;
+pub use ckb_error;
+pub use ckb_hash;
+pub use ckb_jsonrpc_types;
+pub use ckb_script;
+pub use ckb_traits;
+pub use ckb_types;
+pub use ckb_types::bytes;
+pub use ckb_verification;
+```
+
+## Quick Start
+
+Here's a basic unit test for a `hello-world` contract:
+
+```rust
+// generated unit test for contract hello-world
+#[test]
+fn test_hello_world() {
+    // deploy contract
+    let mut context = Context::default();
+    let contract_bin: Bytes = Loader::default().load_binary("hello-world");
+    let out_point = context.deploy_cell(contract_bin);
+
+    // prepare scripts
+    let lock_script = context
+        .build_script(&out_point, Bytes::from(vec![42]))
+        .expect("script");
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input = CellInput::new_builder()
+        .previous_output(input_out_point)
+        .build();
+    let outputs = vec![
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script.clone())
+            .build(),
+        CellOutput::new_builder()
+            .capacity(500u64.pack())
+            .lock(lock_script)
+            .build(),
+    ];
+
+    let outputs_data = vec![Bytes::new(); 2];
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .input(input)
+        .outputs(outputs)
+        .outputs_data(outputs_data.pack())
+        .build();
+    let tx = context.complete_tx(tx);
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, 10_000_000)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
+```
+
+The test consists of three main steps:
+
+### 1. Initialization
+
+- `Context::default()` creates a context to manage test-only transaction variables. (`Context` is primarily designed for testing.)
+- `Loader::default().load_binary()` loads the contract binary. `Loader` is provided by `ckb-script-templates`, but you can implement your own loader, for example using [`include_bytes!`](https://github.com/nervosnetwork/ckb-auth/blob/main/tests/auth-c-tests/src/lib.rs#L46).
+
+### 2. Building the Transaction
+
+A transaction generally consists of three components:
+
+- Input Cells
+- Output Cells
+- Witnesses
+
+In this example, the same lock script is used for both input and output. Once these components are ready, we use `TransactionBuilder` to build a `TransactionView`.
+
+To create an input, you must first generate a `CellOutput`, then use it to create an `OutPoint`. For outputs, `CellOutput` can be used directly.
+
+:::note
+The terminology here can be a bit confusing. Think of it this way:
+
+The `CellOutput` in the input actually comes from a previous transaction. As an input, it also includes the previous transaction hash and other metadata. So creating an input requires an extra step compared to creating an output.
+:::
+
+Once the transaction is built, use `complete_tx` to add required `CellDeps` (script dependencies), allowing CKB-VM to execute the transaction:
+
+```rust
+let tx = context.complete_tx(tx);
+```
+
+### 3. verify the Transaction
+
+Run the transaction using:
+
+```rust
+context.verify_tx(&tx, 10_000_000)
+```
+
+The second parameter `max_cycles` sets the upper limit of cycles. If it's too low, verification may fail. On success, it returns the actual cycle count used.
+
+## Signatures
+
+Contracts often involve signature verification. Signature tests typically focus on three key elements:
+
+- **Key**: The key pair used for signing; can generate a private key or export a public key.
+- **Signature**: The signature generated by signing the message with the private key.
+- **Message**: The data to be signed, usually created using [generate_sighash_all](https://github.com/nervosnetwork/ckb-auth/blob/main/ckb-auth-rs/src/generate_sighash_all.rs#L10).
+
+Since CKB's tx-hash does not include Witnesses, `generate_sighash_all` fills in the missing parts (e.g. with zeroes, it may be more complicated than this) to ensure the signature is bound to the transaction.
+
+The signature must be generated **after** the transaction is completed. For an example, see the secp256k1 test in [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/src/tests/secp256k1_blake160_sighash_all.rs#L194).
+
+:::note
+We don’t recommend using the `ckb-auth` test code as a reference—it supports multiple signature schemes and is heavily abstracted, which can be difficult for beginners.
+:::
+
+## ckb-testtool
+
+We’ve mentioned `ckb-testtool` several times. Here's a detailed analysis.
+
+Besides re-exports, the library mainly contains two components:
+
+- builtin
+- context
+
+### `builtin`
+
+Currently, this includes only the `ALWAYS_SUCCESS` contract, which always returns `Success` (0). It's useful in places where no actual validation is needed (e.g., when testing a Type Script, the Lock Script can be set to `ALWAYS_SUCCESS`).
+
+### `context`
+
+We’ve already shown how to use `Context`, But here needs some more:
+
+- `build_script` uses `ScriptHashType::Type` by default. If you need a different hash type (e.g. `Data`), use `build_script_with_hash_type`.
+- `deploy_cell` does not automatically add the deployed cell to `CellDeps`. You need to do it manually, especially for contracts that require additional data cells (e.g., the default `secp256k1_data` for signature verification).
+- `dump_tx` can export the transaction as JSON, which is helpful for debugging with `ckb-debugger` or sharing with others. (See [Debug](./rust-debug))
+- You can use `captured_messages` to define custom outputs from contracts.
+
+#### Generating Random
+
+Helper functions are provided to generate common types of random data:
+
+```rust
+pub fn random_hash() -> Byte32
+pub fn random_out_point() -> OutPoint
+pub fn random_type_id_script() -> Script
+```
+
+### Deterministic tx
+
+During development, it's often useful to work with fixed transactions when testing CKB Scripts—for example, when optimizing contract performance or debugging issues.
+
+While exporting a transaction using `dump_tx` and running it with `ckb-debugger` is one option, it tends to be inflexible. Here's a more convenient alternative:
+
+```rust
+Context::new_with_deterministic_rng()
+```
+
+A `Context` created with this method will generate relatively fix data when using `deploy_cell`.
+
+:::note
+When using `create_cell`, the generated `out_point` is still randomized. To create a cell with a fixed `out_point`, use `create_cell_with_out_point` instead
+:::
+
+## Summary
+
+This section introduced how to write and run CKB smart contract tests in a local environment using Rust. It covered transaction construction, signature verification, and the core features of the `ckb-testtool` library. Mastering these techniques will help developers write robust and reliable CKB smart contract tests efficiently.

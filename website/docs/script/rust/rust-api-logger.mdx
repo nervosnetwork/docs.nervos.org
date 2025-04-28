@@ -1,0 +1,109 @@
+---
+id: rust-api-logger
+title: "API (Logger)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Logger
+
+In development, logs are a common debugging tool. This chapter introduces the logging functionality of **CKB Script**.
+
+:::note
+Even if the output is not captured, the `logging` still consumes cycles.
+:::
+
+## debug!
+
+Output a debug message.
+
+This macro only compiled under debug build and does nothing in release build. To debug the release build, include `-C debug-assertions` in the environment variable `RUSTFLAGS` before calling `cargo build`.
+
+:::note
+In `ckb-script-templates`, `debug-assertions` is enabled by default. To disable it, comment out the line `CUSTOM_RUSTFLAGS := -C debug-assertions` in the contract's `Makefile`.
+:::
+
+### Syntax
+
+```rust
+macro_rules! debug {
+    ($fmt:literal) => { ... }
+    ($fmt:literal, $($args:expr),+) => { ... }
+```
+
+### Parameters
+
+- `fmt`: Format control.
+- `args`: Optional arguments.
+
+### Return
+
+None
+
+### Remarks
+
+This macro uses `alloc::format` to format `fmt` and `args` into a string, then calls `syscalls::debug` to output the log message.  
+(Since it uses `alloc`, you need to add the `default_alloc!` macro and include `extern crate alloc;`. See [Rust API Introduction](./rust-api-introduction) for details.)
+
+## Logger
+
+Initializes script logging (log level set to `LevelFilter::Trace`).
+
+### Syntax
+
+```rust
+pub fn init() -> Result<(), SetLoggerError>
+```
+
+`rust-script-templates/log`
+
+### Parameters
+
+None
+
+### Return
+
+If Failed: return [SetLoggerError](https://docs.rs/log/latest/log/struct.SetLoggerError.html).
+
+### Example
+
+```rust
+ckb_std::logger::init().unwrap();
+
+trace!("Trace Message");
+debug!("debug Message");
+info!("Info Message");
+warn!("Warning Message");
+error!("Error Message");
+```
+
+```text
+Script log: [TRACE contracts/log/src/main.rs:25] Trace Message
+Script log: [DEBUG contracts/log/src/main.rs:26] debug Message
+Script log: [INFO  contracts/log/src/main.rs:27] Info Message
+Script log: [WARN  contracts/log/src/main.rs:28] Warning Message
+Script log: [ERROR contracts/log/src/main.rs:29] Error Message
+```
+
+(Different types will have different colors)
+
+## Print
+
+By default, **ckb-debugger** prints logs, for example:
+
+```text
+Script log: Hello World!
+```
+
+Here, `Script log:` is a prefix automatically added by **ckb-debugger**, and `Hello World!` is the content output by the contract.  
+Each call to `debug!` automatically adds a newline (similar to `println!`).
+
+Logging is implemented internally by setting a callback function. See [TransactionScriptsVerifier::set_debug_printer](https://github.com/nervosnetwork/ckb/blob/v0.200.0/script/src/verify.rs#L111).
+
+:::note
+Developers can also customize or modify the callback function to handle log output in testcase.
+:::
