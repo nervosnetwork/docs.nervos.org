@@ -61,7 +61,7 @@ Since all input cells in the transaction are consumed and the index ensures that
 
 ### Example
 
-The `rust-script-example` project includes a contract named `type-id` demonstrating the use of Type ID.
+The `rust-script-example` project includes a contract named [`type-id`](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/type-id) demonstrating the use of Type ID.
 
 - The contract calls `check_type_id(32)`, indicating that the Type ID starts at byte 33 (i.e., bytes 33–64) in the script's `args`.
-- The test case `test_type_id_minting` creates two transactions containing Type IDs to demonstrate the behavior of the contract.
+- The test case [`test_type_id_minting`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/tests/src/test_type_id.rs#L7) creates two transactions containing Type IDs to demonstrate the behavior of the contract.
