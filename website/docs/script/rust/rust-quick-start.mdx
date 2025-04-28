@@ -6,7 +6,6 @@ title: "Quick Start"
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import Link from "@docusaurus/Link";
-import Tooltip from "@components/Tooltip";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
 
@@ -37,22 +36,6 @@ Before proceeding, you should be familiar with:
 - Rust
 - The `make` command
   :::
-
-## Why Rust for CKB Contracts?
-
-Rust is widely used in developing core components of CKB due to its high performance and ease of use. Scripts often involve operations like signing, hashing, and handling large numbers. Rust’s superior performance helps reduce <Tooltip>Cycles</Tooltip> consumption. Furthermore, as Scripts are critical for asset management, Rust’s memory safety features help minimize vulnerabilities, making it a **recommended choice for Script development** .
-
-This chapter will demonstrate the complete process of developing CKB Scripts with Rust using two examples. Key steps include:
-
-- Project creation and management
-- Building Scripts
-- Testing methods
-
-[Here](TODO) is the source code of the demo.
-
-:::note
-In previous documentation, the term `Script` refers to CKB smart contracts. However, in development, various types of Scripts (e.g., Shell scripts) may be involved. To avoid confusion, this section will use `Contract` to specifically refer to CKB smart contract
-:::
 
 ## Hello World
 

@@ -3,6 +3,8 @@ id: program-language-for-script
 title: "Program Languages for Script"
 ---
 
+import Tooltip from "@components/Tooltip";
+
 # Program Languages for Script
 
 We have learned what a Script is and how a Script works. So, how do we write a Script then? What kind of programming language do I need to use?
@@ -19,7 +21,19 @@ We will use `Rust` as the programming language across the tutorials on this webs
 
 ## Rust
 
-Rust can easily compile the source code to a RISC-V target, allowing the code to be executed on CKB-VM.
+Rust is widely used in developing core components of CKB due to its high performance and ease of use. Scripts often involve operations like signing, hashing, and handling large numbers. Rust’s superior performance helps reduce <Tooltip>cycles</Tooltip> consumption. Furthermore, as Scripts are critical for asset management, Rust’s memory safety features help minimize vulnerabilities, making it a **recommended choice for Script development** .
+
+This chapter will demonstrate the complete process of developing CKB Scripts with Rust using two examples. Key steps include:
+
+- Project creation and management
+- Building Scripts
+- Testing methods
+
+[Here](TODO) is the source code of the demo.
+
+:::note
+In previous documentation, the term `Script` refers to CKB smart contracts. However, in development, various types of Scripts (e.g., Shell scripts) may be involved. To avoid confusion, this section will use `Contract` to specifically refer to CKB smart contract
+:::
 
 We have also built some useful Rust libraries and template tools to help developers build Script:
 
