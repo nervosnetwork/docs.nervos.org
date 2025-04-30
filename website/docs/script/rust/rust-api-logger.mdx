@@ -24,7 +24,7 @@ Output a debug message.
 This macro only compiled under debug build and does nothing in release build. To debug the release build, include `-C debug-assertions` in the environment variable `RUSTFLAGS` before calling `cargo build`.
 
 :::note
-In `ckb-script-templates`, `debug-assertions` is enabled by default. To disable it, comment out the line `CUSTOM_RUSTFLAGS := -C debug-assertions` in the contract's `Makefile`.
+In `ckb-script-templates`, `debug-assertions` is enabled by default. To disable it, comment out the line `CUSTOM_RUSTFLAGS := -C debug-assertions` in the contract's [`Makefile`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/log/Makefile#L9).
 :::
 
 ### Syntax
@@ -70,6 +70,8 @@ None
 If Failed: return [SetLoggerError](https://docs.rs/log/latest/log/struct.SetLoggerError.html).
 
 ### Example
+
+[Code](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/log/src/main.rs#L25-L29)
 
 ```rust
 ckb_std::logger::init().unwrap();

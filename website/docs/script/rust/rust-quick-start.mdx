@@ -29,17 +29,15 @@ import ScriptTools from "./../_ScriptTools.mdx";
 
 This chapter provides a step-by-step guide on developing contracts with Rust on CKB with several examples. As a "Quick Start" guide, it will not diving into in-depth details. For a more comprehensive understanding, please refer to the subsequent chapters.
 
-:::note
 Before proceeding, you should be familiar with:
 
 - CKB basics and the transaction structures
 - Rust
 - The `make` command
-  :::
 
 ## Hello World
 
-This section introduces the simplest contract, "Hello World," covering:
+This section introduces the simplest contract, "Hello World," covering ([Code](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/hello-world)):
 
 - Creating a project and contract
 - Common project commands
@@ -53,11 +51,9 @@ To create a project, use [`ckb-script-templates`](https://github.com/cryptape/ck
 cargo generate gh:cryptape/ckb-script-templates workspace --name rust-script-examples
 ```
 
-:::note
-If `--name [Project Name]` is not provided, you will be prompted to enter the project name during the setup.
-:::
+_If `--name [Project Name]` is not provided, you will be prompted to enter the project name during the setup._
 
-Upon successful execution, a Rust project will be created in the `rust-script-examples` directory. The generated project includes:
+Upon successful execution, a Rust project will be created in the `rust-script-examples` directory ([Example](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/)). The generated project includes:
 
 - An empty Rust project
 - A `tests` project: A basic testing framework
@@ -76,9 +72,9 @@ make generate CRATE=hello-world
 :::note
 `CRATE=[Contract Name]` is not provided, you will be prompted to enter the project name during the setup.
 :::
-This command creates a `hello-world` subproject inside the `contracts` directory and automatically adds a `test_hello_world` function in `tests/src/tests.rs`.
+This command creates a `hello-world` subproject inside the `contracts` directory and automatically adds a `test_hello_world` function in [`tests/src/tests.rs`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/tests/src/tests.rs#L10-L58).
 
-The contract's entry function, `program_entry` (similar to `main` in Rust), is located in `contracts/hello-world/src/main.rs`.
+The contract's entry function, `program_entry` (similar to `main` in Rust), is located in [`contracts/hello-world/src/main.rs`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/hello-world/src/main.rs).
 By default, the contract depends on `ckb-std`, which provides instruction support.
 
 Insert the following code into `program_entry`:
@@ -152,7 +148,7 @@ Formal contracts will get transaction information or on-chain data. For proper t
 
 ## Simple Script (Print args data)
 
-Real-world contracts often need to access transaction information or on-chain data. To build on the previous example, this section covers.
+Real-world contracts often need to access transaction information or on-chain data. To build on the previous example, this section covers ([Code](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/simple-print-args)).
 
 - `ckb-testtool`: Adding logic code to existing tests.
 - `ckb-debugger`: Using `--tx-file` (or `-f`) to provide transaction data.
@@ -181,7 +177,7 @@ Generate the contract using:
 make generate CRATE=simple-print-args
 ```
 
-Modify `main.rs`:
+Modify [`main.rs`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/simple-print-args/src/main.rs#L18):
 
 ```rust
 pub fn program_entry() -> i8 {
