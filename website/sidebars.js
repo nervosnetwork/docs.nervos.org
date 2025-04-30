@@ -130,6 +130,7 @@ export default {
         "script/rust/rust-api-error",
         "script/rust/rust-api-logger",
         "script/rust/rust-api-type-id",
+        "script/rust/rust-api-spawn",
         "script/rust/rust-test",
       ],
     },
