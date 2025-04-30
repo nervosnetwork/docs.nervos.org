@@ -12,8 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.10.7",
-    "tsup": "^8.3.5",
-    "tsx": "^4.19.2"
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.4"
   },
   "dependencies": {
     "@ckb-ccc/shell": "^1.1.6"
