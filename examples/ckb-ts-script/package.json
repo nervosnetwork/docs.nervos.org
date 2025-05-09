@@ -1,0 +1,22 @@
+{
+  "name": "ckb-ts-script",
+  "packageManager": "yarn@1.22.22",
+  "devDependencies": {
+    "esbuild": "0.24.2",
+    "eslint": "9.18.0",
+    "prettier": "3.4.2",
+    "rimraf": "^6.0.1",
+    "typedoc": "0.27.6",
+    "typedoc-material-theme": "^1.1.0",
+    "typescript": "^5.8.3"
+  },
+  "private": true,
+  "workspaces": [
+    "hello-world"
+  ],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "format": "yarn workspaces run format",
+    "clean": "rimraf dist && yarn workspaces run clean"
+  }
+}
