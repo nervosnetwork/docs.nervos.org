@@ -112,7 +112,6 @@ export default {
         "script/minimal-script",
         "script/sudt-script",
         "script/spawn-script",
-        "script/js-script",
       ],
     },
     {
@@ -133,6 +132,13 @@ export default {
         "script/rust/rust-api-spawn",
         "script/rust/rust-test",
       ],
+    },
+    {
+      type: "category",
+      label: " JavaScript",
+      className: "category-js",
+      collapsible: false,
+      items: ["script/js/js-quick-start", "script/js/js-run-on-ckb"],
     },
     {
       type: "category",

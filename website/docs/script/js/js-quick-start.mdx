@@ -1,0 +1,275 @@
+---
+id: js-quick-start
+title: "Quick Start"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# JavaScript Quick Start
+
+<TutorialHeader
+  time={"5 - 7 min"}
+  customTools={[
+    <div key="ckb-js-vm">
+      <Link
+        to="/docs/getting-started/installation-guide#6-ckb-js-vm"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ckb-js-vm
+      </Link>
+    </div>,
+    <div key="offckb">
+      <Link
+        to="docs/sdk-and-devtool/offckb"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        】=offckb {">= 0.3.2"}
+
+      </Link>
+    </div>,
+
+]}
+/>
+
+Before proceeding, you should be familiar with:
+
+- CKB basics and the transaction structures
+- JavaScript/TypeScript
+
+This guide helps you get started writing CKB contracts in JavaScript as quickly as possible. The goal is to get a working demo running, not to dive deep into implementation details. For in-depth exploration, refer to [Run JavaScript Code on CKB](./js-run-on-ckb).
+
+## Hello World
+
+```shell
+ckb-debugger --bin ckb-js-vm -- -e "console.log(\"hello, ckb-js-script\!\");"
+```
+
+Output:
+
+```text
+Script log: hello, ckb-js-script!
+Run result: 0
+All cycles: 3013129(2.9M)
+```
+
+This is a minimal example to verify that JavaScript code can run in CKB-VM. To create an actual on-chain contract, we need more structure. Let’s build a complete, deployable contract project.
+
+### Create a Project
+
+:::note
+
+- It is recommended to use TypeScript rather than JavaScript for writing contracts. All examples in this tutorial will use TypeScript.
+- Project management will use `yarn`, developers can also choose other methods (e.g. `pnpm`, etc.).
+- Since there is currently no standard project toolchain for JS/TS contract development, it is recommended to start directly from `examples/ckb-ts-script`.
+- This tutorial will omit general setup details, such as configuring the TypeScript environment.
+- In the example project, contract files are placed in `./contracts`, and test code in `./tests`.
+- The test framework used is `Jest`.
+  :::
+
+Start by creating a TypeScript project and add the following code to `hello-world/src/index.ts`:
+
+```ts
+console.log("Hello World!");
+```
+
+### Build
+
+```shell
+tsc --noEmit
+esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js
+ckb-debugger --read-file dist/index.js --bin deps/ckb-js-vm -- -c dist/hello-world.bc
+```
+
+For convenience, add the above commands to the `scripts` section of `package.json`.
+
+```
+"build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=../../dist/hello-world.js && ckb-debugger --read-file ../../dist/hello-world.js --bin ../../deps/ckb-js-vm -- -c ../../dist/hello-world.bc",
+```
+
+Explanation:
+
+- `tsc` is used to validate types with `tsconfig.base.json`.
+- `esbuild` compiles and bundles the source.
+- `ckb-js-vm` compiles the JS file to bytecode for better performance and lower cycle consumption.
+
+Once compiled, you'll get two files in `./dist`:
+
+- `*.js`: The bundled and minified JavaScript
+- `*.bc`: The compiled bytecode
+
+Both formats are executable by `ckb-js-vm`, but with trade-offs:
+
+- `.js` is \~10% smaller in size
+- `.bc` reduces cycles by \~80% during execution
+
+> Note: These numbers vary with project complexity. For example, in [SilentBerry](https://github.com/ksleifjsslsls/silent-berry2/tree/re-js), the AccountBook contract in TypeScript had a 63 KB JS file and a 70 KB bytecode file. During the [`test_simple_withdrawal_suc`](https://github.com/ksleifjsslsls/silent-berry2/blob/re-js/tests/src/tests.rs#L467) test, Rust used 4.04M cycles, bytecode 36.86M, and JS 117.85M.
+
+To execute:
+
+```shell
+ckb-debugger --read-file dist/hello-world.bc --bin deps/ckb-js-vm -- -r
+```
+
+Output：
+
+```text
+Script log: Run from file, local access enabled. For Testing only.
+Script log: Hello World!
+Run result: 0
+All cycles: 3579033(3.4M)
+```
+
+### Test
+
+In the example above, we use `ckb-debugger` to run the script. For realistic testing, we simulate on-chain behavior using [`ckb-testtool`](https://www.npmjs.com/package/ckb-testtool) and [ckb-ccc](https://github.com/ckb-devrel/ccc):
+
+```ts
+import { Resource, Verifier } from "ckb-testtool";
+import { hashCkb, hexFrom, Hex, Transaction } from "@ckb-ccc/core";
+import { readFileSync } from "fs";
+
+const CKB_JS_VM_SCRIPT = readFileSync("../deps/ckb-js-vm");
+const SCRIPT_HELLO_WORLD = readFileSync("../dist/hello-world.bc");
+
+function createJSScript(
+  resource: Resource,
+  tx: Transaction,
+  jsCode: Hex,
+  args: Hex
+) {
+  const lockScript = resource.deployCell(hexFrom(CKB_JS_VM_SCRIPT), tx, false);
+
+  const cell = resource.mockCell(
+    resource.createScriptUnused(),
+    undefined,
+    jsCode
+  );
+  tx.cellDeps.push(resource.createCellDep(cell, "code"));
+
+  let code_hash = hashCkb(jsCode);
+  lockScript.args = hexFrom(
+    "0x0000" + code_hash.slice(2) + "04" + args.slce(2)
+  );
+
+  return lockScript;
+}
+
+test("hello-world success", () => {
+  const resource = Resource.default();
+  const tx = Transaction.default();
+  const lockScript = createJSScript(
+    resource,
+    tx,
+    hexFrom(SCRIPT_HELLO_WORLD),
+    "0x"
+  );
+
+  // mock a input cell with the created script as lock script
+  const inputCell = resource.mockCell(lockScript);
+
+  // add input cell to the transaction
+  tx.inputs.push(Resource.createCellInput(inputCell));
+  // add output cell to the transaction
+  tx.outputs.push(Resource.createCellOutput(lockScript));
+  // add output data to the transaction
+  tx.outputsData.push(hexFrom("0x"));
+
+  // verify the transaction
+  const verifier = Verifier.from(resource, tx);
+  verifier.verifySuccess(true);
+});
+```
+
+Here, `CKB_JS_VM_SCRIPT` is the VM contract and `SCRIPT_HELLO_WORLD` is your contract code, similar to running JS via `node`.
+
+The contract is embedded in a transaction using `ccc`, and `verifier.verifySuccess(true)` checks that execution succeeds.
+
+`ckb-js-vm` lock args format:
+
+- First 2 bytes: loader args (usually `0x0000`)
+- Next 32 bytes: code hash of the JS contract
+- Final byte: hash type (`Data2` or `Type`)
+
+## Simple print args
+
+Now let’s build on Hello World by adding CKB syscall support. Use [`@ckb-js-std/core`](https://www.npmjs.com/package/@ckb-js-std/core) to access script `args` and `witness` data:
+
+1. Duplicate the Hello World project.
+2. Rename the project and update `package.json` fields.
+3. Add `@ckb-js-std/bindings` and `@ckb-js-std/core`.
+
+In `index.ts`, add:
+
+```ts
+import * as bindings from "@ckb-js-std/bindings";
+import { HighLevel } from "@ckb-js-std/core";
+
+function main() {
+  const scritpArgs = HighLevel.loadScript().args.slice(35);
+  console.log(`Script Args: ${new Uint8Array(scritpArgs)}`);
+
+  let witness =
+    HighLevel.loadWitnessArgs(0, bindings.SOURCE_GROUP_INPUT).lock ??
+    new ArrayBuffer(0);
+  console.log(`Witness: ${new Uint8Array(witness)}`);
+
+  return 0;
+}
+
+bindings.exit(main());
+```
+
+Explanation:
+
+- Return values **must** be passed using `bindings.exit`.
+- `scriptArgs` must skip the first 35 bytes (used by VM loader).
+- `witness` is retrieved via `loadWitnessArgs`.
+
+### Test
+
+This contract can't be tested directly with `ckb-debugger` since it requires script `args` and `witness`. Use an updated test:
+
+```ts
+test("simple-print-args success", () => {
+  const resource = Resource.default();
+  const tx = Transaction.default();
+  const lockScript = createJSScript(
+    resource,
+    tx,
+    hexFrom(SCRIPT_SIMPLE_PRINT_ARGS),
+    "0x010203040506"
+  );
+
+  // mock a input cell with the created script as lock script
+  const inputCell = resource.mockCell(lockScript);
+  const witness = WitnessArgs.from({
+    lock: "0x00112233445566",
+  });
+
+  // add input cell to the transaction
+  tx.inputs.push(Resource.createCellInput(inputCell));
+  // add output cell to the transaction
+  tx.outputs.push(Resource.createCellOutput(lockScript));
+  // add output data to the transaction
+  tx.outputsData.push(hexFrom("0x"));
+  // add witnesses
+  tx.witnesses.push(hexFrom(witness.toBytes()));
+
+  // verify the transaction
+  const verifier = Verifier.from(resource, tx);
+  verifier.verifySuccess(true);
+});
+```
+
+Here, `WitnessArgs` is used to structure and encode witness data—this is the recommended approach for contracts sharing witnesses across lock/type scripts.
+
+:::note
+Since `ckb-testtool` uses `ckb-debugger` under the hood and tests run in multiple threads, it may cause the process to hang. To prevent this, use `--maxWorkers=1` to limit test concurrency.
+:::
