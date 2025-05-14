@@ -12,12 +12,13 @@
   },
   "private": true,
   "workspaces": [
-    "contracts/hello-world"
+    "contracts/hello-world",
+    "contracts/simple-print-args"
   ],
   "scripts": {
     "build": "yarn workspaces run build",
     "format": "yarn workspaces run format",
     "clean": "rimraf dist && yarn workspaces run clean",
-    "tests": "cd tests && yarn jest"
+    "tests": "cd tests && yarn jest --maxWorkers=1"
   }
 }

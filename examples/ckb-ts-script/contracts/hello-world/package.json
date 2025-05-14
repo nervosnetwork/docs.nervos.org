@@ -1,5 +1,5 @@
 {
-  "name": "@ckb-ts-script/hello-world",
+  "name": "hello-world",
   "version": "0.1.0",
   "description": "",
   "author": "",
@@ -16,8 +16,5 @@
     "access": "public"
   },
   "dependencies": {
-    "@ckb-js-std/bindings": "0.1.0",
-    "@ckb-js-std/core": "0.1.0",
-    "buffer": "6.0.3"
   }
 }
