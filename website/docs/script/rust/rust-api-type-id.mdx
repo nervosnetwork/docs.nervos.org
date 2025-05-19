@@ -1,0 +1,67 @@
+---
+id: rust-api-type-id
+title: "API(Type ID)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import Tooltip from "@components/Tooltip";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# ckb-std type-id
+
+> Type ID describes a way of using a special type script which can create a singleton type - there's only one live cell of this type. With Type ID nobody could create another code cell with the same type script hash, which makes it a useful companion to `Type` hash type.
+
+By [CKB RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#type-id)
+
+The above RFC introduces the concept of Type ID. The `ckb-std` library provides a utility function, `type_id::check_type_id`, to validate whether a script conforms to the Type ID rules.
+
+## `type_id::check_type_id`
+
+Validates that the script follows the Type ID rule.
+
+(It requires "type-id" feature in ckb-std enabled.)
+
+### Syntax
+
+```rust
+pub fn check_type_id(offset: usize) -> Result<(), SysError>
+```
+
+### Parameters
+
+`offset`: The byte offset in the script's `args` where the Type ID starts.
+
+### Return
+
+If the function succeeds, return `()`.
+
+If the function fails, return [SysError](./rust-api-error).
+
+### Remarks
+
+The function classifies the validation logic based on the usage scenario of the `Type ID`:
+
+- **Minting**: `GroupInput` is empty, and `GroupOutput` only one cell.
+- **Transfer**: Both `GroupInput` and `GroupOutput` only one cell.
+- **Burning**: `GroupInput` only one cell, and `GroupOutput` is empty.
+
+If there are multiple cells in either `GroupInput` or `GroupOutput`, the function returns `SysError::TypeIDError`.
+
+For **Transfer** and **Burning** cases, the function immediately returns `Ok(())`.
+
+In the **Minting** case, the following data is used to compute the Type ID (i.e., the hash):
+
+- The first `CellInput` of the transaction (retrieved via `load_input(0, Source::Input)?`);
+- The index of the current cell.
+
+Since all input cells in the transaction are consumed and the index ensures that no other cell in the same transaction can compute the same hash, uniqueness of the Type ID is guaranteed.
+
+### Example
+
+The `rust-script-example` project includes a contract named [`type-id`](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/type-id) demonstrating the use of Type ID.
+
+- The contract calls `check_type_id(32)`, indicating that the Type ID starts at byte 33 (i.e., bytes 33–64) in the script's `args`.
+- The test case [`test_type_id_minting`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/tests/src/test_type_id.rs#L7) creates two transactions containing Type IDs to demonstrate the behavior of the contract.

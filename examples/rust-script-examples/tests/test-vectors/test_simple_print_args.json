@@ -1,0 +1,87 @@
+{
+    "mock_info": {
+        "inputs": [
+            {
+                "input": {
+                    "since": "0x0",
+                    "previous_output": {
+                        "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000001",
+                        "index": "0x0"
+                    }
+                },
+                "output": {
+                    "capacity": "0x3e8",
+                    "lock": {
+                        "code_hash": "0x{{ ref_type simple-print-args }}",
+                        "hash_type": "type",
+                        "args": "0x11223344556677889900aabbccddeeff"
+                    },
+                    "type": null
+                },
+                "data": "0x",
+                "header": null
+            }
+        ],
+        "cell_deps": [
+            {
+                "cell_dep": {
+                    "out_point": {
+                        "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000002",
+                        "index": "0x0"
+                    },
+                    "dep_type": "code"
+                },
+                "output": {
+                    "capacity": "0x3cb0b21aa00",
+                    "lock": {
+                        "code_hash": "0x0000000000000000000000000000000000000000000000000000000000000003",
+                        "hash_type": "data",
+                        "args": "0x"
+                    },
+                    "type": "{{ def_type simple-print-args }}"
+                },
+                "data": "0x{{ data ../../build/release/simple-print-args }}",
+                "header": null
+            }
+        ],
+        "header_deps": [],
+        "extensions": []
+    },
+    "tx": {
+        "version": "0x0",
+        "cell_deps": [
+            {
+                "out_point": {
+                    "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000002",
+                    "index": "0x0"
+                },
+                "dep_type": "code"
+            }
+        ],
+        "header_deps": [],
+        "inputs": [
+            {
+                "since": "0x0",
+                "previous_output": {
+                    "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000001",
+                    "index": "0x0"
+                }
+            }
+        ],
+        "outputs": [
+            {
+                "capacity": "0x1f4",
+                "lock": {
+                    "code_hash": "0x{{ ref_type simple-print-args }}",
+                    "hash_type": "data2",
+                    "args": "0x"
+                },
+                "type": null
+            }
+        ],
+        "outputs_data": [
+            "0x"
+        ],
+        "witnesses": []
+    }
+}

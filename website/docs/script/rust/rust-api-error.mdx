@@ -1,0 +1,78 @@
+---
+id: rust-api-error
+title: "API (Error)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Error
+
+The syscalls of `ckb` are influenced by the [Unix syscall](https://man7.org/linux/man-pages/man2/syscall.2.html) convention, where a return value of `0` usually indicates success and any non-zero value indicates failure. ()
+However, in Rust, it's more convenient to handle errors using `Result<T, E>`. Therefore, most functions in `ckb-std` return a `Result`, with errors represented by the `SysError` enum.
+
+:::note
+Note that the variants of `SysError` do not correspond one-to-one with the raw [syscall return codes](https://github.com/nervosnetwork/ckb/blob/rc/v0.120.x/script/src/syscalls/mod.rs#L57).
+For example, the `spawn` syscall may return `3`, but in `ckb-std`, this error is represented as `Encoding`.
+:::
+
+### Syntax
+
+```rust
+#[derive(Eq, PartialEq, Debug, Clone, Copy)]
+pub enum SysError {
+    IndexOutOfBound,
+    ItemMissing,
+    LengthNotEnough(usize),
+    Encoding,
+    WaitFailure,
+    InvalidFd,
+    OtherEndClosed,
+    MaxVmsSpawned,
+    MaxFdsCreated,
+    #[cfg(feature = "type-id")]
+    TypeIDError,
+    Unknown(u64),
+}
+```
+
+### Constants
+
+`IndexOutOfBound` : Index out of bound.
+Often used as a signal for the end of iteration. In `ckb_std::high_level`, iterators are recommended, so this is rarely encountered.
+
+`ItemMissing` : Field is missing for the target.
+Typically occurs when trying to read a non-existent field related to a _Type Script_ in `ckb_std::syscalls`.
+In `ckb_std::high_level`, it usually returns `Option::None`.
+
+`LengthNotEnough(usize)` : Buffer length is not enough, error contains actual data length.
+This is usually handled automatically in `ckb_std::high_level` by allocating enough memory and retrying the read.
+
+`Encoding` : Data encoding error. Normally not encountered during typical development.
+
+`WaitFailure` : Failed to wait. Its value is 5.
+
+`InvalidFd` : Invalid file descriptor.
+
+`OtherEndClosed` : Reading from or writing to file descriptor failed due to other end closed.
+
+`MaxVmsSpawned` : Max vms has been spawned.
+
+`MaxFdsCreated` : Max fds has been spawned.
+
+`TypeIDError` : Type ID Error.
+
+`Unknown(u64)` : Unknown syscall error number. ckb-vm 可能会返回一些未知的值，一般会存进这里。
+
+### Remarks
+
+The errors `WaitFailure`, `InvalidFd`, `OtherEndClosed`, `MaxVmsSpawned`, and `MaxFdsCreated` typically only occur when executing functions related to `spawn`.
+
+### Example
+
+See the example at [`rust-script-examples/error`](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/error).
+This is a _Lock Script_ that uses `args[0]` to select which error type to trigger.
+You can verify the behavior with the tests in [`tests/src/test_error.rs`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/tests/src/tests_error.rs).

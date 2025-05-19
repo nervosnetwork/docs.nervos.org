@@ -1,46 +1,102 @@
 ---
 id: ckb-script-ipc
-title: "ckb-script-ipc: Simplifying IPC with Spawn"
+title: "IPC in CKB On-chain Script"
 ---
 
-# ckb-script-ipc: Simplifying IPC with Spawn
+# IPC in CKB On-chain Script: A Deep Dive into ckb-script-ipc Library
 
-Inter-Process Communication (IPC) allows processes within a system to exchange data and coordinate actions. With the introduction of the [`Spawn` syscall](https://docs.nervos.org/docs/script/spawn-cross-script-calling) in CKB, IPC functionality can now be integrated into CKB on-chain scripts.
+## Introduction
 
-To simplify the Implementation of IPC using `Spawn`, we developed `ckb-script-ipc`, a library that streamlines the process of adding IPC to CKB scripts. By abstracting away the complexities of serialization, message passing, and error management internally, it significantly reduces development complexity, allowing developers to easily build modular, reusable, and sophisticated on-chain applications. `ckb-script-ipc` unlocks new possibilities for building advanced applications within the CKB ecosystem.
+The CKB blockchain is taking a significant leap forward with the introduction of the `Spawn` syscall in its upcoming Meepo hardfork. This new feature, along with the `ckb-script-ipc` library, revolutionizes how on-chain scripts can communicate and share functionality with each other.
 
-## Implementation Steps
+Think of `Spawn` as a bridge builder - it enables different scripts within CKB to talk to each other securely and efficiently, much like how different programs communicate in modern operating systems. This is a game-changer for developers who have been looking for better ways to create modular and reusable on-chain applications.
 
-### Step 1 Add required dependencies
+In this deep dive, we’ll explore:
 
-Add the required dependencies to your `Cargo.toml`
+- How the new `Spawn` syscall overcomes the limitations of existing code reuse methods
+- The inner workings of the `ckb-script-ipc` library and how it simplifies complex IPC implementations
+- Practical examples of building client-server communication between scripts
+- The technical details of the wire format protocol that makes it all possible
+- Future possibilities, including developments in bridging on-chain scripts with native machine code
+
+Whether you’re a blockchain developer looking to leverage these new capabilities or a technical enthusiast interested in understanding CKB’s evolution, this guide will provide you with both the conceptual framework and practical knowledge needed to work with CKB’s new IPC features. Let’s dive in and explore how these new tools can transform the way we build on CKB.
+
+## Simple Introduction to Spawn
+
+The upcoming CKB hardfork Meepo introduces a new syscall called `Spawn`. This feature draws inspiration from the Unix/Linux operating system, functioning similarly to a combined `fork` and `exec` operation. Along with `Spawn`, related syscalls such as `pipe`, `read`, and `write` are also implemented, following Unix/Linux conventions. For detailed specifications, refer to the [RFC documentation](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#spawn).
+
+Prior to `Spawn`, CKB supported three primary methods for code reuse:
+
+- Static linking
+- Dynamic linking
+- [`exec`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec)
+
+Each of these methods has distinct limitations. Static linking, while straightforward, only enables code reuse at the source code level, making binary-level reuse impossible. Both dynamic linking and `exec` offer binary-level reuse but come with significant drawbacks.
+
+Dynamic linking faces several challenges:
+
+1. Security Vulnerabilities: Called functions can access and modify the caller’s memory space, creating potential security risks
+2. Resource Constraints: The shared memory space architecture can lead to memory resource limitations
+3. Language Restrictions: Current implementation primarily supports C, with incomplete support for other languages like Rust
+
+The `exec` syscall also has notable limitations:
+
+1. Context Loss: Execution resets the current context information, making state preservation impossible
+2. Communication Barriers: No built-in mechanism for inter-process communication
+
+The new `Spawn` syscall addresses these limitations, offering a more robust and flexible solution for code reuse in CKB. It provides isolated memory spaces, preserves context information, and enables inter-process communication while maintaining security boundaries.
+
+## Developing with Spawn
+
+In computer science, Inter-Process Communication (IPC) refers to the mechanisms that allow processes to share data and communicate with each other within a computer system. With the introduction of `Spawn` syscalls in CKB, we can now implement IPC functionality in CKB scripts.
+
+You might wonder why we refer to this as IPC (Inter-Process Communication) rather than RPC (Remote Procedure Call). The key distinction lies in the execution context: our code runs within script processes that are part of a single transaction, all executing on the same machine. This local, same-machine communication model aligns perfectly with IPC’s core concept.
+
+While RPC systems are designed for distributed computing and include sophisticated features such as encryption and authentication, comprehensive error handling and propagation, retry mechanisms and timeout management, horizontal scaling capabilities, and network transport protocols, our implementation focuses specifically on the core IPC features needed for
+efficient process-to-process communication within CKB’s transaction context. This targeted approach keeps the system lightweight and appropriate for its use case.
+
+Implementing IPC using `Spawn` requires several crucial steps. Here’s a comprehensive overview of what developers need to consider:
+
+1. Interface Definition: Design and define the service interfaces and methods that will be exposed.
+2. Channel Establishment: Create communication channels between processes using pipes.
+3. Parameter Serialization: Encode method parameters into a standardized format.
+4. Wire Format Conversion: Transform the serialized parameters into a binary blob suitable for transmission.
+5. Data Transmission: Send the encoded data blob to the target process.
+6. Data Reception and Parsing: Receive and decode the transmitted data blob.
+7. Method Dispatch: Route the decoded request to the appropriate function handler.
+8. Response Handling: Encode the return values into a transmissible format.
+9. Response Transmission: Send the encoded response back to the calling process.
+
+It’s important to note that implementing a robust IPC system requires additional consideration for error handling, exception management. Building such a system from scratch represents a significant development effort, which is why we’ve developed libraries to simplify this process (discussed in the following sections).
+
+## Introducing ckb-script-ipc: A Simplified IPC Solution
+
+To address the complexities of implementing IPC from scratch, we’ve developed [ckb-script-ipc](https://github.com/XuJiandong/ckb-script-ipc), a library that significantly simplifies the process. This library draws inspiration from Google’s [tarpc](https://github.com/google/tarpc) and provides a straightforward, easy-to-use interface for IPC implementation.
+
+Let’s walk through the implementation process step by step.
+
+1. First, add the required dependencies to your `Cargo.toml`:
 
 ```toml
 ckb-script-ipc = { version = "..." }
 ckb-script-ipc-common = { version = "..." }
 serde = { version = "...", default-features = false, features = ["derive"] }
-
 ```
 
-Remember to replace `“…”` with the latest available versions of these crates.
+Remember to replace “…” with the latest available versions of these crates.
 
-### Step 2 Define the IPC interface
-
-Define the IPC interface using a trait decorated with our service attribute:
+2. Define your IPC interface using a trait decorated with our service attribute:
 
 ```rust
 #[ckb_script_ipc::service]
 pub trait World {
     fn hello(name: String) -> Result<String, u64>;
 }
-
 ```
 
 This trait should be placed in a shared library accessible to both client and server scripts. The `#[ckb_script_ipc::service]` attribute macro automatically generates the necessary implementations for IPC communication.
 
-### Step 3 Initialize the server
-
-Initialize the server by creating communication pipes:
+3. Initialize the server by creating communication pipes:
 
 ```rust
 use ckb_script_ipc_common::spawn::spawn_server;
@@ -50,10 +106,9 @@ let (read_pipe, write_pipe) = spawn_server(
     Source::CellDep,
     &[CString::new("demo").unwrap().as_ref()],
 )?;
-
 ```
 
-### Step 4 Implement the service logic and start the server
+4. Implement the service logic and start the server:
 
 ```rust
 use crate::def::World;
@@ -72,43 +127,42 @@ impl World for WorldServer {
 }
 
 run_server(WorldServer.server()).map_err(|_| Error::ServerError)
-
 ```
 
 Note that `run_server` operates as an infinite loop to handle incoming requests. The `server()` method is automatically implemented by our proc-macro.
 
-### Step 5 Set up and interact with the client
+5. Set up and interact with the client:
 
 ```rust
 use crate::def::WorldClient;
 let mut client = WorldClient::new(read_pipe, write_pipe);
 let ret = client.hello("world".into()).unwrap();
-
 ```
 
-The client uses the pipe handles obtained during server initialization to communicate with the server. For a complete working example, you can explore our [ckb-script-ipc-demo](https://github.com/XuJiandong/ckb-script-ipc/tree/main/contracts/ckb-script-ipc-demo) repository.
+The client uses the pipe handles obtained during server initialization to communicate with the server process. For a complete working example, you can explore our [ckb-script-ipc-demo](https://github.com/XuJiandong/ckb-script-ipc/tree/main/contracts/ckb-script-ipc-demo) repository.
 
-## Key Components: Procedural Macros and Wire Format
+This implementation abstracts away the complexities of IPC communication, handling serialization, message passing, and error management internally. Developers can focus on defining their service interfaces and implementing business logic rather than dealing with low-level IPC details.
+
+## Details of ckb-script-ipc Implementation
 
 ### Procedural Macros
 
-The implementation of client-server communication in `ckb-script-ipc` heavily relies on Rust’s procedural macros to eliminate boilerplate code. The `#[ckb_script_ipc::service]` attribute macro is particularly powerful, automatically generating the necessary code for client, server, and communication handling.
+The implementation of client-server communication in ckb-script-ipc heavily relies on Rust’s procedural macros to eliminate boilerplate code. The `#[ckb_script_ipc::service]` attribute macro is particularly powerful, automatically generating the necessary code for client, server, and communication handling.
 
 Let’s examine how this macro transforms a simple service definition into production-ready code:
 
-First, define your service interface:
+First, we define our service interface:
 
 ```rust
 #[ckb_script_ipc::service]
 pub trait World {
     fn hello(name: String) -> Result<String, u64>;
 }
-
 ```
 
-The macro then generates the required implementation code, including client-side methods, request and response types, and communication handling.
-
-Here’s a simplified version of the generated client code:
+The macro then generates the required implementation code, including client-side
+methods, request/response types, and communication handling. Here’s a simplified
+version of the generated client code:
 
 ```rust
 impl<R, W> WorldClient<R, W>
@@ -129,7 +183,6 @@ where
         }
     }
 }
-
 ```
 
 Here is a simplified version of generated server code:
@@ -156,7 +209,6 @@ where
         }
     }
 }
-
 ```
 
 The generated code handles several aspects:
@@ -170,9 +222,10 @@ This automatic code generation significantly reduces development time and potent
 
 ### Wire Format
 
-Another key component of `ckb-script-ipc` is its wire format, which defines how data is transmitted between processes. While the `spawn` syscall provides basic `read`/`write` stream operations, we needed a more structured approach to handle complex inter-process communications. This led us to implement a packet-based protocol.
+An important component of ckb-script-ipc is its wire format - the protocol that defines how data is transmitted between processes. While the `spawn` syscall provides basic `read`/`write` stream operations, we needed a more structured approach to handle complex inter-process communications. This led us to implement a packet-based protocol.
 
-We use [Variable-length quantity (VLQ)](https://en.wikipedia.org/wiki/Variable-length_quantity) to define the length information in the packet header. Compared to fixed-length representations, VLQ is more compact and suitable for this scenario. Packets are divided into the following two categories: Request and Response.
+We use [VLQ](https://en.wikipedia.org/wiki/Variable-length_quantity) to define the length information in the packet header. Compared to fixed-length
+representations, VLQ is more compact and suitable for this scenario. Packets are divided into the following two categories: Request and Response.
 
 The `Request` contains the following fields without any format. That is, all fields are directly arranged without any additional header. Therefore, in the shortest case, version + method id + length only occupies 3 bytes. The complete structure includes:
 
@@ -190,18 +243,74 @@ The `Response` contains the following fields:
 
 Let’s examine each field in detail:
 
-| FIELD      | PURPOSE                                             | VALUE     | FORMAT                                         | NOTE                                                                                                           |
-| ---------- | --------------------------------------------------- | --------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Version    | Indicates the protocol version                      | 0         | VLQ encoded                                    |                                                                                                                |
-| Length     | Specifies the size of the payload that follows      | 0 to 2^64 | VLQ encoded                                    |                                                                                                                |
-| Method ID  | Identifies the specific service method being called | 0 to 2^64 | VLQ encoded                                    | Only present in Request packets.                                                                               |
-| Error Code | Indicates success/failure status of the operation   | 0 to 2^64 | VLQ encoded                                    | Only present in Response packets.                                                                              |
-| Payload    | Contains the actual data being transmitted          | N/A       | Dynamic array with size specified by `Length`. | Default serialization: JSON; Can include method parameters, return values, or any other service-specific data. |
+**Version Field**
+
+- Purpose: Indicates the protocol version
+- Current value: 0
+- Format: VLQ encoded
+
+**Length Field**
+
+- Purpose: Specifies the size of the payload that follows
+- Format: VLQ encoded
+- Value range: 0 to 2^64
+
+**Method ID Field** (Request only)
+
+- Purpose: Identifies the specific service method being called
+- Format: VLQ encoded
+- Value range: 0 to 2^64
+  ~~- Note: While this field is available in the protocol, it’s optional since method identification can alternatively be included in the payload through serialization/deserialization~~
+
+**Error Code Field** (Response only)
+
+- Purpose: Indicates success/failure status of the operation
+- Format: VLQ encoded
+- Value range: 0 to 2^64
+- Only present in Response packets
+
+**Payload Field**
+
+- Purpose: Contains the actual data being transmitted
+- Format: Flexible, service-provider defined
+- Default serialization: JSON
+- Content: Can include method parameters, return values, or any other service-specific data
 
 All numeric fields (version, length, method_id, error_code) use VLQ encoding for efficient space utilization while supporting values up to 2^64. This provides a good balance between compact representation for common small values while maintaining support for larger values when needed.
 
 For serialization and deserialization, we utilize `serde_json` as our primary library. This means any Rust structure that implements the `Serialize` and `Deserialize` traits (which can be automatically derived using the `#[derive(Serialize, Deserialize)]` attribute macro) can be seamlessly used as parameters and return values in your IPC communications. This provides great flexibility in the types of data you can transmit between processes while maintaining type safety. JSON is not the only option—any Serde framework that supports the `Serialize` and `Deserialize` traits can be used.
 
-## Potentiality Beyond On-Chain Communication
+## The Future of ckb-script-ipc
 
-While `ckb-script-ipc` primarily focuses on facilitating communication between on-chain scripts, its potential extends beyond that. One possibility is bridging the gap between on-chain scripts and native off-chain machine code, enabling off-chain services to interact with on-chain functionality.
+While the primary focus of ckb-script-ipc has been facilitating communication between on-chain scripts, its potential extends beyond that. One exciting development direction is bridging the gap between on-chain scripts and native machine code, enabling off-chain services to interact with on-chain functionality. Let’s explore how this works. To interact with on-chain services from native code, follow these steps:
+
+1. Enable the `std` feature in `ckb-script-ipc-common`
+2. Initialize the server:
+
+   ```rust
+   let script_binary = std::fs::read("path/to/on-chain-script-binary").unwrap();let (read_pipe, write_pipe) = ckb_script_ipc_common::native::spawn_server(&script_binary, &[]).unwrap();
+   ```
+
+3. Create and interact with the client:
+
+   ```rust
+   let mut client = UnitTestsClient::new(read_pipe, write_pipe);client.test_primitive_types(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, true);
+   ```
+
+These operations are executed on the native machine (off-chain), providing a bridge between off-chain applications and on-chain scripts.
+
+The current implementation has two main limitations:
+
+1. **Transaction Context**: The CKB-VM machine running in this mode cannot access transaction context data, as this information isn’t currently provided to the VM.
+2. **Integration Complexity**: Integration with off-chain projects requires manual setup since the functionality is provided as a library rather than a complete solution.
+
+We have a plans to enhance this functionality with two key features:
+
+1. **Native Node Integration**: We’ll integrate the functionality directly into CKB nodes as an HTTP service, providing a “batteries included” solution that’s ready to use out of the box.
+2. **Context-Aware Execution**: Future updates will enable access to transaction context data, allowing for more sophisticated interactions between off-chain and on-chain components.
+
+These improvements will significantly expand the utility of ckb-script-ipc, making it a more powerful tool for building bridges between on-chain and off-chain systems.
+
+## Conclusion and Future Directions
+
+The introduction of `Spawn` and `ckb-script-ipc` marks a significant advancement in CKB’s script development capabilities. By providing robust IPC functionality and simplifying complex implementation details, these tools enable developers to build more sophisticated and modular on-chain applications. We encourage developers to explore these new capabilities and contribute to the growing ecosystem of CKB applications.
