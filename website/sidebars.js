@@ -138,7 +138,7 @@ export default {
       label: " JavaScript",
       className: "category-js",
       collapsible: false,
-      items: ["script/js/js-quick-start", "script/js/js-run-on-ckb"],
+      items: ["script/js/js-quick-start", "script/js/js-vm"],
     },
     {
       type: "category",
