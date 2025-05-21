@@ -13,7 +13,8 @@
   "private": true,
   "workspaces": [
     "contracts/hello-world",
-    "contracts/simple-print-args"
+    "contracts/simple-print-args",
+    "contracts/call-syscalls"
   ],
   "scripts": {
     "build": "yarn workspaces run build",
