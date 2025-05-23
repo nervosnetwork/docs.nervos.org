@@ -266,6 +266,19 @@ export default {
         },
       ],
     },
+    {
+      type: "category",
+      label: "Layer2 Protocols",
+      className: "category-layer2-protocols",
+      collapsible: false,
+      items: [
+        {
+          type: "link",
+          label: "Fiber network",
+          href: "https://www.fiber.world/docs",
+        },
+      ],
+    },
   ],
   "Nodes & Mining": [
     {
