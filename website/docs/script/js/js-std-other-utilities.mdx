@@ -1,0 +1,150 @@
+---
+id: js-std-other-utilities
+title: "JS-Std Other Utilities"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Other Utilities
+
+## `mount`
+
+Mount a file system
+
+### Syntax
+
+```typescript
+function mount(codeHash: ArrayBuffer, hashType: number): void;
+```
+
+### Parameters
+
+- `codeHash`: The code hash of the cell to mount
+- `hashType`: The hash type of the code (use SCRIPT*HASH_TYPE*\* constants)
+
+## `evalJsScript`
+
+Evaluate a JavaScript script. (Generally used before `loadJsScript`)
+
+### Syntax
+
+```typescript
+function evalJsScript(jsScript: string, enableModule?: boolean): any;
+```
+
+### Parameters
+
+- `jsScript`: The JavaScript script to evaluate
+- `enableModule`: Whether to enable ES6 module (default: false)
+
+### Return
+
+The result of the script evaluation, When enableModule is true, the script doesn't return any value.
+
+## `loadJsScript`
+
+Load a JavaScript script
+
+### Syntax
+
+```typescript
+function loadJsScript(path: string, enableModule?: boolean): any;
+```
+
+### Parameters
+
+- `path`: The path to the JavaScript script
+- `enableModule`: Whether to enable ES6 module (default: false)
+
+### Return
+
+The loaded script as ArrayBuffer.
+When enableModule is true, the script doesn't return any value.
+
+## `loadFile`
+
+Load a file
+
+### Syntax
+
+```typescript
+function loadFile(path: string): string;
+```
+
+### Parameters
+
+- `path`: The path to the file
+
+### Return
+
+The loaded file as string
+
+## `debug`
+
+Output debug message.
+
+### Syntax
+
+```typescript
+function debug(message: string): void;
+```
+
+### Parameters
+
+- `message`: The debug message to output
+
+### Remarks
+
+Although calling `debug` directly will have better performance, it is still recommended to use `console`.
+
+## `sprintf`
+
+Format and return a string using printf-style formatting
+
+### Syntax
+
+```typescript
+function sprintf(format: string, ...args: any[]): string;
+```
+
+### Parameters
+
+- `format`: Printf format string
+- `args`: Values to format
+
+### Return
+
+The formatted string
+
+## `printf`
+
+Format and print a string using printf-style formatting
+
+### Syntax
+
+```typescript
+function printf(format: string, ...args: any[]): void;
+```
+
+### Parameters
+
+- `format`: Printf format string
+- `args`: Values to format
+
+## `console`
+
+Console object for logging and assertions.
+
+### Syntax
+
+```typescript
+export const console: {
+  log(...args: any[]): void;
+  assert(condition: boolean, ...args: any[]): void;
+};
+```

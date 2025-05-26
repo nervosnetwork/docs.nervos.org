@@ -138,7 +138,15 @@ export default {
       label: " JavaScript",
       className: "category-js",
       collapsible: false,
-      items: ["script/js/js-quick-start", "script/js/js-vm"],
+      items: [
+        "script/js/js-quick-start",
+        "script/js/js-vm",
+        "script/js/js-std-introduction",
+        "script/js/js-std-syscalls",
+        "script/js/js-std-common-algorithms",
+        "script/js/js-std-molecule",
+        "script/js/js-std-other-utilities",
+      ],
     },
     {
       type: "category",

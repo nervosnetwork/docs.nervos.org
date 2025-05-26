@@ -271,5 +271,5 @@ test("simple-print-args success", () => {
 Here, `WitnessArgs` is used to structure and encode witness data—this is the recommended approach for contracts sharing witnesses across lock/type scripts.
 
 :::note
-Since `ckb-testtool` uses `ckb-debugger` under the hood and tests run in multiple threads, it may cause the process to hang. To prevent this, use `--maxWorkers=1` to limit test concurrency.
+Since `ckb-testtool` relies on `ckb-debugger` under the hood, and `ckb-debugger` uses stdin to receive transaction data, using stdin in a multithreaded context can lead to deadlocks. Therefore, it's necessary to add `--maxWorkers=1`.
 :::

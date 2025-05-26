@@ -1,0 +1,285 @@
+---
+id: js-std-syscalls
+title: "JS-Std Syscalls"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Syscalls
+
+In smart contract development, it’s often necessary to use transaction-related functions—such as `loadScript` mentioned in the [Quick Start](./js-quick-start) guide.
+This chapter introduces [VM Syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md) and their corresponding high-level abstractions.
+
+## Syscalls (bindings)
+
+The syscalls, enums, and constants provided in the bindings are mostly direct wrappers around VM syscalls in `ckb-js-vm`, with function names and parameters nearly identical to their VM counterparts. For detailed behavior, refer to the RFCs; we won’t repeat them here.
+
+## QueryIter
+
+A advanced iterator to manipulate cells/inputs/headers/witnesses.
+
+### Syntax
+
+```typescript
+export type QueryFunction<T> = (
+  index: number,
+  source: bindings.SourceType,
+) => T;
+export class QueryIter<T> implements Iterator<T> {
+  private queryFn: QueryFunction<T>;
+  private index: number;
+  private source: bindings.SourceType;
+  ...
+}
+```
+
+### Remarks
+
+The functions listed in [Load Cells info](./js-std-syscalls#load-cells-info) can be used with `QueryIter`.
+In some cases, a custom QueryIter can also be constructed.
+
+### Example
+
+```typescript
+let cellIters = new HighLevel.QueryIter(
+  HighLevel.loadCell,
+  bindings.SOURCE_INPUT
+);
+for (let it of cellIters) {
+  // ...
+}
+
+let iters = new HighLevel();
+```
+
+## Load Cells info
+
+The following functions are used to load transaction information.
+
+### Syntax
+
+```javascript
+function loadCell(index: number, source: bindings.SourceType): CellOutput
+function loadInput(index: number, source: bindings.SourceType): CellInput
+function loadWitness(index: number, source: bindings.SourceType): ArrayBuffer
+function loadWitnessArgs(index: number, source: bindings.SourceType): WitnessArgs
+function loadCellCapacity(index: number, source: bindings.SourceType): bigint
+function loadCellOccupiedCapacity(index: number, source: bindings.SourceType): bigint
+function loadCellData(index: number, source: bindings.SourceType): ArrayBuffer
+function loadCellTypeHash(index: number, source: bindings.SourceType): ArrayBuffer
+function loadCellLock(index: number, source: bindings.SourceType): Script
+function loadCellLockHash(index: number, source: bindings.SourceType): Bytes
+function loadCellType(index: number, source: bindings.SourceType): Script | null
+function loadHeaderEpochNumber(index: number, source: bindings.SourceType): bigint
+function loadHeaderEpochStartBlockNumber(index: number, source: bindings.SourceType): bigint
+function loadHeaderEpochLength(index: number, source: bindings.SourceType): bigint
+function loadHeader(index: number, source: bindings.SourceType): Header
+function loadInputSince(index: number, source: bindings.SourceType): bigint
+function loadInputOutPoint(index: number, source: bindings.SourceType): OutPoint
+```
+
+### Parameters
+
+index: The index of the cell to load
+
+source: The source to load the cell from
+
+### Return
+
+Return the get value. (Different functions will have different return values)
+
+## loadTransaction
+
+Load all transaction information.
+
+### Syntax
+
+```javascript
+function loadTransaction(): Transaction
+```
+
+### Parameters
+
+None
+
+### Return
+
+Molecule struct `Transaction`.
+
+## loadTxHash
+
+Load transaction hash
+
+### Syntax
+
+```javascript
+function loadTxHash(): Bytes
+```
+
+### Parameters
+
+None
+
+### Return
+
+The hash of the current transaction, fixed length 32 bytes.
+
+## loadScriptHash
+
+Load current script hash
+
+### Syntax
+
+```javascript
+function loadScriptHash(): Bytes
+```
+
+### Parameters
+
+None
+
+### return
+
+Load current script hash, fixed length 32 bytes.
+
+## loadScript
+
+Load script
+
+### Syntax
+
+```javascript
+function loadScript(): Script
+```
+
+### Parameters
+
+None
+
+### Return
+
+The current script.
+
+## findCellByDataHash
+
+Find cell by data_hash.
+
+Iterate and find the cell which data hash equals `dataHash`, return the index of the first cell found, otherwise return null.
+
+### Syntax
+
+```javascript
+function findCellByDataHash(
+  dataHash: Bytes,
+  source: bindings.SourceType,
+): number | null
+```
+
+### Parameters
+
+`dataHash`: The data hash to search for (must be 32 bytes)
+`source`: The source to search in.
+
+### Return
+
+The index of the found cell or null if not found
+
+## lookForDepWithHash2
+
+Look for a dep cell with specific code hash
+
+### Syntax
+
+```javascript
+function lookForDepWithHash2(codeHash: Bytes, hashType: number): number
+```
+
+### Parameters
+
+`codeHash`: The code hash to search for (must be 32 bytes)
+`hashType`: The type of hash to search for (type or data)
+
+### Return
+
+The index of the found cell.
+
+## lookForDepWithDataHash
+
+Look for a dep cell with specific data hash
+
+### Syntax
+
+```javascript
+function lookForDepWithDataHash(dataHash: Bytes): number
+```
+
+### Parameters
+
+`dataHash`: The data hash to search for (must be 32 bytes)
+
+### Return
+
+The index of the found cell
+
+## checkTypeId
+
+Validates that the script follows the Type ID rule. 一般用于创建唯一的 Script。
+
+### Syntax
+
+```javascript
+export function checkTypeId(offset: number): void
+```
+
+### Parameters
+
+`offset`: Byte offset in script args where Type ID starts
+
+### Throws Error
+
+Throws with TypeIDError code if validation fails or ID cannot be retrieved.
+
+### Remarks
+
+:::note
+
+- Checks if the Type ID (32-byte value) stored in script args at specified offset is valid according to Type ID rules. Internally uses validateTypeId.
+- ckb-js-vm will occupy the first 35 bytes of args, so `offset` must be greater than or equal to 35.
+  :::
+
+> Type ID describes a way of using a special type script which can create a singleton type - there's only one live cell of this type. With Type ID nobody could create another code cell with the same type script hash, which makes it a useful companion to `Type` hash type.
+
+By [CKB RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md#type-id)
+
+The above RFC introduces the concept of Type ID. The `ckb-js-std` library provides a utility function, `HighLevel.checkTypeId`, to validate whether a script conforms to the Type ID rules.
+
+The function classifies the validation logic based on the usage scenario of the `Type ID`:
+
+- **Minting**: `GroupInput` is empty, and `GroupOutput` only one cell.
+- **Transfer**: Both `GroupInput` and `GroupOutput` only one cell.
+- **Burning**: `GroupInput` only one cell, and `GroupOutput` is empty.
+
+If there are multiple cells in either `GroupInput` or `GroupOutput`, the function throw Error.
+
+For **Transfer** and **Burning** cases, the function immediately returns.
+
+In the **Minting** case, the following data is used to compute the Type ID (i.e., the hash):
+
+- The first `CellInput` of the transaction (retrieved via `load_input(0, Source::Input)?`);
+- The index of the current cell.
+
+Since all input cells in the transaction are consumed and the index ensures that no other cell in the same transaction can compute the same hash, uniqueness of the Type ID is guaranteed.
+
+### Example
+
+The contract: check-type-id
+
+The tests in `tests/src/type-id.test.ts`.
+When minting, You need to create type-id through `inputCell` and `index` and check it in the contract. `check type-id minting success` and `check type-id minting failed`.
+
+When transaction, Will not check again. `check type-id transaction success`.
