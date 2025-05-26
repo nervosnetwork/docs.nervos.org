@@ -1,0 +1,21 @@
+{
+  "name": "check-type-id",
+  "version": "0.1.0",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=../../dist/check-type-id.js && ckb-debugger --read-file ../../dist/check-type-id.js --bin ../../deps/ckb-js-vm -- -c ../../dist/check-type-id.bc",
+    "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "clean": "echo noclean"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@ckb-js-std/bindings": "^0.1.2",
+    "@ckb-js-std/core": "^0.1.2"
+  }
+}

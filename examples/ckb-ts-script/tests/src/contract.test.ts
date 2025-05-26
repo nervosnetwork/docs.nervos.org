@@ -2,29 +2,10 @@ import { Resource, Verifier } from "ckb-testtool";
 import { hashCkb, hexFrom, Hex, Transaction, WitnessArgs } from "@ckb-ccc/core";
 import { readFileSync } from "fs";
 
+import { createJSScript } from "./misc";
 
-const CKB_JS_VM_SCRIPT = readFileSync('../deps/ckb-js-vm');
 const SCRIPT_HELLO_WORLD = readFileSync('../dist/hello-world.bc')
 const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync('../dist/simple-print-args.bc')
-
-function createJSScript(resource: Resource, tx: Transaction, jsCode: Hex, args: Hex) {
-    const lockScript = resource.deployCell(
-        hexFrom(CKB_JS_VM_SCRIPT),
-        tx,
-        false,
-    );
-
-    const cell = resource.mockCell(
-        resource.createScriptUnused(), undefined,
-        jsCode,
-    );
-    tx.cellDeps.push(resource.createCellDep(cell, "code"));
-
-    let code_hash = hashCkb(jsCode);
-    lockScript.args = hexFrom('0x0000' + code_hash.slice(2) + '04' + args.slice(2));
-
-    return lockScript;
-}
 
 test('hello-world success', () => {
     const resource = Resource.default();

@@ -14,7 +14,8 @@
   "workspaces": [
     "contracts/hello-world",
     "contracts/simple-print-args",
-    "contracts/call-syscalls"
+    "contracts/call-syscalls",
+    "contracts/check-type-id"
   ],
   "scripts": {
     "build": "yarn workspaces run build",
