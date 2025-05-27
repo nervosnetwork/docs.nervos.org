@@ -268,14 +268,19 @@ export default {
     },
     {
       type: "category",
-      label: "Layer2 Protocols",
-      className: "category-layer2-protocols",
+      label: "Other Protocols",
+      className: "category-other-protocols",
       collapsible: false,
       items: [
         {
           type: "link",
           label: "Fiber network",
           href: "https://www.fiber.world/docs",
+        },
+        {
+          type: "link",
+          label: "Spore Protocol",
+          href: "https://docs.spore.pro",
         },
       ],
     },
