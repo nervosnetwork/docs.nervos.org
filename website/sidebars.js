@@ -266,6 +266,24 @@ export default {
         },
       ],
     },
+    {
+      type: "category",
+      label: "Other Protocols",
+      className: "category-other-protocols",
+      collapsible: false,
+      items: [
+        {
+          type: "link",
+          label: "Fiber network",
+          href: "https://www.fiber.world/docs",
+        },
+        {
+          type: "link",
+          label: "Spore Protocol",
+          href: "https://docs.spore.pro",
+        },
+      ],
+    },
   ],
   "Nodes & Mining": [
     {
