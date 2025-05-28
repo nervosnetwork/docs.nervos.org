@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 
 import { createJSScript, createScript, SCRIPT_ALWAYS_SUCCESS } from "./misc";
 
-const SCRIPT_CHECK_TYPE_ID = readFileSync('../dist/check-type-id.bc')
+const SCRIPT_CHECK_TYPE_ID = readFileSync('../../contracts/check-type-id/dist/index.bc')
 
 test('check type-id minting success', () => {
     const resource = Resource.default();

@@ -4,8 +4,8 @@ import { readFileSync } from "fs";
 
 import { createJSScript } from "./misc";
 
-const SCRIPT_HELLO_WORLD = readFileSync('../dist/hello-world.bc')
-const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync('../dist/simple-print-args.bc')
+const SCRIPT_HELLO_WORLD = readFileSync('../../contracts/hello-wrold/dist/index.bc')
+const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync('../../contracts/simple-print-args/dist/index.bc')
 
 test('hello-world success', () => {
     const resource = Resource.default();

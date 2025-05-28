@@ -2,20 +2,31 @@
   "name": "check-type-id",
   "version": "0.1.0",
   "description": "",
-  "author": "",
+  "author": "your name",
   "license": "MIT",
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=../../dist/check-type-id.js && ckb-debugger --read-file ../../dist/check-type-id.js --bin ../../deps/ckb-js-vm -- -c ../../dist/check-type-id.bc",
-    "format": "prettier --write .",
-    "check:format": "prettier --check .",
-    "clean": "echo noclean"
+  "private": true,
+  "homepage": "https://github.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com"
   },
-  "publishConfig": {
-    "access": "public"
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "scripts": {
+    "start": "ckb-debugger --read-file dist/index.bc --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -r",
+    "build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js && ckb-debugger --read-file dist/index.js --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -c dist/index.bc",
+    "format": "prettier --write .",
+    "clean": "rimraf dist/*"
+  },
+  "devDependencies": {
+    "ckb-testtool": "~1.0.0",
+    "esbuild": "~0.25.0"
   },
   "dependencies": {
-    "@ckb-js-std/bindings": "^0.1.2",
-    "@ckb-js-std/core": "^0.1.2"
+    "@ckb-js-std/bindings": "~1.0.0",
+    "@ckb-js-std/core": "~1.0.0",
+    "ckb-default-app": "link:"
   }
 }

@@ -1,26 +1,23 @@
 {
-  "name": "ckb-ts-script",
-  "packageManager": "yarn@1.22.22",
-  "devDependencies": {
-    "esbuild": "0.24.2",
-    "eslint": "9.18.0",
-    "prettier": "3.4.2",
-    "rimraf": "^6.0.1",
-    "typedoc": "0.27.6",
-    "typedoc-material-theme": "^1.1.0",
-    "typescript": "^5.8.3"
-  },
   "private": true,
   "workspaces": [
-    "contracts/hello-world",
-    "contracts/simple-print-args",
-    "contracts/call-syscalls",
-    "contracts/check-type-id"
+    "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspaces run build",
-    "format": "yarn workspaces run format",
-    "clean": "rimraf dist && yarn workspaces run clean",
-    "tests": "cd tests && yarn jest --maxWorkers=1"
+    "build": "pnpm -r run build",
+    "clean": "pnpm -r run clean",
+    "test": "pnpm -r run test",
+    "format": "pnpm -r run format"
+  },
+  "devDependencies": {
+    "prettier": "~3.5.3",
+    "prettier-plugin-organize-imports": "~4.1.0",
+    "rimraf": "~6.0.1",
+    "typescript": "~5.8.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
