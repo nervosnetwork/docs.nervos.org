@@ -61,36 +61,56 @@ All cycles: 3013129(2.9M)
 
 This is a minimal example to verify that JavaScript code can run in CKB-VM. To create an actual on-chain contract, we need more structure. Let’s build a complete, deployable contract project.
 
-### Create a Project
+### Create Project
 
 :::note
 
 - It is recommended to use TypeScript rather than JavaScript for writing contracts. All examples in this tutorial will use TypeScript.
-- Project management will use `yarn`, developers can also choose other methods (e.g. `pnpm`, etc.).
-- Since there is currently no standard project toolchain for JS/TS contract development, it is recommended to start directly from `examples/ckb-ts-script`.
+- Project structure and package managers are not restricted. (`ckb-js-vm` uses `pnpm` by default and provides a project template, which will be covered below.)
 - This tutorial will omit general setup details, such as configuring the TypeScript environment.
-- In the example project, contract files are placed in `./contracts`, and test code in `./tests`.
 - The test framework used is `Jest`.
   :::
 
-Start by creating a TypeScript project and add the following code to `hello-world/src/index.ts`:
+Use the command below to scaffold a default project:
 
-```ts
-console.log("Hello World!");
+```shell
+pnpm create ckb-js-vm-app
 ```
 
+By default, this generates two sub-projects:
+
+- Contracts: `packages/on-chain-script`
+- Tests: `packages/on-chain-script-tests`
+
+(In the examples, multiple contracts are placed under the `contracts` directory.)
+
+Modify `contracts/hello-wrold/src/index.ts`:
+
+```typescript
+import * as bindings from "@ckb-js-std/bindings";
+function main(): number {
+  console.log("Hello World!");
+  return 0;
+}
+bindings.exit(main());
+```
+
+- Return values **must** be passed using `bindings.exit`.
+
 ### Build
+
+The template is pre-configured, so you can simply run:
+
+```shell
+pnpm build
+```
+
+Here's what happens under the hood:
 
 ```shell
 tsc --noEmit
 esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js
-ckb-debugger --read-file dist/index.js --bin deps/ckb-js-vm -- -c dist/hello-world.bc
-```
-
-For convenience, add the above commands to the `scripts` section of `package.json`.
-
-```
-"build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=../../dist/hello-world.js && ckb-debugger --read-file ../../dist/hello-world.js --bin ../../deps/ckb-js-vm -- -c ../../dist/hello-world.bc",
+ckb-debugger --read-file dist/index.js --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -c dist/index.bc
 ```
 
 Explanation:
@@ -130,36 +150,21 @@ All cycles: 3579033(3.4M)
 
 In the example above, we use `ckb-debugger` to run the script. For realistic testing, we simulate on-chain behavior using [`ckb-testtool`](https://www.npmjs.com/package/ckb-testtool) and [ckb-ccc](https://github.com/ckb-devrel/ccc):
 
+In `packages/on-chain-script-tests/src/index.test.ts`:
+
 ```ts
 import { Resource, Verifier } from "ckb-testtool";
-import { hashCkb, hexFrom, Hex, Transaction } from "@ckb-ccc/core";
+import { hashCkb, hexFrom, Hex, Transaction, WitnessArgs } from "@ckb-ccc/core";
 import { readFileSync } from "fs";
 
-const CKB_JS_VM_SCRIPT = readFileSync("../deps/ckb-js-vm");
-const SCRIPT_HELLO_WORLD = readFileSync("../dist/hello-world.bc");
+import { createJSScript } from "./misc";
 
-function createJSScript(
-  resource: Resource,
-  tx: Transaction,
-  jsCode: Hex,
-  args: Hex
-) {
-  const lockScript = resource.deployCell(hexFrom(CKB_JS_VM_SCRIPT), tx, false);
-
-  const cell = resource.mockCell(
-    resource.createScriptUnused(),
-    undefined,
-    jsCode
-  );
-  tx.cellDeps.push(resource.createCellDep(cell, "code"));
-
-  let code_hash = hashCkb(jsCode);
-  lockScript.args = hexFrom(
-    "0x0000" + code_hash.slice(2) + "04" + args.slce(2)
-  );
-
-  return lockScript;
-}
+const SCRIPT_HELLO_WORLD = readFileSync(
+  "../../contracts/hello-wrold/dist/index.bc"
+);
+const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync(
+  "../../contracts/simple-print-args/dist/index.bc"
+);
 
 test("hello-world success", () => {
   const resource = Resource.default();
@@ -228,7 +233,6 @@ bindings.exit(main());
 
 Explanation:
 
-- Return values **must** be passed using `bindings.exit`.
 - `scriptArgs` must skip the first 35 bytes (used by VM loader).
 - `witness` is retrieved via `loadWitnessArgs`.
 
