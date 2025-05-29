@@ -1,6 +1,6 @@
 ---
-id: js-std-molecule
-title: "JS-Std Molecule"
+id: js-api-molecule
+title: "API(Molecule)"
 ---
 
 import Tabs from "@theme/Tabs";
@@ -14,7 +14,7 @@ import ScriptTools from "./../_ScriptTools.mdx";
 
 Many CKB contracts require inputting certain data. For example, in the default Secp256K1 script, the `Args` field requires a public key hash, while the `Witness` contains signature data. These simple scenarios are easy to handle by directly passing the data or processing it in order. However, when dealing with complex data structures, things get messy quickly.
 
-That’s why many CKB contracts use [Molecule](https://github.com/nervosnetwork/molecule), a serialization framework. In fact, even the \`Transaction\` objects used in CKB contracts are serialized using Molecule.
+That’s why many CKB contracts use [Molecule](../../serialization/serialization-molecule-in-ckb), a serialization framework. In fact, even the \`Transaction\` objects used in CKB contracts are serialized using Molecule.
 
 In C and Rust, Molecule has its own dedicated libraries. In JavaScript, however, it’s integrated into the `ckb-js-std` package. This article focuses on two key areas:
 

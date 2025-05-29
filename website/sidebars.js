@@ -141,11 +141,11 @@ export default {
       items: [
         "script/js/js-quick-start",
         "script/js/js-vm",
-        "script/js/js-std-introduction",
-        "script/js/js-std-syscalls",
-        "script/js/js-std-common-algorithms",
-        "script/js/js-std-molecule",
-        "script/js/js-std-other-utilities",
+        "script/js/js-api-introduction",
+        "script/js/js-api-syscalls",
+        "script/js/js-api-common-algorithms",
+        "script/js/js-api-molecule",
+        "script/js/js-api-other-utilities",
       ],
     },
     {
