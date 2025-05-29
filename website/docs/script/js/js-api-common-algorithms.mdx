@@ -1,0 +1,229 @@
+---
+id: js-api-common-algorithms
+title: "API(Common Algorithms)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# Common Algorithms
+
+For performance reasons, many commonly used algorithms in `ckb-js-vm` are implemented in C (more may be added as needed in the future):
+
+- `Sha256`
+- `Keccak256`
+- `Blake2b`
+- `Ripemd160`
+- `secp256k1`
+- `schnorr`
+- `Smt`
+- `hex`
+- `base64`
+
+## Hasher
+
+Currently, only `HasherCkb` and `HasherKeccak256` are provided. To use other hash algorithms, you need to call the interfaces provided by the `bindings`.
+
+### Syntax
+
+```typescript
+interface Hasher {
+  update(data: BytesLike): Hasher;
+  digest(): Bytes;
+}
+```
+
+### Example
+
+```typescript
+const hasher = new HasherCkb();
+hasher.update(bindings.hex.decode("aaaa"));
+const hash = hasher.digest();
+```
+
+## hashCkb
+
+Computes the CKB hash of the given data using the Blake2b algorithm.
+
+### Syntax
+
+```typescript
+function hashCkb(...data: BytesLike[]): Bytes;
+```
+
+### Parameters
+
+`data`: The data to hash.
+
+### Return
+
+The hash (Fixed 32 bytes)
+
+### Example
+
+```typescript
+const hash2 = hashCkb(bindings.hex.decode("aaaa"));
+```
+
+## Secp256k1
+
+Secp256k1 signature verification.
+
+### Syntax
+
+```typescript
+const secp256k1: {
+  recover(
+    signature: ArrayBuffer,
+    recoveryId: number,
+    messageHash: ArrayBuffer
+  ): ArrayBuffer;
+  serializePubkey(pubkey: ArrayBuffer, compressed?: boolean): ArrayBuffer;
+  parsePubkey(serializedPubkey: ArrayBuffer): ArrayBuffer;
+  verify(
+    signature: ArrayBuffer,
+    messageHash: ArrayBuffer,
+    pubkey: ArrayBuffer
+  ): boolean;
+};
+```
+
+### `recover`
+
+Recover raw public key from signature and message hash
+
+#### Parameters
+
+`signature`: The 64-byte signature
+
+`recoveryId`: The recovery ID (0-3)
+
+`messageHash`: The 32-byte message hash
+
+#### Return
+
+The recovered raw public key (64-bytes)
+
+### `serializePubkey`
+
+Serialize a raw public key (64-bytes) to serialized format(compressed or uncompressed)
+
+#### Parameters
+
+`pubkey`: The raw public key to serialize
+
+`compressed`: Whether to use compressed format (33 bytes) or uncompressed (65 bytes)
+
+#### Return
+
+The serialized public key (33 or 65 bytes)
+
+### `parsePubkey`
+
+Parse a serialized public key(compressed or uncompressed) to raw public key. It is the reverse function of serializePubkey.
+
+#### Parameters
+
+`serializedPubkey` - The serialized format public key (33 or 65 bytes)
+
+#### Return
+
+The parsed raw public key (64-bytes)
+
+### `verify`
+
+Verify an ECDSA signature
+
+#### Parameters
+
+`signature`: The 64-byte signature
+
+`messageHash`: The 32-byte message hash
+
+`pubkey`: The raw public key (64-bytes)
+
+#### Return
+
+True if signature is valid, false otherwise
+
+### Remarks
+
+`verify` is more performant than `recover`. When the public key is available, `verify` is preferable.
+
+However, in many cases, the public key is not stored directly but rather as its hash (for example, in the contract's args). In such cases, you need to:
+
+1. Use `recover` to extract the public key from the signature.
+2. Hash the public key.
+3. Compare it with the hash stored in the arguments.
+
+#### Note on `messageHash`
+
+Both `verify` and `recover` require the `messageHash` parameter. This is typically derived from the contract data and can be generated using the [`generateSighashAll`](https://github.com/nervosnetwork/ckb-js-vm/blob/main/packages/examples/src/secp256k1_blake160_lock.ts#L25) function. It hashes the transaction using the `TxHash` and the witnesses.
+
+In CKB contracts, the `TxHash` doesn't include `Witnesses`, but signature data must be placed inside the `Witnesses`. Therefore, the corresponding witness field is zeroed out before hashing.
+
+Similarly, in tests, you must first create a transaction with an empty signature, then sign it, and finally insert the signature into the `Witnesses`.
+
+### Example
+
+See the example in `ckb-js-vm`:
+[secp256k1_blake160_lock](https://github.com/nervosnetwork/ckb-js-vm/blob/main/packages/examples/src/secp256k1_blake160_lock.ts)
+And the corresponding [test](https://github.com/nervosnetwork/ckb-js-vm/blob/main/packages/examples/src/secp256k1_blake160_lock.test.ts).
+
+## SMT
+
+Sparse Merkle Tree implementation
+
+### Syntax
+
+```typescript
+export class Smt {
+  constructor();
+  insert(key: ArrayBuffer, value: ArrayBuffer): void;
+  verify(root: ArrayBuffer, proof: ArrayBuffer): boolean;
+}
+```
+
+### `insert`
+
+Insert a key-value pair into the tree
+
+#### Parameters
+
+- `key`: The key to insert (32 bytes)
+- `value`: The value to insert (32 bytes)
+
+### `verify`
+
+Verify a Merkle proof
+
+#### Parameters
+
+- `root`: The 32-byte Merkle root
+- `proof`: The proof data
+
+#### Return
+
+True if proof is valid, false otherwise
+
+## parseExtJSON
+
+Parse a JSON string with extended options.
+
+#### Syntax
+
+```typescript
+function parseExtJSON(json: string): Object;
+```
+
+#### Parameters
+
+- `json`: The JSON string to parse
+
+#### Return
+
+The parsed JSON object

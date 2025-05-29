@@ -112,7 +112,6 @@ export default {
         "script/minimal-script",
         "script/sudt-script",
         "script/spawn-script",
-        "script/js-script",
       ],
     },
     {
@@ -132,6 +131,21 @@ export default {
         "script/rust/rust-api-type-id",
         "script/rust/rust-api-spawn",
         "script/rust/rust-test",
+      ],
+    },
+    {
+      type: "category",
+      label: " JavaScript",
+      className: "category-js",
+      collapsible: false,
+      items: [
+        "script/js/js-quick-start",
+        "script/js/js-vm",
+        "script/js/js-api-introduction",
+        "script/js/js-api-syscalls",
+        "script/js/js-api-common-algorithms",
+        "script/js/js-api-molecule",
+        "script/js/js-api-other-utilities",
       ],
     },
     {
