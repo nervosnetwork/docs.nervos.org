@@ -5,6 +5,11 @@ title: "Class 1: Validation Model"
 
 # Class 1: Validation Model
 
+:::note
+This course is intended for advanced developers working on low-level scripting, performance tuning, or infrastructure-level components on CKB.
+If you're here to build applications or use existing scripts (like xUDTs or Omnilock), you may not need to go through this section.
+:::
+
 As of now, the cell validation model in CKB has been more or less stablized, hence I'm starting a series of article introducing CKB script programming here. My goal here is to fill in all the missing implementation details one need to write CKB scripts after reading the whitepaper, so you can start exploring this beautiful wonderland CKB presents.
 
 You might noticed that I call the code running on CKB as `script`, not `smart contract`. This is because smart contract is quite a confusing term to me, and I want to use a different word here to indicate CKB's unique programmability. A script in CKB's sense need not be just a script we see in scripting languages such as Ruby, JS, it actually refers to the RISC-V format binary you run on CKB VM.
