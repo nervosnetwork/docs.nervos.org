@@ -1,6 +1,6 @@
 ---
 id: js-vm
-title: "CKB JS VM"
+title: "JS VM: Mechanism and Capabilities"
 ---
 
 import Tabs from "@theme/Tabs";
@@ -10,7 +10,7 @@ import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import ScriptTools from "./../_ScriptTools.mdx";
 
-# CKB JS VM
+# CKB JS VM: Mechanism and Capabilities
 
 The [Quick Start](./js-quick-start) guide mentions that JS contracts run inside the [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm). This document provides a detailed explanation of ckb-js-vm.
 
@@ -80,7 +80,7 @@ ckb-js-vm supports the following options to control its execution behavior:
 - `-e <code>`: Execute JavaScript code directly from the command line string
 - `-r <filename>`: Read and execute JavaScript code from the specified file
 - `-t <target>`: Specify the target resource cell's code_hash and hash_type in hexadecimal format
-- `-f`: Enable [file system](./file-system.md) mode, which provides support for JavaScript modules and imports
+- `-f`: Enable [file system](./js-vm#simple-file-system-and-modules) mode, which provides support for JavaScript modules and imports
 
 Note, the `-c` and `-r` options can only work with `ckb-debugger`. The `-c` option is particularly useful for preparing
 optimized bytecode as described in the previous section. When no options are specified, ckb-js-vm runs in its default
@@ -271,7 +271,7 @@ While it's often more resource-efficient to write all JavaScript code in a singl
 support in ckb-js-vm through either:
 
 - Executing or spawning ckb-js-vm with the "-f" parameter
-- Using ckb-js-vm flags with file system enabled (see the [Working with ckb-js-vm](./ckb-js-vm.md) chapter for details)
+- Using ckb-js-vm flags with file system enabled (see the [Working with ckb-js-vm](./js-vm#ckb-js-vm-command-line-options) chapter for details)
 
 ### Unpacking a Simple File System
 
