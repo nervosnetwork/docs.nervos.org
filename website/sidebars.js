@@ -151,6 +151,7 @@ export default {
     {
       type: "category",
       label: "Common Scripts",
+      label: "Script Examples",
       className: "category-common-scripts",
       collapsible: false,
       items: [
