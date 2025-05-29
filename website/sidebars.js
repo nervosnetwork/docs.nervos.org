@@ -105,17 +105,6 @@ export default {
     },
     {
       type: "category",
-      label: "Script Tutorial",
-      className: "category-script-tutorial",
-      collapsible: false,
-      items: [
-        "script/minimal-script",
-        "script/sudt-script",
-        "script/spawn-script",
-      ],
-    },
-    {
-      type: "category",
       label: "Rust",
       className: "category-rust",
       collapsible: false,
@@ -131,6 +120,7 @@ export default {
         "script/rust/rust-api-type-id",
         "script/rust/rust-api-spawn",
         "script/rust/rust-test",
+        "script/rust/rust-sudt-script",
       ],
     },
     {
