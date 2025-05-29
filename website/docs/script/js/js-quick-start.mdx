@@ -24,18 +24,16 @@ import ScriptTools from "./../_ScriptTools.mdx";
         ckb-js-vm
       </Link>
     </div>,
-    <div key="offckb">
+    <div key="debugger">
       <Link
-        to="docs/sdk-and-devtool/offckb"
+        to="/docs/getting-started/installation-guide#5-ckb-debugger-01170"
         target="_blank"
         rel="noopener noreferrer"
       >
-        】=offckb {">= 0.3.2"}
-
+        CKB-Debugger (≥0.117.0)
       </Link>
     </div>,
-
-]}
+  ]}
 />
 
 Before proceeding, you should be familiar with:
@@ -43,9 +41,11 @@ Before proceeding, you should be familiar with:
 - CKB basics and the transaction structures
 - JavaScript/TypeScript
 
-This guide helps you get started writing CKB contracts in JavaScript as quickly as possible. The goal is to get a working demo running, not to dive deep into implementation details. For in-depth exploration, refer to [Run JavaScript Code on CKB](./js-run-on-ckb).
+This guide helps you get started writing CKB contracts in JavaScript as quickly as possible. The goal is to get a working demo running, not to dive deep into implementation details. For in-depth exploration, refer to [CKB JS VM](./js-vm).
 
 ## Hello World
+
+You can directly run a snippet of JavaScript code using [`ckb-debugger`](https://github.com/nervosnetwork/ckb-standalone-debugger):
 
 ```shell
 ckb-debugger --bin ckb-js-vm -- -e "console.log(\"hello, ckb-js-script\!\");"
@@ -58,6 +58,14 @@ Script log: hello, ckb-js-script!
 Run result: 0
 All cycles: 3013129(2.9M)
 ```
+
+Explanation:
+
+- `--bin` specifies the binary to use. Here, it should point to `ckb-js-vm`, which you can either compile yourself or use the one at `node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm`.
+- `--` separates the debugger’s arguments from those passed to `ckb-js-vm`.
+- `-e` is an argument for `ckb-js-vm` that runs the provided JavaScript code.
+
+(You can run `ckb-debugger --bin ckb-js-vm -- -h` to see all available options for `ckb-js-vm`.)
 
 This is a minimal example to verify that JavaScript code can run in CKB-VM. To create an actual on-chain contract, we need more structure. Let’s build a complete, deployable contract project.
 
