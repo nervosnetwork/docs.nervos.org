@@ -120,7 +120,9 @@ export default {
         "script/rust/rust-api-type-id",
         "script/rust/rust-api-spawn",
         "script/rust/rust-test",
-        "script/rust/rust-sudt-script",
+        "script/rust/rust-example-minimal-script",
+        "script/rust/rust-example-sudt-script",
+        "script/rust/rust-example-spawn-script",
       ],
     },
     {

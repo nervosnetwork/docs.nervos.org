@@ -192,8 +192,16 @@ const config = {
             to: "https://docs-old.nervos.org/docs/basics/tools",
           },
           {
+            from: "/docs/script/minimal-script",
+            to: "/docs/script/rust/rust-example-minimal-script",
+          },
+          {
             from: "/docs/script/sudt-script",
-            to: "/docs/script/rust/rust-sudt-script",
+            to: "/docs/script/rust/rust-example-sudt-script",
+          },
+          {
+            from: "/docs/script/spawn-script",
+            to: "/docs/script/rust/rust-example-spawn-script",
           },
         ],
         createRedirects(existingPath) {
