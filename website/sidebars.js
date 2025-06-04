@@ -86,7 +86,7 @@ export default {
   "Scripts (Smart Contracts)": [
     {
       type: "category",
-      label: "Scripts (Smart Contracts)",
+      label: "Smart Contract Basics",
       className: "category-script",
       collapsible: false,
       items: [
@@ -140,8 +140,7 @@ export default {
     },
     {
       type: "category",
-      label: "Common Scripts",
-      label: "Script Examples",
+      label: "Production Scripts",
       className: "category-common-scripts",
       collapsible: false,
       items: [
