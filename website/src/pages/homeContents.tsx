@@ -49,10 +49,10 @@ const homeCardContents: HomeCardProps[] = [
     links: [
       { label: "Intro to Script", link: "/docs/script/intro-to-script" },
       {
-        label: "Tutorial: A Minimal Script",
-        link: "/docs/script/minimal-script",
+        label: "Program Languages for Script",
+        link: "/docs/script/program-language-for-script",
       },
-      { label: "Tutorial: Simple UDT", link: "/docs/script/sudt-script" },
+      { label: "Rust Quick Start", link: "/docs/script/rust-quick-start" },
     ],
     icon: "script",
   },
