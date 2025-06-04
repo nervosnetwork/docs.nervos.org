@@ -191,6 +191,10 @@ const config = {
             from: "/docs/basics/tools",
             to: "https://docs-old.nervos.org/docs/basics/tools",
           },
+          {
+            from: "/docs/script/sudt-script",
+            to: "/docs/script/rust/rust-sudt-script",
+          },
         ],
         createRedirects(existingPath) {
           if (
