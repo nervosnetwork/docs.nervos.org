@@ -86,7 +86,7 @@ export default {
   "Scripts (Smart Contracts)": [
     {
       type: "category",
-      label: "Scripts (Smart Contracts)",
+      label: "Smart Contract Basics",
       className: "category-script",
       collapsible: false,
       items: [
@@ -101,18 +101,6 @@ export default {
         "script/debug-script",
         "script/script-upgrade-workflow",
         "script/common-script-error-code",
-      ],
-    },
-    {
-      type: "category",
-      label: "Script Tutorial",
-      className: "category-script-tutorial",
-      collapsible: false,
-      items: [
-        "script/minimal-script",
-        "script/sudt-script",
-        "script/spawn-script",
-        "script/js-script",
       ],
     },
     {
@@ -132,11 +120,29 @@ export default {
         "script/rust/rust-api-type-id",
         "script/rust/rust-api-spawn",
         "script/rust/rust-test",
+        "script/rust/rust-example-minimal-script",
+        "script/rust/rust-example-sudt-script",
+        "script/rust/rust-example-spawn-script",
       ],
     },
     {
       type: "category",
-      label: "Common Scripts",
+      label: " JavaScript",
+      className: "category-js",
+      collapsible: false,
+      items: [
+        "script/js/js-quick-start",
+        "script/js/js-vm",
+        "script/js/js-api-introduction",
+        "script/js/js-api-syscalls",
+        "script/js/js-api-common-algorithms",
+        "script/js/js-api-molecule",
+        "script/js/js-api-other-utilities",
+      ],
+    },
+    {
+      type: "category",
+      label: "Production Scripts",
       className: "category-common-scripts",
       collapsible: false,
       items: [
@@ -263,6 +269,24 @@ export default {
           type: "link",
           label: "CKB Cookbook",
           href: "https://cookbook.ckbdapps.com/",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Other Protocols",
+      className: "category-other-protocols",
+      collapsible: false,
+      items: [
+        {
+          type: "link",
+          label: "Fiber network",
+          href: "https://www.fiber.world/docs",
+        },
+        {
+          type: "link",
+          label: "Spore Protocol",
+          href: "https://docs.spore.pro",
         },
       ],
     },

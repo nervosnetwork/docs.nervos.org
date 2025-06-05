@@ -48,11 +48,11 @@ const homeCardContents: HomeCardProps[] = [
     title: "Scripts (Smart Contracts)",
     links: [
       { label: "Intro to Script", link: "/docs/script/intro-to-script" },
+      { label: "Rust Quick Start", link: "/docs/script/rust/rust-quick-start" },
       {
-        label: "Tutorial: A Minimal Script",
-        link: "/docs/script/minimal-script",
+        label: "JavaScript Quick Start",
+        link: "/docs/script/js/js-quick-start",
       },
-      { label: "Tutorial: Simple UDT", link: "/docs/script/sudt-script" },
     ],
     icon: "script",
   },

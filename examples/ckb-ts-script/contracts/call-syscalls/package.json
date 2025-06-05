@@ -1,0 +1,23 @@
+{
+  "name": "call-syscalls",
+  "version": "0.1.0",
+  "description": "",
+  "author": "",
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "start": "ckb-debugger --read-file ../../dist/call-syscalls.bc --bin ../../deps/ckb-js-vm -- -r",
+    "build": "mkdir -p dist && cp src/index.js dist/ && ckb-debugger --read-file dist/index.js --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -c dist/index.bc",
+    "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "clean": "echo noclean"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "ckb-testtool": "~1.0.0"
+  },
+  "dependencies": {
+  }
+}

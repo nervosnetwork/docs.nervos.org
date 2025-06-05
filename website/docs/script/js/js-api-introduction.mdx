@@ -1,0 +1,104 @@
+---
+id: js-api-introduction
+title: "API(Introduction)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# ckb-js-std Introduction
+
+In the _Quick Start_ section under _Simple Print Args_, we briefly introduced `ckb-js-std`. This section and the ones that follow will cover it in more detail.
+
+`ckb-js-std` currently consists of two parts:
+
+- `bindings`
+- `core`
+
+## @ckb-js-std/bindings
+
+This library provides low-level bindings to the C implementation of ckb-js-vm. It serves as the foundation layer that enables JavaScript/TypeScript to interact with the underlying C code. Key characteristics:
+
+- Contains declarations for binding functions to C implementations
+- Has no TypeScript implementation of its own
+- Primarily used as a dependency for higher-level libraries
+
+### Errors thrown by bindings functions
+
+It is possible that bindings functions throw exceptions that can be handled gracefully. The CKB VM defines
+standard error codes that your code should be prepared to handle:
+
+```
+CKB_INDEX_OUT_OF_BOUND 1
+CKB_ITEM_MISSING 2
+```
+
+Common scenarios where these errors occur:
+
+- `CKB_INDEX_OUT_OF_BOUND (1)`: Occurs when iterating beyond available items, such as when looping over cells,
+  scripts, witnesses, etc. This error is expected and should be caught to terminate iteration loops.
+- `CKB_ITEM_MISSING (2)`: Occurs when a type script is missing. This can be a valid state in some on-chain scrips.
+
+You can handle these exceptions by checking the `errorCode` property of the thrown exception. Here's an example
+of properly handling the out-of-bounds case in an iterator:
+
+```typescript
+next(): IteratorResult<T> {
+try {
+    const item = this.queryFn(this.index, this.source);
+    this.index += 1;
+    return { value: item, done: false };
+} catch (err: any) {
+    if (err.errorCode === bindings.INDEX_OUT_OF_BOUND) {
+    // End iteration gracefully when we've reached the end of available items
+    return { value: undefined, done: true };
+    }
+    // Re-throw any other errors with additional context
+    throw new Error(`QueryIter error: ${err.message || err}`);
+}
+}
+```
+
+### CKB Syscalls
+
+This part provides low-level bindings that closely follow the [VM Syscalls](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md) specification. Most functions here correspond directly to the syscalls defined in the RFC.
+
+### Common Algorithms
+
+This part includes frequently used cryptographic algorithms. Since implementing these algorithms directly in JavaScript would consume a large number of cycles, they are implemented natively within the JS-VM for better performance:
+
+- `Sha256`
+- `Keccak256`
+- `Blake2b`
+- `Ripemd160`
+- `secp256k1`
+- `schnorr`
+- `Smt`
+- `hex`
+- `base64`
+- `parseExtJSON`
+
+### Other Utilities
+
+- `mount`
+- `evalJsScript`
+- `loadJsScript`
+- `loadFile`
+- `debug`
+- `sprintf`
+- `printf`
+- `console`
+
+## @ckb-js-std/core
+
+Built on top of `bindings`, this module provides higher-level, easier-to-use interfaces. It also includes common utility functions for writing contracts. It consists of the following parts:
+
+- **High-Level CKB Syscalls**: Further abstractions over the syscall bindings, such as contract iterators.
+- **Molecule and Contract-Related Structures**: Includes data structures like `Script`, `CellInput`, etc.
+- **Common Types**: Utilities like `Bytes`, `Num`.
+- **Logging**
+- **Hasher**: Higher-level wrappers around the hashing algorithms provided by `bindings`.
