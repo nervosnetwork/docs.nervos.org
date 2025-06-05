@@ -86,7 +86,7 @@ export default {
   "Scripts (Smart Contracts)": [
     {
       type: "category",
-      label: "Scripts (Smart Contracts)",
+      label: "Smart Contract Basics",
       className: "category-script",
       collapsible: false,
       items: [
@@ -101,17 +101,6 @@ export default {
         "script/debug-script",
         "script/script-upgrade-workflow",
         "script/common-script-error-code",
-      ],
-    },
-    {
-      type: "category",
-      label: "Script Tutorial",
-      className: "category-script-tutorial",
-      collapsible: false,
-      items: [
-        "script/minimal-script",
-        "script/sudt-script",
-        "script/spawn-script",
       ],
     },
     {
@@ -131,6 +120,9 @@ export default {
         "script/rust/rust-api-type-id",
         "script/rust/rust-api-spawn",
         "script/rust/rust-test",
+        "script/rust/rust-example-minimal-script",
+        "script/rust/rust-example-sudt-script",
+        "script/rust/rust-example-spawn-script",
       ],
     },
     {
@@ -150,7 +142,7 @@ export default {
     },
     {
       type: "category",
-      label: "Common Scripts",
+      label: "Production Scripts",
       className: "category-common-scripts",
       collapsible: false,
       items: [
