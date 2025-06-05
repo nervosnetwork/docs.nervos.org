@@ -5,8 +5,15 @@ function ensureActiveTabInView() {
   const sidebar = document.querySelector("nav[aria-label='Docs sidebar']");
 
   if (sidebar) {
+    // Hide the scrollbar for better UX
+    sidebar.style = `
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+      &::-webkit-scrollbar {
+          display: none;  /* Chrome, Safari and Opera */
+      }
+    `;
     const lastScrollTop = sessionStorage.getItem(SIDEBAR_SCROLL_TOP_KEY);
-    console.log("Restoring sidebar scroll position:", lastScrollTop);
     if (lastScrollTop !== null) {
       sidebar.scrollTop = parseInt(lastScrollTop, 10);
     }
@@ -29,7 +36,6 @@ function ensureActiveTabInView() {
   if (sidebar) {
     const itemRect = item.getBoundingClientRect();
     const sidebarRect = sidebar.getBoundingClientRect();
-    console.log(itemRect, sidebarRect);
     // Check if item is visible within the sidebar's viewport
     isItemVisibleAfterRestore =
       itemRect.top >= sidebarRect.top + SCROLL_THRESHOLD &&
@@ -53,13 +59,18 @@ function ensureActiveTabInView() {
       SIDEBAR_SCROLL_TOP_KEY,
       sidebar.scrollTop.toString()
     );
+    // Restore the scrollbar style
+    sidebar.style = undefined;
   }
 }
 
 function observeDocumentChanges() {
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
-      if (mutation.type === "childList" || mutation.type === "attributes") {
+      if (
+        mutation.type === "childList" ||
+        (mutation.type === "attributes" && mutation.attributeName === "class")
+      ) {
         ensureActiveTabInView();
       }
     }
