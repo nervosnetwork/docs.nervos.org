@@ -1,6 +1,6 @@
 {
   "name": "docs.nervos.org",
-  "version": "2.19.0",
+  "version": "2.20.0",
   "description": "Official docs website for Nervos CKB",
   "license": "MIT",
   "scripts": {
