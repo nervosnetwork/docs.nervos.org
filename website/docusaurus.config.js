@@ -13,7 +13,6 @@ const config = {
   baseUrl: "/",
   organizationName: "nervosnetwork",
   projectName: "docs-new",
-  // scripts: ["/js/scrollSidebar.js"],
   stylesheets: [
     {
       href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
