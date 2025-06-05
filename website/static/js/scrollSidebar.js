@@ -38,8 +38,7 @@ function ensureActiveTabInView() {
     const sidebarRect = sidebar.getBoundingClientRect();
     // Check if item is visible within the sidebar's viewport
     isItemVisibleAfterRestore =
-      itemRect.top >= sidebarRect.top + SCROLL_THRESHOLD &&
-      itemRect.bottom <= sidebarRect.bottom - SCROLL_THRESHOLD;
+      itemRect.top >= sidebarRect.top && itemRect.bottom <= sidebarRect.bottom;
   } else {
     const bounding = item.getBoundingClientRect();
     isItemVisibleAfterRestore =
@@ -50,7 +49,7 @@ function ensureActiveTabInView() {
 
   // Not visible after restoring scroll, so scroll into view.
   if (!isItemVisibleAfterRestore) {
-    item.scrollIntoView({ block: "center", inline: "nearest" });
+    item.scrollIntoView({ block: "nearest", inline: "nearest" });
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 
@@ -86,4 +85,13 @@ function observeDocumentChanges() {
 document.addEventListener("DOMContentLoaded", () => {
   ensureActiveTabInView();
   observeDocumentChanges();
+
+  const sidebar = document.querySelector("nav[aria-label='Docs sidebar']");
+  if (sidebar) {
+    sessionStorage.setItem(
+      SIDEBAR_SCROLL_TOP_KEY,
+      sidebar.scrollTop.toString()
+    );
+    sidebar.addEventListener("scroll", debouncedSaveScrollPosition);
+  }
 });
