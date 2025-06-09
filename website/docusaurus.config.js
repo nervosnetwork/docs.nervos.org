@@ -149,7 +149,7 @@ const config = {
           },
           {
             from: "/docs/reference/rpc/",
-            to: "/docs/node/rpcs",
+            to: "/docs/dapp/rpcs",
           },
           {
             from: "/docs/reference/tools",
@@ -270,7 +270,7 @@ const config = {
           activeBaseRegex: "/(tech-explanation)/",
         },
         {
-          to: "/docs/node/rpcs",
+          to: "/docs/node/node-overview",
           label: "Nodes & Mining",
           position: "left",
           activeBaseRegex: "/(node|mining)/",

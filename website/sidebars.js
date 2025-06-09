@@ -32,7 +32,7 @@ export default {
     },
     {
       type: "category",
-      label: "DApp Tutorials",
+      label: "Build DApp",
       className: "category-dapp",
       collapsible: false,
       items: [
@@ -41,6 +41,7 @@ export default {
         "dapp/create-token",
         "dapp/create-dob",
         "dapp/simple-lock",
+        "dapp/rpcs",
       ],
     },
     {
@@ -294,17 +295,27 @@ export default {
   "Nodes & Mining": [
     {
       type: "category",
-      label: "Network & Nodes",
+      label: "Run a Node",
       className: "category-node",
       collapsible: false,
       items: [
-        "node/rpcs",
-        "node/run-mainnet-node",
-        "node/run-testnet-node",
-        "node/run-devnet-node",
+        "node/node-overview",
+        {
+          type: "category",
+          label: "Run a Full Node",
+          className: "run-full-node",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            "node/run-mainnet-node",
+            "node/run-testnet-node",
+            "node/run-devnet-node",
+          ],
+        },
         "node/run-light-client-node",
         "node/run-public-rpc-node",
-        "node/turn-on-fee-estimator",
+        "node/sync-options",
+        "node/node-config",
       ],
     },
     {

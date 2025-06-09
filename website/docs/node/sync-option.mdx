@@ -1,0 +1,77 @@
+---
+id: sync-options
+title: Sync Options
+---
+
+When running a CKB full node, there are multiple ways to sync blockchain data to your local machine. Each method offers trade-offs between trust, performance, and convenience.
+
+## Option 1: Sync from P2P
+
+This is the default and recommended approach, as described in [Run a Mainnet Node](/docs/node/run-mainnet-node).
+
+How it works:
+
+- Downloads blocks, headers, and state from other nodes over the P2P network.
+- Validates each piece of data as it arrives.
+
+```bash
+ckb init --chain mainnet
+ckb run
+```
+
+If you're using a Unix-like system, run `./ckb init --chain mainnet` and `./ckb run` instead.
+
+## Option 2: Copy Database + Replay
+
+Used when you have access to a trusted, already-synced node, such as https://ckb-data.s3-accelerate.amazonaws.com/ckb-mainnet-0.201.0-2025-04-23.tar.gz.
+
+How it works:
+
+- You copy the entire `data/` directory from a trusted node.
+- `ckb replay` verifies the db integrity based on the local chain spec.
+
+To verify the integrity of the `data/` directory and write temporary output to the current directory, run:
+
+```bash
+ckb replay --tmp-target ./  --sanity-check
+```
+
+If you're using a Unix-like system, run `./ckb replay --tmp-target ./ --sanity-check` instead.
+Note that the `data/` directory must exist in your current directory. If it's located elsewhere, use `-C <path>` to point to the correct config directory.
+
+## Option 3: Import & Export
+
+Use this method for backup or migrating chain data across machines.
+
+How it works:
+
+- `ckb export` saves the chain data from genesis to tip into a file.
+- `ckb import` loads and re-validates that data into a new node.
+
+### Export
+
+You need to shut down your node before running `ckb export`
+
+```bash
+ckb export --target mainnet_export.dat
+```
+
+You can name the file anything you like—`mainnet_export` is just an example.
+If you're using a Unix-like system, run `./ckb export --target mainnet_export.dat` instead.
+
+### Import
+
+```bash
+ckb import <source-path>
+```
+
+`<source-path>` is the path to the `.dat` file you want to import.
+If you're using a Unix-like system, run `./ckb import <source-path>` instead.
+
+## Comparison Summary
+
+| Method              | Trust Model         | Speed  | Validation | Use Case                             |
+| ------------------- | ------------------- | ------ | ---------- | ------------------------------------ |
+| `ckb run`           | Trustless           | Slow   | Full       | First-time sync, safest and standard |
+| `ckb replay`        | Trusted source      | Medium | Full       | Internal sync, faster bootstrapping  |
+| `ckb import/export` | Portable file-based | Slow   | Full       | Migration, backup, offline sync      |
