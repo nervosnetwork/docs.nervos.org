@@ -37,20 +37,39 @@ Some of our developers have used this way to build Scripts like [sUDT](https://g
 
 - [ckb-c-stdlib](https://github.com/nervosnetwork/ckb-c-stdlib)
 
-## JavaScript, Golang, Ruby, Lua, Python...Too?
+## JavaScript
+
+JavaScript is a beginner-friendly language with a large user base and a mature ecosystem. Its usage on CKB differs from Rust or C because JS cannot be compiled directly into RISC-V instructions—it must be executed through an interpreter.
+
+To support this, we provide [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm), which is built on top of [QuickJS](https://bellard.org/quickjs/). It enables JS scripts to run inside the CKB-VM. To reduce cycle consumption and improve performance, `ckb-js-vm` comes with built-in implementations of frequently used cryptographic algorithms (such as Secp256K1, Blake2b, and SMT), written in C for efficiency.
+
+That said, JavaScript's overall performance is still lower than that of compiled languages like Rust or C due to the overhead of interpretation. However, if you're already comfortable with JavaScript or are building prototypes, educational demos, or quick tooling, it remains a flexible and practical option.
+
+Useful packages:
+
+- [@ckb-js-std/bindings](https://www.npmjs.com/package/@ckb-js-std/bindings)
+- [@ckb-js-std/core](https://www.npmjs.com/package/@ckb-js-std/core)
+
+## Lua
+
+Lua is another interpreted language supported by the CKB-VM via [ckb-lua-vm](https://github.com/nervosnetwork/ckb-lua-vm).
+
+Like JavaScript, Lua scripts are executed by first deploying the interpreter as a Script on-chain and then running the Lua code within it. While this approach is less performant than using compiled languages, Lua is lightweight and minimal, making it a suitable option for constrained environments or developers who prefer a simple, embedded-style scripting language.
+
+- [ckb-lua-vm](https://github.com/nervosnetwork/ckb-lua-vm)
+
+## Golang, Ruby, Python...Too?
 
 Since the CKB-VM is akin to a real mini-computer, there's no reason you can't run different programming languages on this mini-computer, right?
 
 The answer is yes, you can run code written in any programming language on CKB. The way it works is that you first deploy a language-specific dependency as a Script on CKB, then run your code on top of this Script, and boom, it just works!
 
-Take JavaScript, for example. All we need to do is take a JavaScript implementation for the embedded system, e.g., [duktape](https://github.com/svaarala/duktape), compile it from C to RISC-V binary, put it on-chain, and then boom, we can run JavaScript in CKB! Since we are working with a real mini-computer here, there’s no stopping us from embedding another VM as a CKB Script to the CKB VM, and exploring this VM on top of VM path.
-
 Expanding from this path, we can also have Ruby on CKB via [mruby](https://github.com/mruby/mruby), and we could even have Bitcoin Script or EVM on-chain if we just compile their VMs and put them on-chain.
 
 If you would like to explore such paths, you can check the following two examples:
 
-- [duktape on CKB](https://xuejie.space/2019_07_13_introduction_to_ckb_script_programming_script_basics)
 - [Godwoken-Polyjuice](https://github.com/godwokenrises/godwoken/tree/develop/gwos-evm): implementation of EVM on CKB
+- [CKB Bitcoin VM](https://github.com/xxuejie/ckb-bitcoin-vm): A demonstration on validating Bitcoin Scripts on CKB-VM
 
 ### Yes, I Know This Is Possible, But Won’t a VM on Top of a VM Be Slow?
 
