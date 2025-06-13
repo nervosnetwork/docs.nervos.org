@@ -9,21 +9,62 @@ import TabItem from "@theme/TabItem";
 
 # Run a Testnet Node
 
-Nervos has introduced the Pudge Testnet for developers to experiment with integrations and Scripts. This is ideal for exploring functionalities in a risk-free environment. Due to hash rate fluctuations, expect periodic resets. We suggest allocating 200GB for experimentation.
+Nervos has introduced a Testnet for developers to experiment with integrations and Scripts in a safe environment, free from real-world risks. Due to fluctuations in the network's hash rate, the Testnet may occasionally reset.
 
-## Step 1: Download CKB Binary
+## Recommended Requirements
+
+- At least 200 GB of available disk space
+- Stable internet connection
+- Syncing from genesis may take up to **several days** depending on your CPU, bandwidth, and disk performance
+
+## Step 1: Download the CKB Binary
+
+Download the latest version of CKB from the official [GitHub Releases](https://github.com/nervosnetwork/ckb/releases) page. Make sure to download the correct version for your operating system.
 
 :::info
-
-We will use **ckb_v0.115.0** for this guide. Please ensure you download the latest version corresponding to your operating system.
-
+This guide uses version **ckb_v0.115.0** as an example.
 :::
 
-Get the latest CKB binary from [Github releases](https://github.com/nervosnetwork/ckb/releases).
+## Step 2: Navigate to the CKB Directory
 
-## Step 2: Navigate to CKB Directory
+Unzip the downloaded archive into a location that's easy to find.
+We recommend:
 
-Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windows, ~/Documents for Mac. Open your terminal/command line and navigate to your CKB directory using the following command:
+- MacOS: `~/Documents/ckb_v0.115.0/...`
+- Windows: `C:\ckb_v0.115.0\...`
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+Open a terminal and navigate into the folder using the following command:
+
+```bash
+cd /Users/(NAME)/Documents/ckb_v0.115.0_aarch64-apple-darwin-portable/ckb
+```
+
+Remember to replace “(NAME)” with your actual name on the device.
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+Open a command prompt and navigate into the folder using the following command:
+
+```bash
+cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Step 3: Verify Installed Versions
+
+Run the following commands:
 
 ```mdx-code-block
 <Tabs>
@@ -31,8 +72,26 @@ Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windo
 ```
 
 ```bash
-  cd /Users/(NAME)/Documents/ckb_v0.115.0-rc3_aarch64-apple-darwin-portable/ckb
+./ckb --version
+./ckb-cli --version
 ```
+
+Notice for Unix-like systems, you need to explicitly use `./` to tell the shell to run `ckb` file in the current folder.
+
+You should see the installed version printed in the terminal, like this:
+
+```bash
+ckb 0.115.0 (d845cbf 2024-04-01)
+ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+
+:::note
+If you see a message like `'ckb' cannot be opened because the developer cannot be verified`, this is macOS blocking unsigned binaries. To bypass:
+
+1. Go to System Settings → Privacy & Security
+2. Scroll down and click “Open Anyway”
+3. Rerun the command
+   :::
 
 ```mdx-code-block
   </TabItem>
@@ -40,7 +99,15 @@ Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windo
 ```
 
 ```bash
-  cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+ckb --version
+ckb-cli --version
+```
+
+You should see the installed version printed in the terminal, like this:
+
+```bash
+ckb 0.115.0 (d845cbf 2024-04-01)
+ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
 ```
 
 ```mdx-code-block
@@ -48,71 +115,95 @@ Unzip the downloaded file to an easily accessible folder, e.g., C:\ckb for Windo
 </Tabs>
 ```
 
-## Step 3: Verify versions
+## Step 4: Initialize the Node for Mainnet
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="check-version" label="Command">
-```
+Enter the following command to set up default configuration and `data` folders.
 
 ```bash
-  ckb --version
-  ckb-cli --version
+ckb init --chain testnet
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="verify-version" label="Result">
-```
+If you're using a Unix-like system, run `./ckb init --chain tesnet` instead.
+
+## Step 5: Start the Node
+
+Now that your node is initialized, you can start syncing to the Mainnet. Make sure you run the following command from the folder where you initialized the node in Step 4.
 
 ```bash
-  ckb 0.115.0 (d845cbf 2024-04-01)
-  ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-## Step 4: Connect to Pudge Testnet
-
-Initialize your CKB node:
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
-
-```bash
-  ckb init --chain testnet
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="result" label="Result">
-```
-
-```bash
-  WARN: Mining feature is disabled because of lacking the block assembler config options.
-  Initialized CKB directory in /PATH/0.115.0
-  create ckb.toml
-  create ckb-miner.toml
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-## Step 5: Start the CKB Testnet Node
-
-```
 ckb run
 ```
 
-After these steps, your CKB Testnet node will be up and running, allowing you to experiment and develop with the Nervos blockchain.
+If you're using a Unix-like system, run `./ckb run` instead.
 
-## Track Your Node
+If your node is running successfully, you’ll see log messages similar to this:
 
-Track your node using [CKB Node Probe](https://nodes.ckb.dev/) and view the global distribution of active CKB nodes.
+```bash
+...
+2025-05-30 01:57:58.941 +00:00 verify_blocks INFO ckb_chain::verify  [verify block] new best block found: 9768557 => 0x1412c40a9ffcb18754e0e8349e383179ea47c4f2183a2e1e830a274ba37b5222, difficulty diff = 0x14f821cdc0fe600e, unverified_tip: 9768562
+2025-05-30 01:57:58.941 +00:00 verify_blocks INFO ckb_chain::verify  block: 9768557, hash: 0x1412c40a9ffcb18754e0e8349e383179ea47c4f2183a2e1e830a274ba37b5222, epoch: 7507(1713/1800), total_diff: 0x54a33f4b40bf2ab7232c3, txs: 3
+2025-05-30 01:57:58.942 +00:00 verify_blocks INFO ckb_chain::verify  [verify block] new best block found: 9768558 => 0x53fce8b632b3e4d011dd682aef73e018a885560a363599d5f00818a1ee3f3762, difficulty diff = 0x14f821cdc0fe600e, unverified_tip: 9768562
+2025-05-30 01:57:58.943 +00:00 verify_blocks INFO ckb_chain::verify  block: 9768558, hash: 0x53fce8b632b3e4d011dd682aef73e018a885560a363599d5f00818a1ee3f3762, epoch: 7507(1714/1800), total_diff: 0x54a3409ac2dc06c7092d1, txs: 2
+2025-05-30 01:57:58.943 +00:00 verify_blocks INFO ckb_chain::verify  [verify block] new best block found: 9768559 => 0x6b4a3c48a2035681f429cd206af3a6906cd72ce9c48b8a7f56eb2844ea8a56f1, difficulty diff = 0x14f821cdc0fe600e, unverified_tip: 9768562
+2025-05-30 01:57:58.944 +00:00 verify_blocks INFO ckb_chain::verify  block: 9768559, hash: 0x6b4a3c48a2035681f429cd206af3a6906cd72ce9c48b8a7f56eb2844ea8a56f1, epoch: 7507(1715/1800), total_diff: 0x54a341ea44f8e2d6ef2df, txs: 3
+```
+
+These logs indicate that your node is downloading and verifying blocks in real time.
+
+The first time you run a node, it will begin syncing the entire blockchain from the genesis block. This process can take up to several days, depending on your internet speed, CPU, and disk performance.
+
+You don’t need to keep it running continuously — you can stop the process at any time using `Ctrl + C`. When you restart the node from the same folder, it will resume syncing from where it left off, as long as you haven't deleted or modified the `data` folder.
+
+:::note
+
+Many operating systems automatically enter low-power or sleep mode after a period of inactivity — even while a terminal process is running. This can silently pause your node, halting sync without an error message. Try disable automatic sleep/suspend in your system settings to ensure your node continues syncing properly.
+
+:::
+
+## Check Sync Progress
+
+To check whether your node has fully synced with the Mainnet, open a new terminal window and run:
+
+```bash
+ckb-cli rpc sync_state
+```
+
+If you're using a Unix-like system, run `./ckb-cli rpc sync_state` instead.
+
+Look for this line in the response:
+
+```bash
+"ibd": false
+```
+
+The `"ibd"` flag stands for **initial block download**. When it is `false`, your node is considered fully synced.
+
+### What Happens During IBD?
+
+While your node is still syncing (`”ibd”: true`), it behaves differently from a fully participating peer:
+
+- It only connects to **one remote peer** (not multiple peers) to download blocks.
+- It does not relay transactions or blocks to other peers.
+- It does not respond to most P2P requests (such as relay or identify).
+- It cannot help other nodes sync.
+
+Once IBD is complete, your node becomes fully-synced.
+
+## Make Your Node Connectable
+
+By default, your Testnet node can sync from others, but it won’t accept inbound connections unless you configure it to.
+
+### Track Your Node’s Connectivity
+
+1. Ensure your node is running
+2. Update the `ckb.toml` file in your ckb folder by following this [instruction](https://nodes.ckb.dev/getConnectedInstruction).
+3. Visit [Node Probe](https://nodes.ckb.dev), then switch to the CKB Testnet using the dropdown menu in the top-right corner.
+4. Search your node ID and you should be prompted that your node is connectable and visible on the network.
+
+### Node Discovery Criteria
+
+To be visible on [Node Probe](https://nodes.ckb.dev), your node must meet all of the following criteria:
+
+- **Supports core protocols**: The node must support the discovery, identify, relay, and sync protocols. If you follow the steps in this guide, this shouldn’t be a problem.
+- **Reachability confirmed**: The node must be reported as reachable by **at least four other nodes** in the network.
+- **Well-synced and active**: The node is **well-synced** (not necessarily fully synced) and is actively validating transactions and blocks.
+- **Stable uptime**: The node must remain online and meet the above conditions for at least **4 epochs (~16 hours)**.

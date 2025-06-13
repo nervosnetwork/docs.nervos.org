@@ -9,25 +9,83 @@ import TabItem from "@theme/TabItem";
 
 # Run a Public RPC Node
 
-A public RPC node allows external parties to interact with the blockchain, enabling actions such as querying blockchain data or submitting transactions. This setup is crucial for applications that rely on real-time data from the blockchain.
+A public RPC (Remote Procedure Call) node is a CKB full node that exposes its JSON-RPC interface to external users or applications over the Internet. This allows anyone to interact with the blockchain through your node – such as querying block data, checking transaction status, or submitting new transactions.
 
-:::warning
+By default, when you run a CKB node, the RPC service is only accessible from your local machine. Turning it into a public RPC node means intentionally making that service available to the outside world.
 
-Exposing RPC can pose significant security risks. Enabling RPC through the `rpc.listen_address` configuration can open the JSON-RPC port to arbitrary machines, increasing vulnerability. It's strongly advised against enabling RPC unless absolutely necessary. If unavoidable, ensure access is restricted solely to trusted machines, following the provided guidelines.
+## Who Is It For?
 
-:::
+Running a public RPC node is a responsibility, not just a configuration. It is intended for advanced users and infrastructure providers who want to serve blockchain data to others – whether for their own dApps, community services, or internal tools that require high reliability and full control over node behavior.
 
-## RPC Access Control
+If you’re simply looking to connect to an existing public RPC node (e.g. for dApp development or testing), check out this [rpc guide](/docs/dapp/rpcs).
 
-Here is an example using Nginx API Gateway to configure the RPC access control.
+## Security Risks
 
-Explore more solutions or submit new ones using the GitHub tag [ckb-rpc-proxy](https://github.com/topics/ckb-rpc-proxy).
+Exposing RPC can pose significant security risks. Enabling it through the `rpc.listen_address` configuration may open the JSON-RPC port to arbitrary machines, increasing the chances of unwanted access. Without proper protection, a public RPC node can be overwhelmed by automated bots, spammed with expensive or invalid requests, or exploited to validate and relay malicious transactions. This can cause your node to crash, fall behind the chain tip, or become a bottleneck in any services that rely on it.
 
-### Step 1: Install Docker-Compose and Docker
+It's strongly advised **not to enable RPC access** unless absolutely necessary. If unavoidable, access should be restricted to trusted machines and properly secured following the guideline provided here.
+
+This guide does more than show you how to “open up” RPC access – it shows you how to do it safely and responsibly, using a reverse proxy (like Nginx) to filter requests and limit exposure.
+
+## Open RPC Using Nginx Proxy
+
+### Step 0: Prepare Your Full Node
+
+You don’t need to run the node yet — just make sure you understand how it works. This guide will walk you through the safe startup sequence later.
+
+See [Run a Mainnet Node](https://docs.nervos.org/docs/node/run-mainnet-node) for setup instructions.
+
+### Step 1: Download Docker
+
+In this example, we suggest you to use Docker to install Nginx.
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+- Go to the official [Docker site](https://www.docker.com/products/docker-desktop/) and click “Download Docker Desktop” and choose the one depending on your hardware.
+- Open the downloaded `.dmg` file and drag it into the Applications folder
+- To verify, enter the following command in your terminal:
 
 ```bash
-apt install docker-compose
-apt install docker
+docker --version
+```
+
+```bash
+Docker version 28.1.1, build 4eba377
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+- Go to the official [Docker site](https://www.docker.com/products/docker-desktop/) and click “Download Docker Desktop” and choose the one depending on your hardware.
+- Double-click the downloaded `.exe` file and follow the installation wizard. Make sure to enable WSL 2 and/or Hyper-V when prompted. You may need to restart your computer.
+- To verify, enter the following command in your command prompt:
+
+```bash
+docker --version
+```
+
+```bash
+Docker version 28.1.1, build 4eba377
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+```
+
+```bash
+  apt install docker-compose
+  apt install docker
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
 ```
 
 ### Step 2: Clone the Proxy Configuration
@@ -36,31 +94,122 @@ apt install docker
 git clone https://github.com/cryptape/ckb-nginx-proxy.git
 ```
 
-### Step 3: Replace Default RPC Address
+### Step 3: Update Nginx Configuration
 
-Navigate to the cloned directory and update the Nginx configuration to point to your CKB node's RPC IP address and port:
+First, navigate to your cloned folder by:
 
 ```bash
 cd ckb-nginx-proxy
-sed -i "s/YOUR_CKR_RPC_IP:8114/192.168.1.100:8114/" nginx.conf
+```
+
+In the `nginx.conf` file, you’ll find a placeholder like this:
+
+```bash
+upstream ckb_rpc {
+	server DEFAULT_CKR_RPC_IP:8114;
+}
+```
+
+This line tells Nginx where to forward incoming RPC requests – i.e., to your CKB node’s actual IP address and port.
+
+You can either edit the file manually or run the following command to replace the placeholder with your actual device’s IP address:
+
+```bash
+sed -i "s/DEFAULT_CKR_RPC_IP:8114/192.168.1.100:8114/" nginx.conf
+```
+
+Make sure to replace `192.168.1.100` with the real IP address of the device running your CKB node – the example above is just a placeholder.
+
+#### How to Find Your Local IP Address?
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+Run the following command in your terminal:
+
+```bash
+ipconfig getifaddr en0
+```
+
+Look for the interface named `en0` (Wi-Fi) or `en1` (Ethernet). Under that section, find the line that starts with `inet`. The IP address will look like `192.168.x.x`.
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+Open command prompt, then run:
+
+```bash
+ipconfig
+```
+
+Scroll down to find your active network adapter (Wi-Fi or Ethernet), and look for the line:
+
+```bash
+IPv4 Address. . . . . . . . . . . : 192.168.x.x
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+```
+
+```bash
+ip -4 addr show
+```
+
+Look for a line like:
+
+```bash
+inet 192.168.1.42/24 ...
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
 ```
 
 ### Step 4: Run Proxy
+
+Run the following command to start your proxy:
 
 ```bash
 docker-compose up -d
 ```
 
-## Examples
-
-**Get tip block hash and number:**
-
-This example retrieves the latest block's hash and number from the CKB node through the configured Nginx proxy.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
+```bash
+[+] Running 2/2
+ ✔ Network ckb-nginx-proxy_default              Created                    0.2s
+ ✔ Container ckb-nginx-proxy-ckb-nginx-proxy-1  Started                   16.2s
 ```
+
+This will start the Nginx container in the background. It will listen on port 80 and forward allowed RPC requests to your CKB node securely.
+
+### Step 5: Update Your RPC Access Control
+
+:::warning
+Before changing `listen_address`, make sure your Nginx proxy is already running and properly configured to handle external traffic. Exposing RPC directly without protection can be dangerous.
+:::
+
+Navigate to your ckb folder and in `ckb.toml` , you will find an `rpc` section:
+
+```bash
+[rpc]
+# By default RPC only binds to localhost, thus it only allows accessing from the same machine.
+#
+# Allowing arbitrary machines to access the JSON-RPC port is dangerous and strongly discouraged.
+# Please strictly limit the access to only trusted machines.
+listen_address = "127.0.0.1:8114"
+```
+
+Now, change `127.0.0.1` with your actual device’s IP address (e.g. `192.168.1.100`), and that will turn your private access to public. Remember to restart your ckb node after saving this change.
+
+## Test Your Public RPC
+
+The following command retrieves the latest block's hash and number from the CKB node through the configured Nginx proxy. Note that `http://192.168.1.100:80` needs to be changed to your device’s IP address.
 
 ```bash
 echo '{
@@ -72,16 +221,9 @@ echo '{
 | tr -d '\n' \
 | curl -H 'content-type: application/json' -d @- \
 http://192.168.1.100:80
-
-## Note that http://192.168.1.100:80 needs to be changed to your proxy IP.
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="result" label="Result">
-```
-
-```json
+```bash
 {
   "jsonrpc": "2.0",
   "result": {
@@ -102,12 +244,7 @@ http://192.168.1.100:80
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-## Restricted Methods
+## **Restricted Methods**
 
 Certain RPC methods are restricted to prevent abusive interactions with the CKB node:
 
@@ -119,12 +256,7 @@ Certain RPC methods are restricted to prevent abusive interactions with the CKB 
 - `remove_transaction`
 - `clear_tx_pool`
 
-These methods can alter the node's network interactions significantly and should be exposed only to trusted administrators. For example, `clear_tx_pool` can be used to remove all transactions from the mempool, which could disrupt node operation if used maliciously.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
+These methods can alter the node's network interactions significantly and should be exposed only to trusted administrators. For example, `clear_tx_pool` can be used to remove all transactions from the mempool, which could disrupt node operation if used maliciously.
 
 ```bash
 echo '{
@@ -136,16 +268,39 @@ echo '{
 http://192.168.1.100:80
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="result" label="Result">
-```
-
-```
+```bash
   This method has been banned.
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
+## Shut Down Public RPC Access
+
+If you no longer wish to expose your CKB node’s RPC interface to the public, follow these steps to safely disable public access:
+
+### Step 1: Stop the CKB node
+
+Shut down your running node to ensure no RPC traffic is processed while you update the configuration.
+
+### Step 2: Revert `listen_address` to local-only
+
+Open your `ckb.toml` file and change your `listen_address` back to `127.0.0.1:8114` like the following:
+
+```bash
+[rpc]
+# By default RPC only binds to localhost, thus it only allows accessing from the same machine.
+#
+# Allowing arbitrary machines to access the JSON-RPC port is dangerous and strongly discouraged.
+# Please strictly limit the access to only trusted machines.
+listen_address = "127.0.0.1:8114"
 ```
+
+This ensures that your node will only accept RPC requests from the local machine after restart.
+
+### Step 3: Shut down the proxy
+
+Running the following command in your Docker to stop and remove the Nginx container
+
+```bash
+docker-compose down
+```
+
+Your node is now fully reverted to local-only mode and is no longer accessible from the outside world.

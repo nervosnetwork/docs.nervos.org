@@ -11,24 +11,25 @@ import TabItem from "@theme/TabItem";
 
 ## Why Light Client?
 
-Running a light client is fundamental to maintaining blockchain decentralization and trustlessness.
-While light clients don't store the entire blockchain, they independently verify transactions and blocks,
-embodying the core principle of blockchain: "Don't trust, verify." By lowering the barriers of running a light client,
-we can encourage broader participation in the network, thereby strengthening its decentralization.
+Running a light client is fundamental to maintaining blockchain decentralization and trustlessness. While light clients don't store the entire blockchain, they independently verify transactions and blocks, embodying the core principle of blockchain: "Don't trust, verify." By lowering the barriers of running a light client, we can encourage broader participation in the network, thereby strengthening its decentralization.
 
 Light clients strike an optimal balance between resource requirements and security, making blockchain verification accessible to more users. This widespread verification is crucial for maintaining the integrity and trustless nature of the network.
 
-Compare to traditional light client, CKB has a more efficient [FlyClient-based](https://talk.nervos.org/t/flyclient-on-ckb/5973) light client protocol.
-It uses a sampling protocol tailored for [NC-Max](https://docs-new.nervos.org/docs/tech-explanation/consensus#nc-max-consensus-algorithm) difficulty adjustment algorithm.
-It requires downloading only a logarithmic number of block headers while storing only a single block header between executions.
+Compare to traditional light client, CKB has a more efficient [FlyClient-based](https://talk.nervos.org/t/flyclient-on-ckb/5973) light client protocol. It uses a sampling protocol tailored for [NC-Max](https://docs-new.nervos.org/docs/tech-explanation/consensus#nc-max-consensus-algorithm) difficulty adjustment algorithm. It requires downloading only a logarithmic number of block headers while storing only a single block header between executions.
 
 CKB’s Light Client is not only lightweight but also compatible with WebAssembly (WASM), ideal for use in mobile applications, browsers, and resource-constrained environments.
 
+## Prerequisite
+
+- [Rust (≥v.1.71.1)](/docs/getting-started/installation-guide#2-rust-v1711-and-riscv64-target)
+- [XCode](/docs/getting-started/installation-guide#4-xcode-macos-only) (MacOs only)
+
 ## Step 1: Build or Download CKB Light Client Binary
 
-Get the latest CKB Light Client binary from [Github releases](https://github.com/nervosnetwork/ckb-light-client/releases).
+You can either:
 
-Or build from the source:
+- Download the prebuilt binary from [Github releases](https://github.com/nervosnetwork/ckb-light-client/releases) based on your operating system.
+- Or build it from source:
 
 ```bash
   git clone https://github.com/nervosnetwork/ckb-light-client.git
@@ -36,26 +37,57 @@ Or build from the source:
   cargo build --release
 ```
 
-## Step 2: Navigate to Light Client Directory
+## Step 2: Setup A Working Folder
 
-Copy the `ckb-light-client` binary and the `config/mainnet.toml` to a new folder. Open your terminal or command line, and navigate to the directory:
+To keep things tidy, copy the binary (`target/release/ckb-light-client`) and `config/mainnet.toml` file into a new folder, then navigate into it:
+
+```bash
+  mkdir ~/light-client
+  cp target/release/ckb-light-client ~/light-client/
+  cp config/mainnet.toml ~/light-client/
+  cd ~/light-client
+```
+
+You can name the folder anything you like—`light-client` is just an example.
+Your folder should now contain:
+
+```bash
+  light-client/
+  ├── ckb-light-client
+  └── mainnet.toml
+```
+
+## Step 3: Start the Light Client
+
+Generally, you don't need to configure anything. But you may edit `mainnet.toml` file to customize:
+
+- Network connection parameters
+- RPC port
+- Storage directory
+- Bootnodes list
+
+Run the following command in your working folder to start the light client:
 
 ```mdx-code-block
 <Tabs>
-  <TabItem value="mac" label="Mac">
+  <TabItem value="command" label="Command">
 ```
 
 ```bash
-  cd /Users/(NAME)/Documents/(YOUR_FOLDER_NAME)
+  RUST_LOG=info,ckb_light_client=info ./ckb-light-client run --config-file ./mainnet.toml
 ```
 
 ```mdx-code-block
   </TabItem>
-  <TabItem value="windows" label="Windows">
+  <TabItem value="response" label="Response">
 ```
 
 ```bash
-  cd C:/(YOUR_FOLDER_NAME)
+...
+[2025-05-30T08:52:14Z INFO  ckb_light_client_lib::protocols::synchronizer] SyncProtocol(3).connected peer=SessionId(3)
+[2025-05-30T08:52:14Z INFO  ckb_light_client_lib::protocols::light_client] LightClient(3).connected peer=SessionId(3)
+[2025-05-30T08:52:15Z INFO  ckb_light_client_lib::protocols::light_client] LightClient(3).connected peer=SessionId(4)
+[2025-05-30T08:52:15Z INFO  ckb_light_client_lib::protocols::synchronizer] SyncProtocol(3).connected peer=SessionId(4)
 ```
 
 ```mdx-code-block
@@ -63,24 +95,7 @@ Copy the `ckb-light-client` binary and the `config/mainnet.toml` to a new folder
 </Tabs>
 ```
 
-## Step 3: Start the Light Client
-
-Edit the `mainnet.toml` to set your preferred settings, including:
-
-- Network connection parameters
-- RPC port
-- Storage location
-- bootnodes
-
-You can leave the file unchanged if satisfied with the default settings.
-
-Start the light client:
-
-```bash
-  RUST_LOG=info,ckb_light_client=info ./ckb-light-client run --config-file ./mainnet.toml
-```
-
-By default, the light client will be available on `http://localhost:9000/`.
+Once running, the light client will listen for RPC requests at http://localhost:9000/ (unless configured otherwise in the `mainnet.toml`).
 
 ## Step 4: Interact with the Light Client
 
@@ -88,29 +103,124 @@ You can interact with your light client using JSON-RPC calls. Here are some comm
 
 ### 1. Get the current tip header
 
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
+
 ```bash
 curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "get_tip_header", "params": [], "id": 1}'
 ```
 
+```mdx-code-block
+  </TabItem>
+  <TabItem value="response" label="Response">
+```
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "compact_target": "0x1908f459",
+    "dao": "0x689d54c5b5ead354515ad5871aa2290068894b4b077d45080074128ecb273707",
+    "epoch": "0x7080202002f81",
+    "extra_hash": "0xc0203d1558cd109a47d360155cd7ed942f5bd74ced54d7598efe9a9c2ed03fad",
+    "hash": "0xc2fcda51fb04ff4df4393b00bdc2f387066f53c8d6125ba59bfbfe14cc07a20d",
+    "nonce": "0x2b887e159f92c37d00000008efb97b20",
+    "number": "0xfa5909",
+    "parent_hash": "0x53717b004829f67121664e8ae0ace4a9e1020cd262879fd47ce066a3e7043d5a",
+    "proposals_hash": "0xf64c8aa3e98eabff3fc4e484d2f08f148100acac91b4c0dcfca6e1fd137a286d",
+    "timestamp": "0x19753e7eb27",
+    "transactions_root": "0x96db829237736a5c5292bf5e08a171fc161212cf58d8715c300266baee39cb77",
+    "version": "0x0"
+  },
+  "id": 1
+}
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
 ### 2. Set scripts to filter
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
 
 ```bash
 curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method":"set_scripts", "params": [[{"script": {"code_hash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8", "hash_type": "type", "args": "0x64257f00b6b63e987609fa9be2d0c86d351020fb"}, "script_type": "lock", "block_number": "0x0"}]], "id": 1}'
 ```
 
+```mdx-code-block
+  </TabItem>
+  <TabItem value="response" label="Response">
+```
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": null,
+  "id": 1
+}
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
 ### 3. Get filtered scripts
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="command" label="Command">
+```
 
 ```bash
 curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method":"get_scripts", "params": [], "id": 1}'
 ```
 
+```mdx-code-block
+  </TabItem>
+  <TabItem value="response" label="Response">
+```
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "block_number": "0x1770",
+      "script": {
+        "args": "0x64257f00b6b63e987609fa9be2d0c86d351020fb",
+        "code_hash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+        "hash_type": "type"
+      },
+      "script_type": "lock"
+    }
+  ],
+  "id": 1
+}
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
 ## WASM Version for Browsers
 
-For browser environments, the CKB Light Client is also available as a WebAssembly package. Please refer to the [wasm](https://github.com/nervosnetwork/ckb-light-client/tree/develop/wasm) folder in the repository for implementation details.
+The CKB Light Client can also run directly in web browsers through WebAssembly (WASM). This allows you to build trustless, lightweight dApps without needing to connect to a full node.
 
-You can also check out the NPM package [ckb-light-client-js](https://www.npmjs.com/package/ckb-light-client-js) for browser usage.
+- To see how it works, check out the [wasm](https://github.com/nervosnetwork/ckb-light-client/tree/develop/wasm) folder in the repo.
+- For JavaScript/TypeScript projects, use the ready-to-go NPM package: [ckb-light-client-js](https://www.npmjs.com/package/ckb-light-client-js).
 
-## More Resources
+With this setup, you can verify transactions and headers entirely in the browser—ideal for mobile wallets, extensions, or web-based explorers.
+
+## Additional Resources
 
 - [CKB Light Client Repository](https://github.com/nervosnetwork/ckb-light-client)
 - [CKB Light Client Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0044-ckb-light-client/0044-ckb-light-client.md)
