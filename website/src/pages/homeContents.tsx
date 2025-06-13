@@ -57,8 +57,8 @@ const homeCardContents: HomeCardProps[] = [
     icon: "script",
   },
   {
-    title: "RPCs & Nodes",
-    to: "/docs/node/rpcs",
+    title: "Run a Node",
+    to: "/docs/node/node-overview",
     icon: "node",
   },
   {

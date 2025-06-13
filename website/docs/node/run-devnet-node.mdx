@@ -8,11 +8,15 @@ import TabItem from "@theme/TabItem";
 
 # Run a Devnet Node
 
-Ideal for local dev environment to start building your CKB dApp. No special local storage required.
+The CKB Devnet is designed for fast, local development. It offers a lightweight, isolated environment for building and testing your dApps without syncing the full chain or affecting real networks.
+This guide covers two ways to run a Devnet node:
+
+- A quickstart using OffCKB, a tool that simplifies the process by running everything you need out of the box
+- A manual setup using the CKB binary, similar to running a Mainnet or Testnet node
 
 ## Quick Start with OffCKB
 
-You can run a devnet node by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides a one-line command to start a Devnet.
+You can run a Devnet node by installing [@offckb/cli](https://www.npmjs.com/package/@offckb/cli). It provides a one-line command to start a Devnet.
 
 ### Install
 
@@ -38,15 +42,85 @@ For those requiring deeper customization, Nervos CKB's development mode is highl
 It is highly recommended to use `Dummy-Worker` for most development scenarios. `Eaglesong-Worker` should only be used when validating the PoW function is necessary, because the block time can behave erratically with extremely low hashrates.
 :::
 
-### Download CKB Binary
+### Download the CKB Binary
 
-Download the latest `ckb` binary file from the CKB releases page on [GitHub](https://github.com/nervosnetwork/ckb/releases).
+Download the latest version of CKB from the official [GitHub Releases](https://github.com/nervosnetwork/ckb/releases) page. Make sure to download the correct version for your operating system.
 
-The following commands can be used to verify the binaries are working and to check versions:
+:::info
+This guide uses version **ckb_v0.115.0** as an example.
+:::
+
+## Navigate to the CKB Directory
+
+Unzip the downloaded archive into a location that's easy to find.
+We recommend:
+
+- MacOS: `~/Documents/ckb_v0.115.0/...`
+- Windows: `C:\ckb_v0.115.0\...`
 
 ```mdx-code-block
 <Tabs>
-  <TabItem value="check-ckb-binary-version" label="Command">
+  <TabItem value="mac" label="Mac">
+```
+
+Open a terminal and navigate into the folder using the following command:
+
+```bash
+cd /Users/(NAME)/Documents/ckb_v0.115.0_aarch64-apple-darwin-portable/ckb
+```
+
+Remember to replace “(NAME)” with your actual name on the device.
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+Open a command prompt and navigate into the folder using the following command:
+
+```bash
+cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Verify Installed Versions
+
+Run the following commands:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+```bash
+./ckb --version
+./ckb-cli --version
+```
+
+Notice for Unix-like systems, you need to explicitly use `./` to tell the shell to run `ckb` file in the current folder.
+
+You should see the installed version printed in the terminal, like this:
+
+```bash
+ckb 0.115.0 (d845cbf 2024-04-01)
+ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
+```
+
+:::note
+If you see a message like `'ckb' cannot be opened because the developer cannot be verified`, this is macOS blocking unsigned binaries. To bypass:
+
+1. Go to System Settings → Privacy & Security
+2. Scroll down and click “Open Anyway”
+3. Rerun the command
+   :::
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
 ```
 
 ```bash
@@ -54,14 +128,11 @@ ckb --version
 ckb-cli --version
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-ckb-binary-version" label="Response">
-```
+You should see the installed version printed in the terminal, like this:
 
 ```bash
-ckb 0.115.0-rc2 (e4bb6c8  2024-03-20)
-ckb-cli 1.7.0 (0c8711e 2024-02-29)
+ckb 0.115.0 (d845cbf 2024-04-01)
+ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
 ```
 
 ```mdx-code-block
@@ -83,6 +154,8 @@ Use the following command to initialize the development blockchain and generate 
 ```bash
 ckb init --chain dev
 ```
+
+If you're using a Unix-like system, run `./ckb init --chain dev` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -122,6 +195,8 @@ To receive the block rewards, you'll need to generate an address. This can be ac
 ```bash
 ckb-cli account new
 ```
+
+If you're using a Unix-like system, run `./ckb-cli account new` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -199,7 +274,7 @@ delay_type = "Constant"
 value = 5000  # The unit of measurement is "ms".
 ```
 
-### 4. Start CKB Node
+### 4. Start the Node
 
 ```mdx-code-block
 <Tabs>
@@ -209,6 +284,8 @@ value = 5000  # The unit of measurement is "ms".
 ```bash
 ckb run
 ```
+
+If you're using a Unix-like system, run `./ckb run` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -238,7 +315,7 @@ ckb run
 
 ### 5. Start CKB Miner
 
-This should be performed in a separate terminal.
+Open another teriminal window and run the following commands:
 
 ```mdx-code-block
 <Tabs>
@@ -248,6 +325,8 @@ This should be performed in a separate terminal.
 ```bash
 ckb miner
 ```
+
+If you're using a Unix-like system, run `./ckb miner` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -282,8 +361,10 @@ An address to receive the block rewards must be created using `ckb-cli`.
 ```
 
 ```bash
-$ ckb-cli account new
+ckb-cli account new
 ```
+
+If you're using a Unix-like system, run `./ckb-cli account new` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -321,6 +402,8 @@ lock_hash: 0x9fecea1600fecfac989b2d15dc227b885afe68f5b652a1a159b59cb69e83ddae
 ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change this to your lock_arg value.
 ```
 
+If you're using a Unix-like system, run `./ckb int -c dev --ba-arg` instead.
+
 ```mdx-code-block
   </TabItem>
   <TabItem value="mining-initialized" label="Response">
@@ -354,7 +437,7 @@ worker_type = "EaglesongSimple"
 threads = 1
 ```
 
-### 4. Start CKB Node
+### 4. Start the Node
 
 ```mdx-code-block
 <Tabs>
@@ -364,6 +447,8 @@ threads = 1
 ```bash
 ckb run
 ```
+
+If you're using a Unix-like system, run `./ckb run` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -402,6 +487,8 @@ This should be performed in a separate terminal.
 ```bash
 ckb miner
 ```
+
+If you're using a Unix-like system, run `./ckb miner` instead.
 
 ```mdx-code-block
   </TabItem>
@@ -442,6 +529,8 @@ Using `ckb-cli` to transfer CKBytes is recommended only for development and test
 ```bash
 ckb-cli
 ```
+
+If you're using a Unix-like system, run `./ckb-cli` instead.
 
 ```mdx-code-block
   </TabItem>

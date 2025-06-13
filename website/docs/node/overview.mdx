@@ -1,0 +1,67 @@
+---
+id: node-overview
+title: Overview
+---
+
+## Introduction
+
+A node is a key component of the Nervos CKB network. It allows you to validate transactions, participate in the peer-to-peer system, help maintain the blockchain’s integrity, and contribute to the overall security and decentralization of the network.
+
+Running your own node means operating a CKB software instance yourself, rather than relying on someone else’s node (such as a public RPC provider) to access the network. While running a node isn’t required for everyone, it comes with clear advantages — along with a few trade-offs.
+
+### Benefits of Running Your Own Node
+
+- **Trustless access**: You don’t need to trust anyone else to confirm or validate transactions – you do it independently.
+- **Transparency & Control**: Running you own node gives you direct access to all on-chain data. You can monitor transactions in real time and review the blockchain state whenever you want.
+- **Security & Privacy**: Your activity stays private. Since you’re not using a public RPC, no one else can see what addresses or data you’re querying.
+- **Network contribution**: Running a node helps keep the network decentralized. The more independent nodes there are, the stronger and more secure the system becomes for all community members.
+
+### Things to Consider
+
+- **Resource usage**: Running a full node means storing all on-chain data, validating transactions, and continuously communicating with other peers. This uses significant disk space, memory (RAM), and network bandwidth.
+- **Not always necessary**: If you just want to use a wallet, send transactions, check balances, running your own node may not be needed. Public RPC endpoints offer an easier way to access the network without managing infrastructure.
+
+## Type of CKB Node
+
+### Full Node
+
+A full node downloads and verifies every block and transaction, checking them against CKB's consensus rules while maintaining the current set of Live Cells – the active, unspent data stored on-chain. In doing so, it hosts a full, verifiable copy of the blockchain.
+
+Running a full node is essential for decentralization. However, in many blockchains, the on-chain state grows unchecked as users continuously store data permanently. Overtime, this leads to a centralization problem: only resource-rich users can afford the hardware and bandwidth needed to run a full node, undermining the network’s decentralization.
+
+#### How CKB Maintains Decentralization
+
+Thanks to the Cell Model, CKB is designed to keep the blockchain sustainable–even as the usage increases:
+
+- **Only Live Cells Are Tracked**: Once a Cell is spent, it’s removed from the current state, keeping the blockchain as lightweight as possible.
+- **1 CKB = 1 Byte of On-Chain Storage**: Putting data on-chain is like renting space–the more data you store, the more CKB you must lock up. While locked, that CKB can’t be sent, staked, or traded. This economic cost, via opportunity loss, encourages users to store only what’s necessary, keeping the blockchain lean and sustainable.
+- **Incentive to Free Up Space**: When you no longer need the data, you can delete it by spending its Cell, and your locked CKB becomes available again. This creates a natural incentive to avoid hoarding state, freeing up capacity for others and helping the network remain decentralized.
+- **Global State Size is Capped**: Since all on-chain storage must be backed by locked CKB—and the total supply is fixed at 33.6 billion CKB—the total size of all Live Cells is inherently capped by design.
+
+Want to learn more? Read about [State Explosion and the Tragedy of the Blockchain Commons](https://medium.com/nervosnetwork/state-explosion-and-the-tragedy-of-the-blockchain-commons-1fbd4837e859).
+
+### Light Node/Light Client
+
+A light node, or a light client, is a resource-efficient alternative of a full node. It downloads only the blockchain headers, utilizing fewer resources and relying on other nodes for transaction data when needed.
+
+## Nodes Comparison
+
+| Feature/Capability             | Full node                                        | Light node/Light client                                     |
+| ------------------------------ | ------------------------------------------------ | ----------------------------------------------------------- |
+| Store full blockchain data     | Yes                                              | No – only keeps block headers                               |
+| Validate blocks & transactions | Yes                                              | No – need to trust full nodes to do so                      |
+| RPC Access                     | Full - exposes complete set of RPC methods       | Limited – depends on light client implementation            |
+| Network contribution           | High – decentralizes validation and data storage | Low                                                         |
+| Security guarantee             | High                                             | Low                                                         |
+| Trust assumption               | Trustless – validates blockchain independently   | Trust required – relies on other full node for verification |
+| Resource usage                 | Moderate to High                                 | Low (Minimal storage & CPU)                                 |
+
+## Resource Requirements (as of May 2025)
+
+The following specs reflect the recommended values for syncing and running a standalone CKB node. If the node is also expected to handle external requests or run services (such as RPC servers, rich indexers, or dApp backends), additional CPU, memory, and bandwidth may be required based on your specific workload. Using an SSD is strongly recommended for sync performance.
+| Node Type | Network | Disk | CPU | Memory |
+|--------------|---------|------------|-----|--------|
+| Full Node | Mainnet | ≥ 150 GB | 2C | 8 GB |
+| Full Node | Testnet | ≥ 200 GB | 2C | 8 GB |
+| Full Node | Devnet | < 1 GB | 2C | 4 GB |
+| Light Client | Any | < 100 MB | 1C | 2 GB |
