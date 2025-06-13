@@ -6,6 +6,40 @@ title: Node Configuration
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
+## Introduction
+
+CKB uses configuration files stored in `<config-dir>`, which by default is the current working directory. You can change this using the `-C <path>` argument to specify a different directory. For example:
+
+```bash
+ckb -C node1 run
+```
+
+- This command tells CKB to use the `node1/` directory as the config directory, where it expects to find `ckb.toml` and related files.
+
+Different subcommands expect different config filenames:
+
+- `ckb run` uses `ckb.toml`
+- `ckb miner` uses `ckb-miner.toml`
+- `ckb import` and `ckb export` also use `ckb.toml`
+
+The `ckb init` command helps initialize a config directory by generating the necessary files. Some config files may refer to other files, such as `chain.spec` in `ckb.toml`, or `system_cells` in a chain spec file. These referenced paths can be either absolute or relative to the config file’s own location. For example, with this directory structure:
+
+```bash
+ckb.toml
+└── specs/dev.toml
+    └── cells/secp256k1_sighash_all
+```
+
+- `ckb.toml` would refer to `specs/dev.toml`
+- `dev.toml` would refer to the cell file as `cells/secp256k1_sighash_all`
+
+This article covers the following configuration topics:
+
+- [Light client support and WSS access](#light-client-support--wss-access)
+- [Proxy and onion routing support](#proxy-and-onion-routing-support)
+- [Fee estimator](#fee-estimator)
+- [Run multiple nodes](#run-multiple-nodes)
+
 ## Light Client Support & WSS Access
 
 CKB full nodes support the [Light Client Protocol](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0044-ckb-light-client/0044-ckb-light-client.md) by default. No configuration is needed — if you're running a standard full node, it will automatically respond to light client peers using the built-in P2P protocol.
