@@ -25,7 +25,7 @@ yarn start
 Use a CLI tool [`offckb`](https://github.com/ckb-devrel/offckb) to start a CKB devnet:
 
 ```sh
-npm install -g offckb
+npm install -g @offckb/cli
 
 # start the devnet
 offckb node 
