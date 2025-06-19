@@ -21,31 +21,6 @@ In this deep dive, we’ll explore:
 
 Whether you’re a blockchain developer looking to leverage these new capabilities or a technical enthusiast interested in understanding CKB’s evolution, this guide will provide you with both the conceptual framework and practical knowledge needed to work with CKB’s new IPC features. Let’s dive in and explore how these new tools can transform the way we build on CKB.
 
-## Simple Introduction to Spawn
-
-The upcoming CKB hardfork Meepo introduces a new syscall called `Spawn`. This feature draws inspiration from the Unix/Linux operating system, functioning similarly to a combined `fork` and `exec` operation. Along with `Spawn`, related syscalls such as `pipe`, `read`, and `write` are also implemented, following Unix/Linux conventions. For detailed specifications, refer to the [RFC documentation](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#spawn).
-
-Prior to `Spawn`, CKB supported three primary methods for code reuse:
-
-- Static linking
-- Dynamic linking
-- [`exec`](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec)
-
-Each of these methods has distinct limitations. Static linking, while straightforward, only enables code reuse at the source code level, making binary-level reuse impossible. Both dynamic linking and `exec` offer binary-level reuse but come with significant drawbacks.
-
-Dynamic linking faces several challenges:
-
-1. Security Vulnerabilities: Called functions can access and modify the caller’s memory space, creating potential security risks
-2. Resource Constraints: The shared memory space architecture can lead to memory resource limitations
-3. Language Restrictions: Current implementation primarily supports C, with incomplete support for other languages like Rust
-
-The `exec` syscall also has notable limitations:
-
-1. Context Loss: Execution resets the current context information, making state preservation impossible
-2. Communication Barriers: No built-in mechanism for inter-process communication
-
-The new `Spawn` syscall addresses these limitations, offering a more robust and flexible solution for code reuse in CKB. It provides isolated memory spaces, preserves context information, and enables inter-process communication while maintaining security boundaries.
-
 ## Developing with Spawn
 
 In computer science, Inter-Process Communication (IPC) refers to the mechanisms that allow processes to share data and communicate with each other within a computer system. With the introduction of `Spawn` syscalls in CKB, we can now implement IPC functionality in CKB scripts.
@@ -95,6 +70,14 @@ pub trait World {
 ```
 
 This trait should be placed in a shared library accessible to both client and server scripts. The `#[ckb_script_ipc::service]` attribute macro automatically generates the necessary implementations for IPC communication.
+
+:::note
+The terms **Client** and **Server** are used here by analogy. If we think in terms of an HTTP server, the Server is like Nginx—responsible for listening and responding—while the Client acts as the requester.
+
+In the context of IPC, the Server provides certain capabilities (i.e., interfaces), and the Client invokes them.
+
+In most cases, the **parent process** acts as the **Client**, while the **child process** plays the role of the **Server**.
+:::
 
 3. Initialize the server by creating communication pipes:
 
