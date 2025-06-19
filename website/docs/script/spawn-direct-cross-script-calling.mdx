@@ -1,11 +1,11 @@
 ---
 id: spawn-cross-script-calling
-title: "Spawn for Direct Cross-Script Calls"
+title: "Spawn: Direct Cross-Script Calls"
 ---
 
 import Tooltip from "@components/Tooltip";
 
-# Spawn for Direct Cross-Script Calls
+# Spawn: Direct Cross-Script Calls
 
 The Meepo hard fork in 2024 has introduced a range of enhancements into CKB Script development, with one major innovation being Spawn.
 
@@ -13,7 +13,7 @@ In [CKB Script](/docs/script/intro-to-script), Spawn refers to a concept and a s
 
 ## Why Spawn
 
-The exec syscall, introduced into <Tooltip>CKB-VM</Tooltip> during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost, as illustrated below:
+The exec syscall, introduced into <Tooltip>CKB-VM</Tooltip> during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost (This means that even if Script A has remaining code after executing `exec`, that code will not be executed.), as illustrated below:
 
 ```
       +----------+   Exec   +----------+
@@ -77,6 +77,90 @@ The term "process" in CKB-VM differs from its meaning in an operating system: in
        .'_ .'  `. _`.                      _.--'     (     (
      oOO(_)      (_)OOo                   (__.--._____)_____)
 ```
+
+## Mechanism and Principles
+
+The new Spawn mechanism consists of two core features:
+
+- Multi-process support
+- Pipe-based communication
+
+Alongside these, two new data types are introduced:
+
+- Process ID (PID)
+- File descriptor (FD)
+
+### Process ID
+
+The concept of Process ID (PID) is similar to that in Unix systems. Each process is assigned a unique ID. The root process always has PID 0, and subsequent processes are assigned incrementally. Even after a process exits, its PID will not be reused.
+
+There are some hard limits to the system to avoid the overuse of resources.
+
+- CKB-VM allows 16 processes to exist at the same time (excluding the root process). Processes that are created but exit normally will not be counted.
+- A maximum of 4 instantiated VMs is allowed. Each process needs to occupy a VM instance to run. When the number of processes is greater than 4, some processes will enter a state called "uninstantiated". CKB-VM implements a scheduler to decide which processes should be "instantiated" and which processes should be "uninstantiated". However, switching the instantiation state of a VM is very expensive, developers should try to keep the number of processes below 4 so that all processes are instantiated.
+
+:::note
+
+- A child process created by exec retains the same PID as its parent.
+- A single transaction may include multiple Scripts, but each Script group is assigned an independent process space.
+- PID overflow is not a concern. Process IDs are represented as uint64 (internally implemented as u64). Exhausting the full range would require an astronomically large number of cycles.
+  :::
+
+### File descriptor (FD)
+
+File descriptors are used for pipe operations. They are created via `pipe()` and released via `close()`. A maximum of 64 FDs can exist simultaneously
+
+Each FD is created with fixed permissions and is bound to a specific process. It can only be used by that process unless explicitly passed to a child via `spawn()`. The child retrieves these using `inherited_fds()`.
+
+Key characteristics:
+
+- Although limited to 64 concurrent FDs, FDs can be reused after being closed.
+- FD overflow is theoretically possible but practically unreachable before cycle exhaustion.
+- FDs are created in pairs (read and write ends), but closing either end invalidates the entire pair.
+
+### Multi-Process
+
+The following syscalls are introduced:
+
+- `spawn`: Create a child process
+- `process_id`: Get the current process’s PID
+- `wait`: Wait for a child process to exit
+
+Developers use spawn to create child processes. Unlike `exec`, `spawn` a process does not discard the parent’s context. Control is transferred to the child, and later returns to the parent once the child exits or when parent-side I/O is needed.
+
+Calling `wait` switches context to the specified child. If the child performs invalid operations (e.g., deadlocks), the VM may abort execution with an error.
+
+### PIPE
+
+To enable inter-process communication, several pipe-related syscalls are introduced:
+
+- `pipe`: Create a unidirectional pipe
+- `close`: Close an FD
+- `inherited_fds`: Retrieve FDs passed from parent
+- `read`: Read data from an FD
+- `write`: Write data to an FD
+
+Because processes cannot access each other's memory directly, pipes are used to transfer data. Each pipe returns two FDs, one for reading and one for writing. For bidirectional communication, two pipes are typically created.
+
+Additionally, since CKB lacks true parallelism, read and write also serve as mechanisms for notification and scheduling between processes.
+
+Pipes must be created before calling `spawn`. When spawning, the parent passes one end of the pipe to the child. The child accesses the FD using `inherited_fds()` and can then operate on it using `read`, `write`, and `close`.
+
+### Process Scheduling
+
+CKB-VM does not support parallel execution or time-sliced multitasking. Instead, process switching is cooperative and syscall a form of pseudo-concurrency.
+
+Syscalls such as `spawn`, `wait`, `read`, and `write` may trigger a context switch. When invoked, the VM switches to the appropriate process stack and resumes execution. When that process completes or triggers another syscall, a similar context switch occurs.
+
+For example, after calling `spawn`, the VM switches context to the child process and begins executing from its `_start`.
+
+The diagram below illustrates inter-process communication and scheduling. The example code is from the rust-script-examples [spawn-parent](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/spawn-parent/src/main.rs) and [spawn-child](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/spawn-parent/src/main.rs).
+
+(The code is written in Rust but is straightforward enough that developers using other languages can easily follow it. You only need to focus on the spawn-related functions mentioned above.)
+
+![spawn exampel](/img/scripts/spawn-example-uml.png)
+
+Although a sequence diagram is used, all execution happens within a single physical thread. The diagram merely clarifies logical relationships between processes.
 
 ## Spawn Functions Overview
 
