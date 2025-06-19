@@ -9,7 +9,7 @@ export NETWORK=testnet # or testnet, mainnet
 On devnet, use [`offckb`](https://github.com/ckb-devrel/offckb) to start a local blockchain first:
 
 ```sh
-npm install -g offckb
+npm install -g @offckb/cli
 
 # start the devnet
 offckb node 
