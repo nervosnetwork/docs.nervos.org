@@ -222,7 +222,7 @@ ul.dropdown__menu {
 }
 
 .theme-doc-sidebar-item-category .theme-doc-sidebar-item-category-level-2 {
-  margin-top: 0;
+  margin-top: 0 !important;
 }
 
 .menu__link,
