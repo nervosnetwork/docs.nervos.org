@@ -122,7 +122,7 @@ let mut client = WorldClient::new(read_pipe, write_pipe);
 let ret = client.hello("world".into()).unwrap();
 ```
 
-The client uses the pipe handles obtained during server initialization to communicate with the server process. For a complete working example, you can explore our [ckb-script-ipc-demo](https://github.com/XuJiandong/ckb-script-ipc/tree/main/contracts/ckb-script-ipc-demo) repository.
+The client uses the pipe handles obtained during server initialization to communicate with the server process. For a complete working example, you can explore our rust-script-examples/ipc-parent repository.
 
 This implementation abstracts away the complexities of IPC communication, handling serialization, message passing, and error management internally. Developers can focus on defining their service interfaces and implementing business logic rather than dealing with low-level IPC details.
 
