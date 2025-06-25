@@ -38,6 +38,10 @@ const toolCardContents: CardProps[] = [
         label: "Github",
         link: "https://github.com/nervosnetwork/ckb-standalone-debugger",
       },
+      {
+        label: "Debug Scripts",
+        link: "https://docs.nervos.org/docs/script/debug-script",
+      },
     ],
   },
   {
