@@ -211,6 +211,7 @@ export default {
         "tech-explanation/cell",
         "tech-explanation/cell-model",
         "tech-explanation/capacity",
+        "tech-explanation/capacity-mini",
         "tech-explanation/script",
         "tech-explanation/code-hash",
         "tech-explanation/hash-type",
