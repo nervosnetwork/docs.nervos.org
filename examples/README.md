@@ -1,16 +1,3 @@
 # Tutorial Examples
 
-The dApp examples are created by [offckb](https://github.com/ckb-devrel/offckb) templates. You can switch different networks by exporting `NETWORK` env var.
-
-```sh
-export NETWORK=testnet # or testnet, mainnet
-```
-
-On devnet, use [`offckb`](https://github.com/ckb-devrel/offckb) to start a local blockchain first:
-
-```sh
-npm install -g @offckb/cli
-
-# start the devnet
-offckb node 
-```
+This folder contains the examples for the CKB Tutorials, including smart contracts(ends with `-script`) and dApps. You can clone this repository and run the examples locally.
