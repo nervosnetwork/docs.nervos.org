@@ -46,11 +46,4 @@ A single public-private key pair can generate multiple Lock Scripts, consequentl
 
 ## Requirements for CKB Transfers
 
-To initiate a transfer, you need at least one Cell. Each Cell comprises the essential data fields: `capacity`, `lock`, `args`, and `hash_type`, with storage sizes as follows:
-
-- `capacity`: 8 bytes
-- `lock`: 32 bytes
-- `args`: 20 bytes
-- `hash_type`: 1 byte
-
-Thus, a single Cell requires at least 61 bytes of storage, equivalent to 61 CKBytes (CKB). **Allocating 62 CKB is recommended to cover additional fees.**
+A single Cell requires at least 61 bytes of storage, equivalent to [61 CKBytes (CKB)](/docs/tech-explanation/capacity-mini). Allocating **62 CKB** is recommended to cover additional fees in practice.
