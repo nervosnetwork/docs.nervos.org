@@ -1,14 +1,13 @@
 ---
-id: header-dep
-title: "header_dep"
+id: header-deps
+title: "header_deps"
 ---
 
-# header_dep
+# header_deps
 
-Header Deps allows Scripts to read block headers whose hashes are listed in `header_deps`, with certain limitations to ensure transaction determinacy.
+`header_deps` lists block headers hashes that Scripts can access during execution, with certain limitations to ensure transaction determinism.
 
 :::note
 
-A transaction is determined when all Scripts yield deterministic results. Another requirement is that the transaction can only be added to the chain if all the blocks listed in `header_deps` are already present in the chain, excluding uncles.
-
+A transaction is **deterministic** when all Scripts produce the same result across all nodes. To ensure this, all block headers listed in `header_deps` must already exist on the chain. Uncle blocks are not allowed — they are excluded to prevent inconsistent results across nodes.
 :::

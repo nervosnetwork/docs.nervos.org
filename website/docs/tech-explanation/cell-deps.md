@@ -1,15 +1,31 @@
 ---
 id: cell-deps
-title: "Cell_deps"
+title: "cell_deps"
 ---
 
 # Cell_deps
 
-`Cell_deps` allows Scripts in the transaction to access referenced Live Cells. Cells listed here are all live and read-only.
+`cell_deps` allows Scripts in the transaction to access referenced Live Cells. These Cells are read-only and must be live at the time of execution. Each item in the `cell_deps` array is of type `CellDep`.
 
-`Cell_deps` includes a `dep_type` field to differentiate the normal Cells, which directly provide the code, and the `dep_groups` expanded to its members inside `cell_deps`.
+## Structure of CellDep
 
-| Name        | Type                                 | Description                                                                                                        |
-| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `out_point` | `OutPoint`                           | A Cell outpoint pointing to the Cells used as deps. For more, see [`out_point`](/docs/tech-explanation/out-point). |
-| `dep_type`  | String, either `code` or `dep_group` | Interpreting referenced cell deps.                                                                                 |
+| Name        | Type                  | Description                                                                                                      |
+| ----------- | --------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `out_point` | `OutPoint`            | Points to a specific Live Cell that the transaction depends on. This Cell might contain executable code or data. |
+| `dep_type`  | `code` or `dep_group` | Tells CKB how to interpret the dependency.                                                                       |
+
+### out_point
+
+Identifies a specific output Cell. Its type is `OutPoint`, which consists of a transaction `hash` and an output `index`.
+
+| Name    | Type        | Description                                         |
+| ------- | ----------- | --------------------------------------------------- |
+| `hash`  | H256 (hash) | Hash of the transaction that this Cell belongs to.  |
+| `index` | Uint32      | Index of the Cell in its transaction's output list. |
+
+### dep_type
+
+Defines how the dependency Cell should be used:
+
+- `code`: The Cell at `out_point` is loaded directly. Its content (usually code) is available to CKB-VM during Script execution.
+- `dep_group`: The Cell at `out_point` is a dep group. It contains a list of `OutPoint`s. CKB reads this list and loads each referenced Cell as if they were individual `cell_deps`. This makes `dep_group` a compact way to include multiple dependencies using a single reference.

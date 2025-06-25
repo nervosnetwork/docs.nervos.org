@@ -11,12 +11,12 @@ A block is a container of transactions, carrying the information required by con
 
 ## Fields & Description
 
-| Name           | Type          | Description                                                                                                                               |
-| -------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `header`       | Header        | Header contains the block’s metadata. For more, see [`header`](/docs/tech-explanation/header)                                             |
-| `transactions` | [Transaction] | An array of committed transactions contained in the block. For more, see [`transactions`](/docs/tech-explanation/transactions)            |
-| `uncles`       | [UncleBlock]  | An array of the block’s uncle blocks. For more, see [`uncles`](/docs/tech-explanation/uncles)                                             |
-| `proposals`    | [H80]         | An array of hex-encoded short transaction IDs of the proposed transactions. For more, see [`proposals`](/docs/tech-explanation/proposals) |
+| Name           | Type          | Description                                                                                                                             |
+| -------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `header`       | Header        | Header contains the block’s metadata. For more, see [`header`](/docs/tech-explanation/header)                                           |
+| `transactions` | [Transaction] | A list of committed transactions contained in the block. For more, see [`transactions`](/docs/tech-explanation/transactions)            |
+| `uncles`       | [UncleBlock]  | A list of the block’s uncle blocks. For more, see [`uncles`](/docs/tech-explanation/uncles)                                             |
+| `proposals`    | [H80]         | A list of hex-encoded short transaction IDs of the proposed transactions. For more, see [`proposals`](/docs/tech-explanation/proposals) |
 
 ## Example
 

@@ -26,7 +26,7 @@ const DAPP_HEADER: JSX.Element[] = [
   <div key="offckb">
     CKB dev environment:{" "}
     <Link
-      to="/docs/getting-started/installation-guide#1-offckb-v030-rc2"
+      to="https://github.com/ckb-devrel/offckb"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -36,7 +36,7 @@ const DAPP_HEADER: JSX.Element[] = [
   <div key="ccc">
     JavaScript SDK:{" "}
     <Link
-      to="/docs/getting-started/installation-guide#2-ccc-v0014-alpha0"
+      to="https://github.com/ckb-devrel/ccc"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -48,7 +48,7 @@ const DAPP_HEADER: JSX.Element[] = [
 const SCRIPT_HEADER: JSX.Element[] = [
   <div key="make">
     <Link
-      to="/docs/getting-started/installation-guide#1-make-sed-bash-sha256sum"
+      to="https://ftp.gnu.org/gnu/"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -57,7 +57,7 @@ const SCRIPT_HEADER: JSX.Element[] = [
   </div>,
   <div key="rust">
     <Link
-      to="/docs/getting-started/installation-guide#2-rust-v1711-and-riscv64-target"
+      to="https://www.rust-lang.org/tools/install"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -66,7 +66,7 @@ const SCRIPT_HEADER: JSX.Element[] = [
   </div>,
   <div key="clang">
     <Link
-      to="/docs/getting-started/installation-guide#3-clang-18"
+      to="https://releases.llvm.org/"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -75,7 +75,7 @@ const SCRIPT_HEADER: JSX.Element[] = [
   </div>,
   <div key="cargo-generate">
     <Link
-      to="/docs/getting-started/installation-guide#4-cargo-generate-0170"
+      to="https://crates.io/crates/cargo-generate"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -88,7 +88,7 @@ const DEBUG_HEADER: JSX.Element[] = [
   ...SCRIPT_HEADER,
   <div key="debugger">
     <Link
-      to="/docs/getting-started/installation-guide#5-ckb-debugger-01170"
+      to="https://github.com/nervosnetwork/ckb-standalone-debugger"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -129,12 +129,6 @@ export default function TutorialHeader({
           <li key={index}>{tool}</li>
         ))}
       </ul>
-      <div className={styles.details}>
-        For detailed installation steps, refer to our{" "}
-        <Link to={"/docs/getting-started/installation-guide"}>
-          Installation Guide
-        </Link>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 ---
 id: ckbhash
-title: ckbhash
+title: Hashing in CKB
 ---
 
 CKB uses [BLAKE2b](<https://en.wikipedia.org/wiki/BLAKE_(hash_function)#BLAKE2b_algorithm>) as the default hash algorithm. The specific configuration of BLAKE2b used in CKB is referred as ckbhash, characterized by:
