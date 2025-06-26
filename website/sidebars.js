@@ -200,21 +200,28 @@ export default {
   "Tech Explanation": [
     {
       type: "category",
-      label: "Tech Explanation",
-      className: "category-tech-explanation",
+      label: "CKB Fundamentals",
+      className: "category-ckb-fundamentals",
       collapsible: false,
       items: [
         "tech-explanation/nervos-blockchain",
         "tech-explanation/ckb-vs-btc",
         "tech-explanation/cell",
         "tech-explanation/capacity",
-        "tech-explanation/capacity-mini",
         "tech-explanation/cell-model",
         "tech-explanation/economics",
         "tech-explanation/consensus",
         "tech-explanation/ckb-address",
         "tech-explanation/ckbhash",
         "tech-explanation/ckb-vm",
+      ],
+    },
+    {
+      type: "category",
+      label: "Core Structures",
+      className: "category-core-structures",
+      collapsible: false,
+      items: [
         {
           type: "category",
           label: "Script",
@@ -261,8 +268,14 @@ export default {
             "tech-explanation/proposals",
           ],
         },
-        "tech-explanation/glossary",
       ],
+    },
+    {
+      type: "category",
+      label: "Resources",
+      className: "category-resources",
+      collapsible: false,
+      items: ["tech-explanation/glossary"],
     },
   ],
   Ecosystem: [
