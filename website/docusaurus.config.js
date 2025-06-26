@@ -149,7 +149,7 @@ const config = {
           },
           {
             from: "/docs/reference/rpc/",
-            to: "/docs/dapp/rpcs",
+            to: "/docs/getting-started/rpcs",
           },
           {
             from: "/docs/reference/tools",

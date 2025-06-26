@@ -335,8 +335,14 @@ ul.dropdown__menu {
   width: 1.125rem;
   height: 1.125rem;
 }
-.category-tech-explanation > div > a:before {
+.category-ckb-fundamentals > div > a:before {
   content: url("/svg/icon-sidebar-concept.svg");
+  margin-right: 0.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.category-core-structures > div > a:before {
+  content: url("/svg/icon-sidebar-structure.svg");
   margin-right: 0.5rem;
   width: 1.125rem;
   height: 1.125rem;
