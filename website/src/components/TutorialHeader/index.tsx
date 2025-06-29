@@ -18,11 +18,6 @@ const DAPP_HEADER: JSX.Element[] = [
       Git (≥2.40.0)
     </Link>
   </div>,
-  <div key="yarn">
-    <Link href="https://yarnpkg.com/" target="_blank" rel="noopener noreferrer">
-      Yarn (≥1.22.0)
-    </Link>
-  </div>,
   <div key="offckb">
     CKB dev environment:{" "}
     <Link
