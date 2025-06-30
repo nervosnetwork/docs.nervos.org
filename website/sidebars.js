@@ -209,7 +209,6 @@ export default {
         "tech-explanation/cell",
         "tech-explanation/capacity",
         "tech-explanation/cell-model",
-        "tech-explanation/economics",
         "tech-explanation/consensus",
         "tech-explanation/ckb-address",
         "tech-explanation/ckbhash",
@@ -268,6 +267,19 @@ export default {
             "tech-explanation/proposals",
           ],
         },
+      ],
+    },
+    {
+      type: "category",
+      label: "Assets & Token Standards",
+      className: "category-token-standards",
+      collapsible: false,
+      items: [
+        "tech-explanation/assets-overview",
+        "tech-explanation/economics",
+        "tech-explanation/xudt",
+        "tech-explanation/spore-protocol",
+        "tech-explanation/rgbpp",
       ],
     },
     {
