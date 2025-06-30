@@ -32,6 +32,9 @@ importers:
       '@ckb-js-std/ipc':
         specifier: ^1.0.0
         version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
     devDependencies:
       ckb-testtool:
         specifier: ~1.0.0
@@ -72,6 +75,50 @@ importers:
         version: 1.0.0
       '@ckb-js-std/core':
         specifier: ~1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
+  contracts/ipc-child:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/ipc':
+        specifier: ^1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
+  contracts/ipc-parent:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/ipc':
+        specifier: ^1.0.0
         version: 1.0.0
       ckb-default-app:
         specifier: 'link:'

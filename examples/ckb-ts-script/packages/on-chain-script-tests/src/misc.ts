@@ -2,7 +2,7 @@ import { Resource, DEFAULT_SCRIPT_ALWAYS_SUCCESS } from "ckb-testtool";
 import { hashCkb, hexFrom, Hex, Transaction, Script } from "@ckb-ccc/core";
 import { readFileSync } from "fs";
 
-const CKB_JS_VM_SCRIPT = readFileSync('node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm');
+export const CKB_JS_VM_SCRIPT = readFileSync('node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm');
 
 export const SCRIPT_ALWAYS_SUCCESS = readFileSync(DEFAULT_SCRIPT_ALWAYS_SUCCESS)
 
