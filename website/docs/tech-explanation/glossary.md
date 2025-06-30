@@ -2812,7 +2812,7 @@ width="688"
 
 ### RGB++
 
-An extended Bitcoin-linked token protocol that maps Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings. It enables secure, programmable asset issuance and state transitions anchored to Bitcoin, while leveraging Nervos CKB for scalable validation, shared state, and scripting functionality.
+A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings. It enables secure, programmable asset issuance and state transitions anchored to Bitcoin, while leveraging CKB for scalable validation, shared state, and scripting functionality.
 
 #### See Also
 

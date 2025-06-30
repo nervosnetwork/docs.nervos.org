@@ -876,7 +876,7 @@
     "link": "/docs/tech-explanation/glossary#rbf"
   },
   "rgb++": {
-    "content": "An extended Bitcoin-linked token protocol that maps Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings.",
+    "content": "A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings.",
     "link": "/docs/tech-explanation/glossary#rgb++"
   },
   "risc-v": {

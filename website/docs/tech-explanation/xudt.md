@@ -21,5 +21,5 @@ xUDT is ideal for scenarios where tokens require on-chain programmable behavior 
 ## Additional Resources
 
 - [DApp Tutorial: Create a Fungible Token](/docs/dapp/create-token)
-- [How xUDT Work](/docs/common-scripts/xudt)
+- [How xUDT Work](/docs/common-scripts/xudt#how-xudt-works)
 - [xUDT RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0052-extensible-udt/0052-extensible-udt.md)
