@@ -1,0 +1,164 @@
+---
+id: js-api-ipc
+title: "API (IPC)"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# IPC
+
+As mentioned in the previous chapter on [JS Syscalls](./js-api-syscalls), `ckb-js-vm` supports [Spawn](../spawn-cross-script-calling). Building on top of Spawn, we implemented an additional abstraction layer called [IPC](../ckb-ipc), which also provides a similar set of APIs for use in JavaScript.
+
+(While using JavaScript as a server is technically supported, the overhead of `ckb-js-vm` is significant, so we do **not** recommend doing so.)
+
+## `spawnCellServer`
+
+Spawns a new IPC server process using the provided code hash and hash type.
+
+### Syntax
+
+```typescript
+export function spawnCellServer(
+  codeHash: ArrayBuffer,
+  hashType: number,
+  argv: string[]
+): [Pipe, Pipe];
+```
+
+### Parameters
+
+- `codeHash`: The code hash to search for (must be 32 bytes)
+- `hashType`: The type of hash to search for (type or data)
+- `argv`: An array of strings representing the arguments to pass to the new process.
+
+### Return
+
+A tuple of two `Pipe` objects representing the read and write pipes for the parent process, or throws an `Error` if an error occurs.
+
+## spawnServer
+
+Same to spawnCellServer, but spawn from a specified source
+
+### Syntax
+
+```typescript
+export function spawnServer(
+  index: number,
+  source: SourceType,
+  argv: string[],
+): [Pipe, Pipe] {
+```
+
+### Parameters
+
+- `index` : The index of the source to spawn from
+- `source` : The type of source (use SOURCE\_\* constants)
+- `argv`: An array of strings representing the arguments to pass to the new process.
+
+### Return
+
+A tuple of two `Pipe` objects representing the read and write pipes for the parent process, or throws an `Error` if an error occurs.
+
+## runServer
+
+Runs the server with the provided service implementation.
+This function listens for incoming requests, processes them using the provided service, and sends back the responses. It uses the inherited file descriptors for communication.
+
+### Syntax
+
+```typescript
+export function runServer(handler: RequestHandler): void;
+```
+
+### Parameters
+
+`handler` : The service implementation that handles the requests and generates the responses.
+
+### Return
+
+Never returns unless an error occurs, in which case it throws an `Error`.
+
+## Channel
+
+The `Channel` class facilitates IPC communication between a client and a server.
+It handles the transmission of requests from the client to the server and the reception of responses from the server to the client.
+
+## Channel.constructor
+
+Creates a new Channel instance
+
+### Syntax
+
+```typescript
+constructor(reader: Read, writer: Write);
+```
+
+### Parameters
+
+- `reader` : Responsible for reading data from the channel
+- `writer` : Responsible for writing data to the channel
+
+## Channel.execute
+
+Executes the server loop, processing incoming requests and sending responses.
+
+### Syntax
+
+```typescript
+execute(handler: RequestHandler): void
+```
+
+### Parameters
+
+`handler` : A service that handles requests and generates responses
+
+## Channel.call
+
+Sends a request to the server and waits for a response.
+
+This method handles the complete request-response cycle by sending the request to the server and then waiting for and returning the server's response.
+
+### Syntax
+
+```typescript
+call(req: RequestPacket): ResponsePacket
+```
+
+### Parameters
+
+- `req` : The request packet to send to the server
+
+### Return
+
+The response packet received from the server
+
+## Channel.sendErrorCode
+
+Sends an error code to the client
+
+### Syntax
+
+```typescript
+sendErrorCode(errorCode: number): void
+```
+
+### Parameters
+
+- `errorCode` - The error code to send
+
+## RequestHandler
+
+Interface for a service that can handle requests and generate responses
+
+### Syntax
+
+```typescript
+export interface RequestHandler {
+  serve(req: RequestPacket): ResponsePacket;
+}
+```

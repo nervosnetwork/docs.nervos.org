@@ -163,6 +163,7 @@ export default {
             "script/js/js-api-common-algorithms",
             "script/js/js-api-molecule",
             "script/js/js-api-other-utilities",
+            "script/js/js-api-ipc",
           ],
         },
       ],

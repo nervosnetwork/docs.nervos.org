@@ -283,3 +283,178 @@ The tests in `tests/src/type-id.test.ts`.
 When minting, You need to create type-id through `inputCell` and `index` and check it in the contract. `check type-id minting success` and `check type-id minting failed`.
 
 When transaction, Will not check again. `check type-id transaction success`.
+
+## spawnCell
+
+Spawn a new process from a cell.
+
+### Syntax
+
+```typescript
+export function spawnCell(
+  codeHash: ArrayBuffer,
+  hashType: number,
+  offset: number,
+  length: number,
+  args: SpawnArgs
+): number;
+```
+
+### Parameters
+
+- `codeHash` : The code hash of the cell to spawn
+- `hashType` : The hash type of the code (use SCRIPT*HASH_TYPE*\* constants)
+- `offset` : The offset in the cell data (defaults to 0)
+- `length` : The length of code to execute (defaults to reading until the end)
+- `args` : Spawn arguments including argv and inherited file descriptors
+
+### Return
+
+The process ID of the spawned process
+
+## spawn
+
+Spawn a new process from a specified source.
+
+### Syntax
+
+```typescript
+export function spawn(
+  index: number,
+  source: SourceType,
+  offset: number,
+  length: number,
+  args: SpawnArgs
+): number;
+```
+
+### Parameters
+
+- `index` : The index of the source to spawn from
+- `source` : The type of source (use SOURCE\_\* constants)
+- `offset` : The offset in the source data (defaults to 0)
+- `length` : The length of code to execute (defaults to reading until the end)
+- `args` : Spawn arguments including argv and inherited file descriptors
+
+### Return
+
+The process ID of the spawned process
+
+## pipe
+
+Create a new pipe
+
+### Syntax
+
+```typescript
+export function pipe(): [number, number];
+```
+
+### Return
+
+A tuple of [read_fd, write_fd] for the pipe.
+
+## inheritedFds
+
+Get inherited file descriptors
+
+### Syntax
+
+```typescript
+export function inheritedFds(): number[];
+```
+
+### Return
+
+Array of inherited file descriptor numbers.
+
+## read
+
+Read from a file descriptor
+
+### Syntax
+
+```typescript
+export function read(fd: number, length: number): ArrayBuffer;
+```
+
+### Parameters
+
+- `fd` : The file descriptor to read from
+- `length` : Number of bytes to read
+
+### Return
+
+The read data as ArrayBuffer.
+
+### Remarks
+
+The length of returned data might be smaller than `length`.
+
+## write
+
+Write data to a file descriptor
+
+### Syntax
+
+```typescript
+export function write(fd: number, data: ArrayBuffer): void;
+```
+
+### Parameters
+
+- `fd` : The file descriptor to write to
+- `data` : The data to write as ArrayBuffer
+
+### Remarks
+
+All data will be written atomically - no partial writes will occur
+
+- - If the write cannot complete fully, it will throw an error
+- - The function blocks until all data is written
+
+## close
+
+Close a file descriptor
+
+### Syntax
+
+```typescript
+export function close(fd: number): void;
+```
+
+### Parameters
+
+- `fd` : The file descriptor to close
+
+## wait
+
+Wait for a process to exit
+
+### Syntax
+
+```typescript
+export function wait(pid: number): number;
+```
+
+### Parameters
+
+- `pid` : The process ID to wait for
+
+### Return
+
+The exit status of the process
+
+## processId
+
+Get the current process ID
+
+### Syntax
+
+```typescript
+export function processId(): number;
+```
+
+### Return
+
+The current process ID
