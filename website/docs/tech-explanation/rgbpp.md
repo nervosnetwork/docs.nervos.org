@@ -30,9 +30,9 @@ The original RGB protocol introduced an innovative model: smart contracts anchor
 
 ## Key Features of RGB++
 
-### Isometric Binding
+### Isomorphic Binding
 
-RGB++ introduces isomorphic bindings between Bitcoin UTXOs and Nervos CKB [Cells](/docs/tech-explanation/cell) to overcome key limitations of the original RGB protocol. In RGB, UTXOs determine ownership, while off-chain commitments and single-use seals manage state. RGB++ maps each Bitcoin UTXO to a CKB Cell, synchronizing ownership through Bitcoin’s locking Scripts while managing state directly via the data and `type` fields of the CKB Cell. This design enables verifiable state transitions with on-chain support and composability.
+RGB++ introduces isomorphic bindings between Bitcoin UTXOs and Nervos CKB [Cells](/docs/tech-explanation/cell) to overcome key limitations of the original RGB protocol. In RGB, UTXOs determine ownership, while off-chain commitments and single-use seals manage state. RGB++ maps each Bitcoin UTXO to a CKB Cell, synchronizing ownership through Bitcoin’s locking Scripts while managing state directly via the `data` and `type` fields of the CKB Cell. This design enables verifiable state transitions with on-chain support and composability.
 
 ### Blockchain-Enhanced Client-Side Validation
 

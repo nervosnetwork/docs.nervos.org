@@ -14,15 +14,11 @@ Within this framework, any token or digital object represented with Cell—and c
 - On-chain digital objects (DOBs via Spore Protocol)
 - Assets validated via RGB++ protocol linking Bitcoin and Nervos CKB
 
-:::note
-Assets that are only off-chain references or rely on external hosting (e.g., simple URLs) are not considered on-chain assets on Nervos.
-:::
-
 ## Overview of Token Standards
 
-| Asset                                            | Type                 | Equivalent        | Description                                                                                                         | Protocol       |
-| ------------------------------------------------ | -------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- | -------------- |
-| [CKByte (CKB)](/docs/tech-explanation/economics) | Native               | /                 | Native utility and governance token                                                                                 | Native         |
-| [xUDT Tokens](/docs/tech-explanation/xudt)       | User-defined         | ERC-20            | Extensive user-defined fungible tokens                                                                              | xUDT           |
-| [Spore](/docs/tech-explanation/spore-protocol)   | Digital Object (DOB) | ERC-721, Ordinals | Unique digital objects with redeemable intrinsic value, true on-chain ownership, privacy, and multi-content support | Spore Protocol |
-| [RGB++](/docs/tech-explanation/rgbpp)            | Cross-chain          | /                 | Enables cross-chain asset issuance and interoperability between Nervos and Bitcoin using UTXO binding               | RGB++ Protocol |
+| Asset                                            | Type                                                                               | Equivalent        | Description                                                                                                                       | Protocol       |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| [CKByte (CKB)](/docs/tech-explanation/economics) | Native                                                                             | /                 | Native utility and governance token                                                                                               | Native         |
+| [xUDT Tokens](/docs/tech-explanation/xudt)       | User-defined                                                                       | ERC-20            | Extensive user-defined fungible tokens                                                                                            | xUDT           |
+| [Spore](/docs/tech-explanation/spore-protocol)   | Digital Object (DOB)                                                               | ERC-721, Ordinals | Unique digital objects with redeemable intrinsic value, true on-chain ownership, privacy, and multi-content support               | Spore Protocol |
+| [RGB++](/docs/tech-explanation/rgbpp)            | [Isomorphically bound to Bitcoin](/docs/tech-explanation/rgbpp#isomorphic-binding) | /                 | Enables bridgeless cross-chain asset issuance and interoperability between Bitcoin and Nervos CKB through isomorphic UTXO binding | RGB++ Protocol |
