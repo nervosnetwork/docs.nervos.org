@@ -1,7 +1,0 @@
-[
-  {
-    "name": "Something went wrong..",
-    "value": "outdated-version",
-    "description": "Init command is no longer used, Please upgrade offckb to newest version and check out the newest docs instead."
-  }
-]

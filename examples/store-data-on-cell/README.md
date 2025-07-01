@@ -1,40 +1,5 @@
-# Write & Read On-chain Message
+# Write & Read On-chain Data
 
-This is a simple Dapp example to show how to write and read data on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/store-data-on-cell) to understand how it works.
+This is a simple dApp example to show how to write and read data on the CKB blockchain. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/store-data-on-cell) to understand how it works and how to run it.
 
 This example is originally modified from [hello, CKB](https://github.com/cryptape/ckb-tutorial) by [@Flouse](https://github.com/Flouse).
-
-## How to run
-
-```sh
-git clone https://github.com/nervosnetwork/docs.nervos.org.git
-cd docs.nervos.org/examples/store-data-on-cell
-yarn && yarn start
-```
-
-### On Testnet
-
-```sh
-export NETWORK=testnet
-cd write-and-read-message
-yarn start 
-```
-
-### On Devnet
-
-Use a CLI tool [`offckb`](https://github.com/ckb-devrel/offckb) to start a CKB devnet:
-
-```sh
-npm install -g @offckb/cli
-
-# start the devnet
-offckb node 
-```
-
-start the app:
-
-```sh
-export NETWORK=devnet
-cd write-and-read-message
-yarn && yarn start
-```
