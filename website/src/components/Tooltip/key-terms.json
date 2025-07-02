@@ -875,6 +875,10 @@
     "content": "Abbreviation of Replace-by-Fee.",
     "link": "/docs/tech-explanation/glossary#rbf"
   },
+  "rgb++": {
+    "content": "A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings.",
+    "link": "/docs/tech-explanation/glossary#rgb++"
+  },
   "risc-v": {
     "content": "An open standard instruction set architecture (ISA) for general computing.",
     "link": "/docs/tech-explanation/glossary#risc-v"
@@ -997,7 +1001,7 @@
   },
   "xudt": {
     "content": "An extended UDT standard upon sUDT (Simple UDT) to accommodate additional functionalities, including regulatory compliance.",
-    "link": "/docs/tech-explanation/glossary#xudt"
+    "link": "/docs/tech-explanation/xudt"
   },
   "zk-snark": {
     "content": "A form of cryptographic proof, that when used in cryptocurrencies, allows for privacy features which do not reveal the amounts or participants in transactions.",

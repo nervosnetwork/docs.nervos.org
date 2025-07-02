@@ -347,6 +347,12 @@ ul.dropdown__menu {
   width: 1.125rem;
   height: 1.125rem;
 }
+.category-token-standards > div > a:before {
+  content: url("/svg/icon-sidebar-token.svg");
+  margin-right: 0.5rem;
+  width: 1.125rem;
+  height: 1.125rem;
+}
 .category-ecosystem > div > a:before {
   content: url("/svg/icon-sidebar-ecosystem.svg");
   margin-right: 0.5rem;
