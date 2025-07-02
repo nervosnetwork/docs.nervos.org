@@ -42,7 +42,7 @@ This article covers the following configuration topics:
 
 ## Node Discoverability
 
-Starting in [CKB v0.202.0](https://github.com/nervosnetwork/ckb/releases/tag/v0.202.0), a new `HolePunching` protocol is enabled by default in `support_protocols`.
+Starting in [CKB v0.202.0](https://github.com/nervosnetwork/ckb/releases/tag/v0.202.0), a new `HolePunching` protocol is enabled by default in `support_protocols`. We recommend keeping `HolePunching` enabled to improve node discoverability.
 
 ```bash title='ckb.toml'
 # Supported protocols list, only "Sync" and "Identify" are mandatory, others are optional
@@ -51,7 +51,7 @@ support_protocols = ["Ping", "Discovery", "Identify", "Feeler", "DisconnectMessa
 
 The `HolePunching` protocol helps nodes behind [NAT](https://en.wikipedia.org/wiki/Network_address_translation) become publicly accessible — significantly improving peer connectivity and making it easier to appear on tools like [Node Probe](https://nodes.ckb.dev/).
 
-- No manual configuration is needed if you're running **CKB v0.202.0 or later** — the protocol is already included by default in the `support_protocols` list.
+- No manual configuration is needed if you initialized your config with **CKB v0.202.0 or later** — the `HolePunching` protocol is already included by default in the `support_protocols` list.
 - If you're upgrading from an older version, make sure your `ckb.toml` includes `HolePunching` in the `support_protocols` list after replacing your binary.
 
 ## Light Client Support & WSS Access
