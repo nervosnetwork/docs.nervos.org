@@ -1,0 +1,70 @@
+---
+id: ccc-sol-lock
+title: CCC SOL Lock
+---
+
+# CCC SOL Lock
+
+CCC (Common Chains Connector) is a framework that enables interoperability between wallets from different blockchain ecosystems and Nervos CKB. It leverages CKB’s flexibility in cryptographic verification to validate signatures from external chains like BTC and ETH.
+
+This script allows CKB transactions to be signed with Solana wallets (which use the Ed25519 signature scheme) and verified directly on-chain. The script argument is a 20-byte hash of the Ed25519 public key, which can be derived from a base58-encoded Solana address.
+
+## How It Works
+
+[Detailed Overview](https://github.com/ckb-devrel/ccc-locks/blob/master/docs/overview.md)
+[Detailed documentation](https://github.com/ckb-devrel/ccc-locks/blob/master/docs/sol.md)
+
+### Lock Script Structure
+
+The CCC Solana lock script contains the following fields:
+
+- `code_hash`: The code hash of the CCC Solana lock script
+- `hash_type`: Typically `"type"`
+- `args`: A 20-byte Ed25519 public key hash, calculated as:
+
+  - `blake160(pubkey)` where `pubkey` is a 32-byte Ed25519 public key
+
+### Signature Format
+
+The `lock` field in `WitnessArgs` must contain 96 bytes of data:
+
+```
+<signature (64 bytes)> + <pubkey (32 bytes)>
+```
+
+- The signature must be created using the Ed25519 signing algorithm.
+- The public key's `blake160` hash must match the script argument (`args`).
+
+### Unlocking Process
+
+1. Construct the message as a raw string:
+
+```
+Signing a CKB transaction: 0x{sighash_all}
+
+IMPORTANT: Please verify the integrity and authenticity of connected Solana wallet before signing this message
+```
+
+> `{sighash_all}` is a 32-byte digest (in hex format, 64 characters) generated via `ckbhash` (Blake2b).
+
+2. Perform Ed25519 signature verification using:
+
+   - The 64-byte signature
+   - The 32-byte public key
+   - The raw message string above
+
+3. Separately, hash the public key using `blake160` and compare with the script `args`.
+
+If the signature verifies and the public key hash matches, the script passes.
+
+## Deployment
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x98870bb4f49768bbd5bcf48b7cd189ab8a2cf2649869715c00a5d3cedd9db86b` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0x3fae7df1db56ae21edfd98054995bbbf7331aaebad66c3e1632b84eb50904531` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

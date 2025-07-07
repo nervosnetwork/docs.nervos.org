@@ -1,0 +1,46 @@
+---
+id: type-burn-lock
+title: Type Burn Lock
+---
+
+# Type Burn Lock
+
+Purpose: Unlocks when a specific type script is burned (destroyed).
+
+## How it works:
+
+Takes a 32-byte type script hash as argument
+Can be unlocked only when the specified type script appears in inputs but NOT in outputs
+Ensures the type script is consumed/burned in the transaction
+
+### Arguments:
+
+args[0..32]: Hash of the type script that must be burned
+
+### Use cases:
+
+Token burning mechanisms
+Proof of destruction
+Conditional unlocking based on asset burning
+
+## Deployment
+
+- mainnet Lina
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xff78bae0abf17d7a404c0be0f9ad9c9185b3f88dcc60403453d5ba8e1f22f53a` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x10d63a996157d32c01078058000052674ca58d15f921bec7f1dcdac2160eb66b` |
+| `index`     | `0x5`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xff78bae0abf17d7a404c0be0f9ad9c9185b3f88dcc60403453d5ba8e1f22f53a` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb4f171c9c9caf7401f54a8e56225ae21d95032150a87a4678eac3f66a3137b93` |
+| `index`     | `0x5`                                                                |
+| `dep_type`  | `code`                                                               |

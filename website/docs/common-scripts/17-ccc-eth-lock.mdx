@@ -1,0 +1,72 @@
+---
+id: ccc-eth-lock
+title: CCC ETH Lock
+---
+
+# CCC ETH Lock
+
+CCC (Common Chains Connector) is a framework that enables interoperability between wallets from different blockchain ecosystems and Nervos CKB. It leverages CKB’s flexibility in cryptographic verification to validate signatures from external chains like BTC and ETH.
+
+The script uses Ethereum addresses as lock arguments, which are derived from secp256k1 public keys. It allows transactions on CKB to be signed and authorized using Ethereum-compatible wallets.
+
+## How It Works
+
+[Detailed Overview](https://github.com/ckb-devrel/ccc-locks/blob/master/docs/overview.md)
+[Detailed documentation](https://github.com/ckb-devrel/ccc-locks/blob/master/docs/eth.md)
+
+### Lock Script Structure
+
+The lock script has the following properties:
+
+- `code_hash`: The code hash of the deployed CCC Ethereum lock script
+- `hash_type`: Typically `"type"`
+- `args`: A 20-byte secp256k1 public key hash (Ethereum address), calculated as:
+
+  1. Apply Keccak hash on the uncompressed secp256k1 public key (64 bytes).
+  2. Take the last 20 bytes of the result. This is referred to as `keccak160`.
+
+---
+
+### Signature Format
+
+The `lock` field in `WitnessArgs` must contain a 65-byte secp256k1 signature:
+
+```
+<r (32 bytes)> <s (32 bytes)> <v (1 byte)>
+```
+
+- The `v` value must be either `27` or `28`. Any other value is rejected.
+- The recovery ID (`recId`) is computed as `v - 27`.
+
+---
+
+### Unlocking Process
+
+To validate the signature:
+
+1. Add a byte representing the length of the prefix string (25).
+2. Add the 25-byte string `"Ethereum Signed Message:\n"`.
+3. Add the message length as a 3-byte decimal string (e.g., `"155"`).
+4. Add the actual message body:
+
+```
+Signing a CKB transaction: 0x{sighash_all}
+
+IMPORTANT: Please verify the integrity and authenticity of connected Ethereum wallet before signing this message
+```
+
+> `{sighash_all}` is a 32-byte digest (in hex format) calculated using `ckbhash` (a blake2b variant).
+
+This complete message is hashed with Keccak. The resulting hash is used for secp256k1 signature verification. The signature and `recId` are used to recover the uncompressed public key. Then `keccak160` is applied to the recovered key and compared to the script `args`. If they match, the script validates successfully.
+
+## Deployment
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5b1983cf4242009f72e82b37fb6b36790e6d4858474046fc3c798e5142cf8835` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0x2e6a50a9ce96c7b9697ed0fd21bd0a736d3df5e62d25137f728d8354a36cb369` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

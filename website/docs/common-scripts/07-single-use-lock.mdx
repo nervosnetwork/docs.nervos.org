@@ -1,0 +1,46 @@
+---
+id: single-use-lock
+title: Single Use Lock
+---
+
+# Single Use Lock
+
+Purpose: Can only be unlocked by consuming a specific outpoint.
+
+## How it works:
+
+Takes an outpoint (36 bytes) as argument
+Can only be unlocked if the specified outpoint appears in transaction inputs
+Provides one-time unlock capability
+
+### Arguments:
+
+args[0..36]: The specific outpoint that must be consumed
+
+### Use cases:
+
+One-time payments
+Voucher systems
+Single-use authorizations
+
+## Deployment
+
+- mainnet Lina
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x8290467a512e5b9a6b816469b0edabba1f4ac474e28ffdd604c2a7c76446bbaf` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x10d63a996157d32c01078058000052674ca58d15f921bec7f1dcdac2160eb66b` |
+| `index`     | `0x4`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x8290467a512e5b9a6b816469b0edabba1f4ac474e28ffdd604c2a7c76446bbaf` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb4f171c9c9caf7401f54a8e56225ae21d95032150a87a4678eac3f66a3137b93` |
+| `index`     | `0x4`                                                                |
+| `dep_type`  | `code`                                                               |

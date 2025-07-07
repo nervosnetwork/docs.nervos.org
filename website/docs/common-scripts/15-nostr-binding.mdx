@@ -1,0 +1,42 @@
+---
+id: nostr-binding
+title: Nostr Binding
+---
+
+# Nostr Binding
+
+The **Nostr Binding Type Script** is a CKB type script that binds a Nostr event (off-chain message) to an on-chain CKB cell. It enables cryptographically verifiable links between content on the Nostr protocol and state on the Nervos blockchain. This can be used for authenticated publishing, identity binding, or cross-protocol integration. The binding is based on a fixed Nostr `event id` and Type ID, making it immutable once created.
+
+## How It Works
+
+[Detailed documentation](https://github.com/cryptape/nostr-binding/blob/main/docs/nostr-binding-type-script.md)
+
+When a cell using the Nostr Binding Type Script is created (minted), a corresponding NIP-01-compliant Nostr `event` must be included in the `WitnessArgs.output_type`. The script performs the following checks:
+
+1. The `event.id` must exactly match the 32-byte event ID in the script args.
+2. The event `tags` must include a `"ckb_global_unique_id"` tag, whose value matches the global unique ID in script args.
+3. The event must be properly signed: the `sig` must be a valid Schnorr signature over `event.id` using the given `pubkey`.
+
+After the initial binding is verified and created, future transfers or burns of the bound cell do not require the event again, as long as the type script remains unchanged. This design ensures strong authenticity at mint time with low overhead in subsequent transactions.
+
+## Deployment
+
+- mainnet Lina
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xb56ea08c4b10b454ed3389bb0e504ecfc57dcfe3089a5030654525a2def2108e` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0xa3a63292ce23600faa508f2b2762d1a41d520eb4dd582a2dc544424ce06c3870` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x4105801324b70b3a1508ded8958aba66a6faf68cab26f863b4902b50dfb8b9ab` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0x0e3949fa8afbbdf6d4abdda0d12ac1206c8d05dd51ec490b7341586291db85a6` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

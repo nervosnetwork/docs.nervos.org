@@ -1,0 +1,70 @@
+---
+id: secp256k1_blake160_multisig_all
+title: secp256k1_blake160_multisig_all
+---
+
+# secp256k1_blake160_multisig_all
+
+One of the CKB genesis scripts, [SECP256K1/multisig](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#multisig) ([Source Code](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_multisig_all.c), is a script which allows a group of users to sign a single transaction.
+
+This is a lock script that serves multiple purposes:
+
+- It provides a multiple signature verification solution
+- It provides a way to enforce lock period to a cell.
+
+## How It Works
+
+It uses a similar (but slightly different) way to prepare the signing message
+as the [single signing script](./secp256k1_blake160_sighash_all). What's different,
+is that the lock field of the first witness treated as WitnessArgs object, uses the
+following structure:
+
+multisig_script | Signature1 | Signature2 | ...
+
+Where the components are of the following format:
+
+multisig_script: S | R | M | N | PubKeyHash1 | PubKeyHash2 | ...
+
+|             | Description                        | Bytes |
+| ----------- | ---------------------------------- | ----- |
+| S           | reserved field, must be zero       | 1     |
+| R           | first nth public keys must match   | 1     |
+| M           | threshold                          | 1     |
+| N           | total public keys                  | 1     |
+| PubkeyHashN | blake160 hash of compressed pubkey | 20    |
+| SignatureN  | recoverable signature              | 65    |
+
+To preserve script size, this lock script also uses a scheme similar to Bitcoin's
+P2SH solution: the script args part only contains the blake160 hash of `multisig_script`
+part, this way no matter how many public keys we are including, and how many signatures
+we are testing, the lock script size remains a constant value. One implicit rule, is that
+`multisig_script` remains a constant since the hash is already fixed in script args part.
+
+First we will need to include a few headers here, for legacy reasons, this repository
+ships with those headers. We are now maintaining a new [repository](https:github.com/nervosnetwork/ckb-c-stdlib)
+with most of those headers included. If you are building a new script, we do recommend
+you to take a look at what's in the new repository, and use the code there directly.
+
+[Reference RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1multisig)
+
+## Deployment
+
+- mainnet Lina
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5c5069eb0857efc65e1bca0c07df34c31663b3622fd3876c876320fc9634e2a8` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0x71a7ba8fc96349fea0ed3a5c47992e3b4084b031a42264a018e0072e8172e46c` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `dep_group`                                                          |
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5c5069eb0857efc65e1bca0c07df34c31663b3622fd3876c876320fc9634e2a8` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0xf8de3bb47d055cdf460d93a2a6e1b05f7432f9777c8c474abf4eec1d4aee5d37` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `dep_group`                                                          |

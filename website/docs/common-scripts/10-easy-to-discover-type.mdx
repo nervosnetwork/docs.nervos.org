@@ -1,0 +1,46 @@
+---
+id: easy-to-discover-type
+title: Easy to Discover Type
+---
+
+# Easy to Discover Type
+
+Purpose: A type script that reveals cell data through its arguments.
+
+## How it works:
+
+Takes a 32-byte data hash as argument
+Validates that all output cells with this type script have data matching the hash
+Makes cell data discoverable through the type script arguments
+
+### Arguments:
+
+args[0..32]: Hash of the expected cell data
+
+### Use cases:
+
+Data integrity verification
+Making cell data easily discoverable
+Content addressing
+
+## Deployment
+
+- mainnet Lina
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xaba4430cc7110d699007095430a1faa72973edf2322ddbfd4d1d219cacf237af` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb0ed754fb27d67fd8388c97fed914fb7998eceaa01f3e6f967e498de1ba0ac9b` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xaba4430cc7110d699007095430a1faa72973edf2322ddbfd4d1d219cacf237af` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x1b4ffcad55ecd36ffb2715b6816b83da73851f1a24fe594f263c4f34dad90792` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

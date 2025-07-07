@@ -1,0 +1,48 @@
+---
+id: time-lock
+title: Time Lock
+---
+
+# Time Lock
+
+Purpose: Time-based lock with additional lock script verification.
+
+## How it works:
+
+Requires both time conditions and lock script presence
+Takes a lock script hash (32 bytes) and since value (8 bytes) as arguments
+Can only be unlocked after the specified since condition is met AND when the required lock script is present
+Uses CKB's since field mechanism for time/block-based constraints
+
+### Arguments:
+
+args[0..32]: Hash of the required lock script
+args[32..40]: Since value (8 bytes, little-endian) - can represent block number, epoch, or timestamp
+
+### Use cases:
+
+Vesting schedules
+Time-delayed payments
+Escrow with time conditions
+
+## Deployment
+
+- mainnet Lina
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x6fac4b2e89360a1e692efcddcb3a28656d8446549fb83da6d896db8b714f4451` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb0ed754fb27d67fd8388c97fed914fb7998eceaa01f3e6f967e498de1ba0ac9b` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- testnet Aggron
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x6fac4b2e89360a1e692efcddcb3a28656d8446549fb83da6d896db8b714f4451` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x1b4ffcad55ecd36ffb2715b6816b83da73851f1a24fe594f263c4f34dad90792` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `code`                                                               |
