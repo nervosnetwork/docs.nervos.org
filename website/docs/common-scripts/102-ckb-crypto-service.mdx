@@ -5,6 +5,21 @@ title: CKB Crypto Service
 
 # CKB Crypto Service
 
+ckb-crypto-service 是基于 CKB 多进程和 IPC 通信机制构建的加密算法服务，旨在为合约提供统一、安全、易用的加密能力接口。它摒弃传统将加密算法库直接集成进合约的方式，避免了语言兼容性差、依赖冲突和实现差异等常见问题。支持 Rust、C、JavaScript 等多种语言调用，大幅提升开发效率与安全性，是目前 CKB 合约中实现加密功能的首选基础设施。
+
+该服务提供如下算法支持：
+
+- Blake2b
+- SHA-256（SHA-2）
+- RIPEMD-160
+- Secp256k1
+- Schnorr
+- Ed25519
+
+## How It Works
+
+ckb-crypto-service 由 Rust 开发， 底层使用 [ckb-script-ipc](https://github.com/xujiandong/ckb-script-ipc)作为通讯库。具体可以参考
+
 ## Deployment
 
 None
