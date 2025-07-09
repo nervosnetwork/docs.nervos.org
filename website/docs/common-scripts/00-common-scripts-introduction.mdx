@@ -39,3 +39,9 @@ Developers can call them through the provided API.
 | ------------------------------------------ | -------------------------------------------------------------- | -------- | --------- | -------------------- |
 | [CKB Auth](./ckb-auth)                     | [ckb-auth](https://github.com/nervosnetwork/ckb-auth)          | C        | C/Rust    | Exec/Dynamic Library |
 | [CKB Crypto Service](./ckb-crypto-service) | [ckb-script-ipc](https://github.com/XuJiandong/ckb-script-ipc) | Rust     | C/Rust/JS | Spawn                |
+
+:::note
+Both **CKB Auth** and **CKB Crypto Service** offer signature verification capabilities, but they differ in how they operate. CKB Auth can directly verify signatures for a specific blockchain, while CKB Crypto Service provides only the underlying cryptographic algorithms.
+
+For example, to verify a CKB Secp256K1 signature, CKB Auth allows direct verification with a single call. In contrast, CKB Crypto Service requires reconstructing the public key, hashing it, and then comparing the resulting public key hash values.
+:::
