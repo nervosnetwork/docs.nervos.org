@@ -170,7 +170,7 @@ export default {
     },
     {
       type: "category",
-      label: "Production Scripts",
+      label: "Ecosystem Scripts",
       className: "category-common-scripts",
       collapsible: false,
       items: [
