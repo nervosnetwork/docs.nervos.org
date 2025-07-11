@@ -5,27 +5,26 @@ title: Time Lock
 
 # Time Lock
 
-Purpose: Time-based lock with additional lock script verification.
+[Time Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/time-lock) is a [Lock Script](/docs/tech-explanation/lock-script) that allows unlocking only after a specified time has passed and certain Lock Script hash is validated.
 
-Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+It is part of the[ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
 
 ## How It Works
 
-Requires both time conditions and lock script presence
-Takes a lock script hash (32 bytes) and since value (8 bytes) as arguments
-Can only be unlocked after the specified since condition is met AND when the required lock script is present
-Uses CKB's since field mechanism for time/block-based constraints
+- Takes a Lock Script hash (32 bytes) and `since` value (8 bytes) as arguments
 
-### Arguments:
-
-args[0..32]: Hash of the required lock script
+```text
+args[0..32]: Hash of the required Lock Script
 args[32..40]: Since value (8 bytes, little-endian) - can represent block number, epoch, or timestamp
+```
+
+- Passes validation only if the specified since condition (block number, epoch, timestamp) is satisfied AND the specified Lock Script appears in one of the transaction inputs.
 
 ### Use Cases
 
-Vesting schedules
-Time-delayed payments
-Escrow with time conditions
+- Vesting schedules
+- Time-delayed payments
+- Escrow with time conditions
 
 ## Deployment
 

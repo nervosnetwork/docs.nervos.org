@@ -5,25 +5,25 @@ title: Type Burn Lock
 
 # Type Burn Lock
 
-Purpose: Unlocks when a specific type script is burned (destroyed).
+[Type Burn Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/type-burn-lock) is a [Lock Script](/docs/tech-explanation/lock-script) that allows unlocking when a specific Type Script is burned (destroyed).
 
-Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
 
 ## How It Works
 
-Takes a 32-byte type script hash as argument
-Can be unlocked only when the specified type script appears in inputs but NOT in outputs
-Ensures the type script is consumed/burned in the transaction
+- Takes a 32-byte Type Script hash as argument
 
-### Arguments:
+```text
+args[0..32]: Hash of the Type Script that must be burned
+```
 
-args[0..32]: Hash of the type script that must be burned
+- Passes validation only if the specified Type Script appears in at least one input Cell AND does not appear in any output Cell.
 
 ### Use Cases
 
-Token burning mechanisms
-Proof of destruction
-Conditional unlocking based on asset burning
+- Token burning mechanisms
+- Proof of destruction
+- Conditional unlocking based on asset burning
 
 ## Deployment
 
