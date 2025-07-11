@@ -5,6 +5,12 @@ title: Introduction
 
 # Introduction
 
+This section provides a list of CKB scripts and related components that have been developed across various repositories. These scripts are often scattered and difficult to discover, especially for developers outside. This summary collects and organizes them in one place for easier access and understanding.
+
+:::danger Disclaimer
+The scripts listed in this document can directly affect the security of your assets. Some of them have not undergone comprehensive security audits and may contain unknown vulnerabilities. Please do not use them in production environments unless you fully understand how they work and have thoroughly tested them in a safe setting.
+:::
+
 ## Scripts
 
 | Script Name                                                      | Repository                                                                        | Language | Lock/Type Script | Description                                                               |
@@ -44,8 +50,4 @@ Developers can call them through the provided API.
 Both **CKB Auth** and **CKB Crypto Service** offer signature verification capabilities, but they differ in how they operate. CKB Auth can directly verify signatures for a specific blockchain, while CKB Crypto Service provides only the underlying cryptographic algorithms.
 
 For example, to verify a CKB Secp256K1 signature, CKB Auth allows direct verification with a single call. In contrast, CKB Crypto Service requires reconstructing the public key, hashing it, and then comparing the resulting public key hash values.
-:::
-
-:::danger Disclaimer
-The scripts listed in this document can directly affect the security of your assets. Some of them have not undergone comprehensive security audits and may contain unknown vulnerabilities. Please do not use them in production environments unless you fully understand how they work and have thoroughly tested them in a safe setting.
 :::
