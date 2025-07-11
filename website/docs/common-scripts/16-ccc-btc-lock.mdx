@@ -7,7 +7,7 @@ title: CCC BTC Lock
 
 CCC (Common Chains Connector) is a framework that enables interoperability between wallets from different blockchain ecosystems and Nervos CKB. It leverages CKB’s flexibility in cryptographic verification to validate signatures from external chains like BTC and ETH.
 
-**CCC BTC Lock** is a specific implementation of the CCC framework that allows CKB transactions to be unlocked using signatures from Bitcoin wallets. It follows common CCC lock design principles and adapts them for Bitcoin’s secp256k1 key system and address formats. This lock script supports Bitcoin-style public key hashes and addresses, allowing seamless interaction between CKB and BTC wallet infrastructures.
+**CCC BTC Lock** is a specific implementation of the CCC framework that allows CKB transactions to be unlocked using signatures from Bitcoin wallets. It follows common CCC lock design principles and adapts them for Bitcoin’s secp256k1 key system and address formats. This [Lock Script](/docs/tech-explanation/lock-script) supports Bitcoin-style public key hashes and addresses, allowing seamless interaction between CKB and BTC wallet infrastructures.
 
 ## How It Works
 
@@ -73,7 +73,7 @@ The witness must be a valid `WitnessArgs` structure. In its `lock` field, it mus
 
 ## Deployment
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

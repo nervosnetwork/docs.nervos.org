@@ -7,7 +7,7 @@ title: CCC ETH Lock
 
 CCC (Common Chains Connector) is a framework that enables interoperability between wallets from different blockchain ecosystems and Nervos CKB. It leverages CKB’s flexibility in cryptographic verification to validate signatures from external chains like BTC and ETH.
 
-The script uses Ethereum addresses as lock arguments, which are derived from secp256k1 public keys. It allows transactions on CKB to be signed and authorized using Ethereum-compatible wallets.
+**CCC ETH Lock** uses Ethereum addresses as the lock arguments, which are derived from secp256k1 public keys. It allows transactions on CKB to be signed and authorized using Ethereum-compatible wallets.
 
 ## How It Works
 
@@ -17,7 +17,7 @@ The script uses Ethereum addresses as lock arguments, which are derived from sec
 
 ### Lock Script Structure
 
-The lock script has the following properties:
+The Lock Script has the following properties:
 
 - `code_hash`: The code hash of the deployed CCC Ethereum lock script
 - `hash_type`: Typically `"type"`
@@ -58,11 +58,11 @@ IMPORTANT: Please verify the integrity and authenticity of connected Ethereum wa
 
 > `{sighash_all}` is a 32-byte digest (in hex format) calculated using `ckbhash` (a blake2b variant).
 
-This complete message is hashed with Keccak. The resulting hash is used for secp256k1 signature verification. The signature and `recId` are used to recover the uncompressed public key. Then `keccak160` is applied to the recovered key and compared to the script `args`. If they match, the script validates successfully.
+This complete message is hashed with Keccak. The resulting hash is used for secp256k1 signature verification. The signature and `recId` are used to recover the uncompressed public key. Then `keccak160` is applied to the recovered key and compared to the script `args`. If they match, the Script validates successfully.
 
 ## Deployment
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

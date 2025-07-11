@@ -5,29 +5,31 @@ title: Easy to Discover Type
 
 # Easy to Discover Type
 
-Purpose: A type script that reveals cell data through its arguments.
+[Easy to Discover Type](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/easy-to-discover-type) is a [Type Script](/docs/tech-explanation/type-script) that reveals and enforces specific Cell data via its arguments.
 
-Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
 
-## How it works:
+## How It Works
 
-Takes a 32-byte data hash as argument
-Validates that all output cells with this type script have data matching the hash
-Makes cell data discoverable through the type script arguments
+This Script validates output Cell data against a predefined hash. The process works as follows:
 
-### Arguments:
+- Takes a 32-byte data hash as an argument
 
+```text
 args[0..32]: Hash of the expected cell data
+```
 
-### Use cases:
+- Passes validation if all output Cells with this Type Script contain data that matches the provided hash.
 
-Data integrity verification
-Making cell data easily discoverable
-Content addressing
+### Use Cases
+
+- Data integrity verification
+- Making cell data easily discoverable
+- Content addressing
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -37,7 +39,7 @@ Content addressing
 | `index`     | `0x0`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

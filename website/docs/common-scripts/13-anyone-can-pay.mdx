@@ -5,31 +5,31 @@ title: Anyone Can Pay
 
 # Anyone Can Pay
 
-The Anyone-Can-Pay is a lock script that enables users to send any amount of CKB or Simple UDT to a cell without the traditional minimum 61 CKBytes requirement. It is particularly useful for small-value token transfers and introduces optional minimum transfer thresholds to mitigate potential DDoS attacks from spam micro-transactions.
+The [Anyone-Can-Pay](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0026-anyone-can-pay/0026-anyone-can-pay.md) is a [Lock Script](/docs/tech-explanation/lock-script) that enables users to send any amount of CKB or sUDT to a Cell without the traditional [minimum 61 CKBytes](/docs/tech-explanation/capacity#capacity-mini) requirement. It is particularly useful for small-value token transfers and introduces optional minimum transfer thresholds to mitigate potential DDoS attacks from spam micro-transactions.
 
 ## How It Works
 
-The Anyone-Can-Pay lock script extends the default `secp256k1-blake2b-sighash-all` lock and supports two unlocking modes:
+The Anyone-Can-Pay Lock Script extends the default `secp256k1-blake2b-sighash-all` lock and supports two unlocking modes:
 
-1. **Signature-based Unlocking**:
-   If a valid signature matching the lock’s public key hash is provided, the cell behaves like a normal one and can be spent freely by the owner.
+1. **Signature-Based Unlocking**:
+   If a valid signature matching the lock’s public key hash is provided, the Cell behaves like a normal one and can be spent freely by the owner.
 
-2. **Non-signature Unlocking (Anyone Can Pay)**:
+2. **Non-Signature Unlocking (Anyone Can Pay)**:
    If no signature is provided, the lock allows anyone to add CKB or UDT to the cell, subject to strict validation rules:
 
-   - Only one input and one output cell are allowed per unique lock + type script pair.
-   - The CKB and UDT in the output must not be less than in the input.
+   - Only one input and one output Cell are allowed per unique Lock + Type Script pair.
+   - The CKB and UDT in the output must not be less than those in the input.
    - Optional minimum thresholds (e.g., `10^x` shannons or UDT base units) must be met if specified.
-   - Cells with type scripts must follow the Simple UDT format (≥16 bytes of data).
-   - Prevents unauthorized merging or splitting of Anyone-Can-Pay cells to avoid storage bloat and fee inefficiencies.
+   - Cells with Type Scripts must follow the sUDT format (≥16 bytes of data).
+   - Prevents unauthorized merging or splitting of Anyone-Can-Pay Cells to avoid storage bloat and fee inefficiencies.
 
-The lock script uses an argument format like `<public key hash> <CKByte minimum> <UDT minimum>`, allowing the cell owner to configure minimum acceptable deposits. This design offers a secure, flexible way to support micro-transactions on CKB without overburdening the network.
+The Lock Script uses an argument format like `<public key hash> <CKByte minimum> <UDT minimum>`, allowing the Cell owner to configure minimum acceptable deposits. This design offers a secure, flexible way to support micro-transactions on CKB without overburdening the network.
 
 [Reference RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0026-anyone-can-pay/0026-anyone-can-pay.md)
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -39,7 +39,7 @@ The lock script uses an argument format like `<public key hash> <CKByte minimum>
 | `index`     | `0x0`                                                                |
 | `dep_type`  | `dep_group`                                                          |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

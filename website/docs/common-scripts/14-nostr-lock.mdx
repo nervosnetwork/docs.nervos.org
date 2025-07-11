@@ -5,18 +5,26 @@ title: Nostr Lock
 
 # Nostr Lock
 
-The Nostr lock script is designed for interoperability with
-[Nostr](https://nostr.com/). It includes built-in support for verifying
-transaction signing methods used by Nostr. Additionally, it can support
-proof-of-work mechanics from Nostr to ensure a fair launch.
+Nostr lock is a [Lock Script](/docs/tech-explanation) designed for interoperability with the
+
+[Nostr protocol](https://nostr.com/). It uses Nostr events as witnesses to unlock CKB transactions. It is designed to improve user experience and simplify the development of Nostr-based dApps on CKB.
 
 ## How It Works
 
-[Detailed documentation](https://github.com/cryptape/nostr-binding/blob/main/docs/nostr-lock-script.md)
+### Script Structure
 
-Nostr lock uses a script argument where the first byte indicates the **PoW difficulty**. Depending on its value, the unlocking method differs:
+```json
+{
+    hash_type: "data2"
+    code_hash: "<NOSTR_LOCK_DATA_HASH>"
+    args: "<PoW difficulty, 1 byte> <schnorr pubkey hash, 20 bytes>"
+}
+```
 
-## Unlocking
+- If PoW difficulty = 0: Unlocking is done via public key signature verifaction
+- If PoW difficulty ≠ 0: The public key hash is not used and should be all zero, and another unlock method, [NIP-13](https://github.com/nostr-protocol/nips/blob/master/13.md), is used
+
+### Unlocking
 
 There are 2 methods to unlock nostr lock script: by key(PoW difficulty is zero)
 or by PoW difficulty(PoW difficulty is non-zero).
@@ -118,7 +126,7 @@ When the rules above(1,2,3,8,9) are met, the validation is successful.
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -128,7 +136,7 @@ When the rules above(1,2,3,8,9) are met, the validation is successful.
 | `index`     | `0x0`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

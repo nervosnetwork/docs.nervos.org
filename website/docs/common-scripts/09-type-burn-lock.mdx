@@ -9,7 +9,7 @@ Purpose: Unlocks when a specific type script is burned (destroyed).
 
 Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
 
-## How it works:
+## How It Works
 
 Takes a 32-byte type script hash as argument
 Can be unlocked only when the specified type script appears in inputs but NOT in outputs
@@ -19,7 +19,7 @@ Ensures the type script is consumed/burned in the transaction
 
 args[0..32]: Hash of the type script that must be burned
 
-### Use cases:
+### Use Cases
 
 Token burning mechanisms
 Proof of destruction
@@ -27,7 +27,7 @@ Conditional unlocking based on asset burning
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -37,7 +37,7 @@ Conditional unlocking based on asset burning
 | `index`     | `0x5`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

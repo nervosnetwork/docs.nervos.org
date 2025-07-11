@@ -5,29 +5,29 @@ title: Output Type Proxy Lock
 
 # Output Type Proxy Lock
 
-Purpose: Unlocks when a specific type script appears in transaction outputs.
+[Output Type Proxy Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/output-type-proxy-lock) is a [Lock Script](/docs/tech-explanation/lock-script) that allows unlocking when a specific Type Script appears in transaction outputs.
 
-Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
 
-## How it works:
+## How It Works
 
-Takes a 32-byte type script hash as argument
-Can be unlocked if any output cell has the specified type script
-Useful for ensuring certain assets are created in the transaction
+- Takes a 32-byte Type Script hash as an argument
 
-### Arguments:
-
+```text
 args[0..32]: Hash of the required output type script
+```
 
-### Use cases:
+- Passes validation if any output Cell has the specified Type Script. This makes it useful for enforcing asset creation rules or conditional logic tied to transaction outputs.
 
-Ensuring token minting
-Conditional payments
-Asset creation requirements
+### Use Cases
+
+- Ensuring token minting
+- Conditional payments
+- Asset creation requirements
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -37,7 +37,7 @@ Asset creation requirements
 | `index`     | `0x2`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

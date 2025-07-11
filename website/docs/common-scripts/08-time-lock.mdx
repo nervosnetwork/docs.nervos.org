@@ -9,7 +9,7 @@ Purpose: Time-based lock with additional lock script verification.
 
 Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
 
-## How it works:
+## How It Works
 
 Requires both time conditions and lock script presence
 Takes a lock script hash (32 bytes) and since value (8 bytes) as arguments
@@ -21,7 +21,7 @@ Uses CKB's since field mechanism for time/block-based constraints
 args[0..32]: Hash of the required lock script
 args[32..40]: Since value (8 bytes, little-endian) - can represent block number, epoch, or timestamp
 
-### Use cases:
+### Use Cases
 
 Vesting schedules
 Time-delayed payments
@@ -29,7 +29,7 @@ Escrow with time conditions
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -39,7 +39,7 @@ Escrow with time conditions
 | `index`     | `0x1`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

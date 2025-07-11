@@ -7,7 +7,7 @@ title: CCC SOL Lock
 
 CCC (Common Chains Connector) is a framework that enables interoperability between wallets from different blockchain ecosystems and Nervos CKB. It leverages CKB’s flexibility in cryptographic verification to validate signatures from external chains like BTC and ETH.
 
-This script allows CKB transactions to be signed with Solana wallets (which use the Ed25519 signature scheme) and verified directly on-chain. The script argument is a 20-byte hash of the Ed25519 public key, which can be derived from a base58-encoded Solana address.
+This Script allows CKB transactions to be signed with Solana wallets (which use the Ed25519 signature scheme) and verified directly on-chain. The script argument is a 20-byte hash of the Ed25519 public key, which can be derived from a base58-encoded Solana address.
 
 ## How It Works
 
@@ -17,7 +17,7 @@ This script allows CKB transactions to be signed with Solana wallets (which use 
 
 ### Lock Script Structure
 
-The CCC Solana lock script contains the following fields:
+The CCC Solana Lock Script contains the following fields:
 
 - `code_hash`: The code hash of the CCC Solana lock script
 - `hash_type`: Typically `"type"`
@@ -56,11 +56,11 @@ IMPORTANT: Please verify the integrity and authenticity of connected Solana wall
 
 3. Separately, hash the public key using `blake160` and compare with the script `args`.
 
-If the signature verifies and the public key hash matches, the script passes.
+If the signature verifies and the public key hash matches, the Script passes.
 
 ## Deployment
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

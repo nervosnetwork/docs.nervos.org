@@ -5,23 +5,23 @@ title: Nostr Binding
 
 # Nostr Binding
 
-The **Nostr Binding Type Script** is a CKB type script that binds a Nostr event (off-chain message) to an on-chain CKB cell. It enables cryptographically verifiable links between content on the Nostr protocol and state on the Nervos blockchain. This can be used for authenticated publishing, identity binding, or cross-protocol integration. The binding is based on a fixed Nostr `event id` and Type ID, making it immutable once created.
+The **Nostr Binding** is [Type Script](/docs/tech-explanation/type-script) on CKB that binds a Nostr event (off-chain message) to an on-chain CKB Cell. It enables cryptographically verifiable links between content on the Nostr protocol and state on the Nervos blockchain. This can be used for authenticated publishing, identity binding, or cross-protocol integration. The binding is based on a fixed Nostr `event id` and Type ID, making it immutable once created.
 
 ## How It Works
 
 [Detailed documentation](https://github.com/cryptape/nostr-binding/blob/main/docs/nostr-binding-type-script.md)
 
-When a cell using the Nostr Binding Type Script is created (minted), a corresponding NIP-01-compliant Nostr `event` must be included in the `WitnessArgs.output_type`. The script performs the following checks:
+When a Cell using the Nostr Binding Type Script is created (minted), a corresponding NIP-01-compliant Nostr `event` must be included in the `WitnessArgs.output_type`. The Script performs the following checks:
 
-1. The `event.id` must exactly match the 32-byte event ID in the script args.
-2. The event `tags` must include a `"ckb_global_unique_id"` tag, whose value matches the global unique ID in script args.
+1. The `event.id` must exactly match the 32-byte event ID in the Script's `args`.
+2. The event `tags` must include a `"ckb_global_unique_id"` tag, whose value matches the global unique ID in Script's `args`.
 3. The event must be properly signed: the `sig` must be a valid Schnorr signature over `event.id` using the given `pubkey`.
 
 After the initial binding is verified and created, future transfers or burns of the bound cell do not require the event again, as long as the type script remains unchanged. This design ensures strong authenticity at mint time with low overhead in subsequent transactions.
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -31,7 +31,7 @@ After the initial binding is verified and created, future transfers or burns of 
 | `index`     | `0x0`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

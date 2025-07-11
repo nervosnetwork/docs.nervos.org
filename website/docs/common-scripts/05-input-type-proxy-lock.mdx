@@ -5,29 +5,29 @@ title: Input Type Proxy Lock
 
 # Input Type Proxy Lock
 
-Purpose: Unlocks when a specific type script appears in transaction inputs.
+[Input Type Proxy Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/input-type-proxy-lock) is a Lock Script that allows unlocking when a specific [Type Script](/docs/tech-explanation/type-script) appears in transaction inputs.
 
-Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
 
-## How it works:
+## How It Works
 
-Takes a 32-byte type script hash as argument
-Can be unlocked if any input cell has the specified type script
-Enables type-script-based authorization
+- Takes a 32-byte Type Script hash as an argument
 
-### Arguments:
+```text
+args[0..32]: Hash of the required input Type Script
+```
 
-args[0..32]: Hash of the required input type script
+- Passes validation if any input Cell in the transaction contains the specified Type Script. This enables more flexible authorization patterns based on Type Script presence.
 
-### Use cases:
+### Use Cases
 
-Token-gated access
-NFT-based permissions
-Conditional unlocking based on asset ownership
+- Token-gated access
+- NFT-based permissions
+- Conditional unlocking based on asset ownership
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -37,7 +37,7 @@ Conditional unlocking based on asset ownership
 | `index`     | `0x1`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

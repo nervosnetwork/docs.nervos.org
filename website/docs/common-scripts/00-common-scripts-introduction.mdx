@@ -3,11 +3,11 @@ id: introduction
 title: Introduction
 ---
 
-# Common Scripts: Introduction
+# Introduction
 
-## Contracts
+## Scripts
 
-| Script Name                                                      | Repositorie                                                                       | Language | Lock/Type Script | Description                                                               |
+| Script Name                                                      | Repository                                                                        | Language | Lock/Type Script | Description                                                               |
 | ---------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------- | ---------------- | ------------------------------------------------------------------------- |
 | [secp256k1_blake160_sighash](./secp256k1_blake160_sighash_all)   | [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts)         | C        | Lock             | Default single-signature lock script on CKB                               |
 | [secp256k1_blake160_multisig](./secp256k1_blake160_multisig_all) | [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts)         | C        | Lock             | Default multisig lock script on CKB                                       |
@@ -32,10 +32,10 @@ title: Introduction
 
 ## Library
 
-Although the following are compiled into executable files (Run in CKB-VM), they cannot be executed as a single contract.
+Although the following are compiled into executable files (Run in CKB-VM), they cannot be executed as a standalone Script.
 Developers can call them through the provided API.
 
-| Script Name                                | Repositorie                                                    | Language | API       | Calling method       |
+| Script Name                                | Repository                                                     | Language | API       | Calling method       |
 | ------------------------------------------ | -------------------------------------------------------------- | -------- | --------- | -------------------- |
 | [CKB Auth](./ckb-auth)                     | [ckb-auth](https://github.com/nervosnetwork/ckb-auth)          | C        | C/Rust    | Exec/Dynamic Library |
 | [CKB Crypto Service](./ckb-crypto-service) | [ckb-script-ipc](https://github.com/XuJiandong/ckb-script-ipc) | Rust     | C/Rust/JS | Spawn                |

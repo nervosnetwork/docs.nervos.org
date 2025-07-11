@@ -5,24 +5,24 @@ title: secp256k1_blake160_sighash_all
 
 # secp256k1_blake160_sighash_all
 
-One of the CKB genesis scripts, [SECP256K1/blake160](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#p2ph) ([Source Code](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_sighash_all.c)), is the default lock script used to verify transaction signatures on the CKB blockchain.
+One of the CKB genesis Scripts, [SECP256K1/blake160](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#p2ph) ([Source Code](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/secp256k1_blake160_sighash_all.c)), is the default [Lock Script](/docs/tech-explanation/lock-script) used to verify transaction signatures on the CKB blockchain.
 
 ## How It Works
 
-This script uses the secp256k1 signature algorithm. The verification process includes:
+This Script uses the secp256k1 signature algorithm. The verification process includes:
 
 - Extracting the public key hash from the `args` field.
 - Constructing the signing message by hashing the `tx_hash` and the `witnesses`.
 - Reading the signature data from the lock witness.
 - Recovering the public key using `secp256k1_ecdsa_recover`.
-- Hashing the recovered public key using CKBBlake2b algorithm, then taking the first 20 bytes.
+- Hashing the recovered public key using CKB's Blake2b algorithm, then taking the first 20 bytes.
 - Comparing the recovered public key hash to the one provided in `args`.
 
 [Reference RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-genesis-script-list/0024-ckb-genesis-script-list.md#secp256k1blake160)
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -32,7 +32,7 @@ This script uses the secp256k1 signature algorithm. The verification process inc
 | `index`     | `0x0`                                                                |
 | `dep_type`  | `dep_group`                                                          |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

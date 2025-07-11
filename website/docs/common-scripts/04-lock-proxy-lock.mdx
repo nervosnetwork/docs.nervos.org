@@ -5,29 +5,31 @@ title: Lock Proxy Lock
 
 # Lock Proxy Lock
 
-Delegates unlocking authority to another lock script.
+[Lock Proxy Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/lock-proxy-lock) is a [Lock Script](/docs/tech-explanation/lock-script) that delegates unlocking authority to another Lock Script.
 
-Part of [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
 
-## How it works:
+## How It Works
 
-Takes a 32-byte lock script hash as argument
-Can be unlocked if any input cell uses the specified lock script
-Useful for creating hierarchical permission systems
+This Script allows indirect unlocking through delegation. The validation process works as follows:
 
-### Arguments:
+- Takes a 32-byte Lock Script hash as an argument
 
-args[0..32]: Hash of the owner lock script
+```text
+args[0...32]:  Blake2b hash of the delegated Lock Script
+```
 
-### Use cases:
+- Passes validation if any input Cell in the transaction uses a Lock Script matching the provided hash. (Useful for creating hierarchical permission systems)
 
-Multi-signature wallets
-Delegated authority systems
-Hierarchical access control
+### Use Cases
+
+- Multi-signature wallets
+- Delegated authority systems (e.g., one lock can authorize others without sharing keys or signatures)
+- Hierarchical access control
 
 ## Deployment
 
-- mainnet Lina
+- Mainnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |
@@ -37,7 +39,7 @@ Hierarchical access control
 | `index`     | `0x3`                                                                |
 | `dep_type`  | `code`                                                               |
 
-- testnet Aggron
+- Testnet
 
 | parameter   | value                                                                |
 | ----------- | -------------------------------------------------------------------- |

@@ -177,8 +177,8 @@ export default {
         "common-scripts/introduction",
         {
           type: "category",
-          label: "Contracts",
-          className: "contracts",
+          label: "Scripts",
+          className: "scripts",
           collapsible: true,
           collapsed: true,
           items: [
