@@ -305,7 +305,7 @@ ul.dropdown__menu {
   width: 1.125rem;
   height: 1.125rem;
 }
-.category-common-scripts > div > a:before {
+.category-ecosystem-scripts > div > a:before {
   content: url("/svg/icon-sidebar-common-script.svg");
   margin-right: 0.5rem;
   width: 1.125rem;
