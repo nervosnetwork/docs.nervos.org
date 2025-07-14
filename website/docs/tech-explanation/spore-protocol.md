@@ -83,5 +83,5 @@ This opens doors for NFT-style use cases with fully on-chain art.
 ## Additional Resources
 
 - [DApp Tutorial: Create a DOB using Spore Protocol](/docs/dapp/create-dob)
-- [How Spore Protocol Works](/docs/common-scripts/spore-protocol)
+- [How Spore Protocol Works](/docs/ecosystem-scripts/spore-protocol)
 - [Spore Docs](https://docs.spore.pro)

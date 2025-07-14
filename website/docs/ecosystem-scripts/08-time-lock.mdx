@@ -1,0 +1,49 @@
+---
+id: time-lock
+title: Time Lock
+---
+
+# Time Lock
+
+[Time Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/time-lock) is a [Lock Script](/docs/tech-explanation/lock-script) that allows unlocking only after a specified time has passed and certain Lock Script hash is validated.
+
+It is part of the[ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
+
+## How It Works
+
+- Takes a Lock Script hash (32 bytes) and `since` value (8 bytes) as arguments
+
+```text
+args[0..32]: Hash of the required Lock Script
+args[32..40]: Since value (8 bytes, little-endian) - can represent block number, epoch, or timestamp
+```
+
+- Passes validation only if the specified since condition (block number, epoch, timestamp) is satisfied AND the specified Lock Script appears in one of the transaction inputs.
+
+### Use Cases
+
+- Vesting schedules
+- Time-delayed payments
+- Escrow with time conditions
+
+## Deployment
+
+- Mainnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x6fac4b2e89360a1e692efcddcb3a28656d8446549fb83da6d896db8b714f4451` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb0ed754fb27d67fd8388c97fed914fb7998eceaa01f3e6f967e498de1ba0ac9b` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x6fac4b2e89360a1e692efcddcb3a28656d8446549fb83da6d896db8b714f4451` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x1b4ffcad55ecd36ffb2715b6816b83da73851f1a24fe594f263c4f34dad90792` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `code`                                                               |

@@ -261,7 +261,7 @@ const config = {
           to: "/docs/script/intro-to-script",
           label: "Scripts (Smart Contracts)",
           position: "left",
-          activeBaseRegex: "/(script|common-scripts|script-course)/",
+          activeBaseRegex: "/(script|ecosystem-scripts|script-course)/",
         },
         {
           to: "/docs/tech-explanation/nervos-blockchain",

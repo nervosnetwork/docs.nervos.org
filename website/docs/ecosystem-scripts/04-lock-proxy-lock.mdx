@@ -1,0 +1,50 @@
+---
+id: lock-proxy-lock
+title: Lock Proxy Lock
+---
+
+# Lock Proxy Lock
+
+[Lock Proxy Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/lock-proxy-lock) is a [Lock Script](/docs/tech-explanation/lock-script) that delegates unlocking authority to another Lock Script.
+
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)
+
+## How It Works
+
+This Script allows indirect unlocking through delegation. The validation process works as follows:
+
+- Takes a 32-byte Lock Script hash as an argument
+
+```text
+args[0...32]:  Blake2b hash of the delegated Lock Script
+```
+
+- Passes validation if any input Cell in the transaction uses a Lock Script matching the provided hash. (Useful for creating hierarchical permission systems)
+
+### Use Cases
+
+- Multi-signature wallets
+- Delegated authority systems (e.g., one lock can authorize others without sharing keys or signatures)
+- Hierarchical access control
+
+## Deployment
+
+- Mainnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5d41e32e224c15f152b7e6529100ebeac83b162f5f692a5365774dad2c1a1d02` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x10d63a996157d32c01078058000052674ca58d15f921bec7f1dcdac2160eb66b` |
+| `index`     | `0x3`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5d41e32e224c15f152b7e6529100ebeac83b162f5f692a5365774dad2c1a1d02` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb4f171c9c9caf7401f54a8e56225ae21d95032150a87a4678eac3f66a3137b93` |
+| `index`     | `0x3`                                                                |
+| `dep_type`  | `code`                                                               |

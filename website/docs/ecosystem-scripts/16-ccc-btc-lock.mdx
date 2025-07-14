@@ -1,0 +1,84 @@
+---
+id: ccc-btc-lock
+title: CCC BTC Lock
+---
+
+# CCC BTC Lock
+
+CCC (Common Chains Connector) is a framework that enables interoperability between wallets from different blockchain ecosystems and Nervos CKB. It leverages CKB’s flexibility in cryptographic verification to validate signatures from external chains like BTC and ETH.
+
+**CCC BTC Lock** is a specific implementation of the CCC framework that allows CKB transactions to be unlocked using signatures from Bitcoin wallets. It follows common CCC lock design principles and adapts them for Bitcoin’s secp256k1 key system and address formats. This [Lock Script](/docs/tech-explanation/lock-script) supports Bitcoin-style public key hashes and addresses, allowing seamless interaction between CKB and BTC wallet infrastructures.
+
+## How It Works
+
+[Detailed Overview](https://github.com/ckb-devrel/ccc-locks/blob/master/docs/overview.md)
+
+[Detailed documentation](https://github.com/ckb-devrel/ccc-locks/blob/master/docs/btc.md)
+
+### Lock Script Structure
+
+A CCC BTC lock script has the following properties:
+
+- `code_hash`: The hash of the deployed CCC BTC lock script code
+- `hash_type`: Usually `"type"`
+- `args`: A 20-byte secp256k1 public key hash, calculated as
+  `RIPEMD-160(SHA-256(compressed_pubkey))`
+
+Supported Bitcoin address types:
+
+- P2PKH (decoded from base58)
+- P2WPKH (decoded from bech32 or bech32m)
+
+---
+
+### Unlocking Process
+
+To unlock a cell with a CCC BTC lock, the following process is performed:
+
+#### 1. Message Construction
+
+A signing message is created using double SHA-256 over the following structure:
+
+```
+0x18                           # Length of the string "Bitcoin Signed Message:\n"
+"Bitcoin Signed Message:\n"
+<length_of_message_string>     # 1 byte
+"Signing a CKB transaction: 0x{sighash_all}\n\nIMPORTANT: Please verify the integrity and authenticity of connected BTC wallet before signing this message"
+```
+
+- `{sighash_all}` is a 32-byte digest calculated via the `ckbhash` function, which uses blake2b.
+- The resulting hash is the message to be signed.
+
+#### 2. Witness and Signature Format
+
+The witness must be a valid `WitnessArgs` structure. In its `lock` field, it must contain a 65-byte secp256k1 signature formatted as:
+
+```
+<recId (1 byte)> <r (32 bytes)> <s (32 bytes)>
+```
+
+- `recId` is derived from the `header` byte in BIP 137 and can be:
+
+  - `0~3`
+  - `27~30` (for P2PKH)
+  - `39~42` (for P2WPKH)
+
+- These values are normalized to `0~3` for public key recovery.
+
+#### 3. Verification
+
+- The signature and `recId` are used to recover the compressed secp256k1 public key.
+- This public key is hashed with SHA-256 and then RIPEMD-160.
+- If the resulting 20-byte hash matches the `args` in the lock script, the script passes and the transaction is validated.
+
+## Deployment
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x8f026d6113b24800e04bfb33703f98dfaa6db6719097ab5d3050db9cf4fec45e` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0xba5a1a77019be0e8942119ad549f01ca3c61fd9f911aa46e27d508a802236614` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

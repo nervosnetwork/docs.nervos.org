@@ -1,0 +1,38 @@
+---
+id: nervos-dao
+title: Nervos Dao
+---
+
+# Nervos Dao
+
+One of the CKB genesis Scripts, [Nervos DAO](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md) ([Source Code](https://github.com/nervosnetwork/ckb-system-scripts/blob/master/c/dao.c)), implements Nervos DAO.
+
+It allows users to lock their CKB tokens to earn proportional compensation over time, protecting their holdings from dilution caused by [secondary issuance](/docs/tech-explanation/glossary#secondary-issuance).
+
+## How It Works
+
+When users deposit CKB into the Nervos DAO, their tokens are locked for a minimum period (measured in epochs). During this time, they earn compensation based on the proportion of their locked CKB relative to the total supply, offsetting dilution from secondary issuance. The withdrawal process involves two steps: first, converting the deposit into a "withdrawing" state (which locks in the duration and reward rate), and second, unlocking the funds after the required time has passed. The longer the tokens stay locked, the more compensation they accumulate.
+
+[Reference RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0023-dao-deposit-withdraw/0023-dao-deposit-withdraw.md)
+
+## Deployment
+
+- Mainnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0xe2fb199810d49a4d8beec56718ba2593b665db9d52299a0f9e6e75416d73ff5c` |
+| `index`     | `0x2`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x82d76d1b75fe2fd9a27dfbaa65a039221a380d76c926f378d3f81cf3e7e13f2e` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0x8f8c79eb6671709633fe6a46de93c0fedc9c1b8a6527a18d3983879542635c9f` |
+| `index`     | `0x2`                                                                |
+| `dep_type`  | `code`                                                               |
