@@ -754,6 +754,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "crypto-service-hash"
+version = "0.1.0"
+dependencies = [
+ "ckb-script-ipc",
+ "ckb-script-ipc-common",
+ "ckb-std",
+ "serde",
+]
+
+[[package]]
 name = "cty"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
