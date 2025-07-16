@@ -25,7 +25,7 @@ A [Type ID](#type-id) is one common pattern for managing upgradeable code safely
 
 ## Data Hash
 
-When `hash_type` is `"data"` (or `"data1"`, `"data2"`), the Script locates a code Cell by matching the Blake2b hash of the Cell’s data against the Script’s `code_hash`. This means the Script expects the exact binary content of the code to be present in one of the transaction’s `cell_deps`.
+When `hash_type` is `data` (or `data1`, `data2`), the Script locates a code Cell by matching the Blake2b hash of the Cell’s data against the Script’s `code_hash`. This means the Script expects the exact binary content of the code to be present in one of the transaction’s `cell_deps`.
 
 Since only `cell_deps` are scanned for matching code when using `data`-type references, the scope is limited to Cells explicitly included in the transaction. This ensures deterministic behavior and strict control over what code is executed.
 
@@ -37,20 +37,21 @@ Because this upgrade process requires destroying the original code Cell, the upg
 
 The type hash provides a way for Scripts to locate code in any Cell that has a matching Type Script. As long as a Cell’s Type Script matches the expected `code_hash` and it is included in the `cell_deps`, its code will be used for execution.
 
-However, this flexibility comes with trade-offs:
+:::caution Advanced: Potential for Malicious Code Substitution
+Using type hash provides flexibility, but it also opens the door to subtle and dangerous risks:
 
-- There can be **multiple Cells** with the same Type Script (and thus the same type hash), each containing different versions of the code.
-- A malicious actor could create a flawed or malicious version of the code using the same type hash, potentially leading to exploits if users unknowingly depend on it.
-
-For this reason, developers can implement restrictions in the Type Script itself — such as verifying the creator's identity — to prevent unauthorized code Cells from being accepted. One common and reliable pattern is to use a Type ID, which guarantees uniqueness and helps prevent spoofing.
+- Multiple Cells may share the same Type Script and type hash while containing different code.
+- A malicious actor could create a flawed or exploitative version of the code that shares the same hash, potentially leading to critical vulnerabilities if a Script unknowingly depends on it.
+  For this reason, this approach is recommended only for advanced developers who understand well how to implement restrictions in the Type Script itself — such as verifying the creator's identity — to prevent unauthorized code Cells from being accepted. Consider using a Type ID to guarantee uniqueness and prevent spoofing.
+  :::
 
 :::tip
-When using `hash_type: type`, be aware that the referenced code can be changed. The Script author may upgrade the code at any time—intentionally or not—so it’s important to review the upgrade policy defined by the code Cell’s Lock Script before relying on it.
+When using type hash, be aware that the referenced code can be changed. The Script author may upgrade the code at any time—intentionally or not—so it’s important to review the upgrade policy defined by the code Cell’s Lock Script before relying on it.
 :::
 
 ### Type ID
 
-A Type ID is a special Script on CKB used to create a singleton Cell type–meaning only one Live Cell can exist with that Type Script hash at any given time.
+A Type ID is a special Script on CKB used to create a singleton Cell type, meaning only one Live Cell can exist with that Type Script hash at any given time.
 
 This makes it particularly useful when working with type hash, as it prevents others from creating competing Cells with the same Type Script. In other words, it ensures that the type hash always refers to a single, unique Cell, eliminating ambiguity and reducing the attack surface.
 
@@ -71,8 +72,8 @@ By building this flexibility into the protocol, CKB accommodates diverse needs a
 
 CKB allows flexibility in how Scripts are referenced. You can choose between:
 
-- **Data hash** – useful for ensuring immutability and auditability
-- **Type hash** – useful when upgradeability is preferred
+- **Data hash** – preferred when immutability and auditability are prioritized
+- **Type hash** – preferred when upgradeability is prioritized
 
 This choice is not permanent — you can change it later if needed.
 
