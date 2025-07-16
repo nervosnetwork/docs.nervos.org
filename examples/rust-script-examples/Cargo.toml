@@ -18,7 +18,9 @@ members = [
   "contracts/hello-world",
   "contracts/simple-print-args",
   "contracts/empty",
-  "tests", "crate/ipc-interface",
+  "tests",
+  "crate/ipc-interface",
+  "crate/ckb-crypto-interface",
 ]
 
 [profile.release]

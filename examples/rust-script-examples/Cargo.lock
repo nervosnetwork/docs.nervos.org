@@ -253,6 +253,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "ckb-crypto-interface"
+version = "0.1.0"
+dependencies = [
+ "ckb-script-ipc",
+ "ckb-script-ipc-common",
+ "serde",
+]
+
+[[package]]
 name = "ckb-dao"
 version = "0.200.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -757,10 +766,9 @@ dependencies = [
 name = "crypto-service-hash"
 version = "0.1.0"
 dependencies = [
- "ckb-script-ipc",
+ "ckb-crypto-interface",
  "ckb-script-ipc-common",
  "ckb-std",
- "serde",
 ]
 
 [[package]]

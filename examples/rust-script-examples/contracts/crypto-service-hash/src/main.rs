@@ -15,8 +15,6 @@ ckb_std::entry!(program_entry);
 // and the buddy-alloc alloc implementation.
 ckb_std::default_alloc!(16384, 1258306, 64);
 
-mod ckb_crypto_interface;
-
 use alloc::{ffi::CString, vec::Vec};
 use ckb_crypto_interface::{CkbCryptoClient, HasherType};
 use ckb_script_ipc_common::spawn::spawn_cell_server;
@@ -44,7 +42,9 @@ fn main() -> Result<(), i8> {
         &[CString::new("").unwrap().as_ref()],
     )
     .unwrap();
+
     let mut crypto_cli = CkbCryptoClient::new(read_pipe, write_pipe);
+
     let ctx = crypto_cli.hasher_new(HasherType::CkbBlake2b);
     crypto_cli
         .hasher_update(

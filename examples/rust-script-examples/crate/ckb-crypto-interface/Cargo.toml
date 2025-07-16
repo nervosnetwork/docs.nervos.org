@@ -1,0 +1,9 @@
+[package]
+name = "ckb-crypto-interface"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ckb-script-ipc-common = "1.0.3"
+ckb-script-ipc = "1.0.3"
+serde = { version = "1.0", default-features = false, features = ["derive"] }

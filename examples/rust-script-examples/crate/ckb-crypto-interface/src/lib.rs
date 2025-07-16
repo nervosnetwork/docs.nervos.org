@@ -1,5 +1,6 @@
-// Copy from https://github.com/XuJiandong/ckb-script-ipc/blob/main/crates/ckb-crypto-interface/src/lib.rs
-// ckb-crypto-interface has not yet been released to crate.io. The source code is used directly here
+#![no_std]
+extern crate alloc;
+
 use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
