@@ -4,56 +4,14 @@
 #include "ckb_consts.h"
 #include "ckb_script_ipc.h"
 
+#include "my_str.h"
+
 #define SCRIPT_SIZE 32768
 #define TEMP_SIZE 32768
 #define MAX_WITNESS_SIZE 32768
 
 static uint8_t g_payload_buf[4096];
 static uint8_t g_io_buf[1024];
-
-const char* my_strchr(const char* str, char ch) {
-    while (*str) {
-        if (*str == ch) {
-            return str;
-        }
-        str++;
-    }
-    return NULL;
-}
-int my_isspace(char c) {
-    return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' ||
-           c == '\r';
-}
-int my_isdigit(char c) { return c >= '0' && c <= '9'; }
-const char* my_strstr(const char* haystack, const char* needle) {
-    if (!*needle) {
-        return haystack;
-    }
-
-    for (; *haystack; haystack++) {
-        const char* h = haystack;
-        const char* n = needle;
-
-        while (*h && *n && (*h == *n)) {
-            h++;
-            n++;
-        }
-
-        if (!*n) {
-            return haystack;
-        }
-    }
-
-    return NULL;
-}
-int read_uint(const char** p) {
-    int val = 0;
-    while (**p >= '0' && **p <= '9') {
-        val = val * 10 + (**p - '0');
-        (*p)++;
-    }
-    return val;
-}
 
 int get_code_hash(uint8_t* code_hash) {
     int ret;
@@ -86,7 +44,7 @@ int get_code_hash(uint8_t* code_hash) {
     return 0;
 }
 
-int load_witness(uint8_t* witness) {
+int get_witness(uint8_t* witness) {
     int ret;
 
     uint8_t temp[TEMP_SIZE];
@@ -274,7 +232,7 @@ int main() {
     }
 
     uint8_t hash_1[32] = {0};
-    err = load_witness(hash_1);
+    err = get_witness(hash_1);
     if (err) {
         printf("load witness failed : %d\n", err);
         return err;

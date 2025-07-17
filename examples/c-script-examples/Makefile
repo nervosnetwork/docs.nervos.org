@@ -23,6 +23,9 @@ CFLAGS := -g -O3 -fPIC \
 CFLAGS_DECLARATION_ONLY = -DCKB_STDLIB_NO_SYSCALL_IMPL -DCKB_DECLARATION_ONLY
 
 all: \
+	build
+
+build: \
 	build/crypto-service-hash
 
 build/ckb_script_ipc.o: deps/ckb-script-ipc/c/ckb_script_ipc.c deps/ckb-script-ipc/c/ckb_script_ipc.h
@@ -38,5 +41,10 @@ build/crypto-service-hash: c/crypto-service-hash.c build/libckb_script_ipc.a
 	$(OBJCOPY) --only-keep-debug $@ $@.debug
 	$(OBJCOPY) --strip-debug --strip-all $@
 
+tests:
+	cd tests && cargo t
+
 clean:
 	rm -r build
+
+.PHONY: tests
