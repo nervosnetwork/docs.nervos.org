@@ -40,8 +40,17 @@ pub struct Script {
 }
 ```
 
-The `code_hash` serves to identify a Script code, allowing the `CKB-VM` to load the binary code of the Script correctly.
+Each Script consists of:
 
-A Script also includes the `args` part, which differentiates one Script from another using the same Script code. The `args` can provide additional arguments for a CKB Script; for example, while multiple users might utilize the same default Lock Script code, each user can have their own public key hash stored in `args`. This setup allows each user to have a unique Lock Script while sharing the same Lock Script code.
+- `code_hash`: Identifies the Script code.
+- `hash_type`: Defines how to interpret `code_hash` when locating the Script code.
+- `args`: Parameters passed to the Script, used to customize behavior.
 
-`hash_type` indicates the method CKB-VM uses to locate the Script code for a Script. Possible values include `type`, `data`, `data1`, and `data2`. Each specifies a different way of referencing the required Script code.
+The combination of `code_hash` and `hash_type` tells CKB how to locate the Script code:
+
+- `data`, `data1`, `data2`(data hash): Match the hash of the Script binary directly.
+- `type`(type hash): Matches the hash of a Cell’s Type Script.
+
+For a deeper comparison, see [Data Hash vs. Type Hash](/docs/tech-explanation/data-type-diff).
+
+A Script also includes the `args` part, which differentiates one Script from another using the same Script code. The `args` can provide additional arguments for a CKB Script. For example, while multiple users might utilize the same default Lock Script code, each user can have their own public key hash stored in `args`. This setup allows each user to have a unique Lock Script while sharing the same Lock Script code.

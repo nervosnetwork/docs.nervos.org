@@ -272,6 +272,7 @@ export default {
             "tech-explanation/lock-type-diff",
             "tech-explanation/code-hash",
             "tech-explanation/hash-type",
+            "tech-explanation/data-type-diff",
             "tech-explanation/script-args",
             "tech-explanation/script-group-exe",
           ],
