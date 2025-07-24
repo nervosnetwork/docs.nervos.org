@@ -15,7 +15,7 @@ Blockchain is a decentralized, immutable ledger that records transactions across
 
 The CKB blockchain works like a storage facility filled with boxes, called Cells. These Cells can hold CKBytes, the native tokens of CKB, which represents both value and storage capacity—the more CKBytes you own, the more data you can store on the blockchain.
 
-Each Cell requires at least **61 CKBytes** to cover the essential data it needs to function. In practice, it's recommended to allocate **62 CKBytes** or more to cover transaction fees and ensure smooth processing.
+Each Cell requires at least [61 CKBytes](/docs/tech-explanation/capacity#capacity-mini) to cover the essential data it needs to function. In practice, it's recommended to allocate **62 CKBytes** or more to cover transaction fees and ensure smooth processing.
 
 The Cell Model defines how these Cells behave, governed by [Scripts](#scripts) that set the rules for how Cells can be used or accessed. Once added to the blockchain, Cells are immutable, meaning they can’t be changed. To update a Cell’s data, you must consume it—extract the data, modify it, and create a new Cell with the updated information.
 
@@ -55,7 +55,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
      alt="Transaction broadcasted to the nearest node"
    />
 
-4. **Validate**: The receiving node performs several checks to validate your transaction. For more details, you can check out the [verification process](/docs/getting-started/ckb-vs-btc#unlocking--verification-process)
+4. **Validate**: The receiving node performs several checks to validate your transaction. For more details, you can check out the [verification process](/docs/tech-explanation/ckb-vs-btc#unlocking--verification-process)
 
    <img
      src="/img/how-ckb-works/validate.png"

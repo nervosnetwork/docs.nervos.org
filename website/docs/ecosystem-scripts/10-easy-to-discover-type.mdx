@@ -1,0 +1,50 @@
+---
+id: easy-to-discover-type
+title: Easy to Discover Type
+---
+
+# Easy to Discover Type
+
+[Easy to Discover Type](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/easy-to-discover-type) is a [Type Script](/docs/tech-explanation/type-script) that reveals and enforces specific Cell data via its arguments.
+
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
+
+## How It Works
+
+This Script validates output Cell data against a predefined hash. The process works as follows:
+
+- Takes a 32-byte data hash as an argument
+
+```text
+args[0..32]: Hash of the expected cell data
+```
+
+- Passes validation if all output Cells with this Type Script contain data that matches the provided hash.
+
+### Use Cases
+
+- Data integrity verification
+- Making cell data easily discoverable
+- Content addressing
+
+## Deployment
+
+- Mainnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xaba4430cc7110d699007095430a1faa72973edf2322ddbfd4d1d219cacf237af` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb0ed754fb27d67fd8388c97fed914fb7998eceaa01f3e6f967e498de1ba0ac9b` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0xaba4430cc7110d699007095430a1faa72973edf2322ddbfd4d1d219cacf237af` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x1b4ffcad55ecd36ffb2715b6816b83da73851f1a24fe594f263c4f34dad90792` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

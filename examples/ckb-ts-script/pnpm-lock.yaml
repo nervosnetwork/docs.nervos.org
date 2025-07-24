@@ -21,6 +21,28 @@ importers:
         specifier: ~5.8.2
         version: 5.8.3
 
+  contracts/call-crypto-service:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/ipc':
+        specifier: ^1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
   contracts/call-syscalls:
     devDependencies:
       ckb-testtool:
@@ -53,6 +75,50 @@ importers:
         version: 1.0.0
       '@ckb-js-std/core':
         specifier: ~1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
+  contracts/ipc-child:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/ipc':
+        specifier: ^1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
+  contracts/ipc-parent:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/ipc':
+        specifier: ^1.0.0
         version: 1.0.0
       ckb-default-app:
         specifier: 'link:'
@@ -283,6 +349,9 @@ packages:
 
   '@ckb-js-std/core@1.0.0':
     resolution: {integrity: sha512-3oIZ5sDYKbQCoXxzgPklbHafXZCULwru0ZUJX5Cet8sxCDXjPIxss0luLOiZYBWaBm6NytOpwNwQX1JJvaiE2Q==}
+
+  '@ckb-js-std/ipc@1.0.0':
+    resolution: {integrity: sha512-spwl1kyYZQuazhbgF+6oLd7hHjzeViUVtufxT8gL4GxXZrqpMC+gaa/s47wpA0Hadj1LBhWLyU4pFbAtTSSRwA==}
 
   '@esbuild/aix-ppc64@0.25.5':
     resolution: {integrity: sha512-9o3TMmpmftaCMepOdA5k/yDw8SfInyzWWTjYTFCX3kPSDJMROQTb8jg+h9Cnwnmm1vOzvxN7gIfB5V2ewpjtGA==}
@@ -1992,6 +2061,11 @@ snapshots:
   '@ckb-js-std/core@1.0.0':
     dependencies:
       '@ckb-js-std/bindings': 1.0.0
+
+  '@ckb-js-std/ipc@1.0.0':
+    dependencies:
+      '@ckb-js-std/bindings': 1.0.0
+      '@ckb-js-std/core': 1.0.0
 
   '@esbuild/aix-ppc64@0.25.5':
     optional: true

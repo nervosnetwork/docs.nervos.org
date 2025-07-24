@@ -5,4 +5,6 @@ title: "outputs_data"
 
 # outputs_data
 
-An array of Cell data of each output Cell. The data of the i-th Cell in `outputs` is the i-th item in `outputs_data`. The actual data is kept separate from outputs to simplify CKB Script handling and to allow for future optimization.
+`outputs_data` is a list containing the data for each output Cell. The data for the i-th Cell in `outputs` is stored as the i-th item in `outputs_data`.
+
+Separating `outputs_data` from `outputs` simplifies Script execution in [CKB-VM](/docs/tech-explanation/ckb-vm) and enables future optimizations at the protocol level.

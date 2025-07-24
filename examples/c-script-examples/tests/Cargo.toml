@@ -1,0 +1,8 @@
+[package]
+name = "tests-c-scripts"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ckb-testtool = "0.15.0"
+serde_json = "1.0"

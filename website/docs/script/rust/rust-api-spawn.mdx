@@ -1,6 +1,6 @@
 ---
 id: rust-api-spawn
-title: "API (Spawn & IPC)"
+title: "API (Spawn)"
 ---
 
 import Tabs from "@theme/Tabs";
@@ -10,9 +10,9 @@ import Tooltip from "@components/Tooltip";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
 
-# ckb-std spawn & IPC
+# ckb-std spawn
 
-The mechanisms behind `spawn` and IPC are described in detail in [ckb-script-ipc](./ckb-script-ipc). This section focuses only on the related APIs.
+The mechanisms behind `spawn` are described in detail in [Spawn: Direct Cross-Script Calls](./../spawn-cross-script-calling). This section focuses only on the related APIs.
 
 ## high_level::spawn_cell
 
@@ -186,19 +186,3 @@ pub fn close(fd: u64) -> Result<(), SysError>
 If the function succeeds, return `Ok(())`
 
 If the function fails, return [SysError](./rust-api-error).
-
-## ckb_script_ipc::service
-
-The compiler can provide some basic implementations of ckb spawn for a trait through the `service` attribute.
-
-This trait should be placed in a shared library accessible to both client and server scripts. The #[ckb_script_ipc::service] attribute macro automatically generates the necessary implementations for IPC communication.
-
-### Syntax
-
-```rust
-pub fn service(_attr: TokenStream, input: TokenStream) -> TokenStream
-```
-
-### Example
-
-[A Simplified IPC Solution](/docs/script/ckb-script-ipc#introducing-ckb-script-ipc-a-simplified-ipc-solution)

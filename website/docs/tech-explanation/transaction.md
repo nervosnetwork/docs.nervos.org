@@ -15,15 +15,15 @@ A transaction in CKB destroys some Cells (outputs from previous transactions) an
 
 ## Fields & Description
 
-| Name           | Type           | Description                                                                                                                                                     |
-| -------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `version`      | Uint32         | Transaction version distinguishes transactions in the event of a fork.                                                                                          |
-| `cell_deps`    | [`CellDep`]    | An array of `outpoint` pointing to the Cells that are dependencies of this transaction. For more, see [`cell_deps`](/docs/tech-explanation/cell-deps).          |
-| `header_deps`  | [`H256(hash)`] | An array of `H256` hashes pointing to block headers that are dependencies of this transaction.                                                                  |
-| `inputs`       | [`CellInput`]  | An array of referenced Cell inputs. For more, see [`CellInput`](/docs/tech-explanation/cellinput).                                                              |
-| `witnesses`    | [`Bytes`]      | Provided by transaction creator to ensure the successful execution of the corresponding Lock Script. For more, see [`witness`](/docs/tech-explanation/witness). |
-| `outputs`      | [`Cells`]      | An array of Cells used as outputs, also can be seen as the newly generated Cells. For more, see [`outputs`](/docs/tech-explanation/outputs).                    |
-| `outputs_data` | [`Bytes`]      | An array of Cell data of each output Cell. For more, see [`outputs_data`](/docs/tech-explanation/outputs-data).                                                 |
+| Name           | Type           | Description                                                                                                                                                       |
+| -------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `version`      | Uint32         | Transaction version distinguishes transactions in the event of a fork.                                                                                            |
+| `cell_deps`    | [`CellDep`]    | A list of `outpoint` pointing to the Cells that are dependencies of this transaction. For more, see [`cell_deps`](/docs/tech-explanation/cell-deps).              |
+| `header_deps`  | [`H256(hash)`] | A list of `H256` hashes pointing to block headers that are dependencies of this transaction. For more, see [`header_deps`](/docs/tech-explanation/header-deps).   |
+| `inputs`       | [`CellInput`]  | A list of referenced Cell inputs. For more, see [`inputs`](/docs/tech-explanation/inputs).                                                                        |
+| `witnesses`    | [`Bytes`]      | Provided by transaction creator to ensure the successful execution of the corresponding Lock Script. For more, see [`witnesses`](/docs/tech-explanation/witness). |
+| `outputs`      | [`Cells`]      | A list of Cells used as outputs, also can be seen as the newly generated Cells. For more, see [`outputs`](/docs/tech-explanation/outputs).                        |
+| `outputs_data` | [`Bytes`]      | A list of Cell data of each output Cell. For more, see [`outputs_data`](/docs/tech-explanation/outputs-data).                                                     |
 
 ## Example
 

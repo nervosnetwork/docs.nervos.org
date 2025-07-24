@@ -1,0 +1,48 @@
+---
+id: input-type-proxy-lock
+title: Input Type Proxy Lock
+---
+
+# Input Type Proxy Lock
+
+[Input Type Proxy Lock](https://github.com/ckb-devrel/ckb-proxy-locks/tree/main/contracts/input-type-proxy-lock) is a Lock Script that allows unlocking when a specific [Type Script](/docs/tech-explanation/type-script) appears in transaction inputs.
+
+It is part of the [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks).
+
+## How It Works
+
+- Takes a 32-byte Type Script hash as an argument
+
+```text
+args[0..32]: Hash of the required input Type Script
+```
+
+- Passes validation if any input Cell in the transaction contains the specified Type Script. This enables more flexible authorization patterns based on Type Script presence.
+
+### Use Cases
+
+- Token-gated access
+- NFT-based permissions
+- Conditional unlocking based on asset ownership
+
+## Deployment
+
+- Mainnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5123908965c711b0ffd8aec642f1ede329649bda1ebdca6bd24124d3796f768a` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0x10d63a996157d32c01078058000052674ca58d15f921bec7f1dcdac2160eb66b` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x5123908965c711b0ffd8aec642f1ede329649bda1ebdca6bd24124d3796f768a` |
+| `hash_type` | `data1`                                                              |
+| `tx_hash`   | `0xb4f171c9c9caf7401f54a8e56225ae21d95032150a87a4678eac3f66a3137b93` |
+| `index`     | `0x1`                                                                |
+| `dep_type`  | `code`                                                               |

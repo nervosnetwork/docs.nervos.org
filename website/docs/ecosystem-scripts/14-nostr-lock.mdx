@@ -1,0 +1,147 @@
+---
+id: nostr-lock
+title: Nostr Lock
+---
+
+# Nostr Lock
+
+Nostr lock is a [Lock Script](/docs/tech-explanation) designed for interoperability with the
+
+[Nostr protocol](https://nostr.com/). It uses Nostr events as witnesses to unlock CKB transactions. It is designed to improve user experience and simplify the development of Nostr-based dApps on CKB.
+
+## How It Works
+
+### Script Structure
+
+```json
+{
+    hash_type: "data2"
+    code_hash: "<NOSTR_LOCK_DATA_HASH>"
+    args: "<PoW difficulty, 1 byte> <schnorr pubkey hash, 20 bytes>"
+}
+```
+
+- If PoW difficulty = 0: Unlocking is done via public key signature verifaction
+- If PoW difficulty ≠ 0: The public key hash is not used and should be all zero, and another unlock method, [NIP-13](https://github.com/nostr-protocol/nips/blob/master/13.md), is used
+
+### Unlocking
+
+There are 2 methods to unlock nostr lock script: by key(PoW difficulty is zero)
+or by PoW difficulty(PoW difficulty is non-zero).
+
+A 32-byte `sighash_all` message can be calculated via `ckbhash` with following data:
+
+- Transaction hash
+- Witness length and content in same script group covered by inputs, excluding lock field
+- Other witness length and content that not covered by inputs
+
+A reference implementation in C can be found [here](https://github.com/nervosnetwork/ckb-system-scripts/blob/a7b7c75662ed950c9bd024e15f83ce702a54996e/c/secp256k1_blake160_sighash_all.c#L219).
+
+The `event` in witness has following format:
+
+```text
+{
+  "id": <32-bytes lowercase hex-encoded sha256 of the serialized event data>,
+  "pubkey": <32-bytes lowercase hex-encoded public key of the event creator>,
+  "created_at": <unix timestamp in seconds>,
+  "kind": <integer between 0 and 65535>,
+  "tags": [
+    [<arbitrary string>...],
+    // ...
+  ],
+  "content": <arbitrary string>,
+  "sig": <64-bytes lowercase hex of the signature of the sha256 hash of the serialized event data, which is the same as the "id" field>
+}
+```
+
+Each tag is an array of one or more strings, with some conventions around them.
+The first element of the tag array is referred to as the tag name or key and the
+second as the tag value.
+
+**Rule 1**: A tag key with "ckb_sighash_all" must be present. Its corresponding
+tag value must be equal to `sighash_all` in hexadecimal string format.
+
+Here is an example of such tag:
+
+```json
+[
+  "ckb_sighash_all",
+  "00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff"
+]
+```
+
+**Rule 2**: The `id` in the `event` is calculated based on
+[NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md#events-and-signatures).
+
+**Rule 3**: The `kind` in the `event` should be equal to 23334. The `content` in
+the `event` should be identical to following fixed string:
+
+```
+"Signing a CKB transaction\n\nIMPORTANT: Please verify the integrity and authenticity of connected Nostr client before signing this message\n"
+```
+
+These 3 rules(1,2,3) should be followed by both of the two unlocking methods
+described below.
+
+### Unlocking by PoW
+
+When PoW difficulty is non-zero, this unlocking method is used. It follows
+[NIP-13](https://github.com/nostr-protocol/nips/blob/master/13.md).
+
+**Rule 4**: A tag key with `nonce` must be present. Its corresponding tag value
+can be any string. This tag value will be mutated to mimic mining behavior.
+
+**Rule 5**: The third entry to the `nonce` tag should contain the PoW
+difficulty in decimal string described in script args.
+
+**Rule 6**: The `id` in `event` should has a difficulty no less than PoW
+difficulty specified in script args.
+
+**Rule 7**: The `pubkey` in script args should be all zeros.
+
+When the rules above(1,2,3,4,5,6,7) are met, the validation is successful.
+
+The `sighash_all` is affected by the length of the `event` in the witness. It is
+suggested to reserve the `nonce` tag value as a very long string, like the
+example below:
+
+```json
+["nonce", "000000000000000000000000000000000000", "24"]
+```
+
+For each mining attempt, only mutate the long string while keeping the length unchanged.
+
+### Unlocking by Key
+
+When PoW difficulty is zero, this unlocking method is used.
+
+**Rule 8**: The blake160 of binary format of `pubkey` field in `event` should be
+equal to schnorr pubkey hash in script args. The `pubkey` in hexadecimal string
+should be converted into binary first.
+
+**Rule 9**: The `sig` field, along with the `pubkey` and `id` fields in the
+`event`, can be validated via Schnorr verification.
+
+When the rules above(1,2,3,8,9) are met, the validation is successful.
+
+## Deployment
+
+- Mainnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x641a89ad2f77721b803cd50d01351c1f308444072d5fa20088567196c0574c68` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0x1911208b136957d5f7c1708a8835edfe8ae1d02700d5cb2c3a6aacf4d5906306` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |
+
+- Testnet
+
+| parameter   | value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x6ae5ee0cb887b2df5a9a18137315b9bdc55be8d52637b2de0624092d5f0c91d5` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0xa2a434dcdbe280b9ed75bb7d6c7d68186a842456aba0fc506657dc5ed7c01d68` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |

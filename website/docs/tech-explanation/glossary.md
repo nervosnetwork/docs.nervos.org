@@ -2810,6 +2810,15 @@ width="688"
 - [CPFP](#cpfp)
 - [Fee Bumping](#fee-bumping)
 
+### RGB++
+
+A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings. It enables secure, programmable asset issuance and state transitions anchored to Bitcoin, while leveraging CKB for scalable validation, shared state, and scripting functionality.
+
+#### See Also
+
+- [RGB](https://rgb.tech/)
+- [RGB++ Protocol](/docs/tech-explanation/rgbpp)
+
 ### RISC-V
 
 An open standard instruction set architecture (ISA) for general computing.

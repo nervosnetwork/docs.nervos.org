@@ -593,11 +593,11 @@
   },
   "dep group": {
     "content": "A method for referencing multiple dependencies which are commonly used together using a single dependency field.",
-    "link": "/docs/tech-explanation/dep-group"
+    "link": "/docs/tech-explanation/glossary#dep-group"
   },
   "dep type": {
     "content": "A field that specifies the type of the dependency.",
-    "link": "/docs/tech-explanation/dep-type"
+    "link": "/docs/tech-explanation/glossary#dep-type"
   },
   "deps": {
     "content": "A shorthand name for dependencies.",
@@ -833,7 +833,7 @@
   },
   "outpoint": {
     "content": "A particular output Cell in a transaction.",
-    "link": "/docs/tech-explanation/outpoint"
+    "link": "/docs/tech-explanation/glossary#outpoint"
   },
   "output": {
     "content": "A Live Cell that is created in a transaction.",
@@ -874,6 +874,10 @@
   "rbf": {
     "content": "Abbreviation of Replace-by-Fee.",
     "link": "/docs/tech-explanation/glossary#rbf"
+  },
+  "rgb++": {
+    "content": "A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomorphic bindings.",
+    "link": "/docs/tech-explanation/glossary#rgb++"
   },
   "risc-v": {
     "content": "An open standard instruction set architecture (ISA) for general computing.",
@@ -921,7 +925,7 @@
   },
   "since": {
     "content": "since is the u64 (unsigned 64-bit integer) field in transaction input for preventing inclusion before a certain block timestamp or a block number.",
-    "link": "/docs/tech-explanation/since"
+    "link": "/docs/tech-explanation/glossary#since"
   },
   "spv": {
     "content": "An abbreviation for Simplified Payment Verification.",
@@ -997,7 +1001,7 @@
   },
   "xudt": {
     "content": "An extended UDT standard upon sUDT (Simple UDT) to accommodate additional functionalities, including regulatory compliance.",
-    "link": "/docs/tech-explanation/glossary#xudt"
+    "link": "/docs/tech-explanation/xudt"
   },
   "zk-snark": {
     "content": "A form of cryptographic proof, that when used in cryptocurrencies, allows for privacy features which do not reveal the amounts or participants in transactions.",

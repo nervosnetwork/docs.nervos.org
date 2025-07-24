@@ -1,0 +1,53 @@
+---
+id: introduction
+title: Introduction
+---
+
+# Introduction
+
+This section provides a list of CKB Scripts and related components that have been developed across various repositories. These Scripts are often scattered and difficult to discover – especially for developers who are new to the ecosystem. This summary organizes them in one place for easier access and understanding.
+
+:::danger Disclaimer
+The Scripts listed here can directly impact the security of your assets. Some have not undergone comprehensive security audits and may contain unknown vulnerabilities. **Do not use them in production** unless you fully understand how they work and have thoroughly tested them in a safe environment.
+:::
+
+## Scripts
+
+| Script Name                                                      | Repository                                                                        | Language | Lock/Type Script | Description                                                               |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------- | ---------------- | ------------------------------------------------------------------------- |
+| [secp256k1_blake160_sighash](./secp256k1_blake160_sighash_all)   | [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts)         | C        | Lock             | Default single-signature lock script on CKB                               |
+| [secp256k1_blake160_multisig](./secp256k1_blake160_multisig_all) | [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts)         | C        | Lock             | Default multisig lock script on CKB                                       |
+| [Nervos Dao](./nervos-dao)                                       | [ckb-system-scripts](https://github.com/nervosnetwork/ckb-system-scripts)         | C        | Type             | Protects CKByte holders from token dilution                               |
+| [Lock Proxy Lock](./lock-proxy-lock)                             | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Lock             | Delegates unlocking authority to another lock script                      |
+| [Input Type Proxy Lock](./input-type-proxy-lock)                 | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Lock             | Unlocks if a specific type script appears in transaction inputs           |
+| [Output Type Proxy Lock](./output-type-proxy-lock)               | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Lock             | Unlocks if a specific type script appears in transaction outputs          |
+| [Single Use Lock](./single-use-lock)                             | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Lock             | Unlocks only once using a specific outpoint                               |
+| [Time Lock](./time-lock)                                         | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Lock             | Unlocks after a specified block/time/epoch with optional extra conditions |
+| [Type Burn Lock](./type-burn-lock)                               | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Lock             | Unlocks when a specific type script is burned (used but not recreated)    |
+| [Easy to Discover Type](./easy-to-discover-type)                 | [ckb-proxy-locks](https://github.com/ckb-devrel/ckb-proxy-locks)                  | Rust     | Type             | Makes cell data easily accessible via type script arguments               |
+| [xUDT](./xudt)                                                   | [ckb-production-scripts](https://github.com/nervosnetwork/ckb-production-scripts) | C        | Type             | Extensible UDT                                                            |
+| [Omnilock](./omnilock)                                           | [omnilock](https://github.com/cryptape/omnilock)                                  | C        | Lock             | Universal lock supporting multiple auth methods and chains                |
+| [Anyone Can Pay](./anyone-can-pay)                               | [anyone-can-pay](https://github.com/cryptape/anyone-can-pay)                      | C        | Lock             | Accepts arbitrary payments without fixed amount                           |
+| [Nostr Lock](./nostr-lock)                                       | [nostr-binding](https://github.com/cryptape/nostr-binding)                        | Rust     | Lock             | Enables lock integration with Nostr protocol                              |
+| [Nostr Binding](./nostr-binding)                                 | [nostr-binding](https://github.com/cryptape/nostr-binding)                        | Rust     | Type             | Binds Nostr Notes to CKB cells via type script                            |
+| [CCC BTC lock](./ccc-btc-lock)                                   | [ccc-locks](https://github.com/ckb-devrel/ccc-locks)                              | Rust     | Lock             | Enables CKB lock compatibility with Bitcoin                               |
+| [CCC ETH lock](./ccc-eth-lock)                                   | [ccc-locks](https://github.com/ckb-devrel/ccc-locks)                              | Rust     | Lock             | Enables CKB lock compatibility with Ethereum                              |
+| [CCC SOL lock](./ccc-sol-lock)                                   | [ccc-locks](https://github.com/ckb-devrel/ccc-locks)                              | Rust     | Lock             | Enables CKB lock compatibility with Solana                                |
+| [Spore DOB-0](./spore-dob-0)                                     | [spore-dob-0](https://github.com/sporeprotocol/spore-dob-0)                       | Rust     | Type             | Basic Spore contract for storing value in CKB cells                       |
+| [Spore Protocol](./spore-protocol)                               | [spore-contract](https://github.com/sporeprotocol/spore-contract)                 | Rust     | Type             | Manages ownership and value of unique digital objects (DOBs) on CKB       |
+
+## Library
+
+Although the following are compiled into executable files (Run in CKB-VM), they cannot be executed as a standalone Script.
+Developers can call them through the provided API.
+
+| Script Name                                | Repository                                                     | Language | API       | Calling method       |
+| ------------------------------------------ | -------------------------------------------------------------- | -------- | --------- | -------------------- |
+| [CKB Auth](./ckb-auth)                     | [ckb-auth](https://github.com/nervosnetwork/ckb-auth)          | C        | C/Rust    | Exec/Dynamic Library |
+| [CKB Crypto Service](./ckb-crypto-service) | [ckb-script-ipc](https://github.com/XuJiandong/ckb-script-ipc) | Rust     | C/Rust/JS | Spawn                |
+
+:::note
+Both **CKB Auth** and **CKB Crypto Service** offer signature verification capabilities, but they differ in how they operate. CKB Auth can directly verify signatures for a specific blockchain, while CKB Crypto Service provides only the underlying cryptographic algorithms.
+
+For example, to verify a CKB Secp256K1 signature, CKB Auth allows direct verification with a single call. In contrast, CKB Crypto Service requires reconstructing the public key, hashing it, and then comparing the resulting public key hash values.
+:::

@@ -253,6 +253,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "ckb-crypto-interface"
+version = "0.1.0"
+dependencies = [
+ "ckb-script-ipc",
+ "ckb-script-ipc-common",
+ "serde",
+]
+
+[[package]]
 name = "ckb-dao"
 version = "0.200.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -460,6 +469,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "ckb-rust-std"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06a655bd9d7696c024604d7f1228dcf468785a56c0254c17de85fb899ffacea0"
+
+[[package]]
 name = "ckb-script"
 version = "0.200.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -476,6 +491,30 @@ dependencies = [
  "faster-hex",
  "serde",
  "tokio",
+]
+
+[[package]]
+name = "ckb-script-ipc"
+version = "1.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6358b00e80784dbf9308d1fe25940ab68faf618f9bfc6b288f3d5e6e880e0cf"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
+]
+
+[[package]]
+name = "ckb-script-ipc-common"
+version = "1.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a0f0448e128d8c33a0086aea620097bbbac4d89a0393b72c203b19552ef02831"
+dependencies = [
+ "ckb-rust-std",
+ "ckb-std",
+ "enumn",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -724,6 +763,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "crypto-service-hash"
+version = "0.1.0"
+dependencies = [
+ "ckb-crypto-interface",
+ "ckb-script-ipc-common",
+ "ckb-std",
+]
+
+[[package]]
 name = "cty"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -796,6 +844,17 @@ name = "empty"
 version = "0.1.0"
 dependencies = [
  "buddy-alloc",
+]
+
+[[package]]
+name = "enumn"
+version = "0.1.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2f9ed6b3789237c8a0c1c505af1c7eb2c560df6186f01b098c3a1064ea532f38"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.100",
 ]
 
 [[package]]
@@ -1072,6 +1131,33 @@ dependencies = [
  "flate2",
  "phf_codegen",
  "walkdir",
+]
+
+[[package]]
+name = "ipc-child"
+version = "0.1.0"
+dependencies = [
+ "ckb-script-ipc-common",
+ "ckb-std",
+ "ipc-interface",
+]
+
+[[package]]
+name = "ipc-interface"
+version = "0.1.0"
+dependencies = [
+ "ckb-script-ipc",
+ "ckb-script-ipc-common",
+ "serde",
+]
+
+[[package]]
+name = "ipc-parent"
+version = "0.1.0"
+dependencies = [
+ "ckb-script-ipc-common",
+ "ckb-std",
+ "ipc-interface",
 ]
 
 [[package]]

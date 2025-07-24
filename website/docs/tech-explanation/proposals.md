@@ -5,7 +5,7 @@ title: proposals
 
 # proposals
 
-`proposals` refer to an array of hex-encoded short transaction IDs that represent proposed transactions within a block or its uncle blocks. A transaction proposal ID is the first 10 bytes of the transaction hash. In CKB, the transaction proposal ID must be proposed before a transaction can be committed to the blockchain.
+`proposals` refer to a list of hex-encoded short transaction IDs that represent proposed transactions within a block or its uncle blocks. A transaction proposal ID is the first 10 bytes of the transaction hash. In CKB, the transaction proposal ID must be proposed before a transaction can be committed to the blockchain.
 
 - A transaction is considered **proposed** if its proposal ID is listed in the `proposals` field of a block or an uncle of that block.
 - A transaction is considered **committed** once it appears in a block’s `transactions` field.
