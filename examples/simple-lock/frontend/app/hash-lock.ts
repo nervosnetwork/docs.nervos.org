@@ -58,6 +58,22 @@ export async function unlock(
     }
     output.capacity = ccc.fixedPointFrom(amountInCKB);
   });
+  
+  // Complete missing parts for transaction
+  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+  await tx.completeInputsByCapacity(
+    readSigner,
+    ccc.fixedPointFrom(0)
+  );
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+      capacity: balanceDiff - 1000n, // Fee 1000
+    });
+  }
 
   // Complete missing parts for transaction
   await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
