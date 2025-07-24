@@ -58,6 +58,22 @@ export async function unlock(
     }
     output.capacity = ccc.fixedPointFrom(amountInCKB);
   });
+  
+  // Complete missing parts for transaction
+  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+  await tx.completeInputsByCapacity(
+    readSigner,
+    ccc.fixedPointFrom(0)
+  );
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+      capacity: balanceDiff - 1000n, // Fee 1000
+    });
+  }
 
   // fill the witness with preimage
   const preimageAnswer = window.prompt("please enter the preimage: ");
@@ -67,24 +83,10 @@ export async function unlock(
   const newWitnessArgs = new ccc.WitnessArgs(
     stringToBytesHex(preimageAnswer) as `0x${string}`
   );
-  console.log("newWitnessArgs: ", newWitnessArgs);
+  console.log(`newWitnessArgs: ${JSON.stringify(newWitnessArgs)}`);
   tx.setWitnessArgsAt(0, newWitnessArgs);
 
-  // Complete missing parts for transaction
-  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
-  await tx.completeInputsByCapacity(
-    readSigner,
-    ccc.fixedPointFrom(amountInCKB)
-  );
-  const balanceDiff =
-    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
-  console.log("balanceDiff: ", balanceDiff);
-  if (balanceDiff > ccc.Zero) {
-    tx.addOutput({
-      lock: fromScript,
-    });
-  }
-  //await tx.completeFeeBy(readSigner, 1000);
+  // console.log(`${JSON.stringify(tx, (_, v) => typeof v === 'bigint' ? v.toString() : v)}`);
 
   const txHash = await cccClient.sendTransaction(tx);
   console.log("Full transaction: ", tx.stringify());
@@ -95,6 +97,6 @@ export async function wait(seconds: number) {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }
 
-export function shannonToCKB(amount: bigint){
+export function shannonToCKB(amount: bigint) {
   return amount / BigInt(100000000);
 }
