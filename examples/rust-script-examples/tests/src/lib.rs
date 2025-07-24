@@ -97,6 +97,16 @@ impl Loader {
         }
         result.unwrap().into()
     }
+
+    pub fn load_crypto_service() -> Bytes {
+        const CKB_CRYPTO_SERVICE_PATH: &str = "../../ckb-ts-script/deps/ckb-crypto-service";
+
+        let result = fs::read(CKB_CRYPTO_SERVICE_PATH);
+        if result.is_err() {
+            panic!("Binary {:?} is missing!", CKB_CRYPTO_SERVICE_PATH);
+        }
+        result.unwrap().into()
+    }
 }
 
 // This helper method runs Context::verify_tx, but in case error happens,
