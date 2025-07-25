@@ -58,12 +58,20 @@ export async function unlock(
     }
     output.capacity = ccc.fixedPointFrom(amountInCKB);
   });
-  
+
   // Complete missing parts for transaction
   await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+
+  // Here calculate the minimum capacity of a single Cell (about 73)
+  let occupiedSize = ccc.CellOutput.from({
+    capacity: BigInt(1000),
+    lock: fromScript,
+  }).occupiedSize;
+  console.log(`occupiedSize: ${occupiedSize}`);
+
   await tx.completeInputsByCapacity(
     readSigner,
-    ccc.fixedPointFrom(0)
+    ccc.fixedPointFrom(occupiedSize)
   );
   const balanceDiff =
     (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
@@ -71,7 +79,7 @@ export async function unlock(
   if (balanceDiff > ccc.Zero) {
     tx.addOutput({
       lock: fromScript,
-      capacity: balanceDiff - 1000n, // Fee 1000
+      capacity: balanceDiff - BigInt(1000), // Fee 1000
     });
   }
 
