@@ -1,15 +1,16 @@
 # Nervos CKB Documentation Website
 
 - [Nervos CKB Documentation Website](#nervos-ckb-documentation-website)
-	- [What is CKB](#what-is-ckb)
-	- [Contributing](#contributing)
-		- [Branches](#branches)
-		- [Code structure](#code-structure)
-		- [Develop](#develop)
-			- [Clone the Repo](#clone-the-repo)
-			- [Install Dependencies](#install-dependencies)
-			- [Run the website](#run-the-website)
-			- [Build for deployment](#build-for-deployment)
+  - [What is CKB](#what-is-ckb)
+  - [Contributing](#contributing)
+    - [Branches](#branches)
+    - [Code structure](#code-structure)
+    - [Develop](#develop)
+      - [Clone the Repo](#clone-the-repo)
+      - [Install Dependencies](#install-dependencies)
+      - [Run the website](#run-the-website)
+      - [Build for deployment](#build-for-deployment)
+      - [Maintain key-terms.json file](#maintain-key-termsjson-file)
 
 ## What is CKB
 
@@ -23,9 +24,8 @@ If you run into an issue on our documentation website you can contact us on [Ner
 
 ### Branches
 
-- production branch: [develop](https://github.com/nervosnetwork/docs.nervos.org/tree/develop)
-- current developing branch: [v2](https://github.com/nervosnetwork/docs.nervos.org/tree/v2)
-- old version developing branch: [v1](https://github.com/nervosnetwork/docs.nervos.org/tree/v1)
+- production branch: [master](https://github.com/nervosnetwork/docs.nervos.org/tree/master)
+- latest developing branch: [develop](https://github.com/nervosnetwork/docs.nervos.org/tree/develop)
 
 ### Code structure
 
