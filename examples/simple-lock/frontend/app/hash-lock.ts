@@ -59,6 +59,30 @@ export async function unlock(
     output.capacity = ccc.fixedPointFrom(amountInCKB);
   });
 
+  // Complete missing parts for transaction
+  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+
+  // Here calculate the minimum capacity of a single Cell (about 73)
+  let occupiedSize = ccc.CellOutput.from({
+    capacity: BigInt(1000),
+    lock: fromScript,
+  }).occupiedSize;
+  console.log(`occupiedSize: ${occupiedSize}`);
+
+  await tx.completeInputsByCapacity(
+    readSigner,
+    ccc.fixedPointFrom(occupiedSize)
+  );
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+      capacity: balanceDiff - BigInt(1000), // Fee 1000
+    });
+  }
+
   // fill the witness with preimage
   const preimageAnswer = window.prompt("please enter the preimage: ");
   if (preimageAnswer == null) {
@@ -67,24 +91,10 @@ export async function unlock(
   const newWitnessArgs = new ccc.WitnessArgs(
     stringToBytesHex(preimageAnswer) as `0x${string}`
   );
-  console.log("newWitnessArgs: ", newWitnessArgs);
+  console.log(`newWitnessArgs: ${JSON.stringify(newWitnessArgs)}`);
   tx.setWitnessArgsAt(0, newWitnessArgs);
 
-  // Complete missing parts for transaction
-  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
-  await tx.completeInputsByCapacity(
-    readSigner,
-    ccc.fixedPointFrom(amountInCKB)
-  );
-  const balanceDiff =
-    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
-  console.log("balanceDiff: ", balanceDiff);
-  if (balanceDiff > ccc.Zero) {
-    tx.addOutput({
-      lock: fromScript,
-    });
-  }
-  //await tx.completeFeeBy(readSigner, 1000);
+  // console.log(`${JSON.stringify(tx, (_, v) => typeof v === 'bigint' ? v.toString() : v)}`);
 
   const txHash = await cccClient.sendTransaction(tx);
   console.log("Full transaction: ", tx.stringify());
@@ -95,6 +105,6 @@ export async function wait(seconds: number) {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }
 
-export function shannonToCKB(amount: bigint){
+export function shannonToCKB(amount: bigint) {
   return amount / BigInt(100000000);
 }
