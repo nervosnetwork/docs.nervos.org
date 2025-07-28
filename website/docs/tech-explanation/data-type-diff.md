@@ -64,6 +64,10 @@ By allowing Scripts to be referenced either via data hash via type hash, CKB pro
 - **Immutable references** (`data`, `data1`, `data2`) ensure that the exact same code is executed every time, promoting auditability and long-term reproducibility.
 - **Upgradeable references** (`type`) allow for controlled Script evolution—such as fixing bugs or adding new features—while maintaining a consistent identifier through a Type ID.
 
+Scripts using `data`, `data1`, or `data2` as their `hash_type` also lock in the version of the [CKB-VM](/docs/tech-explanation/ckb-vm). This ensures consistent behavior, even if the VM changes in a future hard fork. In contrast, Scripts using the type hash always run on the latest VM version, evolving alongside the network.
+
+This separation between Script code and system upgrades gives users more control. They can choose to stick with known behavior or follow improvements introduced through future hard forks.
+
 This design empowers all participants to balance reliability according to their needs. Developers can publish Scripts with upgrade paths, while users seeking stronger execution guarantees can opt to lock in a specific version using a data hash.
 
 By building this flexibility into the protocol, CKB accommodates diverse needs and supports independent decision-making around code usage.
