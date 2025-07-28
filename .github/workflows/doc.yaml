@@ -20,20 +20,20 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20.x
-          cache: yarn
-          cache-dependency-path: website/yarn.lock
+          cache: pnpm
+          cache-dependency-path: website/pnpm-lock.json
 
       - name: Install dependencies
         working-directory: website
-        run: yarn
+        run: pnpm
 
       - name: Run fmt
         working-directory: website
-        run: yarn run fmt
+        run: pnpm run fmt
 
       - name: Check if there are any changes after formatting
         run: git diff --exit-code
 
       - name: Build website
         working-directory: website
-        run: yarn build
+        run: pnpm build
