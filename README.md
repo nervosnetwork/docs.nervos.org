@@ -43,7 +43,7 @@ If you run into an issue on our documentation website you can contact us on [Ner
     ├── src
     ├── static
     ├── tsconfig.json
-    └── yarn.lock
+    └── pnpm.lock
 ```
 
 - `website`: The doc site is built with [docusaurus](https://docusaurus.io/) and under the `website` folder.
@@ -61,12 +61,12 @@ cd website
 
 #### Install Dependencies
 
-Install [yarn](https://yarnpkg.com/en/).
+Install [pnpm](https://pnpmpkg.com/en/).
 
 In `website` folder:
 
 ```bash
-yarn install
+pnpm install
 ```
 
 #### Run the website
@@ -74,7 +74,7 @@ yarn install
 In `website` folder:
 
 ```bash
-yarn start
+pnpm start
 ```
 
 ```bash
@@ -89,7 +89,7 @@ You can check out the website at http://localhost:3000/ in your browser now.
 In `website` folder:
 
 ```bash
-yarn build
+pnpm build
 ```
 
 #### Maintain key-terms.json file
@@ -98,7 +98,7 @@ The `key-terms.json` file is generated from the glossary in the `docs/tech-expla
 Once you have updates in `glossary.md`, please remember to run the following command in the `website` folder to re-generate the `key-terms.json` file:
 
 ```bash
-yarn gen-terms
+pnpm gen-terms
 ```
 
 After running the command, you can navigate to `src/components/Tooltip` to verify that the `key-terms.json` file has been generated successfully.
