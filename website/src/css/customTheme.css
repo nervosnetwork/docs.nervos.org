@@ -508,6 +508,7 @@ code {
 
 pre {
   border-radius: 8px;
+  border: 1px solid var(--border-subtle);
 }
 pre > code {
   box-shadow: none;
