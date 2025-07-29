@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r run build",
+    "clean": "pnpm -r run clean",
+    "test": "pnpm -r run test",
+    "format": "pnpm -r run format"
+  },
+  "devDependencies": {
+    "prettier": "~3.5.3",
+    "prettier-plugin-organize-imports": "~4.1.0",
+    "rimraf": "~6.0.1",
+    "typescript": "~5.8.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
