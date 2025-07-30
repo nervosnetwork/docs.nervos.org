@@ -135,7 +135,7 @@ const offCKBConfig: OffCKBConfig = {
 
   get myScripts() {
     const network = readEnvNetwork();
-    const networkMyScripts: NetworkMyScripts = require('./offckb/my-rust-scripts.json');
+    const networkMyScripts: NetworkMyScripts = require('./offckb/my-scripts.json');
     const myScripts = networkMyScripts[network];
     return myScripts;
   },

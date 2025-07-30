@@ -2,7 +2,7 @@
 
 import offCKB from "@/offckb.config";
 import React, { useEffect, useState } from "react";
-import { capacityOf, generateAccount, shannonToCKB, unlock, wait } from "./hash-lock";
+import { capacityOf, generateAccount, shannonToCKB, unlock, wait, generateAccountRust, unlockRust } from "./hash-lock";
 import Link from "next/link";
 import { Script } from "@ckb-ccc/core";
 
@@ -17,6 +17,9 @@ export default function Home() {
 }
 
 function HashLock() {
+  const [lang, setLang] = useState<"ts" | "rust">("ts");
+  const scriptName = lang === "ts" ? "hash-lock.bc" : "hash-lock";
+
   // You can generate ckb blake2b_256 hash from https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25
   const [hash, setHash] = useState<string>(
     "3376b3e62282513e03d78fc6c5bd555503d0c697bf394d55cd672cc96e6b0a2c"
@@ -26,14 +29,19 @@ function HashLock() {
   const [balance, setBalance] = useState("0");
 
   useEffect(() => {
-    if (hash && offCKB.myScripts["hash-lock"] != null) {
-      
+    if (hash && offCKB.myScripts[scriptName] != null) {
       updateFromInfo();
     }
-  }, [hash]);
+  }, [hash, lang]);
 
   const updateFromInfo = async () => {
-    const { lockScript, address } = generateAccount(hash);
+    console.log(`lang: ${lang}`);
+    let lockScript, address;
+    if (lang === 'ts') {
+      ({ lockScript, address } = generateAccount(hash));
+    } else {
+      ({ lockScript, address } = generateAccountRust(hash));
+    }
     const capacity = await capacityOf(address);
     setFromAddr(address);
     setFromLock(lockScript);
@@ -52,7 +60,14 @@ function HashLock() {
 
   const onTransfer = async () => {
     setIsTransferring(true);
-    const txHash = await unlock(fromAddr, toAddr, amountInCKB).catch(alert);
+
+    let txHash;
+    if (lang == 'ts') {
+      txHash = await unlock(fromAddr, toAddr, amountInCKB).catch(alert);
+    } else {
+      txHash = await unlockRust(fromAddr, toAddr, amountInCKB).catch(alert);
+
+    }
 
     // We can wait for this txHash to be on-chain so that we can trigger the UI/UX updates including balance.
     if (txHash) {
@@ -62,7 +77,6 @@ function HashLock() {
       await wait(10);
       await updateFromInfo();
     }
-
     setIsTransferring(false);
   };
 
@@ -86,12 +100,27 @@ function HashLock() {
       <div className="mb-10 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
         Simple Lock Example
       </div>
+      <div className="mb-4">
+        <span className="mr-4 font-bold">Select Language: </span>
+        <button
+          className={`px-4 py-2 border rounded-l ${lang === "ts" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          onClick={() => setLang("ts")}
+        >
+          TypeScript
+        </button>
+        <button
+          className={`px-4 py-2 border rounded-r ${lang === "rust" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          onClick={() => setLang("rust")}
+        >
+          Rust
+        </button>
+      </div>
       <div className="mb-8">
         <div className="text-xl font-bold">HASH_LOCK Script Info</div>
         <div>
           code_hash:{" "}
-          {offCKB.myScripts["hash-lock"]?.codeHash
-            ? offCKB.myScripts["hash-lock"]?.codeHash
+          {offCKB.myScripts[scriptName]?.codeHash
+            ? offCKB.myScripts[scriptName]?.codeHash
             : "Not Found, deploy script first."}
         </div>
       </div>
@@ -108,7 +137,7 @@ function HashLock() {
             className="w-full px-1 py-1"
           />
         </div>
-        <p>hints: Generate ckb blake2b_256 hash from <Link style={{color: "blue"}} href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">here</Link></p>
+        <p>hints: Generate ckb blake2b_256 hash from <Link style={{ color: "blue" }} href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">here</Link></p>
 
         <div className="my-4">
           Hash Lock:

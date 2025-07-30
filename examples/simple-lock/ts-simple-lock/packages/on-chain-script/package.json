@@ -16,7 +16,7 @@
   "module": "./dist/index.js",
   "scripts": {
     "start": "ckb-debugger --read-file dist/index.bc --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -r",
-    "build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js && ckb-debugger --read-file dist/index.js --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -c dist/index.bc && mkdir -p ../../dist && cp dist/index.bc ../../dist/simple-lock.bc",
+    "build": "tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js && ckb-debugger --read-file dist/index.js --bin node_modules/ckb-testtool/src/unittest/defaultScript/ckb-js-vm -- -c dist/index.bc && mkdir -p ../../dist && cp dist/index.bc ../../dist/hash-lock.bc",
     "format": "prettier --write .",
     "clean": "rimraf dist/*"
   },
