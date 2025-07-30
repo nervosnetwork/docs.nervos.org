@@ -7,7 +7,7 @@
         {
           "cellDep": {
             "outPoint": {
-              "txHash": "0x533dd9ecdb915432540efcd8bdcc7a82bd7ef92865a425914b3bd421556ed049",
+              "txHash": "0x84b52e2bb7a6c857548f3de630c4abf27765c7070c2adfc99fd76d3329886d15",
               "index": 0
             },
             "depType": "code"
@@ -16,13 +16,13 @@
       ]
     },
     "hash-lock": {
-      "codeHash": "0x30c665e4dbade59c029570388f14de8d10cedb250a982037149acca795652755",
-      "hashType": "type",
+      "codeHash": "0x2bfc82639ab968ef24060735ed98ec71d419162bc9024c53bccb3d40af7326cf",
+      "hashType": "data1",
       "cellDeps": [
         {
           "cellDep": {
             "outPoint": {
-              "txHash": "0xbe9e6c4288e03f10a232f9f820ff84cd7c6304e2af45c2e0c8b88f78dd7c1241",
+              "txHash": "0xb828e15c9a35fce9b2f93a6071b9fc53c518fab418c75c5979ec925752641823",
               "index": 0
             },
             "depType": "code"
@@ -37,7 +37,7 @@
         {
           "cellDep": {
             "outPoint": {
-              "txHash": "0xc747426d110902bc07a52221f89d421bf637a8297871c5257ffaf8d2a070518e",
+              "txHash": "0xf6b0b474d999078f0c14490c63e69b80ef0f95b19de01fbbed09641a449e3713",
               "index": 0
             },
             "depType": "code"
