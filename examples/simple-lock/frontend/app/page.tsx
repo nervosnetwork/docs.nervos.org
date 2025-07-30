@@ -137,17 +137,19 @@ function HashLock() {
             className="w-full px-1 py-1"
           />
         </div>
-        <p>hints: Generate ckb blake2b_256 hash from <Link style={{ color: "blue" }} href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">here</Link></p>
+        <p>hints: Generate ckb blake2b_256 hash from <Link style={{ color: "blue" }}
+          href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">
+          here
+        </Link></p>
 
         <div className="my-4">
           Hash Lock:
-          <ul className="ml-3">
-            <li>CKB Address: {fromAddr}</li>
+          <ul className="max-w-2xl">
+            <li className="break-all">CKB Address: {fromAddr}</li>
             <li>
               Current lock script:
-              <pre>{JSON.stringify(fromLock, null, 2)}</pre>
+              <pre className="break-all whitespace-pre-wrap max-w-full">{JSON.stringify(fromLock, null, 2)}</pre>
             </li>
-
             <li>Total capacity: {balance} CKB</li>
           </ul>
         </div>
