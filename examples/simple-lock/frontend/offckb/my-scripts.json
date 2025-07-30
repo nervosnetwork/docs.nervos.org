@@ -1,13 +1,43 @@
 {
   "devnet": {
-    "hash-lock": {
-      "codeHash": "0x4a3e2579373f8be5d49f69c1bfaff41b70f1c0b9e539f8c06feb42f55ec19f57",
-      "hashType": "data1",
+    "ckb_js_vm": {
+      "codeHash": "0x5ea4b9d50093a19943dc788c15bbdf7cd9d89efd67989a18b162feca814d90bb",
+      "hashType": "type",
       "cellDeps": [
         {
           "cellDep": {
             "outPoint": {
-              "txHash": "0xb75a12da376fd98e2010c7ffc62f9eb54b614b834aab19d60787b8f16ec45217",
+              "txHash": "0x533dd9ecdb915432540efcd8bdcc7a82bd7ef92865a425914b3bd421556ed049",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "hash-lock": {
+      "codeHash": "0x30c665e4dbade59c029570388f14de8d10cedb250a982037149acca795652755",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xbe9e6c4288e03f10a232f9f820ff84cd7c6304e2af45c2e0c8b88f78dd7c1241",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
+    },
+    "hash-lock.bc": {
+      "codeHash": "0xddc15b0bdafeb975fb14aa80aa8d79a270a073b5c6917defd1114d619b5dcdc8",
+      "hashType": "type",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xc747426d110902bc07a52221f89d421bf637a8297871c5257ffaf8d2a070518e",
               "index": 0
             },
             "depType": "code"
