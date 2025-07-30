@@ -5,7 +5,12 @@ use super::*;
 use ckb_testtool::{
     builtin::ALWAYS_SUCCESS,
     ckb_hash::blake2b_256,
-    ckb_types::{bytes::Bytes, core::TransactionBuilder, packed::*, prelude::*},
+    ckb_types::{
+        bytes::Bytes,
+        core::{ScriptHashType, TransactionBuilder},
+        packed::*,
+        prelude::*,
+    },
     context::Context,
 };
 
@@ -39,8 +44,16 @@ fn test_hash_lock() {
         expected_hash
     );
 
+    // let hash_lock_script = context
+    //     .build_script(&hash_lock_out_point, Bytes::copy_from_slice(&expected_hash))
+    //     .expect("script");
+
     let hash_lock_script = context
-        .build_script(&hash_lock_out_point, Bytes::copy_from_slice(&expected_hash))
+        .build_script_with_hash_type(
+            &hash_lock_out_point,
+            ScriptHashType::Data2,
+            Bytes::copy_from_slice(&expected_hash),
+        )
         .expect("script");
 
     // prepare cell deps

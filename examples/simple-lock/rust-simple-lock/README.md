@@ -1,6 +1,7 @@
-# Build a Simple Lock
+# simple-lock
 
-A a full-stack dApp example to showcase the development of CKB with scripts(smart contract) and the frontend. Read the step-by-step [tutorial](https://docs.nervos.org/docs/dapp/simple-lock) to understand how it works and how to run it.
+TODO: Write this readme
 
-> [!WARNING]
-> This lock example isn't intended for production, it's just an toy example to show how to build a simple lock with CKB Scripts.
+*This project was bootstrapped with [ckb-script-templates].*
+
+[ckb-script-templates]: https://github.com/cryptape/ckb-script-templates
