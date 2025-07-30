@@ -9,7 +9,7 @@
   "module": "./dist/index.js",
   "scripts": {
     "build": "pnpm copy-js-vm-script",
-    "copy-js-vm-script": "node -e \"const { DEFAULT_SCRIPT_CKB_JS_VM } = require('ckb-testtool'); const fs = require('fs'); const path = require('path'); fs.mkdirSync('../../dist', { recursive: true }); fs.copyFileSync(DEFAULT_SCRIPT_CKB_JS_VM, path.join('../../dist', 'ckb_js_vm'));\"",
+    "copy-js-vm-script": "node -e \"const { DEFAULT_SCRIPT_CKB_JS_VM } = require('ckb-testtool'); const fs = require('fs'); const path = require('path'); fs.mkdirSync('../../../scripts', { recursive: true }); fs.copyFileSync(DEFAULT_SCRIPT_CKB_JS_VM, path.join('../../../scripts', 'ckb_js_vm'));\"",
     "format": "prettier --write .",
     "test": "NODE_OPTIONS='--no-warnings' jest",
     "clean": "rimraf dist/*"
