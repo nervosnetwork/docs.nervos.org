@@ -4,7 +4,7 @@ import offCKB from "@/offckb.config";
 import React, { useEffect, useState } from "react";
 import { capacityOf, generateAccount, shannonToCKB, unlock, wait, generateAccountRust, unlockRust } from "./hash-lock";
 import Link from "next/link";
-import { Script } from "@ckb-ccc/core";
+import { Script, hashCkb, hexFrom } from "@ckb-ccc/core";
 
 export default function Home() {
   return (
@@ -21,18 +21,28 @@ function HashLock() {
   const scriptName = lang === "ts" ? "hash-lock.bc" : "hash-lock";
 
   // You can generate ckb blake2b_256 hash from https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25
+  const [preimage, setPreimage] = useState<string>(
+    "Hello World"
+  );
   const [hash, setHash] = useState<string>(
-    "3376b3e62282513e03d78fc6c5bd555503d0c697bf394d55cd672cc96e6b0a2c"
+    ""
   );
   const [fromAddr, setFromAddr] = useState("");
   const [fromLock, setFromLock] = useState<Script>();
   const [balance, setBalance] = useState("0");
 
   useEffect(() => {
+    // Update Hash
+    if (preimage != null) {
+      const buffer = hexFrom(Array.from(preimage).map(c => c.charCodeAt(0)));
+      const hash = hashCkb(buffer).slice(2);
+      setHash(hash);
+    }
+
     if (hash && offCKB.myScripts[scriptName] != null) {
       updateFromInfo();
     }
-  }, [hash, lang]);
+  }, [preimage, hash, lang]);
 
   const updateFromInfo = async () => {
     console.log(`lang: ${lang}`);
@@ -127,7 +137,17 @@ function HashLock() {
 
       <div>
         <div className="text-xl font-bold">Build A Lock</div>
-        <div className="w-full flex">
+        <div className="w-full flex mb-2 mt-2">
+          <label htmlFor="Preimage-key">Preimage: </label>&nbsp;
+          <input
+            id="Preimage-key"
+            type="text"
+            value={preimage}
+            onChange={(e) => setPreimage(e.target.value)}
+            className="w-full px-1 py-1"
+          />
+        </div>
+        <div className="w-full flex mb-2 mt-2">
           <label htmlFor="Hash-key">Hash: </label>&nbsp;
           <input
             id="Hash-key"
@@ -137,10 +157,15 @@ function HashLock() {
             className="w-full px-1 py-1"
           />
         </div>
-        <p>hints: Generate ckb blake2b_256 hash from <Link style={{ color: "blue" }}
-          href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">
-          here
-        </Link></p>
+        <div className="max-w-3xl">
+          <p className="bg-gray-100 text-gray-800 p-3 rounded-md text-sm break-all max-w-full">
+            hints: Here for the convenience of testing, we use Preimage to generate Hash directly. Generate ckb blake2b_256 hash from
+            <Link style={{ color: "blue" }}
+              href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">
+              here
+            </Link>
+          </p>
+        </div>
 
         <div className="my-4">
           Hash Lock:
