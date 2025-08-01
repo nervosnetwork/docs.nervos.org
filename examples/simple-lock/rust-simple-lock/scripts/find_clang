@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# An utility script used to find a binary of clang 16+
+
+if [[ -n "${CLANG}" ]]; then
+  echo "${CLANG}"
+  exit 0
+fi
+
+# To cope with packaging messes from different distros, we would search
+# for a different binary other than clang, then convert it back to clang
+# at the end.
+SEARCH_TARGET="${SEARCH_TARGET:-llvm-strip}"
+
+CANDIDATES=("${SEARCH_TARGET}" "${SEARCH_TARGET}-19" "${SEARCH_TARGET}-18" "${SEARCH_TARGET}-17" "${SEARCH_TARGET}-16")
+
+BREW_PREFIX=$(brew --prefix 2> /dev/null)
+if [[ -n "${BREW_PREFIX}" ]]; then
+  CANDIDATES+=(
+    "${BREW_PREFIX}/opt/llvm/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@19/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@18/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@17/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@16/bin/${SEARCH_TARGET}"
+  )
+fi
+
+for candidate in ${CANDIDATES[@]}; do
+  OUTPUT=$($candidate --version 2> /dev/null | grep 'version [0-9]' | head -n 1 | cut -d'.' -f 1 | grep -o '[0-9][0-9]*')
+
+  if [[ $((OUTPUT)) -ge 16 ]]; then
+    echo "${candidate/${SEARCH_TARGET}/clang}"
+    exit 0
+  fi
+done
+
+>&2 echo "Cannot find clang of version 16+!"
+exit 1
