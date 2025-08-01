@@ -8,7 +8,7 @@
 }
 
 .codeBlockTitle {
-  border-bottom: 1px solid var(--border-invisible);
+  border: 1px solid var(--border-subtle);
   font-size: var(--ifm-code-font-size);
   padding: 0.75rem var(--ifm-pre-padding);
   border-top-left-radius: inherit;

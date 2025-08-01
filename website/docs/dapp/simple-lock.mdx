@@ -6,7 +6,7 @@ title: Build a Simple Lock
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
-import SwitchToTestnet from "./_SwitchToTestnet.mdx";
+import SwitchToTestnet from "./_SwitchToTestnet.tsx";
 import StartDevnet from "./_StartDevnet.mdx";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import ImgContainer from "@components/ImgContainer";
@@ -327,15 +327,7 @@ By following this tutorial, you've mastered the basics of building a custom lock
 
 ## Next Step
 
-So now your dApp works great on the local blockchain, you might want to switch it to different environments like Testnet and Mainnet.
-
-To do that, just change the environment variable `NETWORK` to `testnet` in the `.env` file:
-
-```sh
-NEXT_PUBLIC_NETWORK=testnet # devnet, testnet or mainnet
-```
-
-For more details, check out the <a href={"https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/README.md"}>README.md</a>.
+<SwitchToTestnet readmeLink="https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/simple-lock" />
 
 ## Additional Resources
 
