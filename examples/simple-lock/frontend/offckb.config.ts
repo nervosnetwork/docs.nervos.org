@@ -91,7 +91,7 @@ export function readEnvNetwork(): Network {
 }
 
 const offCKBConfig: OffCKBConfig = {
-  version: '0.3.0-rc2',
+  version: '0.3.5',
   contractBinFolder: '../scripts',
   // this folder record the script deployment information
   // If you change this folder, you need to update the following get systemScripts and get myScripts method
