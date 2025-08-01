@@ -100,6 +100,7 @@ export default {
         "script/debug-script",
         "script/script-upgrade-workflow",
         "script/common-script-error-code",
+        "script/script-testing-guide",
       ],
     },
     {

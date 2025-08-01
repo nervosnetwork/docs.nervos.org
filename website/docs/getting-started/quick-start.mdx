@@ -273,16 +273,15 @@ offckb inject-config
   <TabItem value="config-injected" label="Response">
 ```
 
-```bash
 All good. You can now use it in your project like:
 
-  import offCKB from "offckb.config";
-
-  const myScriptCodeHash = offCKB.myScripts['script-name'].codeHash;
-  const omnilockScriptCodeHash = offCKB.systemScripts['omnilock'].codeHash;
-
-Check example at https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/simple-transfer
+```bash
+import offCKB from "offckb.config";
+const myScriptCodeHash = offCKB.myScripts['script-name'].codeHash;
+const omnilockScriptCodeHash = offCKB.systemScripts['omnilock'].codeHash;
 ```
+
+Check example at https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/simple-transfer
 
 ```mdx-code-block
 </TabItem>

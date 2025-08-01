@@ -9,6 +9,8 @@ export const DEVNET_SCRIPTS: Record<
     offCKB.systemScripts.secp256k1_blake160_sighash_all!.script,
   [KnownScript.Secp256k1Multisig]:
     offCKB.systemScripts.secp256k1_blake160_multisig_all!.script,
+  [KnownScript.NervosDao]:
+    offCKB.systemScripts.dao!.script,
   [KnownScript.AnyoneCanPay]: offCKB.systemScripts.anyone_can_pay!.script,
   [KnownScript.OmniLock]: offCKB.systemScripts.omnilock!.script,
   [KnownScript.XUdt]: offCKB.systemScripts.xudt!.script,
