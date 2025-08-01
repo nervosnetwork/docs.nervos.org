@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { capacityOf, generateAccountFromPrivateKey, issueToken, queryIssuedTokenCells, shannonToCKB, transferTokenToAddress } from './lib';
 import { ccc, CellOutput, Script } from '@ckb-ccc/core';
 
-const app = document.getElementById('root');
-ReactDOM.render(<App />, app);
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+root.render(<App />);
 
 function IssuedToken() {
   // default value: first account privkey from offckb
