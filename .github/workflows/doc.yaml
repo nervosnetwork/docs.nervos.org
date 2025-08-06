@@ -24,17 +24,5 @@ jobs:
           cache: yarn
           cache-dependency-path: website/yarn.lock
 
-      - name: Install dependencies
-        working-directory: website
-        run: yarn
-
-      - name: Run fmt
-        working-directory: website
-        run: yarn run fmt
-
-      - name: Check if there are any changes after formatting
-        run: git diff --exit-code
-
-      - name: Build website
-        working-directory: website
-        run: yarn build
+      - name: website
+        run: ./scripts/website-ci.sh
