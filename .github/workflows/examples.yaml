@@ -1,0 +1,23 @@
+name: Examples
+
+on:
+  pull_request:
+    paths: [examples/**]
+  push:
+    paths: [examples/**]
+
+jobs:
+  node-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/cache@v3
+      - uses: actions/setup-node@v3
+
+      - name: rust-script-examples
+        run: ./scripts/examples-rust-ci.sh
+
+      - name: ts-script-examples
+        run: ./scripts/examples-ts-ci.sh
