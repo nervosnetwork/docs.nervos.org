@@ -21,7 +21,118 @@ export async function capacityOf(address: string): Promise<bigint> {
   return balance;
 }
 
+function hashTypeToBin(s: string): string {
+  if (s == 'type') {
+    return '0x01'
+  } else if (s == 'data') {
+    return '0x00'
+  } else {
+    throw new Error(`Unknow Hash Type: ${s}`);
+  }
+}
+
+export async function wait(seconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+}
+
+export function shannonToCKB(amount: bigint) {
+  return amount / BigInt(100000000);
+}
+
+////////////////////////////////////////////////////////////
+// JS/TS contract
+////////////////////////////////////////////////////////////
+
 export function generateAccount(hash: string) {
+  const lockArgs =
+    "0x0000" +
+    offCKB.myScripts['hash-lock.bc']!.codeHash.slice(2) +
+    hashTypeToBin(offCKB.myScripts['hash-lock.bc']!.hashType).slice(2) +
+    hash;
+  const lockScript = {
+    codeHash: offCKB.myScripts["ckb_js_vm"]!.codeHash,
+    hashType: offCKB.myScripts["ckb_js_vm"]!.hashType,
+    args: lockArgs,
+  };
+  const address = ccc.Address.fromScript(lockScript, cccClient).toString();
+  return {
+    address,
+    lockScript: ccc.Script.from(lockScript),
+  };
+}
+
+export async function unlock(
+  fromAddr: string,
+  toAddr: string,
+  amountInCKB: string
+): Promise<string> {
+  const fromScript = (await ccc.Address.fromString(fromAddr, cccClient)).script;
+  const toScript = (await ccc.Address.fromString(toAddr, cccClient)).script;
+  const readSigner = new ccc.SignerCkbScriptReadonly(cccClient, fromScript);
+
+  // Build the full transaction
+  const tx = ccc.Transaction.from({
+    outputs: [{ lock: toScript }],
+    outputsData: [],
+  });
+
+  // CCC transactions are easy to be edited
+  tx.outputs.forEach((output, i) => {
+    if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
+      alert(`Insufficient capacity at output ${i} to store data`);
+      return;
+    }
+    output.capacity = ccc.fixedPointFrom(amountInCKB);
+  });
+
+  // Complete missing parts for transaction
+  await tx.addCellDeps(offCKB.myScripts["hash-lock.bc"]!.cellDeps[0].cellDep);
+  await tx.addCellDeps(offCKB.myScripts["ckb_js_vm"]!.cellDeps[0].cellDep);
+
+  // Here calculate the minimum capacity of a single Cell (about 73)
+  let occupiedSize = ccc.CellOutput.from({
+    capacity: BigInt(1000),
+    lock: fromScript,
+  }).occupiedSize;
+  console.log(`occupiedSize: ${occupiedSize}`);
+
+  await tx.completeInputsByCapacity(
+    readSigner,
+    ccc.fixedPointFrom(occupiedSize)
+  );
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+      capacity: balanceDiff - BigInt(1000), // Fee 1000
+    });
+  }
+
+  // fill the witness with preimage
+  const preimageAnswer = window.prompt("please enter the preimage: ");
+  if (preimageAnswer == null) {
+    throw new Error("user abort input!");
+  }
+  const newWitnessArgs = new ccc.WitnessArgs(
+    stringToBytesHex(preimageAnswer) as `0x${string}`
+  );
+  console.log(`newWitnessArgs: ${JSON.stringify(newWitnessArgs)}`);
+  tx.setWitnessArgsAt(0, newWitnessArgs);
+
+  // console.log(`${JSON.stringify(tx, (_, v) => typeof v === 'bigint' ? v.toString() : v)}`);
+
+  const txHash = await cccClient.sendTransaction(tx);
+  console.log("Full transaction: ", tx.stringify());
+  return txHash;
+}
+
+////////////////////////////////////////////////////////////
+// Rust contract
+////////////////////////////////////////////////////////////
+
+export function generateAccountRust(hash: string) {
   const lockArgs = "0x" + hash;
   const lockScript = {
     codeHash: offCKB.myScripts["hash-lock"]!.codeHash,
@@ -35,7 +146,7 @@ export function generateAccount(hash: string) {
   };
 }
 
-export async function unlock(
+export async function unlockRust(
   fromAddr: string,
   toAddr: string,
   amountInCKB: string
@@ -83,6 +194,30 @@ export async function unlock(
     });
   }
 
+  // Complete missing parts for transaction
+  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+
+  // Here calculate the minimum capacity of a single Cell (about 73)
+  let occupiedSize = ccc.CellOutput.from({
+    capacity: BigInt(1000),
+    lock: fromScript,
+  }).occupiedSize;
+  console.log(`occupiedSize: ${occupiedSize}`);
+
+  await tx.completeInputsByCapacity(
+    readSigner,
+    ccc.fixedPointFrom(occupiedSize)
+  );
+  const balanceDiff =
+    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
+  console.log("balanceDiff: ", balanceDiff);
+  if (balanceDiff > ccc.Zero) {
+    tx.addOutput({
+      lock: fromScript,
+      capacity: balanceDiff - BigInt(1000), // Fee 1000
+    });
+  }
+
   // fill the witness with preimage
   const preimageAnswer = window.prompt("please enter the preimage: ");
   if (preimageAnswer == null) {
@@ -99,12 +234,4 @@ export async function unlock(
   const txHash = await cccClient.sendTransaction(tx);
   console.log("Full transaction: ", tx.stringify());
   return txHash;
-}
-
-export async function wait(seconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-}
-
-export function shannonToCKB(amount: bigint) {
-  return amount / BigInt(100000000);
 }

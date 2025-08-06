@@ -1,0 +1,26 @@
+{
+  "name": "simple-lock",
+  "version": "0.1.0",
+  "description": "unit tests",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "scripts": {
+    "build": "pnpm copy-js-vm-script",
+    "copy-js-vm-script": "node -e \"const { DEFAULT_SCRIPT_CKB_JS_VM } = require('ckb-testtool'); const fs = require('fs'); const path = require('path'); fs.mkdirSync('../../../scripts', { recursive: true }); fs.copyFileSync(DEFAULT_SCRIPT_CKB_JS_VM, path.join('../../../scripts', 'ckb_js_vm'));\"",
+    "format": "prettier --write .",
+    "test": "NODE_OPTIONS='--no-warnings' jest",
+    "clean": "rimraf dist/*"
+  },
+  "devDependencies": {
+    "ckb-testtool": "~1.0.0",
+    "@types/node": "~22.13.8",
+    "@types/jest": "~29.5.14",
+    "ts-jest": "~29.2.6",
+    "jest": "~29.7.0",
+    "@ckb-ccc/core": "~1.8.0"
+  },
+  "dependencies": {}
+}

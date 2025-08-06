@@ -46,28 +46,88 @@ cd docs.nervos.org/examples/simple-lock
 
 ### Step 3: Build and Deploy the Script
 
-Navigate to your project, compile and deploy the Script to Devnet.
+In this tutorial, the `hash-lock` contract is implemented in both **Rust** and **TypeScript**. You can choose the version that suits your needs.
 
-Compile the Script:
+To compile the Rust contract, navigate to the `rust-simple-lock` directory and run:
 
 <CodeTabs
   cmd={`make build`}
-  response={`Cleaning build/release directory...
+  response={`docs.nervos.org/examples/simple-lock/rust-simple-lock$ make build 
+Cleaning build/release directory...
 mkdir -p build/release
-RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs --cfg debug_assertions" TARGET_CC="clang"
-                cargo build --target=riscv64imac-unknown-none-elf --release 
-    Finished release [optimized] target(s) in 0.22s
-Copying binary hash-lock to build directory`}
+make[1]: Entering directory 'docs.nervos.org/examples/simple-lock/rust-simple-lock/contracts/hash-lock'
+RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs,-a -C debug-assertions" TARGET_CC="clang-19" TARGET_AR="llvm-ar-19" \
+        cargo build --target=riscv64imac-unknown-none-elf --release 
+   ...
+   Compiling hash-lock v0.1.0 (docs.nervos.org/examples/simple-lock/rust-simple-lock/contracts/hash-lock)
+    Finished \`release\` profile [optimized + debuginfo] target(s) in 14.21s
+Copying binary hash-lock to build directory
+make[1]: Leaving directory 'docs.nervos.org/examples/simple-lock/rust-simple-lock/contracts/hash-lock'`}
 />
+
+Once compiled, the contract binary will be output to the `examples/simple-lock/scripts` directory.
+
+For the TypeScript implementation, navigate to the `ts-simple-lock` directory and run the following commands:
+
+<CodeTabs
+  cmd={`pnpm install
+pnpm build`}
+  response={`docs.nervos.org/examples/simple-lock/ts-simple-lock$ pnpm install
+Scope: all 3 workspace projects
+Lockfile is up to date, resolution step is skipped
+Packages: +400
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 400, reused 400, downloaded 0, added 400, done
+
+devDependencies:
+...
+Done in 1.3s using pnpm v10.10.0
+docs.nervos.org/examples/simple-lock/ts-simple-lock$ pnpm build
+
+> @ build docs.nervos.org/examples/simple-lock/ts-simple-lock
+> pnpm -r run build
+
+Scope: 2 of 3 workspace projects
+packages/on-chain-script build$ tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js && ckb-debugger --read-file dis…
+│ dist/index.js 21.8kb
+│ ⚡ Done in 6ms
+│ Run result: 0
+│ All cycles: 37795437(36.0M)
+└─ Done in 1.2s
+packages/on-chain-script-tests build$ pnpm copy-js-vm-script
+│ > simple-lock@0.1.0 copy-js-vm-script docs.nervos.org/examples/simple-lock/ts-simple-lock/packages/on-chain-script-tests
+│ > node -e "const { DEFAULT_SCRIPT_CKB_JS_VM } = require('ckb-testtool'); const fs = require('fs'); const path = require('path'); fs.mkdirSync('../../../scripts', { recursive: true }); fs.copyFileSync(DEFAULT…
+│ (node:23389) ExperimentalWarning: WASI is an experimental feature and might change at any time
+│ (Use \`node --trace-warnings ...\` to show where the warning was created)
+└─ Done in 445ms`}
+/>
+
+Once compiled, the contract files will be available in the `examples/simple-lock/scripts` directory as well.
+
+Since the `ckb-js-vm` script is not part of the genesis block, it will also appear in the `scripts` directory. During deployment, it will be included on-chain automatically.
 
 Deploy the Script binary to the Devnet:
 
+(Both Rust and TypeScript contracts are built here, so three scripts will be deployed.)
+
 <CodeTabs
   cmd={`cd frontend && offckb deploy -t --network devnet`}
-  response={`contract HASH-LOCK deployed, tx hash: 0x9f55da2b555cdc4412945ff8827b7e77508c84f0b85d82b027d31418e6a9b5d9
-wait 4 blocks..
-done.
-`}
+  response={`contract ckb_js_vm deployed, tx hash: 0x471e03c89c328f7c2c9ba4fbcbce00a9dae5e65cd81511c45e2343aafd748d71
+wait for tx confirmed on-chain...
+tx committed.
+contract hash-lock deployed, tx hash: 0x0396f062ccbd576a3456d8db090f0dd2c62f01fcdcd93a0a5c108acfa73a742b
+wait for tx confirmed on-chain...
+tx committed.
+contract hash-lock.bc deployed, tx hash: 0xd151a01fbb6d1a29a2ea01585360ea9fd25825abd8cb29f13e0dffcc72830207
+wait for tx confirmed on-chain...
+tx committed.
+ckb_js_vm deployment.toml file offckb-nodejs/devnet/contracts/ckb_js_vm/deployment.toml generated successfully.
+ckb_js_vm migration json file offckb-nodejs/devnet/contracts/ckb_js_vm/migrations/2025-07-31-175527.json generated successfully.
+hash-lock deployment.toml file offckb-nodejs/devnet/contracts/hash-lock/deployment.toml generated successfully.
+hash-lock migration json file offckb-nodejs/devnet/contracts/hash-lock/migrations/2025-07-31-175527.json generated successfully.
+hash-lock.bc deployment.toml file offckb-nodejs/devnet/contracts/hash-lock.bc/deployment.toml generated successfully.
+hash-lock.bc migration json file offckb-nodejs/devnet/contracts/hash-lock.bc/migrations/2025-07-31-175527.json generated successfully.
+done.`}
 />
 
 ### Step 4: Run the DApp
@@ -93,14 +153,16 @@ Navigate to your project's frontend folder, install the node dependencies, and s
 }
 />
 
-Now, the app is running in http://localhost:3000
+Now, the app is running in http://localhost:3000.
+
+At the top of the page, developers can select their preferred language based on their needs.
 
 ### Step 5: Deposit Some CKB
 
-With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some <Tooltip>Live Cells</Tooltip> that use this Script as their Lock Script. This preparation process is known as **deposit**. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 200 CKB into a specific address:
+With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some <Tooltip>Live Cells</Tooltip> that use this Script as their Lock Script. This preparation process is known as **deposit**. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 300 CKB into a specific address:
 
 <CodeTabs
-  cmd={`offckb deposit --network devnet ckt1qry2mh3j5cylve2tl2sjpg3zhp9wjeq2l92rvxtd2scsx4jks500xpqrnm4k4g7j8nlnyc0j3y3z5q6s5ns29k8wx9prkn8ff09mhepmagkhur6h 200`}
+  cmd={`offckb deposit --network devnet ckt1qp02fww4qzf6rx2rm3ugc9dmma7dnky7l4ne3xsck930aj5pfkgtkqgqqpdsmqftz49xmjqgm2yr0ejj5jpsgw9w6vtazlaukdf9xecu4z32kqgsdyg7f7p70y8pavhnn00ly0qaksldttujr8mk8et38zd0yyjeegxctl4m 300`}
   response={`tx hash:  0x0668292c875ee31906e48651a553a16158307c02f2e91d24be75166ca080e1fd`}
 />
 
@@ -114,7 +176,7 @@ You can try clicking the **"Transfer"** button. The website will prompt you to e
 
 ## Behind the Scene
 
-### Script Logic
+### Script Logic (Rust)
 
 The concept behind `hash_lock` is to specify a hash in a particular Script. To unlock this Script, you must provide the preimage to reveal the hash. More specifically, the `hash_lock` Script will execute the following validations on-chain:
 
@@ -202,6 +264,53 @@ Here are a few things to note:
 - Next, we compare the two hash values to see if they match `(hash.eq(&expect_hash.as_ref()))`. If they do not match, we return a custom error code `Error::UnMatch` (which is 6).
 
 The whole logic is quite simple and straightforward. How do we use such a Script in our dApp? Let's check the frontend code.
+
+### Script Logic (TypeScript)
+
+For JavaScript/TypeScript developers, the logic behind the `hash_lock` script is equally simple and follows the same principles as the Rust version.
+
+Here’s what the script does step-by-step:
+
+1. It reads the **expected hash** from the Script's `args` field.
+2. It retrieves the **preimage** from the transaction’s **witness** field.
+3. It computes the **hash** of the preimage using the default CKB hash function (`blake2b-256`).
+4. If the computed hash matches the one in the `script_args`, the script returns success (0). Otherwise, it fails.
+
+Here is the complete TypeScript-based `hash_lock` script logic:
+
+```typescript
+import * as bindings from "@ckb-js-std/bindings";
+import { HighLevel, log, hashCkb, bytesEq } from "@ckb-js-std/core";
+
+function main() {
+  log.setLevel(log.LogLevel.Debug);
+  let expect_hash = new Uint8Array(HighLevel.loadScript().args).slice(35);
+
+  let witness_args = HighLevel.loadWitnessArgs(0, bindings.SOURCE_GROUP_INPUT);
+  let preimage = witness_args.lock!;
+
+  let hash = hashCkb(preimage);
+
+  if (!bytesEq(hash, expect_hash.buffer)) {
+    log.error(`Check hash failed: ${new Uint8Array(hash)}, ${expect_hash}`);
+    return 11;
+  } else {
+    return 0;
+  }
+}
+
+bindings.exit(main());
+```
+
+A few key things to highlight for developers coming from the JavaScript ecosystem:
+
+- The `@ckb-js-std/core` and `bindings` libraries provide high-level syscalls for accessing blockchain data.
+- `HighLevel.loadScript()` gets the current Script, and `.args` retrieves the expected hash.
+- `HighLevel.loadWitnessArgs()` fetches the witness for the transaction input, where the preimage is stored.
+- `hashCkb()` is used to calculate the `blake2b-256` hash.
+- If the hash matches, the script returns `0`. Otherwise, it logs the error and returns a failure code (`11`).
+
+This approach demonstrates how to write on-chain logic in a developer-friendly TypeScript environment, allowing you to test and iterate quickly with familiar tooling.
 
 ### Use the Hash_Lock Script in Your DApp
 
