@@ -36,7 +36,7 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
 
       - name: Install ckb-debugger
-        run: cargo install ckb-debugger
+        run: which ckb-debugger >/dev/null 2>&1 || cargo install ckb-debugger
 
       - name: rust-script-examples
         run: ./scripts/examples-rust-ci.sh
