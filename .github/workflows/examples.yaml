@@ -43,3 +43,6 @@ jobs:
 
       - name: ts-script-examples
         run: ./scripts/examples-ts-ci.sh
+
+      - name: c-script-examples
+        run: ./scripts/examples-c-ci.sh
