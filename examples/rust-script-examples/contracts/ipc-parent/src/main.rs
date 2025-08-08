@@ -43,10 +43,10 @@ pub fn client_entry() -> Result<(), i8> {
     let mut client = WorldClient::new(read_pipe, write_pipe);
     // invoke
     let ret = client.hello("world".into()).unwrap();
-    info!("IPC response: {:?}", ret);
+    info!("IPC response: {ret:?}");
     // invoke again, should return error
     let ret = client.hello("error".into());
-    info!("IPC response: {:?}", ret);
+    info!("IPC response: {ret:?}");
     Ok(())
 }
 
