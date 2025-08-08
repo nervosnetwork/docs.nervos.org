@@ -46,3 +46,6 @@ jobs:
 
       - name: c-script-examples
         run: ./scripts/examples-c-ci.sh
+
+      - name: c-script-examples
+        run: ./scripts/examples-simple-lock-ci.sh
