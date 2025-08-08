@@ -387,7 +387,10 @@ fn test_crypto_service_hash() {
 
     // prepare scripts
     let lock_script = context
-        .build_script(&out_point, Bytes::from(crypto_service_code_hash.as_slice().to_vec()))
+        .build_script(
+            &out_point,
+            Bytes::from(crypto_service_code_hash.as_slice().to_vec()),
+        )
         .expect("script");
 
     // prepare cells

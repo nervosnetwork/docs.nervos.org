@@ -1,4 +1,10 @@
-import { hexFrom, Transaction, hashTypeToBytes, WitnessArgs, hashCkb } from "@ckb-ccc/core";
+import {
+  hexFrom,
+  Transaction,
+  hashTypeToBytes,
+  WitnessArgs,
+  hashCkb,
+} from "@ckb-ccc/core";
 import { readFileSync } from "fs";
 import {
   Resource,
@@ -26,15 +32,11 @@ async function main() {
   );
   mainScript.args = hexFrom(
     "0x0000" +
-    jsScript.codeHash.slice(2) +
-    hexFrom(hashTypeToBytes(jsScript.hashType)).slice(2) +
-    hashCkb(Array.from(preimage).map(c => c.charCodeAt(0))).slice(2),
+      jsScript.codeHash.slice(2) +
+      hexFrom(hashTypeToBytes(jsScript.hashType)).slice(2) +
+      hashCkb(Array.from(preimage).map((c) => c.charCodeAt(0))).slice(2),
   );
-  const inputCell = resource.mockCell(
-    mainScript,
-    undefined,
-    "0x",
-  );
+  const inputCell = resource.mockCell(mainScript, undefined, "0x");
   tx.inputs.push(Resource.createCellInput(inputCell));
 
   const alwaysSuccessScript = resource.deployCell(
@@ -48,11 +50,11 @@ async function main() {
   tx.witnesses.push(
     hexFrom(
       new WitnessArgs(
-        hexFrom(Array.from(preimage).map(c => c.charCodeAt(0))),
+        hexFrom(Array.from(preimage).map((c) => c.charCodeAt(0))),
         undefined,
         undefined,
       ).toBytes(),
-    )
+    ),
   );
 
   const verifier = Verifier.from(resource, tx);

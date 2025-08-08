@@ -33,7 +33,7 @@ impl World for WorldServer {
         if name == "error" {
             Err(1)
         } else {
-            Ok(format!("hello, {}", name))
+            Ok(format!("hello, {name}"))
         }
     }
 }

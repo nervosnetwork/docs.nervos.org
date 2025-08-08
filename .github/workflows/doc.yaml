@@ -17,23 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/cache@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.x
           cache: yarn
           cache-dependency-path: website/yarn.lock
 
-      - name: Install dependencies
-        working-directory: website
-        run: yarn
-
-      - name: Run fmt
-        working-directory: website
-        run: yarn run fmt
-
-      - name: Check if there are any changes after formatting
-        run: git diff --exit-code
-
-      - name: Build website
-        working-directory: website
-        run: yarn build
+      - name: website
+        run: ./scripts/website-ci.sh
