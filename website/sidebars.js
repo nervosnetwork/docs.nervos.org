@@ -94,6 +94,7 @@ export default {
         "script/syscalls-for-script",
         "script/vm-cycle-limits",
         "script/vm-selection",
+        "script/vm-known-issues",
         "script/type-id",
         "script/spawn-cross-script-calling",
         "script/ckb-ipc",
