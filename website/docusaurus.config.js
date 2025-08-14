@@ -204,7 +204,7 @@ const config = {
           },
           {
             from: "/docs/history-and-hard-forks/history-vm-version",
-            to: "/docs/script/history-vm-version",
+            to: "/docs/script/vm-version",
           },
         ],
         createRedirects(existingPath) {
