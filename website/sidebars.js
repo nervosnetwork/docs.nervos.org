@@ -94,6 +94,7 @@ export default {
         "script/syscalls-for-script",
         "script/vm-cycle-limits",
         "script/vm-selection",
+        "script/history-vm-version",
         "script/type-id",
         "script/spawn-cross-script-calling",
         "script/ckb-ipc",
@@ -347,7 +348,6 @@ export default {
       items: [
         "history-and-hard-forks/intro-to-hard-fork",
         "history-and-hard-forks/ckb-hard-fork-history",
-        "history-and-hard-forks/history-vm-version",
         "history-and-hard-forks/rethinking-forks",
       ],
     },
