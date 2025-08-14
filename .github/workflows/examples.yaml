@@ -1,0 +1,51 @@
+name: Examples
+
+on:
+  pull_request:
+    paths: [examples/**, scripts/**]
+  push:
+    paths: [examples/**, scripts/**]
+
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
+      - name: Install ckb-debugger
+        run: which ckb-debugger >/dev/null 2>&1 || cargo install ckb-debugger
+
+      - name: rust-script-examples
+        run: ./scripts/examples-rust-ci.sh
+
+      - name: ts-script-examples
+        run: ./scripts/examples-ts-ci.sh
+
+      - name: c-script-examples
+        run: ./scripts/examples-c-ci.sh
+
+      - name: c-script-examples
+        run: ./scripts/examples-simple-lock-ci.sh
