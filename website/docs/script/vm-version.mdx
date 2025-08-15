@@ -105,6 +105,10 @@ As shown in the above chart, each syscall will have 500 initial cycle consumptio
 
 In addition, for each byte loaded into CKB-VM in the syscalls, 0.25 cycles will be charged. Notice fractions will also be rounded up here, so 30.25 cycles will become 31 cycles.
 
+### Known Issues
+
+No known issues have been reported for this VM version.
+
 ## VM 1
 
 Introduced since [1st Hard Fork – CKB Edition Mirana (2021)](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021)
@@ -156,6 +160,10 @@ Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0
 | FAR_JUMP_REL                                                | auipc + jalr                 | 0 + 3             |
 | FAR_JUMP_ABS                                                | lui + jalr                   | 0 + 3             |
 | LD_SIGN_EXTENDED_32_CONSTANT                                | lui + addiw                  | 1 + 0             |
+
+### Known Issues
+
+- [Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) is deprecated and not recommended to use in the VM 1. Under VM 1, the `exec` syscall can cause unexpected behavior theoretically. However, this issues is not existed in VM 2.
 
 ## VM 2
 
@@ -216,3 +224,7 @@ Full description: [RFC](https://github.com/nervosnetwork/rfcs/tree/master/rfcs/0
 | wait                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
 | process_id           | 500                                                                                |
 | load block extension | 500 + BYTES_TRANSFERRED_CYCLES                                                     |
+
+### Known Issues
+
+No known issues have been reported for this VM version.
