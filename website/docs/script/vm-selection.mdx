@@ -1,9 +1,9 @@
 ---
 id: vm-selection
-title: "VM Versioning"
+title: "VM Selection"
 ---
 
-# VM Versioning
+# VM Selection
 
 When writing a Script, it is important to understand how the Script will be executed under a specific CKB-VM version. The CKB network has introduced various CKB-VM versions over time to enhance security, performance, bug fixes and support for new RISC-V extensions. However, the upgrade should not break the old code, and users must have the opt-in option to specify the VM version.
 
@@ -31,9 +31,9 @@ According to the value of `hash_type`:
 | 2           | “data1”             | Data hash (blake2b) | 1          |
 | 4           | “data2”             | Data hash (blake2b) | 2          |
 
-The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available version of VM depending when the Script is executed. But if the Script matches code via `data hash`, the VM version to execute is determined when the Cell is created.
+The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available version of VM depending when the Script is executed. But if the Script matches code via `data hash`, the VM version to execute is determined by the designated value.
 
-Cell owners can trade off between the determination and VM performance boost when creating the Cell. They should use `data hash` for determination, and `type hash` for the latest VM techniques.
+Cell callers can trade off between the determination and VM performance boost when calling the Cell. They should use `data hash` for determination, and `type hash` for the latest VM techniques.
 
 ## Rationale
 
