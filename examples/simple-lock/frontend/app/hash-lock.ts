@@ -184,7 +184,7 @@ export async function unlockRust(
     readSigner,
     ccc.fixedPointFrom(occupiedSize)
   );
-  const balanceDiff =
+  let balanceDiff =
     (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
   console.log("balanceDiff: ", balanceDiff);
   if (balanceDiff > ccc.Zero) {
@@ -198,7 +198,7 @@ export async function unlockRust(
   await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
 
   // Here calculate the minimum capacity of a single Cell (about 73)
-  let occupiedSize = ccc.CellOutput.from({
+  occupiedSize = ccc.CellOutput.from({
     capacity: BigInt(1000),
     lock: fromScript,
   }).occupiedSize;
@@ -208,7 +208,7 @@ export async function unlockRust(
     readSigner,
     ccc.fixedPointFrom(occupiedSize)
   );
-  const balanceDiff =
+  balanceDiff =
     (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
   console.log("balanceDiff: ", balanceDiff);
   if (balanceDiff > ccc.Zero) {

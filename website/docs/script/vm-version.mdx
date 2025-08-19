@@ -1,11 +1,18 @@
 ---
-id: history-vm-version
+id: vm-version
 title: "VM Version History"
 ---
 
-The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. This article lists all versions of the CKB-VM from previous hard fork events.
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. Even though hard forks upgrade the network, CKB ensures old Scripts continue to run and gives users the option to specify the VM version for their Script. For details on how the CKB node chooses the CKB-VM version, see [vm-selection](/docs/script/vm-selection).
 
-It is important to note that, even though a hard fork upgrades the network, it is crucial to prevent the hard fork from breaking the old Script codes. CKB makes best effort to ensure users have the opt-in option to specify the VM version for their Script. For the specific mechanism that determines how the CKB node chooses the CKB-VM version for a transaction's Script group, please refer to [vm-selection](/docs/script/vm-selection).
+CKB offers a high degree of flexibility in Script referencing. By choosing between [`data hash` and `type hash`](/docs/tech-explanation/data-type-diff), developers and users can decide whether to lock a Script to a specific VM version or allow it to track upgrades over time.
+
+While this flexibility enables both immutable and upgradable designs, it also places responsibility on users and developers to understand the characteristics of each VM version. Certain versions may have known issues that could affect Script behavior or security.
+
+This page lists all VM versions and discloses known issues so you can:
+
+- Assess risks before deploying or interacting with a Script.
+- Avoid unexpected behavior by being aware of edge cases, performance changes, or vulnerabilities.
 
 ## VM 0
 
@@ -105,9 +112,13 @@ As shown in the above chart, each syscall will have 500 initial cycle consumptio
 
 In addition, for each byte loaded into CKB-VM in the syscalls, 0.25 cycles will be charged. Notice fractions will also be rounded up here, so 30.25 cycles will become 31 cycles.
 
+### Known Issues
+
+No known issues have been reported for this VM version.
+
 ## VM 1
 
-Introduced since [1st Hard Fork – CKB Edition Mirana (2021)](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021)
+Introduced since [1st Hard Fork – CKB Edition Mirana (2021)](/docs/history-and-hard-forks/ckb-hard-fork-history#mirana-hardfork)
 
 Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0033-ckb-vm-version-1/0033-ckb-vm-version-1.md#1-fixed-several-bugs)
 
@@ -131,7 +142,13 @@ Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0
 
 ### Syscalls
 
-No new added syscalls.
+Added 3 new syscalls:
+
+- [VM Version](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#vm-version)
+- [Current Cycles](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#current-cycles)
+- [Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec)
+
+Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md)
 
 ### Cost Model
 
@@ -151,9 +168,13 @@ No new added syscalls.
 | FAR_JUMP_ABS                                                | lui + jalr                   | 0 + 3             |
 | LD_SIGN_EXTENDED_32_CONSTANT                                | lui + addiw                  | 1 + 0             |
 
+### Known Issues
+
+- [Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) is deprecated and not recommended for use in VM 1. Under VM 1, the `exec` syscall can cause unexpected behavior theoretically. However, this issue does not exist in VM 2.
+
 ## VM 2
 
-Introduced since [2nd Hard Fork – CKB Edition Meepo (2024)](/docs/history-and-hard-forks/ckb-hard-fork-history#2nd-hard-fork--ckb-edition-meepo-2024)
+Introduced since [2nd Hard Fork – CKB Edition Meepo (2024)](/docs/history-and-hard-forks/ckb-hard-fork-history#meepo-hardfork)
 
 Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0049-ckb-vm-version-2/0049-ckb-vm-version-2.md)
 
@@ -210,3 +231,7 @@ Full description: [RFC](https://github.com/nervosnetwork/rfcs/tree/master/rfcs/0
 | wait                 | 500 + SPAWN_YIELD_CYCLES_BASE                                                      |
 | process_id           | 500                                                                                |
 | load block extension | 500 + BYTES_TRANSFERRED_CYCLES                                                     |
+
+### Known Issues
+
+No known issues have been reported for this VM version.

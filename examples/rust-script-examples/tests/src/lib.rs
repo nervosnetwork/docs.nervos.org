@@ -93,7 +93,7 @@ impl Loader {
         path.push(name);
         let result = fs::read(&path);
         if result.is_err() {
-            panic!("Binary {:?} is missing!", path);
+            panic!("Binary {path:?} is missing!");
         }
         result.unwrap().into()
     }
@@ -103,7 +103,7 @@ impl Loader {
 
         let result = fs::read(CKB_CRYPTO_SERVICE_PATH);
         if result.is_err() {
-            panic!("Binary {:?} is missing!", CKB_CRYPTO_SERVICE_PATH);
+            panic!("Binary {CKB_CRYPTO_SERVICE_PATH:?} is missing!");
         }
         result.unwrap().into()
     }
@@ -124,7 +124,7 @@ pub fn verify_and_dump_failed_tx(
         let mock_tx = context.dump_tx(tx).expect("dump failed tx");
         let json = serde_json::to_string_pretty(&mock_tx).expect("json");
         path.push(format!("0x{:x}.json", tx.hash()));
-        println!("Failed tx written to {:?}", path);
+        println!("Failed tx written to {path:?}");
         std::fs::write(path, json).expect("write");
     }
     result
