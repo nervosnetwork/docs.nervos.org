@@ -17,13 +17,6 @@ During a CKB hard fork, a specific activation epoch is determined through commun
 
 Once the fork is activated, CKB nodes determine the CKB-VM version for each Script group based on the `hash_type` field in the Script Structure. The allowed values for `hash_type` are 0, 1, 2 and 4. Cells with different `hash_type` are grouped separately.
 
-According to the value of `hash_type`:
-
-- When the `hash_type` is 0, the Script group matches code via `data hash` and will run the code using the CKB-VM version 0.
-- When the `hash_type` is 1, the Script group matches code via `type Script hash` and will run the code using the CKB-VM version 2.
-- When the `hash_type` is 2, the Script group matches code via `data hash` and will run the code using the CKB-VM version 1.
-- When the `hash_type` is 4, the Script group matches code via `data hash` and will run the code using the CKB-VM version 2.
-
 | `hash_type` | JSON Representation | Matched by          | VM Version |
 | ----------- | ------------------- | ------------------- | ---------- |
 | 0           | “data”              | Data hash (blake2b) | 0          |
@@ -31,9 +24,16 @@ According to the value of `hash_type`:
 | 2           | “data1”             | Data hash (blake2b) | 1          |
 | 4           | “data2”             | Data hash (blake2b) | 2          |
 
-The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available version of VM depending when the Script is executed. But if the Script matches code via `data hash`, the VM version to execute is determined by the designated value.
+The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available VM version at the time the Script is executed. In contrast, if the Script matches code via `data hash`, the VM version is determined by the designated value.
 
-Cell callers can trade off between the determination and VM performance boost when calling the Cell. They should use `data hash` for determination, and `type hash` for the latest VM techniques.
+Cell callers can trade off between the determination and VM performance boost when calling the Cell. They should use `data hash` for determination, and `type hash` for the latest VM features.
+
+For a deeper comparison of these two approaches, see [Data Hash vs. Type Hash](/docs/tech-explanation/data-type-diff).
+
+:::note
+Although CKB provides this level of flexibility, each CKB-VM version may have its own known issues.  
+Before finalizing your choice of VM version, review the [VM Known Issues](/docs/script/vm-known-issues) to understand any potential risks.
+:::
 
 ## Rationale
 
