@@ -3,9 +3,16 @@ id: vm-version
 title: "VM Version History"
 ---
 
-The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. This article lists all versions of the CKB-VM from previous hard fork events.
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. Even though hard forks upgrade the network, CKB ensures old Scripts continue to run and gives users the option to specify the VM version for their Script. For details on how the CKB node chooses the CKB-VM version, see [vm-selection](/docs/script/vm-selection).
 
-It is important to note that, even though a hard fork upgrades the network, it is crucial to prevent the hard fork from breaking the old Script codes. CKB makes best effort to ensure users have the opt-in option to specify the VM version for their Script. For the specific mechanism that determines how the CKB node chooses the CKB-VM version for a transaction's Script group, please refer to [vm-selection](/docs/script/vm-selection).
+CKB offers a high degree of flexibility in Script referencing. By choosing between [`data hash` and `type hash`](/docs/tech-explanation/data-type-diff), developers and users can decide whether to lock a Script to a specific VM version or allow it to track upgrades over time.
+
+While this flexibility enables both immutable and upgradable designs, it also places responsibility on users and developers to understand the characteristics of each VM version. Certain versions may have known issues that could affect Script behavior or security.
+
+This page lists all VM versions and discloses known issues so you can:
+
+- Assess risks before deploying or interacting with a Script.
+- Avoid unexpected behavior by being aware of edge cases, performance changes, or vulnerabilities.
 
 ## VM 0
 
@@ -163,7 +170,7 @@ Full description: [RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0
 
 ### Known Issues
 
-- [Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) is deprecated and not recommended to use in the VM 1. Under VM 1, the `exec` syscall can cause unexpected behavior theoretically. However, this issues is not existed in VM 2.
+- [Exec](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) is deprecated and not recommended for use in VM 1. Under VM 1, the `exec` syscall can cause unexpected behavior theoretically. However, this issue does not exist in VM 2.
 
 ## VM 2
 

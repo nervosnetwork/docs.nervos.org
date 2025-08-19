@@ -24,9 +24,9 @@ Once the fork is activated, CKB nodes determine the CKB-VM version for each Scri
 | 2           | “data1”             | Data hash (blake2b) | 1          |
 | 4           | “data2”             | Data hash (blake2b) | 2          |
 
-The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available VM version at the time the Script is executed. In contrast, if the Script matches code via `data hash`, the VM version is fixed at the time the Cell is created.
+The `hash_type` encoding pattern ensures that if a Script matches code via `type hash`, CKB always uses the latest available VM version at the time the Script is executed. In contrast, if the Script matches code via `data hash`, the VM version is determined by the designated value.
 
-When creating a Cell, owners can choose between determinism and potential VM improvements. Use `data hash` to lock in a specific VM version, or `type hash` to take advantage of the latest VM features as they become available.
+Cell callers can trade off between the determination and VM performance boost when calling the Cell. They should use `data hash` for determination, and `type hash` for the latest VM features.
 
 For a deeper comparison of these two approaches, see [Data Hash vs. Type Hash](/docs/tech-explanation/data-type-diff).
 
