@@ -102,6 +102,7 @@ export default {
         "script/script-upgrade-workflow",
         "script/common-script-error-code",
         "script/script-testing-guide",
+        "script/fuzzing-ckb-scripts",
       ],
     },
     {
