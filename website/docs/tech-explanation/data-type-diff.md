@@ -91,5 +91,5 @@ This allows you to switch from an upgradeable type reference to an immutable dat
 
 :::note
 Although CKB provides this level of flexibility, each CKB-VM version may have its own known issues.  
-Before finalizing your choice of VM version, review the [VM Known Issues](/docs/script/vm-known-issues) to understand any potential risks.
+Before finalizing your choice of VM version, review the [VM Known Issues](/docs/script/vm-version) to understand any potential risks.
 :::
