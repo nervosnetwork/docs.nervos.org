@@ -26,25 +26,9 @@ If you run into an issue on our documentation website you can contact us on [Ner
 
 - production branch: [master](https://github.com/nervosnetwork/docs.nervos.org/tree/master)
 - latest developing branch: [develop](https://github.com/nervosnetwork/docs.nervos.org/tree/develop)
+  - Live Preview: [https://nervos-ckb-docs-git-develop-cryptape.vercel.app/](https://nervos-ckb-docs-git-develop-cryptape.vercel.app/)
 
 ### Code structure
-
-```bash
-├── LICENSE
-├── README.md
-├── examples
-└── website
-    ├── build
-    ├── docs
-    ├── docusaurus.config.js
-    ├── node_modules
-    ├── package.json
-    ├── sidebars.js
-    ├── src
-    ├── static
-    ├── tsconfig.json
-    └── yarn.lock
-```
 
 - `website`: The doc site is built with [docusaurus](https://docusaurus.io/) and under the `website` folder.
 - `examples`: The `examples` folder contains full tutorial codes you can clone.
