@@ -46,3 +46,11 @@ Several solutions were discussed for VM version selection, but the current appro
 
 For Scripts referencing code via `data hash`, the VM version remains consistent before and after a hard fork. In contrast, Scripts referencing code via `type hash` will use different VM versions.
 DApps developers must ensure the compatibility of their Scripts and upgrade them if necessary. By carefully selecting the appropriate `hash_type` and understanding its implications, developers can build robust dApps on CKB while leveraging the flexibility of VM version management.
+
+## Security Measures for VM Issues
+
+When bugs are discovered in specific VM versions that could affect public interests, the Layer 1 maintainer team may implement protective measures at higher layers (such as in the mempool) to intercept potentially problematic transactions.
+
+It's important to note that these measures are not consensus-level modifications and do not violate the principle of VM selection rights. Users retain the ability to construct transactions and include them in blocks themselves, bypassing these protective measures if they choose to do so.
+
+This approach maintains the balance between network security and user autonomy, ensuring that while the network can protect against known vulnerabilities, users still have ultimate control over their transaction execution choices.
