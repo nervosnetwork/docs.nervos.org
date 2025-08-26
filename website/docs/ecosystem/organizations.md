@@ -10,7 +10,7 @@ Explore all the organizations and their relevant GitHub repositories within the 
 | Org name       | Github repo                      | Major contents                                    |
 | -------------- | -------------------------------- | ------------------------------------------------- |
 | Nervos Network | https://github.com/nervosnetwork | CKB-VM, RFCs, Moleculec-es                        |
-| Cell Studio    | https://github.com/utxo-stack    | RGB++, UTXO Stack, Unique Cell                    |
+| Cell Studio    | https://github.com/utxostack     | RGB++, UTXO Stack, Unique Cell                    |
 | Spore Protocol | https://github.com/sporeprotocol | Spore protocol, DOB Decoder, DOB/0, DOB/1         |
 | Cryptape       | https://github.com/cryptape      | CKB Node Probe, Omnilock, CoBuild, Anyone-can-pay |
 | Magickbase     | https://github.com/Magickbase    | CKB Explorer, Neuron, CKB Testnet Faucet          |
