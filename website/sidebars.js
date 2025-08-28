@@ -189,6 +189,7 @@ export default {
             "script/js/js-api-ipc",
           ],
         },
+        "script/js/js-tests",
       ],
     },
     {
