@@ -35,14 +35,21 @@ table WitnessArgs {
 
 <img src={"/img/tech_explanation/witnessArg-structure.png"} width={688} height={353} alt="Structure of WitnessArg" />
 
-This structure is a `table` defined in [Molecule](https://github.com/nervosnetwork/molecule). All three fields are optional (`Opt`), and can be chosen depending on the contract’s requirements.
+This structure is a [`table`](https://github.com/nervosnetwork/molecule/blob/master/docs/encoding_spec.md#table) defined in [Molecule](https://github.com/nervosnetwork/molecule). All three fields are optional (`Opt`), and can be chosen depending on the contract’s requirements.
 
-- A **Lock Script** executes only when the Cell is an **input**.
-- A **Type Script** executes for both **input** and **output** Cells.
+On CKB, different Scripts run at different times:
 
-Therefore, WitnessArgs provides three optional fields to carry proof data for these cases.
+- A [Lock Script](/docs/tech-explanation/lock-script) only runs on input Cells (when they are being spent).
+- A [Type Script](/docs/tech-explanation/type-script) runs on both input and output Cells (when they are being spent and created)
 
-Under this convention, all contracts must read their Witness data through WitnessArgs.  
+Because of this, the WitnessArgs structure has three optional fields:
+
+- `lock`: data used by Lock Script
+- `input_type`: data used by Type Script when validating inputs
+- `output_type`: data used by Type Script when validating outputs
+
+By this convention, all Scripts read their Witness data from WitnessArgs.
+
 The **order** of WitnessArgs items in the `witnesses` field is also important, as it corresponds to the index in the virtual array created by [script grouping](/docs/tech-explanation/script-group-exe).
 
 #### Example and Test
@@ -87,16 +94,26 @@ The groups formed are:
 - **type_script_1**: inputs\[1], outputs\[0]
 - **type_script_2**: inputs\[0], outputs\[1]
 
-#### Quick Reference Table (summary, log below)
+By convention, a group uses the witness of its first input (GroupInput[0]).
 
-| Script group (label)     | Entry Witness (by convention)       | Relevant WitnessArgs fields | Log section               |
-| ------------------------ | ----------------------------------- | --------------------------- | ------------------------- |
-| lock_script_1 (`lock 1`) | `witnesses[index of GroupInput[0]]` | `lock`                      | `[contract debug] lock 1` |
-| type_script_2 (`type 2`) | `witnesses[index of GroupInput[0]]` | `input_type`, `output_type` | `[contract debug] type 2` |
-| type_script_1 (`type 1`) | `witnesses[index of GroupInput[0]]` | `input_type`, `output_type` | `[contract debug] type 1` |
+- lock_script_1 → first input = 0 → uses witnesses[0]
+- type_script_1 → first input = 0 → uses witnesses[0]
+- type_script_2 → first input = 1 → uses witnesses[1]
 
-> Each group always uses the Witness corresponding to its first input (`GroupInput[0]`) as its entry point.
-> Different groups may reference the same Witness item, but each reads only its own field (`lock`, `input_type`, or `output_type`).
+Putting it together:
+
+| Script group (label)     | Entry Witness  | Fields it reads             | Why                                        |
+| ------------------------ | -------------- | --------------------------- | ------------------------------------------ |
+| lock_script_1 (`lock 1`) | `witnesses[0]` | `lock`                      | Lock Scripts only check inputs             |
+| type_script_2 (`type 2`) | `witnesses[0]` | `input_type`, `output_type` | Type Scripts check both input0 and output1 |
+| type_script_1 (`type 1`) | `witnesses[1]` | `input_type`, `output_type` | Type Scripts check both input1 and output0 |
+
+Different groups can point to the same witness index (here, lock_script_1 and type_script_1 both use witnesses[0]). That’s fine because:
+
+- lock_script_1 reads only the lock field.
+- type_script_1 reads 'input_type' and output_type.
+
+They touch different fields inside the same WitnessArgs, so they don’t interfere.
 
 #### Raw Test Output (full logs)
 
