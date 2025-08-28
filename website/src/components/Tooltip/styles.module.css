@@ -14,12 +14,13 @@
   color: var(--text-inverse);
   border-radius: 4px;
   padding: 0.5rem 1rem;
-  position: absolute;
-  z-index: 9999;
+  position: fixed;
   max-width: 400px;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
 }
 .tooltipPortalOpen {
   opacity: 1;
+  pointer-events: auto;
 }
