@@ -5,25 +5,34 @@ title: CKB Address
 
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-CKB address packages the Lock Script into a single line of verifiable and human-readable format, adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki). In this format, the Lock Script consists of three key parameters: `code_hash`, `hash_type`, and `args`.
+An address is a long string of numbers and letters that serves as the destination for a blockchain transaction.
 
-## Get Full Payload
+## Accounts vs. Addresses on CKB
 
-To generate a CKB address, the Lock Script is encoded into a byte array, termed "payload," which is then wrapped into the final address format.
+Bitcoin was the first blockchain to separate the concept of accounts from addresses. One account can be associated with multiple addresses, a design intended to improve privacy.
 
-Full payload format encodes all data fields of Lock Script using Bech32m encoding:
+With the rise of Ethereum, many users became accustomed to a different model: one account = one address. Each account corresponds to a single address that is reused across applications. While this simplifies interaction, it also links all activity to the same address, which reduces privacy.
+
+On CKB, the model follows more closely to Bitcoin: **one account can be linked to multiple addresses**.
+
+- By default, each transaction uses a different address.
+- This minimizes address reuse and makes transaction histories more difficult to correlate.
+
+## How CKB Addresses Are Generated
+
+To understand how this model is implemented, we need to look at how a CKB address is constructed. A CKB address is more than a random string — it encodes the underlying [Lock Script](/docs/tech-explanation/lock-script), adhering to Bitcoin's [Bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki). The Lock Script defines how ownership is verified and consists of three fields: `code_hash`, `hash_type`, and `args`. For details on these fields, see [Script](/docs/tech-explanation/script).
+
+### Get Full Payload
+
+To generate a CKB address, the Lock Script is encoded into a byte array, named "payload," which is then wrapped into the final address format.
+
+The Full payload format encodes all data fields of the Lock Script using Bech32m encoding:
 
 ```
 payload = 0x00 | code_hash | hash_type | args
 ```
 
-The `hash_type` field is for CKB-VM version selection.
-
-- `hash_type` 0: the Script group matches code via data hash and will run the code using CKB-VM v0.
-- `hash_type` 1: the Script group matches code via Type Script hash and will run the code using CKB-VM v1.
-- `hash_type` 2: the Script group matches code via data hash and will run the code using CKB-VM v1.
-
-## Wrap Into Address
+### Wrap Into Address
 
 The payload is wrapped into an address following [Bitcoin Bech32 address format (BIP-173)](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) or [Bitcoin bech32m address format (BIP-350)](https://github.com/sipa/bips/blob/bip-bech32m/bip-0350.mediawiki), using Bech32/Bech32m encoding and a [BCH checksum](https://en.wikipedia.org/wiki/BCH_code).
 
@@ -31,11 +40,11 @@ The payload is wrapped into an address following [Bitcoin Bech32 address format
 The original Bech32/Bech32m format limits strings to 90 characters. However, we have removed this length restriction, similar to [BOLT](https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md). For strings longer than 90 characters, the error correction function is disabled to prevent the risk of incorrect corrections, which we do not intend to use.
 :::
 
-A Bech32/Bech32m string consists of the **human-readable part**, the **separator**, and the **data part**. The last 6 characters of data part is **checksum**.
+A Bech32/Bech32m string consists of three parts, with the last 6 characters serving as a **checksum**:
 
-- Human-readable part: "ckb" for CKB mainnet and "ckt" for the testnet
-- Separator: always being "1"
-- Data part: base32 encoded. The table below provides a translation for Base32 encoding:
+- **Human-readable part**: "ckb" for CKB Mainnet and "ckt" for the Testnet
+- **Separator**: always being "1"
+- **Data part**: base32 encoded. The table below provides a translation for Base32 encoding:
 
 |     | 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -44,7 +53,7 @@ A Bech32/Bech32m string consists of the **human-readable part**, the **separat
 | +16 | s   | 3   | j   | n   | 5   | 4   | k   | h   |
 | +24 | c   | e   | 6   | m   | u   | a   | 7   | l   |
 
-The flow chart below outlines the process of encoding a Lock Script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and then appending a human-readable part and checksum to the data.
+The flow chart below outlines the process of encoding a Lock Script into a payload by adding a 6-byte BCH, followed by Base32 encoding, and finally a human-readable prefix and checksum are appended.
 
 <img
   alt="Encoding a Lock Script into a payload"
@@ -52,12 +61,12 @@ The flow chart below outlines the process of encoding a Lock Script into a paylo
   width="688"
 />
 
-## Examples and Demo Code
+## Example: Generating a Full Address
 
 ```
-== full address test ==
 code_hash to encode:     9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
 hash_type to encode:     01
-with args to encode:     b39bbc0b3673c7d36450bc14cfcdad2d559c6c64
+args to encode:          b39bbc0b3673c7d36450bc14cfcdad2d559c6c64
+---
 full address generated:  ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4
 ```
