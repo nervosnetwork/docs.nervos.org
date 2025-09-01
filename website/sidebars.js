@@ -153,15 +153,35 @@ export default {
       collapsible: false,
       items: [
         "script/js/js-quick-start",
-        "script/js/js-vm",
+        {
+          type: "category",
+          label: "JS VM",
+          className: "js-vm",
+          collapsible: true,
+          collapsed: true,
+          link: {
+            type: "doc",
+            id: "script/js/js-vm",
+          },
+          items: [
+            "script/js/js-vm-build",
+            "script/js/js-vm-cmd-line-options",
+            "script/js/js-vm-security",
+            "script/js/js-vm-file-system",
+            "script/js/js-vm-injecting-function",
+          ],
+        },
         {
           type: "category",
           label: "JS API",
           className: "js-api",
           collapsible: true,
-          collapsed: false,
+          collapsed: true,
+          link: {
+            type: "doc",
+            id: "script/js/js-api-introduction",
+          },
           items: [
-            "script/js/js-api-introduction",
             "script/js/js-api-syscalls",
             "script/js/js-api-common-algorithms",
             "script/js/js-api-molecule",
@@ -169,6 +189,7 @@ export default {
             "script/js/js-api-ipc",
           ],
         },
+        "script/js/js-tests",
       ],
     },
     {

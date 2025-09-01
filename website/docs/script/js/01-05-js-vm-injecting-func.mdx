@@ -1,0 +1,37 @@
+---
+id: js-vm-injecting-function
+title: "Injecting Functions"
+---
+
+## Injecting Functions
+
+During development, functions like `loadScript` are commonly used. Most projects will import the dependency `@ckb-js-std/bindings`. However, this module does not provide actual implementations of these functions — it's only intended for type checking and IDE code hints.
+
+You can refer to [Examples/call-syscalls](https://01-github.com/nervosnetwork/ckb-js-vm/tree/main/examples/call-syscalls), which contains a JS script that can be executed directly inside the JS-VM:
+
+```javascript
+import { loadScript } from "@ckb-js-std/bindings";
+console.log(loadScript);
+console.log(new Uint8Array(loadScript(0, 8)));
+console.log("End");
+```
+
+output:
+
+```text
+Script log: Run from file, local access enabled. For Testing only.
+Script log: function loadScript() {
+    [native code]
+}
+Script log: 53,0,0,0,16,0,0,0
+Script log: End
+Run result: 0
+All cycles: 3738804(3.6M)
+```
+
+In this example, `@ckb-js-std/bindings` is imported directly. Internally, this module is registered within the C code of the JS-VM using `JS_NewCModule` in [`qjs.c`](https://github.com/nervosnetwork/ckb-js-vm/blob/main/src/qjs.c#L445). The actual implementations are placed in [`ckb_module.c`](https://github.com/nervosnetwork/ckb-js-vm/blob/main/src/ckb_module.c).
+
+If developers have specific needs, they can inject custom functions in a similar way. However, we generally do not recommend this approach:
+
+- You would need to publish (i.e., deploy on-chain) the modified JS-VM, which consumes a significant amount of CKB and does not bring substantial performance benefits.
+- If you're modifying C code anyway, it's often better to use `spawn` or even `exec` as alternative solutions.

@@ -1,0 +1,40 @@
+---
+id: js-vm-build
+title: "Build JS-VM"
+---
+
+As a C-language contract, ckb-js-vm uses a Makefile to manage its build process and relies on LLVM 18 by default (Theoretically support higher versions). Developers need to install the dependencies in advance. (LLVM 18 already supports RISC-V compilation, so the official release works.)
+
+```shell
+git submodule update --init
+make all
+```
+
+The contract binary is in `build/ckb-js-vm`. The `build/ckb-js-vm.debug` binary contains debug symbols and can be used for debugging.
+
+### Reproducible Build
+
+When deploying an on-chain script, it's essential to build it from scratch. A key requirement during this process is
+ensuring that different builds of the same source code produce identical binaries - this is known as a "reproducible
+build."
+
+You can achieve this with ckb-js-vm using the following command:
+
+```bash
+bash reproducible_build.sh
+```
+
+### Deployment
+
+The script has been deployed on the testnet with these parameters:
+
+| Parameter   | Value                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| `code_hash` | `0x3e9b6bead927bef62fcb56f0c79f4fbd1b739f32dd222beac10d346f2918bed7` |
+| `hash_type` | `type`                                                               |
+| `tx_hash`   | `0xf594e7deb3bdec611b20bdf7814acf7779ddf061a8f207b1f3261242b8dc4494` |
+| `index`     | `0x0`                                                                |
+| `dep_type`  | `code`                                                               |
+
+The corresponding SHA256 checksum in [checksums.txt](https://github.com/nervosnetwork/ckb-js-vm/blob/main/checksums.txt)
+is: `898260099d49ef84a1fb10f4aae7dae8ef5ec5b34d2edae29a78981fd084f1ed`

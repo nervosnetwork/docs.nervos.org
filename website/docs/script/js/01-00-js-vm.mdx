@@ -1,0 +1,83 @@
+---
+id: js-vm
+title: "JS VM: Mechanism and Capabilities"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Link from "@docusaurus/Link";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "./../_ScriptTools.mdx";
+
+# CKB JS VM: Mechanism and Capabilities
+
+The [Quick Start](./js-quick-start) guide mentions that JS contracts run inside the [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm). This document provides a detailed explanation of ckb-js-vm.
+
+## Introduction
+
+CKB contracts are based on the RISC-V architecture, which means most programming languages can be used to develop contracts for CKB. Currently, Rust and C are the most widely used languages for contract development. However, both have relatively high barriers to entry, which discourages many developers from getting started.
+
+We hope to expand support to more languages in order to lower the entry threshold for developers.
+
+Most beginner-friendly languages, such as Python and JavaScript, are interpreted languages. For CKB-VM, this means they must be interpreted and executed inside the virtual machine, which adds an additional layer of complexity.
+
+JavaScript has long been one of the most popular programming languages. In the past, we attempted to run JavaScript on CKB using [Duktape](https://xuejie.space/2020_02_21_introduction_to_ckb_script_programming_advanced_duktape_examples/), a lightweight JavaScript engine. However, due to poor performance, this effort was not continued.
+
+Later, we developed [ckb-lua-vm](https://github.com/nervosnetwork/ckb-lua-vm). From a technical perspective, Lua is well-suited for contract development and offers acceptable performance. Unfortunately, Lua's limited popularity prevented it from gaining widespread adoption.
+
+Building on these past experiences, we created ckb-js-vm, which is based on QuickJS, and built a full set of supporting tools, including:
+
+- JavaScript bindings with TypeScript libraries
+- A JavaScript testing framework: [`ckb-testtool`](https://www.npmjs.com/package/ckb-testtool)
+
+([QuickJS](https://bellard.org/quickjs/) is a small and embeddable JavaScript engine. It was created by Fabrice Bellard, the author of QEMU and the original developer of FFmpeg.)
+
+## ckb-js-vm `args` Explanation
+
+The `ckb-js-vm` script structure in molecule is below:
+
+```
+code_hash: <code hash of ckb-js-vm, 32 bytes>
+hash_type: <hash type of ckb-js-vm, 1 byte>
+args: <ckb-js-vm flags, 2 bytes> <code hash of resource cell, 32 bytes> <hash type of resource cell, 1 byte>
+```
+
+The first 2 bytes are parsed into an `int16_t` in C using little-endian format (referred to as ckb-js-vm flags). If
+the lowest bit of these flags is set (`v & 0x01 == 1`), the file system is enabled. File system functionality will be
+described in another section.
+
+The subsequent `code_hash` and `hash_type` point to a resource cell which may contain:
+
+1. A file system
+2. JavaScript source code
+3. QuickJS bytecode
+
+When the file system flag is enabled, the resource cell contains a file system that can also include JavaScript code.
+For most scenarios, QuickJS bytecode is stored in the resource cell. When an on-chain script requires extra `args`,
+they can be stored beginning at offset 35 (2 + 32 + 1). Compared to normal on-chain scripts in other languages,
+ckb-js-vm requires these extra 35 bytes.
+
+### An Example — A Clear Contrast Between JS Contracts and Traditional Contracts
+
+Since JavaScript contracts are executed inside the **JS-VM**, creating a transaction for them introduces a few differences compared to traditional contracts.
+
+In the [`simple-lock`](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/simple-lock) example, both Rust and JavaScript implementations of the same contract are provided. Functionally they are identical, but the Rust version is compiled directly into a native executable contract, while the JavaScript version is only compiled into [bytecode](./js-vm-cmd-line-options#compiling-javascript-into-bytecode).
+
+The key differences are as follows:
+
+- **Script**
+
+  - Traditional contracts use their own `code_hash + hash_type`.
+  - JavaScript contracts instead reference the `code_hash + hash_type` of the **ckb-js-vm**.
+
+    - Traditional contract: [Lock Script](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/frontend/app/hash-lock.ts#L137)
+    - JavaScript contract: [Lock Script](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/frontend/app/hash-lock.ts#L47)
+
+- **Args**
+
+  - Traditional contracts directly fill in the `args` field.
+  - JavaScript contracts prepend JS-specific parameters at the beginning of `args`. (This also means when reading arguments inside the contract, you need to offset by 35 bytes.)
+
+    - Traditional contract: [Reading args](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/rust-simple-lock/contracts/hash-lock/src/main.rs#L62)
+    - JavaScript contract: [Reading args](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/ts-simple-lock/packages/on-chain-script/src/index.ts#L6)
