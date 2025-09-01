@@ -54,6 +54,9 @@ The **order** of WitnessArgs items in the `witnesses` field is also important, a
 
 #### Example and Test
 
+- [Contract: Group Exec](https://github.com/joii2020/docs.nervos.org/tree/dev.witnesses_args/examples/rust-script-examples/contracts/group_exec)
+- [Unit Test](https://github.com/joii2020/docs.nervos.org/blob/dev.witnesses_args/examples/rust-script-examples/tests/src/tests.rs#L457)
+
 To illustrate this mechanism, here is a Script that does the following:
 
 1. Prints the contents of its Args (UTF-8 string in this example).
@@ -87,6 +90,8 @@ Outputs:
     Type:
       Code Hash: type_script_1
 ```
+
+(This transaction is just exchanging two `TypeScripts`. This is just for demonstration, in fact, this transaction has no special meaning.)
 
 The groups formed are:
 
