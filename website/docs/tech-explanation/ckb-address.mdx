@@ -15,8 +15,7 @@ With the rise of Ethereum, many users became accustomed to a different model: on
 
 On CKB, the model follows more closely to Bitcoin: **one account can be linked to multiple addresses**.
 
-- By default, each transaction uses a different address.
-- This minimizes address reuse and makes transaction histories more difficult to correlate.
+Accounts and addresses are independent concepts. An account is derived from a key pair while an address is generated from the underlying [Lock Script](/docs/tech-explanation/lock-script). Even under the same account, different Lock Scripts produce different addresses.
 
 ## How CKB Addresses Are Generated
 
