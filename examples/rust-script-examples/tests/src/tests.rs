@@ -451,3 +451,100 @@ fn test_crypto_service_hash() {
         .expect("pass verification");
     println!("consume cycles: {}", cycles);
 }
+
+// generated unit test for contract group_exec
+#[test]
+fn test_group_exec() {
+    let mut context = Context::default();
+    let contract_bin: Bytes = Loader::default().load_binary("group_exec");
+    let out_point = context.deploy_cell(contract_bin);
+
+    let lock_script_1 = context
+        .build_script(&out_point, Bytes::from(String::from("lock 1").into_bytes()))
+        .unwrap();
+    let type_script_1 = context
+        .build_script(&out_point, Bytes::from(String::from("type 1").into_bytes()))
+        .unwrap();
+    let type_script_2 = context
+        .build_script(&out_point, Bytes::from(String::from("type 2").into_bytes()))
+        .unwrap();
+
+    let input_1 = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script_1.clone())
+            .type_(Some(type_script_1.clone()).pack())
+            .build(),
+        Bytes::new(),
+    );
+    let input_2 = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(lock_script_1.clone())
+            .type_(Some(type_script_2.clone()).pack())
+            .build(),
+        Bytes::new(),
+    );
+
+    let output_1 = CellOutput::new_builder()
+        .capacity(500u64.pack())
+        .lock(lock_script_1.clone())
+        .type_(Some(type_script_2.clone()).pack())
+        .build();
+    let output_2 = CellOutput::new_builder()
+        .capacity(500u64.pack())
+        .lock(lock_script_1.clone())
+        .type_(Some(type_script_1.clone()).pack())
+        .build();
+
+    let witness_0 = WitnessArgs::new_builder()
+        .lock(Some(Bytes::from(String::from("Witness 0, Lock").into_bytes())).pack())
+        .input_type(
+            Some(Bytes::from(
+                String::from("Witness 0, Input Type").into_bytes(),
+            ))
+            .pack(),
+        )
+        .output_type(
+            Some(Bytes::from(
+                String::from("Witness 0, Output Type").into_bytes(),
+            ))
+            .pack(),
+        )
+        .build()
+        .as_bytes();
+    let witness_1 = WitnessArgs::new_builder()
+        .lock(Some(Bytes::from(String::from("Witness 1, Lock").into_bytes())).pack())
+        .input_type(
+            Some(Bytes::from(
+                String::from("Witness 1, Input Type").into_bytes(),
+            ))
+            .pack(),
+        )
+        .output_type(
+            Some(Bytes::from(
+                String::from("Witness 1, Output Type").into_bytes(),
+            ))
+            .pack(),
+        )
+        .build()
+        .as_bytes();
+
+    let tx = TransactionBuilder::default()
+        .inputs([
+            CellInput::new_builder().previous_output(input_1).build(),
+            CellInput::new_builder().previous_output(input_2).build(),
+        ])
+        .outputs([output_1, output_2])
+        .outputs_data([Default::default(), Default::default()])
+        .witnesses([witness_0.pack(), witness_1.pack()])
+        .build();
+
+    let tx = context.complete_tx(tx);
+
+    // run
+    let cycles = context
+        .verify_tx(&tx, 10_000_000)
+        .expect("pass verification");
+    println!("consume cycles: {}", cycles);
+}
