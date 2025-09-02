@@ -54,8 +54,8 @@ The **order** of WitnessArgs items in the `witnesses` field is also important, a
 
 #### Example and Test
 
-- [Contract: Group Exec](https://github.com/joii2020/docs.nervos.org/tree/dev.witnesses_args/examples/rust-script-examples/contracts/group_exec)
-- [Unit Test](https://github.com/joii2020/docs.nervos.org/blob/dev.witnesses_args/examples/rust-script-examples/tests/src/tests.rs#L457)
+- [Contract: Group Exec](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/rust-script-examples/contracts/group_exec)
+- [Unit Test](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/rust-script-examples/tests/src/tests.rs#L457)
 
 To illustrate this mechanism, here is a Script that does the following:
 
