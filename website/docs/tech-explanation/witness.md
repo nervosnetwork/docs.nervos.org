@@ -96,29 +96,22 @@ Outputs:
 The groups formed are:
 
 - **lock_script_1**: inputs\[0], inputs\[1]
-- **type_script_1**: inputs\[1], outputs\[0]
-- **type_script_2**: inputs\[0], outputs\[1]
+- **type_script_1**: inputs\[0], outputs\[1]
+- **type_script_2**: inputs\[1], outputs\[0]
 
-By convention, a group uses the witness of its first input (GroupInput[0]).
+In a CKB transaction, **Witnesses** are independent from **Inputs** and **Outputs**. However, the index of each witness corresponds to the index of the Script group it belongs to.
 
-- lock_script_1 → first input = 0 → uses witnesses[0]
-- type_script_1 → first input = 0 → uses witnesses[0]
-- type_script_2 → first input = 1 → uses witnesses[1]
+For example, if `type_script_1` is grouped with `inputs[0]` and `outputs[1]`, then when loading the Witnesses of this group, both `witnesses[0]` and `witnesses[1]` will be accessed. (Note that here you must use the corresponding **GroupInput** and **GroupOutput**—their Witnesses may differ, or they may be the same.)
 
-Putting it together:
+After grouping, the Scripts load Witnesses as follows:
 
-| Script group (label)     | Entry Witness  | Fields it reads             | Why                                        |
-| ------------------------ | -------------- | --------------------------- | ------------------------------------------ |
-| lock_script_1 (`lock 1`) | `witnesses[0]` | `lock`                      | Lock Scripts only check inputs             |
-| type_script_2 (`type 2`) | `witnesses[0]` | `input_type`, `output_type` | Type Scripts check both input0 and output1 |
-| type_script_1 (`type 1`) | `witnesses[1]` | `input_type`, `output_type` | Type Scripts check both input1 and output0 |
+- **lock_script_1** : `witnesses[0]`, `witnesses[1]` (via GroupInput)
+- **type_script_1** : `witnesses[0]` (via GroupInput), `witnesses[1]` (via GroupOutput)
+- **type_script_2** : `witnesses[1]` (via GroupInput), `witnesses[0]` (via GroupOutput)
 
-Different groups can point to the same witness index (here, lock_script_1 and type_script_1 both use witnesses[0]). That’s fine because:
+From this, we can see that multiple Scripts may end up using the same Witness. This situation is common in real transactions. To resolve potential conflicts, CKB introduces a standard convention: **WitnessArgs**.
 
-- lock_script_1 reads only the lock field.
-- type_script_1 reads 'input_type' and output_type.
-
-They touch different fields inside the same WitnessArgs, so they don’t interfere.
+The three fields in WitnessArgs map precisely to the three possible positions above. For example, when `lock_script_1` obtains `witnesses[0]`, it can extract only the `lock` field; similarly, `type_script_1` can take the `input_type` field from `witnesses[0]`.
 
 #### Raw Test Output (full logs)
 
