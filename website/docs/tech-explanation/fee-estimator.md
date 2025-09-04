@@ -102,7 +102,6 @@ Developers should be aware of the following limitations:
 - Always implement error handling for cases where fee estimation might fail.
 - Consider using the fallback mechanism to ensure more reliable results.
 - Monitor network conditions when integrating fee rate estimation into your applications.
-- In the future, we plan to integrate the fee estimator feature into CKB SDKs like [CCC](https://github.com/ckb-ecofund/ccc)
 
 This Fee Estimator marks a significant step forward in improving transaction fee prediction on CKB, helping developers create more efficient and user-friendly applications.
 
