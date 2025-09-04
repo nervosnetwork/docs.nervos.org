@@ -1,0 +1,464 @@
+---
+id: fuzzing-ckb-scripts
+title: "Fuzzing CKB Scripts"
+---
+
+# Fuzzing CKB Scripts
+
+Here we dive into a newly designed fuzz testing setup for CKB on-chain scripts.
+
+## Introduction: Why Fuzzing in CKB Matters
+
+Testing is a huge part of CKB script development, due to the very nature of CKB scripts. We would all write unit tests for starters, perform a certain form of integrated testing, some of us also write [property tests](https://en.wikipedia.org/wiki/Property_testing) to introduce randomness. But one major theme of all the above workflows is that humans design and implement the testing flow. Fuzz testing augments the list with new testing workflows, checking places where humans frequently neglect.
+
+According to [wikipedia](https://en.wikipedia.org/wiki/Fuzzing), fuzz testing is "an automated software testing technique that involves providing invalid, unexpected, or random data as inputs to a computer program. The program is then monitored for exceptions such as crashes, failing built-in code assertions, or potential memory leaks."
+
+While wikipedia can typically be obscure, personally I find this very definition somewhat easy to understand. If I were to further simplify it, fuzz testing would feed random data to code being tested, watching out for cases when the code crashes somehow. When a crash happens, we can then dig into the code to fix the issue.
+
+For example, almost any CKB script would read the witness data of its enclosing transaction, parse it, and validate necessary behaviors. What if malicious data is included in the witness, attempting to exploit it? Will our script code successfully detect invalid code? What's more, can we think of all cases in advance when we write the unit/integration/property tests? Fuzz testing kicks in here, since it keeps generating new data, or mutating existing data, hoping that one particular path tried, might lead to weird behavior in the code, helping us to uncover potential edge cases to fix.
+
+Some of you might immediately realize that the search space for purely random data can be super huge, so naive random number generation won't be helpful at all. Luckily, there have been bright minds working on fuzz testing for decades, modern fuzzing engines have employed a series of strategies so as to efficiently fuzz:
+
+- When running a piece of tested code, fuzzers gather executed code paths, i.e., code coverage information, so they know the code executed with respect to a particular data input. This way, fuzzers can prioritize input data that activates new code paths, and continue to explore based on such input data.
+- [Evolutionary algorithms](https://en.wikipedia.org/wiki/Evolutionary_algorithm) have been utilized by modern fuzzers, to balance different datasets activating different code paths.
+- Experimental and empirical knowledge has been gathered from fuzzing real code for years, the knowledge has also been formalized as real code in battle-tested fuzzing engines, hoping that future code can benefit from experience gathered when fuzzing real code.
+- Modern practice of fuzz testing rarely starts from scratch. Typically, one would prepare a set of seed data (typically named as "corpus" in fuzzing terminology). Those initial seed data, or corpuses, are used by fuzzers as initial inputs to the code being tested. Fuzzers mutate existing corpuses to generate new corpuses, aiming to efficiently fuzz the code being tested.
+
+With those techniques, modern fuzzing engines can uncover a lot of potential problems in code. Many fuzzers have maintained [trophies](https://honggfuzz.dev/) [pages](https://aflplus.plus/) to track bugs and vulnerabilities uncovered by them.
+
+It's also worth noting that fuzzing can be a long running process. Unlike typical unit tests that finish in terms of minutes, fuzzing setup can be a 24/7 process, running for days or even months before a potential edge case can be uncovered.
+
+## CKB Fuzzing Workflow Recommended
+
+With this in mind, the fuzzing workflow we typically recommend for CKB scripts is as follows:
+
+1. An initial set of corpuses can be generated for fuzzing. Your current unit tests can be a good source for corpuses: by some modifications, you can configure each unit test to dump the [mock transaction](https://docs.rs/ckb-mock-tx-types/latest/ckb_mock_tx_types/struct.MockTransaction.html) locally. As we shall see later, we have prepared tools to convert a mock transaction to a corpus that can be used by CKB's fuzzing setup.
+
+2. We have discussed above that fuzzing can be a long running process, which can be different from running normal unit tests. Here, we recommend 2 setups:
+
+a. When a CKB script is still in active development phase, it might make sense to set up a CI task that runs fuzzing for a certain amount of time (30 or 60 minutes for instance), and exits when the timeout is reached.
+
+b. At the same time, or when the CKB script reaches a more mature phase, a few machines can then be set aside to run fuzzing tasks 24/7. If no issues have been uncovered by fuzzing after some time (3 months for example), you can think about gradually reducing the machines used for fuzzing, or pause the fuzzing process when certain conditions are met. However, if issues have been discovered by fuzzing engines, it might be time to put more resources into fuzzing. We will come back to this topic later.
+
+## Fuzzing in Action: Crashes, Debugging, and Improvement
+
+### First Example
+
+Let's jump into an actual demo here. I have previously written a lock named [zero lock](https://github.com/xxuejie/ckb-zero-lock). It is designed to be used as a Lock Script on CKB, which can only be unlocked when:
+
+- The [extension](https://github.com/nervosnetwork/ckb/blob/7486e9e1a32b05887a859ab744cdcb7fc75a1c73/util/gen-types/schemas/blockchain.mol#L106) field of a particular block, contains a root of a [complete binary merkle tree](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0006-merkle-tree/0006-merkle-tree.md).
+- One of the leaves from this very merkle tree, contains the hash of the following items:
+  - An `OutPoint` structure pointing to the current Cell on chain. Current Cell refers to the Cell using zero lock as its Lock Script, and is being used as an input Cell in a CKB transaction.
+  - The Cell data part of the upgraded Cell.
+  - The `CellOutput` structure of the upgraded Cell.
+  - Optionally, the `input_type` and `output_type` data from the `WitnessArgs` structure associated with the current Cell.
+- A proof of the leaf in the merkle tree is provided in the `lock` field of the `WitnessArgs`
+
+Instead of a signature, zero lock relies on a CKB block to have certain data available in its block-level data structure. In other words, zero lock unlocks a Cell (and possibly creates a new Cell) only when the majority of the consensus has been reached. Like a hardfork, zero lock relies on consensus, not the authority of one or more parties to upgrade. The name is chosen because in CKB nowadays, many locks (such as the secp256k1 single-sign & multisig locks) use full zeros in its Lock Script. It is hoped that given enough needs, one of the Lock Scripts using full zeros, can embrace zero lock's unlocking workflow.
+
+We can debate about zero lock another time, here I will merely use zero lock as an example, showing how we can fuzz a real non-trivial CKB script. Zero lock suits this design particularly since it is a lock written in a combination of Rust and C, where both Rust and C code issues CKB syscalls. I did this for efficiency reasons. And I consider the zero lock to be simple in design, but slightly complicated in implementation. It's likely that your CKB script will be simpler than zero lock, and the same fuzzing process described here also works for your case.
+
+The first change happens in this [commit](https://github.com/xxuejie/ckb-zero-lock/commit/92170f7c9536fabc0197b8b6e14ff1c8034602b9). Zero lock was really written earlier when we are still exploring how to architect the directory structure of a CKB script, so the first thing we need to do here, is to upgrade all CKB-related dependencies to the latest `0.202.0` version, then add a Makefile adapted from [ckb-script-templates](https://github.com/cryptape/ckb-script-templates/blob/f9cb1f76f0971b0d3ee3aa2c593f1bbfc898a084/standalone-contract/Makefile), so the zero lock repository becomes a standard standalone contract. Now you can run `make build` to build it, and `make test` to run the tests. I had to modify the Makefile a bit to adjust the `make test` command though.
+
+Now that the basic structure is ready, we will add our first fuzzer and play with it. The first fuzzer has been added in [this commit](https://github.com/xxuejie/ckb-zero-lock/commit/335c06481949bf9bfb51b8c4bd0ddd00ba557024). Several noticeable changes include:
+
+- We switch from the official `0.17.2` release version of `ckb-std`, to a revision only available on GitHub for now. We are waiting for the [changes required for fuzzing](https://github.com/nervosnetwork/ckb-std/pull/136) to be merged and released.
+- The added fuzzer is kept in `fuzzers/libfuzzer-protobuf-fuzzer`, meaning it utilizes [LLVM libfuzzer](https://llvm.org/docs/LibFuzzer.html) as the fuzzing engine, the corpus will be in protobuf format. Don’t worry if those words do not ring a bell to you, as we add more fuzzers later, they will be easier to understand.
+- All the helper code for supporting CKB script fuzzing, has been put into this [project](https://github.com/xxuejie/ckb-script-fuzzing-toolkit). For now, we rely on git-based versions, later as the project matures, we would publish stable versions as Rust crates for Rust projects to use.
+
+Running fuzzers requires certain dependencies. On a native environment, you can do the following:
+
+```bash
+$ rustup toolchain install nightly
+$ cargo install \
+  --git https://github.com/xxuejie/ckb-script-fuzzing-toolkit \
+  --rev 479052e565ef872fbf60531a1ce2dcf54e83085a \
+  ckb-vm-syscall-tracer
+$ git clone https://github.com/xxuejie/ckb-zero-lock
+$ cd ckb-zero-lock
+$ git checkout 335c06481949bf9bfb51b8c4bd0ddd00ba557024
+$ git submodule update --init
+```
+
+The LLVM compiler suite must be installed as well, see [here](https://github.com/cryptape/ckb-script-templates?tab=readme-ov-file#dependencies) for more details. One particular thing to watch out for is that you must have `llvm-symbolizer` in the `PATH`, otherwise the fuzzing engines will not be able to generate meaningful backtrace. This can be a particular thing to watch out for when you are using for example, Ubuntu 24.04. The default `llvm` package does not include `llvm-symbolizer`, you need to run `sudo apt install llvm-dev` to have `llvm-symbolizer` installed.
+
+If you don’t feel like going through the above process, we also have a [Docker image](https://github.com/xxuejie/ckb-script-fuzzing-toolkit/blob/2a7b91031a205bd8d6bfbf8c27cd952a34f06d09/docker/Dockerfile) for you to use. So with Docker, you can proceed with the following commands instead:
+
+```bash
+$ git clone https://github.com/xxuejie/ckb-zero-lock
+$ cd ckb-zero-lock
+$ git checkout 335c06481949bf9bfb51b8c4bd0ddd00ba557024
+$ git submodule update --init
+$ make repl
+root@5f8ac58626e1:/code#
+```
+
+A Docker-based shell will be available for you to try the fuzzers. `/code` inside Docker is mapped to current folder outside Docker.
+
+With the preparation ready, you can start fuzzing:
+
+```bash
+$ cd fuzzers/libfuzzer-protobuf-fuzzer
+$ make fuzz
+```
+
+To run the fuzzer in multi-threaded fashion (4 cores, for example), you can use `make fuzz JOBS=4`.
+
+This command runs the following process in turns:
+
+1. Build the ckb-zero-lock’s RISC-V binary version. While our fuzzer will build from the source code directly, the RISC-V binary is used to generate mock transactions.
+2. Build [tx_generator](https://github.com/xxuejie/ckb-zero-lock/blob/b5c6150df14a3c84c39d3dc08ee2490a618ae458/tests/examples/tx_generator.rs). ckb-zero-lock is unique since I wrote a utility to generate mock transactions using ckb-zero-lock. We can simply leverage this utility to generate corpuses. However, it is not always true that a CKB script will have an accompanying mock transaction generator, later we shall see examples relying on unit tests to generate mock transactions.
+3. Now we start the corpus building process: the tx_generator is first invoked to build a mock transaction, then a common [utility](https://github.com/xxuejie/ckb-script-fuzzing-toolkit/tree/b3b3f42a9e72705e6574c56fc83afbfd1a3c34d2/crates/ckb-vm-syscall-tracer) transforms the mock transaction into the corpus formats accepted by our fuzzers. The same process is repeated a few times, so we have multiple corpuses to start with.
+4. Finally, the fuzzing process is started.
+
+Fuzzing is always a probabilistic task, so chances are if you run the above commands, you might see different outputs than me, since a fuzzer might hit on different crashes. But most likely, you will see a bunch of compiling output, then the fuzzer running for a few seconds, and terminate with a crash, somewhere in the log you might find lines like the following:
+
+```bash
+#111    NEW    cov: 739 ft: 1362 corp: 33/17Kb lim: 740 exec/s: 0 rss: 67Mb L: 685/740 MS: 2 PersAutoDict-CopyPart- DE: "\001\000\000\317\377\377\212J"-
+#112    NEW    cov: 741 ft: 1365 corp: 34/18Kb lim: 740 exec/s: 0 rss: 67Mb L: 723/740 MS: 1 ChangeBit-
+
+thread '<unnamed>' panicked at /code/src/lib.rs:153:10:
+parsing witness failure!
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+==4733== ERROR: libFuzzer: deadly signal
+    #0 0x62b30ab1cd11 in __sanitizer_print_stack_trace /rustc/llvm/src/llvm-project/compiler-rt/lib/asan/asan_stack.cpp:87:3
+    #1 0x62b30c6422cd in fuzzer::PrintStackTrace() /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libfuzzer-sys-0.4.9/libfuzzer/FuzzerUtil.cpp:210:38
+    #2 0x62b30c605e19 in fuzzer::Fuzzer::CrashCallback() /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libfuzzer-sys-0.4.9/libfuzzer/FuzzerLoop.cpp:231:1
+8
+    #3 0x62b30c605e19 in fuzzer::Fuzzer::CrashCallback() /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libfuzzer-sys-0.4.9/libfuzzer/FuzzerLoop.cpp:226:6
+
+```
+
+As pointed by the log, the crash happens at [this line](https://github.com/xxuejie/ckb-zero-lock/blob/335c06481949bf9bfb51b8c4bd0ddd00ba557024/src/lib.rs#L153). For a CKB script, it might be fine to use `unwrap` / `expect` calls, since a crash in CKB-VM really has no difference from a non-zero return code. However a fuzzer would expect more rigid code. Failing to meet Rust asserts here would result in an immediate crash.
+
+You can either try fixing the code yourself, or apply our prepared fix, then rerun the fuzzer:
+
+```bash
+$ # if you are in Docker environment, use `exit` to exit from Docker first
+$ git checkout 6bc7ceb9c2185eefa3e02cc58419038067988dcb
+$ # if you want to go back to Docker, run `make repl` again,
+$ # then also run `cd fuzzers/libfuzzer-protobuf-fuzzer` to go to the fuzzer dir
+$ make fuzz
+```
+
+You would still run into crashes, the logs might look like:
+
+```bash
+#3977   REDUCE cov: 918 ft: 2047 corp: 161/49Kb lim: 740 exec/s: 0 rss: 83Mb L: 236/740 MS: 4 ChangeByte-ChangeASCIIInt-ChangeASCIIInt-EraseBytes-
+#3984   NEW    cov: 918 ft: 2048 corp: 162/49Kb lim: 740 exec/s: 0 rss: 83Mb L: 82/740 MS: 2 EraseBytes-PersAutoDict- DE: "\260j\276x\361\030p\331u\215\245c\023\270C\
+330\326<p\037\257\021\013\264\252@\023\221l\247&\312"-
+=================================================================
+==85==ERROR: AddressSanitizer: out of memory: allocator is trying to allocate 0x4c8171d40 bytes
+    #0 0x5fab7651f6f4 in malloc /rustc/llvm/src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:67:3
+    #1 0x5fab765be56e in alloc::alloc::alloc::he7244d1f3fbe4754 /rustc/255aa220821c05c3eac7605fce4ea1c9ab2cbdb4/library/alloc/src/alloc.rs:94:9
+    #2 0x5fab765be56e in alloc::alloc::Global::alloc_impl::h5040a5b41c6d48de /rustc/255aa220821c05c3eac7605fce4ea1c9ab2cbdb4/library/alloc/src/alloc.rs:189:73
+    #3 0x5fab765be56e in _$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Allocator$GT$::allocate::h1a76bc85942f4f94 /rustc/255aa220821c05c3eac7605fce4ea1c9ab2cbdb4/
+library/alloc/src/alloc.rs:250:14
+    #4 0x5fab765be56e in alloc::raw_vec::RawVecInner$LT$A$GT$::try_allocate_in::ha5daef744e931f31 /rustc/255aa220821c05c3eac7605fce4ea1c9ab2cbdb4/library/alloc/src/ra
+w_vec/mod.rs:476:47
+
+```
+
+Or they might also be like:
+
+```bash
+#28321  NEW    cov: 1082 ft: 2377 corp: 293/54Kb lim: 740 exec/s: 28321 rss: 127Mb L: 65/740 MS: 1 PersAutoDict- DE: "\001\000\000\000"-
+#28374  REDUCE cov: 1082 ft: 2377 corp: 293/54Kb lim: 740 exec/s: 28374 rss: 128Mb L: 63/740 MS: 2 ChangeBinInt-EraseBytes-
+memory allocation of 17179869180 bytes failed
+==121== ERROR: libFuzzer: deadly signal
+    #0 0x64da180f0ce1 in __sanitizer_print_stack_trace /rustc/llvm/src/llvm-project/compiler-rt/lib/asan/asan_stack.cpp:87:3
+    #1 0x64da19c1649d in fuzzer::PrintStackTrace() /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libfuzzer-sys-0.4.9/libfuzzer/FuzzerUtil.cpp:210:38
+    #2 0x64da19bd9fe9 in fuzzer::Fuzzer::CrashCallback() /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libfuzzer-sys-0.4.9/libfuzzer/FuzzerLoop.cpp:231:1
+    #3 0x64da19bd9fe9 in fuzzer::Fuzzer::CrashCallback() /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libfuzzer-sys-0.4.9/libfuzzer/FuzzerLoop.cpp:226:6
+    #4 0x721ffe1cf32f  (/lib/x86_64-linux-gnu/libc.so.6+0x4532f) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #5 0x721ffe228b2b in pthread_kill (/lib/x86_64-linux-gnu/libc.so.6+0x9eb2b) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #6 0x721ffe1cf27d in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4527d) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+
+```
+
+In both cases, buried in the long stacktrace, you might find lines like the following:
+
+```bash
+    #18 0x64da1818428d in alloc::vec::Vec$LT$T$GT$::with_capacity::h983e05cdc06ef413 /rustc/255aa220821c05c3eac7605fce4ea1c9ab2cbdb4/library/alloc/src/vec/mod.rs:500:9
+    #19 0x64da1818428d in ckb_zero_lock::proof_reader::ProofVisitor::process_internal_data::h81af5071e257fde4 /code/src/proof_reader.rs:117:40
+    #20 0x64da181847d5 in ckb_zero_lock::proof_reader::ProofVisitor::process::hf1f92004aca1944a /code/src/proof_reader.rs:168:28
+    #21 0x64da18185024 in visit_lock_data /code/src/witness_reader.rs:55:19
+    #22 0x64da1818a800 in cwhr_bytes_reader_read /code/deps/ckb-witness-args-handwritten-reader/c/witness_args_handwritten_reader.h:288:15
+    #23 0x64da1818b2d3 in cwhr_rust_read_witness /code/binding.c:55:13
+    #24 0x64da18185989 in ckb_zero_lock::witness_reader::read_witness::h3224ea5904423e6d /code/src/witness_reader.rs:99:18
+    #25 0x64da181877b7 in ckb_zero_lock::run::h2bf602e132711cde /code/src/lib.rs:152:41
+    #26 0x64da181865a4 in ckb_zero_lock::program_entry::h3d5fbbc7833ccb9e /code/src/lib.rs:57:11
+
+```
+
+We can now pinpoint the crash to [this line](https://github.com/xxuejie/ckb-zero-lock/blob/6bc7ceb9c2185eefa3e02cc58419038067988dcb/src/proof_reader.rs#L140): here we first read the `total` value from a part of witness, and aim to allocate enough memory as `total` hints. But when `total` is a super big value, our program crashes as it is not possible to allocate such a big buffer.
+
+Similar to the above case, CKB-VM would return an `Err` error when allocating a big buffer fails, which in CKB’s perspective, is not different from a non-zero exit code. However, it is always good practice to bound the allocated buffers. And we might not know what potential edge case this code could lead to.
+
+Similarly, you can either try fixing the code yourself, or apply our prepared fix, then rerun the fuzzer:
+
+```bash
+$ # if you are in Docker environment, use `exit` to exit from Docker first
+$ git checkout 3d93d1e0fce1cc7eea0b65e849778773d9663caf
+$ # if you want to go back t Docker, run `make repl` again,
+$ # then also run `cd fuzzers/libfuzzer-protobuf-fuzzer` to go to the fuzzer dir
+$ make fuzz
+```
+
+Now no more crashes have been caught by the fuzzer when I leave the fuzzer running for a while. However if you do find new crashes from a local environment, please let me know, I’d be curious to see what you have uncovered.
+
+There is one more interesting step to try: we have discussed above that corpuses can help fuzzers efficiently fuzz code being tested, but we have never mentioned how efficient corpuses can be. As an experiment, you can revert the code to either of the 2 points above where fuzzers can find a crash, and just delete all the files in `fuzzers/libfuzzer-protobuf-fuzzer/corpus`(note that you have to keep the `corpus` directory, otherwise make tasks will regenerate corpuses), then rerun the fuzzer to see how long it takes for the fuzzer to find the same crash. That should give you a hint on the power of corpuses.
+
+As an optional step, we have also configured the CI in [this commit](https://github.com/xxuejie/ckb-zero-lock/commit/18c38550defaf2967dc8495c96d8ee8607657ee1), so for every future push, we will have the CI running fuzzers for 15 minutes. It does not replace a 24/7 fuzzing setup, but it’s a good complement whhile you are still working on the Script.
+
+## Different Fuzzers, different corpus formats: Choosing the Right One
+
+Fuzzing is largely a heuristic action; we want to find one particular case where the code triggers a crash or an assertion violation, among a huge search space. Strategies and real experience can play a huge role in efficient fuzzers. Starting from day one, we designed **ckb-script-fuzzing-toolkit** to be able to support multiple different fuzzers to achieve the best fuzzing coverage. For now, ckb-script-fuzzing-toolkit supports three fuzzing engines:
+
+- [LLVM libfuzzer](https://llvm.org/docs/LibFuzzer.html): being part of the LLVM project, LLVM libfuzzer is the first fuzzer we have experimented, and it should already be available for most LLVM distributions. It’s also relatively easier to setup, in that you can just use official clang / clang++ compilers to build the code being tested. One noticeable mention is that LLVM libfuzzer is now in maintenance mode: the original authors of LLVM libfuzzer are now working on a different project, only important bug fixes will be available in LLVM libfuzzer now.
+- [Honggfuzz](https://honggfuzz.dev/): honggfuzz is another decent fuzzer maintained mainly by security experts working for Google (however, honggfuzz is not yet a project officially supported by Google). It is famous for its excellent mutation engine, many vulnerabilities in open source software have been uncovered by honggfuzz.
+- [AFL++](https://aflplus.plus/): AFL(American Fuzzy Loop) is a true legend in the fuzzing space, and AFL++ is the latest variant. It embraces years of knowledge fuzzing code, with its own trophies claimed.
+
+We do believe the combination of all 3 fuzzers should cover a lot of the search space with years of experience digging bugs.
+
+For CKB scripts, the only outside input will be the data fed by CKB syscalls. Thus corpuses for CKB scripts will naturally be modeled over CKB syscalls. We rely on data from corpuses to set return register (`a0`) and also fill in necessary memory regions. ckb-script-fuzzing-toolkit also ships with 2 corpus format:
+
+- A modified [protobuf](https://github.com/xxuejie/ckb-script-fuzzing-toolkit/blob/b3b3f42a9e72705e6574c56fc83afbfd1a3c34d2/protos/traces.proto) format has been introduced due to the widely used [libprotobuf-mutator](https://github.com/google/libprotobuf-mutator) project. It enables [structure aware fuzzing](https://github.com/google/fuzzing/blob/master/docs/structure-aware-fuzzing.md), where fuzzers can understand protobuf format to build a more efficient fuzzing workflow.
+- [FuzzedDataProvider](https://github.com/llvm/llvm-project/blob/deb3464192647501ee1ba8431ffad6aa4c68ef00/compiler-rt/include/fuzzer/FuzzedDataProvider.h) from the LLVM project has also been introduced as another way of generating corpuses based on battle-tested experience. Compared to protobuf-based corpuses, FuzzedDataProvider represents another way of building corpuses: no corpuses are available from the beginning, but easy-to-recognize patterns have been used so fuzzers can generate corpuses much more efficiently.
+
+Between 3 fuzzers and 2 corpus generation engines, ckb-script-fuzzing-toolkit for now supports 6 fuzzing configurations. In [this commit](https://github.com/xxuejie/ckb-zero-lock/commit/ec7b67181b38e3f9b2c5fc8d36012a87aec1317b), we have filled in the missing 5 configurations for ckb-zero-lock. All 6 fuzzing configurations can be started by entering the respective directory, and use the `make fuzz` command, CI tasks have also been configured, so all 6 fuzzing configurations will run for 15 minutes. In addition, you might notice that we don’t really use Rust’s workspace feature. This is because each fuzzer might require its own compilation flags on the tested crate, having a single workspace would only complicate the task.
+
+That said, we merely provide 6 configurations as a demonstration. You don’t always need all these for your CKB script.
+
+[Existing](https://ieeexplore.ieee.org/document/5928349) [research](https://docs.lib.purdue.edu/cgi/viewcontent.cgi?article=1145&context=cstech) has taught us that the potential unknown bugs in your code, is more or less proportional to the bugs you have already found. So the more bugs you can easily find in your code, the more bugs there are probably hidden. This means we can just pick one engine and start running with it (our suggestion here, is to first start with libfuzzer + protobuf or honggfuzz + protobuf), if you have been running it for a while and everything is fine, you can probably reduce the machines running the fuzzer, or stop existing ones and try a different one just as complements. However, if the first fuzzer does expose certain crashes (other than the most trivial ones which can be found in seconds) after some time, it would mean that adding more fuzzers, might be more worthwhile to do.
+
+## Advanced Techniques: Structured-Aware Fuzzing and More
+
+### A C Example
+
+ckb-zero-lock shows the complete workflow for fuzzing a Rust based CKB script. Let’s now look at a different example: given a CKB script mainly written in C, how we can enable fuzzers to detect potential issues.
+
+Our choice is the older version of the [quantum resistant Lock Script](https://github.com/cryptape/quantum-resistant-lock-script/tree/22de5369b60b1e59bb698927c143d9efbe8527a9). This older version is now considered deprecated since we have already [completely overhauled](https://github.com/cryptape/quantum-resistant-lock-script/pull/14) the script. This means it should be safe now for us to expose certain problems in the older script, which hasn’t really been used by anyone.
+
+This [commit](https://github.com/xxuejie/quantum-resistant-lock-script/commit/31775108cf410f3c88d73cc9cb65329872d9a9c3) introduces the fuzzing setup for the older quantum resistant Lock Script. It basically does a few things:
+
+- Upgrade `ckb-c-stdlib` to a version where fuzzing is supported.
+- Tweak unit tests, so each unit test would dump a mock transaction. Later the mock transaction is converted to a corpus acceptable by fuzzers. This serves as a different example compared to ckb-zero-lock: instead of an external generator, unit tests have been tweaked to build corpuses.
+- In `fuzzing` folder, we have assembled a workflow in the `Makefile` to build the necessary corpuses and 2 fuzzers. Here we choose libfuzzer and honggfuzz as our fuzzer of choice, both use protobuf corpus format.
+
+You can start fuzzing using the following steps:
+
+```bash
+$ git clone https://github.com/xxuejie/quantum-resistant-lock-script
+$ cd quantum-resistant-lock-script
+$ git checkout 31775108cf410f3c88d73cc9cb65329872d9a9c3
+$ git submodule update --init
+$ make -C fuzzing repl
+root@75157b4082f3:/code $ cd fuzzing
+root@75157b4082f3:/code/fuzzing $ make generate-corpus
+
+# You can build and start libfuzzer
+root@75157b4082f3:/code/fuzzing $ make libfuzzer-protobuf
+root@75157b4082f3:/code/fuzzing $ ./libfuzzer-protobuf corpus
+# Or you can run the fuzzer using more cores
+root@75157b4082f3:/code/fuzzing $ ./libfuzzer-protobuf corpus -jobs=4
+
+# Honggfuzz is also available
+root@75157b4082f3:/code/fuzzing $ make hfuzz-protobuf
+root@75157b4082f3:/code/fuzzing $ honggfuzz -i corpus -- hfuzz-protobuf ___FILE___
+# By default, honggfuzz will start with half of all available
+# CPU cores, you can also tweak the number of cores used by honggfuzz
+root@75157b4082f3:/code/fuzzing $ honggfuzz -i corpus -n 4 -- hfuzz-protobuf ___FILE___
+```
+
+Unlike Rust, where cargo helps you take care of most dependencies, maintaining exact dependencies required by the fuzzing setup in C/C++ takes a lot of work. So we strongly recommend that you follow the above workflow, which uses our Docker image (Docker is actually started by `make repl`) to run the fuzzers.
+
+Remember that fuzzing is a randomized process, so chances are you might see some of the following results in different order than I did. When I run LLVM libfuzzer, the first crash I can find looks like the following:
+
+```bash
+root@75157b4082f3:/code/fuzzing $ ./libfuzzer-protobuf corpus
+(some lines omitted...)
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14091==ERROR: AddressSanitizer: SEGV on unknown address 0x10008d2d6e81 (pc 0x556ec6635b54 bp 0x7fff77c9f330 sp 0x7fff77c9f310 T0)
+==14091==The signal is caused by a READ memory access.
+    #0 0x556ec6635b54 in mol_unpack_number /code/fuzzing/../deps/ckb-c-stdlib/molecule/molecule_reader.h:93:14
+    #1 0x556ec6664973 in mol_fixvec_slice_raw_bytes /code/fuzzing/../deps/ckb-c-stdlib/molecule/molecule_reader.h:250:14
+    #2 0x556ec6664973 in get_public_key_hash /code/fuzzing/../c/ckb-sphincsplus-lock.c:281:30
+    #3 0x556ec6664973 in _ckb_fuzzing_entrypoint /code/fuzzing/../c/ckb-sphincsplus-lock.c:311:3
+    #4 0x556ec666e093 in ckb_fuzzing_start_with_protobuf(generated::traces::Syscalls const*) /code/fuzzing/ckb-script-fuzzing-toolkit/src/syscalls/protobuf.cc:51:40
+    #5 0x556ec66651da in TestOneProtoInput(generated::traces::Syscalls const&) /code/fuzzing/ckb-script-fuzzing-toolkit/src/interfaces/libfuzzer.cc:15:3
+    #6 0x556ec66651da in LLVMFuzzerTestOneInput /code/fuzzing/ckb-script-fuzzing-toolkit/src/interfaces/libfuzzer.cc:13:1
+    #7 0x556ec64f5704 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/code/fuzzing/libfuzzer-protobuf+0xe8704) (BuildId: ae7412e5c3f324a8760
+9d3a2bae2c7cf5f85e71c)
+    #8 0x556ec64f4df9 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) (/code/fuzzing/libfuzzer-protobuf+0xe7df9)
+ (BuildId: ae7412e5c3f324a87609d3a2bae2c7cf5f85e71c)
+    #9 0x556ec64f65e5 in fuzzer::Fuzzer::MutateAndTestOne() (/code/fuzzing/libfuzzer-protobuf+0xe95e5) (BuildId: ae7412e5c3f324a87609d3a2bae2c7cf5f85e71c)
+    #10 0x556ec64f7145 in fuzzer::Fuzzer::Loop(std::vector<fuzzer::SizedFile, std::allocator<fuzzer::SizedFile>>&) (/code/fuzzing/libfuzzer-protobuf+0xea145) (BuildId
+: ae7412e5c3f324a87609d3a2bae2c7cf5f85e71c)
+    #11 0x556ec64e441f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/code/fuzzing/libfuzzer-protobuf+0xd741f) (BuildId: ae741
+2e5c3f324a87609d3a2bae2c7cf5f85e71c)
+    #12 0x556ec650eaa6 in main (/code/fuzzing/libfuzzer-protobuf+0x101aa6) (BuildId: ae7412e5c3f324a87609d3a2bae2c7cf5f85e71c)
+    #13 0x710cd4f241c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #14 0x710cd4f2428a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #15 0x556ec64d9404 in _start (/code/fuzzing/libfuzzer-protobuf+0xcc404) (BuildId: ae7412e5c3f324a87609d3a2bae2c7cf5f85e71c)
+
+```
+
+This [line](https://github.com/xxuejie/quantum-resistant-lock-script/blob/31775108cf410f3c88d73cc9cb65329872d9a9c3/c/ckb-sphincsplus-lock.c#L281) is triggering the crash. Upon further checking, it seems that after loading the current running script, we have never verified that the script has a valid structure, so when garbage data is used here, fetching data from the script results in an error. However, it is worth mentioning that CKB’s `load_script` syscall for now specifies that the returned data must be a `Script` structure. In this sense, one can say that the error might never really happen in CKB, the fuzzer code has been too rigid. We can of course debate if our fuzzer toolkit code should be modified to only return a valid `Script` structure here, but that can be a long discussion, fixing the code won’t be a hard task, let’s just fix the code to make sure the Lock Script is of higher standard.
+
+A sample fix can be found in [this commit](https://github.com/xxuejie/quantum-resistant-lock-script/commit/68b388edc92103386a17be542fffdf3c46a67cf6). After upgrading the code, rebuild and rerun the fuzzer, another crash is uncovered by the fuzzer:
+
+```bash
+src/syscalls/protobuf.cc:115:12: runtime error: null pointer passed as argument 1, which is declared to never be null
+/usr/include/string.h:44:28: note: nonnull attribute specified here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/syscalls/protobuf.cc:115:12
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==16750==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x7b8bde9bda88 bp 0x7ffe0b6cf130 sp 0x7ffe0b6ce8e8 T0)
+==16750==The signal is caused by a WRITE memory access.
+==16750==Hint: address points to the zero page.
+    #0 0x7b8bde9bda88  (/lib/x86_64-linux-gnu/libc.so.6+0x188a88) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #1 0x582823ef0466 in __asan_memcpy (/code/fuzzing/libfuzzer-protobuf+0x19a466) (BuildId: 3e83f34ab939643cf814945f8f67e9027439187a)
+    #2 0x582823fb8e92 in _ckb_fuzzing_io_data(void*, unsigned long*, generated::traces::Syscalls const*, int*, unsigned long, unsigned long) /code/fuzzing/ckb-script-
+fuzzing-toolkit/src/syscalls/protobuf.cc:115:5
+    #3 0x582823fae2fa in __internal_syscall /code/fuzzing/ckb-script-fuzzing-toolkit/src/syscalls/utils.h:200:14
+    #4 0x582823f7c5ed in ckb_load_input_by_field /code/fuzzing/../deps/ckb-c-stdlib/ckb_raw_syscalls.h:166:13
+    #5 0x582823f7e2c0 in ckb_calculate_inputs_len /code/fuzzing/../deps/ckb-c-stdlib/ckb_syscall_utils.h:150:11
+    #6 0x582823fac27f in generate_sighash_all /code/fuzzing/../c/ckb-sphincsplus-lock.c:169:15
+    #7 0x582823fad904 in _ckb_fuzzing_entrypoint /code/fuzzing/../c/ckb-sphincsplus-lock.c:317:3
+    #8 0x582823fb6fa3 in ckb_fuzzing_start_with_protobuf(generated::traces::Syscalls const*) /code/fuzzing/ckb-script-fuzzing-toolkit/src/syscalls/protobuf.cc:51:40
+    #9 0x582823fae0ea in TestOneProtoInput(generated::traces::Syscalls const&) /code/fuzzing/ckb-script-fuzzing-toolkit/src/interfaces/libfuzzer.cc:15:3
+    #10 0x582823fae0ea in LLVMFuzzerTestOneInput /code/fuzzing/ckb-script-fuzzing-toolkit/src/interfaces/libfuzzer.cc:13:1
+```
+
+We can pinpoint the error to [this function](https://github.com/nervosnetwork/ckb-c-stdlib/blob/3b1b2ee8013e4c390a486c2fc199611a568a1a39/ckb_syscall_utils.h#L141-L175) in `ckb-c-stdlib`. All the `ckb_load_input_by_field` invocations in this function are just expected to tell us if an input Cell exists, no actual data loading work is needed. In this originally intended behavior, we need to set `len` to `0` before each `ckb_load_input_by_field` invocation. And yet in the actual code, `len` is only set to `0` at the beginning once, all later `ckb_load_input_by_field` invocations will have a non-zero `len`, meaning that CKB will try to write data into `NULL` address. For many CKB scripts, writing a few bytes of data to `0` address is fine, since CKB scripts don’t really use lower address, and that CKB-VM lacks a MMU, but modern fuzzers treat writing to the `0` address as an immediate failure and a bad practice. So it makes sense for us to fix it.
+
+A fix can be found in [this commit](https://github.com/xxuejie/quantum-resistant-lock-script/commit/59a812883cab5987bc25ae4887391a072c5cd088), so our script no longer writes to `0` memory address. Let’s upgrade the code, rebuild and rerun the fuzzer, and we can reach at one more crash:
+
+```bash
+=================================================================
+==19346==ERROR: AddressSanitizer: unknown-crash on address 0x8000426e9773 at pc 0x57718656d959 bp 0x7fff426e9690 sp 0x7fff426e8e60
+WRITE of size 4294967295 at 0x8000426e9773 thread T0
+    #0 0x57718656d958 in __asan_memset (/code/fuzzing/libfuzzer-protobuf+0x19a958) (BuildId: 0d66202f5ad285259cf465d4a01b98993cb54cc5)
+    #1 0x577186629169 in generate_sighash_all /code/fuzzing/../c/ckb-sphincsplus-lock.c:146:3
+    #2 0x57718662a924 in _ckb_fuzzing_entrypoint /code/fuzzing/../c/ckb-sphincsplus-lock.c:317:3
+    #3 0x577186633fc3 in ckb_fuzzing_start_with_protobuf(generated::traces::Syscalls const*) /code/fuzzing/ckb-script-fuzzing-toolkit/src/syscalls/protobuf.cc:51:40
+    #4 0x57718662b10a in TestOneProtoInput(generated::traces::Syscalls const&) /code/fuzzing/ckb-script-fuzzing-toolkit/src/interfaces/libfuzzer.cc:15:3
+    #5 0x57718662b10a in LLVMFuzzerTestOneInput /code/fuzzing/ckb-script-fuzzing-toolkit/src/interfaces/libfuzzer.cc:13:1
+    #6 0x5771864bb704 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/code/fuzzing/libfuzzer-protobuf+0xe8704) (BuildId: 0d66202f5ad285259c
+f465d4a01b98993cb54cc5)
+    #7 0x5771864badf9 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) (/code/fuzzing/libfuzzer-protobuf+0xe7df9
+) (BuildId: 0d66202f5ad285259cf465d4a01b98993cb54cc5)
+    #8 0x5771864bc5e5 in fuzzer::Fuzzer::MutateAndTestOne() (/code/fuzzing/libfuzzer-protobuf+0xe95e5) (BuildId: 0d66202f5ad285259cf465d4a01b98993cb54cc5)
+    #9 0x5771864bd145 in fuzzer::Fuzzer::Loop(std::vector<fuzzer::SizedFile, std::allocator<fuzzer::SizedFile>>&) (/code/fuzzing/libfuzzer-protobuf+0xea145) (BuildId
+: 0d66202f5ad285259cf465d4a01b98993cb54cc5)
+    #10 0x5771864aa41f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/code/fuzzing/libfuzzer-protobuf+0xd741f) (BuildId: 0d66
+202f5ad285259cf465d4a01b98993cb54cc5)
+    #11 0x5771864d4aa6 in main (/code/fuzzing/libfuzzer-protobuf+0x101aa6) (BuildId: 0d66202f5ad285259cf465d4a01b98993cb54cc5)
+    #12 0x7a192e9591c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #13 0x7a192e95928a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 42c84c92e6f98126b3e2230ebfdead22c235b667)
+    #14 0x57718649f404 in _start (/code/fuzzing/libfuzzer-protobuf+0xcc404) (BuildId: 0d66202f5ad285259cf465d4a01b98993cb54cc5)
+
+Address 0x8000426e9773 is a wild pointer inside of access range of size 0x0000ffffffff.
+SUMMARY: AddressSanitizer: unknown-crash (/code/fuzzing/libfuzzer-protobuf+0x19a958) (BuildId: 0d66202f5ad285259cf465d4a01b98993cb54cc5) in __asan_memset
+==19346==ABORTING
+
+```
+
+We now arrive at [this line](https://github.com/xxuejie/quantum-resistant-lock-script/blob/59a812883cab5987bc25ae4887391a072c5cd088/c/ckb-sphincsplus-lock.c#L146), where memset is given an extremely large size to write (4294967295). If we dive into the code slightly, it seems the problem is that we have neither validated that the loaded witness is a proper `WitnessArgs` structure, nor have we ensured that `lock_bytes_seg.size` provides a reasonable size. The current code actually [hacks](https://github.com/xxuejie/quantum-resistant-lock-script/blob/59a812883cab5987bc25ae4887391a072c5cd088/c/ckb-sphincsplus-lock.c#L72-L85) its way to obtain the `lock` field in a `WitnessArgs` structure. Unlike the previous case where `load_script` does return a valid `Script` structure per CKB’s RFC, here `load_witness` simply returns arbitrary bytes, and it is a Lock Script’s own task to validate that loaded witness is of `WitnessArgs` structure. In CKB’s setup, this buffer-overflowed memset might or might not be something an attacker can exploit, it overwrites data that should not be overwritten to 0.
+
+The previous cases were mostly “good-to-fix-but-do-not-really-cause-problems” kind. However, here we have the first real bug that fuzzers do help us uncover. If you have followed along the path, you would notice that modern fuzzers don’t take long to uncover such issues. We do strongly encourage you to incorporate a proper fuzzing setup into your scripts.
+
+A fix for this bug can be found [here](https://github.com/xxuejie/quantum-resistant-lock-script/commit/cdc11bd26fe2186b2451161deb932229414e8011). After this fix, the fuzzers won’t detect any crashes when I keep it running for a short while. As always, if you have uncovered new crashes, please do let us know :P
+
+### Structured-Aware Fuzzing
+
+If you have tried both libfuzzer and honggfuzz on the older quantum resistant Lock Script. You might notice that honggfuzz does not detect those crashes as fast as libfuzzer. Does that mean honggfuzz is inferior to libfuzzer? I don’t believe so. Modern, sophisticated fuzzers all contain enough heuristics, and they can complement each other quite well. The difference in finding crashes above, is because that in C/C++’s fuzzer setup, we have implemented [structured-aware fuzzing](https://github.com/google/fuzzing/blob/master/docs/structure-aware-fuzzing.md) with the help of [libprototbuf-mutator](https://github.com/google/libprotobuf-mutator) library. Libfuzzer knows the internals of protobuf, and can directly mutate all kinds of data stored within a protobuf structure, while most mutations honggfuzz attempts have been rejected by protobuf parsers.
+
+We aim to continue improving the fuzzing toolkit, so we can introduce structured-aware fuzzing to honggfuzz and AFL++ in the C/C++ case, as well as all three fuzzers in the Rust case. For the moment, the C/C++ fuzzer using LLVM libfuzzer will now have a slight advantage over the others.
+
+### Asserting or Not Asserting Return Result
+
+It's worth noting that the tested code is merely _executed_ in the above fuzzing setup:
+
+```rust
+// In libfuzzer-protobuf-fuzzer/src/lib.rs
+pub fn run(data: &[u8]) -> i8 {
+    protobuf_ckb_syscalls::entry(data, ckb_zero_lock::program_entry)
+}
+
+// In libfuzzer-protobuf-fuzzer/fuzz/fuzz_targets/fuzzing_target.rs
+fuzz_target!(|data: &[u8]| {
+    libfuzzer_protobuf_fuzzer::run(data);
+});
+
+```
+
+The actual return result of `run` function is ignored.
+
+Modern fuzzers actually do rely on sanitizers a lot. There are [all](https://clang.llvm.org/docs/AddressSanitizer.html) [kinds](https://clang.llvm.org/docs/MemorySanitizer.html) of [sanitizers](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html) in modern compilers, inserting assertions everywhere checking against weird behaviors. Some guard against buffer overflows, others might aim to detect arithmetic overflows or other undefined behaviors. All the fuzzers we use above, compile the code being tested with as many sanitizers enabled as possible. Fuzzers really do rely on all those sanitizers to crash when certain properties are violated, so as to detect potential problems. In a way, fuzzers rely on return results of a function much less than normal unit tests.
+
+This also reflects the very nature of fuzzing: with random inputs, it's very hard to say what the outcome of tested code is. For 99.9999% chances, the random input will lead to the tested code returns a failure exit code. So it is very tempting to modify the above code to assert that `libfuzzer_protobuf_fuzzer::run` always returns a non-zero exit code. However, albeit small, there is still a 0.0001% chance, in which a fuzzing engine will construct a perfect working input. Now the question is: do you want to manually watch out for a potential false positive case?
+
+Some might not want more false positives than necessary, for those people, feel free to stick to the code as it is. Others might feel a different way: we have seen from previous cases, and possibly cases below, that fuzzing engines do find false positives that might not feel safe to fuzzing engines, but in fact the code does run fine. For those people, they might want to alter the above code to like the following:
+
+```rust
+// In libfuzzer-protobuf-fuzzer/fuzz/fuzz_targets/fuzzing_target.rs
+fuzz_target!(|data: &[u8]| {
+    assert_ne!(libfuzzer_protobuf_fuzzer::run(data), 0);
+});
+
+```
+
+There is never a right or wrong here, it all comes down to preferences. I personally rely on sanitizers to do their job, and ignore the return result of code being tested, but others might disagree.
+
+There is one exception I do agree on asserting return result: occasionally, you might have multiple implementations of the same algorithm, you want to make sure one implementation is good enough on chain. Among all the other tests, fuzz engines can feed all kinds of input to both implementations of the same algorithm, and then assert their return results are idential. It does not necessarily mean that your algorithm of choice is invalid if fuzzing engines help you find a rebuttal case, but it certainly will be something that is worth investigating.
+
+We actually do have an example of this case: while we utilize [sphincsplus](https://github.com/sphincs/sphincsplus) in our [quantum resistant Lock Script](https://github.com/xxuejie/quantum-resistant-lock-script/tree/overhaul), it remains a question if this implementation written in C is good enough. So we build a fuzzing setup here, where we assert that the C sphincsplus implementation and the Rust [fips205](https://github.com/integritychain/fips205) generate the same result given the same input. To me this is a case where we feel comfortable asserting the return result of code being tested. Still, it is a rare case where we have 2 implementations of the same thing, for typical CKB scripts, there is only one implementation, and I prefer to simply ignore the return result, relying on sanitizers to help us scrutinize the code.
+
+### More Examples
+
+We have some more examples on fuzzing existing CKB scripts:
+
+Fuzzing code has been added to the multisig script [included in CKB's genesis block](https://github.com/xxuejie/ckb-system-scripts/tree/fuzzing/fuzzing). As one of our earliest examples, the fuzzing code has been carefully organized in a branch, where each individual commit represents a separate step:
+
+1. Introduce fuzzing setup for the multisig script.
+2. To efficiently fuzz the code, an option is added so secp256k1 multiplication table required by the original scripts, is moved out of corpuses, and be put as part of the source code. Having fuzzing engines mutate a 1MB constant table guarded by a hash really does not make much sense. With this change, fuzzing engines have much smaller corpuses to mutate.
+3. A complete README is added so you can follow the fuzzing steps by yourself.
+4. While it won't cause many problems, fuzzers would report a write-to-zero-address error. While writing to the the address `0x0` is prohibited by most modern architecture, for CKB-VM running the multisig script, writing to the address `0x0` is perfectly fine. However, this behavior is actually introduced by a mistake. It is always good practice to fix it so more fuzzing work can continue on the multisig script.
+
+Earlier, to introduce fuzzing to `ckb-zero-lock`, we have upgraded all CKB-related dependencies of the Lock Script to the latest version. The multisig script [shows](https://github.com/nervosnetwork/ckb-system-scripts/commit/25762d1d50641644da13e10b71519108f66b8b64#diff-35dd501674c29ffd5ce530e622a8726a658242d3a7fc15c623ad653985ccef46R131) another method: you can keep old code using older version of CKB dependencies, and only do the conversion to the newer version when we really need to build the mock transaction. When your old script does not rely on features from a later hardfork version, this can be a viable solution. Of course some might say it is always best practice to upgrade dependency versions for newer features and bug fixes, and we do recommend to upgrade dep versions when you can, but for some extreme cases, current code provides a possible path to introduce fuzzing with minimal efforts.
+
+A proper fuzzing setup has also been [introduced](https://github.com/xxuejie/quantum-resistant-lock-script/commit/edc01559579562d8c8029d32323d3b328f0f2dfa) to the [overhauled quantum resistant Lock Script](https://github.com/xxuejie/quantum-resistant-lock-script/tree/overhaul). However, I have to mention the complexity of the quantum resistant Lock Script, due to the design of the sphincsplus implementation. So if you want to dive into this project, make sure not to get lost in the details. One particular thing I want to point out here, is that the recent version of [ckb-testtool](https://github.com/nervosnetwork/ckb-testtool) introduces a [method](https://docs.rs/ckb-testtool/latest/ckb_testtool/context/struct.Context.html#method.dump_tx) to dump mock transaction. So if you are also using this crate to build unit tests(if you are using [ckb-script-templates](https://github.com/cryptape/ckb-script-templates), it's very likely you are also using `ckb-testtool` crate), it can be a simple task to dump mock transaction (See [this](https://github.com/xxuejie/quantum-resistant-lock-script/blob/edc01559579562d8c8029d32323d3b328f0f2dfa/tests/validation-tests/src/tests.rs#L4007)).
+
+### Binary Fuzzing vs. Source Fuzzing: Future Direction
+
+So far, all the examples we have shown, begins at the source code level: first you must have original source code for the CKB script being tested available. After certain reconfiguration of Rust features or C macros (in most cases, this is done to stub syscalls), the source code will then be compiled by a particular fuzzing engine to native code on the computer (not RISC-V), the fuzzing engine then executes native code compiled from the code being tested as the fuzzing process.
+
+There is indeed a different form of fuzzing: we can just take final RISC-V binary form of a CKB script, and run the binary as part of the fuzzing process. In fact both honggfuzz and AFL++ do support qemu mode, which allows one to fuzz a binary from another architecture via qemu. Theoretically it is possible to perform the same fuzzing workflow on a RISC-V binary used in CKB. Then there is also the question if sanitizers will be included in the RISC-V binary, now we do have 3 levels of fuzzing modes:
+
+1. Fuzz the original source code of CKB scripts in native code architecture.
+2. Fuzz RISC-V binary, but with sanitizers enabled.
+3. Fuzz RISC-V binary in final optimized form, which is the same form used on-chain in CKB.
+
+We've been doing 1 previously, while 2 and 3 are possible and not yet explored. Personally, I'm interested in 3, since it has 2 additional benefits:
+
+- In a way, the compiler used to generate the RISC-V binary is also being tested. Modern compilers are complicated beasts, they can have bugs in their own way, when security matters, we should also consider the possibility that compilers might also be buggy.
+- Previously we've been talking about having 2 implementations of the same algorithm so we can assert the equality of their return results. In this workflow, it can be done that we build the same code into 2 platforms: native code with sanitizers, and RISC-V binary in final optimized form, we can then run fuzzing on them where the return results of the 2 versions are also asserted. To me, we are getting the best of all worlds this way: we have state-of-the-art sanitizers that run on our code, we have also tested a complete workflow where compilers are in a way tested.
+
+We will continue working on this path, hopefully we can introduce the new setup in a future post.
+
+## Suggestions (Cheatsheets)
+
+Here we keep a series of suggestions that you can use as cheatsheets:
+
+- Don't overthink on choice of fuzzers, it might be better to toss a coin and start right way, than to spend days debating which fuzzing engine to use.
+- Consider trying out new fuzzing engines when you have run on one fuzzing engine for a while, definitely introduce new fuzzing engines when one fuzzing engine helps you find vulnerabilities.
+- Always start with a set of useful corpuses when possible. It's even better if you can verify one corpus in use can lead to a successful return result.
+
+## Final Remarks
+
+Now we have concluded our current knowledge on fuzzing CKB scripts. It's a long journey but you don't have to digest everything at once. And don't hesitate to contact us if you have any puzzles along the journey.
+
+Before we finish, I do want to shout out Google's [fuzzing](https://github.com/google/fuzzing) project and related projects. We gained a lot of insights on fuzzing due to Google's amazing work in this space.
