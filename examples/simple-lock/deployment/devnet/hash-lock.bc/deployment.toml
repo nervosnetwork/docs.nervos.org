@@ -1,0 +1,11 @@
+[[cells]]
+name = "hash-lock.bc"
+enable_type_id = false
+
+  [cells.location]
+  file = "/Users/retric/Desktop/docs.nervos.org/examples/simple-lock/dist/hash-lock.bc"
+
+[lock]
+code_hash = "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"
+args = "0x4118c8c16749bf126b22468d030bf9de7da3717b"
+hash_type = "type"
