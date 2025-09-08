@@ -10,7 +10,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x75be96e1871693f030db27ddae47890a28ab180e88e36ebb3575d9f1377d3da7",
+                "txHash": "0x3adf8c8bf04842c83cdaa21072cd3c4f869e8f7448b68d9baa409f6dc09f09b6",
                 "index": 0
               },
               "depType": "depGroup"
@@ -29,7 +29,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 2
               },
               "depType": "code"
@@ -48,7 +48,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x75be96e1871693f030db27ddae47890a28ab180e88e36ebb3575d9f1377d3da7",
+                "txHash": "0x3adf8c8bf04842c83cdaa21072cd3c4f869e8f7448b68d9baa409f6dc09f09b6",
                 "index": 1
               },
               "depType": "depGroup"
@@ -67,7 +67,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 5
               },
               "depType": "code"
@@ -86,7 +86,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 6
               },
               "depType": "code"
@@ -105,7 +105,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 7
               },
               "depType": "code"
@@ -114,7 +114,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x75be96e1871693f030db27ddae47890a28ab180e88e36ebb3575d9f1377d3da7",
+                "txHash": "0x3adf8c8bf04842c83cdaa21072cd3c4f869e8f7448b68d9baa409f6dc09f09b6",
                 "index": 0
               },
               "depType": "depGroup"
@@ -133,7 +133,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 8
               },
               "depType": "code"
@@ -152,7 +152,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 9
               },
               "depType": "code"
@@ -171,7 +171,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 10
               },
               "depType": "code"
@@ -190,7 +190,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 11
               },
               "depType": "code"
@@ -209,7 +209,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 12
               },
               "depType": "code"
@@ -228,7 +228,7 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 13
               },
               "depType": "code"
@@ -247,13 +247,116 @@
           {
             "cellDep": {
               "outPoint": {
-                "txHash": "0x1dbed8dcfe0f18359c65c5e9546fd15cd69de73ea0a502345be30180649c9467",
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
                 "index": 14
               },
               "depType": "code"
             }
           }
         ]
+      }
+    },
+    "ckb_js_vm": {
+      "name": "ckb_js_vm",
+      "file": "FileSystem(/Users/retric/Library/Application Support/offckb-nodejs/devnet/specs/ckb_js_vm)",
+      "script": {
+        "codeHash": "0xac4db0d0c028ba0d73dec9ee5e6a3c0c98fcdfca895402a3285d680e964dcb46",
+        "hashType": "type",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
+                "index": 15
+              },
+              "depType": "code"
+            }
+          }
+        ]
+      }
+    },
+    "nostr_lock": {
+      "name": "nostr_lock",
+      "file": "FileSystem(/Users/retric/Library/Application Support/offckb-nodejs/devnet/specs/nostr_lock)",
+      "script": {
+        "codeHash": "0x97bb42c154a4fda179e0cd891c94efd0ed5eb7fa5371135122ed58deb39d94b0",
+        "hashType": "data1",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x6141d3dc3ccd8cbe4f0870676649778dd0f0422cf19735fcdebfa003fa980a40",
+                "index": 16
+              },
+              "depType": "code"
+            }
+          }
+        ]
+      }
+    },
+    "secp256k1_keccak256_sighash_all": {
+      "name": "secp256k1_keccak256_sighash_all",
+      "file": "FileSystem(/Users/retric/Library/Application Support/offckb-nodejs/devnet/specs/pw-lock/secp256k1_keccak256_sighash_all)",
+      "script": {
+        "codeHash": "0xf3d9b5e8eff7bce00731be767a65f58cc5707c2b6ee8e732d56f383a47f77abd",
+        "hashType": "data1",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x3adf8c8bf04842c83cdaa21072cd3c4f869e8f7448b68d9baa409f6dc09f09b6",
+                "index": 3
+              },
+              "depType": "depGroup"
+            }
+          }
+        ]
+      }
+    },
+    "secp256k1_keccak256_sighash_all_acpl": {
+      "name": "secp256k1_keccak256_sighash_all_acpl",
+      "file": "FileSystem(/Users/retric/Library/Application Support/offckb-nodejs/devnet/specs/pw-lock/secp256k1_keccak256_sighash_all_acpl)",
+      "script": {
+        "codeHash": "0xf7c7fedcb0cbf549095f5b1ad6c267a141e96282b0f5308cad2d0af2901cfc48",
+        "hashType": "data1",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x3adf8c8bf04842c83cdaa21072cd3c4f869e8f7448b68d9baa409f6dc09f09b6",
+                "index": 4
+              },
+              "depType": "depGroup"
+            }
+          }
+        ]
+      }
+    },
+    "secp256k1_blake160_multisig_all_v2": {
+      "name": "secp256k1_blake160_multisig_all_v2",
+      "file": "FileSystem(/Users/retric/Library/Application Support/offckb-nodejs/devnet/specs/secp256k1_blake160_multisig_all_v2)",
+      "script": {
+        "codeHash": "0x36c971b8d41fbd94aabca77dc75e826729ac98447b46f91e00796155dddb0d29",
+        "hashType": "data1",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x3adf8c8bf04842c83cdaa21072cd3c4f869e8f7448b68d9baa409f6dc09f09b6",
+                "index": 2
+              },
+              "depType": "depGroup"
+            }
+          }
+        ]
+      }
+    },
+    "type_id": {
+      "name": "type_id",
+      "script": {
+        "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+        "hashType": "type",
+        "cellDeps": []
       }
     }
   },
@@ -492,6 +595,68 @@
           }
         ]
       }
+    },
+    "ckb_js_vm": {
+      "name": "ckb_js_vm",
+      "script": {
+        "codeHash": "0x3e9b6bead927bef62fcb56f0c79f4fbd1b739f32dd222beac10d346f2918bed7",
+        "hashType": "type",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x9f6558e91efa7580bfe97830d11cd94ca5d614bbf4a10b36f3a5b9d092749353",
+                "index": 0
+              },
+              "depType": "code"
+            }
+          }
+        ]
+      }
+    },
+    "nostr_lock": {
+      "name": "nostr_lock",
+      "script": {
+        "codeHash": "0x6ae5ee0cb887b2df5a9a18137315b9bdc55be8d52637b2de0624092d5f0c91d5",
+        "hashType": "type",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0xa2a434dcdbe280b9ed75bb7d6c7d68186a842456aba0fc506657dc5ed7c01d68",
+                "index": 0
+              },
+              "depType": "code"
+            }
+          }
+        ]
+      }
+    },
+    "type_id": {
+      "name": "type_id",
+      "script": {
+        "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+        "hashType": "type",
+        "cellDeps": []
+      }
+    },
+    "secp256k1_blake160_multisig_all_v2": {
+      "name": "secp256k1_blake160_multisig_all_v2",
+      "script": {
+        "codeHash": "0x36c971b8d41fbd94aabca77dc75e826729ac98447b46f91e00796155dddb0d29",
+        "hashType": "data1",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x2eefdeb21f3a3edf697c28a52601b4419806ed60bb427420455cc29a090b26d5",
+                "index": 0
+              },
+              "depType": "depGroup"
+            }
+          }
+        ]
+      }
     }
   },
   "mainnet": {
@@ -666,6 +831,50 @@
                 "index": 0
               },
               "depType": "code"
+            }
+          }
+        ]
+      }
+    },
+    "nostr_lock": {
+      "name": "nostr_lock",
+      "script": {
+        "codeHash": "0x641a89ad2f77721b803cd50d01351c1f308444072d5fa20088567196c0574c68",
+        "hashType": "type",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x1911208b136957d5f7c1708a8835edfe8ae1d02700d5cb2c3a6aacf4d5906306",
+                "index": 0
+              },
+              "depType": "code"
+            }
+          }
+        ]
+      }
+    },
+    "type_id": {
+      "name": "type_id",
+      "script": {
+        "codeHash": "0x00000000000000000000000000000000000000000000000000545950455f4944",
+        "hashType": "type",
+        "cellDeps": []
+      }
+    },
+    "secp256k1_blake160_multisig_all_v2": {
+      "name": "secp256k1_blake160_multisig_all_v2",
+      "script": {
+        "codeHash": "0x36c971b8d41fbd94aabca77dc75e826729ac98447b46f91e00796155dddb0d29",
+        "hashType": "data1",
+        "cellDeps": [
+          {
+            "cellDep": {
+              "outPoint": {
+                "txHash": "0x6888aa39ab30c570c2c30d9d5684d3769bf77265a7973211a3c087fe8efbf738",
+                "index": 0
+              },
+              "depType": "depGroup"
             }
           }
         ]
