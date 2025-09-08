@@ -1,10 +1,12 @@
+import { createRoot } from "react-dom/client";
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { capacityOf, generateAccountFromPrivateKey, shannonToCKB, transfer, wait } from './lib';
 import { Script } from '@ckb-ccc/core';
 
-const app = document.getElementById('root');
-ReactDOM.render(<App />, app);
+const container = document.getElementById("root");
+const root = createRoot(container)
+root.render(<App />);
 
 export function App() {
   // default value: first account privkey from offckb
