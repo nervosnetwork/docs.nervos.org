@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 import { capacityOf, generateAccountFromPrivateKey, issueToken, queryIssuedTokenCells, shannonToCKB, transferTokenToAddress } from './lib';
 import { ccc, CellOutput, Script } from '@ckb-ccc/core';
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const container = document.getElementById("root");
+const root = createRoot(container)
 root.render(<App />);
 
 function IssuedToken() {
