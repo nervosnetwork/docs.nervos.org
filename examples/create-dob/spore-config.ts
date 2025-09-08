@@ -1,7 +1,5 @@
 import { SporeConfig, predefinedSporeConfigs } from "@spore-sdk/core";
-import offCKB from "./offckb.config";
-
-const CKB_RPC_URL = offCKB.rpcUrl;
+import { readEnvNetwork } from "./ccc-client";
 
 // use `offckb system-scripts --export-style lumos` to get the blow info
 const lumosConfig = {
@@ -111,10 +109,10 @@ export type PredefinedDevnetSporeScriptName =
   | "Lua";
 
 //@ts-ignore
-export const SPORE_CONFIG: SporeConfig<PredefinedDevnetSporeScriptName> = CKB_RPC_URL === "https://testnet.ckb.dev/rpc" ? predefinedSporeConfigs.Testnet :  {
+export const SPORE_CONFIG: SporeConfig<PredefinedDevnetSporeScriptName> = readEnvNetwork() === "testnet" ? predefinedSporeConfigs.Testnet :  {
   lumos: lumosConfig,
-  ckbNodeUrl: CKB_RPC_URL,
-  ckbIndexerUrl: CKB_RPC_URL,
+  ckbNodeUrl: "http://localhost:28114", // the default offckb devnet proxy rpc url
+  ckbIndexerUrl: "http://localhost:28114",
   defaultTags: ["latest"],
   scripts: {
     Spore: {
