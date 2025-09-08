@@ -166,15 +166,13 @@ Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt
 
 You can try clicking the **"Transfer"** button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
 
-<ImgContainer src="/img/dapps/simple-lock.jpg" />
+<ImgContainer src="/img/dapps/simple-lock.png" />
 
 ---
 
 ## Behind the Scene
 
-### Script Logic (TypeScript)
-
-For JavaScript/TypeScript developers, the logic behind the `hash_lock` script is equally simple and follows the same principles as the Rust version.
+### Script Logic
 
 Here’s what the script does step-by-step:
 
@@ -183,7 +181,7 @@ Here’s what the script does step-by-step:
 3. It computes the **hash** of the preimage using the default CKB hash function (`blake2b-256`).
 4. If the computed hash matches the one in the `script_args`, the script returns success (0). Otherwise, it fails.
 
-Here is the complete TypeScript-based `hash_lock` script logic:
+Here is the complete `hash_lock` script logic:
 
 ```typescript
 import * as bindings from "@ckb-js-std/bindings";
