@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client";
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
 import { capacityOf, generateAccountFromPrivateKey, shannonToCKB, transfer, wait } from './lib';
 import { Script } from '@ckb-ccc/core';
 

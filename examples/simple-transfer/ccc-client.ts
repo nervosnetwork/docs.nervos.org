@@ -16,7 +16,7 @@ export const DEVNET_SCRIPTS: Record<
   [KnownScript.AnyoneCanPay]: systemScripts["devnet"].anyone_can_pay!.script as ScriptInfo,
   [KnownScript.OmniLock]: systemScripts["devnet"].omnilock!.script as ScriptInfo,
   [KnownScript.XUdt]: systemScripts["devnet"].xudt!.script as ScriptInfo,
-} ;
+};
 
 export function buildCccClient(network: Network) {
   const client =
