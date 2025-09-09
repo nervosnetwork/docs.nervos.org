@@ -1,14 +1,19 @@
-// Include your tests here
-// See https://github.com/xxuejie/ckb-native-build-sample/blob/main/tests/src/tests.rs for examples
-
-use super::*;
+use crate::Loader;
 use ckb_testtool::{
     builtin::ALWAYS_SUCCESS,
-    ckb_types::{bytes::Bytes, core::TransactionBuilder, packed::*, prelude::*},
+    ckb_error::Error,
+    ckb_types::{
+        bytes::Bytes,
+        core::TransactionBuilder,
+        packed::{CellDep, CellInput, CellOutput},
+        prelude::*,
+    },
     context::Context,
 };
 
 const MAX_CYCLES: u64 = 10_000_000;
+
+const ERROR_CARROT_ATTACK: i8 = 100;
 
 #[test]
 fn test_no_carrot() {
@@ -147,7 +152,7 @@ fn test_carrot_attack() {
 
     // run
     let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();
-    assert_script_error(err, 5);
+    assert_script_error(err, ERROR_CARROT_ATTACK);
 }
 
 fn assert_script_error(err: Error, err_code: i8) {

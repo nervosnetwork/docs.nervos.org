@@ -1,4 +1,4 @@
-# rust-script-examples
+# CKB Rust Script
 
 TODO: Write this readme
 

@@ -1,6 +1,6 @@
-# carrot
+# carrot-script
 
-This script ensures none of the output cells can have carrot in cell data.
+TODO: Write this readme
 
 *This contract was bootstrapped with [ckb-script-templates].*
 
