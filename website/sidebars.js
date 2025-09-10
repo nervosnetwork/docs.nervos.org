@@ -141,7 +141,6 @@ export default {
           items: [
             "script/rust/rust-example-minimal-script",
             "script/rust/rust-example-sudt-script",
-            "script/rust/rust-example-spawn-script",
           ],
         },
       ],
