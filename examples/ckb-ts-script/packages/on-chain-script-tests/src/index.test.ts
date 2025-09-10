@@ -10,9 +10,7 @@ const SCRIPT_HELLO_WORLD = readFileSync(
 const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync(
   "../../contracts/simple-print-args/dist/index.bc",
 );
-const SCRIPT_FIB = readFileSync(
-  "../../contracts/fib/dist/index.bc",
-);
+const SCRIPT_FIB = readFileSync("../../contracts/fib/dist/index.bc");
 
 test("hello-world success", () => {
   const resource = Resource.default();
@@ -72,12 +70,7 @@ test("simple-print-args success", () => {
 test("fib success", () => {
   const resource = Resource.default();
   const tx = Transaction.default();
-  const lockScript = createJSScript(
-    resource,
-    tx,
-    hexFrom(SCRIPT_FIB),
-    "0x",
-  );
+  const lockScript = createJSScript(resource, tx, hexFrom(SCRIPT_FIB), "0x");
 
   // mock a input cell with the created script as lock script
   const inputCell = resource.mockCell(lockScript);

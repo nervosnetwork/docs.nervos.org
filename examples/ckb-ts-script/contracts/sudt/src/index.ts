@@ -19,7 +19,7 @@ function get_amount(source: bindings.SourceType): bigint {
 }
 
 function main() {
-  console.log('simple UDT ...');
+  console.log("simple UDT ...");
   // ckb-js-vm has leading 35 bytes args
   let args = HighLevel.loadScript().args.slice(35);
   if (args.byteLength != 32) {
@@ -27,7 +27,10 @@ function main() {
   }
 
   let owner_mode = false;
-  for (let item of new HighLevel.QueryIter(HighLevel.loadCellLockHash, bindings.SOURCE_INPUT)) {
+  for (let item of new HighLevel.QueryIter(
+    HighLevel.loadCellLockHash,
+    bindings.SOURCE_INPUT,
+  )) {
     if (bytesEq(item, args)) {
       owner_mode = true;
       break;
@@ -44,7 +47,7 @@ function main() {
   if (input_amount < output_amount) {
     return ERROR_AMOUNT;
   }
-  console.log('Simple UDT quit successfully');
+  console.log("Simple UDT quit successfully");
   return 0;
 }
 
