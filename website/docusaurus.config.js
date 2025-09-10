@@ -5,6 +5,14 @@ import katex from "rehype-katex";
 const lightCodeTheme = require("./src/prism/light");
 const darkCodeTheme = require("./src/prism/dark");
 
+const repoOwner =
+  process.env.VERCEL_GIT_REPO_OWNER ||
+  process.env.DEPLOY_OWNER ||
+  "nervosnetwork";
+const repoSlug = process.env.VERCEL_GIT_REPO_SLUG || "docs.nervos.org";
+const repoBranch =
+  process.env.VERCEL_GIT_COMMIT_REF || process.env.DEPLOY_BRANCH || "master";
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Nervos CKB",
@@ -59,6 +67,7 @@ const config = {
         url: "https://talk.nervos.org/",
       },
     ],
+    examplesBaseUrl: `https://github.com/${repoOwner}/${repoSlug}/tree/${repoBranch}/examples/`,
   },
   onBrokenLinks: "log",
   onBrokenMarkdownLinks: "log",
