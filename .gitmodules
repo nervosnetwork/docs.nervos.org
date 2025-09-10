@@ -1,6 +1,3 @@
-[submodule "examples/c-script-examples/deps"]
-	path = examples/c-script-examples/deps
-	url = https://github.com/nervosnetwork/ckb-c-stdlib.git
-[submodule "examples/c-script-examples/deps/ckb-c-stdlib"]
-	path = examples/c-script-examples/deps/ckb-c-stdlib
+[submodule "examples/ckb-c-script/deps/ckb-c-stdlib"]
+	path = examples/ckb-c-script/deps/ckb-c-stdlib
 	url = https://github.com/nervosnetwork/ckb-c-stdlib.git

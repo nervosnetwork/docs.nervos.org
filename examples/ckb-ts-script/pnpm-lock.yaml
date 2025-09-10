@@ -68,6 +68,25 @@ importers:
         specifier: ~0.25.0
         version: 0.25.5
 
+  contracts/fib:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
   contracts/hello-wrold:
     dependencies:
       '@ckb-js-std/bindings':
@@ -132,6 +151,25 @@ importers:
         version: 0.25.5
 
   contracts/simple-print-args:
+    dependencies:
+      '@ckb-js-std/bindings':
+        specifier: ~1.0.0
+        version: 1.0.0
+      '@ckb-js-std/core':
+        specifier: ~1.0.0
+        version: 1.0.0
+      ckb-default-app:
+        specifier: 'link:'
+        version: 'link:'
+    devDependencies:
+      ckb-testtool:
+        specifier: ~1.0.0
+        version: 1.0.0(typescript@5.8.3)
+      esbuild:
+        specifier: ~0.25.0
+        version: 0.25.5
+
+  contracts/sudt:
     dependencies:
       '@ckb-js-std/bindings':
         specifier: ~1.0.0

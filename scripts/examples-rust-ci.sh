@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
-cd "$SCRIPT_DIR/../examples/rust-script-examples/"
+cd "$SCRIPT_DIR/../examples/ckb-rust-script/"
 
 rustup component add rustfmt
 rustup target add riscv64imac-unknown-none-elf

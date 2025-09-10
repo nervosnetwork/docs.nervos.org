@@ -38,14 +38,11 @@ jobs:
       - name: Install ckb-debugger
         run: which ckb-debugger >/dev/null 2>&1 || cargo install ckb-debugger
 
-      - name: rust-script-examples
+      - name: ckb-rust-script
         run: ./scripts/examples-rust-ci.sh
 
-      - name: ts-script-examples
+      - name: ckb-ts-script
         run: ./scripts/examples-ts-ci.sh
 
-      - name: c-script-examples
+      - name: ckb-c-script
         run: ./scripts/examples-c-ci.sh
-
-      - name: c-script-examples
-        run: ./scripts/examples-simple-lock-ci.sh

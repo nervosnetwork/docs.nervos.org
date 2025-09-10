@@ -10,6 +10,7 @@ const SCRIPT_HELLO_WORLD = readFileSync(
 const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync(
   "../../contracts/simple-print-args/dist/index.bc",
 );
+const SCRIPT_FIB = readFileSync("../../contracts/fib/dist/index.bc");
 
 test("hello-world success", () => {
   const resource = Resource.default();
@@ -60,6 +61,26 @@ test("simple-print-args success", () => {
   tx.outputsData.push(hexFrom("0x"));
   // add witnesses
   tx.witnesses.push(hexFrom(witness.toBytes()));
+
+  // verify the transaction
+  const verifier = Verifier.from(resource, tx);
+  verifier.verifySuccess(true);
+});
+
+test("fib success", () => {
+  const resource = Resource.default();
+  const tx = Transaction.default();
+  const lockScript = createJSScript(resource, tx, hexFrom(SCRIPT_FIB), "0x");
+
+  // mock a input cell with the created script as lock script
+  const inputCell = resource.mockCell(lockScript);
+
+  // add input cell to the transaction
+  tx.inputs.push(Resource.createCellInput(inputCell));
+  // add output cell to the transaction
+  tx.outputs.push(Resource.createCellOutput(lockScript));
+  // add output data to the transaction
+  tx.outputsData.push(hexFrom("0x"));
 
   // verify the transaction
   const verifier = Verifier.from(resource, tx);
