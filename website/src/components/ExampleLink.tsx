@@ -9,5 +9,9 @@ export default function ExampleLink({
 }) {
   const config = useDocusaurusContext();
   const examplesBaseUrl = config.siteConfig.customFields?.examplesBaseUrl;
-  return <a href={`${examplesBaseUrl}${path}`}>{children}</a>;
+  return (
+    <a href={`${examplesBaseUrl}${path}`} target="_blank">
+      {children}
+    </a>
+  );
 }
