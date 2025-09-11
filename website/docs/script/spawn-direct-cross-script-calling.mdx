@@ -4,6 +4,7 @@ title: "Spawn: Direct Cross-Script Calls"
 ---
 
 import Tooltip from "@components/Tooltip";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # Spawn: Direct Cross-Script Calls
 
@@ -154,7 +155,7 @@ Syscalls such as `spawn`, `wait`, `read`, and `write` may trigger a context swit
 
 For example, after calling `spawn`, the VM switches context to the child process and begins executing from its `_start`.
 
-The diagram below illustrates inter-process communication and scheduling. The example code is from the ckb-rust-script [spawn-parent](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/spawn-parent/src/main.rs) and [spawn-child](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/spawn-parent/src/main.rs).
+The diagram below illustrates inter-process communication and scheduling. The example code is from the ckb-rust-script <ExampleLink path="ckb-rust-script/contracts/spawn-parent/src/main.rs">spawn-parent</ExampleLink> and <ExampleLink path="ckb-rust-script/contracts/spawn-child/src/main.rs">spawn-child</ExampleLink>.
 
 (The code is written in Rust but is straightforward enough that developers using other languages can easily follow it. You only need to focus on the spawn-related functions mentioned above.)
 
