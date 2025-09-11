@@ -8,6 +8,7 @@ import TabItem from "@theme/TabItem";
 import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # Test
 
@@ -39,7 +40,7 @@ pub use ckb_verification;
 
 ## Quick Start
 
-Here's a basic unit test for a [`hello-world`](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/hello-world) contract:
+Here's a basic unit test for a <ExampleLink path="ckb-rust-script/contracts/hello-world">`hello-world`</ExampleLink> contract:
 
 ```rust
 // generated unit test for contract hello-world
@@ -100,7 +101,11 @@ The test consists of three main steps:
 ### 1. Initialization
 
 - `Context::default()` creates a context to manage test-only transaction variables. (`Context` is primarily designed for testing.)
-- [`Loader::default().load_binary()`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/tests/src/tests.rs#L13) loads the contract binary. [`Loader`](https://github.com/cryptape/ckb-script-templates/blob/main/workspace/tests/src/lib.rs#L38) is provided by `ckb-script-templates`, but you can implement your own loader, for example using [`include_bytes!`](https://github.com/nervosnetwork/ckb-auth/blob/main/tests/auth-c-tests/src/lib.rs#L46).
+- <ExampleLink path="ckb-rust-script/tests/src/tests.rs#L14">
+    `Loader::default().load_binary()`
+  </ExampleLink> loads the contract binary. [`Loader`](https://github.com/cryptape/ckb-script-templates/blob/main/workspace/tests/src/lib.rs#L38)
+  is provided by `ckb-script-templates`, but you can implement your own loader, for
+  example using [`include_bytes!`](https://github.com/nervosnetwork/ckb-auth/blob/main/tests/auth-c-tests/src/lib.rs#L46).
 
 ### 2. Building the Transaction
 

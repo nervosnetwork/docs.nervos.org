@@ -8,6 +8,7 @@ import TabItem from "@theme/TabItem";
 import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # Main & Allocator
 
@@ -190,4 +191,4 @@ Explanation:
 
 ## example
 
-In [`ckb-rust-script/empty`](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/empty), implement a basic Rust Script following the structure described above. This example uses the `allocator` feature to create a heap allocator, enabling the use of types like `String` through `alloc`.
+In <ExampleLink path="ckb-rust-script/contracts/empty">`ckb-rust-script/empty`</ExampleLink>, implement a basic Rust Script following the structure described above. This example uses the `allocator` feature to create a heap allocator, enabling the use of types like `String` through `alloc`.

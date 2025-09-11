@@ -8,6 +8,7 @@ import TabItem from "@theme/TabItem";
 import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # Error
 
@@ -65,7 +66,7 @@ This is usually handled automatically in `ckb_std::high_level` by allocating eno
 
 `TypeIDError` : Type ID Error.
 
-`Unknown(u64)` : Unknown syscall error number. ckb-vm 可能会返回一些未知的值，一般会存进这里。
+`Unknown(u64)` : Unknown syscall error number. ckb-vm may return some unknown value and will generally be saved here.
 
 ### Remarks
 
@@ -73,6 +74,6 @@ The errors `WaitFailure`, `InvalidFd`, `OtherEndClosed`, `MaxVmsSpawned`, and `M
 
 ### Example
 
-See the example at [`ckb-rust-script/error`](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/contracts/error).
+See the example at <ExampleLink path="ckb-rust-script/contracts/error">`ckb-rust-script/error`</ExampleLink>.
 This is a _Lock Script_ that uses `args[0]` to select which error type to trigger.
-You can verify the behavior with the tests in [`tests/src/test_error.rs`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/tests/src/tests_error.rs).
+You can verify the behavior with the tests in <ExampleLink path="ckb-rust-script/tests/src/tests_error.rs">`tests/src/test_error.rs`</ExampleLink>.

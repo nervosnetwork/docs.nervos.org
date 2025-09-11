@@ -9,6 +9,7 @@ import Link from "@docusaurus/Link";
 import Tooltip from "@components/Tooltip";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # ckb-script-ipc IPC
 
@@ -189,7 +190,7 @@ This automatic code generation significantly reduces development time and potent
 
 ## `ckb_script_ipc::service`
 
-As mentioned earlier, by simply adding the `#[ckb_script_ipc::service]` attribute macro to a `trait`, you can automatically generate all necessary IPC-related code. This section uses the [`ckb-rust-script`](https://github.com/nervosnetwork/docs.nervos.org/blob/master/examples/rust-script-examples/contracts/ipc-child/src/main.rs#L43) repository to illustrate how this macro works and what code it generates.
+As mentioned earlier, by simply adding the `#[ckb_script_ipc::service]` attribute macro to a `trait`, you can automatically generate all necessary IPC-related code. This section uses the <ExampleLink path="ckb-rust-script/contracts/ipc-child/src/main.rs#L43">`ckb-rust-script`</ExampleLink> repository to illustrate how this macro works and what code it generates.
 
 The IPC example is divided into three parts:
 
