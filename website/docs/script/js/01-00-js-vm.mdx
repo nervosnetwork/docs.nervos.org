@@ -9,6 +9,7 @@ import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # CKB JS VM: Mechanism and Capabilities
 
@@ -62,7 +63,7 @@ ckb-js-vm requires these extra 35 bytes.
 
 Since JavaScript contracts are executed inside the **JS-VM**, creating a transaction for them introduces a few differences compared to traditional contracts.
 
-In the [`simple-lock`](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/simple-lock) example, both Rust and JavaScript implementations of the same contract are provided. Functionally they are identical, but the Rust version is compiled directly into a native executable contract, while the JavaScript version is only compiled into [bytecode](./js-vm-cmd-line-options#compiling-javascript-into-bytecode).
+In the <ExampleLink path="dApp/simple-lock">simple-lock</ExampleLink> example, both Rust and JavaScript implementations of the same contract are provided. Functionally they are identical, but the Rust version is compiled directly into a native executable contract, while the JavaScript version is only compiled into [bytecode](./js-vm-cmd-line-options#compiling-javascript-into-bytecode).
 
 The key differences are as follows:
 
@@ -71,13 +72,13 @@ The key differences are as follows:
   - Traditional contracts use their own `code_hash + hash_type`.
   - JavaScript contracts instead reference the `code_hash + hash_type` of the **ckb-js-vm**.
 
-    - Traditional contract: [Lock Script](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/frontend/app/hash-lock.ts#L137)
-    - JavaScript contract: [Lock Script](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/frontend/app/hash-lock.ts#L47)
+    - Traditional contract: <ExampleLink path="dApp/simple-lock/frontend/app/hash-lock.ts#L137">Lock Script</ExampleLink>
+    - JavaScript contract: <ExampleLink path="dApp/simple-lock/frontend/app/hash-lock.ts#L47">Lock Script</ExampleLink>
 
 - **Args**
 
   - Traditional contracts directly fill in the `args` field.
   - JavaScript contracts prepend JS-specific parameters at the beginning of `args`. (This also means when reading arguments inside the contract, you need to offset by 35 bytes.)
 
-    - Traditional contract: [Reading args](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/rust-simple-lock/contracts/hash-lock/src/main.rs#L62)
-    - JavaScript contract: [Reading args](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/simple-lock/ts-simple-lock/packages/on-chain-script/src/index.ts#L6)
+    - Traditional contract: <ExampleLink path="dApp/simple-lock/rust-simple-lock/contracts/hash-lock/src/main.rs#L62">Reading args</ExampleLink>
+    - JavaScript contract: <ExampleLink path="dApp/simple-lock/ts-simple-lock/packages/on-chain-script/src/index.ts#L6">Reading args</ExampleLink>
