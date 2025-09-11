@@ -1,10 +1,14 @@
 import React from "react";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 interface SwitchToTestnetProps {
   readmeLink: string;
 }
 
 export default function SwitchToTestnet({ readmeLink }: SwitchToTestnetProps) {
+  const examplesBaseUrl =
+    useDocusaurusContext().siteConfig.customFields?.examplesBaseUrl;
+  const url = `${examplesBaseUrl}${readmeLink}`;
   return (
     <>
       <p>
@@ -23,7 +27,7 @@ export default function SwitchToTestnet({ readmeLink }: SwitchToTestnetProps) {
       </p>
       <p>
         For more details, check out{" "}
-        <a href={readmeLink} target="_blank" rel="noopener noreferrer">
+        <a href={url} target="_blank" rel="noopener noreferrer">
           the full source code
         </a>
         .
