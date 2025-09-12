@@ -1,0 +1,24 @@
+# .lychee.toml
+
+
+exclude = [
+  "http://localhost:*",
+  "https://127.0.0.1:*",
+  "http://0.0.0.0:*",
+]
+
+max-concurrency = 10
+
+timeout = "20s"
+accept = ["200..=299", "403"]
+
+exclude-path = [
+  "*.png",
+  "*.jpg",
+  "*.jpeg",
+  "*.gif",
+  "*.svg",
+]
+
+[github]
+token = "${GITHUB_TOKEN}"

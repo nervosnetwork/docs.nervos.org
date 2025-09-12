@@ -26,3 +26,8 @@ jobs:
 
       - name: website
         run: ./scripts/website-ci.sh
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config website/.lychee.toml website/build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
