@@ -7,9 +7,8 @@ exclude = [
   "http://0.0.0.0:*",
 ]
 
-max-concurrency = 10
+max-concurrency = 4
 
-timeout = "20s"
 accept = ["200..=299", "403"]
 
 exclude-path = [
@@ -21,4 +20,3 @@ exclude-path = [
 ]
 
 [github]
-token = "${GITHUB_TOKEN}"
