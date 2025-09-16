@@ -8,16 +8,14 @@ exclude = [
   "https://github.com/*",
 ]
 
+scheme = ["http", "https"]
+
 max-concurrency = 1
 
 accept = ["200..=299", "403"]
 
-exclude-path = [
-  "*.png",
-  "*.jpg",
-  "*.jpeg",
-  "*.gif",
-  "*.svg",
-]
+exclude_all_private = true
 
-[github]
+cache = true
+
+max_cache_age = "30d"
