@@ -48,12 +48,12 @@ This section introduces the simplest contract, "Hello World," covering ([Code](h
 To create a project, use [`ckb-script-templates`](https://github.com/cryptape/ckb-script-templates) :
 
 ```shell
-cargo generate gh:cryptape/ckb-script-templates workspace --name rust-script-examples
+cargo generate gh:cryptape/ckb-script-templates workspace --name ckb-rust-script
 ```
 
 _If `--name [Project Name]` is not provided, you will be prompted to enter the project name during the setup._
 
-Upon successful execution, a Rust project will be created in the `rust-script-examples` directory ([Example](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/)). The generated project includes:
+Upon successful execution, a Rust project will be created in the `ckb-rust-script` directory ([Example](https://github.com/nervosnetwork/docs.nervos.org/tree/v2/examples/rust-script-examples/)). The generated project includes:
 
 - An empty Rust project
 - A `tests` project: A basic testing framework
@@ -65,7 +65,7 @@ Upon successful execution, a Rust project will be created in the `rust-script-ex
 The initialized project does not include a contract by default, so we need to generate one manually using `make generate`:
 
 ```shell
-cd rust-script-examples
+cd ckb-rust-script
 make generate CRATE=hello-world
 ```
 

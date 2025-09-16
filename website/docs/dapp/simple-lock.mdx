@@ -37,7 +37,7 @@ To get started with the tutorial dApp, clone the repository and navigate to the 
 
 ```bash {2}
 git clone https://github.com/nervosnetwork/docs.nervos.org.git
-cd docs.nervos.org/examples/simple-lock
+cd docs.nervos.org/examples/dApp/simple-lock
 ```
 
 ### Step 2: Start the Devnet
@@ -52,27 +52,27 @@ To compile the Rust contract, navigate to the `rust-simple-lock` directory and r
 
 <CodeTabs
   cmd={`make build`}
-  response={`docs.nervos.org/examples/simple-lock/rust-simple-lock$ make build 
+  response={`docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock$ make build 
 Cleaning build/release directory...
 mkdir -p build/release
-make[1]: Entering directory 'docs.nervos.org/examples/simple-lock/rust-simple-lock/contracts/hash-lock'
+make[1]: Entering directory 'docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock/contracts/hash-lock'
 RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs,-a -C debug-assertions" TARGET_CC="clang-19" TARGET_AR="llvm-ar-19" \
         cargo build --target=riscv64imac-unknown-none-elf --release 
    ...
-   Compiling hash-lock v0.1.0 (docs.nervos.org/examples/simple-lock/rust-simple-lock/contracts/hash-lock)
+   Compiling hash-lock v0.1.0 (docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock/contracts/hash-lock)
     Finished \`release\` profile [optimized + debuginfo] target(s) in 14.21s
 Copying binary hash-lock to build directory
-make[1]: Leaving directory 'docs.nervos.org/examples/simple-lock/rust-simple-lock/contracts/hash-lock'`}
+make[1]: Leaving directory 'docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock/contracts/hash-lock'`}
 />
 
-Once compiled, the contract binary will be output to the `examples/simple-lock/scripts` directory.
+Once compiled, the contract binary will be output to the `examples/dApp/simple-lock/scripts` directory.
 
 For the TypeScript implementation, navigate to the `ts-simple-lock` directory and run the following commands:
 
 <CodeTabs
   cmd={`pnpm install
 pnpm build`}
-  response={`docs.nervos.org/examples/simple-lock/ts-simple-lock$ pnpm install
+  response={`docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock$ pnpm install
 Scope: all 3 workspace projects
 Lockfile is up to date, resolution step is skipped
 Packages: +400
@@ -82,9 +82,9 @@ Progress: resolved 400, reused 400, downloaded 0, added 400, done
 devDependencies:
 ...
 Done in 1.3s using pnpm v10.10.0
-docs.nervos.org/examples/simple-lock/ts-simple-lock$ pnpm build
+docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock$ pnpm build
 
-> @ build docs.nervos.org/examples/simple-lock/ts-simple-lock
+> @ build docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock
 > pnpm -r run build
 
 Scope: 2 of 3 workspace projects
@@ -95,14 +95,14 @@ packages/on-chain-script build$ tsc --noEmit && esbuild --platform=neutral --min
 │ All cycles: 37795437(36.0M)
 └─ Done in 1.2s
 packages/on-chain-script-tests build$ pnpm copy-js-vm-script
-│ > simple-lock@0.1.0 copy-js-vm-script docs.nervos.org/examples/simple-lock/ts-simple-lock/packages/on-chain-script-tests
+│ > simple-lock@0.1.0 copy-js-vm-script docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock/packages/on-chain-script-tests
 │ > node -e "const { DEFAULT_SCRIPT_CKB_JS_VM } = require('ckb-testtool'); const fs = require('fs'); const path = require('path'); fs.mkdirSync('../../../scripts', { recursive: true }); fs.copyFileSync(DEFAULT…
 │ (node:23389) ExperimentalWarning: WASI is an experimental feature and might change at any time
 │ (Use \`node --trace-warnings ...\` to show where the warning was created)
 └─ Done in 445ms`}
 />
 
-Once compiled, the contract files will be available in the `examples/simple-lock/scripts` directory as well.
+Once compiled, the contract files will be available in the `examples/dApp/simple-lock/scripts` directory as well.
 
 Since the `ckb-js-vm` script is not part of the genesis block, it will also appear in the `scripts` directory. During deployment, it will be included on-chain automatically.
 
@@ -436,7 +436,7 @@ By following this tutorial, you've mastered the basics of building a custom lock
 
 ## Next Step
 
-<SwitchToTestnet readmeLink="https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/simple-lock" />
+<SwitchToTestnet readmeLink="https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/dApp/simple-lock" />
 
 ## Additional Resources
 

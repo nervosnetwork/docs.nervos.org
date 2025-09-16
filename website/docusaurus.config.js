@@ -199,10 +199,6 @@ const config = {
             to: "/docs/script/rust/rust-example-sudt-script",
           },
           {
-            from: "/docs/script/spawn-script",
-            to: "/docs/script/rust/rust-example-spawn-script",
-          },
-          {
             from: "/docs/history-and-hard-forks/history-vm-version",
             to: "/docs/script/vm-version",
           },
