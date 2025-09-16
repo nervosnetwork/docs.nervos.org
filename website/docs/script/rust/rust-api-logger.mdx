@@ -8,6 +8,7 @@ import TabItem from "@theme/TabItem";
 import Link from "@docusaurus/Link";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # Logger
 
@@ -24,7 +25,7 @@ Output a debug message.
 This macro only compiled under debug build and does nothing in release build. To debug the release build, include `-C debug-assertions` in the environment variable `RUSTFLAGS` before calling `cargo build`.
 
 :::note
-In `ckb-script-templates`, `debug-assertions` is enabled by default. To disable it, comment out the line `CUSTOM_RUSTFLAGS := -C debug-assertions` in the contract's [`Makefile`](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/rust-script-examples/contracts/log/Makefile#L9).
+In `ckb-script-templates`, `debug-assertions` is enabled by default. To disable it, comment out the line `CUSTOM_RUSTFLAGS := -C debug-assertions` in the contract's <ExampleLink path="ckb-rust-script/contracts/log/Makefile#L9">`Makefile`</ExampleLink>.
 :::
 
 ### Syntax
@@ -71,7 +72,11 @@ If Failed: return [SetLoggerError](https://docs.rs/log/latest/log/struct.SetLogg
 
 ### Example
 
-[Code](https://github.com/nervosnetwork/docs.nervos.org/blob/v2/examples/ckb-rust-script/contracts/log/src/main.rs#L25-L29)
+<ExampleLink path="ckb-rust-script/contracts/log/src/main.rs#L25-L29">
+  Code
+</ExampleLink>
+<br />
+<br />
 
 ```rust
 ckb_std::logger::init().unwrap();

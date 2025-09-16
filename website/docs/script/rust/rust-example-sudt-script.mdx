@@ -9,6 +9,7 @@ import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import ScriptTools from "../_ScriptTools.mdx";
 import Link from "@docusaurus/Link";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # Example: Simple UDT Script
 
@@ -35,7 +36,7 @@ to help you better understand how fungible tokens work on CKB.
 
 It is highly recommended to go through the dApp tutorial [Create a Fungible Token](/docs/dapp/create-token) first before writing your own UDT Script.
 
-The full code of the UDT Script in this tutorial can be found at [Github](https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/sudt-script).
+The full code of the UDT Script in this tutorial can be found at <ExampleLink path="ckb-rust-script/contracts/sudt">Github</ExampleLink>.
 
 ### Data Structure for simple UDT Cell
 
@@ -183,7 +184,7 @@ tree .
 
 ### Implement sUDT Script Logic
 
-The sUDT Script is implemented in [contracts/sudt/src/main.rs](https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/sudt-script/contracts/sudt/src/main.rs). This script is designed to manage the transfer of UDTs on the CKB blockchain.
+The sUDT Script is implemented in <ExampleLink path="ckb-rust-script/contracts/sudt/src/main.rs#L37">`contracts/sudt/src/main.rs`</ExampleLink>. This script is designed to manage the transfer of UDTs on the CKB blockchain.
 
 Let's break down the high-level logic of how this Script works:
 
@@ -282,7 +283,7 @@ fn collect_outputs_amount() -> Result<u128, Error> {
 
 In summary, these functions are essential for the accurate calculation of the total UDT amounts involved in the transaction, while ensuring that only the relevant Cells are considered, thus maintaining the integrity of the UDT transfer process.
 
-Full code: [contracts/sudt/src/main.rs](https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/sudt-script/contracts/sudt/src/main.rs)
+Full code: <ExampleLink path="ckb-rust-script/contracts/sudt/src/main.rs">`contracts/sudt/src/main.rs`</ExampleLink>
 
 ### Write Tests for UDT Script
 
@@ -375,7 +376,7 @@ In this test case:
 
 Notice that in the Type Script args we use a random bytes which is 42 indicating that we are not under the `owner_mode` in the `test_transfer_sudt` test case.
 
-For owner mode test case, refer to the [full tests code](https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/sudt-script/contracts/sudt/tests/src/tests.rs) for reference.
+For owner mode test case, refer to the <ExampleLink path="ckb-rust-script/tests/src/test_sudt.rs">full tests code</ExampleLink> for reference.
 
 By writing tests like `test_transfer_sudt`, we can ensure that our sUDT Script functions correctly under various scenarios, helping to identity any issues before deployment.
 
@@ -393,7 +394,7 @@ Here's a quick recap:
 ## Additional Resources
 
 - Full source code of this tutorial:
-  [sudt-script](https://github.com/nervosnetwork/docs.nervos.org/tree/master/examples/sudt-script)
+  <ExampleLink path="ckb-rust-script/contracts/sudt">sudt-script</ExampleLink>
 - CKB syscalls specs: [RFC-0009](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md)
 - Script templates: [ckb-script-templates](https://github.com/cryptape/ckb-script-templates)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
