@@ -1,0 +1,21 @@
+# .lychee.toml
+
+
+exclude = [
+  "http://localhost:*",
+  "https://127.0.0.1:*",
+  "http://0.0.0.0:*",
+  "https://github.com/*",
+]
+
+scheme = ["http", "https"]
+
+max-concurrency = 1
+
+accept = ["200..=299", "403"]
+
+exclude_all_private = true
+
+cache = true
+
+max_cache_age = "30d"

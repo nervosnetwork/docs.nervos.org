@@ -3,6 +3,8 @@ id: witness
 title: witnesses
 ---
 
+import ExampleLink from "@site/src/components/ExampleLink";
+
 # witnesses
 
 `witnesses` is provided by transaction creator to enable the successful execution of the corresponding Script. For example, signatures might be included to ensure a signature verification Lock Script passes.
@@ -54,8 +56,8 @@ The **order** of WitnessArgs items in the `witnesses` field is also important, a
 
 #### Example and Test
 
-- [Contract: Group Exec](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/rust-script-examples/contracts/group_exec)
-- [Unit Test](https://github.com/nervosnetwork/docs.nervos.org/blob/develop/examples/rust-script-examples/tests/src/tests.rs#L457)
+- <ExampleLink path="ckb-rust-script/contracts/group_exec">Contract: Group Exec</ExampleLink>
+- <ExampleLink path="ckb-rust-script/tests/src/tests.rs#L457">Unit Test</ExampleLink>
 
 To illustrate this mechanism, here is a Script that does the following:
 

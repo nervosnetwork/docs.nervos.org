@@ -3,6 +3,8 @@ id: ckb-crypto-service
 title: CKB Crypto Service
 ---
 
+import ExampleLink from "@site/src/components/ExampleLink";
+
 # CKB Crypto Service
 
 `ckb-crypto-service` is an encryption service built on CKB’s multi-process architecture and IPC (inter-process communication) mechanism. It provides a unified, secure, and easy-to-use cryptographic interface for smart contracts.
@@ -122,7 +124,7 @@ Notes:
 
 ### JavaScript Integration
 
-JavaScript currently lacks an auto-generation tool like Rust’s `ckb_script_ipc::service`, so IPC packets must be constructed and parsed manually. See [TypeScript example](https://github.com/joii2020/docs.nervos.org/blob/v2.dev.spawn/examples/ckb-ts-script/contracts/call-crypto-service/src/index.ts).
+JavaScript currently lacks an auto-generation tool like Rust’s `ckb_script_ipc::service`, so IPC packets must be constructed and parsed manually. See <ExampleLink path="ckb-ts-script/contracts/call-crypto-service/src/index.ts">TypeScript</ExampleLink>.
 
 Basic usage:
 

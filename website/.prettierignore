@@ -10,6 +10,7 @@ config/
 .husky/
 package-lock.json
 yarn.lock
+.lychee.toml
 
 # Ignore specific files
 *.log
