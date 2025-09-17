@@ -24,58 +24,6 @@ npm install -g @offckb/cli
 Throughout this documentation, we use offckb/cli version **>=0.3.0**. You can always run the above command to update to the latest version.
 :::
 
-## Create a New Project
-
-To setup a boilerplate for a full-stacked dApp, run the following command. Replace `<my-dapp-project>` with any name you like.
-
-```bash
-offckb create <my-dapp-project>
-```
-
-When prompted to select a bare template, use your arrow keys to select the frontend framework you prefer. If you wish to use a frontend framework not listed, please refer to [this section](/docs/getting-started/quick-start#different-frontend-framework).
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-project" label="Command">
-```
-
-```bash {3}
-? Select a bare template
-  Remix-Vite Bare Templates
-> Next.js Bare Templates
----
-A full-stack template with Next.js framework and ckb-script-templates,
-[next.js,tailwindcss,ckb-script-templates,typescript,rust]
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-create-project" label="Response">
-```
-
-```bash
-Cloning into '/Users/Desktop/offckb/templates/temp-clone-folder'...
-Folder examples/next-js-template downloaded successfully from https://github.com/nervosnetwork/docs.nervos.org and moved to /Users/nervosDocs/Desktop/offckb/my-dapp-project
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-<details>
-  <summary>How to create a Script-only project?</summary>
-
-To create a project focused solely on Script development without any frontend work, you can run the following command. Replace `<my-script-project>` with any name you like.
-
-```bash
-offckb create --script <my-script-project>
-```
-
-Note that `offckb` essentially utilizes an underlying tool called `ckb-script-templates` to initialize Script projects. You can directly engage `ckb-script-templates` for more specific Script development tasks. For further details, refer to the [Script tutorial](/docs/script/minimal-script).
-
-</details>
-
 ## Start the Devnet
 
 ```mdx-code-block
@@ -140,6 +88,58 @@ Chain data cleaned.
 </TabItem>
 </Tabs>
 ```
+
+## Create a New Project
+
+To setup a boilerplate for a full-stacked dApp, run the following command. Replace `<my-dapp-project>` with any name you like.
+
+```bash
+offckb create <my-dapp-project>
+```
+
+When prompted to select a bare template, use your arrow keys to select the frontend framework you prefer. If you wish to use a frontend framework not listed, please refer to [this section](/docs/getting-started/quick-start#different-frontend-framework).
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="create-project" label="Command">
+```
+
+```bash {3}
+? Select a bare template
+  Remix-Vite Bare Templates
+> Next.js Bare Templates
+---
+A full-stack template with Next.js framework and ckb-script-templates,
+[next.js,tailwindcss,ckb-script-templates,typescript,rust]
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-create-project" label="Response">
+```
+
+```bash
+Cloning into '/Users/Desktop/offckb/templates/temp-clone-folder'...
+Folder examples/next-js-template downloaded successfully from https://github.com/nervosnetwork/docs.nervos.org and moved to /Users/nervosDocs/Desktop/offckb/my-dapp-project
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+<details>
+  <summary>How to create a Script-only project?</summary>
+
+To create a project focused solely on Script development without any frontend work, you can run the following command. Replace `<my-script-project>` with any name you like.
+
+```bash
+offckb create --script <my-script-project>
+```
+
+Note that `offckb` essentially utilizes an underlying tool called `ckb-script-templates` to initialize Script projects. You can directly engage `ckb-script-templates` for more specific Script development tasks. For further details, refer to the [Script tutorial](/docs/script/minimal-script).
+
+</details>
 
 ## Run the DApp Project
 
