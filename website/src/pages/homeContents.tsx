@@ -63,7 +63,7 @@ const homeCardContents: HomeCardProps[] = [
   },
   {
     title: "Mining",
-    to: "/docs/mining/algorithm-difficulty",
+    to: "/docs/mining/guide",
     icon: "mining",
   },
   {
