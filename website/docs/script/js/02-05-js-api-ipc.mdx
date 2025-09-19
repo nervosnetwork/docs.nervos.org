@@ -14,7 +14,9 @@ import ScriptTools from "./../_ScriptTools.mdx";
 
 As mentioned in the previous chapter on [JS Syscalls](./js-api-syscalls), `ckb-js-vm` supports [Spawn](../spawn-cross-script-calling). Building on top of Spawn, we implemented an additional abstraction layer called [IPC](../ckb-ipc), which also provides a similar set of APIs for use in JavaScript.
 
-(While using JavaScript as a server is technically supported, the overhead of `ckb-js-vm` is significant, so we do **not** recommend doing so.)
+:::warning
+Although using JavaScript as a server is technically supported, the overhead of `ckb-js-vm` is significant, so it is NOT recommended.
+:::
 
 ## spawnCellServer
 
@@ -44,7 +46,7 @@ export function spawnCellServer(
 
 ## spawnServer
 
-Same to spawnCellServer, but spawn from a specified source
+Similar to `spawnCellServer`, but spawns a process from a specified source.
 
 ```ts
 export function spawnServer(
@@ -92,7 +94,7 @@ It handles the transmission of requests from the client to the server and the re
 
 ### Channel.constructor
 
-Creates a new Channel instance
+Creates a new `Channel` instance
 
 ```ts
 constructor(reader: Read, writer: Write);
@@ -117,7 +119,7 @@ execute(handler: RequestHandler): void
 
 ### Channel.call
 
-Sends a request to the server and waits for a response.
+Sends a request to the server and waits for the response.
 
 This method handles the complete request-response cycle by sending the request to the server and then waiting for and returning the server's response.
 

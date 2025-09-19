@@ -74,11 +74,11 @@ function loadFile(path: string): string;
 
 **Return**
 
-- `string`: The loaded file as string
+- `string`: The loaded file as a string
 
 ## debug
 
-Output debug message.
+Output a debug message.
 
 ```ts
 function debug(message: string): void;
@@ -89,7 +89,7 @@ function debug(message: string): void;
 - `message`: The debug message to output
 
 :::note
-Although calling `debug` directly will have better performance, it is still recommended to use `console`.
+While calling `debug` directly may offer better performance, using `console` is generally recommended unless you are in a highly performance-sensitive situation.
 :::
 
 ## sprintf

@@ -141,13 +141,13 @@ Verify an ECDSA signature
 
 :::note
 
-`verify` is more performant than `recover`. When the public key is available, `verify` is preferable.
+`verify` is more performant than `recover`, so it should be preferred whenever the public key is already available.
 
 However, in many cases, the public key is not stored directly but rather as its hash (for example, in the Script's args). In such cases, you need to:
 
 1. Use `recover` to extract the public key from the signature.
-2. Hash the public key.
-3. Compare it with the hash stored in the arguments.
+2. Hash the recovered public key.
+3. Compare the result with the hash stored in the arguments.
 
 ---
 
