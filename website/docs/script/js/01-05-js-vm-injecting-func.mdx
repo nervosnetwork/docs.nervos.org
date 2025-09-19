@@ -3,11 +3,13 @@ id: js-vm-injecting-function
 title: "Injecting Functions"
 ---
 
+import ExampleLink from "@site/src/components/ExampleLink";
+
 ## Injecting Functions
 
 During development, functions like `loadScript` are commonly used. Most projects will import the dependency `@ckb-js-std/bindings`. However, this module does not provide actual implementations of these functions — it's only intended for type checking and IDE code hints.
 
-You can refer to [Examples/call-syscalls](https://01-github.com/nervosnetwork/ckb-js-vm/tree/main/examples/call-syscalls), which contains a JS script that can be executed directly inside the JS-VM:
+You can refer to <ExampleLink path="ckb-ts-script/contracts/call-syscalls">Examples/call-syscalls</ExampleLink>, which contains a JS script that can be executed directly inside the JS-VM:
 
 ```javascript
 import { loadScript } from "@ckb-js-std/bindings";
