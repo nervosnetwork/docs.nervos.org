@@ -1,10 +1,21 @@
+---
+id: install-ckb
+title: Install CKB
+---
+
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="download" label="Download from release">
-```
+# Install CKB
+
+There are three ways to install and run the CKB binary, depending on your platform and preference:
+
+- [Download from release](#download-from-release) – the fastest way. Grab a prebuilt binary package from the official GitHub Releases
+  page and unzip it.
+- [Build from source](#build-from-source) – recommended if you want to compile with the latest changes or verify the build process yourself.
+- [Use Docker](/docs/node/run-node-docker) – if your platform isn’t directly supported, or if you prefer containerized environments, you can run CKB inside Docker.
+
+## Method 1: Download from Release
 
 Download the latest version of CKB from the official [GitHub Releases](https://github.com/nervosnetwork/ckb/releases) page. Make sure to download the correct version for your operating system.
 
@@ -47,9 +58,16 @@ cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
 </Tabs>
 ```
 
+Now that you’ve installed CKB, you can start running a node:
+
+- [Run a Mainnet Node](/docs/node/run-mainnet-node#step-2-verify-installed-versions)
+- [Run a Testnet Node](/docs/node/run-testnet-node#step-2-verify-installed-versions)
+
+## Method 2: Build from Source
+
 ```mdx-code-block
-  </TabItem>
-  <TabItem value="source-linmac" label="Build from source (Linux/MacOS)">
+<Tabs>
+  <TabItem value="linmac" label="Linux/MacOS">
 ```
 
 **1.1 Install Rust**
@@ -128,7 +146,7 @@ Or symlink the ckb binary into `/usr/local/bin`.
 
 ```mdx-code-block
   </TabItem>
-  <TabItem value="source-win" label="Build from source (Windows)">
+  <TabItem value="windows" label="Windows">
 ```
 
 **1.1 Setup Build Environment**
@@ -192,3 +210,12 @@ setx PATH "$($env:PATH);$((Get-Location).Path)\target\release"
   </TabItem>
 </Tabs>
 ```
+
+## Next Steps
+
+- [Run a Mainnet Node](/docs/node/run-mainnet-node)
+- [Run a Testnet Node](/docs/node/run-testnet-node)
+
+:::note
+If you prefer containers, you can instead [Run a Node with Docker](/docs/node/run-node-docker).
+:::

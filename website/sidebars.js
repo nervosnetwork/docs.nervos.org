@@ -432,6 +432,7 @@ export default {
       collapsible: false,
       items: [
         "node/node-overview",
+        "node/install-ckb",
         {
           type: "category",
           label: "Run a Full Node",
