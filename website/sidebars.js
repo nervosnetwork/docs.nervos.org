@@ -442,6 +442,7 @@ export default {
             "node/run-mainnet-node",
             "node/run-testnet-node",
             "node/run-devnet-node",
+            "node/run-node-docker",
           ],
         },
         "node/run-light-client-node",

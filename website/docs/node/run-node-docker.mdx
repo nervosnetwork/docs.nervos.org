@@ -1,0 +1,209 @@
+---
+id: run-node-docker
+title: Run a Node with Docker
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+If your platform isn’t supported (or you prefer containers), you can run CKB inside Docker. This guide covers running a node on both [Mainnet](#run-on-mainnet) and [Testnet](#run-on-testnet).
+
+## Run on Mainnet
+
+### 1. Install Docker
+
+- Follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
+- Make sure your docker is installed:
+
+```bash
+docker --version
+```
+
+### 2. Get the CKB Image
+
+Run this one-off container to confirm Docker is working. By default, it connects to Mainnet and runs the latest release version.
+
+```bash
+docker run --rm -it nervos/ckb:latest run
+```
+
+:::note
+Tag `latest` means that the image is built from the latest master branch of ckb.
+Tags `vx.y.z` means that the image is built from the historical release version.
+Tags `vx.y.z-rc` means that the image is built from the preview release version.
+:::
+
+### 3. Mount a Volume
+
+It is recommended to mount a volume at `/var/lib/ckb` in the container.
+This ensures that chain data and configuration files are stored persistently on your host:
+
+```bash
+docker volume create ckb-mainnet
+```
+
+### 4. Initialize the Config for Mainnet
+
+Initialize CKB for Mainnet (forces overwrite if the volume has old files):
+
+```bash
+docker run --rm -it \
+  -v ckb-mainnet:/var/lib/ckb \
+  nervos/ckb:latest init --chain mainnet --force
+```
+
+### 5. Create a Named Container for the Node
+
+Bind the volume and prepare a container you can start/stop later:
+
+```bash
+docker create -it \
+  -v ckb-mainnet:/var/lib/ckb \
+  --name ckb-mainnet-node \
+  nervos/ckb:latest run
+```
+
+### 6. Copy Config Files to Your Host
+
+```bash
+docker cp ckb-mainnet-node:/var/lib/ckb/ckb.toml .
+docker cp ckb-mainnet-node:/var/lib/ckb/ckb-miner.toml .
+```
+
+:::note
+If you want to run a miner, update the `[block_assembler]` section in your `ckb.toml`.  
+See [Configure the Block Assembler](/docs/node/run-devnet-node#2b-update-config) for detailed instructions.
+:::
+
+### 7. Copy Edited Configs Back into the Container
+
+Use `tar` to preserve the file owner/group expected by the container:
+
+```bash
+tar --owner=1000 --group=1000 -cf - ckb.toml ckb-miner.toml | \
+  docker cp - ckb-mainnet-node:/var/lib/ckb/
+```
+
+### 8. Start the Node
+
+```bash
+docker start -i ckb-mainnet-node
+```
+
+### 9. Start the Miner (Optional)
+
+Run the miner inside the same container:
+
+```bash
+docker exec ckb-mainnet-node ckb miner
+```
+
+### 10. Stop the Node
+
+Stop the node:
+
+```bash
+docker stop ckb-mainnet-node
+```
+
+Stop the miner if run interactively: press `Ctrl-C` in the terminal.
+
+## Run on Testnet
+
+### 1. Install Docker
+
+- Follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
+- Make sure your docker is installed:
+
+```bash
+docker --version
+```
+
+### 2. Get the CKB Image
+
+After v0.26.1, you can set the `CKB_CHAIN` environment variable to run a Testnet node with default configs.
+
+```bash
+docker run -e CKB_CHAIN=testnet --rm -it nervos/ckb:latest run
+```
+
+:::note
+Tag `latest` means that the image is built from the latest master branch of ckb.
+Tags `vx.y.z` means that the image is built from the historical release version.
+Tags `vx.y.z-rc` means that the image is built from the preview release version.
+:::
+
+### 3. Mount a Volume
+
+It is recommended to mount a volume at `/var/lib/ckb` in the container.
+This ensures that chain data and configuration files are stored persistently on your host:
+
+```bash
+docker volume create ckb-testnet
+```
+
+### 4. Initialize the Config for Testnet
+
+Initialize CKB for Testnet (forces overwrite if the volume has old files):
+
+```bash
+docker run --rm -it \
+  -v ckb-testnet:/var/lib/ckb \
+  nervos/ckb:latest init --spec testnet --force
+```
+
+### 5. Create a Named Container for the Node
+
+Bind the volume and prepare a container you can start/stop later:
+
+```bash
+docker create -it \
+  -v ckb-testnet:/var/lib/ckb \
+  --name ckb-testnet-node \
+  nervos/ckb:latest run
+```
+
+### 6. Copy Config Files to Your Host
+
+```bash
+docker cp ckb-testnet-node:/var/lib/ckb/ckb.toml .
+docker cp ckb-testnet-node:/var/lib/ckb/ckb-miner.toml .
+```
+
+:::note
+If you want to run a miner, update the `[block_assembler]` section in your `ckb.toml`.  
+See [Configure the Block Assembler](/docs/node/run-devnet-node#2b-update-config) for detailed instructions.
+:::
+
+### 7. Copy Edited Configs Back into the Container
+
+Use `tar` to preserve the file owner/group expected by the container:
+
+```bash
+tar --owner=1000 --group=1000 -cf - ckb.toml ckb-miner.toml | \
+  docker cp - ckb-testnet-node:/var/lib/ckb/
+```
+
+### 8. Start the Node
+
+```bash
+docker start -i ckb-testnet-node
+```
+
+### 9. Start the Miner (Optional)
+
+Run the miner inside the same container:
+
+```bash
+docker exec ckb-testnet-node ckb miner
+```
+
+### 10. Stop the Node
+
+Stop the node:
+
+```bash
+docker stop ckb-testnet-node
+```
+
+Stop the miner if run interactively: press `Ctrl-C` in the terminal.

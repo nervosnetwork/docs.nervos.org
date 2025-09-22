@@ -6,6 +6,7 @@ title: Run a Testnet Node
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import InstallCKB from "./_InstallCKB.mdx";
 
 # Run a Testnet Node
 
@@ -17,52 +18,17 @@ Nervos has introduced a Testnet for developers to experiment with integrations a
 - Stable internet connection
 - Syncing from genesis may take up to **several days** depending on your CPU, bandwidth, and disk performance
 
-## Step 1: Download the CKB Binary
+## Supported Platforms
 
-Download the latest version of CKB from the official [GitHub Releases](https://github.com/nervosnetwork/ckb/releases) page. Make sure to download the correct version for your operating system.
+- Works on modern Linux, macOS, and Windows.
+- Recommended: Ubuntu / Debian / Arch / CentOS 7, macOS, Windows x64.
+- For other operating systems, consider running a node with [Docker](/docs/node/run-node-docker).
 
-:::info
-This guide uses version **ckb_v0.115.0** as an example.
-:::
+## Step 1: Install CKB
 
-## Step 2: Navigate to the CKB Directory
+<InstallCKB />
 
-Unzip the downloaded archive into a location that's easy to find.
-We recommend:
-
-- MacOS: `~/Documents/ckb_v0.115.0/...`
-- Windows: `C:\ckb_v0.115.0\...`
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
-
-Open a terminal and navigate into the folder using the following command:
-
-```bash
-cd /Users/(NAME)/Documents/ckb_v0.115.0_aarch64-apple-darwin-portable/ckb
-```
-
-Remember to replace “(NAME)” with your actual name on the device.
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
-
-Open a command prompt and navigate into the folder using the following command:
-
-```bash
-cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
-## Step 3: Verify Installed Versions
+## Step 2: Verify Installed Versions
 
 Run the following commands:
 
@@ -115,7 +81,7 @@ ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
 </Tabs>
 ```
 
-## Step 4: Initialize the Node for Mainnet
+## Step 3: Initialize the Node for Mainnet
 
 Enter the following command to set up default configuration and `data` folders.
 
@@ -125,7 +91,7 @@ ckb init --chain testnet
 
 If you're using a Unix-like system, run `./ckb init --chain tesnet` instead.
 
-## Step 5: Start the Node
+## Step 4: Start the Node
 
 Now that your node is initialized, you can start syncing to the Mainnet. Make sure you run the following command from the folder where you initialized the node in Step 4.
 
