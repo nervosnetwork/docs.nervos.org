@@ -12,137 +12,121 @@ import ScriptTools from "./../_ScriptTools.mdx";
 
 # Other Utilities
 
-## `mount`
+## mount
 
 Mount a file system
 
-### Syntax
-
-```typescript
+```ts
 function mount(codeHash: ArrayBuffer, hashType: number): void;
 ```
 
-### Parameters
+**Parameters**
 
-- `codeHash`: The code hash of the cell to mount
-- `hashType`: The hash type of the code (use SCRIPT*HASH_TYPE*\* constants)
+- `codeHash`: The code hash of the Cell to mount.
+- `hashType`: The hash type of the code (use SCRIPT*HASH_TYPE*\* constants).
 
-## `evalJsScript`
+## evalJsScript
 
-Evaluate a JavaScript script. (Generally used before `loadJsScript`)
+Evaluate a JavaScript Script (Generally used before `loadJsScript`).
 
-### Syntax
-
-```typescript
+```ts
 function evalJsScript(jsScript: string, enableModule?: boolean): any;
 ```
 
-### Parameters
+**Parameters**
 
-- `jsScript`: The JavaScript script to evaluate
+- `jsScript`: The JavaScript Script to evaluate
 - `enableModule`: Whether to enable ES6 module (default: false)
 
-### Return
+**Return**
 
-The result of the script evaluation, When enableModule is true, the script doesn't return any value.
+- The result of the Script evaluation. When `enableModule` is true, the Script doesn't return any value.
 
-## `loadJsScript`
+## loadJsScript
 
-Load a JavaScript script
+Load a JavaScript Script
 
-### Syntax
-
-```typescript
+```ts
 function loadJsScript(path: string, enableModule?: boolean): any;
 ```
 
-### Parameters
+**Parameters**
 
-- `path`: The path to the JavaScript script
+- `path`: The path to the JavaScript Script
 - `enableModule`: Whether to enable ES6 module (default: false)
 
-### Return
+**Return**
 
-The loaded script as ArrayBuffer.
-When enableModule is true, the script doesn't return any value.
+- The loaded Script as ArrayBuffer.
+- When `enableModule` is true, the Script doesn't return any value.
 
-## `loadFile`
+## loadFile
 
 Load a file
 
-### Syntax
-
-```typescript
+```ts
 function loadFile(path: string): string;
 ```
 
-### Parameters
+**Parameters**
 
 - `path`: The path to the file
 
-### Return
+**Return**
 
-The loaded file as string
+- `string`: The loaded file as a string
 
-## `debug`
+## debug
 
-Output debug message.
+Output a debug message.
 
-### Syntax
-
-```typescript
+```ts
 function debug(message: string): void;
 ```
 
-### Parameters
+**Parameters**
 
 - `message`: The debug message to output
 
-### Remarks
+:::note
+While calling `debug` directly may offer better performance, using `console` is generally recommended unless you are in a highly performance-sensitive situation.
+:::
 
-Although calling `debug` directly will have better performance, it is still recommended to use `console`.
-
-## `sprintf`
+## sprintf
 
 Format and return a string using printf-style formatting
 
-### Syntax
-
-```typescript
+```ts
 function sprintf(format: string, ...args: any[]): string;
 ```
 
-### Parameters
+**Parameters**
 
 - `format`: Printf format string
 - `args`: Values to format
 
-### Return
+**Return**
 
-The formatted string
+- `string`: The formatted string
 
-## `printf`
+## printf
 
 Format and print a string using printf-style formatting
 
-### Syntax
-
-```typescript
+```ts
 function printf(format: string, ...args: any[]): void;
 ```
 
-### Parameters
+**Parameters**
 
 - `format`: Printf format string
 - `args`: Values to format
 
-## `console`
+## console
 
 Console object for logging and assertions.
 
-### Syntax
-
-```typescript
+```ts
 export const console: {
   log(...args: any[]): void;
   assert(condition: boolean, ...args: any[]): void;

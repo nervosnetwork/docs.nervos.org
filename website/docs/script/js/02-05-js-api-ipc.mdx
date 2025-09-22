@@ -14,15 +14,15 @@ import ScriptTools from "./../_ScriptTools.mdx";
 
 As mentioned in the previous chapter on [JS Syscalls](./js-api-syscalls), `ckb-js-vm` supports [Spawn](../spawn-cross-script-calling). Building on top of Spawn, we implemented an additional abstraction layer called [IPC](../ckb-ipc), which also provides a similar set of APIs for use in JavaScript.
 
-(While using JavaScript as a server is technically supported, the overhead of `ckb-js-vm` is significant, so we do **not** recommend doing so.)
+:::warning
+Although using JavaScript as a server is technically supported, the overhead of `ckb-js-vm` is significant, so it is NOT recommended.
+:::
 
-## `spawnCellServer`
+## spawnCellServer
 
 Spawns a new IPC server process using the provided code hash and hash type.
 
-### Syntax
-
-```typescript
+```ts
 export function spawnCellServer(
   codeHash: ArrayBuffer,
   hashType: number,
@@ -30,124 +30,120 @@ export function spawnCellServer(
 ): [Pipe, Pipe];
 ```
 
-### Parameters
+**Parameters**
 
 - `codeHash`: The code hash to search for (must be 32 bytes)
 - `hashType`: The type of hash to search for (type or data)
 - `argv`: An array of strings representing the arguments to pass to the new process.
 
-### Return
+**Return**
 
-A tuple of two `Pipe` objects representing the read and write pipes for the parent process, or throws an `Error` if an error occurs.
+- `[Pipe, Pipe]`: A tuple of `Pipe` objects representing the read and write pipes for the parent process.
+
+**Error**
+
+- Throws on system errors.
 
 ## spawnServer
 
-Same to spawnCellServer, but spawn from a specified source
+Similar to `spawnCellServer`, but spawns a process from a specified source.
 
-### Syntax
-
-```typescript
+```ts
 export function spawnServer(
   index: number,
   source: SourceType,
-  argv: string[],
-): [Pipe, Pipe] {
+  argv: string[]
+): [Pipe, Pipe] {}
 ```
 
-### Parameters
+**Parameters**
 
 - `index` : The index of the source to spawn from
 - `source` : The type of source (use SOURCE\_\* constants)
 - `argv`: An array of strings representing the arguments to pass to the new process.
 
-### Return
+**Return**
 
-A tuple of two `Pipe` objects representing the read and write pipes for the parent process, or throws an `Error` if an error occurs.
+- `[Pipe, Pipe]`: A tuple of `Pipe` objects representing the read and write pipes for the parent process.
+
+**Error**
+
+- Throws on system errors.
 
 ## runServer
 
 Runs the server with the provided service implementation.
 This function listens for incoming requests, processes them using the provided service, and sends back the responses. It uses the inherited file descriptors for communication.
 
-### Syntax
-
-```typescript
+```ts
 export function runServer(handler: RequestHandler): void;
 ```
 
-### Parameters
+**Parameters**
 
-`handler` : The service implementation that handles the requests and generates the responses.
+- `handler` : The service implementation that handles the requests and generates the responses.
 
-### Return
+**Error**
 
-Never returns unless an error occurs, in which case it throws an `Error`.
+- Throws on system errors.
 
 ## Channel
 
 The `Channel` class facilitates IPC communication between a client and a server.
 It handles the transmission of requests from the client to the server and the reception of responses from the server to the client.
 
-## Channel.constructor
+### Channel.constructor
 
-Creates a new Channel instance
+Creates a new `Channel` instance
 
-### Syntax
-
-```typescript
+```ts
 constructor(reader: Read, writer: Write);
 ```
 
-### Parameters
+**Parameters**
 
 - `reader` : Responsible for reading data from the channel
 - `writer` : Responsible for writing data to the channel
 
-## Channel.execute
+### Channel.execute
 
 Executes the server loop, processing incoming requests and sending responses.
 
-### Syntax
-
-```typescript
+```ts
 execute(handler: RequestHandler): void
 ```
 
-### Parameters
+**Parameters**
 
-`handler` : A service that handles requests and generates responses
+- `handler` : A service that handles requests and generates responses
 
-## Channel.call
+### Channel.call
 
-Sends a request to the server and waits for a response.
+Sends a request to the server and waits for the response.
 
 This method handles the complete request-response cycle by sending the request to the server and then waiting for and returning the server's response.
 
-### Syntax
-
-```typescript
+```ts
 call(req: RequestPacket): ResponsePacket
 ```
 
-### Parameters
+**Parameters**
 
 - `req` : The request packet to send to the server
 
-### Return
+**Return**
 
-The response packet received from the server
+- `ResponsePacket`: The response packet received from the server
 
-## Channel.sendErrorCode
+### Channel.sendErrorCode
 
 Sends an error code to the client
 
-### Syntax
-
-```typescript
+```ts
 sendErrorCode(errorCode: number): void
 ```
 
-### Parameters
+**Parameters**
 
 - `errorCode` - The error code to send
 
@@ -155,9 +151,7 @@ sendErrorCode(errorCode: number): void
 
 Interface for a service that can handle requests and generate responses
 
-### Syntax
-
-```typescript
+```ts
 export interface RequestHandler {
   serve(req: RequestPacket): ResponsePacket;
 }
