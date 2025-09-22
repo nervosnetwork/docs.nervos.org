@@ -71,9 +71,11 @@ make generate CRATE=hello-world
 ```
 
 :::note
-`CRATE=[Contract Name]` is not provided, you will be prompted to enter the project name during the setup.
-:::
-This command creates a `hello-world` subproject inside the `contracts` directory and automatically adds a `test_hello_world` function in <ExampleLink path="ckb-rust-script/tests/src/tests.rs#L10-L58">`tests/src/tests.rs`</ExampleLink>.
+
+- `CRATE=[Contract Name]` is not provided, you will be prompted to enter the project name during the setup.
+- Rust contracts must enable no_std. [See details](./rust-api-entry).
+  :::
+  This command creates a `hello-world` subproject inside the `contracts` directory and automatically adds a `test_hello_world` function in <ExampleLink path="ckb-rust-script/tests/src/tests.rs#L10-L58">`tests/src/tests.rs`</ExampleLink>.
 
 The contract's entry function, `program_entry` (similar to `main` in Rust), is located in <ExampleLink path="ckb-rust-script/contracts/hello-world/src/main.rs">`contracts/hello-world/src/main.rs`</ExampleLink>.
 By default, the contract depends on `ckb-std`, which provides instruction support.
