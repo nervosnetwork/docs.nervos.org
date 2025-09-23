@@ -138,7 +138,7 @@ Both formats are executable by `ckb-js-vm`, but with trade-offs:
 - `*.bc`: reduces execution cycles by \~80%
 
 > **Note**:
-> These numbers vary with project complexity. For example, in [SilentBerry](https://github.com/ksleifjsslsls/silent-berry2/tree/re-js), the AccountBook contract in TypeScript generated a 63 KB JS file and a 70 KB bytecode file. During the [`test_simple_withdrawal_suc`](https://github.com/ksleifjsslsls/silent-berry2/blob/re-js/tests/src/tests.rs#L467) test, Rust used 4.04M cycles, 36.86M bytecode, and 117.85M JS.
+> These numbers vary with project complexity. For example, in [SilentBerry](https://github.com/ksleifjsslsls/silent-berry2/tree/re-js), the AccountBook contract in TypeScript generated a 63 KB JS file and a 70 KB bytecode file. During the [`test_simple_withdrawal_suc`](https://github.com/ksleifjsslsls/silent-berry2/blob/re-js/tests/src/tests.rs#L467) test, Rust used 4.04M cycles, bytecode used 36.86M cycles, and JS used 117.85M cycles.
 
 Execute:
 
