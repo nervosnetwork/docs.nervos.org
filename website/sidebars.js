@@ -432,6 +432,7 @@ export default {
       collapsible: false,
       items: [
         "node/node-overview",
+        "node/install-ckb",
         {
           type: "category",
           label: "Run a Full Node",
@@ -442,6 +443,7 @@ export default {
             "node/run-mainnet-node",
             "node/run-testnet-node",
             "node/run-devnet-node",
+            "node/run-node-docker",
           ],
         },
         "node/run-light-client-node",

@@ -1,0 +1,221 @@
+---
+id: install-ckb
+title: Install CKB
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Install CKB
+
+There are three ways to install and run the CKB binary, depending on your platform and preference:
+
+- [Download from release](#download-from-release) – the fastest way. Grab a prebuilt binary package from the official GitHub Releases
+  page and unzip it.
+- [Build from source](#build-from-source) – recommended if you want to compile with the latest changes or verify the build process yourself.
+- [Use Docker](/docs/node/run-node-docker) – if your platform isn’t directly supported, or if you prefer containerized environments, you can run CKB inside Docker.
+
+## Method 1: Download from Release
+
+Download the latest version of CKB from the official [GitHub Releases](https://github.com/nervosnetwork/ckb/releases) page. Make sure to download the correct version for your operating system.
+
+:::info
+This guide uses version **ckb_v0.115.0** as an example.
+:::
+
+Unzip the downloaded archive into a location that's easy to find.
+We recommend:
+
+- MacOS: `~/Documents/ckb_v0.115.0/...`
+- Windows: `C:\ckb_v0.115.0\...`
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="mac" label="Mac">
+```
+
+Open a terminal and navigate into the folder using the following command:
+
+```bash
+cd /Users/(NAME)/Documents/ckb_v0.115.0_aarch64-apple-darwin-portable/ckb
+```
+
+Remember to replace “(NAME)” with your actual name on the device.
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+Open a command prompt and navigate into the folder using the following command:
+
+```bash
+cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+Now that you’ve installed CKB, you can start running a node:
+
+- [Run a Mainnet Node](/docs/node/run-mainnet-node#step-2-verify-installed-versions)
+- [Run a Testnet Node](/docs/node/run-testnet-node#step-2-verify-installed-versions)
+
+## Method 2: Build from Source
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="linmac" label="Linux/MacOS">
+```
+
+**1.1 Install Rust**
+
+CKB uses Rust. Install via [rustup](https://www.rust-lang.org/tools/install). The project includes a rust-toolchain file that pins the correct version.
+
+**1.2 Install Build Dependencies**
+
+Use your system package manager:
+
+```mdx-code-block
+<Tabs>
+    <TabItem value ="ubuntu" label="Ubuntu / Debian">
+```
+
+```bash
+sudo apt-get install -y git gcc libc6-dev pkg-config libssl-dev libclang-dev clang
+```
+
+```mdx-code-block
+    </TabItem>
+    <TabItem value ="linux" label="Arch Linux">
+```
+
+```bash
+sudo pacman -Sy git gcc pkgconf clang
+```
+
+```mdx-code-block
+    </TabItem>
+    <TabItem value ="mac" label="MacOS">
+```
+
+```bash
+brew install autoconf libtool
+```
+
+```mdx-code-block
+    </TabItem>
+    <TabItem value ="centOS" label="CentOS7">
+```
+
+```bash
+sudo yum install -y git make gcc-c++ openssl-devel devtoolset-7 llvm-toolset-7 scl enable devtoolset-7 llvm-toolset-7 bash
+```
+
+```mdx-code-block
+    </TabItem>
+</Tabs>
+```
+
+(Optional) If you already have a pre-built Snappy library, you can set:
+
+```bash
+export SNAPPY_LIB_DIR=/usr/local/lib
+```
+
+**1.3 Build CKB**
+
+```bash
+git clone https://github.com/nervosnetwork/ckb.git
+cd ckb
+git checkout <tag-or-branch>   # use a release tag when possible
+make prod
+```
+
+**1.4 Add CKB to $PATH**
+
+Either add the `target/release` directory to your PATH:
+
+```bash
+export PATH="$(pwd)/target/release:$PATH"
+```
+
+Or symlink the ckb binary into `/usr/local/bin`.
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+```
+
+**1.1 Setup Build Environment**
+
+Install [Visual Studio 2019 (or newer)](https://visualstudio.microsoft.com/downloads/). During installation, select the **Desktop development with C++** workload.
+
+At minimum include:
+
+- MSVC v142 - VS 2019 C++ x64/x86 build tools
+- Windows 10 SDK (10.0.X.0)
+
+**1.2 Install Scoop & Tools**
+
+Install [scoop](https://scoop.sh/):
+
+```bash
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+```
+
+Install tools and dependencies via scoop:
+
+```bash
+scoop install git
+scoop install llvm
+scoop install yasm
+scoop install rustup
+
+scoop bucket add extras
+scoop install vcredist2010
+```
+
+**1.3 Configure Rust for MSVC**
+
+```bash
+rustup set default-host x86_64-pc-windows-msvc
+rustup toolchain install stable
+```
+
+**1.4 Build CKB**
+Check out the source code:
+
+```bash
+git clone https://github.com/nervosnetwork/ckb.git
+cd ckb
+```
+
+Build CKB:
+
+```bash
+devtools/windows/make prod
+```
+
+**1.5 Add CKB to $PATH (Optional)**
+
+```bash
+setx PATH "$($env:PATH);$((Get-Location).Path)\target\release"
+```
+
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Next Steps
+
+- [Run a Mainnet Node](/docs/node/run-mainnet-node)
+- [Run a Testnet Node](/docs/node/run-testnet-node)
+
+:::note
+If you prefer containers, you can instead [Run a Node with Docker](/docs/node/run-node-docker).
+:::
