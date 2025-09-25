@@ -141,7 +141,6 @@ export default {
           items: [
             "script/rust/rust-example-minimal-script",
             "script/rust/rust-example-sudt-script",
-            "script/rust/rust-example-spawn-script",
           ],
         },
       ],
@@ -433,6 +432,7 @@ export default {
       collapsible: false,
       items: [
         "node/node-overview",
+        "node/install-ckb",
         {
           type: "category",
           label: "Run a Full Node",
@@ -443,6 +443,7 @@ export default {
             "node/run-mainnet-node",
             "node/run-testnet-node",
             "node/run-devnet-node",
+            "node/run-node-docker",
           ],
         },
         "node/run-light-client-node",
@@ -457,13 +458,12 @@ export default {
       className: "category-mining",
       collapsible: false,
       items: [
+        "mining/guide",
         "mining/algorithm-difficulty",
         "mining/rewards",
         "mining/halving",
         "mining/cost-and-profit",
         "mining/risks",
-        "mining/hardware",
-        "mining/guide",
         "mining/info-stats",
       ],
     },

@@ -9,6 +9,7 @@ import Link from "@docusaurus/Link";
 import Tooltip from "@components/Tooltip";
 import TutorialHeader from "@components/TutorialHeader";
 import ScriptTools from "./../_ScriptTools.mdx";
+import ExampleLink from "@site/src/components/ExampleLink";
 
 # ckb-script-ipc IPC
 
@@ -106,7 +107,7 @@ let mut client = WorldClient::new(read_pipe, write_pipe);
 let ret = client.hello("world".into()).unwrap();
 ```
 
-The client uses the pipe handles obtained during server initialization to communicate with the server process. For a complete working example, you can explore our rust-script-examples/ipc-parent repository.
+The client uses the pipe handles obtained during server initialization to communicate with the server process. For a complete working example, you can explore our ckb-rust-script/ipc-parent repository.
 
 This implementation abstracts away the complexities of IPC communication, handling serialization, message passing, and error management internally. Developers can focus on defining their service interfaces and implementing business logic rather than dealing with low-level IPC details.
 
@@ -189,7 +190,7 @@ This automatic code generation significantly reduces development time and potent
 
 ## `ckb_script_ipc::service`
 
-As mentioned earlier, by simply adding the `#[ckb_script_ipc::service]` attribute macro to a `trait`, you can automatically generate all necessary IPC-related code. This section uses the [`rust-script-examples`](https://github.com/XuJiandong/rust-script-examples) repository to illustrate how this macro works and what code it generates.
+As mentioned earlier, by simply adding the `#[ckb_script_ipc::service]` attribute macro to a `trait`, you can automatically generate all necessary IPC-related code. This section uses the <ExampleLink path="ckb-rust-script/contracts/ipc-child/src/main.rs#L43">`ckb-rust-script`</ExampleLink> repository to illustrate how this macro works and what code it generates.
 
 The IPC example is divided into three parts:
 
@@ -235,7 +236,7 @@ pub fn hello(&mut self, name: String) -> Result<String, u64>
 
 ### Remarks
 
-To inspect the macro-expanded code, simply run `cargo expand` in the `examples/rust-script-examples/crate/ipc-interface` directory. For example:
+To inspect the macro-expanded code, simply run `cargo expand` in the `examples/ckb-rust-script/crate/ipc-interface` directory. For example:
 
 ```rust
 pub struct WorldClient<R, W>

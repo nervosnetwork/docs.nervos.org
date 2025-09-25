@@ -38,7 +38,7 @@ import ScriptTools from "./../_ScriptTools.mdx";
 
 Before proceeding, you should be familiar with:
 
-- CKB basics and the transaction structures
+- CKB basics and its transaction structures
 - JavaScript/TypeScript
 
 This guide helps you get started writing CKB contracts in JavaScript as quickly as possible. The goal is to get a working demo running, not to dive deep into implementation details. For in-depth exploration, refer to [CKB JS VM](./js-vm).
@@ -65,7 +65,7 @@ Explanation:
 - `--` separates the debugger’s arguments from those passed to `ckb-js-vm`.
 - `-e` is an argument for `ckb-js-vm` that runs the provided JavaScript code.
 
-(You can run `ckb-debugger --bin ckb-js-vm -- -h` to see all available options for `ckb-js-vm`.)
+You can run `ckb-debugger --bin ckb-js-vm -- -h` to see all available options for `ckb-js-vm`.
 
 This is a minimal example to verify that JavaScript code can run in CKB-VM. To create an actual on-chain contract, we need more structure. Let’s build a complete, deployable contract project.
 
@@ -79,7 +79,7 @@ This is a minimal example to verify that JavaScript code can run in CKB-VM. To c
 - The test framework used is `Jest`.
   :::
 
-Use the command below to scaffold a default project:
+Scaffold a default project:
 
 ```shell
 pnpm create ckb-js-vm-app
@@ -87,12 +87,12 @@ pnpm create ckb-js-vm-app
 
 By default, this generates two sub-projects:
 
-- Contracts: `packages/on-chain-script`
-- Tests: `packages/on-chain-script-tests`
+- **Contracts**: `packages/on-chain-script`
+- **Tests**: `packages/on-chain-script-tests`
 
 (In the examples, multiple contracts are placed under the `contracts` directory.)
 
-Modify `contracts/hello-wrold/src/index.ts`:
+Modify `contracts/hello-world/src/index.ts`:
 
 ```typescript
 import * as bindings from "@ckb-js-std/bindings";
@@ -103,17 +103,17 @@ function main(): number {
 bindings.exit(main());
 ```
 
-- Return values **must** be passed using `bindings.exit`.
+> Return values **must** be passed using `bindings.exit`.
 
 ### Build
 
-The template is pre-configured, so you can simply run:
+The template is pre-configured. Simply run:
 
 ```shell
 pnpm build
 ```
 
-Here's what happens under the hood:
+Under the hood:
 
 ```shell
 tsc --noEmit
@@ -134,12 +134,13 @@ Once compiled, you'll get two files in `./dist`:
 
 Both formats are executable by `ckb-js-vm`, but with trade-offs:
 
-- `.js` is \~10% smaller in size
-- `.bc` reduces cycles by \~80% during execution
+- `*.js`: \~10% smaller in size
+- `*.bc`: reduces execution cycles by \~80%
 
-> Note: These numbers vary with project complexity. For example, in [SilentBerry](https://github.com/ksleifjsslsls/silent-berry2/tree/re-js), the AccountBook contract in TypeScript had a 63 KB JS file and a 70 KB bytecode file. During the [`test_simple_withdrawal_suc`](https://github.com/ksleifjsslsls/silent-berry2/blob/re-js/tests/src/tests.rs#L467) test, Rust used 4.04M cycles, bytecode 36.86M, and JS 117.85M.
+> **Note**:
+> These numbers vary with project complexity. For example, in [SilentBerry](https://github.com/ksleifjsslsls/silent-berry2/tree/re-js), the AccountBook contract in TypeScript generated a 63 KB JS file and a 70 KB bytecode file. During the [`test_simple_withdrawal_suc`](https://github.com/ksleifjsslsls/silent-berry2/blob/re-js/tests/src/tests.rs#L467) test, Rust used 4.04M cycles, bytecode used 36.86M cycles, and JS used 117.85M cycles.
 
-To execute:
+Execute:
 
 ```shell
 ckb-debugger --read-file dist/hello-world.bc --bin deps/ckb-js-vm -- -r
@@ -168,7 +169,7 @@ import { readFileSync } from "fs";
 import { createJSScript } from "./misc";
 
 const SCRIPT_HELLO_WORLD = readFileSync(
-  "../../contracts/hello-wrold/dist/index.bc"
+  "../../contracts/hello-world/dist/index.bc"
 );
 const SCRIPT_SIMPLE_PRINT_ARGS = readFileSync(
   "../../contracts/simple-print-args/dist/index.bc"
@@ -202,7 +203,7 @@ test("hello-world success", () => {
 
 Here, `CKB_JS_VM_SCRIPT` is the VM contract and `SCRIPT_HELLO_WORLD` is your contract code, similar to running JS via `node`.
 
-The contract is embedded in a transaction using `ccc`, and `verifier.verifySuccess(true)` checks that execution succeeds.
+The contract is embedded in a transaction using `ccc`, while `verifier.verifySuccess(true)` checks successful execution.
 
 `ckb-js-vm` lock args format:
 
@@ -212,7 +213,7 @@ The contract is embedded in a transaction using `ccc`, and `verifier.verifySucce
 
 ## Simple print args
 
-Now let’s build on Hello World by adding CKB syscall support. Use [`@ckb-js-std/core`](https://www.npmjs.com/package/@ckb-js-std/core) to access script `args` and `witness` data:
+Now let’s build on Hello World by adding CKB syscall support. Use [`@ckb-js-std/core`](https://www.npmjs.com/package/@ckb-js-std/core) to access Script `args` and `witness` data:
 
 1. Duplicate the Hello World project.
 2. Rename the project and update `package.json` fields.
@@ -225,8 +226,8 @@ import * as bindings from "@ckb-js-std/bindings";
 import { HighLevel } from "@ckb-js-std/core";
 
 function main() {
-  const scritpArgs = HighLevel.loadScript().args.slice(35);
-  console.log(`Script Args: ${new Uint8Array(scritpArgs)}`);
+  const scriptArgs = HighLevel.loadScript().args.slice(35);
+  console.log(`Script Args: ${new Uint8Array(scriptArgs)}`);
 
   let witness =
     HighLevel.loadWitnessArgs(0, bindings.SOURCE_GROUP_INPUT).lock ??
@@ -246,7 +247,7 @@ Explanation:
 
 ### Test
 
-This contract can't be tested directly with `ckb-debugger` since it requires script `args` and `witness`. Use an updated test:
+This contract can't be tested directly with `ckb-debugger` since it requires Script `args` and `witness`. Use an updated test instead:
 
 ```ts
 test("simple-print-args success", () => {
@@ -280,8 +281,8 @@ test("simple-print-args success", () => {
 });
 ```
 
-Here, `WitnessArgs` is used to structure and encode witness data—this is the recommended approach for contracts sharing witnesses across lock/type scripts.
+Here, `WitnessArgs` is used to structure and encode witness data—this is the recommended approach for contracts sharing witnesses across lock/type Scripts.
 
 :::note
-Since `ckb-testtool` relies on `ckb-debugger` under the hood, and `ckb-debugger` uses stdin to receive transaction data, using stdin in a multithreaded context can lead to deadlocks. Therefore, it's necessary to add `--maxWorkers=1`.
+Since `ckb-testtool` relies on `ckb-debugger` under the hood, and `ckb-debugger` uses `stdin` to receive transaction data, using `stdin` in a multithreaded context can lead to deadlocks. Therefore, it's necessary to add `--maxWorkers=1`.
 :::
