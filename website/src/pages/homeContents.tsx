@@ -136,7 +136,7 @@ const devToolSectionContents: DevToolProps[] = [
   },
   {
     title: "OffCKB",
-    href: "https://github.com/ckb-devrel/offckb/tree/7d87d018be7626e1672a039b52f8bf4db9dd4eae",
+    href: "https://github.com/ckb-devrel/offckb",
     category: "Other DevTools",
   },
   {

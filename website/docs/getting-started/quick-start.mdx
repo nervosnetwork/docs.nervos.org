@@ -22,7 +22,7 @@ npm install -g @offckb/cli
 ```
 
 :::info
-Throughout this documentation, we use offckb/cli version **>=0.3.0**. You can always run the above command to update to the latest version.
+Throughout this documentation, we use offckb/cli version **>=0.4.0**. You can always run the above command to update to the latest version.
 :::
 
 ## Start the Devnet
@@ -42,20 +42,8 @@ offckb node
 ```
 
 ```bash
-/bin/sh: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb: No such file or directory
-/Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/ckb/ckb not found, download and install the new version 0.113.1..
-CKB installed successfully.
-init Devnet config folder: /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet
-modified  /Users/nervosDocs/.nvm/versions/node/v18.12.1/lib/node_modules/@offckb/cli/target/devnet/ckb-miner.toml
-CKB output: 2024-03-20 07:56:44.765 +00:00 main INFO sentry  sentry is disabled
-
-CKB output: 2024-03-20 07:56:44.766 +00:00 main INFO ckb_bin::helper  raise_fd_limit newly-increased limit: 61440
-
-CKB output: 2024-03-20 07:56:44.854 +00:00 main INFO ckb_bin::subcommand::run  ckb version: 0.113.1 (95ad24b 2024-01-31)
-
-CKB output: 2024-03-20 07:56:45.320 +00:00 main INFO ckb_db_migration  Init database version 20230206163640
-
-CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain spec hash: Byte32(0x3036c73473a371f3aa61c588c38924a93fb8513e481fa7c8d884fc4cf5fd368a)
+Launching CKB devnet Node...
+CKB devnet RPC Proxy server running on http://127.0.0.1:28114
 ```
 
 ```mdx-code-block
@@ -63,7 +51,7 @@ CKB output: 2024-03-20 07:56:45.329 +00:00 main INFO ckb_launcher  Touch chain s
 </Tabs>
 ```
 
-Your local CKB blockchain is currently active with the RPC endpoint at [localhost:8114](http://localhost:8114). To stop the chain, press `CTRL+C` in the terminal. To resume where you left off, simply run `offckb node` again.
+Your local CKB blockchain is currently active with a proxy RPC endpoint at [localhost:28114](http://localhost:28114). To stop the chain, press `CTRL+C` in the terminal. To resume where you left off, simply run `offckb node` again.
 
 If you need to start fresh with a new chain, run the following command before starting the node:
 
@@ -90,252 +78,43 @@ Chain data cleaned.
 </Tabs>
 ```
 
-## Create a New Project
+## Create a CKB Smart Contract Project
 
-To setup a boilerplate for a full-stacked dApp, run the following command. Replace `<my-dapp-project>` with any name you like.
-
-```bash
-offckb create <my-dapp-project>
-```
-
-When prompted to select a bare template, use your arrow keys to select the frontend framework you prefer. If you wish to use a frontend framework not listed, please refer to [this section](/docs/getting-started/quick-start#different-frontend-framework).
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-project" label="Command">
-```
-
-```bash {3}
-? Select a bare template
-  Remix-Vite Bare Templates
-> Next.js Bare Templates
----
-A full-stack template with Next.js framework and ckb-script-templates,
-[next.js,tailwindcss,ckb-script-templates,typescript,rust]
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-create-project" label="Response">
-```
-
-```bash
-Cloning into '/Users/Desktop/offckb/templates/temp-clone-folder'...
-Folder examples/next-js-template downloaded successfully from https://github.com/nervosnetwork/docs.nervos.org and moved to /Users/nervosDocs/Desktop/offckb/my-dapp-project
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-<details>
-  <summary>How to create a Script-only project?</summary>
-
-To create a project focused solely on Script development without any frontend work, you can run the following command. Replace `<my-script-project>` with any name you like.
-
-```bash
-offckb create --script <my-script-project>
-```
-
-Note that `offckb` essentially utilizes an underlying tool called `ckb-script-templates` to initialize Script projects. You can directly engage `ckb-script-templates` for more specific Script development tasks. For further details, refer to the [Script tutorial](/docs/script/minimal-script).
-
-</details>
-
-## Run the DApp Project
-
-The dApp is based on various JavaScript web frontend frameworks, such as `Remix-Vite` and `Next.js`, and is integrated with the CKB JavaScript framework, [Lumos](https://github.com/ckb-js/lumos). All Lumos-related code is defined in the `frontend/offckb.config.ts` file.
-
-To start development, navigate to the frontend workspace:
-
-```bash
-cd frontend
-```
-
-Now, run the following command to install dependencies and start the dApp:
-
-```bash
-npm i && npm run dev
-```
-
-Once the server is up and running, you can view the dApp by visiting [localhost:3000](http://localhost:3000). You can start editing the page by modifying `app/page.tsx`. As you make changes to the file, the page will automatically update to reflect your edits. For detailed instructions on how to start the dApp and explore additional config options, please see the `README.md` file.
-
-![dapp-screenshot](/img/quick-start/remix-vite-dapp.png)
-
----
-
-## DApp Project Structure
-
-The boilerplate project for a full-stack CKB dApp comprises two main components:
-
-- The frontend, which utilizes the CKB JavaScript framework, [CCC](https://github.com/ckb-devrel/ccc).
-- The Scripts, which leverage the [ckb-script-templates](https://github.com/cryptape/ckb-script-templates).
-
-By default, the Next.js template comes with a simple Script `hello-world` under `contracts/hello-world/src/main.rs`.
-
-<ScriptTools />
-
-### Script-Related Commands
-
-- Add a new Script: `make generate`
-- Build Script: `make build`
-- Run unit tests: `make test`
-
-### Deploy Scripts to Blockchain
-
-After building your Scripts, you can navigate to your frontend workspace and deploy your Scripts to the Devnet or Testnet by using the following command:
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="deploy-to-devnet" label="Devnet">
-```
+You can create a new CKB Smart Contract project in Typescript from our boilerplate.
 
 ```sh
-offckb deploy --network devnet
+offckb create <your-project-name> -c <your-contract-name>
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="deploy-to-testnet" label="Testnet">
-```
+The `-c` option is optional, if you don't provide it, the contract name will be `hello-world`.
+
+After create the project, you can follow the instructions on build, deploy and test the contract in README.md of the project.
+
+The project includes both `mock` test and `devnet` test. For developing frontend interacting with the blockchain, you can refer to the `devnet` test and see how it works.
+
+### Deploy a CKB Smart Contract
+
+To deploy the script, use `offckb deploy` command:
 
 ```sh
-offckb deploy --network testnet
+offckb deploy --network <devnet/testnet> --target <path-to-your-contract-binary-file-or-folder> --output <output-folder-path>
 ```
 
-```mdx-code-block
-</TabItem>
-</Tabs>
+Pass `--type-id` option if you want Scripts to be upgradable
+
+```sh
+offckb deploy --type-id --network <devnet/testnet>
 ```
 
-### Use Scripts in Frontend
+Your deployed scripts info will be be listed in the `output-folder-path` which you defined in the command.
 
-If the deployment is successful, the `offckb.config.ts` file will contain the necessary details to import and utilize your Scripts in your frontend dApp. Here's how you can use your Scripts directly:
+Note that upgrades are keyed by the contract‘s artifact name. If you plan to upgrade with `--type-id`, do not rename your contract artifact (e.g. keep `hello-world.bc`). Renaming it makes the offckb unable to find the previous Type ID info from the `output-folder-path` and will create a new Type ID.
 
-```ts
-import offckb from "offckb.config";
+### Debug a transaction
 
-const myScriptDeps: CellDep[] = offCKB.myScripts["YOUR_SCRIPT_NAME"]!.cellDeps;
-const myScript: Script = {
-  codeHash: offCKB.myScripts["hash-lock"]!.codeHash,
-  hashType: offCKB.myScripts["hash-lock"]!.hashType,
-  args: lockArgs,
-};
-```
+If you are interacting the CKB devnet via the proxy RPC server(`localhost:28114`), all the failed transactions will be dumped and recorded so you can debug them later.
 
-## Use a Different Frontend Framework? {#different-frontend-framework}
-
-The frontend world is filled with numerous (perhaps too many) frameworks. New frameworks come out every day, and different developers have different preferences among these frameworks. So if you don't use the framework in the pre-defined boilerplate, like `remix-vite` and `next.js`, don't worry! You can still use `offckb` with the `inject-config` command.
-
-First, simply initialize your dApp project with your preferred framework, such as [CRA](https://create-react-app.dev/):
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-my-cra-dapp" label="Command">
-```
-
-```bash
-npx create-react-app my-cra-dapp --template typescript
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="my-cra-dapp-created" label="Response">
-```
-
-```bash
-Creating a new React app in /Users/nervosDocs/Desktop/offckb/my-cra-dapp.
-
-Installing packages. This might take a couple of minutes.
-Installing react, react-dom, and react-scripts with cra-template-typescript...
-added 1489 packages in 2m
-
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-Next, navigate to your dApp directory and initialize the `offckb` config within your framework:
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="inject-config" label="Command">
-```
-
-```bash
-cd my-cra-dapp
-offckb inject-config
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="config-injected" label="Response">
-```
-
-All good. You can now use it in your project like:
-
-```bash
-import offCKB from "offckb.config";
-const myScriptCodeHash = offCKB.myScripts['script-name'].codeHash;
-const omnilockScriptCodeHash = offCKB.systemScripts['omnilock'].codeHash;
-```
-
-<ExampleLink path="dApp/simple-transfer">Check Example</ExampleLink>
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-Now, when you deploy your Scripts with `offckb deploy --network devnet --target <your-folder-to-your-script-binaries>`, run the following command in your frontend root path where the `offckb.config.ts` file is located to update the deployed Scripts info for your frontend.
-
-```mdx-code-block
-<Tabs>
-  <TabItem value="sync-config" label="Command">
-```
-
-```bash
-offckb sync-scripts
-```
-
-```mdx-code-block
-  </TabItem>
-  <TabItem value="config-synced" label="Response">
-```
-
-```bash
-scripts json config updated.
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
-For switching between different networks, you might need to update the `readEnvNetwork` method in `offckb.config.ts` according to your framework.
-
-```ts
-function readEnvNetwork(): "devnet" | "testnet" | "mainnet" {
-  // you may need to update the env method
-  // according to your frontend framework
-  const network = process.env.NETWORK;
-  const defaultNetwork = "devnet";
-  if (!network) return defaultNetwork;
-  if (!["devnet", "testnet", "mainnet"].includes(network)) {
-    return defaultNetwork;
-  }
-
-  return network as "devnet" | "testnet" | "mainnet";
-}
-```
-
-## Debug a transaction
-
-If you are using the offckb dApp template to create your project, one of the beneficial is that all the failed transactions will be dumped and recorded so you can debug them later.
-
-Everytime you run a transaction, you can debug it with the transaction hash:
+Every time you run a transaction, you can debug it with the transaction hash:
 
 ```sh
 offckb debug <transaction-hash>
@@ -387,9 +166,3 @@ offckb debug <transaction-hash> --single-script <single-cell-script-option> --bi
 ```
 
 All the debug utils are borrowed from [ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger).
-
-## About offckb.config.ts
-
-`offckb.config.ts` is a straightforward TypeScript file that encapsulates basic devnet information. Everything is explicitly defined, making it easy to modify. This minimalistic approach ensures that `offckb` does not impose limitations on the tech selections and development processes of developers.
-
-If you have any feedback you would like to share with us, feel free to contact us at [github](https://github.com/nervosnetwork/docs.nervos.org) or [discord](https://discord.gg/4Jcw8MwEEv).

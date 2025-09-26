@@ -1270,7 +1270,7 @@ Dry run success result: {
 
 # Given an invalid secret string, the transaction would fail the validation.
 # If you have enabled debug output in CKB's configuration like mentioned here:
-# https://docs.nervos.org/dev-guide/debugging-ckb-script.html#debug-syscall
+# https://docs-old.nervos.org/docs/essays/debug/#debug-syscall
 # you can notice the failure lines in CKB's debug logs.
 $ ./unlock_via_secret_string.js \
     0xf30e1e8989fc3a4cb1e52dacc85090f8ff74b05e008d636b8c9154f5c296e1f4 \
@@ -1381,4 +1381,4 @@ I sincerely hope you have read till this far, instead of skipping it. This is a 
 - How to serialize/deserialize molecule data structures
 - How to include external libraries on npm and pack a single JavaScript for CKB use
 
-While I might still add more posts to this series if I noticed interesting stuff to write, I'm sure the existing 7 posts in this series, together with [many](https://justjjy.com/Build-CKB-contract-with-Rust-part-1) [other](https://justjjy.com/CKB-contract-in-Rust-part-2-Rewrite-contract-with-ckb) [awesome](https://docs.nervos.org/dev-guide/debugging-ckb-script.html) [posts](https://mp.weixin.qq.com/s/9cP_Qik-AsdpiqL-q0ac4w) by my colleagues, have well prepared you to build awesome things on CKB. We are all prepared to amazed by the beautiful things you build on CKB :)
+While I might still add more posts to this series if I noticed interesting stuff to write, I'm sure the existing 7 posts in this series, together with [many](https://justjjy.com/Build-CKB-contract-with-Rust-part-1) [other](https://justjjy.com/CKB-contract-in-Rust-part-2-Rewrite-contract-with-ckb) [awesome](https://docs-old.nervos.org/docs/essays/debug/) [posts](https://mp.weixin.qq.com/s/9cP_Qik-AsdpiqL-q0ac4w) by my colleagues, have well prepared you to build awesome things on CKB. We are all prepared to amazed by the beautiful things you build on CKB :)

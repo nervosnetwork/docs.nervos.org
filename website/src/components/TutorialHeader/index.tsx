@@ -25,7 +25,7 @@ const DAPP_HEADER: JSX.Element[] = [
       target="_blank"
       rel="noopener noreferrer"
     >
-      OffCKB (≥v0.3.0)
+      OffCKB (≥v0.4.0)
     </Link>
   </div>,
   <div key="ccc">

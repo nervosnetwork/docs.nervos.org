@@ -6,6 +6,7 @@
   "scripts": {
     "basic": "tsx watch src/basic.ts",
     "example": "tsx watch src/full-example.ts",
+    "build": "tsup src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

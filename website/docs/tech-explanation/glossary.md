@@ -352,7 +352,7 @@ A layer 1 proof of work blockchain that provides a foundation of decentralized t
 
 #### See Also
 
-- [Nervos CKB on Nervos.org](https://www.nervos.org/ckb/)
+- [Nervos CKB on Nervos.org](https://www.nervos.org/ckbpage)
 
 ---
 
@@ -459,7 +459,7 @@ This is a similar concept to Ethereum's Gas, we set cycles to ensure optimal per
 
 #### See Also
 
-- [Estimate cycles](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/faq/#estimate-cycles)
+- [Estimate cycles](https://docs-old.nervos.org/docs/essays/faq#estimate-cycles)
 - [Max_block_cycles](#max_block_cycles)
 - [Rules for calculating cycles in RFC on Nervos Network Github](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0014-vm-cycle-limits/0014-vm-cycle-limits.md)
 - [Script](#script)
@@ -1712,7 +1712,7 @@ EpochNumberWithFraction::new_unchecked(4, 0, 1);
 
 Pointers to Live Cells on the chain that allow Scripts in the transaction to access (read-only) referenced Live Cells.
 
-Find more in the essay [Script dependencies](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/dependencies/#how-dependencies-work).
+Find more in the essay [Script dependencies](https://docs-old.nervos.org/docs/essays/dependencies#how-dependencies-work).
 
 #### See Also
 
@@ -3032,7 +3032,7 @@ Short for “test network,” a network used to simulate the behavior of the [Ma
 
 The number of confirmations required for a transaction to be added to a block.
 
-As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation [here](https://nervos-ckb-docs-git-v1-cryptape.vercel.app/docs/essays/tx-confirmation/)).
+As permissionless blockchain designs offer only probabilistic finality, a transaction can never be fully confirmed, facing an adversary with infinite computational power. Therefore, users and apps can choose a number they deem secure. We briefly discuss one factor here that influences the level of security: the recent orphan rate. It takes 6 confirmations to fully settle a transaction when the orphan rate is 0, and 24 confirmations when the rate reaches 2.5% to achieve the same level of security (See the rationale and calculation [here](https://docs-old.nervos.org/docs/essays/tx-confirmation)).
 
 In blockchain settlement assurance, transaction confirmation is one of the variables that cannot be easily quantified (See Nic Carter’s [article](https://medium.com/@nic__carter/its-the-settlement-assurances-stupid-5dcd1c3f4e41)). The exact number is open to adjustment depending on the security level that users desire. Nervos CKB sets a minimum of 15 confirmations, which should be considered conservative.
 
