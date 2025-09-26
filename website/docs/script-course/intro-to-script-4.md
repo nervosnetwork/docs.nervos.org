@@ -21,7 +21,7 @@ But enough for the rant, let's just assume for now, WebAssembly does have a bloc
 
 ## AssemblyScript
 
-I believe no words speak better than a demo you can play with. So let's try the official AssemblyScript and run the compiled program on CKB. We will just use the official example in AssemblyScript's [introduction page](https://docs.assemblyscript.org/):
+I believe no words speak better than a demo you can play with. So let's try the official AssemblyScript and run the compiled program on CKB. We will just use the official example in AssemblyScript's [introduction page](https://www.assemblyscript.org/introduction.html):
 
 ```
 $ cat fib.ts

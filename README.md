@@ -11,6 +11,7 @@
       - [Run the website](#run-the-website)
       - [Build for deployment](#build-for-deployment)
       - [Maintain key-terms.json file](#maintain-key-termsjson-file)
+    - [Broken Link Checker](#broken-link-checker)
 
 ## What is CKB
 
@@ -86,3 +87,20 @@ yarn gen-terms
 ```
 
 After running the command, you can navigate to `src/components/Tooltip` to verify that the `key-terms.json` file has been generated successfully.
+
+###  Broken Link Checker
+Use `./scripts/check-urls.sh` to scan for dead links.
+
+**How to Use**
+
+1. Install [lychee](https://github.com/lycheeverse/lychee).
+2. Build the website: `cd website && yarn build`.
+3. Run the script: `./scripts/check-urls.sh`.
+
+The script prints any links that fail the check.
+
+**Notes**
+
+* A cache file `./website/.lycheecache` will be created. For local development, the cache TTL is 30 days; you can change `max_cache_age` in `website/.lychee.toml`.
+* Because the docs contain many GitHub links, requests are routed via `api.github.com`. Providing a GitHub token increases the rate limit.
+* For this reason, the check is not integrated into CI at the moment.
