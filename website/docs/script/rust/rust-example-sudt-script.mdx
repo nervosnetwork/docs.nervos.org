@@ -13,21 +13,7 @@ import ExampleLink from "@site/src/components/ExampleLink";
 
 # Example: Simple UDT Script
 
-<TutorialHeader
-  time={"5 - 7 min"}
-  tools={"script"}
-  customTools={[
-    <div key="offckb">
-      <Link
-        to="docs/sdk-and-devtool/offckb"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        offckb {">= 0.3.2"}
-      </Link>
-    </div>,
-  ]}
-/>
+<TutorialHeader time={"5 - 7 min"} tools={"script"} customTools={[]} />
 
 User-Defined Token (UDT) is a fungible token standard on CKB blockchain.
 
@@ -59,7 +45,7 @@ This hash is also used to determine if a transaction is initiated by the token i
   For a more detailed explanation,
   please refer to [Create a Fungible Token](/docs/dapp/create-token) or [RFC0025: Simple UDT](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0025-simple-udt/0025-simple-udt.md)
 
-Now, let's create a new project to build the UDT Script. We will use [OFFCKB](https://github.com/ckb-devrel/offckb) and [ckb-script-templates](https://github.com/cryptape/ckb-script-templates).
+Now, let's create a new project to build the UDT Script. We will use [ckb-script-templates](https://github.com/cryptape/ckb-script-templates).
 
 ### Initialize a Script Project
 
@@ -71,7 +57,8 @@ Let's run the command to generate a new Script project called `sudt-script`(shor
 ```
 
 ```bash
-offckb create --script sudt-script
+alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
+create-ckb-scripts
 ```
 
 ```mdx-code-block
@@ -387,7 +374,7 @@ By writing tests like `test_transfer_sudt`, we can ensure that our sUDT Script f
 By following this tutorial so far, you have mastered how to write a simple UDT Script that brings fungible tokens to CKB.
 Here's a quick recap:
 
-- Use `offckb` and `ckb-script-templates` to init a Script project
+- Use `ckb-script-templates` to init a Script project
 - Use `ckb_std` to leverage CKB syscalls `Source::GroupIuput`/`Source::GroupOutput` for performing relevant Cell iteration.
 - Write unit tests to make sure the UDT Script works as expected.
 
