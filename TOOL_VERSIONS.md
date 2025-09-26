@@ -12,10 +12,14 @@ Updates may be triggered by:
 
 | Name          | Version | Release Date | Last Reviewed | Download |
 | ------------- | ------- | ------------ | ------------- | -------- |
-| offckb        | 0.3.5   | 2025-04-16   | 2025-08-01    | [Github](https://github.com/ckb-devrel/offckb/releases/tag/v0.3.5) |
+| offckb        | 0.4.0   | 2025-04-16   | 2025-08-01    | [Github](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.0) |
 
 ---
 
 ### offckb
-Useed In:
-* [Build a Simple Lock](website/docs/dapp/simple-lock.mdx)
+Used In:
+* [Simple Lock](examples/dApp/simple-lock.mdx)
+* [Simple Transfer](examples/dApp/simple-transfer/)
+* [xudt](examples/dApp/xudt/)
+* [store-data-on-cell](examples/dApp/store-data-on-cell/)
+* [create-dob](examples/dApp/create-dob/)

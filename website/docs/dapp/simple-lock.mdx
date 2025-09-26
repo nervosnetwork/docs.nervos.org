@@ -299,7 +299,7 @@ export async function unlock(
   tx.setWitnessArgsAt(0, newWitnessArgs);
 
   // Complete missing parts for transaction
-  await tx.addCellDeps(offCKB.myScripts["hash-lock"]!.cellDeps[0].cellDep);
+  await tx.addCellDeps(myScripts["hash-lock"]!.cellDeps[0].cellDep);
   await tx.completeInputsByCapacity(
     readSigner,
     ccc.fixedPointFrom(amountInCKB)
