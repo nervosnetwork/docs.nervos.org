@@ -46,3 +46,8 @@ jobs:
 
       - name: ckb-c-script
         run: ./scripts/examples-c-ci.sh
+      - name: dApp-examples
+        run: ./scripts/examples-dapp-ci.sh
+
+      - name: dApp-fullstack
+        run: ./scripts/examples-fullstack-ci.sh

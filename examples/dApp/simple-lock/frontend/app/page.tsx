@@ -1,10 +1,19 @@
 "use client";
 
-import offCKB from "@/offckb.config";
 import React, { useEffect, useState } from "react";
-import { capacityOf, generateAccount, shannonToCKB, unlock, wait, generateAccountRust, unlockRust } from "./hash-lock";
+import {
+  capacityOf,
+  generateAccount,
+  shannonToCKB,
+  unlock,
+  wait,
+} from "./hash-lock";
 import Link from "next/link";
 import { Script, hashCkb, hexFrom } from "@ckb-ccc/core";
+import scripts from "../deployment/scripts.json";
+import { readEnvNetwork } from "./ccc-client";
+
+const myScripts = scripts[readEnvNetwork()] as any;
 
 export default function Home() {
   return (
@@ -17,16 +26,11 @@ export default function Home() {
 }
 
 function HashLock() {
-  const [lang, setLang] = useState<"ts" | "rust">("ts");
-  const scriptName = lang === "ts" ? "hash-lock.bc" : "hash-lock";
+  const scriptName = "hash-lock.bc";
 
   // You can generate ckb blake2b_256 hash from https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25
-  const [preimage, setPreimage] = useState<string>(
-    "Hello World"
-  );
-  const [hash, setHash] = useState<string>(
-    ""
-  );
+  const [preimage, setPreimage] = useState<string>("Hello World");
+  const [hash, setHash] = useState<string>("");
   const [fromAddr, setFromAddr] = useState("");
   const [fromLock, setFromLock] = useState<Script>();
   const [balance, setBalance] = useState("0");
@@ -34,24 +38,18 @@ function HashLock() {
   useEffect(() => {
     // Update Hash
     if (preimage != null) {
-      const buffer = hexFrom(Array.from(preimage).map(c => c.charCodeAt(0)));
+      const buffer = hexFrom(Array.from(preimage).map((c) => c.charCodeAt(0)));
       const hash = hashCkb(buffer).slice(2);
       setHash(hash);
     }
 
-    if (hash && offCKB.myScripts[scriptName] != null) {
+    if (hash && myScripts[scriptName] != null) {
       updateFromInfo();
     }
-  }, [preimage, hash, lang]);
+  }, [preimage, hash]);
 
   const updateFromInfo = async () => {
-    console.log(`lang: ${lang}`);
-    let lockScript, address;
-    if (lang === 'ts') {
-      ({ lockScript, address } = generateAccount(hash));
-    } else {
-      ({ lockScript, address } = generateAccountRust(hash));
-    }
+    const { lockScript, address } = generateAccount(hash);
     const capacity = await capacityOf(address);
     setFromAddr(address);
     setFromLock(lockScript);
@@ -60,7 +58,7 @@ function HashLock() {
 
   // default value: second account address from offckb
   const [toAddr, setToAddr] = useState(
-    "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew"
+    "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqt435c3epyrupszm7khk6weq5lrlyt52lg48ucew",
   );
   // default value: 99 CKB
   const [amountInCKB, setAmountInCKB] = useState("99");
@@ -71,13 +69,7 @@ function HashLock() {
   const onTransfer = async () => {
     setIsTransferring(true);
 
-    let txHash;
-    if (lang == 'ts') {
-      txHash = await unlock(fromAddr, toAddr, amountInCKB).catch(alert);
-    } else {
-      txHash = await unlockRust(fromAddr, toAddr, amountInCKB).catch(alert);
-
-    }
+    const txHash = await unlock(fromAddr, toAddr, amountInCKB).catch(alert);
 
     // We can wait for this txHash to be on-chain so that we can trigger the UI/UX updates including balance.
     if (txHash) {
@@ -110,27 +102,12 @@ function HashLock() {
       <div className="mb-10 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
         Simple Lock Example
       </div>
-      <div className="mb-4">
-        <span className="mr-4 font-bold">Select Language: </span>
-        <button
-          className={`px-4 py-2 border rounded-l ${lang === "ts" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          onClick={() => setLang("ts")}
-        >
-          TypeScript
-        </button>
-        <button
-          className={`px-4 py-2 border rounded-r ${lang === "rust" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-          onClick={() => setLang("rust")}
-        >
-          Rust
-        </button>
-      </div>
       <div className="mb-8">
         <div className="text-xl font-bold">HASH_LOCK Script Info</div>
         <div>
           code_hash:{" "}
-          {offCKB.myScripts[scriptName]?.codeHash
-            ? offCKB.myScripts[scriptName]?.codeHash
+          {myScripts[scriptName]?.codeHash
+            ? myScripts[scriptName]?.codeHash
             : "Not Found, deploy script first."}
         </div>
       </div>
@@ -159,9 +136,12 @@ function HashLock() {
         </div>
         <div className="max-w-3xl">
           <p className="bg-gray-100 text-gray-800 p-3 rounded-md text-sm break-all max-w-full">
-            hints: Here for the convenience of testing, we use Preimage to generate Hash directly. Generate ckb blake2b_256 hash from
-            <Link style={{ color: "blue" }}
-              href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25">
+            hints: Here for the convenience of testing, we use Preimage to
+            generate Hash directly. Generate ckb blake2b_256 hash from
+            <Link
+              style={{ color: "blue" }}
+              href="https://codesandbox.io/p/sandbox/calculate-blake2b-256-hash-6h2s8?file=%2Fsrc%2FApp.vue%3A55%2C25"
+            >
               here
             </Link>
           </p>
@@ -173,7 +153,9 @@ function HashLock() {
             <li className="break-all">CKB Address: {fromAddr}</li>
             <li>
               Current lock script:
-              <pre className="break-all whitespace-pre-wrap max-w-full">{JSON.stringify(fromLock, null, 2)}</pre>
+              <pre className="break-all whitespace-pre-wrap max-w-full">
+                {JSON.stringify(fromLock, null, 2)}
+              </pre>
             </li>
             <li>Total capacity: {balance} CKB</li>
           </ul>

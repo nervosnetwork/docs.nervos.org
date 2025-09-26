@@ -15,7 +15,7 @@ import CodeTabs from "./_CodeTabs.mdx";
 
 # Build a Simple Lock
 
-<TutorialHeader time={"10 - 15 min"} tools={"script"} />
+<TutorialHeader time={"10 - 15 min"} tools={"dapp"} />
 
 ## Tutorial Overview
 
@@ -26,7 +26,7 @@ Our example dApp will use a simple toy lock. You will create a <Tooltip>Lock Scr
 The `hash_lock` project involves specifying a hash in the Script's <Tooltip>script_args</Tooltip>. To unlock it, users must provide the preimage that matches this hash.
 
 :::note
-This toy lock example isn't intended for production. Use it ONLY n Testnet as an starting point for learning the basics.
+This toy lock example isn't intended for production. Use it ONLY in Testnet or Devnet as a starting point for learning the basics.
 :::
 
 ## Setup Devnet & Run Example
@@ -46,93 +46,89 @@ cd docs.nervos.org/examples/dApp/simple-lock
 
 ### Step 3: Build and Deploy the Script
 
-In this tutorial, the `hash-lock` contract is implemented in both **Rust** and **TypeScript**. You can choose the version that suits your needs.
+In this tutorial, the `hash-lock` contract is implemented in **TypeScript**.
 
-To compile the Rust contract, navigate to the `rust-simple-lock` directory and run:
-
-<CodeTabs
-  cmd={`make build`}
-  response={`docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock$ make build 
-Cleaning build/release directory...
-mkdir -p build/release
-make[1]: Entering directory 'docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock/contracts/hash-lock'
-RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs,-a -C debug-assertions" TARGET_CC="clang-19" TARGET_AR="llvm-ar-19" \
-        cargo build --target=riscv64imac-unknown-none-elf --release 
-   ...
-   Compiling hash-lock v0.1.0 (docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock/contracts/hash-lock)
-    Finished \`release\` profile [optimized + debuginfo] target(s) in 14.21s
-Copying binary hash-lock to build directory
-make[1]: Leaving directory 'docs.nervos.org/examples/dApp/simple-lock/rust-simple-lock/contracts/hash-lock'`}
-/>
-
-Once compiled, the contract binary will be output to the `examples/dApp/simple-lock/scripts` directory.
-
-For the TypeScript implementation, navigate to the `ts-simple-lock` directory and run the following commands:
+To compile the TypeScript contract, navigate to the `root` directory and run:
 
 <CodeTabs
   cmd={`pnpm install
 pnpm build`}
-  response={`docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock$ pnpm install
-Scope: all 3 workspace projects
-Lockfile is up to date, resolution step is skipped
-Packages: +400
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 400, reused 400, downloaded 0, added 400, done
+  response={`> node scripts/build-all.js
 
-devDependencies:
-...
-Done in 1.3s using pnpm v10.10.0
-docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock$ pnpm build
+Building 1 contract(s): hash-lock
 
-> @ build docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock
-> pnpm -r run build
+📦 Building contract: hash-lock
+Building hash-lock from contracts/hash-lock/src/index.ts...
+📦 Bundling with esbuild...
+🔧 Compiling to bytecode...
+✅ Contract 'hash-lock' built successfully!
+📄 JavaScript: dist/hash-lock.js
+🔗 Bytecode: dist/hash-lock.bc
+✅ Successfully built: hash-lock
 
-Scope: 2 of 3 workspace projects
-packages/on-chain-script build$ tsc --noEmit && esbuild --platform=neutral --minify --bundle --external:@ckb-js-std/bindings --target=es2022 src/index.ts --outfile=dist/index.js && ckb-debugger --read-file dis…
-│ dist/index.js 21.8kb
-│ ⚡ Done in 6ms
-│ Run result: 0
-│ All cycles: 37795437(36.0M)
-└─ Done in 1.2s
-packages/on-chain-script-tests build$ pnpm copy-js-vm-script
-│ > simple-lock@0.1.0 copy-js-vm-script docs.nervos.org/examples/dApp/simple-lock/ts-simple-lock/packages/on-chain-script-tests
-│ > node -e "const { DEFAULT_SCRIPT_CKB_JS_VM } = require('ckb-testtool'); const fs = require('fs'); const path = require('path'); fs.mkdirSync('../../../scripts', { recursive: true }); fs.copyFileSync(DEFAULT…
-│ (node:23389) ExperimentalWarning: WASI is an experimental feature and might change at any time
-│ (Use \`node --trace-warnings ...\` to show where the warning was created)
-└─ Done in 445ms`}
+🎉 All contracts built successfully!
+`}
 />
 
-Once compiled, the contract files will be available in the `examples/dApp/simple-lock/scripts` directory as well.
-
-Since the `ckb-js-vm` script is not part of the genesis block, it will also appear in the `scripts` directory. During deployment, it will be included on-chain automatically.
+Once compiled, the contract files will be available in the `simple-lock/dist` directory.
 
 Deploy the Script binary to the Devnet:
 
-(Both Rust and TypeScript contracts are built here, so three scripts will be deployed.)
-
 <CodeTabs
-  cmd={`cd frontend && offckb deploy -t --network devnet`}
-  response={`contract ckb_js_vm deployed, tx hash: 0x471e03c89c328f7c2c9ba4fbcbce00a9dae5e65cd81511c45e2343aafd748d71
+  cmd={`pnpm run deploy --network devnet`}
+  response={`> node scripts/build-all.js && node scripts/deploy.js "--network" "devnet"
+
+Building 1 contract(s): hash-lock
+
+📦 Building contract: hash-lock
+Building hash-lock from contracts/hash-lock/src/index.ts...
+📦 Bundling with esbuild...
+🔧 Compiling to bytecode...
+✅ Contract 'hash-lock' built successfully!
+📄 JavaScript: dist/hash-lock.js
+🔗 Bytecode: dist/hash-lock.bc
+✅ Successfully built: hash-lock
+
+🎉 All contracts built successfully!
+🚀 Deploying contracts...
+📁 Target: dist
+📄 Output: deployment
+🌐 Network: devnet
+
+💻 Running: offckb deploy --network devnet --target dist --output deployment
+
+You are about to deploy the following contracts:
+
+- /Users/Desktop/docs.nervos.org/examples/simple-lock/dist/hash-lock.bc
+
+The deployment will be saved to /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment
+
+The network is: devnet
+? Are you sure you want to deploy these contracts? yes
+contract hash-lock.bc deployed, tx hash: 0x5f71110ed1ab57196976f357083d4c4fd767de6088a97fad6846ec9559c61f58
 wait for tx confirmed on-chain...
 tx committed.
-contract hash-lock deployed, tx hash: 0x0396f062ccbd576a3456d8db090f0dd2c62f01fcdcd93a0a5c108acfa73a742b
-wait for tx confirmed on-chain...
-tx committed.
-contract hash-lock.bc deployed, tx hash: 0xd151a01fbb6d1a29a2ea01585360ea9fd25825abd8cb29f13e0dffcc72830207
-wait for tx confirmed on-chain...
-tx committed.
-ckb_js_vm deployment.toml file offckb-nodejs/devnet/contracts/ckb_js_vm/deployment.toml generated successfully.
-ckb_js_vm migration json file offckb-nodejs/devnet/contracts/ckb_js_vm/migrations/2025-07-31-175527.json generated successfully.
-hash-lock deployment.toml file offckb-nodejs/devnet/contracts/hash-lock/deployment.toml generated successfully.
-hash-lock migration json file offckb-nodejs/devnet/contracts/hash-lock/migrations/2025-07-31-175527.json generated successfully.
-hash-lock.bc deployment.toml file offckb-nodejs/devnet/contracts/hash-lock.bc/deployment.toml generated successfully.
-hash-lock.bc migration json file offckb-nodejs/devnet/contracts/hash-lock.bc/migrations/2025-07-31-175527.json generated successfully.
-done.`}
-/>
+Saving artifacts for hash-lock.bc...
+hash-lock.bc deployment.toml file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/devnet/hash-lock.bc/deployment.toml generated successfully.
+Migration json file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/devnet/hash-lock.bc/migrations/2025-09-08-205232.json generated successfully.
+Script info file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/scripts.json generated successfully.
+
+🎉 Deployment completed successfully!
+📁 Deployment artifacts saved to: deployment/
+
+💡 Next steps:
+
+- Check the deployment artifacts in the deployment/ folder
+- Run your tests to use the deployed contract scripts`}
+  />
+
+The deployment artifacts will be saved to the `examples/simple-lock/deployment` directory.
 
 ### Step 4: Run the DApp
 
-Navigate to your project's frontend folder, install the node dependencies, and start running the example:
+Next, you need to copy the `scripts.json` file from `deployment` folder to the `frontend/deployment` directory.
+
+Then, navigate to the frontend folder, install the node dependencies, and start running the example:
 
 <CodeTabs
   cmd={
@@ -170,104 +166,13 @@ Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt
 
 You can try clicking the **"Transfer"** button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
 
-<ImgContainer src="/img/dapps/simple-lock.jpg" />
+<ImgContainer src="/img/dapps/simple-lock.png" />
 
 ---
 
 ## Behind the Scene
 
-### Script Logic (Rust)
-
-The concept behind `hash_lock` is to specify a hash in a particular Script. To unlock this Script, you must provide the preimage to reveal the hash. More specifically, the `hash_lock` Script will execute the following validations on-chain:
-
-- First, the Script will read the preimage value from the transaction witness field.
-- Second, the Script will take the preimage and hash it using `ckb-default-hash` based on `blake-2b-256`.
-- Lastly, the Script will compare the hash generated from the preimage with the hash value from the `script_args`. If the two match, it returns 0 as success; otherwise, it fails.
-
-To gain a better understanding, let's examine the full Script code. Open the `main.rs` file in the `contracts` folder:
-
-```rust title='simple-lock/contracts/hash-lock/src/main.rs'
-#![no_std]
-#![cfg_attr(not(test), no_main)]
-
-#[cfg(test)]
-extern crate alloc;
-
-use ckb_hash::blake2b_256;
-use ckb_std::ckb_constants::Source;
-
-#[cfg(not(test))]
-use ckb_std::default_alloc;
-use ckb_std::error::SysError;
-#[cfg(not(test))]
-ckb_std::entry!(program_entry);
-#[cfg(not(test))]
-default_alloc!();
-
-#[repr(i8)]
-pub enum Error {
-    IndexOutOfBound = 1,
-    ItemMissing,
-    LengthNotEnough,
-    Encoding,
-    // Add customized errors here...
-    CheckError,
-    UnMatch,
-}
-
-impl From<SysError> for Error {
-    fn from(err: SysError) -> Self {
-        match err {
-            SysError::IndexOutOfBound => Self::IndexOutOfBound,
-            SysError::ItemMissing => Self::ItemMissing,
-            SysError::LengthNotEnough(_) => Self::LengthNotEnough,
-            SysError::Encoding => Self::Encoding,
-            SysError::Unknown(err_code) => panic!("unexpected sys error {}", err_code),
-        }
-    }
-}
-
-pub fn program_entry() -> i8 {
-    ckb_std::debug!("This is a sample contract!");
-
-    match check_hash() {
-        Ok(_) => 0,
-        Err(err) => err as i8,
-    }
-}
-
-pub fn check_hash() -> Result<(), Error> {
-    let script = ckb_std::high_level::load_script()?;
-    let expect_hash = script.args().raw_data().to_vec();
-
-    let witness_args = ckb_std::high_level::load_witness_args(0, Source::GroupInput)?;
-    let preimage = witness_args
-        .lock()
-        .to_opt()
-        .ok_or(Error::CheckError)?
-        .raw_data();
-
-    let hash = blake2b_256(preimage.as_ref());
-
-    if hash.eq(&expect_hash.as_ref()) {
-        Ok(())
-    } else {
-        Err(Error::UnMatch)
-    }
-}
-```
-
-Here are a few things to note:
-
-- In the `check_hash()` function, we use `ckb_std::high_level::load_witness_args` syscalls to read the preimage value from the witness fieled in the CKB transaction. The structure used in the witness fieled here is the `witnessArgs`.
-- We then use the CKB default hash function `blake2b_256` from the `use ckb_hash::blake2b_256` library to hash the preimage and get its hash value.
-- Next, we compare the two hash values to see if they match `(hash.eq(&expect_hash.as_ref()))`. If they do not match, we return a custom error code `Error::UnMatch` (which is 6).
-
-The whole logic is quite simple and straightforward. How do we use such a Script in our dApp? Let's check the frontend code.
-
-### Script Logic (TypeScript)
-
-For JavaScript/TypeScript developers, the logic behind the `hash_lock` script is equally simple and follows the same principles as the Rust version.
+### Script Logic
 
 Here’s what the script does step-by-step:
 
@@ -276,7 +181,7 @@ Here’s what the script does step-by-step:
 3. It computes the **hash** of the preimage using the default CKB hash function (`blake2b-256`).
 4. If the computed hash matches the one in the `script_args`, the script returns success (0). Otherwise, it fails.
 
-Here is the complete TypeScript-based `hash_lock` script logic:
+Here is the complete `hash_lock` script logic:
 
 ```typescript
 import * as bindings from "@ckb-js-std/bindings";
@@ -316,15 +221,19 @@ This approach demonstrates how to write on-chain logic in a developer-friendly T
 
 Let's take a look at the `generateAccount` function: It accepts a hash string parameter. This hash string is used as `script_args` to build a `hash_lock` Script. This Script can then be used as the lock to secure CKB tokens.
 
-Note that we can directly use `offCKB.myScripts["hash-lock"]` to get the `code_hash` and `hash_type` information, thanks to the `offckb` templates.
+One thing to note here is that our script is a JavaScript contract, so it needs to run inside the `ckb-js-vm` Script. That's why we pass the script `code_hash` and `hash_type` as a `args` to the `ckb-js-vm` Script.
 
 ```ts title='simple-lock/frontend/app/hash-lock.ts'
 // ...
 export function generateAccount(hash: string) {
-  const lockArgs = "0x" + hash;
+  const lockArgs =
+    "0x0000" +
+    myScripts["hash-lock.bc"]!.codeHash.slice(2) +
+    hexFrom(hashTypeToBytes(myScripts["hash-lock.bc"]!.hashType)).slice(2) +
+    hash;
   const lockScript = {
-    codeHash: offCKB.myScripts["hash-lock"]!.codeHash,
-    hashType: offCKB.myScripts["hash-lock"]!.hashType,
+    codeHash: mySystemScripts["ckb_js_vm"]!.script.codeHash,
+    hashType: mySystemScripts["ckb_js_vm"]!.script.hashType,
     args: lockArgs,
   };
   const address = ccc.Address.fromScript(lockScript, cccClient).toString();
