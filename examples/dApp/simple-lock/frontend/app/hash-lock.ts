@@ -77,7 +77,9 @@ export async function unlock(
 
   // Complete missing parts for transaction
   await tx.addCellDeps(myScripts["hash-lock.bc"]!.cellDeps[0].cellDep);
-  await tx.addCellDeps(mySystemScripts["ckb_js_vm"]!.script.cellDeps[0].cellDep);
+  await tx.addCellDeps(
+    mySystemScripts["ckb_js_vm"]!.script.cellDeps[0].cellDep,
+  );
 
   // Here calculate the minimum capacity of a single Cell (about 73)
   let occupiedSize = ccc.CellOutput.from({
