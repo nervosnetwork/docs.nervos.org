@@ -12,7 +12,7 @@ Updates may be triggered by:
 
 | Name          | Version | Release Date | Last Reviewed | Download |
 | ------------- | ------- | ------------ | ------------- | -------- |
-| offckb        | 0.4.0   | 2025-04-16   | 2025-08-01    | [Github](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.0) |
+| offckb        | 0.4.0   | 2025-09-26   | 2025-09-26    | [Github](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.0) |
 
 ---
 
