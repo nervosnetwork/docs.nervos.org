@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import {
   buildMessageTx,
   capacityOf,
@@ -9,8 +9,9 @@ import {
 } from "./lib";
 import { Script } from "@ckb-ccc/core";
 
-const app = document.getElementById("root");
-ReactDOM.render(<App />, app);
+const container = document.getElementById("root");
+const root = createRoot(container)
+root.render(<App />);
 
 export function App() {
   // default value: first account privkey from offckb
