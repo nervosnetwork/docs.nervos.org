@@ -32,7 +32,7 @@ or use `pnpm` to install:
 pnpm install -g @offckb/cli
 ```
 
-_Require Node version `>= v20.0.0`. We recommend using latest [LTS](https://nodejs.org/en/download/package-manager) version of Node to run `offckb`_
+_Requires Node version `>= v20.0.0`. We recommend using latest [LTS](https://nodejs.org/en/download/package-manager) version of Node to run `offckb`_
 
 ## Usage
 
@@ -147,7 +147,10 @@ Result:
 }
 ```
 
-Pay attention to the `devnet.configPath` and `devnet.dataPath`. They are the ones we need. 2. `cd` into the `devnet.configPath`, this is the config folder for the local blockchain. Modify the config in the folder to better customize the devnet. For customization, see [Custom Devnet Setup](https://docs.nervos.org/docs/node/run-devnet-node#custom-devnet-setup) and [Configure CKB](https://github.com/nervosnetwork/ckb/blob/develop/docs/configure.md) for better explanation of the config files. 3. After modifications, remove everything in the `devnet.dataPath` folder. This will clean the chain data. 4. Restart local blockchain by running `offckb node`
+2. Pay attention to the `devnet.configPath` and `devnet.dataPath`. They are the ones we need.
+3. `cd` into the `devnet.configPath`, this is the config folder for the local blockchain. Modify the config in the folder to better customize the devnet. For customization, see [Custom Devnet Setup](https://docs.nervos.org/docs/node/run-devnet-node#custom-devnet-setup) and [Configure CKB](https://github.com/nervosnetwork/ckb/blob/develop/docs/configure.md) for better explanation of the config files.
+4. After modifications, remove everything in the `devnet.dataPath` folder. This will clean the chain data.
+5. Restart local blockchain by running `offckb node`
 
 Done.
 
@@ -179,7 +182,7 @@ Pass `--type-id` option if you want Scripts to be upgradable
 offckb deploy --type-id --network <devnet/testnet>
 ```
 
-Your deployed scripts info will be be listed in the `output-folder-path` which you defined in the command.
+Your deployed scripts info will be listed in the `output-folder-path` which you defined in the command.
 
 Note that upgrades are keyed by the contract‘s artifact name. If you plan to upgrade with `--type-id`, do not rename your contract artifact (e.g. keep `hello-world.bc`). Renaming it makes the offckb unable to find the previous Type ID info from the `output-folder-path` and will create a new Type ID.
 
@@ -278,7 +281,7 @@ You can tweak env `LOG_LEVEL` to control the `offckb` log level.
 For example, set `LOG_LEVEL=debug` gives you more outputs of offckb proxy RPC.
 
 ```sh
-LOG_LEVEL offckb node
+LOG_LEVEL=debug offckb node
 ```
 
 ## Built-in scripts
