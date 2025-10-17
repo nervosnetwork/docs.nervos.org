@@ -29,6 +29,9 @@ mod test_carrot;
 #[cfg(test)]
 mod test_sudt;
 
+#[cfg(test)]
+mod test_simple_lock;
+
 // The exact same Loader code from capsule's template, except that
 // now we use MODE as the environment variable
 const TEST_ENV_VAR: &str = "MODE";

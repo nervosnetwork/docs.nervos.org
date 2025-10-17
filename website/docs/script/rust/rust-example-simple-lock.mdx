@@ -1,0 +1,271 @@
+---
+id: rust-example-simple-lock
+title: "Example: Simple Lock"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import TutorialHeader from "@components/TutorialHeader";
+import Tooltip from "@components/Tooltip";
+import ScriptTools from "../_ScriptTools.mdx";
+import Link from "@docusaurus/Link";
+import ExampleLink from "@site/src/components/ExampleLink";
+
+# Example: Simple Lock
+
+<TutorialHeader time={"5 - 7 min"} tools={"script"} customTools={[]} />
+
+We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tutorial using a JavaScript implementation. Here, we’ll write a **Rust** contract that provides the same functionality.
+
+> This example is for demonstration purposes only. It may contain security issues and is **strongly discouraged for mainnet use**.
+
+## Design
+
+- Used as a **lock script**
+- **Args** hold a hash (32 bytes)
+- **Witness** uses `WitnessArgs.lock`, which stores the preimage (binary data, 32 bytes)
+- Validation rule: compute `ckb_blake2b` on the preimage from the witness; unlock if it equals the hash in args
+
+## Implementation
+
+> We’ll add a new contract to the <ExampleLink path="ckb-rust-script/">`ckb-rust-script`</ExampleLink> project.
+
+1. Generate the contract scaffold:
+
+```bash
+make generate CRATE=simple-lock
+```
+
+2. The generated code lives in `contracts/simple-lock`. Implement the logic in <ExampleLink path="ckb-rust-script/contracts/simple-lock/src/main.rs">`contracts/simple-lock/src/main.rs`</ExampleLink>.
+
+Core logic:
+
+```rust
+pub fn program_entry() -> i8 {
+    ckb_std::debug!("This is a sample contract!");
+
+    match check_hash() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
+}
+
+fn check_hash() -> Result<(), Error> {
+    let script = ckb_std::high_level::load_script()?;
+    let expect_hash = script.args().raw_data().to_vec();
+
+    let witness_args = ckb_std::high_level::load_witness_args(0, Source::GroupInput)?;
+    let preimage = witness_args
+        .lock()
+        .to_opt()
+        .ok_or(Error::CheckError)?
+        .raw_data();
+
+    let hash = blake2b_256(preimage.as_ref());
+
+    if hash.eq(&expect_hash.as_ref()) {
+        Ok(())
+    } else {
+        Err(Error::UnMatch)
+    }
+}
+```
+
+Key points:
+
+- `program_entry` is the entry function and must be marked `pub` (see [**API-entry**](./rust-api-entry)).
+- Returning `Result<(), Error>` lets us use ? to forward errors from inner calls, avoiding extra error-handling boilerplate.
+- You can fetch args directly with `ckb_std::high_level::load_script()?.args().raw_data().to_vec()`.
+- Use `load_witness_args` to stay compatible with type scripts in the same cell and the corresponding type script in outputs at the same index.
+- This example uses `blake2b_256` from `ckb-hash`. When used in a contract, disable default features and enable `ckb-contract` in `Cargo.toml`:
+
+  ```toml
+  ckb-hash = { version = "...", default-features = false, features = ["ckb-contract"] }
+  ```
+
+- CKB’s `blake2b_256` uses a different **personalization** than the default; always use the CKB-provided implementation.
+- Errors are enumerated, then converted to `i8` in `program_entry` for the VM exit code.
+
+### Testing
+
+After `make generate`, a starter test is placed in `tests/src/tests.rs`; extend as needed.
+A real project should cover:
+
+- All successful paths
+- All business-relevant failure cases
+- Edge conditions (lengths, empties, duplicates, extreme sizes, etc.)
+
+> For maintainability, this guide consolidates simple-lock tests in <ExampleLink path="ckb-rust-script/tests/src/test_simple_lock.rs">`tests/src/test_simple_lock.rs`</ExampleLink> and removes the auto-generated example from `tests.rs`.
+
+### Success case
+
+```rust
+const MAX_CYCLES: u64 = 10_000_000;
+
+// deploy contract
+let mut context = Context::default();
+let loader = Loader::default();
+let hash_lock_out_point = context.deploy_cell(loader.load_binary("simple-lock"));
+
+let preimage: Bytes = Bytes::from("this is my secret preimage");
+let expected_hash = blake2b_256(preimage.clone().to_vec());
+
+let hash_lock_script = context
+    .build_script_with_hash_type(
+        &hash_lock_out_point,
+        ScriptHashType::Data2,
+        Bytes::copy_from_slice(&expected_hash),
+    )
+    .expect("script");
+
+// prepare cells
+let input_out_point = context.create_cell(
+    CellOutput::new_builder()
+        .capacity(1000u64.pack())
+        .lock(hash_lock_script.clone())
+        .build(),
+    Bytes::new(),
+);
+let input: CellInput = CellInput::new_builder()
+    .previous_output(input_out_point.clone())
+    .build();
+
+let output = CellOutput::new_builder()
+    .capacity(900u64.pack())
+    .lock(hash_lock_script)
+    .build();
+
+// prepare output cell data
+let output_data = Bytes::from("");
+
+// prepare witness for hash_lock
+let witness_builder = WitnessArgs::new_builder();
+let witness = witness_builder.lock(Some(preimage).pack()).build();
+
+// build transaction
+let tx = TransactionBuilder::default()
+    .input(input)
+    .output(output)
+    .output_data(output_data.pack())
+    .witness(witness.as_bytes().pack())
+    .build();
+let tx = context.complete_tx(tx);
+
+// run
+let cycles = context
+    .verify_tx(&tx, MAX_CYCLES)
+    .expect("pass verification");
+println!("consume cycles: {}", cycles);
+```
+
+Notes:
+
+- For simplicity, the output lock reuses the input lock. Transaction verification does not execute output locks, and this example doesn’t check output lock content.
+- In production, assert cycles within a reasonable range. CKB-VM is deterministic; unusual cycle drift can indicate logic changes or regressions.
+- `context.complete_tx(tx)` auto-includes required scripts for this transaction, but external cells like `secp256k1_data` or JS code for the js-vm must still be added manually.
+
+### Failure case
+
+```rust
+#[test]
+fn test_invalid_hash_lock() {
+    // deploy contract
+    let mut context = Context::default();
+    let loader = Loader::default();
+    let hash_lock_out_point = context.deploy_cell(loader.load_binary("simple-lock"));
+
+    let preimage: Bytes = Bytes::from("this is my secret preimage");
+    let expected_hash = blake2b_256(preimage.clone().to_vec());
+
+    let hash_lock_script = context
+        .build_script_with_hash_type(
+            &hash_lock_out_point,
+            ScriptHashType::Data2,
+            Bytes::copy_from_slice(&expected_hash),
+        )
+        .expect("script");
+
+    // prepare cells
+    let input_out_point = context.create_cell(
+        CellOutput::new_builder()
+            .capacity(1000u64.pack())
+            .lock(hash_lock_script.clone())
+            .build(),
+        Bytes::new(),
+    );
+    let input: CellInput = CellInput::new_builder()
+        .previous_output(input_out_point.clone())
+        .build();
+
+    let output = CellOutput::new_builder()
+        .capacity(900u64.pack())
+        .lock(hash_lock_script)
+        .build();
+
+    // prepare output cell data
+    let output_data = Bytes::from("");
+
+    // prepare witness for hash_lock
+    let invalid_preimage: Bytes = Bytes::from("this is invalid preimage");
+    let witness_builder = WitnessArgs::new_builder();
+    let witness = witness_builder.lock(Some(invalid_preimage).pack()).build();
+
+    // build transaction
+    let tx = TransactionBuilder::default()
+        .input(input)
+        .output(output)
+        .output_data(output_data.pack())
+        .witness(witness.as_bytes().pack())
+        .build();
+    let tx = context.complete_tx(tx);
+
+    // run
+    let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();
+    assert_script_error(err, 11);
+}
+
+fn assert_script_error(err: Error, err_code: i8) {
+    let error_string = err.to_string();
+    assert!(
+        error_string.contains(format!("error code {} ", err_code).as_str()),
+        "error_string: {}, expected_error_code: {}",
+        error_string,
+        err_code
+    );
+}
+```
+
+Notes:
+
+- The only difference from the success case is the invalid preimage in the witness.
+- Failure cases usually don’t check cycles (though too small a `MAX_CYCLES` can still cause unexpected failures).
+- Edge cases (e.g., maximum preimage size) should be added for real-world robustness.
+- Here we can’t directly extract the exit code, so we assert by matching the formatted error string in `assert_script_error`.
+
+## Using it in a dApp
+
+See [**Build a Simple Lock**](../../dapp/simple-lock). The Rust version works the same as the JS version, **except for how args are constructed**.
+
+Only modify `generateAccount`:
+
+```ts
+export function generateAccountRust(hash: string) {
+  const lockArgs = "0x" + hash;
+  const lockScript = {
+    codeHash: offCKB.myScripts["simple-lock"]!.codeHash,
+    hashType: offCKB.myScripts["simple-lock"]!.hashType,
+    args: lockArgs,
+  };
+  const address = ccc.Address.fromScript(lockScript, cccClient).toString();
+  return {
+    address,
+    lockScript: ccc.Script.from(lockScript),
+  };
+}
+```
+
+Comparison:
+
+- **Rust args**: a 32-byte hash
+- **JS args**: `35-byte JS params + 32-byte hash`
+- **Cell deps**: the Rust version does not require `ckb-js-vm`

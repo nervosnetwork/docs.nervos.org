@@ -3,7 +3,6 @@
 
 use super::*;
 use ckb_testtool::{
-    builtin::ALWAYS_SUCCESS,
     ckb_hash::blake2b_256,
     ckb_types::{
         bytes::Bytes,
@@ -21,32 +20,10 @@ fn test_hash_lock() {
     // deploy contract
     let mut context = Context::default();
     let loader = Loader::default();
-    let hash_lock_bin = loader.load_binary("hash-lock");
-    let hash_lock_out_point = context.deploy_cell(hash_lock_bin);
-    let hash_lock_cell_dep = CellDep::new_builder()
-        .out_point(hash_lock_out_point.clone())
-        .build();
-
-    // prepare scripts
-    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
-    let always_success_lock_script = context
-        .build_script(&always_success_out_point.clone(), Default::default())
-        .expect("script");
-    let lock_script_dep = CellDep::new_builder()
-        .out_point(always_success_out_point)
-        .build();
+    let hash_lock_out_point = context.deploy_cell(loader.load_binary("simple-lock"));
 
     let preimage: Bytes = Bytes::from("this is my secret preimage");
     let expected_hash = blake2b_256(preimage.clone().to_vec());
-    println!(
-        "preimage: {:?}, hash: {:?}",
-        preimage.to_vec(),
-        expected_hash
-    );
-
-    // let hash_lock_script = context
-    //     .build_script(&hash_lock_out_point, Bytes::copy_from_slice(&expected_hash))
-    //     .expect("script");
 
     let hash_lock_script = context
         .build_script_with_hash_type(
@@ -56,9 +33,6 @@ fn test_hash_lock() {
         )
         .expect("script");
 
-    // prepare cell deps
-    let cell_deps: Vec<CellDep> = vec![lock_script_dep, hash_lock_cell_dep];
-
     // prepare cells
     let input_out_point = context.create_cell(
         CellOutput::new_builder()
@@ -67,23 +41,17 @@ fn test_hash_lock() {
             .build(),
         Bytes::new(),
     );
-    let input = CellInput::new_builder()
+    let input: CellInput = CellInput::new_builder()
         .previous_output(input_out_point.clone())
         .build();
 
-    let outputs = vec![
-        CellOutput::new_builder()
-            .capacity(500u64.pack())
-            .lock(always_success_lock_script.clone())
-            .build(),
-        CellOutput::new_builder()
-            .capacity(500u64.pack())
-            .lock(always_success_lock_script)
-            .build(),
-    ];
+    let output = CellOutput::new_builder()
+        .capacity(900u64.pack())
+        .lock(hash_lock_script)
+        .build();
 
     // prepare output cell data
-    let outputs_data = vec![Bytes::from(""), Bytes::from("")];
+    let output_data = Bytes::from("");
 
     // prepare witness for hash_lock
     let witness_builder = WitnessArgs::new_builder();
@@ -91,14 +59,12 @@ fn test_hash_lock() {
 
     // build transaction
     let tx = TransactionBuilder::default()
-        .cell_deps(cell_deps)
         .input(input)
-        .outputs(outputs)
-        .outputs_data(outputs_data.pack())
+        .output(output)
+        .output_data(output_data.pack())
         .witness(witness.as_bytes().pack())
         .build();
-
-    let tx = tx.as_advanced_builder().build();
+    let tx = context.complete_tx(tx);
 
     // run
     let cycles = context
@@ -112,30 +78,18 @@ fn test_invalid_hash_lock() {
     // deploy contract
     let mut context = Context::default();
     let loader = Loader::default();
-    let hash_lock_bin = loader.load_binary("hash-lock");
-    let hash_lock_out_point = context.deploy_cell(hash_lock_bin);
-    let hash_lock_cell_dep = CellDep::new_builder()
-        .out_point(hash_lock_out_point.clone())
-        .build();
+    let hash_lock_out_point = context.deploy_cell(loader.load_binary("simple-lock"));
 
-    // prepare scripts
-    let always_success_out_point = context.deploy_cell(ALWAYS_SUCCESS.clone());
-    let always_success_lock_script = context
-        .build_script(&always_success_out_point.clone(), Default::default())
-        .expect("script");
-    let lock_script_dep = CellDep::new_builder()
-        .out_point(always_success_out_point)
-        .build();
-
-    let preimage: Bytes = Bytes::from("this is my preimage");
+    let preimage: Bytes = Bytes::from("this is my secret preimage");
     let expected_hash = blake2b_256(preimage.clone().to_vec());
 
     let hash_lock_script = context
-        .build_script(&hash_lock_out_point, Bytes::copy_from_slice(&expected_hash))
+        .build_script_with_hash_type(
+            &hash_lock_out_point,
+            ScriptHashType::Data2,
+            Bytes::copy_from_slice(&expected_hash),
+        )
         .expect("script");
-
-    // prepare cell deps
-    let cell_deps: Vec<CellDep> = vec![lock_script_dep, hash_lock_cell_dep];
 
     // prepare cells
     let input_out_point = context.create_cell(
@@ -145,23 +99,17 @@ fn test_invalid_hash_lock() {
             .build(),
         Bytes::new(),
     );
-    let input = CellInput::new_builder()
+    let input: CellInput = CellInput::new_builder()
         .previous_output(input_out_point.clone())
         .build();
 
-    let outputs = vec![
-        CellOutput::new_builder()
-            .capacity(500u64.pack())
-            .lock(always_success_lock_script.clone())
-            .build(),
-        CellOutput::new_builder()
-            .capacity(500u64.pack())
-            .lock(always_success_lock_script)
-            .build(),
-    ];
+    let output = CellOutput::new_builder()
+        .capacity(900u64.pack())
+        .lock(hash_lock_script)
+        .build();
 
     // prepare output cell data
-    let outputs_data = vec![Bytes::from(""), Bytes::from("")];
+    let output_data = Bytes::from("");
 
     // prepare witness for hash_lock
     let invalid_preimage: Bytes = Bytes::from("this is invalid preimage");
@@ -170,14 +118,12 @@ fn test_invalid_hash_lock() {
 
     // build transaction
     let tx = TransactionBuilder::default()
-        .cell_deps(cell_deps)
         .input(input)
-        .outputs(outputs)
-        .outputs_data(outputs_data.pack())
+        .output(output)
+        .output_data(output_data.pack())
         .witness(witness.as_bytes().pack())
         .build();
-
-    let tx = tx.as_advanced_builder().build();
+    let tx = context.complete_tx(tx);
 
     // run
     let err = context.verify_tx(&tx, MAX_CYCLES).unwrap_err();

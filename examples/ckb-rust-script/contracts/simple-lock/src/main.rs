@@ -59,7 +59,7 @@ pub fn program_entry() -> i8 {
     }
 }
 
-pub fn check_hash() -> Result<(), Error> {
+fn check_hash() -> Result<(), Error> {
     let script = ckb_std::high_level::load_script()?;
     let expect_hash = script.args().raw_data().to_vec();
 
