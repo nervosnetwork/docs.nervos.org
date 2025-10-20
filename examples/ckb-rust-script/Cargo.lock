@@ -219,7 +219,7 @@ dependencies = [
  "ckb-crypto",
  "ckb-dao-utils",
  "ckb-error",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-jsonrpc-types",
  "ckb-logger",
  "ckb-pow",
@@ -347,7 +347,7 @@ dependencies = [
  "cfg-if",
  "ckb-error",
  "ckb-fixed-hash",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-occupied-capacity",
  "molecule",
  "numext-fixed-uint",
@@ -361,6 +361,15 @@ checksum = "93571b17af91fc16f03275bd70612e16092ad4d2e89eaed9cdf513cd3f1e20e7"
 dependencies = [
  "blake2b-ref",
  "blake2b-rs",
+]
+
+[[package]]
+name = "ckb-hash"
+version = "0.202.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0a74fb43c0f092a5ea388d31e4579cada2cc14e45dd5818b996f348613efe202"
+dependencies = [
+ "blake2b-ref",
 ]
 
 [[package]]
@@ -443,7 +452,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "656ce99ec57ed75be3d87800d747c15311a99acd24f8d332ecf9aad99dcd4fd0"
 dependencies = [
  "byteorder",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-types",
  "eaglesong",
  "log 0.4.27",
@@ -490,7 +499,7 @@ dependencies = [
  "byteorder",
  "ckb-chain-spec",
  "ckb-error",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-logger",
  "ckb-traits",
  "ckb-types",
@@ -533,7 +542,7 @@ dependencies = [
  "buddy-alloc",
  "cc",
  "ckb-gen-types",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-x64-simulator",
  "gcd",
  "log 0.4.27",
@@ -571,7 +580,7 @@ dependencies = [
  "ckb-chain-spec",
  "ckb-crypto",
  "ckb-error",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-jsonrpc-types",
  "ckb-mock-tx-types",
  "ckb-resource",
@@ -608,7 +617,7 @@ dependencies = [
  "ckb-error",
  "ckb-fixed-hash",
  "ckb-gen-types",
- "ckb-hash",
+ "ckb-hash 0.200.0",
  "ckb-merkle-mountain-range",
  "ckb-occupied-capacity",
  "ckb-rational",
@@ -1733,6 +1742,14 @@ name = "shlex"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
+
+[[package]]
+name = "simple-lock"
+version = "0.1.0"
+dependencies = [
+ "ckb-hash 0.202.0",
+ "ckb-std",
+]
 
 [[package]]
 name = "simple-print-args"
