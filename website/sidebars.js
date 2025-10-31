@@ -360,7 +360,11 @@ export default {
       label: "Ecosystem",
       className: "category-ecosystem",
       collapsible: false,
-      items: ["ecosystem/projects", "ecosystem/organizations"],
+      items: [
+        "ecosystem/projects",
+        "ecosystem/organizations",
+        "ecosystem/contribute",
+      ],
     },
     {
       type: "category",
