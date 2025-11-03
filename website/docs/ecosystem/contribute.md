@@ -19,7 +19,7 @@ If you’re new to blockchain, start by learning about [_How CKB Works_](https:/
 
 ## Become a Nervos Builder
 
-For experienced developers eager to get involved, we invite you to engage directly to our open-source projects.
+For experienced developers eager to get involved, we invite you to engage directly with our open-source projects.
 
 You’ll find several good first issues and ongoing development tasks across our repos:
 
