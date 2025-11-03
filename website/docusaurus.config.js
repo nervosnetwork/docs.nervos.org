@@ -291,6 +291,11 @@ const config = {
           className: "navbar-search",
         },
         {
+          to: "docs/ecosystem/contribute",
+          label: "Contribute",
+          position: "right",
+        },
+        {
           type: "html",
           position: "right",
           value:
