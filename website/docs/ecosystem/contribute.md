@@ -15,7 +15,7 @@ Our **Proof-of-Contribution (POC)** model lets both contributors and the team ev
 
 Your **open-source contributions are the pathway** to joining the Nervos ecosystem. Real contributions—no matter how small—are the best way to get noticed by the team.
 
-If you’re new to blockchain, start by learning about [_How CKB Works_](https://docs.nervos.org/docs/getting-started/how-ckb-works)
+If you’re new to blockchain, start by learning about [_How CKB Works_](https://docs.nervos.org/docs/getting-started/how-ckb-works).
 
 ## Become a Nervos Builder
 
