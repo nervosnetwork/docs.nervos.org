@@ -9,11 +9,11 @@ Join us in redefining a future where **trust is hardcoded into the digital world
 
 ## Proof-of-Contribution
 
-Instead of traditional hiring, Nervos is building its team through community contributions.
+Instead of traditional hiring, Nervos grows its ecosystem through community contributions.
 
-Our **Proof-of-Contribution (POC)** model lets both contributors and the team evaluate long-term compatibility through real projects.
+Our **Proof-of-Contribution (POC)** model lets both contributors and the ecosystem evaluate long-term compatibility through real projects.
 
-Your **open-source contributions are the pathway** to joining the Nervos ecosystem. Real contributions—no matter how small—are the best way to get noticed by the team.
+Your **open-source contributions are the pathway** to joining the Nervos ecosystem. Real contributions—no matter how small—are the best way to get noticed within the community.
 
 If you’re new to blockchain, start by learning about [_How CKB Works_](https://docs.nervos.org/docs/getting-started/how-ckb-works).
 
