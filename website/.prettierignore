@@ -20,6 +20,7 @@ yarn.lock
 *.jpeg
 *.gif
 *.webp
+*.mp4
 
 # Ignore specific directories
 # since it has a bug for mdx tsx code block
