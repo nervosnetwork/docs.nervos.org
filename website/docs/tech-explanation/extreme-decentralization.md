@@ -23,13 +23,13 @@ This philosophy dictates a clear division of labor, ensuring every point on the 
 - **Layer 1 (CKB):** Focuses exclusively on being the ultimate guardian of value. Its design prioritizes maximum decentralization, security, and censorship resistance—the original spirit of crypto—above all else.
 - **Layer 2 & Ecosystem:** Focuses on scalability, high performance, the developer and user experience necessary for mass adoption, free from the burden of base-layer consensus trade-offs.
 
-It is not only about code, but also for operational decisions. For example, the CKB team might deliberately reject providing centralized conveniences, such as a default, productional RPC service (similar to Infura in Ethereum). While such a service would offer a shortcut for developers, it introduces a central point of failure. Note that the [public RPC service](/docs/getting-started/rpcs) that CKB team provide is only for testing purpose, it is strongly recommended to run your own RPC service for your dApp. By refusing to encroach on the "service layer," CKB forces the ecosystem to build its own robust, distributed access layers, ensuring the foundation remains a neutral, decentralized settlement platform.
+It is not only about code, but also for operational decisions. For example, the CKB team might deliberately reject providing centralized conveniences, such as a default, production RPC service (similar to Infura in Ethereum). While such a service would offer a shortcut for developers, it introduces a central point of failure. Note that the [public RPC service](/docs/getting-started/rpcs) that CKB team provide is only for testing purpose, it is strongly recommended to run your own RPC service for your dApp. By refusing to encroach on the "service layer," CKB forces the ecosystem to build its own robust, distributed access layers, ensuring the foundation remains a neutral, decentralized settlement platform.
 
 ## How to Achieve Extreme Decentralization
 
 Decentralization is not just about who _mines_ the next block; it is about who can _verify_ the history. If running a node becomes too expensive due to data bloat, the network centralizes into a few server farms regardless of its consensus algorithm.
 
-CKB ensures this never happens through three radical approaches: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client** with a engineer effort on building nodes that lowers the entry barrier for participants.
+CKB ensures this never happens through three radical approaches: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client** with an engineering effort on building nodes that lowers the entry barrier for participants.
 
 ### 1. Sustainable State Management
 
