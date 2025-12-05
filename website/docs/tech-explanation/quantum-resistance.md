@@ -36,7 +36,7 @@ The network does not fork. Old addresses continue to function. The upgrade is pe
 
 ### The Data Size Limitation
 
-Even if a other blockchains successfully coordinates a hard fork, it still faces a physical limit: **Data Size**. Quantum-resistant signatures are orders of magnitude larger than classical ones.
+Even if other blockchains successfully coordinate a hard fork, they still face a physical limit: **Data Size**. Quantum-resistant signatures are orders of magnitude larger than classical ones.
 
 - **Secp256k1 (Bitcoin/ETH):** ~64 bytes
 - **ML-DSA (Dilithium):** ~2.5 KB (~40x larger)
@@ -44,7 +44,7 @@ Even if a other blockchains successfully coordinates a hard fork, it still faces
 
 Take Bitcoin as an [example](https://x.com/bensig/status/1985426927893823667), a simple consolidation of 100 UTXOs using ML-DSA signatures could result in a **250KB+ transaction**, potentially costing hundreds of thousands of dollars in fees during peak congestion.
 
-CKB doesn't face such a problem, since the verification of signatures is done by separting the rule(Lock Script) from the proof(Witness). There are also mechanisms that grouping the same Lock Scripts so multiple inputs can share one signature in the transaction Witnesses. That makes moving 100 Cells with SPHINCS+ signatures as simple as moving 1 Cell with SPHINCS+ signature. You can learn more about this in [Script Group Execution](/docs/tech-explanation/script-group-exe) and [Witness](/docs/tech-explanation/witness).
+CKB doesn't face such a problem, since the verification of signatures is done by separting the rule(Lock Script) from the proof(Witness). There are also mechanisms for grouping the same Lock Scripts so multiple inputs can share one signature in the transaction Witnesses. That makes moving 100 Cells with SPHINCS+ signatures as simple as moving 1 Cell with SPHINCS+ signature. You can learn more about this in [Script Group Execution](/docs/tech-explanation/script-group-exe) and [Witness](/docs/tech-explanation/witness).
 
 ## What CKB has achieved
 
@@ -94,7 +94,7 @@ Since the SPHINCS+ Lock Script is a production-ready implementation, there are a
 
 - [Quantum-Purse](https://github.com/tea2x/quantum-purse) - A CKB quantum-safe & lightweight wallet from community
 
-We are looking forward to more SPHINCS+ based applications and tools arised in the CKB community.
+We are looking forward to more SPHINCS+ based applications and tools arisen in the CKB community.
 
 ## Summary
 
