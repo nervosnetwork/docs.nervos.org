@@ -263,6 +263,17 @@ export default {
   "Tech Explanation": [
     {
       type: "category",
+      label: "What makes CKB unique",
+      className: "category-ckb-features",
+      collapsible: false,
+      items: [
+        "tech-explanation/extreme-decentralization",
+        "tech-explanation/native-quantum-resistance",
+        "tech-explanation/vm-built-for-hackers",
+      ],
+    },
+    {
+      type: "category",
       label: "CKB Fundamentals",
       className: "category-ckb-fundamentals",
       collapsible: false,
