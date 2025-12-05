@@ -1,0 +1,91 @@
+---
+id: extreme-decentralization
+title: Extreme Decentralization
+---
+
+Decentralization is the core value proposition of public blockchains. It ensures censorship resistance, permissionless access, and security without relying on trusted intermediaries. CKB (The layer 1 protocol) is designed from the ground up to make sure this core value is not compromised.
+
+## Decoupling: Our Approach to True Decentralization
+
+To achieve true decentralization, we must abandon the view of a blockchain as a monolithic, "do-it-all" platform. If a single blockchain layer tries to be everything to everyone—fast for users, easy for developers, and secure for the network—it inevitably creates conflicting incentives. High throughput demands often override verification needs, and the push for seamless developer experiences frequently introduces centralized dependencies.
+
+Nervos CKB addresses this by decoupling concerns across a multi-layered architecture, viewing the blockchain landscape as a continuous spectrum:
+
+- **The Far Left:** Extreme decentralization, lowest-threshold verification, and uncompromised security.
+- **The Far Right:** Developer experience, high throughput, the middleware and centralized services needed for mass adoption.
+
+### The Last Line of Defense
+
+The CKB team consciously positions the Layer 1 protocol at the **absolute left-most edge** of this spectrum. By holding this ground, Layer 1 acts as the immutable trust anchor and the **last line of defense** for the entire network. If the CKB team were to compromise here for the sake of usability or speed, the security of the entire structure would crumble.
+
+This philosophy dictates a clear division of labor, ensuring every point on the spectrum receives dedicated effort from the actors best suited for it:
+
+- **Layer 1 (CKB):** Focuses exclusively on being the ultimate guardian of value. Its design prioritizes maximum decentralization, security, and censorship resistance—the original spirit of crypto—above all else.
+- **Layer 2 & Ecosystem:** Focuses on scalability, high performance, the developer and user experience necessary for mass adoption, free from the burden of base-layer consensus trade-offs.
+
+It is not only about code, but also for operational decisions. For example, the CKB team might deliberately reject providing centralized conveniences, such as a default, productional RPC service (similar to Infura in Ethereum). While such a service would offer a shortcut for developers, it introduces a central point of failure. Note that the [public RPC service](/docs/getting-started/rpcs) that CKB team provide is only for testing purpose, it is strongly recommended to run your own RPC service for your dApp. By refusing to encroach on the "service layer," CKB forces the ecosystem to build its own robust, distributed access layers, ensuring the foundation remains a neutral, decentralized settlement platform.
+
+## How to Achieve Extreme Decentralization
+
+Decentralization is not just about who _mines_ the next block; it is about who can _verify_ the history. If running a node becomes too expensive due to data bloat, the network centralizes into a few server farms regardless of its consensus algorithm.
+
+CKB ensures this never happens through three radical approaches: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client** with a engineer effort on building nodes that lowers the entry barrier for participants.
+
+### 1. Sustainable State Management
+
+Most blockchains operate as "General Computation Networks" (like a world computer). Users pay a one-time fee to execute a transaction, but the resulting data (state) occupies the network's storage forever at no further cost. This leads to the **"Tragedy of the Commons"**: because storage is effectively free, the state grows indefinitely ([State Explosion](https://medium.com/nervosnetwork/state-explosion-and-the-tragedy-of-the-blockchain-commons-1fbd4837e859)). Eventually, only enterprise-grade hardware can store the chain, forcing regular users to trust third parties.
+
+CKB adopts a "General Verification Network" architecture based on [Cell Model](/docs/tech-explanation/cell-model). The **Common Knowledge Base** acts as a verified state layer rather than a computation layer. To maintain "Extreme Decentralization," CKB creates a direct economic link between state and scarcity:
+
+- **State as a Scarce Resource:** In CKB, state is not an afterthought; it is the physical "land" of the blockchain.
+- **The CKB = Byte Equation:** The native token (CKB) represents **state capacity**. Holding 1 CKB entitles you to store 1 byte of data on the blockchain.
+- **Targeted Inflation (State Rent):** To occupy space on the Global State, users must lock CKB tokens. This incurs an opportunity cost (via secondary issuance inflation), effectively acting as a "State Rent." This forces developers and users to be efficient—they only store what is truly valuable.
+
+**Why this guarantees decentralization:**
+
+By economically constraining the growth of the state, CKB ensures that the hardware requirements for running a full node remain low and predictable over decades. This allows users to run nodes on consumer hardware, preserving the network's permissionless nature.
+
+Moving computation off-chain also reduces the burden on full nodes. They only need to verify the result, which is typically much faster than executing the computation itself.
+
+### 2. Proof-of-Work (PoW) over Proof-of-Stake (PoS)
+
+CKB utilizes **NC-Max** (a variant of Nakamoto Consensus) with a custom hash function, **Eaglesong**. While many modern blockchains have shifted to Proof-of-Stake (PoS), CKB adheres to PoW for specific reasons regarding decentralization:
+
+1.  **Permissionless Participation:** In PoW, anyone with hardware and electricity can participate. There is no need to buy tokens from existing holders to become a validator, avoiding the "rich get richer" centralization loop often criticized in PoS.
+2.  **Objective Security:** PoW provides an objective measure of the chain's security (accumulated work). A new node can independently verify the valid chain with the most work without trusting any peers or checkpoints.
+3.  **Cost of Attack:** Attacking a PoW network requires tangible external resources (energy and hardware), whereas attacking a PoS network involves internal resources (staked tokens).
+
+### 3. Viable Light Client
+
+True decentralization requires that users can verify the state of the blockchain themselves rather than relying on trusted third-party RPC nodes (like Infura or Alchemy). If a user relies on a server to tell them their balance, they are not using a blockchain; they are using a bank.
+
+However, running a full node (downloading terabytes of history) is impossible for mobile and web users. CKB solves this with a next-generation **Light Client** protocol that brings full-node-level security to consumer devices.
+
+#### The FlyClient Protocol & MMR
+
+Unlike traditional SPV (Simplified Payment Verification) clients that must download linearly increasing amounts of headers, CKB implements the **FlyClient** protocol.
+
+- **Logarithmic Scaling:** Instead of downloading every block header, the client uses a probabilistic sampling technique. It downloads only a logarithmic number of block headers to statistically verify the Proof-of-Work with overwhelming certainty.
+- **Merkle Mountain Ranges (MMR):** CKB blocks include an MMR root in their headers. This cryptographic structure allows the light client to prove that any specific block is part of the valid chain history without storing the history itself.
+- **Result:** A user can sync the chain in seconds with minimal bandwidth, regardless of how long the blockchain becomes.
+
+#### WASM & In-Browser Verification
+
+The most radical feature of the CKB Light Client is its portability. The CKB team has compiled the light client into **WebAssembly (WASM)**, enabling it to run in environments previously thought impossible for blockchain nodes.
+
+- **No Installation Required:** The light client can be embedded directly into a web wallet or dApp. When a user visits a website, the browser _becomes_ a node.
+- **Trustless Interaction:** The dApp does not ask a server "What is my balance?" or "Did this trade settle?" Instead, the browser connects directly to the P2P network, samples headers, and mathematically verifies the data locally.
+- **Mobile Ready:** Because it requires minimal storage (storing only a single block header between executions) and low CPU usage, it runs efficiently on mobile devices without draining battery.
+
+#### Privacy and Sovereignty
+
+The CKB Light Client protocol allows the client to request specific transaction data and state (Cells) related _only_ to the user.
+
+- **Data Minimization:** The client filters data at the network level. If you own 5 UTXOs (Cells), your device only fetches and verifies the proofs for those 5 items, ignoring the rest of the global state.
+- **Censorship Resistance:** Because the client connects to a randomized mesh of peers rather than a single RPC endpoint, it is extremely difficult for any single entity to block the user's access to the network.
+
+By embedding the verification layer directly into the user's application, CKB closes the final gap in decentralization: **The user is not just a customer of the network; the user _is_ the network.**
+
+## Summary
+
+This completes the picture of "Extreme Decentralization" on CKB: a system where users own their state(Cell Model), participate permissionlessly (PoW), compute locally (Verification Network), and verify independently (Light Client).
