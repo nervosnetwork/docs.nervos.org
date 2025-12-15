@@ -255,45 +255,181 @@ const config = {
       },
       items: [
         {
-          to: "/docs/getting-started/how-ckb-works",
-          label: "Getting Started",
+          type: "custom-megaMenu",
+          label: "Build",
           position: "left",
+          menuId: "build",
           activeBaseRegex:
-            "/(getting-started|how-tos|serialization|integrate-wallets|dapp|sdk-and-devtool)/",
+            "/(getting-started|dapp|script|how-tos|integrate-wallets|sdk-and-devtool|serialization)/",
+          primaryItems: [
+            {
+              title: "Getting Started",
+              description: "Basics for onboarding to CKB",
+              href: "/docs/getting-started/how-ckb-works",
+              icon: "squareRocket",
+              activeBaseRegex: "/getting-started/",
+            },
+            {
+              title: "DApp Tutorials",
+              description: "Step-by-step examples for building on CKB",
+              href: "/docs/dapp/transfer-ckb",
+              icon: "squareDapp",
+              activeBaseRegex: "/dapp/",
+            },
+            {
+              title: "Script Development",
+              description: "Implement smart-contract logic on CKB",
+              href: "/docs/script/intro-to-script",
+              icon: "squareScript",
+              activeBaseRegex: "/(script|ecosystem-scripts|script-course)/",
+            },
+          ],
+
+          otherLabel: "OTHER",
+          otherItems: [
+            {
+              title: "How-Tos",
+              href: "/docs/how-tos/how-to-sign-a-tx",
+              icon: "howto",
+              activeBaseRegex: "/how-tos/",
+            },
+            {
+              title: "Integrate Wallets",
+              href: "/docs/integrate-wallets/intro-to-wallets",
+              icon: "wallet",
+              activeBaseRegex: "/integrate-wallets/",
+            },
+            {
+              title: "SDK & Dev Tools",
+              href: "/docs/sdk-and-devtool/devtool",
+              icon: "tool",
+              activeBaseRegex: "/sdk-and-devtool/",
+            },
+            {
+              title: "Serialization (Molecule)",
+              href: "/docs/serialization/serialization-molecule-in-ckb",
+              icon: "molecule",
+              activeBaseRegex: "/serialization/",
+            },
+          ],
         },
         {
-          to: "/docs/script/intro-to-script",
-          label: "Scripts (Smart Contracts)",
+          type: "custom-megaMenu",
+          label: "Learn",
           position: "left",
-          activeBaseRegex: "/(script|ecosystem-scripts|script-course)/",
-        },
-        {
-          to: "/docs/tech-explanation/nervos-blockchain",
-          label: "Tech Explanation",
-          position: "left",
+          menuId: "learn",
           activeBaseRegex: "/(tech-explanation)/",
+          primaryItems: [
+            {
+              title: "What Makes CKB Unique",
+              description: "Design choices behind CKB",
+              href: "/docs/tech-explanation/nervos-blockchain",
+              icon: "squareFeature",
+            },
+            {
+              title: "CKB Fundamentals",
+              description: "Step-by-step examples for building on CKB",
+              href: "/docs/tech-explanation/nervos-blockchain",
+              icon: "squareConcept",
+            },
+            {
+              title: "Core Structures",
+              description: "Implement smart-contract logic on CKB",
+              href: "/docs/tech-explanation/cell",
+              icon: "squareStructure",
+            },
+          ],
+
+          otherLabel: "OTHER",
+          otherItems: [
+            {
+              title: "Assets & Token Standards",
+              href: "/docs/tech-explanation/assets-overview",
+              icon: "token",
+              activeBaseRegex: "/tech-explanation/(assets)",
+            },
+            {
+              title: "Glossary",
+              href: "/docs/tech-explanation/glossary",
+              icon: "resource",
+              activeBaseRegex: "/tech-explanation/glossary",
+            },
+          ],
         },
         {
-          to: "/docs/node/node-overview",
-          label: "Nodes & Mining",
+          type: "custom-megaMenu",
+          label: "Network",
           position: "left",
-          activeBaseRegex: "/(node|mining)/",
+          menuId: "network",
+          activeBaseRegex: "/(node)/(mining)",
+          primaryItems: [
+            {
+              title: "Run a Node",
+              description: "Design choices behind CKB",
+              href: "/docs/node/node-overview",
+              icon: "squareNodes",
+              activeBaseRegex: "/node/",
+            },
+            {
+              title: "Mining",
+              description: "Step-by-step examples for building on CKB",
+              href: "/docs/mining/guide",
+              icon: "squareMine",
+              activeBaseRegex: "/mining/",
+            },
+          ],
         },
         {
-          to: "/docs/ecosystem/projects",
-          label: "Ecosystem",
+          type: "custom-megaMenu",
+          label: "Community",
           position: "left",
-          activeBaseRegex: "/(ecosystem|history-and-hard-forks)/",
+          menuId: "community",
+          activeBaseRegex: "/(ecosystem)/(history-and-hard-forks)",
+          primaryItems: [
+            {
+              title: "Projects",
+              description:
+                "Applications, tools, and initiatives in the ecosystem",
+              href: "/docs/ecosystem/projects",
+              icon: "squareProject",
+              activeBaseRegex: "/ecosystem/projects",
+            },
+            {
+              title: "History & Hard Forks",
+              description: "Timeline and evolution of the CKB network",
+              href: "/docs/history-and-hard-forks/intro-to-hard-fork",
+              icon: "squareHistory",
+              activeBaseRegex: "/history-and-hard-forks/",
+            },
+            {
+              title: "Resources",
+              description: "Docs, guides, and external knowledge sources",
+              href: "/docs/history-and-hard-fork/intro-to-hardfork",
+              icon: "squareResource",
+              activeBaseRegex: "/history-and-hard-fork/",
+            },
+          ],
+          otherLabel: "OTHER",
+          otherItems: [
+            {
+              title: "Organizations",
+              href: "/docs/ecosystem/organizations",
+              icon: "organization",
+              activeBaseRegex: "/ecosystem/organizations",
+            },
+            {
+              title: "Contribute",
+              href: "/docs/ecosystem/contribute",
+              icon: "contribution",
+              activeBaseRegex: "/ecosystem/contribute",
+            },
+          ],
         },
+
         {
           type: "search",
           position: "right",
           className: "navbar-search",
-        },
-        {
-          to: "docs/ecosystem/contribute",
-          label: "Contribute",
-          position: "right",
         },
         {
           type: "html",
