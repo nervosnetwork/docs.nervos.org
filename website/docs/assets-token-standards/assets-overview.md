@@ -3,7 +3,7 @@ id: assets-overview
 title: Assets & Token Standards on Nervos
 ---
 
-Nervos CKB uses [Cell Model](/docs/tech-explanation/cell-model), an evolution of Bitcoin’s UTXO model, where all digital assets (fungible, non-fungible tokens, collectibles) are represented as immutable Cells exclusively owned by users. Each Cell contains ownership rules enforced by [Scripts](/docs/tech-explanation/script), ensuring that assets comply with protocol rules during transactions while remaining under the sole control of their owners.
+Nervos CKB uses [Cell Model](/docs/ckb-fundamentals/cell-model), an evolution of Bitcoin’s UTXO model, where all digital assets (fungible, non-fungible tokens, collectibles) are represented as immutable Cells exclusively owned by users. Each Cell contains ownership rules enforced by [Scripts](/docs/tech-explanation/script), ensuring that assets comply with protocol rules during transactions while remaining under the sole control of their owners.
 
 ## What Counts as an On-Chain Asset?
 

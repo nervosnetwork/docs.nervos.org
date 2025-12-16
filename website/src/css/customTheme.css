@@ -37,6 +37,7 @@
   /* Sidebar */
   --doc-sidebar-width: 260px !important;
   --ifm-sidebar-border-color: var(--border-subtle);
+  --ifm-navbar-sidebar-width: 100vw;
 
   /* DocSearch for algolia*/
   --docsearch-modal-background: var(--surface-03) !important;
@@ -84,6 +85,9 @@ ul.dropdown__menu {
 }
 
 @media (max-width: 1280px) {
+  .navbar {
+    padding: 0 1rem;
+  }
   .navbar__item {
     display: none;
   }

@@ -319,27 +319,28 @@ const config = {
           position: "left",
           menuId: "learn",
           activeBaseRegex:
-            "/(tech-explanation|ckb-features|assets-token-standards)/",
+            "/(tech-explanation|ckb-fundamentals|ckb-features|assets-token-standards)/",
           primaryItems: [
             {
               title: "What Makes CKB Unique",
               description: "Design choices behind CKB",
               href: "/docs/ckb-features/extreme-decentralization",
               icon: "squareFeature",
+              activeBaseRegex: "/ckb-features/",
             },
             {
               title: "CKB Fundamentals",
               description: "Core concepts of how CKB works",
-              href: "/docs/tech-explanation/nervos-blockchain",
+              href: "/docs/ckb-fundamentals/nervos-blockchain",
               icon: "squareConcept",
+              activeBaseRegex: "/ckb-fundamentals/",
             },
             {
               title: "Core Structures",
               description: "Detailed breakdown of core components",
               href: "/docs/tech-explanation/cell",
               icon: "squareStructure",
-              activeBaseRegex:
-                "/tech-explanation/(cell|script|transaction|block)",
+              activeBaseRegex: "^.*tech-explanation(?!/glossary)",
             },
           ],
 
@@ -404,13 +405,7 @@ const config = {
               icon: "squareHistory",
               activeBaseRegex: "/history-and-hard-forks/",
             },
-            {
-              title: "Resources",
-              description: "Docs, guides, and external knowledge sources",
-              href: "/docs/history-and-hard-fork/intro-to-hardfork",
-              icon: "squareResource",
-              activeBaseRegex: "/history-and-hard-fork/",
-            },
+            // TODO: Add Resources
           ],
           otherLabel: "OTHER",
           otherItems: [

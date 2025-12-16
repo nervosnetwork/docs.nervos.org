@@ -35,7 +35,7 @@ CKB addresses this challenge through three radical design choices: **Sustainable
 
 Most blockchains operate as "General Computation Networks" (like a world computer). Users pay a one-time fee to execute a transaction, but the resulting data (state) occupies the network's storage forever at no further cost. This leads to the **"Tragedy of the Commons"**: because storage is effectively free, the state grows indefinitely ([State Explosion](https://medium.com/nervosnetwork/state-explosion-and-the-tragedy-of-the-blockchain-commons-1fbd4837e859)). Eventually, only enterprise-grade hardware can store the chain, forcing regular users to trust third parties.
 
-CKB takes a different approach. It adopts a "General Verification Network" architecture built on the [Cell Model](/docs/tech-explanation/cell-model), where on-chain storage is treated as a scarce resource rather than free space.
+CKB takes a different approach. It adopts a "General Verification Network" architecture built on the [Cell Model](/docs/ckb-fundamentals/cell-model), where on-chain storage is treated as a scarce resource rather than free space.
 
 - **State as a Scarce Resource:** On-chain state is modeled as a finite resource that must be explicitly accounted for.
 - **1 CKB = 1 Byte of Storage:** The native token, CKB, represents state capacity; holding 1 CKB entitles the holder to store 1 byte of data on the blockchain.
