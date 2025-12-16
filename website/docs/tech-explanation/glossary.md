@@ -2817,7 +2817,7 @@ A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomor
 #### See Also
 
 - [RGB](https://rgb.tech/)
-- [RGB++ Protocol](/docs/tech-explanation/rgbpp)
+- [RGB++ Protocol](/docs/assets-token-standards/rgbpp)
 
 ### RISC-V
 

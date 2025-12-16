@@ -161,7 +161,7 @@ const config = {
           },
           {
             from: "/docs/basics/concepts/economics",
-            to: "/docs/tech-explanation/economics",
+            to: "/docs/assets-token-standards/economics",
           },
           {
             from: "/docs/basics/glossary/",
@@ -318,25 +318,28 @@ const config = {
           label: "Learn",
           position: "left",
           menuId: "learn",
-          activeBaseRegex: "/(tech-explanation)/",
+          activeBaseRegex:
+            "/(tech-explanation|ckb-features|assets-token-standards)/",
           primaryItems: [
             {
               title: "What Makes CKB Unique",
               description: "Design choices behind CKB",
-              href: "/docs/tech-explanation/nervos-blockchain",
+              href: "/docs/ckb-features/extreme-decentralization",
               icon: "squareFeature",
             },
             {
               title: "CKB Fundamentals",
-              description: "Step-by-step examples for building on CKB",
+              description: "Core concepts of how CKB works",
               href: "/docs/tech-explanation/nervos-blockchain",
               icon: "squareConcept",
             },
             {
               title: "Core Structures",
-              description: "Implement smart-contract logic on CKB",
+              description: "Detailed breakdown of core components",
               href: "/docs/tech-explanation/cell",
               icon: "squareStructure",
+              activeBaseRegex:
+                "/tech-explanation/(cell|script|transaction|block)",
             },
           ],
 
@@ -344,9 +347,9 @@ const config = {
           otherItems: [
             {
               title: "Assets & Token Standards",
-              href: "/docs/tech-explanation/assets-overview",
+              href: "/docs/assets-token-standards/assets-overview",
               icon: "token",
-              activeBaseRegex: "/tech-explanation/(assets)",
+              activeBaseRegex: "/assets-token-standards/",
             },
             {
               title: "Glossary",
@@ -361,18 +364,18 @@ const config = {
           label: "Network",
           position: "left",
           menuId: "network",
-          activeBaseRegex: "/(node)/(mining)",
+          activeBaseRegex: "/(node|mining)/",
           primaryItems: [
             {
               title: "Run a Node",
-              description: "Design choices behind CKB",
+              description: "Install, configure, and operate CKB nodes",
               href: "/docs/node/node-overview",
               icon: "squareNodes",
               activeBaseRegex: "/node/",
             },
             {
               title: "Mining",
-              description: "Step-by-step examples for building on CKB",
+              description: "Mining mechanics, tools, and rewards",
               href: "/docs/mining/guide",
               icon: "squareMine",
               activeBaseRegex: "/mining/",

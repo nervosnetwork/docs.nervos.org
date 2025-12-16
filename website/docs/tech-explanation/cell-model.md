@@ -23,7 +23,7 @@ Transactions reflect the state change of Cells, where a group of Live Cells are 
 
 In Cell Model, all digital assets (e.g., CKBytes, tokens, collectibles) are considered first-class, exclusively owned by their respective owners. While assets must comply with smart contracts rules during transactions, they are inherently owned by the user, not the smart contracts. This ownership structure ensures that only the owner has permission to use the assets, regardless of how the smart contract defines the token. If a contract exploit, attackers would be unable to access the asset, as it remains under the user's control, effectively mitigating the negative impact.
 
-This ownership structure also defines the responsibility for asset upkeep. As assets occupy space on Nervos, the owner are subject to a small recurring upkeep fee, known as **state rent,** which is elaborated in the [Tokenomics](/docs/tech-explanation/economics) section.
+This ownership structure also defines the responsibility for asset upkeep. As assets occupy space on Nervos, the owner are subject to a small recurring upkeep fee, known as **state rent,** which is elaborated in the [Tokenomics](/docs/assets-token-standards/economics) section.
 
 ## Flexible Transaction Fee Coverage
 

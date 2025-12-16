@@ -299,6 +299,9 @@ export default {
       label: "What makes CKB unique",
       className: "category-ckb-features",
       collapsible: false,
+      customProps: {
+        icon: "feature",
+      },
       items: [
         "ckb-features/extreme-decentralization",
         "ckb-features/native-quantum-resistance",
@@ -390,22 +393,6 @@ export default {
     },
     {
       type: "category",
-      label: "Assets & Token Standards",
-      className: "category-token-standards",
-      collapsible: false,
-      customProps: {
-        icon: "token",
-      },
-      items: [
-        "tech-explanation/assets-overview",
-        "tech-explanation/economics",
-        "tech-explanation/xudt",
-        "tech-explanation/spore-protocol",
-        "tech-explanation/rgbpp",
-      ],
-    },
-    {
-      type: "category",
       label: "Resources",
       className: "category-resources",
       collapsible: false,
@@ -413,6 +400,24 @@ export default {
         icon: "resource",
       },
       items: ["tech-explanation/glossary"],
+    },
+  ],
+  "Assets & Token": [
+    {
+      type: "category",
+      label: "Assets & Token Standards",
+      className: "category-token-standards",
+      collapsible: false,
+      customProps: {
+        icon: "token",
+      },
+      items: [
+        "assets-token-standards/assets-overview",
+        "assets-token-standards/economics",
+        "assets-token-standards/xudt",
+        "assets-token-standards/spore-protocol",
+        "assets-token-standards/rgbpp",
+      ],
     },
   ],
   Ecosystem: [

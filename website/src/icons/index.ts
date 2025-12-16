@@ -20,6 +20,7 @@ import Contribution from "/svg/icon-sidebar-contribution.svg";
 import Rust from "/svg/icon-sidebar-rust.svg";
 import JS from "/svg/icon-sidebar-js.svg";
 import Organization from "/svg/icon-sidebar-organization.svg";
+import Feature from "/svg/icon-sidebar-feature.svg";
 import SquareRocket from "/svg/square-rocket.svg";
 import SquareDapp from "/svg/square-dapp.svg";
 import SquareScript from "/svg/square-script.svg";
@@ -55,6 +56,7 @@ export const sidebarIconMap = {
   rust: Rust,
   js: JS,
   organization: Organization,
+  feature: Feature,
   squareRocket: SquareRocket,
   squareDapp: SquareDapp,
   squareScript: SquareScript,
