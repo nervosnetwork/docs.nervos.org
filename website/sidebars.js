@@ -267,9 +267,9 @@ export default {
       className: "category-ckb-features",
       collapsible: false,
       items: [
-        "tech-explanation/extreme-decentralization",
-        "tech-explanation/native-quantum-resistance",
-        "tech-explanation/vm-built-for-hackers",
+        "ckb-features/extreme-decentralization",
+        "ckb-features/native-quantum-resistance",
+        "ckb-features/vm-built-for-hackers",
       ],
     },
     {

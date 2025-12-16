@@ -1,28 +1,31 @@
 import { useEffect } from "react";
 import LogRocket from "logrocket";
 import Layout from "@theme/Layout";
+import clsx from "clsx";
+import { useColorMode } from "@docusaurus/theme-common";
+
 import styles from "./styles.module.css";
 import CardLayout from "../components/CardLayout";
-import clsx from "clsx";
+import CookieConsent from "../components/CookieConsent";
+
 import {
   HomeCardSection,
+  DAppSection,
+  UniqueCardSection,
   WalletDisplay,
   ToolDisplay,
+  ProjectDisplay,
   DevLogSection,
   HistorySection,
-  ProjectDisplay,
-  FooterSection,
   CTASection,
-  DAppSection,
+  FooterSection,
 } from "../components/Home";
-import { useColorMode } from "@docusaurus/theme-common";
-import CookieConsent from "../components/CookieConsent";
 
 export default function Home() {
   useEffect(() => {
-    // Initialize LogRocket
     LogRocket.init("ghkibu/nervos-doc");
   }, []);
+
   return (
     <Layout
       wrapperClassName={clsx(styles.homeLayout, styles.relative)}
@@ -31,73 +34,118 @@ export default function Home() {
     >
       <img
         className={styles.headerGlow}
-        src={"/svg/header-glow.svg"}
-        alt={"glowing effect"}
+        src="/svg/header-glow.svg"
+        alt="glowing effect"
       />
-      <SwitchToDark />
+
+      <ForceDarkMode />
       <CookieConsent />
-      <div className={clsx(styles.sectionContainer)}>
-        <div className={styles.header1}>Nervos CKB Documentation</div>
-        <div className={clsx(styles.description, styles.titleBtm)}>
+
+      <Section>
+        <h1 className={styles.header1}>Nervos CKB Documentation</h1>
+        <p className={clsx(styles.description, styles.titleBtm)}>
           Discover the power of Nervos CKB through tutorials, guides, and
           concepts
-        </div>
+        </p>
         <HomeCardSection />
-      </div>
-      <div className={styles.sectionContainer}>
-        <DAppSection />
-      </div>
+      </Section>
 
-      <div
-        className={clsx(styles.sectionContainer, styles.relative, styles.ecoBG)}
-      >
-        <div className={styles.header2}>
+      <Section>
+        <DAppSection />
+      </Section>
+
+      <Section>
+        <UniqueHeader />
+        <UniqueCardSection />
+      </Section>
+
+      <Section className={clsx(styles.relative, styles.ecoBG)}>
+        <h2 className={styles.header2}>
           Explore <span className={styles.textHighlight}>Ecosystem</span>
-        </div>
-        <div className={clsx(styles.description, styles.titleBtm)}>
+        </h2>
+        <p className={clsx(styles.description, styles.titleBtm)}>
           Explore our curated selection of featured tools and resources designed
           to empower your development on Nervos CKB
-        </div>
+        </p>
+
         <CardLayout gap={40} colNum={[2, 1, 1, 1]}>
           <WalletDisplay />
           <ToolDisplay />
         </CardLayout>
-        <ProjectDisplay />
-      </div>
 
-      <div
-        className={clsx(
-          styles.sectionContainer,
-          styles.relative,
-          styles.updateBG
-        )}
-      >
-        <div className={clsx(styles.header2, styles.titleBtm)}>
+        <ProjectDisplay />
+      </Section>
+
+      <Section className={clsx(styles.relative, styles.updateBG)}>
+        <h2 className={clsx(styles.header2, styles.titleBtm)}>
           Unveil{" "}
           <span className={styles.textHighlight}>Updates and Evolution</span>
-        </div>
+        </h2>
         <DevLogSection />
-        <div className={styles.titleBtm}></div>
         <HistorySection />
-      </div>
-      <div className={styles.sectionContainer}>
-        <div className={styles.header2}>Ready to Dive In?</div>
-        <div className={clsx(styles.description, styles.titleBtm)}>
+      </Section>
+
+      <Section>
+        <h2 className={styles.header2}>Ready to Dive In?</h2>
+        <p className={clsx(styles.description, styles.titleBtm)}>
           Whether you&apos;re curious about how CKB works or eager to jump
           straight into building, we&apos;ve got you covered.
-        </div>
+        </p>
         <CTASection />
-      </div>
+      </Section>
+
       <FooterSection />
     </Layout>
   );
 }
 
-function SwitchToDark() {
+function Section({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={clsx(styles.sectionContainer, className)}>{children}</div>
+  );
+}
+
+function UniqueHeader() {
+  return (
+    <div className={styles.uniqueHeader}>
+      <h2
+        className={clsx(
+          styles.header2,
+          styles.textLeftAlign,
+          styles.noTop,
+          styles.uniqueMaxWidth
+        )}
+      >
+        What Makes CKB
+        <span className={styles.textHighlight}> Unique</span>
+      </h2>
+
+      <p
+        className={clsx(
+          styles.description,
+          styles.textLeftAlign,
+          styles.uniqueMaxWidth
+        )}
+      >
+        CKB combines PoW security, quantum-resistant cryptography, and a RISC-V
+        VM—built for long-term, verifiable applications
+      </p>
+    </div>
+  );
+}
+
+function ForceDarkMode() {
   const { setColorMode } = useColorMode();
 
   useEffect(() => {
     setColorMode("dark");
-  }, []);
+  }, [setColorMode]);
+
   return null;
 }
