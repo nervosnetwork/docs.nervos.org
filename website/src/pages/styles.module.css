@@ -1,28 +1,42 @@
 @import "@css/customVariables.css";
 
-/* General styling */
 .homeLayout {
   width: 100%;
   background: url("/svg/header-bg.svg") no-repeat top center;
   background-color: var(--dark-surface-01) !important;
 }
+
+.relative {
+  position: relative;
+}
+
 .headerGlow {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 0;
 }
-.relative {
-  position: relative;
+
+.sectionContainer {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto 10rem;
+  padding: 0 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 .header1 {
   font-size: 3.5em;
   margin: 7.5rem 0 1.25rem;
 }
+
 .header2 {
   font-size: 3em;
   margin: 8.75rem 0 1.25rem;
 }
+
 .header1,
 .header2 {
   font-family: "Poppins-Bold", sans-serif;
@@ -30,38 +44,56 @@
   text-align: center;
   color: var(--dark-text-primary);
 }
+
+.noTop {
+  margin-top: 0;
+}
+
 .description {
   text-align: center;
   color: var(--dark-text-secondary);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
+
 .titleBtm {
   margin-bottom: 2rem;
 }
-.flexCol {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-.sectionContainer {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 4rem;
-  margin-bottom: 10rem;
-}
+
 .textHighlight {
   color: var(--dark-text-link);
 }
+
+.textLeftAlign {
+  text-align: left;
+}
+
+/* Unique header layout */
+.uniqueHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 5rem;
+  align-items: flex-start;
+}
+.uniqueMaxWidth {
+  max-width: 560px;
+}
+
 .ecoBG {
   background: url("/svg/bg-eco-header.svg") no-repeat top center;
 }
+
 .updateBG {
   background: url("/svg/bg-update-header.svg") no-repeat top center;
+}
+@media (max-width: 996px) {
+  .uniqueHeader {
+    flex-direction: column;
+    gap: 0;
+  }
+  .uniqueMaxWidth {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
@@ -69,10 +101,12 @@
     font-size: 2.5rem;
     margin: 3rem 0 1.25rem;
   }
+
   .header2 {
     font-size: 2em;
     margin: 8rem 0 1.25rem;
   }
+
   .sectionContainer {
     padding: 0 1rem;
     margin-bottom: 5rem;
