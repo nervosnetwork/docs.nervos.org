@@ -35,8 +35,11 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
 
-      - name: Install ckb-debugger
-        run: which ckb-debugger >/dev/null 2>&1 || cargo install ckb-debugger
+      - uses: sigoden/install-binary@v1
+        with:
+          repo: nervosnetwork/ckb-standalone-debugger
+          name: ckb-debugger
+          cache: true
 
       - name: ckb-rust-script
         run: ./scripts/examples-rust-ci.sh
