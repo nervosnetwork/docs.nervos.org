@@ -269,13 +269,11 @@ export default {
       items: [
         "tech-explanation/nervos-blockchain",
         "tech-explanation/ckb-vs-btc",
-        "tech-explanation/cell",
-        "tech-explanation/capacity",
         "tech-explanation/cell-model",
+        "tech-explanation/ckb-vm",
         "tech-explanation/consensus",
         "tech-explanation/ckb-address",
         "tech-explanation/ckbhash",
-        "tech-explanation/ckb-vm",
       ],
     },
     {
@@ -284,6 +282,13 @@ export default {
       className: "category-core-structures",
       collapsible: false,
       items: [
+        {
+          type: "category",
+          label: "Cell",
+          collapsible: true,
+          collapsed: false,
+          items: ["tech-explanation/cell", "tech-explanation/capacity"],
+        },
         {
           type: "category",
           label: "Script",
@@ -449,6 +454,7 @@ export default {
             "node/run-testnet-node",
             "node/run-devnet-node",
             "node/run-node-docker",
+            "node/run-node-over-tor",
           ],
         },
         "node/run-light-client-node",

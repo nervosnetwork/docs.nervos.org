@@ -4,6 +4,7 @@ title: CKB Address
 ---
 
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tooltip from "@components/Tooltip";
 
 An address is a long string of numbers and letters that is used to receive blockchain assets.
 
@@ -69,3 +70,25 @@ args to encode:          b39bbc0b3673c7d36450bc14cfcdad2d559c6c64
 ---
 full address generated:  ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4
 ```
+
+## How CKB Addresses Reflect Ownership Rules (with Demo)
+
+An CKB addresses represents **ownership rules**, rather than an account. Each address is derived from a Lock Script that governs how the associated funds can be spent. Unlike blockchains with fixed script logic, this design gives users granular control over which code they trust to manage their assets.
+
+CKB provides two ways to reference Scripts:
+
+- **Type Hash (Upgradable):** References a script via a <Tooltip>Type_ID</Tooltip>. The script can be updated while preserving the address, offering convenience but requiring trust in the updater.
+- **Data Hash (Immutable):** References the exact script binary, freezing it at a specific version. This ensures stability and predictability, but requires manual updates for changes.
+
+This design allows users to decide between convenience and immutability, freeze scripts to specific versions, opt into updates on their own terms, or even run multiple script versions simultaneously. As a result, a single key can generate multiple valid addresses, each reflecting a different trust model.
+
+### Interactive Demo: Craft CKB Address
+
+Try the interactive demo [Craft CKB Address](https://craft-ckb-address.vercel.app) to see how one key combined with different Script references produce multiple addresses.
+
+<img
+  src="/img/tech_explanation/ckb_addr_demo_cover.png"
+  alt="Craft CKB Address Demo"
+  width="688"
+  height="327"
+/>
