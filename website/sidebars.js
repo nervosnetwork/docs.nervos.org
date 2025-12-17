@@ -454,6 +454,7 @@ export default {
             "node/run-testnet-node",
             "node/run-devnet-node",
             "node/run-node-docker",
+            "node/run-node-over-tor",
           ],
         },
         "node/run-light-client-node",

@@ -1,0 +1,115 @@
+---
+id: run-node-over-tor
+title: Run a Node Over Tor
+---
+
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Run a Node Over Tor
+
+CKB’s [Tor/Onion](<https://en.wikipedia.org/wiki/Tor_(network)>) integration gives node operators better privacy and network resilience:
+
+- **Hide your IP:** Tor routes traffic through multiple relays so observers and peers can’t easily link your node’s traffic to your real IP. This reduces risk of nodes being mapped or tracked. Tor is designed for anonymous communication via Onion routing.
+
+- **Inbound connectivity behind firewalls/NAT:** By running a Tor hidden service (Onion address), your node can accept incoming connections without requiring public port forwarding, just like [Bitcoin’s hidden services](https://en.bitcoin.it/wiki/Setting_up_a_Tor_hidden_service?utm_source=chatgpt.com).
+
+- **Censorship resistance:** Tor makes it harder for ISPs or national firewalls to block your node’s connections, increasing the resiliency of the CKB network under adversarial conditions.
+
+## Setting Up Tor/Onion on Ubuntu
+
+This section walks you through installing the Tor daemon, enabling SOCKS and ControlPort, before enabling it in CKB.
+
+### Step 1 — Install Tor Daemon
+
+Install the [Tor daemon](https://help.ubuntu.com/community/Tor) (not just the browser) to get a system service that provides an Onion SOCKS5 proxy:
+
+```
+sudo apt update
+sudo apt install tor
+```
+
+This installs a Tor service that listens on **localhost:9050 (SOCKS5)** by default.
+
+### Step 2 — Config & Start Tor
+
+Edit the following lines in `/etc/tor/torrc` :
+
+```toml
+SocksPort 9050
+ControlPort 9051
+CookieAuthentication 1
+```
+
+- `SocksPort 9050`: used by CKB to route outbound connections over Tor. (For more details, see [LinuxConfig](https://linuxconfig.org/install-tor-proxy-on-ubuntu-20-04-linux?utm_source=chatgpt.com))
+- `ControlPort 9051`: used by CKB to request Tor create v3 Onion services for inbound peers.
+- `CookieAuthentication 1`: allows applications to authenticate by reading a secure file created by Tor (easier than managing passwords).
+
+Then enable Tor to run on boot:
+
+```bash
+sudo systemctl enable --now tor.service
+```
+
+Check the Tor status:
+
+```bash
+sudo systemctl status tor
+```
+
+Or stop/restart as needed:
+
+```bash
+sudo systemctl restart tor.service
+```
+
+Tor is now running as a [service](https://help.ubuntu.com/community/Tor) in the background.
+
+### Step 3 — Verify Tor Is Running
+
+Confirm both ports are active:
+
+```bash
+ss -nlt | grep 9050
+ss -nlt | grep 9051
+```
+
+You should see `127.0.0.1:9050` and `127.0.0.1:9051` listening, indicating the proxy is up. (See [Ubuntu Documentation](https://help.ubuntu.com/community/Tor?utm_source=chatgpt.com))
+
+### Step 4 — Test Tor Proxy
+
+To verify the Tor proxy actually works, you can test a connection through it (this works on any system with `curl`):
+
+```bash
+curl --proxy socks5h://127.0.0.1:9050  https://check.torproject.org/api/ip
+```
+
+If a Tor exit IP and a JSON field `"IsTor": true` appear in the response, your Tor is functioning correctly.
+
+Alternatively, compare your IPs before and after routing through Tor:
+
+```bash
+curl https://api.ipify.org  # your normal IP
+curl --proxy socks5h://127.0.0.1:9050 https://api.ipify.org  # Tor exit IP
+```
+
+If the second IP is different, Tor is routing traffic properly.
+
+## Dealing with Censorship: Bridges and Pluggable Transports
+
+In some restricted countries or ISPs, direct connections to Tor may be blocked, where Tor service on Ubuntu may start but still fail to connect to the network. In these cases, you may need [Tor bridges or pluggable transports](https://tb-manual.torproject.org/circumvention/) to get it work.
+
+- [**Tor Bridges**](https://tb-manual.torproject.org/bridges/): Special unlisted entry relays that help connection when public Tor relays are blocked.
+
+- **Pluggable Transports**: Obfuscation layers (obfs4, Snowflake, meek, etc.) that disguise traffic patterns. (For more details, see [Censorship circumvention](https://support.torproject.org/tor-browser/circumvention). )
+
+To use bridges with the Tor service (used by CKB), add bridge lines in `/etc/tor/torrc`:
+
+```
+UseBridges 1
+ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+Bridge obfs4 <ip:port> <fingerprint> cert=… iat-mode=0
+```
+
+Replace the placeholders `<…>` with actual bridge details obtained from [Tor BridgeDB](https://bridges.torproject.org/options), email request, or other sources.
