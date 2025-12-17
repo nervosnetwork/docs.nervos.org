@@ -37,6 +37,7 @@ This article covers the following configuration topics:
 
 - [Node Discoverability](#improve-node-discoverability)
 - [Light client support and WSS access](#light-client-support--wss-access)
+- [Proxy and onion support](#proxy-and-onion-support)
 - [Fee estimator](#fee-estimator)
 - [Run multiple nodes](#run-multiple-nodes)
 
@@ -267,6 +268,99 @@ bootnodes = ["/dns4/ckb.example.com/tcp/443/wss/p2p/<PeerID>"]
 3. Start the second node
 
 Start the second node and check the logs. If it begins syncing blocks successfully, your WSS setup is complete.
+
+## Proxy and Tor/Onion
+
+CKB supports [Tor/Onion](<https://en.wikipedia.org/wiki/Tor_(network)>), giving node operators better privacy and network resilience. To run a node over Tor, see this [guidance](/docs/node/run-node-over-tor).
+
+### Configuring CKB for Tor
+
+CKB’s Tor support is controlled via the `network.proxy` and Onion configuration fields.
+
+**ProxyConfig (`network.proxy`)**
+
+- `proxy_url`
+  User-specified SOCKS5 proxy address for outbound connections. Example: `proxy_url = "socks5://127.0.0.1:9050"`
+- `proxy_random_auth`
+  - Default: `true`. When enabled, CKB generates a random username and password for each connection.
+    :::note
+    Note: For non-Tor proxies that support but do NOT require authentication, set it to `false` to avoid connection failures.
+    :::
+  - See `IsolateSOCKSAuth` section in this doc: [Tor - The second-generation onion router](https://manpages.debian.org/testing/tor/torrc.5.en.html)
+
+**Other Config Keys**
+
+- `listen_on_onion = true`
+  - Enable or disable listening for incoming connections over Tor.
+  - When set to `true`, CKB automatically accepts inbound connections via the Onion network.
+  - The Onion listening address can be retrieved from logs or via the `local_node_info` RPC.
+- `p2p_listen_address = "127.0.0.1:8115"`
+  - Local P2P address for incoming Onion traffic.
+  - Only configure this if your node uses a different IPv4 listen address and port than the default `127.0.0.1`.
+- `onion_server = "127.0.0.1:9050"`
+  - Address and port of the Tor SOCKS5 server used for outbound connections to other Onion nodes.
+  - Default: `network.proxy.proxy_url`.
+- `tor_controller = "127.0.0.1:9051"`
+  - Address and port of Tor’s ControlPort for managing Onion services.
+  - Default: `127.0.0.1:9051`
+- `tor_password`
+  - Password for authenticating with the Tor ControlPort. Should match `HashedControlPassword` in your Tor configuration. You can create a Tor Hashed Password using: `tor --hash-password "my_secret_password"`
+  - Leave this empty if no authentication is required: `tor_password = ""`
+- `onion_external_port`
+  - The external port that the Onion service will expose.
+
+### Verifying CKB Is Running Over Tor/Onion
+
+After starting CKB with `listen_on_onion = true` and ensuring that Tor is running, you can confirm Onion integration through logs or RPC.
+
+#### Option 1 — Check the logs
+
+When CKB creates the hidden service via Tor’s ControlPort, it logs the generated `.onion` listening address. Look for a message similar to the following, meaning the Onion service is active.
+
+```toml
+2025-12-11 09:29:11.930 +00:00 GlobalRt-16 INFO ckb_onion::onion_service  CKB has started listening on the onion hidden network, the onion service address is: /onion3/opnrrg67wtcg4kqhiclirn2nxd7b6u3a73hym4obuoyicj3ithayorid:8115/p2p/QmSrc5RW4o3S9ukbJW199vQ1xL7ssKPcudRy6fXvTbNEbz
+
+```
+
+#### Option 2 — Use the `local_node_info` RPC
+
+Call the JSON-RPC method to inspect your node’s addresses:
+
+```bash
+curl -sX POST http://127.0.0.1:8114 \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "id": 42,
+    "jsonrpc": "2.0",
+    "method": "local_node_info",
+    "params": []
+  }' | jq '.result.addresses'
+
+[
+  {
+    "address": "/onion3/opnrrg67wtcg4kqhiclirn2nxd7b6u3a73hym4obuoyicj3ithayorid:8115/p2p/QmSrc5RW4o3S9ukbJW199vQ1xL7ssKPcudRy6fXvTbNEbz",
+    "score": "0x1"
+  },
+  {
+    "address": "/ip6/::/tcp/8115",
+    "score": "0x1"
+  },
+  {
+    "address": "/ip4/0.0.0.0/tcp/8115",
+    "score": "0x1"
+  },
+  {
+    "address": "/ip6/::/tcp/8115/ws",
+    "score": "0x1"
+  },
+  {
+    "address": "/ip4/0.0.0.0/tcp/8115/ws",
+    "score": "0x1"
+  }
+]
+```
+
+In the response, check the `addresses` array for an address containing a `.onion` hostname. If you see an Onion entry there, CKB is successfully running behind the Tor network.
 
 ## Fee Estimator
 
