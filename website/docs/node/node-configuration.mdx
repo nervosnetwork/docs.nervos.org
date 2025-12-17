@@ -281,7 +281,7 @@ CKB’s [Tor/Onion](<https://en.wikipedia.org/wiki/Tor_(network)>) integration g
 
 This section walks you through installing the Tor daemon, enabling SOCKS and ControlPort, before enabling it in CKB.
 
-**Step 1 — Install Tor Daemon**
+#### Step 1 — Install Tor Daemon
 
 Install the [Tor daemon](https://help.ubuntu.com/community/Tor) (not just the browser) to get a system service that provides an Onion SOCKS5 proxy:
 
@@ -292,7 +292,7 @@ sudo apt install tor
 
 This installs a Tor service that listens on **localhost:9050 (SOCKS5)** by default.
 
-**Step 2 — Config & Start Tor**
+#### Step 2 — Config & Start Tor
 
 Edit the following lines in `/etc/tor/torrc` :
 
@@ -326,7 +326,7 @@ sudo systemctl restart tor.service
 
 Tor is now running as a [service](https://help.ubuntu.com/community/Tor) in the background.
 
-**Step 3 — Verify Tor Is Running**
+#### Step 3 — Verify Tor Is Running
 
 Confirm both ports are active:
 
@@ -337,7 +337,7 @@ ss -nlt | grep 9051
 
 You should see `127.0.0.1:9050` and `127.0.0.1:9051` listening, indicating the proxy is up. (See [Ubuntu Documentation](https://help.ubuntu.com/community/Tor?utm_source=chatgpt.com))
 
-**Step 4 — Test Tor Proxy**
+#### Step 4 — Test Tor Proxy
 
 To verify the Tor proxy actually works, you can test a connection through it (this works on any system with `curl`):
 
@@ -414,7 +414,7 @@ CKB’s Tor support is controlled via the `network.proxy` and Onion configuratio
 
 After starting CKB with `listen_on_onion = true` and ensuring that Tor is running, you can confirm Onion integration through logs or RPC.
 
-**Option 1 — Check the logs**
+#### Option 1 — Check the logs
 
 When CKB creates the hidden service via Tor’s ControlPort, it logs the generated `.onion` listening address. Look for a message similar to the following, meaning the Onion service is active.
 
@@ -423,7 +423,7 @@ When CKB creates the hidden service via Tor’s ControlPort, it logs the generat
 
 ```
 
-**Option 2 — Use the `local_node_info` RPC**
+#### Option 2 — Use the `local_node_info` RPC
 
 Call the JSON-RPC method to inspect your node’s addresses:
 
