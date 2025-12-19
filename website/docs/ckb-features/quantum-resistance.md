@@ -54,6 +54,8 @@ In 2023, The CKB team and Cryptape researchers have successfully implemented a p
 
 - **Repository:** [cryptape/quantum-resistant-lock-script](https://github.com/cryptape/quantum-resistant-lock-script)
 
+- **Security Audit:** The code has completed a security audit conducted by ScaleBit.
+
 The Lock Script supports [12 different SPHINCS+ parameter sets](https://github.com/sphincs/sphincsplus#parameters), which can be selected by the user. It is based on the new definition of [CKB_TX_MESSAGE_ALL](https://github.com/nervosnetwork/rfcs/pull/446) to generate the signing message. By default, the Lock script is implemented as a multi-signature contract, and the single-signature process is just a special case of multi-signature.
 
 #### Why SPHINCS+?
