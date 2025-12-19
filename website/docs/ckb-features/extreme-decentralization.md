@@ -7,7 +7,7 @@ Decentralization is the core value proposition of public blockchains. It ensures
 
 ## Decoupling: Our Approach to True Decentralization
 
-To achieve true decentralization, we must abandon the view of a blockchain as a monolithic, "do-it-all" platform. If a single blockchain layer tries to be everything to everyone—fast for users, easy for developers, and secure for the network—it inevitably creates conflicting incentives. High throughput demands often override verification needs, and the push for seamless developer experiences frequently introduces centralized dependencies.
+To achieve true decentralization, a blockchain cannot function as a "do everything" platform. If a single layer attempts to maximize performance, offer developer convenience, and maintain strong security at the same time, these goals create conflicting incentives. High throughput begins to override verification needs, and shortcuts taken for developer experience frequently introduce points of centralization.
 
 Nervos CKB addresses this by decoupling concerns across a multi-layered architecture, viewing the blockchain landscape as a continuous spectrum:
 
@@ -71,11 +71,11 @@ Unlike traditional SPV (Simplified Payment Verification), where clients must dow
 
 #### WASM & In-Browser Verification
 
-The most radical feature of the CKB Light Client is its portability. The CKB team has compiled the light client into **WebAssembly (WASM)**, enabling it to run in environments previously thought impossible for blockchain nodes.
+The CKB Light Client is compiled to **WebAssembly (WASM)**, enabling it to run in browser environments and other platforms that do not support traditional full node operations.
 
-- **No Installation Required:** The light client can be embedded directly into a web wallet or dApp. When a user visits a website, the browser _becomes_ a node.
-- **Trustless Interaction:** The dApp does not ask a server "What is my balance?" or "Did this trade settle?" Instead, the browser connects directly to the P2P network, samples headers, and mathematically verifies the data locally.
-- **Mobile Ready:** Because it requires minimal storage (storing only a single block header between executions) and low CPU usage, it runs efficiently on mobile devices without draining battery.
+- **No Installation Required:** The light client can be embedded directly into a web wallet or dApp. When a user visits a website, the browser operates as a lightweight verification node.
+- **Trustless Interaction:** Instead of relying on a server to check balances or transactions, the browser connects to the P2P network, samples block headers, and verifies data locally. 
+- **Mobile Ready:** With minimal storage requirements(storing only a single block header between executions) and low CPU usage, the light client can operate efficiently on mobile devices.
 
 #### Privacy and Sovereignty
 
