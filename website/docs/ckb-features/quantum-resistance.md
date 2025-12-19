@@ -13,11 +13,11 @@ While the industry is standardizing defenses (e.g., NIST's PQC competition), the
 
 ## Why CKB is native quantum-resistant
 
-Most blockchains struggle with the quantum-resistant problem with two main reasons. CKB is native quantum-resistant not because it outperforms the other blockchains in solving these two problems, but because it is designed from the first principle, which doesn't have those two problems in the first place.
+Most blockchains struggle with quantum resistance for two primary reasons. CKB achieves native quantum resistance not by simply outperforming others in patching these flaws, but by being designed from first principles to avoid them entirely.
 
 ### The hardcoded Cryptographic Primitives problem
 
-The fundamental flaw in most Layer 1 blockchains is that their cryptographic primitives are **hardcoded** into the consensus protocol. This rigidity creates one massive hurdle: the "Hard Fork" crisis. If you want to upgrade to quantum-resistant cryptography, you must coordinate a hard fork with the entire network.
+The fundamental flaw in most Layer 1 blockchains is that their cryptographic primitives are **hardcoded** into the consensus protocol. This rigidity creates one massive hurdle: the "Hard Fork" crisis. If you want to upgrade to quantum-resistant cryptography, you must coordinate a network-wide hard fork.
 
 In Ethereum or Bitcoin, the rule "Transaction X is valid" is effectively hardwired to check a specific ECDSA signature. Changing this rule is not a software update; it is a change to the fundamental laws of that blockchain's universe.
 
@@ -26,7 +26,7 @@ CKB is by design a **Cryptographic Abstraction** blockchain. In CKB, the protoco
 - **Other blockchains:** Act like a pocket calculator. They calculate specific math (ECC) very fast, but you cannot add new buttons.
 - **Nervos CKB:** Acts like a generic CPU. If you need a new mathematical operation (like the matrix multiplications used in Lattice-based cryptography), you simply upload the code for it.
 
-This abstraction turns Quantum Resistance from a "Governance Crisis" into a simple "User Choice." Users can choose to migrate to quantum-resistant cryptography without a hard fork. By ten years later, if there are quantum computers that can break the current cryptography, CKB users can follow the process for upgrades in the following:
+This abstraction turns Quantum Resistance from a "Governance Crisis" into a simple "User Choice." Users can choose to migrate to quantum-resistant cryptography without a hard fork. In the future, if quantum computers disrupt current encryption technology, CKB users can simply follow this upgrade process:
 
 1.  **Deploy:** Developers deploy a new Lock Script implementing PQC algorithms (e.g., SPHINCS+).
 2.  **Adopt:** Users create new addresses referencing this script's `Code Hash`.
