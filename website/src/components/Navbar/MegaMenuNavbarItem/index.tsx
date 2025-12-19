@@ -1,11 +1,8 @@
-// src/components/Navbar/MegaMenuNavbarItem.tsx
-
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import { useLocation } from "@docusaurus/router";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-
 import ChevronDown from "/svg/icon-chevron-down.svg";
 import { sidebarIconMap, SidebarIconName } from "../../../icons";
 import styles from "./styles.module.css";
@@ -14,6 +11,7 @@ export type MegaMenuItem = {
   title: string;
   description?: string;
   href: string;
+  external?: boolean;
   icon?: SidebarIconName;
   activeBaseRegex?: string;
 };
@@ -27,6 +25,7 @@ export type MegaMenuNavbarItemProps = {
   primaryItems: MegaMenuItem[];
   otherItems?: MegaMenuItem[];
   otherLabel?: string;
+  otherCol?: 1 | 2;
 };
 
 const EVENT_NAME = "nervos:megamenu-open";
@@ -39,6 +38,7 @@ const MegaMenuNavbarItem: React.FC<MegaMenuNavbarItemProps> = ({
   primaryItems,
   otherItems = [],
   otherLabel = "OTHER",
+  otherCol = 1,
 }) => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -183,15 +183,25 @@ const MegaMenuNavbarItem: React.FC<MegaMenuNavbarItemProps> = ({
             {otherItems.length > 0 && (
               <div className={styles.otherCol}>
                 <div className={styles.otherLabel}>{otherLabel}</div>
-                <div className={styles.otherList}>
+                <div
+                  className={clsx(
+                    styles.otherList,
+                    otherCol === 2 && styles.otherListTwoCols
+                  )}
+                >
                   {otherItems.map((item) => {
                     const Icon = item.icon ? sidebarIconMap[item.icon] : null;
+                    const External = sidebarIconMap["external"];
                     const active = isItemActive(item);
 
                     return (
                       <Link
                         key={item.href}
-                        to={useBaseUrl(item.href)}
+                        to={item.external ? item.href : useBaseUrl(item.href)}
+                        {...(item.external && {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        })}
                         className={clsx(
                           styles.otherItem,
                           active && styles.cardActive
@@ -205,6 +215,12 @@ const MegaMenuNavbarItem: React.FC<MegaMenuNavbarItemProps> = ({
                           />
                         )}
                         <span className={styles.otherTitle}>{item.title}</span>
+                        {item.external && (
+                          <External
+                            className={styles.externalIcon}
+                            aria-hidden="true"
+                          />
+                        )}
                       </Link>
                     );
                   })}

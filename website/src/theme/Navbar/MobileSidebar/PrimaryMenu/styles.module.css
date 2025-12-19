@@ -135,6 +135,12 @@ details[open] {
   color: var(--dark-text-primary);
 }
 
+.externalIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+  color: var(--dark-text-tertiary);
+}
+
 .primaryTitle.activeText {
   color: var(--dark-text-link);
 }

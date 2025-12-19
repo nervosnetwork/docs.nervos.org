@@ -388,7 +388,7 @@ const config = {
           label: "Community",
           position: "left",
           menuId: "community",
-          activeBaseRegex: "/(ecosystem)/(history-and-hard-forks)",
+          activeBaseRegex: "/(ecosystem|history-and-hard-forks)",
           primaryItems: [
             {
               title: "Projects",
@@ -405,21 +405,51 @@ const config = {
               icon: "squareHistory",
               activeBaseRegex: "/history-and-hard-forks/",
             },
-            // TODO: Add Resources
-          ],
-          otherLabel: "OTHER",
-          otherItems: [
-            {
-              title: "Organizations",
-              href: "/docs/ecosystem/organizations",
-              icon: "organization",
-              activeBaseRegex: "/ecosystem/organizations",
-            },
             {
               title: "Contribute",
+              description: "Ways to participate and support the network",
               href: "/docs/ecosystem/contribute",
-              icon: "contribution",
+              icon: "squareContribution",
               activeBaseRegex: "/ecosystem/contribute",
+            },
+          ],
+          otherLabel: "RESOURCES",
+          otherCol: 2,
+          otherItems: [
+            {
+              title: "Positioning Paper",
+              href: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md",
+              external: true,
+            },
+            {
+              title: "CKB RFCs",
+              href: "https://github.com/nervosnetwork/rfcs",
+              external: true,
+            },
+            {
+              title: "Fiber Network",
+              href: "https://www.fiber.world/docs",
+              external: true,
+            },
+            {
+              title: "Spore Protocol",
+              href: "https://docs.spore.pro/",
+              external: true,
+            },
+            {
+              title: "CKB Academy",
+              href: "https://academy.ckb.dev/",
+              external: true,
+            },
+            {
+              title: "CKB Cookbook",
+              href: "https://cookbook.ckbdapps.com/",
+              external: true,
+            },
+            {
+              title: "CKB Dev Log",
+              href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
+              external: true,
             },
           ],
         },

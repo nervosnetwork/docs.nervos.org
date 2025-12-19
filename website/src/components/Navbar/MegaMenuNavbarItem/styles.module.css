@@ -35,15 +35,12 @@
   right: 0;
   top: var(--ifm-navbar-height);
   z-index: 200;
-
-  opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 160ms ease, visibility 160ms ease;
+  transition: visibility 160ms ease;
 }
 
 .panelWrapperOpen {
-  opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
@@ -107,13 +104,17 @@
 }
 
 .otherLabel {
-  font-size: 1.125rem;
-  font-weight: 700;
+  font-size: 1rem;
   color: var(--text-tertiary);
+  padding: 0.5rem 0;
 }
 
 .otherList {
   display: grid;
+  grid-template-columns: 1fr;
+}
+.otherListTwoCols {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .otherItem {
@@ -134,6 +135,12 @@
   width: 24px;
   height: 24px;
   color: var(--text-primary);
+}
+
+.externalIcon {
+  color: var(--text-tertiary);
+  width: 18px;
+  height: 18px;
 }
 
 .otherTitle {

@@ -296,7 +296,7 @@ export default {
   "Tech Explanation": [
     {
       type: "category",
-      label: "What makes CKB unique",
+      label: "What Makes CKB Unique",
       className: "category-ckb-features",
       collapsible: false,
       customProps: {
@@ -476,8 +476,13 @@ export default {
         },
         {
           type: "link",
-          label: "CKB Dev Log",
-          href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
+          label: "Fiber Network",
+          href: "https://www.fiber.world/docs",
+        },
+        {
+          type: "link",
+          label: "Spore Protocol",
+          href: "https://docs.spore.pro",
         },
         {
           type: "link",
@@ -491,13 +496,8 @@ export default {
         },
         {
           type: "link",
-          label: "Fiber network",
-          href: "https://www.fiber.world/docs",
-        },
-        {
-          type: "link",
-          label: "Spore Protocol",
-          href: "https://docs.spore.pro",
+          label: "CKB Dev Log",
+          href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
         },
       ],
     },

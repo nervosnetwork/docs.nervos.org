@@ -15,10 +15,36 @@ const outputPath = path.join(
   __dirname,
   "../src/components/Tooltip/key-terms.json"
 );
-const docsPath = path.join(__dirname, "../docs/tech-explanation");
+
+const docSections = [
+  {
+    slug: "tech-explanation",
+    dir: path.join(__dirname, "../docs/tech-explanation"),
+  },
+  {
+    slug: "ckb-fundamentals",
+    dir: path.join(__dirname, "../docs/ckb-fundamentals"),
+  },
+  {
+    slug: "assets-token-standards",
+    dir: path.join(__dirname, "../docs/assets-token-standards"),
+  },
+];
 
 const glossaryContent = fs.readFileSync(glossaryPath, "utf8");
 const terms = {};
+
+function resolveTermLink(normalizedTerm) {
+  for (const section of docSections) {
+    const md = path.join(section.dir, `${normalizedTerm}.md`);
+    const mdx = path.join(section.dir, `${normalizedTerm}.mdx`);
+    if (fs.existsSync(md) || fs.existsSync(mdx)) {
+      return `/docs/${section.slug}/${normalizedTerm}`;
+    }
+  }
+  // fallback to glossary anchor (same as before)
+  return `/docs/tech-explanation/glossary#${normalizedTerm}`;
+}
 
 remark()
   .use(() => (tree) => {
@@ -59,17 +85,8 @@ remark()
           .toLowerCase()
           .replace(/[\s_]+/g, "-")
           .replace(/[()]/g, "");
-        const termFilePathMd = path.join(docsPath, `${normalizedTerm}.md`);
-        const termFilePathMdx = path.join(docsPath, `${normalizedTerm}.mdx`);
-        if (fs.existsSync(termFilePathMd) || fs.existsSync(termFilePathMdx)) {
-          terms[
-            currentTerm.toLowerCase()
-          ].link = `/docs/tech-explanation/${normalizedTerm}`;
-        } else {
-          terms[
-            currentTerm.toLowerCase()
-          ].link = `/docs/tech-explanation/glossary#${normalizedTerm}`;
-        }
+
+        terms[currentTerm.toLowerCase()].link = resolveTermLink(normalizedTerm);
       }
     });
   })

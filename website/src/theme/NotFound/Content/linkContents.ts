@@ -7,7 +7,7 @@ const suggestedLinks: CardLinks[] = [
   { label: "Run a Node", link: "/docs/node/node-overview" },
   { label: "Mining", link: "/docs/mining/guide" },
   {
-    label: "Tech Explanation",
+    label: "CKB Fundamentals",
     link: "/docs/ckb-fundamentals/nervos-blockchain",
   },
 ];

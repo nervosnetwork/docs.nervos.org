@@ -7,18 +7,11 @@ import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
 import { useLocation } from "@docusaurus/router";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import styles from "./styles.module.css";
+import { MegaMenuItem } from "@site/src/components/Navbar/MegaMenuNavbarItem";
 
 import { sidebarIconMap, type SidebarIconName } from "../../../../icons";
 
 /* ---------- Types ---------- */
-
-type MegaMenuItem = {
-  title: string;
-  description?: string;
-  href: string;
-  icon?: SidebarIconName;
-  activeBaseRegex?: string;
-};
 
 type MegaMenuNavbarItem = {
   type: "custom-megaMenu";
@@ -135,17 +128,24 @@ function OtherItem({
   item,
   pathname,
   onClick,
+  external = false,
 }: {
   item: MegaMenuItem;
   pathname: string;
+  external?: boolean;
   onClick: () => void;
 }) {
   const Icon = resolveIcon(item.icon);
+  const External = sidebarIconMap["external"];
   const active = isActive(pathname, item);
 
   return (
     <Link
-      to={useBaseUrl(item.href)}
+      to={item.external ? item.href : useBaseUrl(item.href)}
+      {...(external && {
+        target: "_blank",
+        rel: "noopener noreferrer",
+      })}
       className={clsx(styles.otherItem, active && styles.activeText)}
       onClick={onClick}
     >
@@ -153,6 +153,9 @@ function OtherItem({
       <span className={clsx(styles.otherTitle, active && styles.activeText)}>
         {item.title}
       </span>
+      {item.external && (
+        <External className={styles.externalIcon} aria-hidden="true" />
+      )}
     </Link>
   );
 }

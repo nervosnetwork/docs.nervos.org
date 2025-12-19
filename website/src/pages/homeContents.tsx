@@ -68,7 +68,7 @@ const homeCardContents: HomeCardProps[] = [
   { title: "Run a Node", to: "/docs/node/node-overview", icon: "node" },
   { title: "Mining", to: "/docs/mining/guide", icon: "mining" },
   {
-    title: "Tech Explanation",
+    title: "CKB Fundamentals",
     to: "/docs/ckb-fundamentals/nervos-blockchain",
     icon: "tech-explanation",
   },
