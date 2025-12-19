@@ -21,7 +21,7 @@ The fundamental flaw in most Layer 1 blockchains is that their cryptographic pri
 
 In Ethereum or Bitcoin, the rule "Transaction X is valid" is effectively hardwired to check a specific ECDSA signature. Changing this rule is not a software update; it is a change to the fundamental laws of that blockchain's universe.
 
-CKB is by design a **Cryptographic Abstraction** blockchain. In CKB, the protocol does not know or care what "secp256k1" is. Cryptography is not a consensus rule; it is simply a **Lock Script** (smart contract) that runs in a virtual machine. As a contrast, Ethereum baked the hardcoded ECC into the EVM as a Precompile.
+CKB is by design a **Cryptographic Abstraction** blockchain. In CKB, the protocol does not know or care what "secp256k1" is. Cryptography is not a consensus rule; it is simply a [Lock Script](/docs/tech-explanation/lock-script) (smart contract) that runs in a virtual machine. As a contrast, Ethereum baked the hardcoded ECC into the EVM as a Precompile.
 
 - **Other blockchains:** Act like a pocket calculator. They calculate specific math (ECC) very fast, but you cannot add new buttons.
 - **Nervos CKB:** Acts like a generic CPU. If you need a new mathematical operation (like the matrix multiplications used in Lattice-based cryptography), you simply upload the code for it.
@@ -69,9 +69,9 @@ The trade-off for SPHINCS+ is signature size. However, CKB handles this graceful
 
 There are 3 implementations for the Lock Script:
 
-- [A C lock script](./contracts/c-sphincs-all-in-one-lock/) using [SPHINCS+](https://github.com/sphincs/sphincsplus)
-- [A Rust lock script](./contracts/sphincs-all-in-one-lock/) using [fips205](https://github.com/integritychain/fips205)
-- [A hybrid lock script](./contracts/hybrid-sphincs-all-in-one-lock/) with the implementation of SPHINCS+ utilizing the sphincsplus C library and Rust glue code.
+- [A C lock script](https://github.com/cryptape/quantum-resistant-lock-script/blob/main/contracts/c-sphincs-all-in-one-lock) using [SPHINCS+](https://github.com/sphincs/sphincsplus)
+- [A Rust lock script](https://github.com/cryptape/quantum-resistant-lock-script/blob/main/contracts/sphincs-all-in-one-lock) using [fips205](https://github.com/integritychain/fips205)
+- [A hybrid lock script](https://github.com/cryptape/quantum-resistant-lock-script/blob/main/contracts/hybrid-sphincs-all-in-one-lock) with the implementation of SPHINCS+ utilizing the sphincsplus C library and Rust glue code.
 
 The exact cycle consumptions will slightly vary from one signature to another, a ballpark estimation of cycle consumptions(here we measure cycle consumptions for the whole script, meaning CKB transaction signing is included as well) for each NIST approved parameter set, can be located below(`M` stands for million):
 
