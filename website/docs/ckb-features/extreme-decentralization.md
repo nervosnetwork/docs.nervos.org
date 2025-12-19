@@ -63,9 +63,9 @@ However, running a full node (downloading terabytes of history) is impossible fo
 
 #### The FlyClient Protocol & MMR
 
-Unlike traditional SPV (Simplified Payment Verification) clients that must download linearly increasing amounts of headers, CKB implements the **FlyClient** protocol.
+Unlike traditional SPV (Simplified Payment Verification), where clients must download linearly increasing amounts of headers, CKB implements the **FlyClient** protocol.
 
-- **Logarithmic Scaling:** Instead of downloading every block header, the client uses a probabilistic sampling technique. It downloads only a logarithmic number of block headers to statistically verify the Proof-of-Work with overwhelming certainty.
+- **Logarithmic Scaling:** Instead of downloading every block header, the client uses a probabilistic sampling technique. It downloads only a logarithmic number of block headers to statistically verify the Proof-of-Work with near certainty.
 - **Merkle Mountain Ranges (MMR):** CKB blocks include an MMR root in their headers. This cryptographic structure allows the light client to prove that any specific block is part of the valid chain history without storing the history itself.
 - **Result:** A user can sync the chain in seconds with minimal bandwidth, regardless of how long the blockchain becomes.
 
@@ -88,4 +88,7 @@ By embedding the verification layer directly into the user's application, CKB cl
 
 ## Summary
 
-This completes the picture of "Extreme Decentralization" on CKB: a system where users own their state(Cell Model), participate permissionlessly (PoW), compute locally (Verification Network), and verify independently (Light Client).
+In summary, CKB achieves extreme decentralization through three core components:
+- **Sustainable State Management**: By enforcing the rule that **1 CKB = 1 byte of storage**, CKB treats state as a scarce resource, preventing unbounded growth and keeping full nodes practical to run.
+- **Proof-of-Work Consensus**: Security is anchored in permissionless participation, allowing anyone to help secure the network by contributing computing power.
+- **Light Client**: Independent verification is possible on browsers and mobile devices without requiring full-node resources. 
