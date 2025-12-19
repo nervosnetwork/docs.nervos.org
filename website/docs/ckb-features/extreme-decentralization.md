@@ -3,7 +3,7 @@ id: extreme-decentralization
 title: Extreme Decentralization
 ---
 
-Decentralization is the core value proposition of public blockchains. It ensures censorship resistance, permissionless access, and security without relying on trusted intermediaries. CKB (The layer 1 protocol) is designed from the ground up to make sure this core value is not compromised.
+Decentralization is the core value proposition of public blockchains. It ensures censorship resistance, permissionless access, and security without relying on trusted intermediaries. As the layer 1 protocol of Nervos Network, CKB is designed from the ground up to make sure this core value is not compromised.
 
 ## Decoupling: Our Approach to True Decentralization
 
@@ -16,30 +16,30 @@ Nervos CKB addresses this by decoupling concerns across a multi-layered architec
 
 ### The Last Line of Defense
 
-The CKB team consciously positions the Layer 1 protocol at the **absolute left-most edge** of this spectrum. By holding this ground, Layer 1 acts as the immutable trust anchor and the **last line of defense** for the entire network. If the CKB team were to compromise here for the sake of usability or speed, the security of the entire structure would crumble.
+CKB is positioned at the **far-left edge** of this spectrum, serving as the immutable trust anchor and the **last line of defense** for the entire network. Compromising the base layer for usability or speed would weaken the security of the entire structure.
 
-This philosophy dictates a clear division of labor, ensuring every point on the spectrum receives dedicated effort from the actors best suited for it:
+This separation establishes a clear division of labor:
 
 - **Layer 1 (CKB):** Focuses exclusively on being the ultimate guardian of value. Its design prioritizes maximum decentralization, security, and censorship resistance—the original spirit of crypto—above all else.
 - **Layer 2 & Ecosystem:** Focuses on scalability, high performance, the developer and user experience necessary for mass adoption, free from the burden of base-layer consensus trade-offs.
 
-It is not only about code, but also for operational decisions. For example, the CKB team might deliberately reject providing centralized conveniences, such as a default, production RPC service (similar to Infura in Ethereum). While such a service would offer a shortcut for developers, it introduces a central point of failure. Note that the [public RPC service](/docs/getting-started/rpcs) that CKB team provide is only for testing purpose, it is strongly recommended to run your own RPC service for your dApp. By refusing to encroach on the "service layer," CKB forces the ecosystem to build its own robust, distributed access layers, ensuring the foundation remains a neutral, decentralized settlement platform.
+This principle applies not only to code, but also for operational decisions. For example, the CKB team deliberately avoid providing centralized conveniences, such as a default, production-grade RPC service (similar to Infura in Ethereum). While such a service would make developers’ lives easier, it introduces a central point of failure. Note that the [public RPC service](/docs/getting-started/rpcs) provided by CKB exists solely for testing, and developers are strongly encouraged to run their own RPC services for their dApps. By refusing to encroach on the "service layer," CKB forces the ecosystem to build its own robust, distributed access layers, ensuring the foundation remains a neutral, decentralized settlement layer.
 
 ## How to Achieve Extreme Decentralization
 
-Decentralization is not just about who _mines_ the next block; it is about who can _verify_ the history. If running a node becomes too expensive due to data bloat, the network centralizes into a few server farms regardless of its consensus algorithm.
+Decentralization is not just about who mines the next block–it is about who can independently **verify** the chain's history. If running a node becomes too expensive due to data bloat, participation collapses into a few data centers, and the system recentralizes in practice regardless of its consensus algorithm.
 
-CKB ensures this never happens through three radical approaches: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client** with an engineering effort on building nodes that lowers the entry barrier for participants.
+CKB addresses this challenge through three radical design choices: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client**, supported by ongoing engineering efforts to lower the barrier to running nodes.
 
 ### 1. Sustainable State Management
 
 Most blockchains operate as "General Computation Networks" (like a world computer). Users pay a one-time fee to execute a transaction, but the resulting data (state) occupies the network's storage forever at no further cost. This leads to the **"Tragedy of the Commons"**: because storage is effectively free, the state grows indefinitely ([State Explosion](https://medium.com/nervosnetwork/state-explosion-and-the-tragedy-of-the-blockchain-commons-1fbd4837e859)). Eventually, only enterprise-grade hardware can store the chain, forcing regular users to trust third parties.
 
-CKB adopts a "General Verification Network" architecture based on [Cell Model](/docs/tech-explanation/cell-model). The **Common Knowledge Base** acts as a verified state layer rather than a computation layer. To maintain "Extreme Decentralization," CKB creates a direct economic link between state and scarcity:
+CKB takes a different approach. It adopts a "General Verification Network" architecture built on the [Cell Model](/docs/tech-explanation/cell-model), where on-chain storage is treated as a scarce resource rather than free space.
 
-- **State as a Scarce Resource:** In CKB, state is not an afterthought; it is the physical "land" of the blockchain.
-- **The CKB = Byte Equation:** The native token (CKB) represents **state capacity**. Holding 1 CKB entitles you to store 1 byte of data on the blockchain.
-- **Targeted Inflation (State Rent):** To occupy space on the Global State, users must lock CKB tokens. This incurs an opportunity cost (via secondary issuance inflation), effectively acting as a "State Rent." This forces developers and users to be efficient—they only store what is truly valuable.
+- **State as a Scarce Resource:** On-chain state is modeled as a finite resource that must be explicitly accounted for.
+- **1 CKB = 1 Byte of Storage:** The native token, CKB, represents state capacity; holding 1 CKB entitles the holder to store 1 byte of data on the blockchain.
+- **Targeted Inflation (State Rent):** Occupying on-chain storage requires locking CKB, which carries an opportunity cost through secondary issuance. This mechanism functions as a form of "state rent" and encourages efficient use of capacity, ensuring that developers and users store only the truly valuable data.
 
 **Why this guarantees decentralization:**
 
@@ -49,7 +49,7 @@ Moving computation off-chain also reduces the burden on full nodes. They only ne
 
 ### 2. Proof-of-Work (PoW) over Proof-of-Stake (PoS)
 
-CKB utilizes **NC-Max** (a variant of Nakamoto Consensus) with a custom hash function, **Eaglesong**. While many modern blockchains have shifted to Proof-of-Stake (PoS), CKB adheres to PoW for specific reasons regarding decentralization:
+CKB utilizes [**NC-Max**](https://eprint.iacr.org/2020/1101.pdf) (a variant of Nakamoto Consensus) with a custom hash function, **Eaglesong**. While many modern blockchains rely on Proof-of-Stake (PoS), CKB adheres to PoW for decentralization-related reasons:
 
 1.  **Permissionless Participation:** In PoW, anyone with hardware and electricity can participate. There is no need to buy tokens from existing holders to become a validator, avoiding the "rich get richer" centralization loop often criticized in PoS.
 2.  **Objective Security:** PoW provides an objective measure of the chain's security (accumulated work). A new node can independently verify the valid chain with the most work without trusting any peers or checkpoints.
