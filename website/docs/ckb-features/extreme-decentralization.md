@@ -89,6 +89,7 @@ By embedding the verification layer directly into the user's application, CKB cl
 ## Summary
 
 In summary, CKB achieves extreme decentralization through three core components:
+
 - **Sustainable State Management**: By enforcing the rule that **1 CKB = 1 byte of storage**, CKB treats state as a scarce resource, preventing unbounded growth and keeping full nodes practical to run.
 - **Proof-of-Work Consensus**: Security is anchored in permissionless participation, allowing anyone to help secure the network by contributing computing power.
-- **Light Client**: Independent verification is possible on browsers and mobile devices without requiring full-node resources. 
+- **Light Client**: Independent verification is possible on browsers and mobile devices without requiring full-node resources.
