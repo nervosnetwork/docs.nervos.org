@@ -57,9 +57,9 @@ CKB utilizes [**NC-Max**](https://eprint.iacr.org/2020/1101.pdf) (a variant of N
 
 ### 3. Viable Light Client
 
-True decentralization requires that users can verify the state of the blockchain themselves rather than relying on trusted third-party RPC nodes (like Infura or Alchemy). If a user relies on a server to tell them their balance, they are not using a blockchain; they are using a bank.
+True decentralization requires that users can verify the state of the blockchain themselves rather than relying on trusted third-party RPC nodes (like Infura or Alchemy). If a user relies on a server to tell them their balance, they are not using a blockchain; they are using a bank. Running a full node (downloading terabytes of history), however, is too heavy for mobile and browser environments.
 
-However, running a full node (downloading terabytes of history) is impossible for mobile and web users. CKB solves this with a next-generation **Light Client** protocol that brings full-node-level security to consumer devices.
+CKB addresses this with a next-generation **Light Client** based on FlyClient and MMRs, bringing near-full-node security to everyday devices.
 
 #### The FlyClient Protocol & MMR
 
@@ -74,7 +74,7 @@ Unlike traditional SPV (Simplified Payment Verification), where clients must dow
 The CKB Light Client is compiled to **WebAssembly (WASM)**, enabling it to run in browser environments and other platforms that do not support traditional full node operations.
 
 - **No Installation Required:** The light client can be embedded directly into a web wallet or dApp. When a user visits a website, the browser operates as a lightweight verification node.
-- **Trustless Interaction:** Instead of relying on a server to check balances or transactions, the browser connects to the P2P network, samples block headers, and verifies data locally. 
+- **Trustless Interaction:** Instead of relying on a server to check balances or transactions, the browser connects to the P2P network, samples block headers, and verifies data locally.
 - **Mobile Ready:** With minimal storage requirements(storing only a single block header between executions) and low CPU usage, the light client can operate efficiently on mobile devices.
 
 #### Privacy and Sovereignty
