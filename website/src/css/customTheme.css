@@ -37,6 +37,7 @@
   /* Sidebar */
   --doc-sidebar-width: 260px !important;
   --ifm-sidebar-border-color: var(--border-subtle);
+  --ifm-navbar-sidebar-width: 100vw;
 
   /* DocSearch for algolia*/
   --docsearch-modal-background: var(--surface-03) !important;
@@ -84,6 +85,9 @@ ul.dropdown__menu {
 }
 
 @media (max-width: 1280px) {
+  .navbar {
+    padding: 0 1rem;
+  }
   .navbar__item {
     display: none;
   }
@@ -268,114 +272,18 @@ ul.dropdown__menu {
   padding-right: 1rem;
 }
 
-/* Add icon next to the menus */
-.category-getting-started > div > a:before {
-  content: url("/svg/icon-sidebar-rocket.svg");
-  margin-right: 0.5rem;
+/* Customize sidebar icons next to category names */
+.sidebarIcon {
   width: 1.125rem;
   height: 1.125rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
 }
-.category-dapp > div > a:before {
-  content: url("/svg/icon-sidebar-tutorial.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-script > div > a:before {
-  content: url("/svg/icon-sidebar-script.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-tool > div > a:before {
-  content: url("/svg/icon-sidebar-tool.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-integrate-wallets > div > a:before {
-  content: url("/svg/icon-sidebar-wallet.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-node > div > a:before {
-  content: url("/svg/icon-sidebar-node.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-ecosystem-scripts > div > a:before {
-  content: url("/svg/icon-sidebar-common-script.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-molecule > div > a:before {
-  content: url("/svg/icon-sidebar-molecule.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-howto > div > a:before {
-  content: url("/svg/icon-sidebar-howto.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-mining > div > a:before {
-  content: url("/svg/icon-sidebar-mining.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-history-hardfork > div > a:before {
-  content: url("/svg/icon-sidebar-history.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-ckb-fundamentals > div > a:before {
-  content: url("/svg/icon-sidebar-concept.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-core-structures > div > a:before {
-  content: url("/svg/icon-sidebar-structure.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-token-standards > div > a:before {
-  content: url("/svg/icon-sidebar-token.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-ecosystem > div > a:before {
-  content: url("/svg/icon-sidebar-ecosystem.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-resources > div > a:before {
-  content: url("/svg/icon-sidebar-resource.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-rust > div > a:before {
-  content: url("/svg/icon-sidebar-script.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.category-js > div > a:before {
-  content: url("/svg/icon-sidebar-script.svg");
-  margin-right: 0.5rem;
-  width: 1.125rem;
-  height: 1.125rem;
+
+.sidebarCategoryLabelWithIcon {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Footer */

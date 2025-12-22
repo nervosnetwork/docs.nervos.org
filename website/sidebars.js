@@ -5,6 +5,9 @@ export default {
       label: "Getting Started",
       className: "category-getting-started",
       collapsible: false,
+      customProps: {
+        icon: "rocket",
+      },
       items: [
         "getting-started/how-ckb-works",
         "getting-started/quick-start",
@@ -17,6 +20,9 @@ export default {
       label: "SDK & Devtools",
       className: "category-tool",
       collapsible: false,
+      customProps: {
+        icon: "tool",
+      },
       items: [
         "sdk-and-devtool/rust",
         "sdk-and-devtool/go",
@@ -34,6 +40,9 @@ export default {
       label: "Build DApp",
       className: "category-dapp",
       collapsible: false,
+      customProps: {
+        icon: "tutorial",
+      },
       items: [
         "dapp/transfer-ckb",
         "dapp/store-data-on-cell",
@@ -47,6 +56,9 @@ export default {
       label: "Integrate Wallets",
       className: "category-integrate-wallets",
       collapsible: false,
+      customProps: {
+        icon: "wallet",
+      },
       items: [
         "integrate-wallets/intro-to-wallets",
         "integrate-wallets/ccc-wallet",
@@ -57,6 +69,9 @@ export default {
       label: "Serialization (Molecule)",
       className: "category-molecule",
       collapsible: false,
+      customProps: {
+        icon: "molecule",
+      },
       items: [
         "serialization/serialization-molecule-in-ckb",
         "serialization/features-molecule",
@@ -73,6 +88,9 @@ export default {
       label: "How-Tos",
       className: "category-howto",
       collapsible: false,
+      customProps: {
+        icon: "howto",
+      },
       items: [
         "how-tos/how-to-sign-a-tx",
         "how-tos/how-to-query-tx-state",
@@ -88,6 +106,9 @@ export default {
       label: "Smart Contract Basics",
       className: "category-script",
       collapsible: false,
+      customProps: {
+        icon: "script",
+      },
       items: [
         "script/intro-to-script",
         "script/program-language-for-script",
@@ -110,6 +131,9 @@ export default {
       label: "Rust",
       className: "category-rust",
       collapsible: false,
+      customProps: {
+        icon: "rust",
+      },
       items: [
         "script/rust/rust-quick-start",
         "script/rust/rust-build",
@@ -151,6 +175,9 @@ export default {
       label: " JavaScript",
       className: "category-js",
       collapsible: false,
+      customProps: {
+        icon: "js",
+      },
       items: [
         "script/js/js-quick-start",
         {
@@ -197,6 +224,9 @@ export default {
       label: "Ecosystem Scripts",
       className: "category-ecosystem-scripts",
       collapsible: false,
+      customProps: {
+        icon: "commonScript",
+      },
       items: [
         "ecosystem-scripts/introduction",
         {
@@ -245,6 +275,9 @@ export default {
       type: "category",
       label: "Script Development Course",
       className: "category-full-script-development-series",
+      customProps: {
+        icon: "tutorial",
+      },
       collapsible: false,
       items: [
         "script-course/intro-to-script-1",
@@ -263,17 +296,34 @@ export default {
   "Tech Explanation": [
     {
       type: "category",
+      label: "What Makes CKB Unique",
+      className: "category-ckb-features",
+      collapsible: false,
+      customProps: {
+        icon: "feature",
+      },
+      items: [
+        "ckb-features/extreme-decentralization",
+        "ckb-features/native-quantum-resistance",
+        "ckb-features/vm-built-for-hackers",
+      ],
+    },
+    {
+      type: "category",
       label: "CKB Fundamentals",
       className: "category-ckb-fundamentals",
       collapsible: false,
+      customProps: {
+        icon: "concept",
+      },
       items: [
-        "tech-explanation/nervos-blockchain",
-        "tech-explanation/ckb-vs-btc",
-        "tech-explanation/cell-model",
-        "tech-explanation/ckb-vm",
-        "tech-explanation/consensus",
-        "tech-explanation/ckb-address",
-        "tech-explanation/ckbhash",
+        "ckb-fundamentals/nervos-blockchain",
+        "ckb-fundamentals/ckb-vs-btc",
+        "ckb-fundamentals/cell-model",
+        "ckb-fundamentals/ckb-vm",
+        "ckb-fundamentals/consensus",
+        "ckb-fundamentals/ckb-address",
+        "ckb-fundamentals/ckbhash",
       ],
     },
     {
@@ -281,6 +331,9 @@ export default {
       label: "Core Structures",
       className: "category-core-structures",
       collapsible: false,
+      customProps: {
+        icon: "structure",
+      },
       items: [
         {
           type: "category",
@@ -340,23 +393,31 @@ export default {
     },
     {
       type: "category",
-      label: "Assets & Token Standards",
-      className: "category-token-standards",
-      collapsible: false,
-      items: [
-        "tech-explanation/assets-overview",
-        "tech-explanation/economics",
-        "tech-explanation/xudt",
-        "tech-explanation/spore-protocol",
-        "tech-explanation/rgbpp",
-      ],
-    },
-    {
-      type: "category",
       label: "Resources",
       className: "category-resources",
       collapsible: false,
+      customProps: {
+        icon: "resource",
+      },
       items: ["tech-explanation/glossary"],
+    },
+  ],
+  "Assets & Token": [
+    {
+      type: "category",
+      label: "Assets & Token Standards",
+      className: "category-token-standards",
+      collapsible: false,
+      customProps: {
+        icon: "token",
+      },
+      items: [
+        "assets-token-standards/assets-overview",
+        "assets-token-standards/economics",
+        "assets-token-standards/xudt",
+        "assets-token-standards/spore-protocol",
+        "assets-token-standards/rgbpp",
+      ],
     },
   ],
   Ecosystem: [
@@ -364,18 +425,20 @@ export default {
       type: "category",
       label: "Ecosystem",
       className: "category-ecosystem",
+      customProps: {
+        icon: "ecosystem",
+      },
       collapsible: false,
-      items: [
-        "ecosystem/projects",
-        "ecosystem/organizations",
-        "ecosystem/contribute",
-      ],
+      items: ["ecosystem/projects", "ecosystem/organizations"],
     },
     {
       type: "category",
       label: "History & Hard Forks",
       className: "category-history",
       collapsible: false,
+      customProps: {
+        icon: "history",
+      },
       items: [
         "history-and-hard-forks/intro-to-hard-fork",
         "history-and-hard-forks/ckb-hard-fork-history",
@@ -384,8 +447,21 @@ export default {
     },
     {
       type: "category",
+      label: "Contribution",
+      className: "category-contribution",
+      collapsible: false,
+      customProps: {
+        icon: "contribution",
+      },
+      items: ["ecosystem/contribute"],
+    },
+    {
+      type: "category",
       label: "Resources",
       className: "category-resources",
+      customProps: {
+        icon: "resource",
+      },
       collapsible: false,
       items: [
         {
@@ -400,8 +476,13 @@ export default {
         },
         {
           type: "link",
-          label: "CKB Dev Log",
-          href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
+          label: "Fiber Network",
+          href: "https://www.fiber.world/docs",
+        },
+        {
+          type: "link",
+          label: "Spore Protocol",
+          href: "https://docs.spore.pro",
         },
         {
           type: "link",
@@ -413,32 +494,22 @@ export default {
           label: "CKB Cookbook",
           href: "https://cookbook.ckbdapps.com/",
         },
-      ],
-    },
-    {
-      type: "category",
-      label: "Other Protocols",
-      className: "category-other-protocols",
-      collapsible: false,
-      items: [
         {
           type: "link",
-          label: "Fiber network",
-          href: "https://www.fiber.world/docs",
-        },
-        {
-          type: "link",
-          label: "Spore Protocol",
-          href: "https://docs.spore.pro",
+          label: "CKB Dev Log",
+          href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
         },
       ],
     },
   ],
-  "Nodes & Mining": [
+  Nodes: [
     {
       type: "category",
       label: "Run a Node",
       className: "category-node",
+      customProps: {
+        icon: "node",
+      },
       collapsible: false,
       items: [
         "node/node-overview",
@@ -463,10 +534,15 @@ export default {
         "node/node-config",
       ],
     },
+  ],
+  Mining: [
     {
       type: "category",
       label: "Mining",
       className: "category-mining",
+      customProps: {
+        icon: "mining",
+      },
       collapsible: false,
       items: [
         "mining/guide",

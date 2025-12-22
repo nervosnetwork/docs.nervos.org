@@ -21,7 +21,7 @@ Spore is comparable to Ethereum’s [ERC-721](https://eips.ethereum.org/EIPS/eip
 | Features           | ERC-721 (Ethereum)          | Ordinals (Bitcoin) | Spore Protocol (Nervos CKB)                                |
 | ------------------ | --------------------------- | ------------------ | ---------------------------------------------------------- |
 | Content            | Mostly off-chain            | On-chain           | On-chain                                                   |
-| Model              | Account-based               | UTXO               | UTXO-based [Cell Model](/docs/tech-explanation/cell-model) |
+| Model              | Account-based               | UTXO               | UTXO-based [Cell Model](/docs/ckb-fundamentals/cell-model) |
 | Privacy            | No                          | Maybe              | Yes                                                        |
 | Immutability       | Variable                    | Yes, immutable     | Yes, immutable                                             |
 | Redeemable         | No                          | No                 | Yes                                                        |
@@ -44,7 +44,7 @@ Spore is a unique class of digital assets linked to the native currency of the N
 
 Spore Protocol offers enhanced privacy and security features that are not inherent in account-based NFT protocols, particularly addressing the challenges faced by NFT holders.
 
-- **Privacy through Cell Model**: Unlike account-based blockchains, where all transactions are tied to a single address, Nervos CKB uses a UTXO-based [Cell Model](/docs/tech-explanation/cell-model), which leverages independent Cells. In this model, each transaction uses a new address — even though it is controlled by the same key — effectively splitting ownership across multiple addresses and making it difficult to link them to a single identity.
+- **Privacy through Cell Model**: Unlike account-based blockchains, where all transactions are tied to a single address, Nervos CKB uses a UTXO-based [Cell Model](/docs/ckb-fundamentals/cell-model), which leverages independent Cells. In this model, each transaction uses a new address — even though it is controlled by the same key — effectively splitting ownership across multiple addresses and making it difficult to link them to a single identity.
 
 ### Zero-Fee Transfers
 

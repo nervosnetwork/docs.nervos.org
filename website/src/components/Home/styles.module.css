@@ -1,17 +1,61 @@
 @import "@css/customVariables.css";
 
-/* General styling */
+/* ---------------- General layout styling ---------------- */
 .section {
-  background: var(--dark-alert-secondary-bg);
-  border-radius: 32px;
-  border: 1px solid var(--dark-border-invisible);
-  backdrop-filter: blur(10px);
+  position: relative;
+  width: 100%;
   padding: 2.5rem;
   z-index: 1;
-  width: 100%;
-  position: relative;
+
+  background: var(--dark-alert-secondary-bg);
+  border: 1px solid var(--dark-border-invisible);
+  border-radius: 32px;
+  backdrop-filter: blur(10px);
 }
 
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.noGap {
+  gap: 0;
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flexBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.alignMiddle {
+  justify-content: center;
+}
+
+.section h1,
+.section h2,
+.section h3 {
+  margin: 0;
+  color: var(--dark-text-primary);
+}
+
+.section a {
+  margin: 0;
+}
+
+/* ---------------- Glows ---------------- */
 .sectionGlow {
   position: absolute;
   top: 0;
@@ -33,36 +77,11 @@
   z-index: -1;
 }
 
-.flexCol {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-.noGap {
-  gap: 0;
-}
-.flexCenter {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.flexBetween {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.flexWrap {
-  display: flex;
-  flex-wrap: wrap;
-}
-.alignMiddle {
-  justify-content: center;
-}
+/* ---------------- Icon containers ---------------- */
 .iconContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  object-fit: fill;
   width: 4rem;
   height: 4rem;
 }
@@ -72,106 +91,129 @@
   height: 2rem;
 }
 
-.section h3,
-.section h2,
-.section h1 {
-  margin: 0;
-  color: var(--dark-text-primary);
-}
-.section a {
-  margin: 0;
-}
-
-/* Home card used in header section */
+/* ---------------- Home cards (top) ---------------- */
 .smHomeCard {
   cursor: pointer;
 }
+
 .smHomeCard:hover {
   background-color: var(--dark-hover);
   text-decoration: none;
 }
+
 .cardTitle {
   margin-top: 1.5rem;
   margin-bottom: 2.5rem;
 }
+
 .cardLinks {
   margin-left: -0.5rem;
   margin-right: -0.5rem;
 }
+
 .cardLinks > .borderBtm:not(:last-child) {
   border-bottom: 1px solid var(--dark-border-invisible);
 }
+
 .link {
   line-height: 3rem;
   color: var(--dark-text-secondary) !important;
   text-decoration: none !important;
 }
+
 .line {
   cursor: pointer;
   padding: 0 0.5rem;
 }
+
 .line:hover {
   background-color: var(--dark-hover);
   border-radius: 2px;
 }
 
-/* wallet section specific */
+/* ---------------- Wallet section ---------------- */
 .filters {
   width: 100%;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
+
 .tag {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 2rem;
+
+  padding: 0 0.75rem;
+  margin: 0 1rem 1rem 0;
+
   font-size: 0.875rem;
+  line-height: 2rem;
+
   background-color: var(--dark-surface-03);
   color: var(--dark-text-tertiary);
-  line-height: 2rem;
+
   border-radius: 32px;
   border: 1px solid var(--dark-border-subtle);
   box-shadow: none;
   cursor: pointer;
-  margin: 0 1rem 1rem 0;
-  padding: 0 0.75rem;
 }
+
 .tag:hover {
   background-color: var(--dark-surface-03-hover);
 }
+
 .activeTag {
   background-color: var(--dark-alert-success-bg) !important;
   border: 1px solid var(--dark-alert-success);
   color: var(--dark-text-primary);
 }
 
-/* DApp section specific */
+/* ---------------- DApp tutorials ---------------- */
 .tutorialSection {
   padding: 7.5rem 2.5rem;
   gap: 2.5rem;
 }
+
 .tutorialLeft {
   width: 636px;
 }
+
 .tutorialSidebar {
   margin: 2.5rem 0;
   color: var(--dark-text-secondary);
 }
+
 .tutorialItem {
+  width: 100%;
+  text-align: left;
+
+  border: none;
+  background: transparent;
+
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+
   padding: 1rem 1.25rem;
   opacity: 0.5;
   cursor: pointer;
+
   position: relative;
   overflow: hidden;
 }
+
 .tutorialItem:hover {
   background-color: var(--dark-hover);
 }
+
+.itemTitle {
+  margin-bottom: 0.5rem;
+  color: var(--dark-text-primary);
+  z-index: 1;
+}
+
 .itemDecor {
   position: absolute;
   right: -1.5rem;
@@ -179,52 +221,103 @@
   z-index: 0;
   display: none;
 }
-.itemTitle {
-  margin-bottom: 0.5rem;
-  color: var(--dark-text-primary);
-  z-index: 1;
-}
+
 .itemActive {
   background: var(--dark-surface-accent);
   box-shadow: 0px 10px 40px -5px rgba(7, 28, 39, 0.4);
   opacity: 1;
 }
+
 .itemActive .itemDecor {
   display: block;
 }
+
 .tutorialFrame {
   width: 567px;
 }
 
-/* Dev tools section specific */
-.tableContainer {
-  display: flex;
-  justify-content: space-between;
+/* ---------------- Unique cards ---------------- */
+.uniqueWrap {
+  width: 100%;
 }
 
+.uniqueCard {
+  position: relative;
+  display: block;
+  text-decoration: none;
+
+  height: 340px;
+  padding: 1.5rem;
+
+  background-image: url("/svg/unique-card-shape.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.uniqueCard:hover {
+  text-decoration: none;
+}
+
+.uniqueCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.uniqueIcon {
+  width: 56px;
+  height: 56px;
+}
+
+.uniqueCardTitle {
+  margin: 0;
+}
+
+.uniqueCardDesc {
+  margin: 0;
+  padding: 1rem 0;
+
+  color: var(--dark-text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+  min-height: 8rem;
+}
+
+/* ---------------- Dev tools ---------------- */
+.devlogSection {
+  margin-bottom: 2.5rem;
+}
 .column {
   display: flex;
   flex-direction: column;
   color: var(--dark-text-primary);
   flex: 1;
 }
+
 .cell {
-  border: 1px solid var(--dark-border-subtle);
-  height: 3.5rem;
-  line-height: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  height: 3.5rem;
+  line-height: 3.5rem;
+
+  border: 1px solid var(--dark-border-subtle);
   cursor: pointer;
+
   text-decoration: none !important;
   color: var(--dark-text-primary);
   font-weight: bold;
+
   flex: 1 1 50%;
 }
+
 .cell:hover {
   background-color: var(--dark-hover);
   border-color: var(--dark-border-accent);
 }
+
 .columnHeader {
   background-color: var(--dark-surface-03) !important;
   border: 1px solid var(--dark-border-subtle) !important;
@@ -232,68 +325,79 @@
   cursor: default;
 }
 
-/* Project Display specific */
+/* ---------------- Projects carousel ---------------- */
 .carouselContainer {
   width: 100%;
 }
+
 .carouselController {
   gap: 0.5rem;
 }
+
 .arrowLeft,
 .arrowRight {
   width: 2rem;
   min-width: 2rem;
   height: 2rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  cursor: pointer;
-  color: var(--dark-alert-success);
-  background: var(--dark-alert-success-bg);
-  border-radius: 50%;
+
   border: 1px solid var(--dark-border-accent);
+  border-radius: 50%;
+
+  cursor: pointer;
+  background: var(--dark-alert-success-bg);
+  color: var(--dark-alert-success);
 }
+
 .arrowLeft:hover,
 .arrowRight:hover {
   background: var(--dark-surface-03-hover);
 }
+
 .arrowLeft {
   transform: scaleX(-1);
 }
 
-/* Dev Log specific */
+/* ---------------- Dev log / history ---------------- */
+
 .illusContainer {
   width: 417px;
   height: 350px;
 }
+
 .leftContainer {
   max-width: 55%;
 }
+
 .description {
   color: var(--dark-text-secondary);
   font-size: 1.25rem;
 }
 
-/* CTA section specific */
+/* ---------------- CTA ---------------- */
 .ctaSection {
   background-color: var(--dark-surface-02);
 }
+
 .ctaSection::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+
   background-image: url("/img/noise.png");
   background-position: center;
   background-repeat: repeat;
+
   z-index: -1;
 }
+
 .ctaSubsection {
   max-width: 40%;
 }
+
 .or {
   background-color: var(--dark-surface-01);
   width: 5rem;
@@ -301,15 +405,21 @@
   height: 5rem;
   border-radius: 50%;
 }
+
 .command {
+  border: none;
+
   background-color: var(--dark-alert-success-bg);
   padding: 0 2rem;
+
   line-height: 3rem;
   width: 286px;
   border-radius: 40px;
+
   color: var(--dark-text-link);
   cursor: pointer;
 }
+
 .command:hover {
   background: radial-gradient(
     50% 50% at 50% 50%,
@@ -319,77 +429,107 @@
   transition: opacity 0.2s;
 }
 
-/* Footer section specific */
+/* ---------------- Footer ---------------- */
 .footerSection {
   border-top: 1px solid var(--dark-border-invisible);
   min-height: 4rem;
   padding: 1rem 4rem;
 }
+
 .copyright {
   color: var(--dark-text-secondary);
   font-size: 0.875rem;
   text-align: center;
 }
+
 .icons {
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .iconBG {
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 2.25rem;
   height: 2.25rem;
+
   background-color: var(--dark-surface-02);
   border-radius: 50%;
   cursor: pointer;
 }
+
 .iconBG:hover {
   background-color: var(--dark-surface-03);
 }
 
-/* Responsiveness */
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 1440px) {
+  .uniqueCard {
+    background-image: none;
+    background-color: var(--dark-surface-02);
+    border: 1px solid var(--dark-border-invisible);
+    border-radius: 2rem;
+    height: fit-content;
+  }
+  .uniqueCardDesc {
+    min-height: 4rem;
+  }
+}
+
 @media (max-width: 996px) {
   .illusContainer {
     width: 100%;
   }
+
   .tutorialSection {
     flex-direction: column;
     padding: 3.5rem;
   }
+
   .tutorialLeft,
   .tutorialFrame {
     width: 100%;
   }
+
   .devlogSection {
     flex-direction: column-reverse;
-    align-items: start;
+    align-items: flex-start;
   }
+
   .leftContainer {
     max-width: 100%;
   }
+
   .ctaSection {
     flex-direction: column;
     gap: 2.5rem;
-    align-items: start;
+    align-items: flex-start;
   }
+
   .ctaSubsection {
     max-width: 100%;
   }
+
   .footerSection {
     flex-direction: column;
     gap: 1rem;
   }
 }
+
 @media (max-width: 768px) {
   .section {
     padding: 2.5rem 1.25rem;
     border-radius: 20px;
   }
+
   .sectionGlow,
   .sectionGlowOpposite {
     display: none;
   }
+
   .flexCol {
     gap: 1.25rem;
   }
