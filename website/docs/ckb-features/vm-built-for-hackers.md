@@ -21,12 +21,13 @@ Nervos picked RISC-V for some pretty solid reasons:
 
 ## What Makes CKB-VM Unique?
 
-CKB-VM is a pure software implementation of the RISC-V instruction set. Specifically, it uses the **RV64IMC** instruction set:
+CKB-VM is a pure software implementation of the RISC-V instruction set. Specifically, it uses the **RV64IMC_ZBA_ZBB_ZBC_ZBS** instruction set:
 
 - **RV64**: 64-bit address space and registers.
 - **I**: Integer instructions (basic arithmetic).
 - **M**: Integer Multiplication and Division.
 - **C**: Compressed instructions (smaller code size).
+- **B**: Bit manipulation extension.
 
 ### The "No Precompiles" Philosophy
 
