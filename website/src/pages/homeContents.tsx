@@ -2,6 +2,14 @@ export interface CardLinks {
   label: string;
   link: string;
 }
+
+export interface HomeCardProps {
+  title: string;
+  icon: string;
+  links?: CardLinks[];
+  to?: string;
+}
+
 export interface TutorialProps {
   title: string;
   description: string;
@@ -9,17 +17,18 @@ export interface TutorialProps {
   iframeSrc: string;
   illusSrc: string;
 }
+
 export interface DevToolProps {
   title: string;
   href: string;
-  category: string;
+  category: "SDK" | "Other DevTools";
 }
 
-export interface HomeCardProps {
-  title: string;
-  links?: CardLinks[];
-  to?: string;
+export interface UniqueProps {
   icon: string;
+  title: string;
+  description: string;
+  link: string;
 }
 
 const homeCardContents: HomeCardProps[] = [
@@ -56,19 +65,11 @@ const homeCardContents: HomeCardProps[] = [
     ],
     icon: "script",
   },
+  { title: "Run a Node", to: "/docs/node/node-overview", icon: "node" },
+  { title: "Mining", to: "/docs/mining/guide", icon: "mining" },
   {
-    title: "Run a Node",
-    to: "/docs/node/node-overview",
-    icon: "node",
-  },
-  {
-    title: "Mining",
-    to: "/docs/mining/guide",
-    icon: "mining",
-  },
-  {
-    title: "Tech Explanation",
-    to: "/docs/tech-explanation/nervos-blockchain",
+    title: "CKB Fundamentals",
+    to: "/docs/ckb-fundamentals/nervos-blockchain",
     icon: "tech-explanation",
   },
 ];
@@ -108,27 +109,35 @@ const tutorialSectionContents: TutorialProps[] = [
   },
 ];
 
+const uniqueSectionContents: UniqueProps[] = [
+  {
+    icon: "nodes",
+    title: "Extreme Decentralization",
+    description:
+      "Secured by Proof-of-Work so anyone can verify the network without trusting a central party.",
+    link: "/docs/ckb-features/extreme-decentralization",
+  },
+  {
+    icon: "quantum",
+    title: "Native Quantum Resistance",
+    description:
+      "Supports quantum-resistant cryptography to help protect assets and identities over time.",
+    link: "/docs/ckb-features/native-quantum-resistance",
+  },
+  {
+    icon: "vm",
+    title: "Virtual Machine Built for Hackers",
+    description:
+      "Uses a public, open standard (RISC-V) to run and verify on-chain rules in a transparent way.",
+    link: "/docs/ckb-features/vm-built-for-hackers",
+  },
+];
+
 const devToolSectionContents: DevToolProps[] = [
-  {
-    title: "Rust",
-    href: "/docs/sdk-and-devtool/rust",
-    category: "SDK",
-  },
-  {
-    title: "Go",
-    href: "/docs/sdk-and-devtool/go",
-    category: "SDK",
-  },
-  {
-    title: "Java",
-    href: "/docs/sdk-and-devtool/java",
-    category: "SDK",
-  },
-  {
-    title: "TypeScript",
-    href: "/docs/sdk-and-devtool/ccc",
-    category: "SDK",
-  },
+  { title: "Rust", href: "/docs/sdk-and-devtool/rust", category: "SDK" },
+  { title: "Go", href: "/docs/sdk-and-devtool/go", category: "SDK" },
+  { title: "Java", href: "/docs/sdk-and-devtool/java", category: "SDK" },
+  { title: "TypeScript", href: "/docs/sdk-and-devtool/ccc", category: "SDK" },
   {
     title: "CKB-CLI",
     href: "https://github.com/nervosnetwork/ckb-cli",
@@ -165,15 +174,14 @@ const contactUsContents: CardLinks[] = [
   },
 ];
 
-// Just to include a default export
-const HomeContentsPage: React.FC = () => {
-  return null;
-};
+// default export placeholder
+const HomeContentsPage: React.FC = () => null;
 export default HomeContentsPage;
 
 export {
   homeCardContents,
   tutorialSectionContents,
+  uniqueSectionContents,
   devToolSectionContents,
   contactUsContents,
 };

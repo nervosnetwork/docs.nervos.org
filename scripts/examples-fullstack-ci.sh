@@ -26,12 +26,7 @@ fi
 
 # Run build for frontend
 cd frontend
-npm install
-if [ $? -ne 0 ]; then
-    exit 1
-fi
-
-npm run build
+pnpm run build
 if [ $? -ne 0 ]; then
     exit 1
 fi

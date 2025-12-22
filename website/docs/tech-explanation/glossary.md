@@ -205,7 +205,7 @@ A Cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 - [Type Script](#type-script)
 - [Dead Cell](#dead-cell)
 - [Live Cell](#live-cell)
-- [Cell Model](/docs/tech-explanation/cell-model)
+- [Cell Model](/docs/ckb-fundamentals/cell-model)
 - [UTXO on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
 
 ---
@@ -220,7 +220,7 @@ The Cell Model is a new construction that combines many of the advantages of Eth
 
 - [Lock Script](#lock-script)
 - [Type Script](#type-script)
-- [Cell Model](/docs/tech-explanation/cell-model)
+- [Cell Model](/docs/ckb-fundamentals/cell-model)
 - [Cell Model on the Nervos Blog](https://medium.com/nervosnetwork/https-medium-com-nervosnetwork-cell-model-7323fca57571)
 - [UTXO on Bitcoin.org](https://developer.bitcoin.org/glossary.html)
 
@@ -2817,7 +2817,7 @@ A token protocol that maps native Bitcoin UTXOs to Nervos CKB Cells using isomor
 #### See Also
 
 - [RGB](https://rgb.tech/)
-- [RGB++ Protocol](/docs/tech-explanation/rgbpp)
+- [RGB++ Protocol](/docs/assets-token-standards/rgbpp)
 
 ### RISC-V
 

@@ -161,7 +161,7 @@ const config = {
           },
           {
             from: "/docs/basics/concepts/economics",
-            to: "/docs/tech-explanation/economics",
+            to: "/docs/assets-token-standards/economics",
           },
           {
             from: "/docs/basics/glossary/",
@@ -255,45 +255,209 @@ const config = {
       },
       items: [
         {
-          to: "/docs/getting-started/how-ckb-works",
-          label: "Getting Started",
+          type: "custom-megaMenu",
+          label: "Build",
           position: "left",
+          menuId: "build",
           activeBaseRegex:
-            "/(getting-started|how-tos|serialization|integrate-wallets|dapp|sdk-and-devtool)/",
+            "/(getting-started|dapp|script|how-tos|integrate-wallets|sdk-and-devtool|serialization)/",
+          primaryItems: [
+            {
+              title: "Getting Started",
+              description: "Basics for onboarding to CKB",
+              href: "/docs/getting-started/how-ckb-works",
+              icon: "squareRocket",
+              activeBaseRegex: "/getting-started/",
+            },
+            {
+              title: "DApp Tutorials",
+              description: "Step-by-step examples for building on CKB",
+              href: "/docs/dapp/transfer-ckb",
+              icon: "squareDapp",
+              activeBaseRegex: "/dapp/",
+            },
+            {
+              title: "Script Development",
+              description: "Implement smart-contract logic on CKB",
+              href: "/docs/script/intro-to-script",
+              icon: "squareScript",
+              activeBaseRegex: "/(script|ecosystem-scripts|script-course)/",
+            },
+          ],
+
+          otherLabel: "OTHER",
+          otherItems: [
+            {
+              title: "How-Tos",
+              href: "/docs/how-tos/how-to-sign-a-tx",
+              icon: "howto",
+              activeBaseRegex: "/how-tos/",
+            },
+            {
+              title: "Integrate Wallets",
+              href: "/docs/integrate-wallets/intro-to-wallets",
+              icon: "wallet",
+              activeBaseRegex: "/integrate-wallets/",
+            },
+            {
+              title: "SDK & Dev Tools",
+              href: "/docs/sdk-and-devtool/devtool",
+              icon: "tool",
+              activeBaseRegex: "/sdk-and-devtool/",
+            },
+            {
+              title: "Serialization (Molecule)",
+              href: "/docs/serialization/serialization-molecule-in-ckb",
+              icon: "molecule",
+              activeBaseRegex: "/serialization/",
+            },
+          ],
         },
         {
-          to: "/docs/script/intro-to-script",
-          label: "Scripts (Smart Contracts)",
+          type: "custom-megaMenu",
+          label: "Learn",
           position: "left",
-          activeBaseRegex: "/(script|ecosystem-scripts|script-course)/",
+          menuId: "learn",
+          activeBaseRegex:
+            "/(tech-explanation|ckb-fundamentals|ckb-features|assets-token-standards)/",
+          primaryItems: [
+            {
+              title: "What Makes CKB Unique",
+              description: "Design choices behind CKB",
+              href: "/docs/ckb-features/extreme-decentralization",
+              icon: "squareFeature",
+              activeBaseRegex: "/ckb-features/",
+            },
+            {
+              title: "CKB Fundamentals",
+              description: "Core concepts of how CKB works",
+              href: "/docs/ckb-fundamentals/nervos-blockchain",
+              icon: "squareConcept",
+              activeBaseRegex: "/ckb-fundamentals/",
+            },
+            {
+              title: "Core Structures",
+              description: "Detailed breakdown of core components",
+              href: "/docs/tech-explanation/cell",
+              icon: "squareStructure",
+              activeBaseRegex: "^.*tech-explanation(?!/glossary)",
+            },
+          ],
+
+          otherLabel: "OTHER",
+          otherItems: [
+            {
+              title: "Assets & Token Standards",
+              href: "/docs/assets-token-standards/assets-overview",
+              icon: "token",
+              activeBaseRegex: "/assets-token-standards/",
+            },
+            {
+              title: "Glossary",
+              href: "/docs/tech-explanation/glossary",
+              icon: "resource",
+              activeBaseRegex: "/tech-explanation/glossary",
+            },
+          ],
         },
         {
-          to: "/docs/tech-explanation/nervos-blockchain",
-          label: "Tech Explanation",
+          type: "custom-megaMenu",
+          label: "Network",
           position: "left",
-          activeBaseRegex: "/(tech-explanation)/",
-        },
-        {
-          to: "/docs/node/node-overview",
-          label: "Nodes & Mining",
-          position: "left",
+          menuId: "network",
           activeBaseRegex: "/(node|mining)/",
+          primaryItems: [
+            {
+              title: "Run a Node",
+              description: "Install, configure, and operate CKB nodes",
+              href: "/docs/node/node-overview",
+              icon: "squareNodes",
+              activeBaseRegex: "/node/",
+            },
+            {
+              title: "Mining",
+              description: "Mining mechanics, tools, and rewards",
+              href: "/docs/mining/guide",
+              icon: "squareMine",
+              activeBaseRegex: "/mining/",
+            },
+          ],
         },
         {
-          to: "/docs/ecosystem/projects",
-          label: "Ecosystem",
+          type: "custom-megaMenu",
+          label: "Community",
           position: "left",
-          activeBaseRegex: "/(ecosystem|history-and-hard-forks)/",
+          menuId: "community",
+          activeBaseRegex: "/(ecosystem|history-and-hard-forks)",
+          primaryItems: [
+            {
+              title: "Projects",
+              description:
+                "Applications, tools, and initiatives in the ecosystem",
+              href: "/docs/ecosystem/projects",
+              icon: "squareProject",
+              activeBaseRegex: "/ecosystem/projects",
+            },
+            {
+              title: "History & Hard Forks",
+              description: "Timeline and evolution of the CKB network",
+              href: "/docs/history-and-hard-forks/intro-to-hard-fork",
+              icon: "squareHistory",
+              activeBaseRegex: "/history-and-hard-forks/",
+            },
+            {
+              title: "Contribute",
+              description: "Ways to participate and support the network",
+              href: "/docs/ecosystem/contribute",
+              icon: "squareContribution",
+              activeBaseRegex: "/ecosystem/contribute",
+            },
+          ],
+          otherLabel: "RESOURCES",
+          otherCol: 2,
+          otherItems: [
+            {
+              title: "Positioning Paper",
+              href: "https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0001-positioning/0001-positioning.md",
+              external: true,
+            },
+            {
+              title: "CKB RFCs",
+              href: "https://github.com/nervosnetwork/rfcs",
+              external: true,
+            },
+            {
+              title: "Fiber Network",
+              href: "https://www.fiber.world/docs",
+              external: true,
+            },
+            {
+              title: "Spore Protocol",
+              href: "https://docs.spore.pro/",
+              external: true,
+            },
+            {
+              title: "CKB Academy",
+              href: "https://academy.ckb.dev/",
+              external: true,
+            },
+            {
+              title: "CKB Cookbook",
+              href: "https://cookbook.ckbdapps.com/",
+              external: true,
+            },
+            {
+              title: "CKB Dev Log",
+              href: "https://github.com/nervosnetwork/ckb/discussions/categories/dev-log",
+              external: true,
+            },
+          ],
         },
+
         {
           type: "search",
           position: "right",
           className: "navbar-search",
-        },
-        {
-          to: "docs/ecosystem/contribute",
-          label: "Contribute",
-          position: "right",
         },
         {
           type: "html",
