@@ -365,7 +365,7 @@ const config = {
           label: "Network",
           position: "left",
           menuId: "network",
-          activeBaseRegex: "/(node|mining)/",
+          activeBaseRegex: "/(node|mining|history-and-hard-forks)/",
           primaryItems: [
             {
               title: "Run a Node",
@@ -373,6 +373,13 @@ const config = {
               href: "/docs/node/node-overview",
               icon: "squareNodes",
               activeBaseRegex: "/node/",
+            },
+            {
+              title: "History & Hard Forks",
+              description: "Timeline and evolution of the CKB network",
+              href: "/docs/history-and-hard-forks/intro-to-hard-fork",
+              icon: "squareHistory",
+              activeBaseRegex: "/history-and-hard-forks/",
             },
             {
               title: "Mining",
@@ -388,7 +395,7 @@ const config = {
           label: "Community",
           position: "left",
           menuId: "community",
-          activeBaseRegex: "/(ecosystem|history-and-hard-forks)",
+          activeBaseRegex: "/(ecosystem)",
           primaryItems: [
             {
               title: "Projects",
@@ -397,13 +404,6 @@ const config = {
               href: "/docs/ecosystem/projects",
               icon: "squareProject",
               activeBaseRegex: "/ecosystem/projects",
-            },
-            {
-              title: "History & Hard Forks",
-              description: "Timeline and evolution of the CKB network",
-              href: "/docs/history-and-hard-forks/intro-to-hard-fork",
-              icon: "squareHistory",
-              activeBaseRegex: "/history-and-hard-forks/",
             },
             {
               title: "Contribute",
