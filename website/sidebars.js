@@ -433,20 +433,6 @@ export default {
     },
     {
       type: "category",
-      label: "History & Hard Forks",
-      className: "category-history",
-      collapsible: false,
-      customProps: {
-        icon: "history",
-      },
-      items: [
-        "history-and-hard-forks/intro-to-hard-fork",
-        "history-and-hard-forks/ckb-hard-fork-history",
-        "history-and-hard-forks/rethinking-forks",
-      ],
-    },
-    {
-      type: "category",
       label: "Contribution",
       className: "category-contribution",
       collapsible: false,
@@ -532,6 +518,22 @@ export default {
         "node/run-public-rpc-node",
         "node/sync-options",
         "node/node-config",
+      ],
+    },
+  ],
+  HardFork: [
+    {
+      type: "category",
+      label: "History & Hard Forks",
+      className: "category-history",
+      collapsible: false,
+      customProps: {
+        icon: "history",
+      },
+      items: [
+        "history-and-hard-forks/intro-to-hard-fork",
+        "history-and-hard-forks/ckb-hard-fork-history",
+        "history-and-hard-forks/rethinking-forks",
       ],
     },
   ],
