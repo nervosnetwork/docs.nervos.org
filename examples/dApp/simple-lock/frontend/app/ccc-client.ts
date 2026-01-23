@@ -17,6 +17,7 @@ export const DEVNET_SCRIPTS: Record<string, ScriptInfo> = {
   [KnownScript.OmniLock]: systemScripts["devnet"].omnilock!
     .script as ScriptInfo,
   [KnownScript.XUdt]: systemScripts["devnet"].xudt!.script as ScriptInfo,
+  [KnownScript.NervosDao]: systemScripts["devnet"].dao!.script as ScriptInfo,
 };
 
 export function buildCccClient(network: Network) {
