@@ -26,7 +26,7 @@ A kind of basic object in distributed ledger used to keep the balance and other 
 ### Address
 
 A label consists of string of letters and numbers that anonymously represents user's identity on chain. Crypto assets can be sent to and/or from addresses.
-CKB address packages [Lock Script](#lock-script) into a single line, verifiable, and human read friendly format. A single public-private key pair can generate multiple Lock Scripts, consequently multiple addresses.
+CKB address packages [Lock Script](#lock-script) into a single line, verifiable, and human-readable format. A single public-private key pair can generate multiple Lock Scripts, consequently multiple addresses.
 
 #### Synonyms
 
@@ -189,7 +189,7 @@ The maximum space (in bytes) that a Cell can occupy on the Nervos CKB.
 
 ### Cell
 
-Cells are the primary state units in CKB, within them users can include arbitrary states. All data on Nervos CKB is stored in Cells.
+Cells are the primary state units in CKB, within which users can include arbitrary states. All data on Nervos CKB is stored in Cells.
 
 A Cell has 4 fields: `capacity`, `data`, `type` and `lock`.
 
@@ -596,7 +596,7 @@ The sender of a transaction often includes a fee to the network for processing t
 
 A tip per byte that a user offers to the miners for including his transaction in a block on the blockchain.
 
-This is a same concept to Bitcoin's [Fee Rate(often spelled feerate)](https://en.bitcoin.it/wiki/Miner_fees#Feerates).
+This is the same concept as Bitcoin's [Fee Rate(often spelled feerate)](https://en.bitcoin.it/wiki/Miner_fees#Feerates).
 
 #### See Also
 
