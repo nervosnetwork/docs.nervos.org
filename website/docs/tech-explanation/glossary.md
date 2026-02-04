@@ -596,7 +596,7 @@ The sender of a transaction often includes a fee to the network for processing t
 
 A tip per byte that a user offers to the miners for including his transaction in a block on the blockchain.
 
-This is the same concept as Bitcoin's [Fee Rate(often spelled feerate)](https://en.bitcoin.it/wiki/Miner_fees#Feerates).
+This is the same concept as Bitcoin's [Fee Rate (often spelled feerate)](https://en.bitcoin.it/wiki/Miner_fees#Feerates).
 
 #### See Also
 
