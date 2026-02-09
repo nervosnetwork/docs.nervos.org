@@ -17,6 +17,7 @@ Nervos CKB addresses this by decoupling concerns across a multi-layered architec
 ### The Last Line of Defense
 
 CKB is positioned at the **far-left edge** of this spectrum, serving as the immutable trust anchor and the **last line of defense** for the entire network. Compromising the base layer for usability or speed would weaken the security of the entire structure.
+![Blockchain Landscape Spectrum](/img/ckb-features/multi-layered-architecture.png)
 
 This separation establishes a clear division of labor:
 
@@ -30,6 +31,8 @@ This principle applies not only to code, but also for operational decisions. For
 Decentralization is not just about who mines the next block–it is about who can independently **verify** the chain's history. If running a node becomes too expensive due to data bloat, participation collapses into a few data centers, and the system recentralizes in practice regardless of its consensus algorithm.
 
 CKB addresses this challenge through three radical design choices: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client**, supported by ongoing engineering efforts to lower the barrier to running nodes.
+
+![How CKB Achieve Extreme Decentralization](/img/ckb-features/extreme-decentralization.png)
 
 ### 1. Sustainable State Management
 
