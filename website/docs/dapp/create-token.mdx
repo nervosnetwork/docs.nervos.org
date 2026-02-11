@@ -19,7 +19,7 @@ import ExampleLink from "@components/ExampleLink";
 
 Unlike [ERC20(Ethereum)](https://eips.ethereum.org/EIPS/eip-20) and [BRC20(Bitcoin)](https://www.brc-20.io/), CKB uses a unique way to build custom tokens based on its UTXO-like <Tooltip>Cell Model</Tooltip>.
 
-In CKB, custom tokens are called User-Defined Tokens (UDTs). CKB defines a minimal standard for UDT called [xUDT(extensible UDT)](/docs/assets-token-standards/xudt). In this tutorial, you will learn how to issue custom tokens using the pre-deployed `xUDT Script`.
+In CKB, custom tokens are called User-Defined Tokens (UDTs). CKB defines a minimal standard for UDTs called [xUDT(extensible UDT)](/docs/assets-token-standards/xudt). In this tutorial, you will learn how to issue custom tokens using the pre-deployed `xUDT Script`.
 
 Steps to Issue a Custom Token with xUDT:
 
@@ -39,7 +39,7 @@ To get started with the tutorial dApp, download or clone the <ExampleLink path="
 
 <SetupProject imageSrc="img/dapps/issue-token-dapp.jpg" />
 
-## Behind the Scene
+## Behind the Scenes
 
 ### Issuing Custom Token
 
@@ -63,7 +63,7 @@ export async function issueToken(privKey: string, amount: string) {
 This function accepts two parameters:
 
 - `privKey`: The private key of the issuer
-- `amount`: The amount of token
+- `amount`: The amount of tokens
 
 Note that we aim to create an output Cell whose <Tooltip>Type Script</Tooltip> is an xUDT Script. The args of this xUDT Script are the issuer's Lock Script Hash, which is why we include the following lines of code:
 
@@ -97,7 +97,7 @@ Next, to complete our `issueToken` function, we just use the `helpers.Transactio
 ...
 ```
 
-Lastly, we do the signing and sending transaction:
+Lastly, we do the signing and sending of the transaction:
 
 ```ts
 const txHash = await signer.sendTransaction(tx);
@@ -173,7 +173,7 @@ const tx = ccc.Transaction.from({
 await tx.completeInputsByUdt(signer, xUdtType);
 ```
 
-Notice that If there is any token amount remaining, we need to return the change amount along with change capacities to the sender.
+Notice that if there is any token amount remaining, we need to return the change amount along with change capacities to the sender.
 
 ```ts
 const balanceDiff =
