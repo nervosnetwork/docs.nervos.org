@@ -54,9 +54,10 @@ export function ensureActiveTabInView() {
 }
 
 export function observeSidebarChanges() {
-  const sidebar = document.querySelector("nav[aria-label='Docs sidebar']");
+  const label = "Docs sidebar";
+  const sidebar = document.querySelector(`nav[aria-label='${label}']`);
   if (!sidebar) {
-    return;
+    return () => {};
   }
 
   let rafId: number | null = null;
