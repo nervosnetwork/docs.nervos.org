@@ -1,29 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import NavbarLayout from "@theme/Navbar/Layout";
 import NavbarContent from "@theme/Navbar/Content";
 import { useLocation } from "@docusaurus/router";
 import {
   ensureActiveTabInView,
-  observeDocumentChanges,
+  observeSidebarChanges,
   subscribeSidebarScroll,
 } from "./auto-scroll";
 
 export default function Navbar(): JSX.Element {
-  const isMounted = useRef(false);
   const location = useLocation();
 
   useEffect(() => {
     ensureActiveTabInView();
+  }, [location.pathname]);
 
+  useEffect(() => {
     const unsubscribeSidebarScroll = subscribeSidebarScroll();
-    const unsubscribeDocumentChanges = observeDocumentChanges();
+    const unsubscribeSidebarChanges = observeSidebarChanges();
 
-    isMounted.current = true;
     return () => {
       unsubscribeSidebarScroll?.();
-      unsubscribeDocumentChanges?.();
+      unsubscribeSidebarChanges?.();
     };
-  }, [location.pathname]);
+  }, []);
 
   return (
     <NavbarLayout>

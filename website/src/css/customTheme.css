@@ -218,6 +218,14 @@ ul.dropdown__menu {
 }
 
 /* Sidebar Menu */
+nav[aria-label="Docs sidebar"] {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+nav[aria-label="Docs sidebar"]::-webkit-scrollbar {
+  display: none;
+}
+
 .menu {
   padding: 1rem 1rem 3rem 1rem !important;
 }
