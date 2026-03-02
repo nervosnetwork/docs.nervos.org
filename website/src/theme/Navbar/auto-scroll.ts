@@ -76,7 +76,7 @@ export function observeDocumentChanges() {
     }
   });
 
-  const targetNode = document.getElementById("__docusaurus");
+  const targetNode = document.querySelector("nav[aria-label='Docs sidebar']");
   if (targetNode) {
     const config = { attributes: true, childList: true, subtree: true };
     observer.observe(targetNode, config);
