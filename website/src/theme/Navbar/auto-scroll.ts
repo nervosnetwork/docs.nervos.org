@@ -49,10 +49,8 @@ export function ensureActiveTabInView() {
 
   // Not visible after restoring scroll, so scroll into view.
   if (!isItemVisibleAfterRestore) {
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
     item.scrollIntoView({ block: "nearest", inline: "nearest" });
-    window.scrollTo(scrollX, scrollY);
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 
   if (sidebar) {
