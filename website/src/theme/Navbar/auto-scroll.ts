@@ -4,6 +4,15 @@ export function ensureActiveTabInView() {
   const sidebar = document.querySelector("nav[aria-label='Docs sidebar']");
 
   if (sidebar) {
+    // Hide the scrollbar for better UX
+    // @ts-ignore
+    sidebar.style = `
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+      &::-webkit-scrollbar {
+          display: none;  /* Chrome, Safari and Opera */
+      }
+    `;
     const lastScrollTop = sessionStorage.getItem(SIDEBAR_SCROLL_TOP_KEY);
     if (lastScrollTop !== null) {
       sidebar.scrollTop = parseInt(lastScrollTop, 10);
@@ -27,6 +36,7 @@ export function ensureActiveTabInView() {
   if (sidebar) {
     const itemRect = item.getBoundingClientRect();
     const sidebarRect = sidebar.getBoundingClientRect();
+    // Check if item is visible within the sidebar's viewport
     isItemVisibleAfterRestore =
       itemRect.top >= sidebarRect.top && itemRect.bottom <= sidebarRect.bottom;
   } else {
@@ -50,33 +60,31 @@ export function ensureActiveTabInView() {
       SIDEBAR_SCROLL_TOP_KEY,
       sidebar.scrollTop.toString()
     );
+    // Restore the scrollbar style
+    // @ts-ignore
+    sidebar.style = undefined;
   }
 }
 
-export function observeSidebarChanges() {
-  const sidebar = document.querySelector("nav[aria-label='Docs sidebar']");
-  if (!sidebar) {
-    return;
+export function observeDocumentChanges() {
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (
+        mutation.type === "childList" ||
+        (mutation.type === "attributes" && mutation.attributeName === "class")
+      ) {
+        ensureActiveTabInView();
+      }
+    }
+  });
+
+  const targetNode = document.getElementById("__docusaurus");
+  if (targetNode) {
+    const config = { attributes: true, childList: true, subtree: true };
+    observer.observe(targetNode, config);
   }
-
-  let rafId: number | null = null;
-
-  const observer = new MutationObserver(() => {
-    if (rafId !== null) return;
-    rafId = requestAnimationFrame(() => {
-      rafId = null;
-      ensureActiveTabInView();
-    });
-  });
-
-  observer.observe(sidebar, {
-    childList: true,
-    subtree: true,
-  });
-
   return () => {
     observer.disconnect();
-    if (rafId !== null) cancelAnimationFrame(rafId);
   };
 }
 
