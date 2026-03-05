@@ -15,7 +15,7 @@ import ExampleLink from "@site/src/components/ExampleLink";
 
 <TutorialHeader time={"5 - 7 min"} tools={"script"} customTools={[]} />
 
-We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tutorial using a JavaScript implementation. Here, we’ll write a **Rust** contract that provides the same functionality.
+We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tutorial. The dApp tutorial demonstrates how to build a full-stack application with a Rust contract and a web frontend. Here, we'll dive deeper into the Rust contract implementation itself.
 
 > This example is for demonstration purposes only. It may contain security issues and is **strongly discouraged for mainnet use**.
 
@@ -28,7 +28,7 @@ We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tuto
 
 ## Implementation
 
-> We’ll add a new contract to the <ExampleLink path="ckb-rust-script/">`ckb-rust-script`</ExampleLink> project.
+> We'll add a new contract to the <ExampleLink path="ckb-rust-script/">`ckb-rust-script`</ExampleLink> project.
 
 1. Generate the contract scaffold:
 
@@ -83,7 +83,7 @@ Key points:
   ckb-hash = { version = "...", default-features = false, features = ["ckb-contract"] }
   ```
 
-- CKB’s `blake2b_256` uses a different **personalization** than the default; always use the CKB-provided implementation.
+- CKB's `blake2b_256` uses a different **personalization** than the default; always use the CKB-provided implementation.
 - Errors are enumerated, then converted to `i8` in `program_entry` for the VM exit code.
 
 ### Testing
@@ -160,7 +160,7 @@ println!("consume cycles: {}", cycles);
 
 Notes:
 
-- For simplicity, the output lock reuses the input lock. Transaction verification does not execute output locks, and this example doesn’t check output lock content.
+- For simplicity, the output lock reuses the input lock. Transaction verification does not execute output locks, and this example doesn't check output lock content.
 - In production, assert cycles within a reasonable range. CKB-VM is deterministic; unusual cycle drift can indicate logic changes or regressions.
 - `context.complete_tx(tx)` auto-includes required scripts for this transaction, but external cells like `secp256k1_data` or JS code for the js-vm must still be added manually.
 
@@ -238,22 +238,22 @@ fn assert_script_error(err: Error, err_code: i8) {
 Notes:
 
 - The only difference from the success case is the invalid preimage in the witness.
-- Failure cases usually don’t check cycles (though too small a `MAX_CYCLES` can still cause unexpected failures).
+- Failure cases usually don't check cycles (though too small a `MAX_CYCLES` can still cause unexpected failures).
 - Edge cases (e.g., maximum preimage size) should be added for real-world robustness.
-- Here we can’t directly extract the exit code, so we assert by matching the formatted error string in `assert_script_error`.
+- Here we can't directly extract the exit code, so we assert by matching the formatted error string in `assert_script_error`.
 
 ## Using it in a dApp
 
-See [**Build a Simple Lock**](../../dapp/simple-lock). The Rust version works the same as the JS version, **except for how args are constructed**.
+See [**Build a Simple Lock**](../../dapp/simple-lock). The Rust version works the same way in the frontend.
 
-Only modify `generateAccount`:
+Example `generateAccount` function:
 
 ```ts
-export function generateAccountRust(hash: string) {
+export function generateAccount(hash: string) {
   const lockArgs = "0x" + hash;
   const lockScript = {
-    codeHash: offCKB.myScripts["simple-lock"]!.codeHash,
-    hashType: offCKB.myScripts["simple-lock"]!.hashType,
+    codeHash: myScripts["simple-lock"]!.codeHash,
+    hashType: myScripts["simple-lock"]!.hashType,
     args: lockArgs,
   };
   const address = ccc.Address.fromScript(lockScript, cccClient).toString();
@@ -264,8 +264,7 @@ export function generateAccountRust(hash: string) {
 }
 ```
 
-Comparison:
+Note:
 
-- **Rust args**: a 32-byte hash
-- **JS args**: `35-byte JS params + 32-byte hash`
-- **Cell deps**: the Rust version does not require `ckb-js-vm`
+- **Rust args**: a 32-byte hash directly passed to the contract
+- **Cell deps**: the Rust version does not require `ckb-js-vm`, making it simpler to use
