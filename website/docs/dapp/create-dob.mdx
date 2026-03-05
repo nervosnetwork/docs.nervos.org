@@ -83,7 +83,7 @@ reader.onload = () => {
 reader.readAsArrayBuffer(files[0]);
 ```
 
-Once we have the picture content and the private key, we will build a transaction that produces a Spore output Cell, aka the digital object Cell. We can handle all the logic with Lumos.js, but with the help of Spore-SDK, it becomes very simple to do:
+Once we have the picture content and the private key, we will build a transaction that produces a Spore output Cell, aka the digital object Cell. With the help of Spore-SDK, building the transaction becomes very simple:
 
 ```ts
 export async function createSporeDOB(
