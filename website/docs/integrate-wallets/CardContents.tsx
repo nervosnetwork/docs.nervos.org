@@ -56,6 +56,11 @@ const walletCardContents: WalletCardProps[] = [
     href: "https://www.gate.io/web3",
     tags: ["Browser Extension"],
   },
+  {
+    title: "QuantumPurse",
+    href: "https://quantumpurse.org",
+    tags: ["Desktop", "Quantum-safe"],
+  },
 ];
 
 export { walletCardContents };
