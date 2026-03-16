@@ -207,7 +207,10 @@ const config = {
             to: "/docs/script/vm-version",
           },
           {
-            from: ["/docs/sdk-and-devtool/lumos", "/docs/sdk-and-devtool/lumos/"],
+            from: [
+              "/docs/sdk-and-devtool/lumos",
+              "/docs/sdk-and-devtool/lumos/",
+            ],
             to: "/docs/sdk-and-devtool/ccc",
           },
         ],
