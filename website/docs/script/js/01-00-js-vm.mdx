@@ -59,11 +59,9 @@ For most scenarios, QuickJS bytecode is stored in the resource cell. When an on-
 they can be stored beginning at offset 35 (2 + 32 + 1). Compared to normal on-chain scripts in other languages,
 ckb-js-vm requires these extra 35 bytes.
 
-### An Example — A Clear Contrast Between JS Contracts and Traditional Contracts
+### Comparison Between JS Contracts and Traditional Contracts
 
-Since JavaScript contracts are executed inside the **JS-VM**, creating a transaction for them introduces a few differences compared to traditional contracts.
-
-In the <ExampleLink path="dApp/simple-lock">simple-lock</ExampleLink> example, both Rust and JavaScript implementations of the same contract are provided. Functionally they are identical, but the Rust version is compiled directly into a native executable contract, while the JavaScript version is only compiled into [bytecode](./js-vm-cmd-line-options#compiling-javascript-into-bytecode).
+Since JavaScript contracts are executed inside the **JS-VM**, creating a transaction for them introduces a few differences compared to traditional contracts (such as those written in Rust or C).
 
 The key differences are as follows:
 
@@ -72,13 +70,32 @@ The key differences are as follows:
   - Traditional contracts use their own `code_hash + hash_type`.
   - JavaScript contracts instead reference the `code_hash + hash_type` of the **ckb-js-vm**.
 
-    - Traditional contract: <ExampleLink path="dApp/simple-lock/frontend/app/hash-lock.ts#L137">Lock Script</ExampleLink>
-    - JavaScript contract: <ExampleLink path="dApp/simple-lock/frontend/app/hash-lock.ts#L47">Lock Script</ExampleLink>
-
 - **Args**
 
-  - Traditional contracts directly fill in the `args` field.
-  - JavaScript contracts prepend JS-specific parameters at the beginning of `args`. (This also means when reading arguments inside the contract, you need to offset by 35 bytes.)
+  - Traditional contracts directly fill in the `args` field with their parameters.
+  - JavaScript contracts prepend JS-specific parameters at the beginning of `args` (2 bytes flags + 32 bytes code hash + 1 byte hash type). This also means when reading arguments inside the contract, you need to offset by 35 bytes.
 
-    - Traditional contract: <ExampleLink path="dApp/simple-lock/rust-simple-lock/contracts/hash-lock/src/main.rs#L62">Reading args</ExampleLink>
-    - JavaScript contract: <ExampleLink path="dApp/simple-lock/ts-simple-lock/packages/on-chain-script/src/index.ts#L6">Reading args</ExampleLink>
+- **Cell Dependencies**
+
+  - Traditional contracts only require their own binary as a cell dependency.
+  - JavaScript contracts require both the **ckb-js-vm** binary and the JavaScript bytecode cell as dependencies.
+
+- **Performance**
+
+  - Traditional contracts (Rust/C) are compiled directly to RISC-V machine code, offering the best performance.
+  - JavaScript contracts are interpreted by ckb-js-vm, which consumes more cycles. Bytecode execution is faster than raw JavaScript but still slower than native contracts.
+
+## When to Use JavaScript Contracts
+
+JavaScript contracts are suitable for:
+
+- **Prototyping**: Quickly test ideas without learning Rust or C
+- **Educational purposes**: Learn CKB script concepts with a familiar language
+- **Simple logic**: Scripts with straightforward validation rules
+- **Development tooling**: Build internal tools and utilities
+
+For production use cases involving complex logic or high-value assets, we recommend using **Rust** for better performance and security.
+
+:::note
+While CKB-JS-VM is not yet deployed on mainnet, you can experiment with it on devnet and testnet. Check the current deployment status in the [ecosystem-scripts documentation](/docs/ecosystem-scripts/introduction).
+:::

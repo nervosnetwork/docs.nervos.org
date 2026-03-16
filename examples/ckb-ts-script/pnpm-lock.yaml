@@ -87,7 +87,7 @@ importers:
         specifier: ~0.25.0
         version: 0.25.5
 
-  contracts/hello-wrold:
+  contracts/hello-world:
     dependencies:
       '@ckb-js-std/bindings':
         specifier: ~1.0.0
