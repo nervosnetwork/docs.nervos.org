@@ -15,7 +15,7 @@ import ExampleLink from "@site/src/components/ExampleLink";
 
 <TutorialHeader time={"5 - 7 min"} tools={"script"} customTools={[]} />
 
-We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tutorial.
+We introduced <ExampleLink path="dApp/simple-lock">Build a Simple Lock</ExampleLink> in the dApp tutorial.
 That tutorial uses **JavaScript/TypeScript** contracts running on ckb-js-vm to demonstrate
 full-stack dApp development with a web frontend. Here, we'll dive deeper into implementing
 the same hash-lock logic using **Rust** (without the frontend components).
@@ -244,32 +244,3 @@ Notes:
 - Failure cases usually don't check cycles (though too small a `MAX_CYCLES` can still cause unexpected failures).
 - Edge cases (e.g., maximum preimage size) should be added for real-world robustness.
 - Here we can't directly extract the exit code, so we assert by matching the formatted error string in `assert_script_error`.
-
-## Using it in a dApp
-
-See [**Build a Simple Lock**](../../dapp/simple-lock) for the full-stack dApp approach using JavaScript.
-Note that this Rust contract is a standalone implementation—you would need to build your own frontend
-integration using the Rust contract's deployment artifacts instead of the JavaScript bytecode.
-
-Example `generateAccount` function:
-
-```ts
-export function generateAccount(hash: string) {
-  const lockArgs = "0x" + hash;
-  const lockScript = {
-    codeHash: myScripts["simple-lock"]!.codeHash,
-    hashType: myScripts["simple-lock"]!.hashType,
-    args: lockArgs,
-  };
-  const address = ccc.Address.fromScript(lockScript, cccClient).toString();
-  return {
-    address,
-    lockScript: ccc.Script.from(lockScript),
-  };
-}
-```
-
-Note:
-
-- **Rust args**: a 32-byte hash directly passed to the contract
-- **Cell deps**: the Rust version does not require `ckb-js-vm`, making it simpler to use
