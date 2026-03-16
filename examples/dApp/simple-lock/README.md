@@ -4,7 +4,7 @@ A JavaScript/TypeScript dApp demonstrating the `hash-lock` smart contract on CKB
 
 ## Overview
 
-This project demonstrates a full-stack dApp using the CKB JavaScript VM (ckb-js-vm). 
+This project demonstrates a full-stack dApp using the CKB JavaScript VM (ckb-js-vm).
 It includes a `hash-lock` contract and a web frontend for interacting with it.
 
 ## Project Structure
