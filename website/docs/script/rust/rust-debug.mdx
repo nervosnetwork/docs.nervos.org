@@ -126,7 +126,14 @@ Transfer cycles: 764, running cycles: 942
 
 In most case, you want to debug failed transactions instead of successful ones to find out the reasons for the failures.
 
-First, dump the transaction into a local file. Assume you are using the [Lumos SDK](/docs/sdk-and-devtool/lumos) to build the transaction,
+:::caution Legacy Example
+
+The following example demonstrates debugging transactions built with the **Lumos SDK**, which is considered a legacy option.
+If you are using [CCC](/docs/sdk-and-devtool/ccc) or other JavaScript SDKs, the transaction building API will differ.
+
+:::
+
+First, dump the transaction into a local file. Assume you are using the Lumos SDK to build the transaction,
 you can convert the `txSkeleton` type into a JSON file:
 
 ```js
