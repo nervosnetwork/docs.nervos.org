@@ -1,7 +1,7 @@
 # simple-lock (Rust)
 
 This is the Rust implementation of the `hash-lock` contract, demonstrating the same 
-logic as the [dApp/simple-lock JavaScript tutorial](../../dApp/simple-lock).
+logic as the [dApp/simple-lock JavaScript tutorial](https://github.com/nervosnetwork/docs.nervos.org/tree/develop/examples/dApp/simple-lock).
 
 ## Overview
 
