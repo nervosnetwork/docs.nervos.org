@@ -105,7 +105,7 @@ For example, consider the following inputs:
 inputs = [g1, g2, g1]
 ```
 
-Here are three inputs, where the gN notation represents the group. `inputs[0]` and `inputs[2]` share the same group **g1**, while `inputs[1]` is in a different group **g2**. CKB runs the Lock Script on **g1** and **g2** separately. Understanding that the same `script_hash` implies identical lock fields of inputs, thus requiring only one signature per group.
+Here are three inputs, where the gN notation represents the group. `inputs[0]` and `inputs[2]` share the same group **g1**, while `inputs[1]` is in a different group **g2**. CKB runs the Lock Script on **g1** and **g2** separately. Understand that the same `script_hash` implies identical lock fields of inputs, thus requiring only one signature per group.
 
 The default locks, such as P2SH and multisig, assume there is a <Tooltip>witness</Tooltip> for each input group. The witness contains the signature and the default locks read the signature from the index of the first input. For **g1**, the signature is read from `witnesses[0]`, while for **g2**, from `witnesses[1]`.
 
@@ -141,7 +141,7 @@ The default P2PKH and the multisig Scripts require user to use `WitnessArgs` on 
 
 In CKB, `witnesses` is extended to allow users to include any one-time data necessary solely for the transaction’s verification process. However, this flexibility brings a problem, a transaction's Lock Script and Type Script may require different data from the same witness, there is a risk that neither script’s requirement can be met at the same time, potentially causing the transaction permanently locked.
 
-To dismiss this potential conflict, `WitnessArgs` is introduced to allow Lock Script and Type Script to read data from different fields in the `WitnessArgs`.
+To resolve this potential conflict, `WitnessArgs` is introduced to allow Lock Script and Type Script to read data from different fields in the `WitnessArgs`.
 
 :::
 

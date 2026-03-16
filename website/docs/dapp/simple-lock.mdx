@@ -20,7 +20,7 @@ import ExampleLink from "@components/ExampleLink";
 
 ## Tutorial Overview
 
-In this tutorial, you will learn how to create a full-stack dApp, including both the frontend and the Script, to deepen your understanding of CKB blockchain development.
+In this tutorial, you will learn how to create a full-stack dApp, including both the frontend and the <Tooltip>Script</Tooltip>, to deepen your understanding of CKB blockchain development.
 
 Our example dApp will use a simple toy lock. You will create a <Tooltip>Lock Script</Tooltip> named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
 
@@ -28,6 +28,12 @@ The `hash_lock` project involves specifying a hash in the Script's <Tooltip>scri
 
 :::note
 This toy lock example isn't intended for production. Use it ONLY in Testnet or Devnet as a starting point for learning the basics.
+:::
+
+:::tip
+This tutorial uses **JavaScript/TypeScript** contracts running on [ckb-js-vm](/docs/script/js/js-vm).
+For production use, we recommend using [**Rust**](/docs/script/rust/rust-quick-start).
+You can find a [Rust implementation of the same hash-lock logic here](/docs/script/rust/rust-example-simple-lock).
 :::
 
 ## Setup Devnet & Run Example
@@ -42,9 +48,7 @@ To get started with the tutorial dApp, download or clone the <ExampleLink path="
 
 ### Step 3: Build and Deploy the Script
 
-In this tutorial, the `hash-lock` contract is implemented in **TypeScript**.
-
-To compile the TypeScript contract, navigate to the `root` directory and run:
+To compile the contract, navigate to the `root` directory and run:
 
 <CodeTabs
   cmd={`pnpm install
@@ -170,10 +174,10 @@ You can try clicking the **"Transfer"** button. The website will prompt you to e
 
 ### Script Logic
 
-Here’s what the script does step-by-step:
+Here's what the script does step-by-step:
 
 1. It reads the **expected hash** from the Script's `args` field.
-2. It retrieves the **preimage** from the transaction’s **witness** field.
+2. It retrieves the **preimage** from the transaction's **witness** field.
 3. It computes the **hash** of the preimage using the default CKB hash function (`blake2b-256`).
 4. If the computed hash matches the one in the `script_args`, the script returns success (0). Otherwise, it fails.
 
@@ -216,8 +220,6 @@ This approach demonstrates how to write on-chain logic in a developer-friendly T
 ### Use the Hash_Lock Script in Your DApp
 
 Let's take a look at the `generateAccount` function: It accepts a hash string parameter. This hash string is used as `script_args` to build a `hash_lock` Script. This Script can then be used as the lock to secure CKB tokens.
-
-One thing to note here is that our script is a JavaScript contract, so it needs to run inside the `ckb-js-vm` Script. That's why we pass the script `code_hash` and `hash_type` as a `args` to the `ckb-js-vm` Script.
 
 ```ts title='simple-lock/frontend/app/hash-lock.ts'
 // ...
@@ -299,7 +301,7 @@ export async function unlock(
   tx.setWitnessArgsAt(0, newWitnessArgs);
 
   // Complete missing parts for transaction
-  await tx.addCellDeps(myScripts["hash-lock"]!.cellDeps[0].cellDep);
+  await tx.addCellDeps(myScripts["hash-lock.bc"]!.cellDeps[0].cellDep);
   await tx.completeInputsByCapacity(
     readSigner,
     ccc.fixedPointFrom(amountInCKB)
@@ -327,7 +329,7 @@ The short answer is no. The `hash_lock` is not very secure for guarding your CKB
 - **Miner Front-running**: Since the preimage value is revealed in the witness, once you submit the transaction to the blockchain, miners can see this preimage and construct a new transaction to transfer the tokens to their addresses before you do.
 - **Balance Vulnerability**: Once you transfer part of the balance from the `hash_lock` address, the preimage value is revealed on-chain. This makes the remaining tokens locked in the `hash_lock` vulnerable since anyone who sees the preimage can steal them.
 
-Even though using a hash and preimage is too simple to be a secure Lock Script, it’s a great starting point for learning. The goal is to understand how CKB Scripts work and gain experience with CKB development.
+Even though using a hash and preimage is too simple to be a secure Lock Script, it's a great starting point for learning. The goal is to understand how CKB Scripts work and gain experience with CKB development.
 
 ---
 
@@ -345,5 +347,7 @@ By following this tutorial, you've mastered the basics of building a custom lock
 
 ## Additional Resources
 
+- [**Rust Quick Start**](/docs/script/rust/rust-quick-start) — Learn how to write CKB Scripts in Rust (recommended for production)
+- [**Rust Example: Simple Lock**](/docs/script/rust/rust-example-simple-lock) — The same hash-lock logic implemented in Rust (standalone contract, without frontend)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)

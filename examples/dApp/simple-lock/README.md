@@ -1,33 +1,23 @@
 # simple-lock
 
-A JavaScript project for developing smart contracts on the CKB blockchain.
+A JavaScript/TypeScript dApp demonstrating the `hash-lock` smart contract on CKB.
 
 ## Overview
 
-This project uses the CKB JavaScript VM (ckb-js-vm) to write smart contracts in typescript. The contracts are compiled to bytecode and can be deployed to the CKB blockchain.
+This project demonstrates a full-stack dApp using the CKB JavaScript VM (ckb-js-vm).
+It includes a `hash-lock` contract and a web frontend for interacting with it.
 
 ## Project Structure
 
 ```
 simple-lock/
 ├── contracts/           # Smart contract source code
-│   └── hello-world/
+│   └── hash-lock/       # Hash-lock contract
 │       └── src/
-│           └── index.typescript # Contract implementation
-├── tests/              # Contract tests
-│   └── hello-world.test.typescript
-├── scripts/            # Build and utility scripts
-│   ├── build-all.js
-│   ├── build-contract.js
-│   └── add-contract.js
-├── dist/               # Compiled output (generated)
-│   ├── hello-world.js  # Bundled JavaScript
-│   └── hello-world.bc  # Compiled bytecode
-├── package.json
-├── tsconfig.json       # TypeScript configuration
-├── tsconfig.base.json  # Base TypeScript settings
-├── jest.config.cjs     # Jest testing configuration
-└── README.md
+│           └── index.ts # Contract implementation
+├── frontend/            # Next.js web frontend
+│   └── app/
+│       └── hash-lock.ts # Frontend integration
 ```
 
 ## Getting Started

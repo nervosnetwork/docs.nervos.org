@@ -9,13 +9,12 @@ import Tooltip from "@components/Tooltip";
 
 # OffCKB
 
-[offckb](https://github.com/ckb-devrel/offckb) is a an all-in-one CLI tool that provides a local CKB development environment.
+[offckb](https://github.com/ckb-devrel/offckb) is an all-in-one CLI tool that provides a local CKB development environment.
 
-- Simplifies development with one-line command to start the devnet and create projects from boilerplate
+- Simplifies development with one-line command to start the devnet
 - Comes with 20 pre-funded accounts and multiple minimal dApp templates for quick project setup
-- Embeds common Scripts in the genesis block, such as CKB-VM-JS, Omnilock, xUDT, and Spore
-- Provides a complete workflow from Script building and deployment to frontend integration for devnet
-- Includes tools like ckb-debugger
+- Embeds common Scripts in the genesis block, such as Omnilock, xUDT, and Spore
+- Provides debugging tools like ckb-debugger
 - Offers configurable settings via a JSON file
 
 This guide will walk you through leveraging OffCKB to kickstart your first CKB project. The version used here is [`v0.4.0`](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.0) or later.
@@ -47,7 +46,6 @@ Options:
 
 Commands:
   node [CKB-Version]                            Use the CKB to start devnet
-  create [options] [project-name]               Create a new CKB Smart Contract project in JavaScript.
   deploy [options]                              Deploy contracts to different networks, only supports devnet and testnet
   debug [options]                               Quickly debug transaction with tx-hash
   system-scripts [options]                      Print/Output system scripts of the CKB blockchain
@@ -154,20 +152,6 @@ Result:
 
 Done.
 
-### Create a CKB Smart Contract Project
-
-You can create a new CKB Smart Contract project in Typescript from our boilerplate.
-
-```sh
-offckb create <your-project-name> -c <your-contract-name>
-```
-
-The `-c` option is optional, if you don't provide it, the contract name will be `hello-world`.
-
-After create the project, you can follow the instructions on build, deploy and test the contract in README.md of the project.
-
-The project includes both `mock` test and `devnet` test. For developing frontend interacting with the blockchain, you can refer to the `devnet` test and see how it works.
-
 ### Deploy a CKB Smart Contract
 
 To deploy the script, use `offckb deploy` command:
@@ -184,7 +168,7 @@ offckb deploy --type-id --network <devnet/testnet>
 
 Your deployed scripts info will be listed in the `output-folder-path` which you defined in the command.
 
-Note that upgrades are keyed by the contract‘s artifact name. If you plan to upgrade with `--type-id`, do not rename your contract artifact (e.g. keep `hello-world.bc`). Renaming it makes the offckb unable to find the previous Type ID info from the `output-folder-path` and will create a new Type ID.
+Note that upgrades are keyed by the contract's artifact name. If you plan to upgrade with `--type-id`, do not rename your contract artifact. Renaming it makes the offckb unable to find the previous Type ID info from the `output-folder-path` and will create a new Type ID.
 
 ### Debug a transaction
 
