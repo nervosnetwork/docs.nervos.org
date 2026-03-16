@@ -206,6 +206,10 @@ const config = {
             from: "/docs/history-and-hard-forks/history-vm-version",
             to: "/docs/script/vm-version",
           },
+          {
+            from: "/docs/sdk-and-devtool/lumos",
+            to: "/docs/sdk-and-devtool/ccc",
+          },
         ],
         createRedirects(existingPath) {
           if (
