@@ -15,7 +15,10 @@ import ExampleLink from "@site/src/components/ExampleLink";
 
 <TutorialHeader time={"5 - 7 min"} tools={"script"} customTools={[]} />
 
-We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tutorial. The dApp tutorial demonstrates how to build a full-stack application with a Rust contract and a web frontend. Here, we'll dive deeper into the Rust contract implementation itself.
+We introduced [**Build a Simple Lock**](../../dapp/simple-lock) in the dApp tutorial.
+That tutorial uses **JavaScript/TypeScript** contracts running on ckb-js-vm to demonstrate
+full-stack dApp development with a web frontend. Here, we'll dive deeper into implementing
+the same hash-lock logic using **Rust** (without the frontend components).
 
 > This example is for demonstration purposes only. It may contain security issues and is **strongly discouraged for mainnet use**.
 
@@ -244,7 +247,9 @@ Notes:
 
 ## Using it in a dApp
 
-See [**Build a Simple Lock**](../../dapp/simple-lock). The Rust version works the same way in the frontend.
+See [**Build a Simple Lock**](../../dapp/simple-lock) for the full-stack dApp approach using JavaScript.
+Note that this Rust contract is a standalone implementation—you would need to build your own frontend
+integration using the Rust contract's deployment artifacts instead of the JavaScript bytecode.
 
 Example `generateAccount` function:
 

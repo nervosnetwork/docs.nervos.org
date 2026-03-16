@@ -31,7 +31,9 @@ This toy lock example isn't intended for production. Use it ONLY in Testnet or D
 :::
 
 :::tip
-For production smart contract development, we recommend using [**Rust**](/docs/script/rust/rust-quick-start) due to its performance, memory safety, and mature tooling support. Check out the [Rust version of this example](/docs/script/rust/rust-example-simple-lock) to see the same functionality implemented in Rust.
+This tutorial uses **JavaScript/TypeScript** contracts running on [ckb-js-vm](/docs/script/js/js-vm).
+For production use, we recommend using [**Rust**](/docs/script/rust/rust-quick-start).
+You can find a [Rust implementation of the same hash-lock logic here](/docs/script/rust/rust-example-simple-lock).
 :::
 
 ## Setup Devnet & Run Example
@@ -346,6 +348,6 @@ By following this tutorial, you've mastered the basics of building a custom lock
 ## Additional Resources
 
 - [**Rust Quick Start**](/docs/script/rust/rust-quick-start) — Learn how to write CKB Scripts in Rust (recommended for production)
-- [**Rust Example: Simple Lock**](/docs/script/rust/rust-example-simple-lock) — The same functionality implemented in Rust
+- [**Rust Example: Simple Lock**](/docs/script/rust/rust-example-simple-lock) — The same hash-lock logic implemented in Rust (standalone contract, without frontend)
 - CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
 - CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
