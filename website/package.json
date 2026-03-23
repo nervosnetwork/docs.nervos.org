@@ -11,6 +11,8 @@
     "type": "module",
     "gen-term": "node scripts/generate-key-terms.mjs",
     "fmt": "prettier --write . --ignore-path .prettierignore",
+    "link:check": "../scripts/check-urls.sh",
+    "link:report": "node ../scripts/compare-link-report.js",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
