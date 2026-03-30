@@ -59,6 +59,7 @@ function buildContract(contractName) {
       "--minify",
       "--bundle",
       "--external:@ckb-js-std/bindings",
+      "--external:@ckb-js-std/core",
       "--target=es2022",
       srcFile,
       `--outfile=${outputJsFile}`,
