@@ -13,6 +13,7 @@ yarn.lock
 .lychee.toml
 
 # Ignore specific files
+static/llms.txt
 *.log
 *.png
 *.jpg
