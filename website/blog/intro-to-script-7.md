@@ -20,7 +20,7 @@ This post is written based on current CKB Lina mainnet version now.
 
 # Scope
 
-In this post, we will write a simple [HTLC](https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts) script in JavaScript. Let me admit that I'm not the world's best teacher, there're many, many people who are better than me in [explaining HTLC](https://liquality.io/blog/hash-time-locked-contracts-htlcs-explained/~). So if you want to know what HTLC is, feel free to check other places first and come back here later.
+In this post, we will write a simple [HTLC](https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts) script in JavaScript. Let me admit that I'm not the world's best teacher, there're many, many people who are better than me in [explaining HTLC](https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts). So if you want to know what HTLC is, feel free to check other places first and come back here later.
 
 Now I will assume you know what HTLC is :P The HTLC script we create here, will be unlocked if either one of the following conditions is met:
 
@@ -1384,4 +1384,4 @@ I sincerely hope you have read till this far, instead of skipping it. This is a 
 - How to serialize/deserialize molecule data structures
 - How to include external libraries on npm and pack a single JavaScript for CKB use
 
-While I might still add more posts to this series if I noticed interesting stuff to write, I'm sure the existing 7 posts in this series, together with [many](https://justjjy.com/Build-CKB-contract-with-Rust-part-1) [other](https://justjjy.com/CKB-contract-in-Rust-part-2-Rewrite-contract-with-ckb) [awesome](https://docs-old.nervos.org/docs/essays/debug/) [posts](https://mp.weixin.qq.com/s/9cP_Qik-AsdpiqL-q0ac4w) by my colleagues, have well prepared you to build awesome things on CKB. We are all prepared to amazed by the beautiful things you build on CKB :)
+While I might still add more posts to this series if I noticed interesting stuff to write, I'm sure the existing 7 posts in this series, together with [awesome](https://docs-old.nervos.org/docs/essays/debug/) [posts](https://mp.weixin.qq.com/s/9cP_Qik-AsdpiqL-q0ac4w) by my colleagues, have well prepared you to build awesome things on CKB. We are all prepared to amazed by the beautiful things you build on CKB :)

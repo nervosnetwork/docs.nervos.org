@@ -334,7 +334,7 @@ Total cycles consumed: 16249542
 Transfer cycles: 96998, running cycles: 16152544
 ```
 
-The first command here executes the script as normals, but internally it [calls](https://github.com/xxuejie/ckb-duktape/blob/d6241938247b402ec56c7af218acfc9049ac753d/c/dump_load0.c#L14) the dump syscall, resultling in a dumping of the VM state then into `dump0.bin` executable file. Later when we run CKB VM on `dump0.bin` directly, we can notice it performs the same action as the above duktape binary, but saves us close to 4 million cycles.
+The first command here executes the script as normals, but internally it [calls](https://github.com/xxuejie/ckb-duktape/blob/d6241938247b402ec56c7af218acfc9049ac753d/c/dump_load0.c) the dump syscall, resultling in a dumping of the VM state then into `dump0.bin` executable file. Later when we run CKB VM on `dump0.bin` directly, we can notice it performs the same action as the above duktape binary, but saves us close to 4 million cycles.
 
 # Step 2: Bytecode Over Source
 
@@ -358,7 +358,7 @@ Total cycles consumed: 5289852
 Transfer cycles: 96998, running cycles: 5192854
 ```
 
-The [dump_load0](https://github.com/xxuejie/ckb-duktape/blob/d6241938247b402ec56c7af218acfc9049ac753d/c/dump_load0.c#L26-L37) binary actually supports both duktape bytecode and JavaScript source. It does a runtime check to see if the loaded data here is duktape bytecode or JavaScript source. Here we can see that by combining the previous 2 solutions, we can already shrink the cycle consumption from ~ 20 million to ~ 5 million.
+The [dump_load0](https://github.com/xxuejie/ckb-duktape/blob/d6241938247b402ec56c7af218acfc9049ac753d/c/dump_load0.c) binary actually supports both duktape bytecode and JavaScript source. It does a runtime check to see if the loaded data here is duktape bytecode or JavaScript source. Here we can see that by combining the previous 2 solutions, we can already shrink the cycle consumption from ~ 20 million to ~ 5 million.
 
 Note that duktape bytecode does come with tradeoffs. It never ensures version compatibility, so different versions of duktape, or even different builds of the same duktape version could use different bytecode format. In a normal environment, this could be a problem, but since here we also ship duktape binary as a smart contract, we can lock the version of duktape binary we are using, ensuring the bytecode always works. Another drawback, and a big surprise to many, is that the bytecode file is in fact usually larger than the original JavaScript source file:
 
