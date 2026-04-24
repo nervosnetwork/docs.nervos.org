@@ -11,17 +11,8 @@ This file is intentionally selective. Start with the high-priority entry points 
 - [How CKB Works](https://docs.nervos.org/docs/getting-started/how-ckb-works): Best first overview of the network and its design.
 - [Quick Start](https://docs.nervos.org/docs/getting-started/quick-start): Fastest onboarding path for new users and developers.
 - [Cell Model](https://docs.nervos.org/docs/ckb-fundamentals/cell-model): Core state model used across all CKB explanations.
-- [Transaction](https://docs.nervos.org/docs/tech-explanation/transaction): Main reference for how CKB transactions are structured.
-- [JavaScript/TypeScript (CCC)](https://docs.nervos.org/docs/sdk-and-devtool/ccc): Primary SDK for most dApp development.
-- [Rust Quick Start](https://docs.nervos.org/docs/script/rust/rust-quick-start): Best starting point for Rust on-chain script development.
-
-## CKB Onboarding
-
-- [How CKB Works](https://docs.nervos.org/docs/getting-started/how-ckb-works): Overview of how the CKB network works.
-- [Quick Start](https://docs.nervos.org/docs/getting-started/quick-start): Fast onboarding path for new users and developers.
 - [CKB Networks](https://docs.nervos.org/docs/getting-started/ckb-networks): Mainnet, testnet, devnet, explorers, and address prefixes.
 - [RPCs](https://docs.nervos.org/docs/getting-started/rpcs): Public RPC endpoints and JSON-RPC usage.
-- [Cell Model](https://docs.nervos.org/docs/ckb-fundamentals/cell-model): The core state model of CKB.
 - [CKB-VM](https://docs.nervos.org/docs/ckb-fundamentals/ckb-vm): The virtual machine used to run CKB scripts.
 
 ## Node Operations
