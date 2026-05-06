@@ -38,7 +38,7 @@ Spore is a unique class of digital assets linked to the native currency of the N
 
 - **Redemption of Intrinsic Value**: Spores can be melted back into the underlying CKBytes at any time. This is achieved through the `meltSpore` API provided by the [`spore-sdk`](https://github.com/sporeprotocol/spore-sdk), granting owners the flexibility to convert their digital assets into CKBytes currency whenever they choose.
 
-- **Tokenomics and Intrinsic Value Growth**: As the utilization of on-chain space on the Nervos CKB grows, the value of the CKBytes locked within each Spore naturally appreciates. This growth is organic and driven by CKB’s economic model, which includes a structured issuance schedule and a state rent mechanism, as detailed in the [CKB Cryptoeconomics RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-economic-model/0019-economic-model.md).
+- **Tokenomics and Intrinsic Value Growth**: As the utilization of on-chain space on the Nervos CKB grows, the value of the CKBytes locked within each Spore naturally appreciates. This growth is organic and driven by CKB’s economic model, which includes a structured issuance schedule and a state rent mechanism, as detailed in the [CKB Cryptoeconomics RFC](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0015-ckb-cryptoeconomics/0015-ckb-cryptoeconomics.md).
 
 ### On-Chain Ownership & Privacy
 
