@@ -53,7 +53,11 @@ LYCHEE_CMD="$LYCHEE_CMD --max-retries $LINK_CHECK_RETRIES"
 LYCHEE_CMD="$LYCHEE_CMD --accept \"$LINK_CHECK_ACCEPT\""
 
 echo "🚀 Running link check with concurrency=$LINK_CHECK_CONCURRENCY, timeout=${LINK_CHECK_TIMEOUT}s, retries=$LINK_CHECK_RETRIES..."
-echo "Command: $LYCHEE_CMD build"
+DISPLAY_CMD="$LYCHEE_CMD"
+if [ -n "$GITHUB_TOKEN" ]; then
+    DISPLAY_CMD="${DISPLAY_CMD//$GITHUB_TOKEN/***REDACTED***}"
+fi
+echo "Command: $DISPLAY_CMD build"
 
 # Run lychee and capture both output and exit code
 set +e

@@ -1,474 +1,66 @@
 [
   {
-    "url": "https://www.nervos.org/grants/",
-    "status": 429,
-    "sourceHint": "build/blog/page/10/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.673Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://www.nervos.org/grants/",
-    "status": 429,
-    "sourceHint": "build/blog/intro-to-ckb-script-programming-10/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://explorer.nervos.org/halving",
-    "status": 429,
-    "sourceHint": "build/docs/mining/halving/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://developer.apple.com/xcode/",
-    "status": "unknown",
-    "sourceHint": "build/docs/node/run-light-client-node/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Network error"
-  },
-  {
-    "url": "https://www.nervos.org/ckbpage",
-    "status": 429,
-    "sourceHint": "build/docs/tech-explanation/glossary/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://www.nervos.org/knowledge-base/utxo_model_explained",
-    "status": 429,
-    "sourceHint": "build/docs/tech-explanation/glossary/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://explorer.nervos.org/charts/inflation-rate",
-    "status": 429,
-    "sourceHint": "build/docs/tech-explanation/glossary/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://blog.cryptape.com/reaching-design-consensus-on-ckb-script-execution-model",
-    "status": 429,
-    "sourceHint": "build/docs/script/script-upgrade-workflow/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://liquality.io/blog/hash-time-locked-contracts-htlcs-explained/",
-    "status": "unknown",
-    "sourceHint": "build/blog/intro-to-ckb-script-programming-7/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Error (cached)"
-  },
-  {
-    "url": "https://api.github.com/repos/CasperLabs/CasperLabs/contents/execution-engine/cargo-casperlabs#building-the-contract~?ref=dev",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/cryptape/quantum-resistant-lock-script/contents/contracts/sphincs-all-in-one-lock?ref=main",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/ckb-features/quantum-resistance.md?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/ckb-devrel/ccc/contents/packages/demo?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/ecosystem-scripts/04-lock-proxy-lock.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/ecosystem/projects.md?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/xxuejie/ckb-duktape/contents/c/dump_load0.c#L14",
+    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0019-economic-model/0019-economic-model.md?ref=master",
     "status": 404,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
   },
   {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb/releases/tags/v0.119.0",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "url": "https://api.github.com/repos/nervosnetwork/ckb-testtool/releases/tags/v0.14.0",
+    "status": 404,
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
   },
   {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/ecosystem-scripts/01-secp256k1_blake160_sighash_all.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "url": "https://api.github.com/repos/nervosnetwork/ckb-sdk-rust/releases/tags/v3.4.1",
+    "status": 404,
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
+    "note": "Rejected status code (this depends on your \"accept\" configuration)"
+  },
+  {
+    "url": "https://api.github.com/repos/editor-Ajian/Personal-Work/contents/%EF%BC%882024.11%EF%BC%89%E5%86%B0%E5%B1%B1%E4%B9%8B%E4%B8%8B.pdf/u2026?ref=main",
+    "status": 404,
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
   },
   {
     "url": "https://api.github.com/repos/nervosnetwork/ckb/contents/v0.120.x/script/src/syscalls/mod.rs#L57?ref=rc",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/tech-explanation/transaction.md?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/dapp/create-dob.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/ckb-devrel/ccc/contents/packages/demo/src/app/connected/(tools)/TransferLumos/page.tsx?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0050-vm-syscalls-3?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/lightningnetwork/lightning-rfc/contents/11-payment-encoding.md?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0051-ckb2023/0051-ckb2023.md?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs.nervos.org/contents/examples/ckb-rust-script/contracts/type-id?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/ksleifjsslsls/silent-berry2/contents/ts/account_book/src/types.ts?ref=re-js",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data-as_code?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/blog/intro-to-script-6.md?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/sdk-and-devtool/rust.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/mining/info-stats.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0029-allow-script-multiple-matches-on-identical-code/0029-allow-script-multiple-matches-on-identical-code.md?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb-auth/contents/docs/auth.md?ref=main",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/bitcoin/bips/contents/bip-0173.mediawiki?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb-c-stdlib/contents/ckb_syscall_utils.h#L141-L175?ref=3b1b2ee8013e4c390a486c2fc199611a568a1a39",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/ckb-devrel/ckb-proxy-locks/contents/contracts/type-burn-lock?ref=main",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/getting-started/quick-start.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/molecule/contents/docs/grammar/grammar.ebnf?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0021-ckb-address-format/0021-ckb-address-format.md#short-payload-format?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb/releases/tags/v0.100.0",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb-js-vm/contents/packages/fs-packer?ref=main",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0017-tx-valid-since/0017-tx-valid-since.md?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/node/run-light-client-node.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/ksleifjsslsls/silent-berry2/commits/d7573cfcae2b8089d09568de751a4449a59a0534",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/script/vm-version.mdx?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/docs.nervos.org/contents/examples/ckb-rust-script/contracts/spawn-child/src/main.rs?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0027-block-structure/0027-block-structure.md#rawheader?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb-sdk-java/contents/example/src/main/java/org/nervos/ckb/example?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/xxuejie/ckb-duktape/contents/c/dump_load0.c#L26-L37",
     "status": 404,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
   },
   {
-    "url": "https://api.github.com/repos/nervosnetwork/docs-new/contents/website/docs/assets-token-standards/xudt.md?ref=develop",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb-system-scripts/contents/c/secp256k1_blake160_sighash_all.c?ref=master",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://api.github.com/repos/nervosnetwork/ckb/contents/script/src/type_id.rs",
-    "status": 429,
-    "sourceHint": "build/github-api-urls.txt",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://explorer.nervos.org/halving",
-    "status": 429,
-    "sourceHint": "build/docs/mining/rewards/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://explorer.nervos.org/charts/secondary-issuance",
-    "status": 429,
-    "sourceHint": "build/docs/mining/rewards/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://en.wikipedia.org/wiki/Macro-operation_fusion",
+    "url": "https://api.github.com/repos/ckb-devrel/ccc/releases/tags/v0.0.2",
     "status": 404,
-    "sourceHint": "build/docs/script/vm-version/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
   },
   {
-    "url": "https://explorer.nervos.org/",
-    "status": 429,
-    "sourceHint": "build/docs/getting-started/ckb-networks/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "url": "https://api.github.com/repos/xxuejie/quantum-resistant-lock-script/contents/tests/validation-tests/src/tests.rs#L4007?ref=edc01559579562d8c8029d32323d3b328f0f2dfa",
+    "status": 404,
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
   },
   {
-    "url": "https://pudge.explorer.nervos.org/",
-    "status": 429,
-    "sourceHint": "build/docs/getting-started/ckb-networks/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
+    "url": "https://api.github.com/repos/editor-Ajian/Personal-Work/contents/%EF%BC%882024.11%EF%BC%89%E5%86%B0%E5%B1%B1%E4%B9%8B%E4%B8%8B.pdf%E2%80%A6?ref=main",
+    "status": 404,
+    "sourceHint": "retry-only-failed-nocache",
+    "firstSeenAt": "2026-05-06T08:34:31Z",
+    "lastSeenAt": "2026-05-06T08:34:31Z",
     "note": "Rejected status code (this depends on your \"accept\" configuration)"
-  },
-  {
-    "url": "https://liquality.io/blog/hash-time-locked-contracts-htlcs-explained/",
-    "status": "unknown",
-    "sourceHint": "build/blog/page/7/index.html",
-    "firstSeenAt": "2026-04-24T01:35:48.674Z",
-    "lastSeenAt": "2026-04-24T01:35:48.674Z",
-    "note": "Network error"
   }
 ]
