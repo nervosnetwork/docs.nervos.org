@@ -36,7 +36,7 @@ Thanks to the Cell Model, CKB is designed to keep the blockchain sustainable–e
 - **Only Live Cells Are Tracked**: Once a Cell is spent, it’s removed from the current state, keeping the blockchain as lightweight as possible.
 - **1 CKB = 1 Byte of On-Chain Storage**: Putting data on-chain is like renting space–the more data you store, the more CKB you must lock up. While locked, that CKB can’t be sent, staked, or traded. This economic cost, via opportunity loss, encourages users to store only what’s necessary, keeping the blockchain lean and sustainable.
 - **Incentive to Free Up Space**: When you no longer need the data, you can delete it by spending its Cell, and your locked CKB becomes available again. This creates a natural incentive to avoid hoarding state, freeing up capacity for others and helping the network remain decentralized.
-- **Global State Size is Capped**: Since all on-chain storage must be backed by locked CKB—and the total supply is fixed at 33.6 billion CKB—the total size of all Live Cells is inherently capped by design.
+- **Global State Growth is Economically Constrained**: Since all on-chain storage must be backed by locked CKB, expanding the set of Live Cells always requires committing more CKB to storage. This creates a built-in cost for occupying state and discourages unchecked growth. While base issuance is capped at 33.6 billion CKB, the overall upper bound on Live Cell capacity can still increase predictably through secondary issuance.
 
 Want to learn more? Read about [State Explosion and the Tragedy of the Blockchain Commons](https://medium.com/nervosnetwork/state-explosion-and-the-tragedy-of-the-blockchain-commons-1fbd4837e859).
 
