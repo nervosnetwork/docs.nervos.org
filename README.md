@@ -34,6 +34,23 @@ If you run into an issue on our documentation website you can contact us on [Ner
 - `website`: The doc site is built with [docusaurus](https://docusaurus.io/) and under the `website` folder.
 - `examples`: The `examples` folder contains full tutorial codes you can clone.
 
+### Release
+
+Production release should be on the master branch. 
+
+Please follow the steps below:
+
+1. Create a new PR that bumps the version in the `package.json` under `/website`
+2. Merge the PR on `develop` branch
+3. Create a new PR from `develop` that targeting on the `master` branch
+4. Merge the PR into `master` branch
+5. Create a new tag and release on github targeting on the master branch
+6. The release content should include description of changes following 3 sections:
+   - New Content
+   - Fixes
+   - Others
+7. Example release content: https://github.com/nervosnetwork/docs.nervos.org/releases/tag/v2.35.0 
+
 ### Develop
 
 #### Clone the Repo
