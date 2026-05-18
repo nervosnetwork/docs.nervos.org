@@ -26,7 +26,7 @@ The Cell Model defines how these Cells behave, governed by [Scripts](#scripts) t
   alt="Cells are removed and added to the set of Live Cells"
 />
 
-Cells that have not been consumed are known as Live Cells, and these are available for use in future transactions. For example, if you want to send 100 CKByes to Alice from a Live Cell containing 200 CKBytes:
+Cells that have not been consumed are known as Live Cells, and these are available for use in future transactions. For example, if you want to send 100 CKBytes to Alice from a Live Cell containing 200 CKBytes:
 
 1. **Create**: You start by selecting a Live Cell with a capacity of 200 CKBytes. Two new Live Cells will be created as output: one Cell with 100 CKBytes, locked so only Alice can unlock it; another Cell with 99.999 CKBytes locked to yourself as your change. The 0.001 CKBytes difference will be used as the transaction fee.
 
