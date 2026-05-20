@@ -270,27 +270,6 @@ export default {
         },
       ],
     },
-    {
-      type: "category",
-      label: "Script Development Course",
-      className: "category-full-script-development-series",
-      customProps: {
-        icon: "tutorial",
-      },
-      collapsible: false,
-      items: [
-        "script-course/intro-to-script-1",
-        "script-course/intro-to-script-2",
-        "script-course/intro-to-script-3",
-        "script-course/intro-to-script-4",
-        "script-course/intro-to-script-5",
-        "script-course/intro-to-script-6",
-        "script-course/intro-to-script-7",
-        "script-course/intro-to-script-8",
-        "script-course/intro-to-script-9",
-        "script-course/intro-to-script-10",
-      ],
-    },
   ],
   "Tech Explanation": [
     {

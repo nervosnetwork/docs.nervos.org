@@ -106,18 +106,72 @@ yarn gen-terms
 After running the command, you can navigate to `src/components/Tooltip` to verify that the `key-terms.json` file has been generated successfully.
 
 ###  Broken Link Checker
-Use `./scripts/check-urls.sh` to scan for dead links.
 
-**How to Use**
+The link checker scans for dead links and maintains a collaborative dead link registry.
+
+**Quick Start**
 
 1. Install [lychee](https://github.com/lycheeverse/lychee).
 2. Build the website: `cd website && yarn build`.
-3. Run the script: `./scripts/check-urls.sh`.
+3. Run the check: `cd website && yarn link:check`.
+4. Review results: `cd website && yarn link:report`.
 
-The script prints any links that fail the check.
+**Environment Variables**
+
+Customize the check behavior with these optional environment variables:
+
+- `GITHUB_TOKEN`: GitHub API token to increase rate limits
+- `LINK_CHECK_CONCURRENCY`: Number of concurrent requests (default: 1)
+- `LINK_CHECK_TIMEOUT`: Request timeout in seconds (default: 30)
+- `LINK_CHECK_RETRIES`: Number of retries per URL (default: 2)
+- `LINK_CHECK_ACCEPT`: Acceptable HTTP status codes (default: "200..=299,403")
+
+Example: `GITHUB_TOKEN=your_token LINK_CHECK_CONCURRENCY=2 yarn link:check`
+
+**Report Files**
+
+All reports are stored in `website/reports/link-check/`:
+
+- `summary.json`: Run statistics and metrics
+- `dead-links.json`: All currently failing links with metadata
+- `new-failures.json`: Links that failed but aren't in the baseline
+- `recovered.json`: Previously failing links that now work
+- `unresolved-known.json`: Known issues that still fail
+- `known-failures.json`: Baseline of accepted failures (manual maintenance)
+- `history.jsonl`: Historical run data
+- `report.md`: Human-readable summary report
+
+**Workflow**
+
+1. **Run Check**: Execute `yarn link:check` to scan all links
+2. **Review Report**: Check `report.md` for new failures and recoveries
+3. **Take Action**:
+   - Fix broken links in documentation
+   - For unfixable external links, add to `known-failures.json` with reason
+   - Remove recovered links from `known-failures.json`
+4. **Commit Changes**: Include report updates and documentation fixes
+
+**Baseline Management**
+
+The `known-failures.json` file contains links that are expected to fail. Each entry should have:
+
+```json
+{
+  "url": "https://example.com/broken",
+  "expectedStatus": 404,
+  "reason": "External service discontinued",
+  "owner": "team-member",
+  "addedAt": "2024-01-01T00:00:00.000Z"
+}
+```
+
+**Only add links to baseline if:**
+- The link points to an external service you don't control
+- The failure is permanent (not temporary network issues)
+- You've confirmed the link is truly broken
 
 **Notes**
 
 * A cache file `./website/.lycheecache` will be created. For local development, the cache TTL is 30 days; you can change `max_cache_age` in `website/.lychee.toml`.
 * Because the docs contain many GitHub links, requests are routed via `api.github.com`. Providing a GitHub token increases the rate limit.
-* For this reason, the check is not integrated into CI at the moment.
+* The check is designed for local/manual execution; CI integration is not currently implemented.
