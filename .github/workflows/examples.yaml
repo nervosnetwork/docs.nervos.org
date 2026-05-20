@@ -2,9 +2,9 @@ name: Examples
 
 on:
   pull_request:
-    paths: [examples/**, scripts/**]
+    paths: [examples/**, scripts/**, .github/workflows/examples.yaml]
   push:
-    paths: [examples/**, scripts/**]
+    paths: [examples/**, scripts/**, .github/workflows/examples.yaml]
 
 jobs:
   examples:
@@ -13,6 +13,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: '1.94.0'
+          targets: riscv64imac-unknown-none-elf
+          components: rustfmt,clippy
 
       - uses: actions/cache@v4
         with:
