@@ -514,7 +514,7 @@ In summary, CKB achieves extreme decentralization through three core components:
 ---
 
 ## Source: ckb-features/quantum-resistance.md
-URL: https://docs.nervos.org/docs/ckb-features/quantum-resistance
+URL: https://docs.nervos.org/docs/ckb-features/native-quantum-resistance
 
 # Native Quantum Resistance
 
@@ -1338,6 +1338,9 @@ URL: https://docs.nervos.org/docs/dapp/create-dob
 
 # Create a Digital Object Using Spore Protocol
 
+**Estimated Time:** 5 - 10 min
+**Tools:** dapp
+
 ## Tutorial Overview
 
 [Spore](/docs/assets-token-standards/spore-protocol) is an on-chain digital object (DOB) protocol backed by CKB. An “on-chain” asset refers to a digital asset with its data directly encoded on the blockchain. A Spore Cell can hold any type of asset users want to store on-chain. The data structure for a Spore Cell is as follows:
@@ -1512,6 +1515,9 @@ By following this tutorial this far, you have mastered how digital-object works 
 URL: https://docs.nervos.org/docs/dapp/create-token
 
 # Create a Fungible Token
+
+**Estimated Time:** 5 - 10 min
+**Tools:** dapp
 
 ## Tutorial Overview
 
@@ -1729,6 +1735,9 @@ URL: https://docs.nervos.org/docs/dapp/simple-lock
 
 # Build a Simple Lock
 
+**Estimated Time:** 10 - 15 min
+**Tools:** dapp
+
 ## Tutorial Overview
 
 In this tutorial, you will learn how to create a full-stack dApp, including both the frontend and the Script, to deepen your understanding of CKB blockchain development.
@@ -1762,10 +1771,17 @@ You can also read the full code online or download it here.
 
 To compile the contract, navigate to the `root` directory and run:
 
-<CodeTabs
-  cmd={`pnpm install
-pnpm build`}
-  response={`> node scripts/build-all.js
+**Command:**
+
+```bash
+pnpm install
+pnpm build
+```
+
+**Response:**
+
+```
+> node scripts/build-all.js
 
 Building 1 contract(s): hash-lock
 
@@ -1779,16 +1795,22 @@ Building hash-lock from contracts/hash-lock/src/index.ts...
 ✅ Successfully built: hash-lock
 
 🎉 All contracts built successfully!
-`}
-/>
+```
 
 Once compiled, the contract files will be available in the `simple-lock/dist` directory.
 
 Deploy the Script binary to the Devnet:
 
-<CodeTabs
-  cmd={`pnpm run deploy --network devnet`}
-  response={`> node scripts/build-all.js && node scripts/deploy.js "--network" "devnet"
+**Command:**
+
+```bash
+pnpm run deploy --network devnet
+```
+
+**Response:**
+
+```
+> node scripts/build-all.js && node scripts/deploy.js "--network" "devnet"
 
 Building 1 contract(s): hash-lock
 
@@ -1831,8 +1853,8 @@ Script info file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/
 💡 Next steps:
 
 - Check the deployment artifacts in the deployment/ folder
-- Run your tests to use the deployed contract scripts`}
-  />
+- Run your tests to use the deployed contract scripts
+```
 
 The deployment artifacts will be saved to the `examples/simple-lock/deployment` directory.
 
@@ -1842,12 +1864,16 @@ Next, you need to copy the `scripts.json` file from `deployment` folder to the `
 
 Then, navigate to the frontend folder, install the node dependencies, and start running the example:
 
-<CodeTabs
-  cmd={
-`cd frontend && pnpm i && pnpm run dev`
-  }
-  response={
-`> frontend@0.1.0 dev
+**Command:**
+
+```bash
+cd frontend && pnpm i && pnpm run dev
+```
+
+**Response:**
+
+```
+> frontend@0.1.0 dev
 > next dev
 
 ▲ Next.js 14.2.3
@@ -1857,9 +1883,7 @@ Then, navigate to the frontend folder, install the node dependencies, and start 
 
 ✓ Starting...
 ✓ Ready in 1631ms
-`
-}
-/>
+```
 
 Now, the app is running in http://localhost:3000.
 
@@ -1869,9 +1893,23 @@ At the top of the page, developers can select their preferred language based on 
 
 With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some Live Cells that use this Script as their Lock Script. This preparation process is known as **deposit**. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 300 CKB into a specific address:
 
+**Command:**
+
+```bash
+offckb deposit --network devnet ckt1qp02fww4qzf6rx2rm3ugc9dmma7dnky7l4ne3xsck930aj5pfkgtkqgqqpdsmqftz49xmjqgm2yr0ejj5jpsgw9w6vtazlaukdf9xecu4z32kqgsdyg7f7p70y8pavhnn00ly0qaksldttujr8mk8et38zd0yyjeegxctl4m 300
+```
+
+**Response:**
+
+```
+tx hash:  0x0668292c875ee31906e48651a553a16158307c02f2e91d24be75166ca080e1fd
+```
+
 Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt to transfer some balance from this address to another. This will allow you to test the `hash_lock` Script and see if it functions as expected.
 
 You can try clicking the **"Transfer"** button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
+
+![](/img/dapps/simple-lock.png)
 
 ---
 
@@ -1889,6 +1927,8 @@ Here's what the script does step-by-step:
 Here is the complete `hash_lock` script logic:
 
 ```typescript
+import * as bindings from "@ckb-js-std/bindings";
+import { HighLevel, log, hashCkb, bytesEq } from "@ckb-js-std/core";
 
 function main() {
   log.setLevel(log.LogLevel.Debug);
@@ -2060,6 +2100,9 @@ URL: https://docs.nervos.org/docs/dapp/transfer-ckb
 
 # View and Transfer a CKB Balance
 
+**Estimated Time:** 2 - 5 min
+**Tools:** dapp
+
 ## Tutorial Overview
 
 CKB is based on a UTXO-like Cell Model. Every Cell has a capacity limit, which represents both the CKB balance and how much data can be stored in the Cell simultaneously.
@@ -2205,9 +2248,12 @@ By following this tutorial this far, you have mastered how balance transfers wor
 ---
 
 ## Source: dapp/write-message.mdx
-URL: https://docs.nervos.org/docs/dapp/write-message
+URL: https://docs.nervos.org/docs/dapp/store-data-on-cell
 
 # Store Data on Cell
+
+**Estimated Time:** 2 - 5 min
+**Tools:** dapp
 
 ## Tutorial Overview
 
@@ -2353,7 +2399,7 @@ By following this tutorial this far, you have mastered how storing data on Cells
 ---
 
 ## Source: ecosystem-scripts/00-common-scripts-introduction.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/00-common-scripts-introduction
+URL: https://docs.nervos.org/docs/ecosystem-scripts/introduction
 
 # Introduction
 
@@ -2404,7 +2450,7 @@ For example, to verify a CKB Secp256K1 signature, CKB Auth allows direct verific
 ---
 
 ## Source: ecosystem-scripts/01-secp256k1_blake160_sighash_all.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/01-secp256k1_blake160_sighash_all
+URL: https://docs.nervos.org/docs/ecosystem-scripts/secp256k1_blake160_sighash_all
 
 # secp256k1_blake160_sighash_all
 
@@ -2448,7 +2494,7 @@ This Script uses the secp256k1 signature algorithm. The verification process inc
 ---
 
 ## Source: ecosystem-scripts/02-secp256k1_blake160_multisig_all.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/02-secp256k1_blake160_multisig_all
+URL: https://docs.nervos.org/docs/ecosystem-scripts/secp256k1_blake160_multisig_all
 
 # secp256k1_blake160_multisig_all
 
@@ -2512,7 +2558,7 @@ If you are building a new Script, we recommend using the code from that reposito
 ---
 
 ## Source: ecosystem-scripts/03-nervos-dao.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/03-nervos-dao
+URL: https://docs.nervos.org/docs/ecosystem-scripts/nervos-dao
 
 # Nervos Dao
 
@@ -2551,7 +2597,7 @@ When users deposit CKB into the Nervos DAO, their tokens are locked for a minimu
 ---
 
 ## Source: ecosystem-scripts/04-lock-proxy-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/04-lock-proxy-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/lock-proxy-lock
 
 # Lock Proxy Lock
 
@@ -2602,7 +2648,7 @@ args[0...32]:  Blake2b hash of the delegated Lock Script
 ---
 
 ## Source: ecosystem-scripts/05-input-type-proxy-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/05-input-type-proxy-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/input-type-proxy-lock
 
 # Input Type Proxy Lock
 
@@ -2651,7 +2697,7 @@ args[0..32]: Hash of the required input Type Script
 ---
 
 ## Source: ecosystem-scripts/06-output-type-proxy-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/06-output-type-proxy-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/output-type-proxy-lock
 
 # Output Type Proxy Lock
 
@@ -2700,7 +2746,7 @@ args[0..32]: Hash of the required output type script
 ---
 
 ## Source: ecosystem-scripts/07-single-use-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/07-single-use-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/single-use-lock
 
 # Single Use Lock
 
@@ -2749,7 +2795,7 @@ args[0..36]: The specific OutPoint that must be consumed
 ---
 
 ## Source: ecosystem-scripts/08-time-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/08-time-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/time-lock
 
 # Time Lock
 
@@ -2799,7 +2845,7 @@ args[32..40]: Since value (8 bytes, little-endian) - can represent block number,
 ---
 
 ## Source: ecosystem-scripts/09-type-burn-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/09-type-burn-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/type-burn-lock
 
 # Type Burn Lock
 
@@ -2848,7 +2894,7 @@ args[0..32]: Hash of the Type Script that must be burned
 ---
 
 ## Source: ecosystem-scripts/10-easy-to-discover-type.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/10-easy-to-discover-type
+URL: https://docs.nervos.org/docs/ecosystem-scripts/easy-to-discover-type
 
 # Easy to Discover Type
 
@@ -2899,7 +2945,7 @@ args[0..32]: Hash of the expected cell data
 ---
 
 ## Source: ecosystem-scripts/101-ckb-auth.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/101-ckb-auth
+URL: https://docs.nervos.org/docs/ecosystem-scripts/ckb-auth
 
 # CKB Auth
 
@@ -2944,7 +2990,7 @@ None
 ---
 
 ## Source: ecosystem-scripts/102-ckb-crypto-service.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/102-ckb-crypto-service
+URL: https://docs.nervos.org/docs/ecosystem-scripts/ckb-crypto-service
 
 # CKB Crypto Service
 
@@ -3118,7 +3164,7 @@ None
 ---
 
 ## Source: ecosystem-scripts/11-xudt.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/11-xudt
+URL: https://docs.nervos.org/docs/ecosystem-scripts/xudt
 
 # xUDT Script
 
@@ -3463,7 +3509,7 @@ This Script is not upgradeable due to zero lock (lock args with all zeros).
 ---
 
 ## Source: ecosystem-scripts/12-omnilock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/12-omnilock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/omnilock
 
 # Omnilock Script
 
@@ -3680,7 +3726,7 @@ Other example:
 ---
 
 ## Source: ecosystem-scripts/13-anyone-can-pay.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/13-anyone-can-pay
+URL: https://docs.nervos.org/docs/ecosystem-scripts/anyone-can-pay
 
 # Anyone Can Pay
 
@@ -3731,7 +3777,7 @@ The Lock Script uses an argument format like `<public key hash> <CKByte minimum>
 ---
 
 ## Source: ecosystem-scripts/14-nostr-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/14-nostr-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/nostr-lock
 
 # Nostr Lock
 
@@ -3879,7 +3925,7 @@ When the rules above(1,2,3,8,9) are met, the validation is successful.
 ---
 
 ## Source: ecosystem-scripts/15-nostr-binding.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/15-nostr-binding
+URL: https://docs.nervos.org/docs/ecosystem-scripts/nostr-binding
 
 # Nostr Binding
 
@@ -3922,7 +3968,7 @@ After the initial binding is verified and created, future transfers or burns of 
 ---
 
 ## Source: ecosystem-scripts/16-ccc-btc-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/16-ccc-btc-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/ccc-btc-lock
 
 # CCC BTC Lock
 
@@ -4007,7 +4053,7 @@ The witness must be a valid `WitnessArgs` structure. In its `lock` field, it mus
 ---
 
 ## Source: ecosystem-scripts/17-ccc-eth-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/17-ccc-eth-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/ccc-eth-lock
 
 # CCC ETH Lock
 
@@ -4081,7 +4127,7 @@ This complete message is hashed with Keccak. The resulting hash is used for secp
 ---
 
 ## Source: ecosystem-scripts/18-ccc-sol-lock.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/18-ccc-sol-lock
+URL: https://docs.nervos.org/docs/ecosystem-scripts/ccc-sol-lock
 
 # CCC SOL Lock
 
@@ -4153,7 +4199,7 @@ If the signature verifies and the public key hash matches, the Script passes.
 ---
 
 ## Source: ecosystem-scripts/19-spore-dob-0.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/19-spore-dob-0
+URL: https://docs.nervos.org/docs/ecosystem-scripts/spore-dob-0
 
 # Spore DOB-0
 
@@ -4280,6 +4326,8 @@ The [Spore DOB-0](https://github.com/sporeprotocol/spore-dob-0) has been deploye
 To create a Cluster using [spore-sdk](https://github.com/sporeprotocol/spore-sdk):
 
 ```js
+import { createCluster } from '@spore-sdk/api';
+import { bytifyRawString } from '@spore-sdk/helpers/buffer';
 
 const account = ...;
 const dob_metadata = {
@@ -4309,6 +4357,8 @@ const { txSkeleton, outputIndex } = await createCluster({
 To create a DOB with `content_type` as `dob/0`:
 
 ```js
+import { createSpore } from '@spore-sdk/api';
+import { bytifyRawString } from '@spore-sdk/helpers/buffer';
 
 const account = ...;
 const dob_cluster_id = ...;
@@ -4356,7 +4406,7 @@ http://localhost:8090
 ---
 
 ## Source: ecosystem-scripts/20-spore-protocol.mdx
-URL: https://docs.nervos.org/docs/ecosystem-scripts/20-spore-protocol
+URL: https://docs.nervos.org/docs/ecosystem-scripts/spore-protocol
 
 # Spore Protocol
 
@@ -4550,7 +4600,7 @@ Discover our ecosystem of tools, resources, and projects that are essential for 
 ---
 
 ## Source: getting-started/blockchain-networks.mdx
-URL: https://docs.nervos.org/docs/getting-started/blockchain-networks
+URL: https://docs.nervos.org/docs/getting-started/ckb-networks
 
 # CKB Networks
 
@@ -4565,10 +4615,8 @@ Public networks are accessible to anyone in the world with an internet connectio
 Mainnet is the primary public CKB production blockchain, where actual-value transactions occur on the distributed ledger.
 
 - CKB Mainnet RPCs
-  - <CopyLink url="https://mainnet.ckbapp.dev/">
-      https://mainnet.ckbapp.dev/
-    </CopyLink>{" "}
-  - <CopyLink url="https://mainnet.ckb.dev/">https://mainnet.ckb.dev/</CopyLink>{" "}
+  - [https://mainnet.ckbapp.dev/](https://mainnet.ckbapp.dev/){" "}
+  - [https://mainnet.ckb.dev/](https://mainnet.ckb.dev/){" "}
 - Guide: [Running CKB Mainnet Node](/docs/node/run-mainnet-node)
 - Mainnet Explorer: [https://explorer.nervos.org/](https://explorer.nervos.org/)
 - Address Prefix: `ckb`, eg `ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`
@@ -4580,10 +4628,8 @@ In addition to Mainnet, there is a public Testnet for CKB called PUDGE. The Test
 You should test any Script code you write on a Testnet before deploying to Mainnet. Many dApps also run on Testnet before going to the production level.
 
 - CKB Testnet RPCs
-  - <CopyLink url="https://testnet.ckbapp.dev/">
-      https://testnet.ckbapp.dev/
-    </CopyLink>
-  - <CopyLink url="https://testnet.ckb.dev/">https://testnet.ckb.dev/</CopyLink>
+  - [https://testnet.ckbapp.dev/](https://testnet.ckbapp.dev/)
+  - [https://testnet.ckb.dev/](https://testnet.ckb.dev/)
 - Guide: [Running CKB Testnet Node](/docs/node/run-testnet-node)
 - Testnet Explorer: [https://pudge.explorer.nervos.org/](https://pudge.explorer.nervos.org/)
 - Address Prefix: `ckt`, eg `ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdnnw7qkdnnclfkg59uzn8umtfd2kwxceqxwquc4`
@@ -4743,55 +4789,33 @@ Throughout this documentation, we use offckb/cli version **>=0.4.0**. You can al
 
 ### Start the Devnet
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="start-devnet" label="Command">
-```
+**Command:**
 
 ```bash
 offckb node
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-start-devnet" label="Response">
-```
+**Response:**
 
 ```bash
 Launching CKB devnet Node...
 CKB devnet RPC Proxy server running on http://127.0.0.1:28114
 ```
 
-```mdx-code-block
-</TabItem>
-</Tabs>
-```
-
 Your local CKB blockchain is currently active with a proxy RPC endpoint at [localhost:28114](http://localhost:28114). To stop the chain, press `CTRL+C` in the terminal. To resume where you left off, simply run `offckb node` again.
 
 If you need to start fresh with a new chain, run the following command before starting the node:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="clean-node-data" label="Command">
-```
+**Command:**
 
 ```bash
 offckb clean
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="node-data-cleaned" label="Response">
-```
+**Response:**
 
 ```bash
 Chain data cleaned.
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
 ```
 
 OffCKB also provides pre-funded test accounts, built-in Scripts like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract), and useful debugging tools. Check out the [OffCKB documentation](/docs/sdk-and-devtool/offckb) for more details.
@@ -4870,10 +4894,10 @@ CKB RPCs are a set of programming interfaces provided by the Nervos CKB blockcha
 
 | Type    | Link                                                                               |
 | ------- | ---------------------------------------------------------------------------------- |
-| Mainnet | <CopyLink url="https://mainnet.ckbapp.dev/">https://mainnet.ckbapp.dev/</CopyLink> |
-| Mainnet | <CopyLink url="https://mainnet.ckb.dev/">https://mainnet.ckb.dev/</CopyLink>       |
-| Testnet | <CopyLink url="https://testnet.ckbapp.dev/">https://testnet.ckbapp.dev/</CopyLink> |
-| Testnet | <CopyLink url="https://testnet.ckb.dev/">https://testnet.ckb.dev/</CopyLink>       |
+| Mainnet | [https://mainnet.ckbapp.dev/](https://mainnet.ckbapp.dev/) |
+| Mainnet | [https://mainnet.ckb.dev/](https://mainnet.ckb.dev/)       |
+| Testnet | [https://testnet.ckbapp.dev/](https://testnet.ckbapp.dev/) |
+| Testnet | [https://testnet.ckb.dev/](https://testnet.ckb.dev/)       |
 
 ## RPC Provider: Ankr
 
@@ -4892,10 +4916,7 @@ CKB exposes a set of RPCs in [JSON-RPC 2.0](https://www.jsonrpc.org/specificatio
 
 The following commands uses [get_tip_block_number](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#get_tip_block_number) RPC to fetch the `tip` block number, of the latest block number in the longest blockchain:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="get-tip-block-number" label="Command">
-```
+**Command:**
 
 ```
 echo '{
@@ -4909,26 +4930,15 @@ echo '{
 http://localhost:8114
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="tip-block-number" label="Response">
-```
+**Response:**
 
 ```bash
 {"jsonrpc":"2.0","result":"0x2cb4","id":2}
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 The following commands uses `send_transaction` RPC to send transactions to the CKB network:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="send-transaction" label="Command">
-```
+**Command:**
 
 ```
 echo '{
@@ -4982,10 +4992,7 @@ echo '{
 http://localhost:8114
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="transaction" label="Response">
-```
+**Response:**
 
 ```json
 {
@@ -4995,17 +5002,9 @@ http://localhost:8114
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 It should be noted that `send_transaction` is asynchronous, that is, the return of the transaction hash, does not mean that the transaction is fully verified, if you need to follow up on the status of the transaction, it is recommended to use the following get_transaction rpc：
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="send-transaction" label="Command">
-```
+**Command:**
 
 ```
 echo '{
@@ -5019,10 +5018,7 @@ echo '{
 http://localhost:8114
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="transaction" label="Response">
-```
+**Response:**
 
 ```json
 {
@@ -5076,11 +5072,6 @@ http://localhost:8114
     }
   }
 }
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ## Subscription
@@ -5415,7 +5406,7 @@ Initially, Nervos CKB used different names for Mainnet (Lina) and Testnet (Aggro
 ---
 
 ## Source: history-and-hard-forks/rethinking-fork.mdx
-URL: https://docs.nervos.org/docs/history-and-hard-forks/rethinking-fork
+URL: https://docs.nervos.org/docs/history-and-hard-forks/rethinking-forks
 
 # Rethinking Forks: The Philosophy Behind CKB's Network Upgrade Design
 
@@ -5567,10 +5558,7 @@ For more details on the CKB JSON-RPC `send_transaction` method, visit the list o
 
 ## Example: Query With JSON-RPC
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="query-jsonrpc-request" label="Request">
-```
+**Request:**
 
 ```javascript
 {
@@ -5583,10 +5571,7 @@ For more details on the CKB JSON-RPC `send_transaction` method, visit the list o
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="query-jsonrpc-response" label="Response">
-```
+**Response:**
 
 ```javascript
 {
@@ -5645,11 +5630,6 @@ For more details on the CKB JSON-RPC `send_transaction` method, visit the list o
     }
   }
 }
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
 ```
 
 ---
@@ -5934,7 +5914,7 @@ We design CCC for both front-end and back-end developers. You need only one pack
 CCC exports everything on the `ccc` object:
 
 ```typescript
-
+import { ccc } from "@ckb-ccc/<package-name>";
 ```
 
 ## Lumos Patches
@@ -5948,6 +5928,7 @@ See [lumos-patches](https://www.npmjs.com/package/@ckb-ccc/lumos-patches): `npm 
 You can apply patches by:
 
 ```typescript
+import { generateDefaultScriptInfos } from "@ckb-ccc/lumos-patches";
 
 // Before using Lumos. You don't need @ckb-lumos/joyid anymore.
 registerCustomLockScriptInfos(generateDefaultScriptInfos());
@@ -6027,6 +6008,9 @@ The project comes with a pre-configured wallet connector as following:
   <summary>Toggle to view the ConnectWallet component</summary>
 ```typescript
 /* eslint-disable*/
+import React, { useEffect, useState } from "react";
+import { ccc } from "@ckb-ccc/connector-react";
+import { truncateAddress } from "../utils/stringUtils";
 
 const ConnectWallet: React.FC = () => {
 const { open, wallet } = ccc.useCcc();
@@ -6091,6 +6075,8 @@ export default ConnectWallet;
 Here's how to use it:
 
 ```tsx
+import React from "react";
+import ConnectWallet from "@/src/components/ConnectWallet";
 
 function App() {
   return ;
@@ -6102,6 +6088,9 @@ function App() {
 You can customize which wallets to support by modifying the connector configuration. Here's an example:
 
 ```typescript
+import React from "react";
+import { ccc } from "@ckb-ccc/connector-react";
+import { CSSProperties } from "react";
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const defaultClient = React.useMemo(() => {
@@ -6171,11 +6160,6 @@ When it comes to storing and securing CKB assets, users have various options, in
 
 These wallets listed below offer custody and security services tailored to CKB. For more information, refer to the respective guides for each wallet.
 
-<CardLayout colNum={[3, 2, 2, 1]}>
-  {walletCardContents.map(({ index, title, href, tags }) => (
-    
-  ))}
-</CardLayout>
 ---
 
 ## CKB Address
@@ -6517,10 +6501,7 @@ We recommend:
 - MacOS: `~/Documents/ckb_v0.115.0/...`
 - Windows: `C:\ckb_v0.115.0\...`
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 Open a terminal and navigate into the folder using the following command:
 
@@ -6530,20 +6511,12 @@ cd /Users/(NAME)/Documents/ckb_v0.115.0_aarch64-apple-darwin-portable/ckb
 
 Remember to replace “(NAME)” with your actual name on the device.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 Open a command prompt and navigate into the folder using the following command:
 
 ```bash
 cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 Now that you’ve installed CKB, you can start running a node:
@@ -6553,10 +6526,7 @@ Now that you’ve installed CKB, you can start running a node:
 
 ## Method 2: Build from Source
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="linmac" label="Linux/MacOS">
-```
+**Linux/MacOS:**
 
 **1.1 Install Rust**
 
@@ -6566,45 +6536,28 @@ CKB uses Rust. Install via [rustup](https://www.rust-lang.org/tools/install). Th
 
 Use your system package manager:
 
-```mdx-code-block
-<Tabs>
-    <TabItem value ="ubuntu" label="Ubuntu / Debian">
-```
+**Ubuntu / Debian:**
 
 ```bash
 sudo apt-get install -y git gcc libc6-dev pkg-config libssl-dev libclang-dev clang
 ```
 
-```mdx-code-block
-    </TabItem>
-    <TabItem value ="linux" label="Arch Linux">
-```
+**Arch Linux:**
 
 ```bash
 sudo pacman -Sy git gcc pkgconf clang
 ```
 
-```mdx-code-block
-    </TabItem>
-    <TabItem value ="mac" label="MacOS">
-```
+**MacOS:**
 
 ```bash
 brew install autoconf libtool
 ```
 
-```mdx-code-block
-    </TabItem>
-    <TabItem value ="centOS" label="CentOS7">
-```
+**CentOS7:**
 
 ```bash
 sudo yum install -y git make gcc-c++ openssl-devel devtoolset-7 llvm-toolset-7 scl enable devtoolset-7 llvm-toolset-7 bash
-```
-
-```mdx-code-block
-    </TabItem>
-</Tabs>
 ```
 
 (Optional) If you already have a pre-built Snappy library, you can set:
@@ -6632,10 +6585,7 @@ export PATH="$(pwd)/target/release:$PATH"
 
 Or symlink the ckb binary into `/usr/local/bin`.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 **1.1 Setup Build Environment**
 
@@ -6694,11 +6644,6 @@ devtools/windows/make prod
 setx PATH "$($env:PATH);$((Get-Location).Path)\target\release"
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ## Next Steps
 
 - [Run a Mainnet Node](/docs/node/run-mainnet-node)
@@ -6709,7 +6654,7 @@ If you prefer containers, you can instead [Run a Node with Docker](/docs/node/ru
 ---
 
 ## Source: node/node-configuration.mdx
-URL: https://docs.nervos.org/docs/node/node-configuration
+URL: https://docs.nervos.org/docs/node/node-config
 
 ## Introduction
 
@@ -6930,10 +6875,7 @@ Then restart your CKB node.
 
 1. Check your node’s public address:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
+**Command:**
 
 ```bash
 curl -s -H "Content-Type: application/json" \
@@ -6941,18 +6883,10 @@ curl -s -H "Content-Type: application/json" \
   http://127.0.0.1:8114 | jq '.result.addresses[].address'
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="response" label="Response">
-```
+**Response:**
 
 ```bash
 "/dns4/ckb.example.com/tcp/443/p2p/<PeerID>"
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 2. Use it as a bootnode in another node
@@ -7171,7 +7105,7 @@ ckb -C node2 run
 ---
 
 ## Source: node/overview.mdx
-URL: https://docs.nervos.org/docs/node/overview
+URL: https://docs.nervos.org/docs/node/node-overview
 
 ## Introduction
 
@@ -7206,7 +7140,7 @@ Thanks to the Cell Model, CKB is designed to keep the blockchain sustainable–e
 - **Only Live Cells Are Tracked**: Once a Cell is spent, it’s removed from the current state, keeping the blockchain as lightweight as possible.
 - **1 CKB = 1 Byte of On-Chain Storage**: Putting data on-chain is like renting space–the more data you store, the more CKB you must lock up. While locked, that CKB can’t be sent, staked, or traded. This economic cost, via opportunity loss, encourages users to store only what’s necessary, keeping the blockchain lean and sustainable.
 - **Incentive to Free Up Space**: When you no longer need the data, you can delete it by spending its Cell, and your locked CKB becomes available again. This creates a natural incentive to avoid hoarding state, freeing up capacity for others and helping the network remain decentralized.
-- **Global State Growth is Economically Constrained**: Since all on-chain storage must be backed by locked CKB, expanding the set of Live Cells always requires committing more CKB to storage. This creates a built-in cost for occupying state and discourages unchecked growth. While base issuance is capped at 33.6 billion CKB, the overall upper bound on Live Cell capacity can still increase predictably through secondary issuance.
+- **Global State Size is Capped**: Since all on-chain storage must be backed by locked CKB—and the total supply is fixed at 33.6 billion CKB—the total size of all Live Cells is inherently capped by design.
 
 Want to learn more? Read about [State Explosion and the Tragedy of the Blockchain Commons](https://medium.com/nervosnetwork/state-explosion-and-the-tragedy-of-the-blockchain-commons-1fbd4837e859).
 
@@ -7246,7 +7180,7 @@ The following specs reflect the recommended values for syncing and running a sta
 ---
 
 ## Source: node/run-a-node-over-tor.mdx
-URL: https://docs.nervos.org/docs/node/run-a-node-over-tor
+URL: https://docs.nervos.org/docs/node/run-node-over-tor
 
 # Run a Node Over Tor
 
@@ -7408,10 +7342,7 @@ We recommend:
 - MacOS: `~/Documents/ckb_v0.115.0/...`
 - Windows: `C:\ckb_v0.115.0\...`
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 Open a terminal and navigate into the folder using the following command:
 
@@ -7421,10 +7352,7 @@ cd /Users/(NAME)/Documents/ckb_v0.115.0_aarch64-apple-darwin-portable/ckb
 
 Remember to replace “(NAME)” with your actual name on the device.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 Open a command prompt and navigate into the folder using the following command:
 
@@ -7432,19 +7360,11 @@ Open a command prompt and navigate into the folder using the following command:
 cd C:/ckb_v0.115.0_x86_64-pc-windows-msvc
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ## Verify Installed Versions
 
 Run the following commands:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 ```bash
 ./ckb --version
@@ -7466,10 +7386,7 @@ If you see a message like `'ckb' cannot be opened because the developer cannot b
 2. Scroll down and click “Open Anyway”
 3. Rerun the command
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 ```bash
 ckb --version
@@ -7483,21 +7400,13 @@ ckb 0.115.0 (d845cbf 2024-04-01)
 ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ## Dummy-Worker Setup
 
 ### 1. Initialize
 
 Use the following command to initialize the development blockchain and generate the required configuration files:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="initialize" label="Command">
-```
+**Command:**
 
 ```bash
 ckb init --chain dev
@@ -7505,10 +7414,7 @@ ckb init --chain dev
 
 If you're using a Unix-like system, run `./ckb init --chain dev` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="after-initialize" label="Response">
-```
+**Response:**
 
 ```bash
 WARN: mining feature is disabled because of lacking the block assembler config options
@@ -7518,11 +7424,6 @@ create ckb.toml
 create ckb-miner.toml
 create default.db-options
 Genesis Hash: 0x180621a13efd899730abfb3dd7aaa82f4b61ac9ed5283fe73b47b0f4c4196757
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ### 2. Config Block Assembler
@@ -7535,10 +7436,7 @@ To receive the block rewards, you'll need to generate an address. This can be ac
 
 ##### Note: Be sure to record the `lock_arg` value in the response which we will use in the next step.
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-new-account" label="Command">
-```
+**Command:**
 
 ```bash
 ckb-cli account new
@@ -7546,10 +7444,7 @@ ckb-cli account new
 
 If you're using a Unix-like system, run `./ckb-cli account new` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="account-created" label="Response">
-```
+**Response:**
 
 ```bash
 Your new account is locked with a password. Please give a password. Do not forget this password.
@@ -7563,11 +7458,6 @@ address(deprecated):
   testnet: ckt1qyqp0d7pq7ckkflde2rydwx0wdp686hx0hes3v7var
 lock_arg: 0x17b7c107b16b27edca8646b8cf7343a3eae67df3
 lock_hash: 0x9fecea1600fecfac989b2d15dc227b885afe68f5b652a1a159b59cb69e83ddae
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 #### 2b. Update Config
@@ -7624,10 +7514,7 @@ value = 5000  # The unit of measurement is "ms".
 
 ### 4. Start the Node
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="run-node" label="Command">
-```
+**Command:**
 
 ```bash
 ckb run
@@ -7635,10 +7522,7 @@ ckb run
 
 If you're using a Unix-like system, run `./ckb run` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="node-running" label="Response">
-```
+**Response:**
 
 ```bash
 2020-06-05 18:31:14.970 +08:00 main INFO sentry  sentry is disabled
@@ -7656,19 +7540,11 @@ If you're using a Unix-like system, run `./ckb run` instead.
 2020-06-05 18:31:26.586 +08:00 ChainService INFO ckb-chain  block: 1, hash: 0x47995f78e95202d2c85ce11bce2ee16d131a57d871f7d93cd4c90ad2a8220bd1, epoch: 0(1/1000), total_diff: 0x200, txs: 1
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 5. Start CKB Miner
 
 Open another teriminal window and run the following commands:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="start-miner" label="Command">
-```
+**Command:**
 
 ```bash
 ckb miner
@@ -7676,10 +7552,7 @@ ckb miner
 
 If you're using a Unix-like system, run `./ckb miner` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="mining" label="Response">
-```
+**Response:**
 
 ```bash
 2020-06-05 18:31:21.558 +08:00 main INFO sentry  sentry is disabled
@@ -7690,11 +7563,6 @@ Found! #3 0x625b230f84cb92bcd9cb0bf76d1397c1d948ab25c19df3c4edc246a765f94427
 Found! #4 0x4550fb3b62d9d5ba4d3926db6704b25b90438cfb67037d253ceceb2d86ffdbf7
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ## Eaglesong-Worker Setup
 
 ### 1. Create Account
@@ -7703,10 +7571,7 @@ An address to receive the block rewards must be created using `ckb-cli`.
 
 ##### Note: Be sure to record the `lock_arg` value from the response, as it will be used in the next step.
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="check-ckb-binary-version" label="Command">
-```
+**Command:**
 
 ```bash
 ckb-cli account new
@@ -7714,10 +7579,7 @@ ckb-cli account new
 
 If you're using a Unix-like system, run `./ckb-cli account new` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="show-ckb-binary-version" label="Response">
-```
+**Response:**
 
 ```bash
 ckb-cli account new
@@ -7734,17 +7596,9 @@ lock_arg: 0x17b7c107b16b27edca8646b8cf7343a3eae67df3
 lock_hash: 0x9fecea1600fecfac989b2d15dc227b885afe68f5b652a1a159b59cb69e83ddae
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 2. Initialize Miner
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="initialize-miner" label="Command">
-```
+**Command:**
 
 ```bash
 ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change this to your lock_arg value.
@@ -7752,21 +7606,13 @@ ckb init -c dev --ba-arg 0x41ecee7b8fc0783c75da1f4346009b2e5a774a96 // Change th
 
 If you're using a Unix-like system, run `./ckb int -c dev --ba-arg` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="mining-initialized" label="Response">
-```
+**Response:**
 
 ```bash
 Initialized CKB directory in /PATH/ckb_v0.32.1_x86_64-apple-darwin
 create specs/dev.toml
 create ckb.toml
 create ckb-miner.toml
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ### 3. Change PoW Function
@@ -7787,10 +7633,7 @@ threads = 1
 
 ### 4. Start the Node
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="run-node" label="Command">
-```
+**Command:**
 
 ```bash
 ckb run
@@ -7798,10 +7641,7 @@ ckb run
 
 If you're using a Unix-like system, run `./ckb run` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="node-running" label="Response">
-```
+**Response:**
 
 ```bash
 2020-06-05 11:25:31.433 +08:00 main INFO sentry  sentry is disabled
@@ -7818,19 +7658,11 @@ If you're using a Unix-like system, run `./ckb run` instead.
 2020-06-05 11:25:31.638 +08:00 main INFO ckb-db  Init database version 20191201091330
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 5. Start CKB Miner
 
 This should be performed in a separate terminal.
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="start-mining" label="Command">
-```
+**Command:**
 
 ```bash
 ckb miner
@@ -7838,10 +7670,7 @@ ckb miner
 
 If you're using a Unix-like system, run `./ckb miner` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="mining" label="Response">
-```
+**Response:**
 
 ```bash
 2020-06-05 11:25:37.867 +08:00 main INFO sentry  sentry is disabled
@@ -7850,11 +7679,6 @@ EaglesongSimple-Worker-0 ⠁ [00:00:00]
 Found! #2 0xe5831f39f928dca599a02e490c482a881ccdc47a2376371dec4e440e363fa5c0
 Found! #3 0x605b3e6449954c2daa996c06b2412bbf60b8231763149742119fb623f9de27b2
 Found! #4 0x64064e7257ea4589e8cb177cf119c68ab1b4559de005a20dc13ef3d42949e04b
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ---
@@ -7867,10 +7691,7 @@ Using `ckb-cli` to transfer CKBytes is recommended only for development and test
 
 ### 1. Access `ckb-cli`
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="access-ckb-cli" label="Command">
-```
+**Command:**
 
 ```bash
 ckb-cli
@@ -7878,10 +7699,7 @@ ckb-cli
 
 If you're using a Unix-like system, run `./ckb-cli` instead.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ckb-cli-accessed" label="Response">
-```
+**Response:**
 
 ```bash
 [  ckb-cli version ]: 1.7.0 (0c8711e 2024-02-29)
@@ -7897,26 +7715,15 @@ No previous history.
 CKB>
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 2. Create Account
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-account" label="Command">
-```
+**Command:**
 
 ```bash
 account new
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="account-created" label="Response">
-```
+**Response:**
 
 ```bash
 $ ckb-cli account new
@@ -7933,28 +7740,17 @@ lock_arg: 0x17b7c107b16b27edca8646b8cf7343a3eae67df3
 lock_hash: 0x9fecea1600fecfac989b2d15dc227b885afe68f5b652a1a159b59cb69e83ddae
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 3. Check Balance
 
 In the previous sections, you created a miner account that collects all mining rewards. Using the following command with the correct address will show you the current CKByte balance:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="check-balance" label="Command">
-```
+**Command:**
 
 ```bash
 wallet get-capacity --address "miner's address"
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="balance-result" label="Response">
-```
+**Response:**
 
 ```bash
 CKB> wallet get-capacity --address "ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus"
@@ -7962,26 +7758,15 @@ immature: 8027902.89083717 (CKB)
 total: 46253677.72927512 (CKB)
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 4. Transfer CKBytes
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="transfer-ckb" label="Command">
-```
+**Command:**
 
 ```bash
 wallet transfer --from-account "miner's address" --to-address "new account's address" --capacity 10000 --tx-fee 0.00001
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ckb-transferred" label="Response">
-```
+**Response:**
 
 ```bash
 CKB> wallet transfer --from-account ckt1qyqg6cnaankwgwvh0gaq49uptd3aawhl9p6qpg5cus --to-address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5 --capacity 10000 --max-tx-fee 0.00001
@@ -7989,35 +7774,19 @@ Password:
 0x1b66aafaaba5ce34de494f60374ef78e8f536bb3af9cab4fa63c0f29374c3f89
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 5. Verify Balance
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="verify-balance" label="Command">
-```
+**Command:**
 
 ```bash
 wallet get-capacity --address "new account's address"
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="balance-displayed" label="Response">
-```
+**Response:**
 
 ```bash
 CKB> wallet get-capacity --address ckt1qyq0g9p6nxf5cdy38fm35zech5f90jl5aueqnsxch5
 total: 10000.0 (CKB)
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 The transfer is successful!
@@ -8085,20 +7854,14 @@ echo 0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d > pk2
 
 Import the private key files using `ckb-cli`:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="import-privkey" label="Command">
-```
+**Command:**
 
 ```bash
 CKB> account import --privkey-path pk1
 CKB> account import --privkey-path pk2
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="privkey-result" label="Response">
-```
+**Response:**
 
 ```bash
 $ ckb-cli account import --privkey-path  pk1
@@ -8110,11 +7873,6 @@ address(deprecated):
   mainnet: ckb1qyqg3qa9zthz8q7qz462x28kpmkvhdxhsfqqjavu23
   testnet: ckt1qyqg3qa9zthz8q7qz462x28kpmkvhdxhsfqq0cjrxd
 lock_arg: 0x8883a512ee2383c01574a328f60eeccbb4d78240
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ---
@@ -8183,19 +7941,13 @@ Generally, you don't need to configure anything. But you may edit `mainnet.toml`
 
 Run the following command in your working folder to start the light client:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
+**Command:**
 
 ```bash
   RUST_LOG=info,ckb_light_client=info ./ckb-light-client run --config-file ./mainnet.toml
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="response" label="Response">
-```
+**Response:**
 
 ```bash
 ...
@@ -8203,11 +7955,6 @@ Run the following command in your working folder to start the light client:
 [2025-05-30T08:52:14Z INFO  ckb_light_client_lib::protocols::light_client] LightClient(3).connected peer=SessionId(3)
 [2025-05-30T08:52:15Z INFO  ckb_light_client_lib::protocols::light_client] LightClient(3).connected peer=SessionId(4)
 [2025-05-30T08:52:15Z INFO  ckb_light_client_lib::protocols::synchronizer] SyncProtocol(3).connected peer=SessionId(4)
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 Once running, the light client will listen for RPC requests at http://localhost:9000/ (unless configured otherwise in the `mainnet.toml`).
@@ -8218,19 +7965,13 @@ You can interact with your light client using JSON-RPC calls. Here are some comm
 
 ### 1. Get the current tip header
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
+**Command:**
 
 ```bash
 curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "get_tip_header", "params": [], "id": 1}'
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="response" label="Response">
-```
+**Response:**
 
 ```json
 {
@@ -8253,26 +7994,15 @@ curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"js
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 2. Set scripts to filter
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
+**Command:**
 
 ```bash
 curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method":"set_scripts", "params": [[{"script": {"code_hash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8", "hash_type": "type", "args": "0x64257f00b6b63e987609fa9be2d0c86d351020fb"}, "script_type": "lock", "block_number": "0x0"}]], "id": 1}'
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="response" label="Response">
-```
+**Response:**
 
 ```json
 {
@@ -8282,26 +8012,15 @@ curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"js
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### 3. Get filtered scripts
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="command" label="Command">
-```
+**Command:**
 
 ```bash
 curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method":"get_scripts", "params": [], "id": 1}'
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="response" label="Response">
-```
+**Response:**
 
 ```json
 {
@@ -8319,11 +8038,6 @@ curl http://localhost:9000/ -X POST -H "Content-Type: application/json" -d '{"js
   ],
   "id": 1
 }
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ## WASM Version for Browsers
@@ -8370,10 +8084,7 @@ Before running a node, make sure you have CKB installed. See [Install CKB](/docs
 
 Run the following commands:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 ```bash
 ./ckb --version
@@ -8395,10 +8106,7 @@ If you see a message like `'ckb' cannot be opened because the developer cannot b
 2. Scroll down and click “Open Anyway”
 3. Rerun the command
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 ```bash
 ckb --version
@@ -8410,11 +8118,6 @@ You should see the installed version printed in the terminal, like this:
 ```bash
 ckb 0.115.0 (d845cbf 2024-04-01)
 ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ## Step 3: Initialize the Node for Mainnet
@@ -8746,10 +8449,7 @@ See [Run a Mainnet Node](https://docs.nervos.org/docs/node/run-mainnet-node) for
 
 In this example, we suggest you to use Docker to install Nginx.
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 - Go to the official [Docker site](https://www.docker.com/products/docker-desktop/) and click “Download Docker Desktop” and choose the one depending on your hardware.
 - Open the downloaded `.dmg` file and drag it into the Applications folder
@@ -8763,10 +8463,7 @@ docker --version
 Docker version 28.1.1, build 4eba377
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 - Go to the official [Docker site](https://www.docker.com/products/docker-desktop/) and click “Download Docker Desktop” and choose the one depending on your hardware.
 - Double-click the downloaded `.exe` file and follow the installation wizard. Make sure to enable WSL 2 and/or Hyper-V when prompted. You may need to restart your computer.
@@ -8780,19 +8477,11 @@ docker --version
 Docker version 28.1.1, build 4eba377
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="linux" label="Linux">
-```
+**Linux:**
 
 ```bash
   apt install docker-compose
   apt install docker
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ### Step 2: Clone the Proxy Configuration
@@ -8829,10 +8518,7 @@ Make sure to replace `192.168.1.100` with the real IP address of the device runn
 
 #### How to Find Your Local IP Address?
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 Run the following command in your terminal:
 
@@ -8842,10 +8528,7 @@ ipconfig getifaddr en0
 
 Look for the interface named `en0` (Wi-Fi) or `en1` (Ethernet). Under that section, find the line that starts with `inet`. The IP address will look like `192.168.x.x`.
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 Open command prompt, then run:
 
@@ -8859,10 +8542,7 @@ Scroll down to find your active network adapter (Wi-Fi or Ethernet), and look fo
 IPv4 Address. . . . . . . . . . . : 192.168.x.x
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="linux" label="Linux">
-```
+**Linux:**
 
 ```bash
 ip -4 addr show
@@ -8872,11 +8552,6 @@ Look for a line like:
 
 ```bash
 inet 192.168.1.42/24 ...
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ### Step 4: Run Proxy
@@ -9039,10 +8714,7 @@ Before running a node, make sure you have CKB installed. See [Install CKB](/docs
 
 Run the following commands:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="mac" label="Mac">
-```
+**Mac:**
 
 ```bash
 ./ckb --version
@@ -9064,10 +8736,7 @@ If you see a message like `'ckb' cannot be opened because the developer cannot b
 2. Scroll down and click “Open Anyway”
 3. Rerun the command
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="windows" label="Windows">
-```
+**Windows:**
 
 ```bash
 ckb --version
@@ -9079,11 +8748,6 @@ You should see the installed version printed in the terminal, like this:
 ```bash
 ckb 0.115.0 (d845cbf 2024-04-01)
 ckb-cli 1.8.0-rc1 (cf4159b 2024-03-28)
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 ## Step 3: Initialize the Node for Mainnet
@@ -9178,7 +8842,7 @@ To be visible on [Node Probe](https://nodes.ckb.dev), your node must meet all of
 ---
 
 ## Source: node/sync-option.mdx
-URL: https://docs.nervos.org/docs/node/sync-option
+URL: https://docs.nervos.org/docs/node/sync-options
 
 When running a CKB full node, there are multiple ways to sync blockchain data to your local machine. Each method offers trade-offs between trust, performance, and convenience.
 
@@ -13281,6 +12945,7 @@ $ cd ckb-duktape-template
 $ git checkout 1a3536ae1dc14abe1e91461ab356e8967cde8d7b
 $ npm i
 $ cat << EOF > src/index.js
+import { Script } from "../schema/blockchain.js"
 
 function bytesToHex(b) {
   return "0x" + Array.prototype.map.call(
@@ -13656,7 +13321,7 @@ The above are just 3 simple solutions you can levarage, there are very likely to
 ---
 
 ## Source: script/ckb-script-ipc.mdx
-URL: https://docs.nervos.org/docs/script/ckb-script-ipc
+URL: https://docs.nervos.org/docs/script/ckb-ipc
 
 # Inter-Process Communication (IPC) in Scripts: A Deep Dive into ckb-script-ipc Library
 
@@ -13857,6 +13522,8 @@ Error codes from common scripts via [ckb-script-error-codes](https://nervosnetwo
 URL: https://docs.nervos.org/docs/script/debug-script
 
 # Debug Scripts
+
+**Estimated Time:** 5 - 10 min
 
 ## Debug With CKB-Debugger
 
@@ -14804,9 +14471,11 @@ A Script also includes the `args` part, which differentiates one Script from ano
 ---
 
 ## Source: script/js/00-js-quick-start.mdx
-URL: https://docs.nervos.org/docs/script/js/00-js-quick-start
+URL: https://docs.nervos.org/docs/script/js/js-quick-start
 
 # JavaScript Quick Start
+
+**Estimated Time:** 5 - 7 min
 
 Before proceeding, you should be familiar with:
 
@@ -14864,7 +14533,7 @@ By default, this generates two sub-projects:
 Modify `contracts/hello-world/src/index.ts`:
 
 ```typescript
-
+import * as bindings from "@ckb-js-std/bindings";
 function main(): number {
   console.log("Hello World!");
   return 0;
@@ -14931,6 +14600,11 @@ In the example above, we use `ckb-debugger` to run the script. For realistic tes
 In `packages/on-chain-script-tests/src/index.test.ts`:
 
 ```ts
+import { Resource, Verifier } from "ckb-testtool";
+import { hashCkb, hexFrom, Hex, Transaction, WitnessArgs } from "@ckb-ccc/core";
+import { readFileSync } from "fs";
+
+import { createJSScript } from "./misc";
 
 const SCRIPT_HELLO_WORLD = readFileSync(
   "../../contracts/hello-world/dist/index.bc"
@@ -14986,6 +14660,8 @@ Now let’s build on Hello World by adding CKB syscall support. Use [`@ckb-js-st
 In `index.ts`, add:
 
 ```ts
+import * as bindings from "@ckb-js-std/bindings";
+import { HighLevel } from "@ckb-js-std/core";
 
 function main() {
   const scriptArgs = HighLevel.loadScript().args.slice(35);
@@ -15050,7 +14726,7 @@ Since `ckb-testtool` relies on `ckb-debugger` under the hood, and `ckb-debugger`
 ---
 
 ## Source: script/js/01-00-js-vm.mdx
-URL: https://docs.nervos.org/docs/script/js/01-00-js-vm
+URL: https://docs.nervos.org/docs/script/js/js-vm
 
 # CKB JS VM: Mechanism and Capabilities
 
@@ -15142,7 +14818,7 @@ While CKB-JS-VM is not yet deployed on mainnet, you can experiment with it on de
 ---
 
 ## Source: script/js/01-01-js-vm-build.mdx
-URL: https://docs.nervos.org/docs/script/js/01-01-js-vm-build
+URL: https://docs.nervos.org/docs/script/js/js-vm-build
 
 As a C-language contract, ckb-js-vm uses a Makefile to manage its build process and relies on LLVM 18 by default (Theoretically support higher versions). Developers need to install the dependencies in advance. (LLVM 18 already supports RISC-V compilation, so the official release works.)
 
@@ -15183,7 +14859,7 @@ is: `898260099d49ef84a1fb10f4aae7dae8ef5ec5b34d2edae29a78981fd084f1ed`
 ---
 
 ## Source: script/js/01-02-js-vm-cmd-line.mdx
-URL: https://docs.nervos.org/docs/script/js/01-02-js-vm-cmd-line
+URL: https://docs.nervos.org/docs/script/js/js-vm-cmd-line-options
 
 ## ckb-js-vm Command Line Options
 
@@ -15227,7 +14903,7 @@ ensures that generated bytecode is always compatible with the exact QuickJS vers
 ---
 
 ## Source: script/js/01-03-js-vm-security.mdx
-URL: https://docs.nervos.org/docs/script/js/01-03-js-vm-security
+URL: https://docs.nervos.org/docs/script/js/js-vm-security
 
 In this section, we will introduce some background and useful security tips for ckb-js-vm.
 
@@ -15346,7 +15022,7 @@ next(): IteratorResult<T> {
 ---
 
 ## Source: script/js/01-04-file-system.mdx
-URL: https://docs.nervos.org/docs/script/js/01-04-file-system
+URL: https://docs.nervos.org/docs/script/js/js-vm-file-system
 
 ## Simple File System and Modules
 
@@ -15365,7 +15041,7 @@ Consider the following two files:
 
 ```js
 // File index.js
-
+import { fib } from "./fib_module.js";
 console.log("fib(10)=", fib(10));
 ```
 
@@ -15477,15 +15153,17 @@ The ckb-js-vm supports special initialization files named `init.bc` or `init.js`
 Consider this example code:
 
 ```javascript
-
+import * as bindings from "@ckb-js-std/bindings";
 bindings.mount(2, bindings.SOURCE_CELL_DEP, "/");
-
+import * as module from "./fib_module.js";
 ```
 
 Due to JavaScript's [hoisting behavior](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting), import statements
 are processed before other code executes. The code effectively becomes:
 
 ```javascript
+import * as bindings from "@ckb-js-std/bindings";
+import * as module from "./fib_module.js";
 
 bindings.mount(2, bindings.SOURCE_CELL_DEP, "/");
 ```
@@ -15497,7 +15175,7 @@ processed in the main file.
 ---
 
 ## Source: script/js/01-05-js-vm-injecting-func.mdx
-URL: https://docs.nervos.org/docs/script/js/01-05-js-vm-injecting-func
+URL: https://docs.nervos.org/docs/script/js/js-vm-injecting-function
 
 ## Injecting Functions
 
@@ -15506,7 +15184,7 @@ During development, functions like `loadScript` are commonly used. Most projects
 You can refer to Examples/call-syscalls, which contains a JS script that can be executed directly inside the JS-VM:
 
 ```javascript
-
+import { loadScript } from "@ckb-js-std/bindings";
 console.log(loadScript);
 console.log(new Uint8Array(loadScript(0, 8)));
 console.log("End");
@@ -15535,7 +15213,7 @@ If developers have specific needs, they can inject custom functions in a similar
 ---
 
 ## Source: script/js/02-00-js-api-introduction.mdx
-URL: https://docs.nervos.org/docs/script/js/02-00-js-api-introduction
+URL: https://docs.nervos.org/docs/script/js/js-api-introduction
 
 # ckb-js-std Introduction
 
@@ -15633,7 +15311,7 @@ Built on top of `bindings`, this module provides higher-level, easier-to-use int
 ---
 
 ## Source: script/js/02-01-js-api-syscalls.mdx
-URL: https://docs.nervos.org/docs/script/js/02-01-js-api-syscalls
+URL: https://docs.nervos.org/docs/script/js/js-api-syscalls
 
 # Syscalls
 
@@ -16050,7 +15728,7 @@ export function processId(): number;
 ---
 
 ## Source: script/js/02-02-js-api-common-algorithms.mdx
-URL: https://docs.nervos.org/docs/script/js/02-02-js-api-common-algorithms
+URL: https://docs.nervos.org/docs/script/js/js-api-common-algorithms
 
 # Common Algorithms
 
@@ -16255,7 +15933,7 @@ function parseExtJSON(json: string): Object;
 ---
 
 ## Source: script/js/02-03-js-api-molecule.mdx
-URL: https://docs.nervos.org/docs/script/js/02-03-js-api-molecule
+URL: https://docs.nervos.org/docs/script/js/js-api-molecule
 
 # Molecule
 
@@ -16379,7 +16057,7 @@ let totalIncome = BigInt(witnessData.totalIncomeUdt);
 ---
 
 ## Source: script/js/02-04-js-api-other-utilities.mdx
-URL: https://docs.nervos.org/docs/script/js/02-04-js-api-other-utilities
+URL: https://docs.nervos.org/docs/script/js/js-api-other-utilities
 
 # Other Utilities
 
@@ -16505,7 +16183,7 @@ export const console: {
 ---
 
 ## Source: script/js/02-05-js-api-ipc.mdx
-URL: https://docs.nervos.org/docs/script/js/02-05-js-api-ipc
+URL: https://docs.nervos.org/docs/script/js/js-api-ipc
 
 # IPC
 
@@ -16655,7 +16333,7 @@ export interface RequestHandler {
 ---
 
 ## Source: script/js/03-js-tests.mdx
-URL: https://docs.nervos.org/docs/script/js/03-js-tests
+URL: https://docs.nervos.org/docs/script/js/js-tests
 
 # Writing Effective Unit Tests
 
@@ -18117,6 +17795,8 @@ URL: https://docs.nervos.org/docs/script/rust/rust-debug
 
 # Debug Rust Script
 
+**Estimated Time:** 15 - 30 min
+
 ## Debug With CKB-Debugger
 
 Debugging Scripts on the Nervos CKB can be challenging without the right tools. We recommend using the [CKB-Debugger](https://github.com/nervosnetwork/ckb-standalone-debugger), a powerful standalone command-line tool designed for off-chain Script development. With CKB-Debugger, you can efficiently identify and resolve issues in your Scripts, ensuring smooth execution and optimal performance.
@@ -18547,6 +18227,9 @@ URL: https://docs.nervos.org/docs/script/rust/rust-example-minimal-script
 
 # Example: A Minimal Script
 
+**Estimated Time:** 5 - 7 min
+**Tools:** script
+
 ## A Minimal Script
 
 As we have learned before, a Script that returns 0 is considered successful. The simplest CKB Script code in Rust looks like this:
@@ -18579,20 +18262,14 @@ The first step is to create a new Script project. We use [ckb-script-templates](
 
 Now let's run the command to generate a new Script project called `my-first-contract-workspace`:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="init-script" label="Command">
-```
+**Command:**
 
 ```bash
 alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
 create-ckb-scripts
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="init-script-result" label="Response">
-```
+**Response:**
 
 ```bash
 ⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
@@ -18605,29 +18282,18 @@ create-ckb-scripts
 ✨   Done! New project created /tmp/my-first-contract-workspace
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 ### Create a New Script
 
 Let’s create a new Script called `carrot`.
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-a-new-script" label="Command">
-```
+**Command:**
 
 ```bash
 cd my-first-contract-workspace
 make generate
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="create-a-new-script-result" label="Response">
-```
+**Response:**
 
 ```bash
 🤷   Project Name: carrot
@@ -18639,26 +18305,15 @@ make generate
 ✨   Done! New project created /tmp/my-first-contract-workspace/contracts/carrot
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 Our project is successfully setup! You can run `tree .` to show the project structure:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="script-project-structure" label="Command">
-```
+**Command:**
 
 ```bash {5}
 tree .
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="script-project-structure-result" label="Response">
-```
+**Response:**
 
 ```bash
 .
@@ -18682,11 +18337,6 @@ tree .
         └── tests.rs
 
 7 directories, 13 files
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 Here's a little introduction: `contracts/carrot/src/main.rs` contains the source code of the carrot Script, while `tests/tests.rs` provides unit tests for our Scripts. We will introduce the tests after we write the Script.
@@ -19020,6 +18670,9 @@ URL: https://docs.nervos.org/docs/script/rust/rust-example-simple-lock
 
 # Example: Simple Lock
 
+**Estimated Time:** 5 - 7 min
+**Tools:** script
+
 We introduced Build a Simple Lock in the dApp tutorial.
 That tutorial uses **JavaScript/TypeScript** contracts running on ckb-js-vm to demonstrate
 full-stack dApp development with a web frontend. Here, we'll dive deeper into implementing
@@ -19257,6 +18910,9 @@ URL: https://docs.nervos.org/docs/script/rust/rust-example-sudt-script
 
 # Example: Simple UDT Script
 
+**Estimated Time:** 5 - 7 min
+**Tools:** script
+
 User-Defined Token (UDT) is a fungible token standard on CKB blockchain.
 
 In this tutorial, we will create a UDT Script, a simplified version of [XUDT standard](/docs/ecosystem-scripts/xudt)
@@ -19293,20 +18949,14 @@ Now, let's create a new project to build the UDT Script. We will use [ckb-script
 
 Let's run the command to generate a new Script project called `sudt-script`(short for simple UDT):
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="init-script" label="Command">
-```
+**Command:**
 
 ```bash
 alias create-ckb-scripts="cargo generate gh:cryptape/ckb-script-templates workspace"
 create-ckb-scripts
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="init-script-result" label="Response">
-```
+**Response:**
 
 ```bash
 ⚠️   Favorite `gh:cryptape/ckb-script-templates` not found in config, using it as a git repository: https://github.com/cryptape/ckb-script-templates.git
@@ -19319,31 +18969,20 @@ create-ckb-scripts
 ✨   Done! New project created /tmp/sudt-script
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 This command sets up a boilerplate project called `sudt-script` and does not automatically generate an sUDT Script.
 
 ### Create a New Script
 
 Let’s create a new Script called `sudt` inside the project.
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="create-a-new-script" label="Command">
-```
+**Command:**
 
 ```bash
 cd sudt-script
 make generate
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="create-a-new-script-result" label="Response">
-```
+**Response:**
 
 ```bash
 🤷   Project Name: sudt
@@ -19355,28 +18994,17 @@ make generate
 ✨   Done! New project created /tmp/sudt-script/contracts/sudt
 ```
 
-```mdx-code-block
-  </TabItem>
-</Tabs>
-```
-
 After running the `make generate`, the boilerplate for the sUDT Script is generated inside the project.
 
 Now our project is successfully setup. You can run `tree .` to view the project structure:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="script-project-structure" label="Command">
-```
+**Command:**
 
 ```bash {5}
 tree .
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="script-project-structure-result" label="Response">
-```
+**Response:**
 
 ```bash
 .
@@ -19400,11 +19028,6 @@ tree .
         └── tests.rs
 
 7 directories, 12 files
-```
-
-```mdx-code-block
-  </TabItem>
-</Tabs>
 ```
 
 `contracts/sudt/src/main.rs` contains the source code of the sUDT Script, and `tests/tests.rs` provides the unit tests for our Scripts. We will introduce the tests after completing the Script.
@@ -19633,6 +19256,9 @@ Here's a quick recap:
 URL: https://docs.nervos.org/docs/script/rust/rust-quick-start
 
 # Quick Start
+
+**Estimated Time:** 5 - 15min
+**Tools:** script
 
 This chapter provides a step-by-step guide on developing contracts with Rust on CKB with several examples. As a "Quick Start" guide, it will not diving into in-depth details. For a more comprehensive understanding, please refer to the subsequent chapters.
 
@@ -20404,10 +20030,7 @@ CKB validates transactions based on Lock and Type Scripts through the following 
   - Lock and Type Scripts in Inputs
   - Type Scripts in Outputs (Lock Scripts in Output is NOT executed.)
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="execution-flow-example" label="Example">
-```
+**Example:**
 
 ```
 Transaction {
@@ -20425,10 +20048,7 @@ Transaction {
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="execution-flow-result" label="Grouping Result">
-```
+**Grouping Result:**
 
 ```
 [
@@ -20437,11 +20057,6 @@ Transaction {
     Type B: inputs:[0, 1], outputs:[0, 1],
     Type F: inputs:[], outputs:[3]
 ]
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
 ```
 
 **Execution Process**
@@ -20711,7 +20326,7 @@ This article introduced the original design workflow for implementing an upgrada
 ---
 
 ## Source: script/spawn-direct-cross-script-calling.mdx
-URL: https://docs.nervos.org/docs/script/spawn-direct-cross-script-calling
+URL: https://docs.nervos.org/docs/script/spawn-cross-script-calling
 
 # Spawn: Direct Cross-Script Calls
 
@@ -21218,10 +20833,7 @@ These are the field specifiers for syscalls that request a specific field of an 
 
 Consider the creation of a dependency library with a straightforward function that receives strings, concatenates them, and subsequently returns the resulting string to the caller (a.k.a, echo).
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="spawn-example-caller" label="Caller">
-```
+**Caller:**
 
 ```C
 #include <stdint.h>
@@ -21342,10 +20954,7 @@ exit:
 }
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="spawn-example-callee" label="Callee">
-```
+**Callee:**
 
 ```C
 #include <stdint.h>
@@ -21418,11 +21027,6 @@ int main() {
 exit:
     return err;
 }
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
 ```
 
 ---
@@ -22126,45 +21730,28 @@ CCC also serves as a [wallet connector](/docs/integrate-wallets/ccc-wallet) enha
 
 CCC is designed for both front-end and back-end developers. It streamlines the development process by offering a single package that caters to a variety of requirements:
 
-```mdx-code-block
-<Tabs>
-  <TabItem value="nodejs" label="NodeJS" >
-```
+**NodeJS:**
 
 ```bash
 npm install @ckb-ccc/core
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="customui" label="Custom UI">
-```
+**Custom UI:**
 
 ```bash
 npm install @ckb-ccc/ccc
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="web-component" label="Web Component">
-```
+**Web Component:**
 
 ```bash
 npm install @ckb-ccc/connector
 ```
 
-```mdx-code-block
-  </TabItem>
-  <TabItem value="react" label="React">
-```
+**React:**
 
 ```bash
 npm install @ckb-ccc/connector-react
-```
-
-```mdx-code-block
-</TabItem>
-</Tabs>
 ```
 
 - [NodeJS](https://www.npmjs.com/package/@ckb-ccc/core)
@@ -22175,7 +21762,7 @@ npm install @ckb-ccc/connector-react
 To use CCC, import the desired package:
 
 ```tsx
-
+import { ccc } from "@ckb-ccc/<package-name>";
 ```
 
 CCC encapsulates all functionalities within the `ccc` object, providing a unified interface.
@@ -22183,7 +21770,7 @@ CCC encapsulates all functionalities within the `ccc` object, providing a unifie
 For advanced developers, CCC introduces `cccA` object that offers a comprehensive set of advanced features:
 
 ```tsx
-
+import { cccA } from "@ckb-ccc/<package-name>/advanced";
 ```
 
 Please notice that these advanced interfaces are subject to change and may not be as stable as the core API.
@@ -22212,6 +21799,13 @@ const txHash = await signer.sendTransaction(tx); // Send and get the transaction
 
 ```tsx
 "use client";
+
+import { ccc } from "@ckb-ccc/connector-react";
+import React, { useState } from "react";
+import { Button } from "@/src/components/Button";
+import { TextInput } from "@/src/components/Input";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 
 export default function Sign() {
   const { signer, createSender } = useApp();
@@ -22269,6 +21863,13 @@ export default function Sign() {
 ```tsx
 "use client";
 
+import { ccc } from "@ckb-ccc/connector-react";
+import React, { useState } from "react";
+import { Button } from "@/src/components/Button";
+import { TextInput } from "@/src/components/Input";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+
 export default function Hash() {
   const { createSender } = useApp();
   const { log } = createSender("Hash");
@@ -22310,6 +21911,15 @@ export default function Hash() {
 
 ```tsx
 "use client";
+
+import React, { useState } from "react";
+import { TextInput } from "@/src/components/Input";
+import { Button } from "@/src/components/Button";
+import { Textarea } from "@/src/components/Textarea";
+import { ccc } from "@ckb-ccc/connector-react";
+import { bytesFromAnyString, useGetExplorerLink } from "@/src/utils";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 
 export default function Transfer() {
   const { signer, createSender } = useApp();
@@ -22417,9 +22027,21 @@ export default function Transfer() {
 ```tsx
 "use client";
 
+import React, { useState } from "react";
+import { TextInput } from "@/src/components/Input";
+import { Button } from "@/src/components/Button";
+import { ccc } from "@ckb-ccc/connector-react";
 import common, {
   registerCustomLockScriptInfos,
 } from "@ckb-lumos/common-scripts/lib/common";
+import { generateDefaultScriptInfos } from "@ckb-ccc/lumos-patches";
+import { Indexer } from "@ckb-lumos/ckb-indexer";
+import { TransactionSkeleton } from "@ckb-lumos/helpers";
+import { predefined } from "@ckb-lumos/config-manager";
+import { Textarea } from "@/src/components/Textarea";
+import { useGetExplorerLink } from "@/src/utils";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 
 export default function TransferLumos() {
   const { signer, createSender } = useApp();
@@ -22524,6 +22146,17 @@ export default function TransferLumos() {
 
 ```tsx
 "use client";
+
+import { useState } from "react";
+import { TextInput } from "@/src/components/Input";
+import { Button } from "@/src/components/Button";
+import { ccc } from "@ckb-ccc/connector-react";
+import { tokenInfoToBytes, useGetExplorerLink } from "@/src/utils";
+import { Message } from "@/src/components/Message";
+import React from "react";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+import Link from "next/link";
 
 export default function IssueXUdtSul() {
   const { signer, createSender } = useApp();
@@ -22685,6 +22318,16 @@ export default function IssueXUdtSul() {
 
 ```tsx
 "use client";
+
+import React, { useState } from "react";
+import { TextInput } from "@/src/components/Input";
+import { Button } from "@/src/components/Button";
+import { ccc } from "@ckb-ccc/connector-react";
+import { tokenInfoToBytes, useGetExplorerLink } from "@/src/utils";
+import { Message } from "@/src/components/Message";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+import Link from "next/link";
 
 export default function IssueXUdtTypeId() {
   const { signer, createSender } = useApp();
@@ -22864,6 +22507,15 @@ export default function IssueXUdtTypeId() {
 ```tsx
 "use client";
 
+import React, { useState } from "react";
+import { TextInput } from "@/src/components/Input";
+import { Button } from "@/src/components/Button";
+import { ccc } from "@ckb-ccc/connector-react";
+import { Textarea } from "@/src/components/Textarea";
+import { useGetExplorerLink } from "@/src/utils";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+
 export default function TransferXUdt() {
   const { signer, createSender } = useApp();
   const { log } = createSender("Transfer xUDT");
@@ -22947,6 +22599,8 @@ export default function TransferXUdt() {
   <summary>Toggle to view code</summary>
 
 ```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { client, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
   const isMainnet = client.addressPrefix === "ckb";
@@ -23035,6 +22689,8 @@ console.log(
   <summary>Toggle to view code</summary>
 
 ```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { client, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
   const isMainnet = client.addressPrefix === "ckb";
@@ -23088,6 +22744,8 @@ console.log(
   <summary>Toggle to view code</summary>
 
 ```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { render, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
   const isMainnet = signer.client.addressPrefix === "ckb";
@@ -23142,6 +22800,8 @@ await render(tx);
   <summary>Toggle to view code</summary>
 
 ```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { render, signer } from "@ckb-ccc/playground";
 
 function getExplorerTxUrl(txHash: string) {
   const isMainnet = signer.client.addressPrefix === "ckb";
@@ -23187,6 +22847,15 @@ await render(tx);
 
 ```tsx
 "use client";
+
+import React, { useEffect, useMemo, useState } from "react";
+import { TextInput } from "@/src/components/Input";
+import { Button } from "@/src/components/Button";
+import { ccc } from "@ckb-ccc/connector-react";
+import { useGetExplorerLink } from "@/src/utils";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+import { BigButton } from "@/src/components/BigButton";
 
 function parseEpoch(epoch: ccc.Epoch): ccc.FixedPoint {
   return (
@@ -23593,6 +23262,16 @@ export default function Transfer() {
 ```tsx
 "use client";
 
+import { ccc } from "@ckb-ccc/connector-react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "@/src/components/Button";
+import { TextInput } from "@/src/components/Input";
+import * as bip39 from "@scure/bip39";
+import { wordlist } from "@scure/bip39/wordlists/english";
+import { HDKey } from "@scure/bip32";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
+
 export default function Mnemonic() {
   const { client } = ccc.useCcc();
   const { createSender } = useApp();
@@ -23740,6 +23419,15 @@ export default function Mnemonic() {
 
 ```tsx
 "use client";
+
+import { ccc } from "@ckb-ccc/connector-react";
+import React, { useCallback, useEffect, useState } from "react";
+import { Button } from "@/src/components/Button";
+import { TextInput } from "@/src/components/Input";
+import { HDKey } from "@scure/bip32";
+import { Textarea } from "@/src/components/Textarea";
+import { useApp } from "@/src/context";
+import { ButtonsPanel } from "@/src/components/ButtonsPanel";
 
 export default function Keystore() {
   const { client } = ccc.useCcc();
@@ -23970,12 +23658,6 @@ URL: https://docs.nervos.org/docs/sdk-and-devtool/devtool
 Besides the ones listed above, you can also explore other tools for building on CKB:
 
 ## Utilities & Testing
-
-<CardLayout>
-  {toolCardContents.slice(2, 5).map(({ index, title, description, link, type, links }) => (
-    
-  ))}
-</CardLayout>
 
 ---
 
@@ -24719,6 +24401,8 @@ The CCC Playground provides multiple ways to write and share code:
 1. **Direct Editor Usage**
 
 ```tsx
+import { ccc } from "@ckb-ccc/ccc";
+import { render, signer } from "@ckb-ccc/playground";
 
 console.log("Welcome to CCC Playground!");
 // TODO: Add your code here
@@ -25022,7 +24706,7 @@ to help you serialize and deserialize data in Molecule format.
 You can import the Molecule module from the SDK and use it to serialize and deserialize data.
 
 ```javascript
-
+import { mol } from "@ckb-ccc/core";
 ```
 
 In the following sections, we will show you how to use the CCC Molecule
@@ -25037,6 +24721,7 @@ CCC Molecule provides straightforward APIs for such types.
 ### Basic Data Types
 
 ```javascript
+import { ccc } from "@ckb-ccc/shell";
 
 // Basic Usage
 
@@ -25178,6 +24863,7 @@ array AttrValue [byte; 1];
 With CCC, we can define the `AttrValue` type with simple codec bindings:
 
 ```javascript
+import { Bytes, bytesFrom, BytesLike, mol, NumLike } from "@ckb-ccc/core";
 
 export type AttrValue = number;
 export type AttrValueLike = NumLike;
@@ -25568,7 +25254,7 @@ vector Skills <Skill>;
 ---
 
 ## Source: serialization/features.mdx
-URL: https://docs.nervos.org/docs/serialization/features
+URL: https://docs.nervos.org/docs/serialization/features-molecule
 
 # Rust Library Features
 
@@ -25715,7 +25401,7 @@ Molecule was developed to address these specific needs, providing a reliable and
 ---
 
 ## Source: serialization/tools.mdx
-URL: https://docs.nervos.org/docs/serialization/tools
+URL: https://docs.nervos.org/docs/serialization/tools-molecule
 
 # Molecule Tools
 
@@ -29500,7 +29186,7 @@ Learn more about VM versions and how to choose, visit [RFC0032: CKB VM Version S
 ---
 
 ## Source: tech-explanation/header-dep.md
-URL: https://docs.nervos.org/docs/tech-explanation/header-dep
+URL: https://docs.nervos.org/docs/tech-explanation/header-deps
 
 # header_deps
 
