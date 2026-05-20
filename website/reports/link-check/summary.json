@@ -1,7 +1,9 @@
 {
-  "runAt": "2026-05-06T09:30:59Z",
+  "runAt": "2026-05-20T06:18:53.441Z",
   "scannedTotal": 250,
   "failedTotal": 0,
+  "rawErrorTotal": 14,
+  "ignoredTransientTotal": 14,
   "newFailedTotal": 0,
   "recoveredTotal": 0
 }

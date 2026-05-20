@@ -2,6 +2,11 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+WEBSITE_DIR="$REPO_ROOT/website"
+REPORTS_DIR="reports/link-check"
+
 # Configuration via environment variables
 LINK_CHECK_CONCURRENCY=${LINK_CHECK_CONCURRENCY:-1}
 LINK_CHECK_TIMEOUT=${LINK_CHECK_TIMEOUT:-30}
@@ -9,7 +14,7 @@ LINK_CHECK_RETRIES=${LINK_CHECK_RETRIES:-2}
 LINK_CHECK_ACCEPT=${LINK_CHECK_ACCEPT:-"200..=299,403"}
 GITHUB_TOKEN=${GITHUB_TOKEN:-""}
 
-cd website
+cd "$WEBSITE_DIR"
 
 # Pre-flight checks
 echo "🔍 Pre-flight checks..."
@@ -40,35 +45,47 @@ node ../scripts/convert-github-urls.js build/github-urls.txt > build/github-api-
 echo "📝 Generated $(wc -l < build/github-api-urls.txt) API URLs"
 
 # Prepare lychee command with optional token
-LYCHEE_CMD="lychee --config .lychee.toml --cache-exclude-status=\"400..=699\" --format json --output reports/link-check/dead-links-raw.json"
+lychee_args=(
+    --config .lychee.toml
+    --cache-exclude-status "400..=699"
+    --format json
+    --output "$REPORTS_DIR/dead-links-raw.json"
+    --max-concurrency "$LINK_CHECK_CONCURRENCY"
+    --timeout "$LINK_CHECK_TIMEOUT"
+    --max-retries "$LINK_CHECK_RETRIES"
+    --accept "$LINK_CHECK_ACCEPT"
+)
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    LYCHEE_CMD="$LYCHEE_CMD --header \"Authorization: Bearer $GITHUB_TOKEN\""
+    lychee_args+=(--header "Authorization: Bearer $GITHUB_TOKEN")
 fi
 
-# Override config with environment variables
-LYCHEE_CMD="$LYCHEE_CMD --max-concurrency $LINK_CHECK_CONCURRENCY"
-LYCHEE_CMD="$LYCHEE_CMD --timeout $LINK_CHECK_TIMEOUT"
-LYCHEE_CMD="$LYCHEE_CMD --max-retries $LINK_CHECK_RETRIES"
-LYCHEE_CMD="$LYCHEE_CMD --accept \"$LINK_CHECK_ACCEPT\""
-
 echo "🚀 Running link check with concurrency=$LINK_CHECK_CONCURRENCY, timeout=${LINK_CHECK_TIMEOUT}s, retries=$LINK_CHECK_RETRIES..."
-DISPLAY_CMD="$LYCHEE_CMD"
+DISPLAY_CMD="lychee --config .lychee.toml --cache-exclude-status \"400..=699\" --format json --output $REPORTS_DIR/dead-links-raw.json --max-concurrency $LINK_CHECK_CONCURRENCY --timeout $LINK_CHECK_TIMEOUT --max-retries $LINK_CHECK_RETRIES --accept \"$LINK_CHECK_ACCEPT\""
 if [ -n "$GITHUB_TOKEN" ]; then
-    DISPLAY_CMD="${DISPLAY_CMD//$GITHUB_TOKEN/***REDACTED***}"
+    DISPLAY_CMD="$DISPLAY_CMD --header \"Authorization: Bearer ***REDACTED***\""
 fi
 echo "Command: $DISPLAY_CMD build"
 
 # Run lychee and capture both output and exit code
 set +e
-eval "$LYCHEE_CMD build" 2>&1 | grep --color=never -v 'InvalidPathToUri'
-LYCHEE_EXIT_CODE=$?
+lychee "${lychee_args[@]}" build 2>&1 | grep --color=never -v 'InvalidPathToUri'
+LYCHEE_EXIT_CODE=${PIPESTATUS[0]}
 set -e
 
 echo "📊 Processing results..."
 
 # Process the raw JSON output into our structured format
-node ../scripts/process-link-results.js
+node "$REPO_ROOT/scripts/process-link-results.js"
 
 echo "✅ Link check completed. Results saved to website/reports/link-check/"
-echo "📋 Summary: $(cat reports/link-check/summary.json | jq -r '.failedTotal') failed links found"
+FAILED_TOTAL=$(node -e "const fs=require('fs');const s=JSON.parse(fs.readFileSync('reports/link-check/summary.json','utf8'));process.stdout.write(String(s.failedTotal ?? 0));")
+IGNORED_TOTAL=$(node -e "const fs=require('fs');const s=JSON.parse(fs.readFileSync('reports/link-check/summary.json','utf8'));process.stdout.write(String(s.ignoredTransientTotal ?? 0));")
+echo "📋 Summary: $FAILED_TOTAL failed links found"
+if [ "$IGNORED_TOTAL" -gt 0 ]; then
+    echo "ℹ️ Ignored transient errors (e.g. 429): $IGNORED_TOTAL"
+fi
+
+if [ "$LYCHEE_EXIT_CODE" -ne 0 ]; then
+    echo "⚠️ lychee exited with code $LYCHEE_EXIT_CODE. Processed report artifacts were still generated."
+fi
