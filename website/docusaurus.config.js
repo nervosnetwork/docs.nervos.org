@@ -285,7 +285,7 @@ const config = {
               description: "Implement smart-contract logic on CKB",
               href: "/docs/script/intro-to-script",
               icon: "squareScript",
-              activeBaseRegex: "/(script|ecosystem-scripts|script-course)/",
+              activeBaseRegex: "/(script|ecosystem-scripts)/",
             },
           ],
 

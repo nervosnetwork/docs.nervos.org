@@ -1,0 +1,118 @@
+{
+  "total": 250,
+  "successful": 236,
+  "unknown": 0,
+  "unsupported": 0,
+  "timeouts": 0,
+  "redirects": 0,
+  "excludes": 0,
+  "errors": 14,
+  "cached": 0,
+  "success_map": {},
+  "error_map": {
+    "build/github-api-urls.txt": [
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/molecule/contents/docs/encoding_spec.md?ref=master",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0029-allow-script-multiple-matches-on-identical-code/0029-allow-script-multiple-matches-on-identical-code.md?ref=master",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nostr-protocol/nips/contents/01.md?ref=master",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/ckb-devrel/ckb-proxy-locks/contents/contracts/type-burn-lock?ref=main",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/xxuejie/ckb-script-fuzzing-toolkit/contents/crates/ckb-vm-syscall-tracer?ref=b3b3f42a9e72705e6574c56fc83afbfd1a3c34d2",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/bellard/quickjs/issues/176",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/ckb-c-stdlib/pulls/59",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/ksleifjsslsls/silent-berry2/contents/ts/types/silent_berry.js?ref=re-js",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/XuJiandong/rfcs/contents/rfcs/0052-extensible-udt/0052-extensible-udt.md?ref=xudt",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/rfcs/contents/rfcs/0006-merkle-tree/0006-merkle-tree.md?ref=master",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/ckb-system-scripts/contents/src/tests/secp256k1_blake160_sighash_all.rs?ref=master",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/ckb-production-scripts/contents/c/xudt_rce.c?ref=master",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/ckb-system-scripts/contents/c/secp256k1_blake160_sighash_all.c?ref=a7b7c75662ed950c9bd024e15f83ce702a54996e",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      },
+      {
+        "url": "https://api.github.com/repos/nervosnetwork/ckb/git/ref/tags/v0.112.1",
+        "status": {
+          "text": "Rejected status code (this depends on your \"accept\" configuration)",
+          "code": 429
+        }
+      }
+    ]
+  },
+  "suggestion_map": {},
+  "excluded_map": {},
+  "duration_secs": 129,
+  "detailed_stats": false
+}

@@ -1,6 +1,6 @@
 {
   "name": "docs.nervos.org",
-  "version": "2.38.0",
+  "version": "2.39.0",
   "description": "Official docs website for Nervos CKB",
   "license": "MIT",
   "scripts": {
@@ -11,6 +11,8 @@
     "type": "module",
     "gen-term": "node scripts/generate-key-terms.mjs",
     "fmt": "prettier --write . --ignore-path .prettierignore",
+    "link:check": "../scripts/check-urls.sh",
+    "link:report": "node ../scripts/compare-link-report.js",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",

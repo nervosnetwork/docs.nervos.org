@@ -16,7 +16,7 @@ The syscalls of `ckb` are influenced by the [Unix syscall](https://man7.org/linu
 However, in Rust, it's more convenient to handle errors using `Result<T, E>`. Therefore, most functions in `ckb-std` return a `Result`, with errors represented by the `SysError` enum.
 
 :::note
-Note that the variants of `SysError` do not correspond one-to-one with the raw [syscall return codes](https://github.com/nervosnetwork/ckb/blob/rc/v0.120.x/script/src/syscalls/mod.rs#L57).
+Note that the variants of `SysError` do not correspond one-to-one with the raw [syscall return codes](https://github.com/nervosnetwork/ckb/blob/v0.120.0/script/src/syscalls/mod.rs#L57).
 For example, the `spawn` syscall may return `3`, but in `ckb-std`, this error is represented as `Encoding`.
 :::
 
