@@ -52,7 +52,7 @@ For example,
 - **Blake2b** is implemented as a library.
 - **Schnorr / BLS / ZK-SNARKs** are implemented as libraries.
 
-Because these algorithms are not embedded in consensus rules, CKB is **crypto-agnostic**. Developers can introduce any new cryptographic primitive whenever they want, without waiting for a hard fork. That’s how CKB is [quantum-resistant](/docs/ckb-features/quantum-resistant) natively and already enabled early experimentation with post-quantum cryptography, such as SPHINCS+.
+Because these algorithms are not embedded in consensus rules, CKB is **crypto-agnostic**. Developers can introduce any new cryptographic primitive whenever they want, without waiting for a hard fork. That’s how CKB is [quantum-resistant](/docs/ckb-features/native-quantum-resistance) natively and already enabled early experimentation with post-quantum cryptography, such as SPHINCS+.
 
 To maintain performance without relying on precompiled operations, CKB-VM uses some optimization techniques:
 
