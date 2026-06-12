@@ -35,6 +35,17 @@
   --alert-danger: #c51c1c;
   --alert-danger-bg: rgba(197, 28, 28, 0.05);
 
+  /* AI Resource Variables */
+  --ai-bg-start: rgba(0, 206, 136, 0.14);
+  --ai-bg-mid: rgba(91, 216, 255, 0.09);
+  --ai-bg-end: rgba(130, 142, 249, 0.13);
+  --ai-bg: linear-gradient(
+    90deg,
+    var(--ai-bg-start) 0%,
+    var(--ai-bg-mid) 48%,
+    var(--ai-bg-end) 100%
+  );
+
   /* Code Variables*/
   --code-plain: #255063;
   --code-comment: #637f8a;

@@ -1,0 +1,34 @@
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.iconButton:hover,
+.iconButton:focus-visible {
+  border-color: rgba(24, 239, 177, 0.45);
+  transform: translateY(-1px);
+}
+
+.iconButton:active {
+  transform: translateY(0);
+}
+
+.iconButton img {
+  width: 18px;
+  height: 18px;
+}

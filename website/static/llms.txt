@@ -118,6 +118,12 @@ Use JavaScript when JS tooling or portability is the priority. If the user is ne
 - [API (Syscalls)](https://docs.nervos.org/docs/script/js/js-api-syscalls): JavaScript syscall APIs.
 - [JS Tests](https://docs.nervos.org/docs/script/js/js-tests): Testing JavaScript-based on-chain scripts.
 
+## AI Resources
+
+Use these resources when an AI assistant or coding agent needs current CKB documentation context, CKB-specific agent instructions, starter prompts, CKB Dev Skills, or CKB AI MCP setup guidance.
+
+- [AI Resources](https://docs.nervos.org/docs/ai-agents/ai-resource): LLM files, starter prompts, agent instructions, CKB Dev Skills, and CKB AI MCP setup.
+
 ## Ecosystem
 
 - [Omnilock Script](https://docs.nervos.org/docs/ecosystem-scripts/omnilock): Flexible lock script for multiple auth modes.

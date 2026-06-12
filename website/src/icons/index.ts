@@ -22,6 +22,7 @@ import JS from "/svg/icon-sidebar-js.svg";
 import Organization from "/svg/icon-sidebar-organization.svg";
 import Feature from "/svg/icon-sidebar-feature.svg";
 import External from "/svg/icon-sidebar-external.svg";
+import AI from "/svg/icon-sidebar-ai.svg";
 import SquareRocket from "/svg/square-rocket.svg";
 import SquareDapp from "/svg/square-dapp.svg";
 import SquareScript from "/svg/square-script.svg";
@@ -34,6 +35,7 @@ import SquareHistory from "/svg/square-history.svg";
 import SquareResource from "/svg/square-resource.svg";
 import SquareStructure from "/svg/square-structure.svg";
 import SquareContribution from "/svg/square-contribution.svg";
+import SquareAi from "/svg/square-ai.svg";
 
 export const sidebarIconMap = {
   commonScript: CommonScript,
@@ -60,6 +62,7 @@ export const sidebarIconMap = {
   organization: Organization,
   feature: Feature,
   external: External,
+  ai: AI,
   squareRocket: SquareRocket,
   squareDapp: SquareDapp,
   squareScript: SquareScript,
@@ -72,6 +75,7 @@ export const sidebarIconMap = {
   squareResource: SquareResource,
   squareStructure: SquareStructure,
   squareContribution: SquareContribution,
+  squareAi: SquareAi,
 };
 
 export type SidebarIconName = keyof typeof sidebarIconMap;

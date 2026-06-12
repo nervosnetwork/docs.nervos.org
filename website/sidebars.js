@@ -36,6 +36,16 @@ export default {
     },
     {
       type: "category",
+      label: "AI Agents",
+      className: "category-ai-agents",
+      collapsible: false,
+      customProps: {
+        icon: "ai",
+      },
+      items: ["ai-agents/ai-resource"],
+    },
+    {
+      type: "category",
       label: "Build DApp",
       className: "category-dapp",
       collapsible: false,

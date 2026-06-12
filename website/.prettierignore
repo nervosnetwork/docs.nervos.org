@@ -14,6 +14,7 @@ yarn.lock
 
 # Ignore specific files
 static/llms.txt
+static/llms-full.txt
 *.log
 reports/link-check/history.jsonl
 *.png

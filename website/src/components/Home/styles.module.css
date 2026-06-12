@@ -288,41 +288,108 @@
 .devlogSection {
   margin-bottom: 2.5rem;
 }
-.column {
-  display: flex;
-  flex-direction: column;
-  color: var(--dark-text-primary);
-  flex: 1;
+
+.toolGrid {
+  width: 100%;
 }
 
-.cell {
+.toolGridTop {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.toolColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.toolHeader,
+.toolCell {
   display: flex;
   align-items: center;
   justify-content: center;
 
   height: 3.5rem;
   line-height: 3.5rem;
+  min-width: 0;
 
-  border: 1px solid var(--dark-border-subtle);
-  cursor: pointer;
-
-  text-decoration: none !important;
+  border: 1px solid var(--dark-border-invisible);
   color: var(--dark-text-primary);
+}
+
+.toolHeader {
+  background-color: var(--dark-surface-02);
+  color: var(--dark-text-secondary);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.toolCells {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.toolCell {
+  gap: 0.625rem;
   font-weight: bold;
 
   flex: 1 1 50%;
 }
 
-.cell:hover {
+.toolLink {
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.toolLink:hover {
   background-color: var(--dark-hover);
   border-color: var(--dark-border-accent);
 }
 
-.columnHeader {
-  background-color: var(--dark-surface-03) !important;
-  border: 1px solid var(--dark-border-subtle) !important;
-  color: var(--dark-text-secondary);
-  cursor: default;
+.toolLink:focus-visible,
+.toolLink:active {
+  background-color: var(--dark-selected);
+  border-color: var(--dark-border-accent);
+  outline: none;
+}
+
+.fullToolCell {
+  flex-basis: 100%;
+}
+
+.aiResourceGroup {
+  width: 100%;
+  background: var(--ai-bg);
+}
+
+.aiResourceGroup .toolHeader {
+  background: var(--ai-bg);
+}
+
+.alphaTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 1.5rem;
+  padding: 0 0.5rem;
+
+  background-color: var(--dark-alert-success-bg);
+  border-radius: 4px;
+  color: var(--dark-alert-success);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.toolActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
 }
 
 /* ---------------- Projects carousel ---------------- */
@@ -532,5 +599,18 @@
 
   .flexCol {
     gap: 1.25rem;
+  }
+
+  .toolGridTop {
+    flex-direction: column;
+  }
+
+  .toolCell {
+    flex-basis: 100%;
+  }
+
+  .toolActions {
+    width: 100%;
+    gap: 0.75rem;
   }
 }
