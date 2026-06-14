@@ -200,15 +200,30 @@ println!("address: {}", address.to_string());
 
 In the world of CKB, a <Tooltip>Lock Script</Tooltip> can be represented as an address. It is possible to parse an address from an encoded string and then obtain its network and Script.
 
+If you are testing this inside a new `cargo new --bin` project, add these dependencies to `Cargo.toml` and place the code inside `src/main.rs`.
+
+```bash title='Cargo.toml'
+[dependencies]
+ckb-sdk = "3.7.0"
+ckb-types = "0.200.0"
+```
+
 ```rust
 use ckb_sdk::types::Address;
 use ckb_types::packed::Script;
 use std::str::FromStr;
 
-let addr_str = "ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqgvf0k9sc40s3azmpfvhyuudhahpsj72tsr8cx3d";
-let addr = Address::from_str(addr_str).unwrap();
-let _network = addr.network();
-let _script: Script = addr.payload().into();
+fn main() {
+    let addr_str = "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8";
+
+    let addr = Address::from_str(addr_str).expect("valid CKB address");
+    let network = addr.network();
+    let script: Script = addr.payload().into();
+
+    println!("Address: {}", addr);
+    println!("Network: {:?}", network);
+    println!("Lock Script: {:?}", script);
+}
 ```
 
 :::note
