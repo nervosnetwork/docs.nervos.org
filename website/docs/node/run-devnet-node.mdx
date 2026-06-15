@@ -249,6 +249,10 @@ Modify the `genesis_epoch_length` parameter in the `specs/dev.toml` file under t
 genesis_epoch_length = 1000  # The unit of meansurement is "block".
 ```
 
+:::note
+If you are initializing a dev chain from existing Mainnet or Testnet data, `genesis_epoch_length` must match the value used by the source chain. Mainnet was launched with `1743`, while Testnet uses the default `1000`. A mismatch produces a genesis hash mismatch error on startup. See the upstream [`docs/devnet-from-existing-data.md`](https://github.com/nervosnetwork/ckb/blob/v0.207.0/docs/devnet-from-existing-data.md) for the full procedure.
+:::
+
 #### 3b. Set Permanent Difficulty
 
 When `permanent_difficulty_in_dummy` is set to `true`, all epochs will use the same length as the genesis epoch length, skipping the difficulty adjustment entirely. This param is typically used in conjunction with `genesis_epoch_length`.
