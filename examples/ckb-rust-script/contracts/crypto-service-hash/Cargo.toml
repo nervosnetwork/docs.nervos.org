@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ckb-std = "0.17.0"
+ckb-std = "1.1"
 ckb-crypto-interface = { path = "../../crate/ckb-crypto-interface" }
-ckb-script-ipc-common = "1.0.3"
+ckb-script-ipc-common = "1.1"
 
 [features]
 library = []

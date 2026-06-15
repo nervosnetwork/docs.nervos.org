@@ -20,7 +20,7 @@ use ckb_std::error::SysError;
 use ckb_std::high_level::load_script_hash;
 
 fn ckb_main() -> Result<(), SysError> {
-    ckb_std::type_id::check_type_id(32)?;
+    ckb_std::type_id::check_type_id(32, 32)?;
 
     debug!("Script Hash: {:02x?}", load_script_hash()?);
 

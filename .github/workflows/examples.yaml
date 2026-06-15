@@ -16,7 +16,7 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: '1.94.0'
+          toolchain: '1.95.0'
           targets: riscv64imac-unknown-none-elf
           components: rustfmt,clippy
 
@@ -29,6 +29,11 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install LLVM and Clang
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-19 llvm-19
 
       - uses: pnpm/action-setup@v4
         with:
