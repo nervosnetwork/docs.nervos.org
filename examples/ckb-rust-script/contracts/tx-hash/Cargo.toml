@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ckb-std = "0.17.0"
+ckb-std = "1.1"
 blake2b-ref = "0.3.1"
 
 [features]

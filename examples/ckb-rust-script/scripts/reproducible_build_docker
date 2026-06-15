@@ -7,8 +7,8 @@
 set -ex
 
 DOCKER="${DOCKER:-docker}"
-# docker pull docker.io/cryptape/llvm-n-rust:20250117
-DOCKER_IMAGE="${DOCKER_IMAGE:-docker.io/cryptape/llvm-n-rust@sha256:12e7821cb9c7cbc8988d5b1d60bcc87da4cedcf3eea32df1d8833328c5a69f88}"
+# docker pull nervos/llvm-n-rust:20260610
+DOCKER_IMAGE="${DOCKER_IMAGE:-docker.io/nervos/llvm-n-rust@sha256:c1abd0c0542222b3e6c3e87361636fe2f3e08b9a3126e5bb1df10880aa0f23ca}"
 CHECKSUM_FILE_PATH="${CHECKSUM_FILE_PATH:-checksums.txt}"
 
 # We are parsing command line arguments based on tips from:
@@ -55,9 +55,15 @@ else
   TASKS+=" build "
 fi
 
-$DOCKER run --rm $DOCKER_RUN_ARGS -v `pwd`:/code $DOCKER_IMAGE make $TASKS
+DOCKER_IMAGE_PLATFORM=linux/amd64
+if [[ "$(grep -E '^ID=' /etc/os-release 2>/dev/null | cut -d= -f2 | tr -d '"')" == "ubuntu" ]] && [[ "$(uname -m)" == "aarch64" ]]; then
+  echo "Ubuntu ARM64 detected. Using docker image with linux/arm64 platform. Note: This may produce different binaries than the default linux/amd64."
+  DOCKER_IMAGE_PLATFORM=linux/arm64
+fi
+
+$DOCKER run --platform=${DOCKER_IMAGE_PLATFORM} --rm $DOCKER_RUN_ARGS -v `pwd`:/code $DOCKER_IMAGE make $TASKS
 # Reset file ownerships for all files docker might touch
-$DOCKER run --rm $DOCKER_RUN_ARGS -e UID=`id -u` -e GID=`id -g` -v `pwd`:/code $DOCKER_IMAGE bash -c 'chown -R -f $UID:$GID checksums.txt build target'
+$DOCKER run --platform=${DOCKER_IMAGE_PLATFORM} --rm $DOCKER_RUN_ARGS -e UID=`id -u` -e GID=`id -g` -v `pwd`:/code $DOCKER_IMAGE bash -c 'chown -R -f $UID:$GID checksums.txt build target'
 
 if [[ "${UPDATE}" = "yes" ]]; then
   echo "${CHECKSUM_FILE_PATH} file is updated with latest binary hashes!"

@@ -12,16 +12,16 @@ fi
 # at the end.
 SEARCH_TARGET="${SEARCH_TARGET:-llvm-strip}"
 
-CANDIDATES=("${SEARCH_TARGET}" "${SEARCH_TARGET}-19" "${SEARCH_TARGET}-18" "${SEARCH_TARGET}-17" "${SEARCH_TARGET}-16")
+CANDIDATES=("${SEARCH_TARGET}" "${SEARCH_TARGET}-19" "${SEARCH_TARGET}-20" "${SEARCH_TARGET}-21" "${SEARCH_TARGET}-22")
 
 BREW_PREFIX=$(brew --prefix 2> /dev/null)
 if [[ -n "${BREW_PREFIX}" ]]; then
   CANDIDATES+=(
     "${BREW_PREFIX}/opt/llvm/bin/${SEARCH_TARGET}"
     "${BREW_PREFIX}/opt/llvm@19/bin/${SEARCH_TARGET}"
-    "${BREW_PREFIX}/opt/llvm@18/bin/${SEARCH_TARGET}"
-    "${BREW_PREFIX}/opt/llvm@17/bin/${SEARCH_TARGET}"
-    "${BREW_PREFIX}/opt/llvm@16/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@20/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@21/bin/${SEARCH_TARGET}"
+    "${BREW_PREFIX}/opt/llvm@22/bin/${SEARCH_TARGET}"
   )
 fi
 

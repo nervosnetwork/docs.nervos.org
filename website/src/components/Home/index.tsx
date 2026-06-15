@@ -297,49 +297,96 @@ function WalletDisplay(): JSX.Element {
 }
 
 /* ---------------- Dev tools ---------------- */
+const AI_RESOURCE_DOC_PATH = "/docs/ai-agents/ai-resource";
+
 function ToolDisplay(): JSX.Element {
   const sdks = devToolSectionContents.filter((t) => t.category === "SDK");
   const others = devToolSectionContents.filter(
     (t) => t.category === "Other DevTools"
   );
+  const aiResources = [
+    {
+      title: "llms.txt",
+      href: `${AI_RESOURCE_DOC_PATH}#access-llm-files`,
+    },
+    {
+      title: "llms-full.txt",
+      href: `${AI_RESOURCE_DOC_PATH}#access-llm-files`,
+    },
+    {
+      title: "Agent Skills",
+      href: `${AI_RESOURCE_DOC_PATH}#agent-skills`,
+    },
+  ];
 
   return (
-    <EcoSection title="SDKs & Dev Tools" icon="devtool">
-      <CardLayout topMargin={0} gap={0} colNum={[2, 1, 1, 1]}>
-        <div className={styles.column}>
-          <div className={clsx(styles.columnHeader, styles.cell)}>SDKs</div>
-          <div className={styles.flexWrap}>
-            {sdks.map((tool) => (
-              <Link key={tool.href} to={tool.href} className={styles.cell}>
-                {tool.title}
-              </Link>
-            ))}
+    <EcoSection title="Dev Tools" icon="devtool">
+      <div className={styles.toolGrid}>
+        <div className={styles.toolGridTop}>
+          <div className={styles.toolColumn}>
+            <div className={styles.toolHeader}>SDKs</div>
+            <div className={styles.toolCells}>
+              {sdks.map((tool) => (
+                <Link
+                  key={tool.href}
+                  to={tool.href}
+                  className={clsx(styles.toolCell, styles.toolLink)}
+                >
+                  {tool.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.toolColumn}>
+            <div className={styles.toolHeader}>Other Tools</div>
+            <div className={styles.toolCells}>
+              {others.map((tool) => (
+                <Link
+                  key={tool.href}
+                  href={tool.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx(styles.toolCell, styles.toolLink)}
+                >
+                  {tool.title}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className={styles.column}>
-          <div className={clsx(styles.columnHeader, styles.cell)}>
-            Other Dev Tools
-          </div>
-          <div className={styles.flexWrap}>
-            {others.map((tool) => (
+        <div className={styles.aiResourceGroup}>
+          <div className={styles.toolHeader}>AI Resources</div>
+          <div className={styles.toolCells}>
+            {aiResources.map((resource) => (
               <Link
-                key={tool.href}
-                href={tool.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.cell}
+                key={resource.href}
+                to={resource.href}
+                className={clsx(styles.toolCell, styles.toolLink)}
               >
-                {tool.title}
+                {resource.title}
               </Link>
             ))}
+            <Link
+              to={`${AI_RESOURCE_DOC_PATH}#connect-via-ckb-ai`}
+              className={clsx(styles.toolCell, styles.toolLink)}
+            >
+              CKB AI
+              <span className={styles.alphaTag}>Alpha</span>
+            </Link>
           </div>
         </div>
-      </CardLayout>
+      </div>
 
-      <Button internal size="small" link="/docs/sdk-and-devtool/devtool">
-        View dev tools →
-      </Button>
+      <div className={styles.toolActions}>
+        <Button internal size="small" link="/docs/sdk-and-devtool/devtool">
+          View dev tools →
+        </Button>
+        <Button internal size="small" link={AI_RESOURCE_DOC_PATH}>
+          View AI resources →
+        </Button>
+      </div>
     </EcoSection>
   );
 }

@@ -264,7 +264,7 @@ const config = {
           position: "left",
           menuId: "build",
           activeBaseRegex:
-            "/(getting-started|dapp|script|how-tos|integrate-wallets|sdk-and-devtool|serialization)/",
+            "/(getting-started|dapp|script|how-tos|integrate-wallets|sdk-and-devtool|ai-agents|serialization)/",
           primaryItems: [
             {
               title: "Getting Started",
@@ -286,6 +286,13 @@ const config = {
               href: "/docs/script/intro-to-script",
               icon: "squareScript",
               activeBaseRegex: "/(script|ecosystem-scripts)/",
+            },
+            {
+              title: "AI Resources",
+              description: "Build with CKB-aware agents and prompts",
+              href: "/docs/ai-agents/ai-resource",
+              icon: "squareAi",
+              activeBaseRegex: "/ai-agents/",
             },
           ],
 
