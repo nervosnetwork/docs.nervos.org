@@ -12,7 +12,7 @@ ckb-js-vm supports the following options to control its execution behavior:
 - `-e <code>`: Execute JavaScript code directly from the command line string
 - `-r <filename>`: Read and execute JavaScript code from the specified file
 - `-t <target>`: Specify the target resource cell's code_hash and hash_type in hexadecimal format
-- `-f`: Enable [file system](./js-vm#simple-file-system-and-modules) mode, which provides support for JavaScript modules and imports
+- `-f`: Enable [file system](./js-vm-file-system) mode, which provides support for JavaScript modules and imports
 
 Note, the `-c` and `-r` options can only work with `ckb-debugger`. The `-c` option is particularly useful for preparing
 optimized bytecode as described in the previous section. When no options are specified, ckb-js-vm runs in its default
