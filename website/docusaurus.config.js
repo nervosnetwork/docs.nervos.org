@@ -7,6 +7,8 @@ const darkCodeTheme = require("./src/prism/dark");
 
 const repoBranch =
   process.env.VERCEL_GIT_COMMIT_REF || process.env.DEPLOY_BRANCH || "master";
+const enableGtag =
+  process.env.VERCEL_ENV === "production" || process.env.ENABLE_GTAG === "true";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -28,7 +30,7 @@ const config = {
   favicon: "img/favicon.png",
   customFields: {
     oldDocSiteUrl: "https://docs-old.nervos.org",
-    gaGtag: true,
+    gaGtag: enableGtag,
     disableHeaderTitle: true,
     socialLinks: [
       {
@@ -70,10 +72,14 @@ const config = {
     [
       "@docusaurus/preset-classic",
       {
-        gtag: {
-          trackingID: "G-1PH980CNX1",
-          anonymizeIP: true,
-        },
+        ...(enableGtag
+          ? {
+              gtag: {
+                trackingID: "G-1PH980CNX1",
+                anonymizeIP: true,
+              },
+            }
+          : {}),
         docs: {
           path: "./docs",
           breadcrumbs: false,
