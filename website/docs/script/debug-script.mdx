@@ -438,7 +438,7 @@ where:
 - `__ckb_std_main`: the entry function. When executed, it dynamically loads the lib and runs this function. The transaction information of the Script is passed through the two above-mentioned environment variables.
 - `__set_script_info`: responsible for passing the global state necessary for `exec` and `spawn`.
 
-:::Attention
+:::caution Attention
 
 - The separate crate `$crate::env::Arg` is used to prevent project complexity, as combining these two functions would complicate maintenance.
 - For developers wishing to use this feature, we recommend to use `ckb-testtool` for development and testing to simplify work.

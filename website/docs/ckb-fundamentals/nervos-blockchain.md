@@ -28,7 +28,7 @@ To store 100 bytes of data in Nervos, it is mandatory to have 100 CKBytes. If yo
 
 CKBytes can also be deposited in the Nervos DAO，where they gain rewards in a staking-like process.
 
-Further information about CKByte will be presented in the [Cell Model](cell-model.md) and [Economics](economics.md) sections.
+Further information about CKByte will be presented in the [Cell Model](cell-model.md) and [Economics](/docs/assets-token-standards/economics) sections.
 
 ## Programming on Nervos
 
