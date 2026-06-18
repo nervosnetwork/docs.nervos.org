@@ -1,3 +1,3 @@
 declare interface Window {
-  gtag: (...args: any[]) => void;
+  gtag?: (...args: any[]) => void;
 }

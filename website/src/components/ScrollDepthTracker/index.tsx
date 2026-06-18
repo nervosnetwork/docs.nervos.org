@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "@docusaurus/router";
-import { getSafePagePath } from "@site/src/components/AnalyticsTracking/utils";
+import {
+  getSafePagePath,
+  sendAnalyticsEvent,
+} from "@site/src/components/AnalyticsTracking/utils";
 
 const SCROLL_MILESTONES = [25, 50, 75, 90, 100];
 
@@ -39,10 +42,6 @@ export default function ScrollDepthTracker(): null {
     const sendScrollDepthEvents = () => {
       animationFrame.current = null;
 
-      if (!window.gtag) {
-        return;
-      }
-
       const scrollDepth = getScrollDepth();
       const pagePath = getSafePagePath(location);
 
@@ -52,7 +51,7 @@ export default function ScrollDepthTracker(): null {
           !trackedMilestones.current.has(milestone)
         ) {
           trackedMilestones.current.add(milestone);
-          window.gtag("event", "scroll_depth", {
+          sendAnalyticsEvent("scroll_depth", {
             percent_scrolled: milestone,
             page_path: pagePath,
             page_title: document.title,

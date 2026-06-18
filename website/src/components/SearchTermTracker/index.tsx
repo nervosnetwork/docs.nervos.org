@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "@docusaurus/router";
 import {
+  getDeveloperDestination,
   getSafePagePath,
-  getSafeUrl,
+  sendAnalyticsEvent,
 } from "@site/src/components/AnalyticsTracking/utils";
 
 const SEARCH_INPUT_SELECTOR = ".aa-Input";
+const SEARCH_RESULT_LINK_SELECTOR = ".aa-ItemLink";
+const SELECTED_SEARCH_RESULT_SELECTOR =
+  ".aa-Item[aria-selected='true'] .aa-ItemLink, .aa-Item[aria-current='true'] .aa-ItemLink";
 const SEARCH_EVENT_DELAY = 1000;
 const MAX_SEARCH_TERM_LENGTH = 100;
 const SENSITIVE_SEARCH_PATTERNS = [
@@ -21,6 +25,12 @@ function getSafeSearchTerm(value: string): string {
   ).slice(0, MAX_SEARCH_TERM_LENGTH);
 }
 
+function getSearchResultLinks(): HTMLAnchorElement[] {
+  return Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(SEARCH_RESULT_LINK_SELECTOR)
+  );
+}
+
 export default function SearchTermTracker(): null {
   const location = useLocation();
   const trackedSearchTerms = useRef<Set<string>>(new Set());
@@ -28,7 +38,7 @@ export default function SearchTermTracker(): null {
 
   useEffect(() => {
     const sendSearchTermEvent = (searchTerm: string) => {
-      if (!window.gtag || !searchTerm) {
+      if (!searchTerm) {
         return;
       }
 
@@ -40,11 +50,31 @@ export default function SearchTermTracker(): null {
       }
 
       trackedSearchTerms.current.add(trackingKey);
-      window.gtag("event", "view_search_results", {
+      const resultCount = getSearchResultLinks().length;
+      const searchParams = {
         search_term: searchTerm,
-        page_path: pagePath,
-        page_title: document.title,
-      });
+        result_count: resultCount,
+        no_results: resultCount === 0,
+      };
+
+      sendAnalyticsEvent("view_search_results", searchParams);
+
+      if (resultCount === 0) {
+        sendAnalyticsEvent("search_no_results", {
+          search_term: searchTerm,
+          no_results: true,
+        });
+      }
+    };
+
+    const scheduleSearchTermEvent = (searchTerm: string) => {
+      if (searchEventTimer.current !== null) {
+        window.clearTimeout(searchEventTimer.current);
+      }
+
+      searchEventTimer.current = window.setTimeout(() => {
+        sendSearchTermEvent(searchTerm);
+      }, SEARCH_EVENT_DELAY);
     };
 
     const handleSearchInput = (event: Event) => {
@@ -57,15 +87,29 @@ export default function SearchTermTracker(): null {
         return;
       }
 
-      const searchTerm = getSafeSearchTerm(target.value);
+      scheduleSearchTermEvent(getSafeSearchTerm(target.value));
+    };
 
-      if (searchEventTimer.current !== null) {
-        window.clearTimeout(searchEventTimer.current);
+    const sendSearchSelectionEvent = (selectedLink: HTMLAnchorElement) => {
+      const searchInput = document.querySelector<HTMLInputElement>(
+        SEARCH_INPUT_SELECTOR
+      );
+      const searchTerm = getSafeSearchTerm(searchInput?.value || "");
+
+      if (!searchTerm) {
+        return;
       }
 
-      searchEventTimer.current = window.setTimeout(() => {
-        sendSearchTermEvent(searchTerm);
-      }, SEARCH_EVENT_DELAY);
+      const resultLinks = getSearchResultLinks();
+      const resultRank = resultLinks.indexOf(selectedLink) + 1;
+      const selectedUrl = new URL(selectedLink.href, window.location.href);
+
+      sendAnalyticsEvent("select_search_result", {
+        search_term: searchTerm,
+        result_count: resultLinks.length,
+        result_rank: resultRank || undefined,
+        ...getDeveloperDestination(selectedUrl),
+      });
     };
 
     const handleSearchSelection = (event: MouseEvent | KeyboardEvent) => {
@@ -84,25 +128,16 @@ export default function SearchTermTracker(): null {
 
       const selectedLink =
         event instanceof MouseEvent
-          ? target.closest<HTMLAnchorElement>(".aa-ItemLink")
+          ? target.closest<HTMLAnchorElement>(SEARCH_RESULT_LINK_SELECTOR)
           : document.querySelector<HTMLAnchorElement>(
-              ".aa-Item[aria-selected='true'] .aa-ItemLink, .aa-Item[aria-current='true'] .aa-ItemLink, .aa-ItemLink"
+              SELECTED_SEARCH_RESULT_SELECTOR
             );
-      const searchInput = document.querySelector<HTMLInputElement>(
-        SEARCH_INPUT_SELECTOR
-      );
-      const searchTerm = getSafeSearchTerm(searchInput?.value || "");
 
-      if (!selectedLink || !window.gtag || !searchTerm) {
+      if (!selectedLink) {
         return;
       }
 
-      window.gtag("event", "select_search_result", {
-        search_term: searchTerm,
-        page_path: getSafePagePath(location),
-        page_title: document.title,
-        link_url: getSafeUrl(selectedLink.href),
-      });
+      sendSearchSelectionEvent(selectedLink);
     };
 
     document.addEventListener("input", handleSearchInput);

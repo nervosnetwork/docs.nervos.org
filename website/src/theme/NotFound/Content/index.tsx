@@ -12,16 +12,11 @@ import ThemedImage from "@theme/ThemedImage";
 import styles from "./styles.module.css";
 import Button from "@site/src/components/Button";
 import Link from "@docusaurus/Link";
+import { sendAnalyticsEvent } from "@site/src/components/AnalyticsTracking/utils";
 
 export default function NotFoundContent({ className }: Props): JSX.Element {
   const sendEvent = () => {
-    if (window.gtag) {
-      window.gtag("event", "page_view", {
-        page_title: "404 Page Not Found",
-        page_location: window.location.href, // URL of the current page
-        referrer: document.referrer, // URL of the previous page
-      });
-    }
+    sendAnalyticsEvent("page_not_found", {});
   };
 
   useEffect(() => {

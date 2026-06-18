@@ -5,15 +5,55 @@ import { translate } from "@docusaurus/Translate";
 import type { Props } from "@theme/CodeBlock/CopyButton";
 import IconCopy from "@theme/Icon/Copy";
 import IconSuccess from "@theme/Icon/Success";
+import {
+  getLlmsFileNameFromText,
+  sendAnalyticsEvent,
+} from "@site/src/components/AnalyticsTracking/utils";
 
 import styles from "./styles.module.css";
+
+function getCodeBlockMetadata(button: HTMLButtonElement | null): {
+  code_block_index?: number;
+  code_block_label?: string;
+} {
+  const codeBlock = button?.closest<HTMLElement>(".theme-code-block");
+  const title = codeBlock
+    ?.querySelector<HTMLElement>("[class*='codeBlockTitle']")
+    ?.textContent?.trim();
+  const codeBlocks = Array.from(
+    document.querySelectorAll<HTMLElement>(".theme-code-block")
+  );
+  const codeBlockIndex = codeBlock ? codeBlocks.indexOf(codeBlock) + 1 : 0;
+  const fallbackLabel =
+    codeBlockIndex > 0 ? `snippet_${codeBlockIndex}` : "snippet";
+
+  return {
+    code_block_index: codeBlockIndex || undefined,
+    code_block_label: title || fallbackLabel,
+  };
+}
 
 export default function CopyButton({ code, className }: Props): JSX.Element {
   const [isCopied, setIsCopied] = useState(false);
   const copyTimeout = useRef<number | undefined>(undefined);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const handleCopyCode = useCallback(() => {
     copy(code);
     setIsCopied(true);
+    const codeBlockMetadata = getCodeBlockMetadata(buttonRef.current);
+
+    sendAnalyticsEvent("copy_code", {
+      ...codeBlockMetadata,
+    });
+
+    const llmsFile = getLlmsFileNameFromText(code);
+
+    if (llmsFile) {
+      sendAnalyticsEvent("llms_file_action", {
+        llms_action: "copy_reference",
+      });
+    }
+
     copyTimeout.current = window.setTimeout(() => {
       setIsCopied(false);
     }, 1000);
@@ -23,6 +63,7 @@ export default function CopyButton({ code, className }: Props): JSX.Element {
 
   return (
     <button
+      ref={buttonRef}
       type="button"
       aria-label={
         isCopied
