@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { sendAnalyticsEvent } from "@site/src/components/AnalyticsTracking/utils";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -13,6 +14,9 @@ export default function LlmFileActions({ path, filename }: Props): JSX.Element {
     const response = await fetch(path);
     const text = await response.text();
     await navigator.clipboard.writeText(text);
+    sendAnalyticsEvent("llms_file_action", {
+      llms_action: "copy_file_content",
+    });
     setCopied(true);
     window.setTimeout(() => setCopied(false), 2000);
   }
@@ -32,6 +36,12 @@ export default function LlmFileActions({ path, filename }: Props): JSX.Element {
         className={styles.iconButton}
         href={path}
         download={filename}
+        data-llms-action-tracked="true"
+        onClick={() => {
+          sendAnalyticsEvent("llms_file_action", {
+            llms_action: "download",
+          });
+        }}
         aria-label={`Download ${filename}`}
         title="Download file"
       >
