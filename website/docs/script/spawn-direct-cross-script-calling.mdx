@@ -10,11 +10,11 @@ import ExampleLink from "@site/src/components/ExampleLink";
 
 The Meepo hard fork in 2024 has introduced a range of enhancements into CKB Script development, with one major innovation being Spawn.
 
-In [CKB Script](/docs/script/intro-to-script), Spawn refers to a concept and a set of syscalls for creating new processes. Unlike the [exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) introduced during [CKB’s first hard fork in 2021](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), Spawn enables **direct cross-script calls**, simplifying development process while offering greater control and optimization.
+In [CKB Script](/docs/script/intro-to-script), Spawn refers to a concept and a set of syscalls for creating new processes. Unlike the [exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) introduced during [CKB’s first hard fork in 2021](/docs/history-and-hard-forks/ckb-hard-fork-history#mirana-hardfork), Spawn enables **direct cross-script calls**, simplifying development process while offering greater control and optimization.
 
 ## Why Spawn
 
-The exec syscall, introduced into <Tooltip>CKB-VM</Tooltip> during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost (This means that even if Script A has remaining code after executing `exec`, that code will not be executed.), as illustrated below:
+The exec syscall, introduced into <Tooltip>CKB-VM</Tooltip> during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#mirana-hardfork), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost (This means that even if Script A has remaining code after executing `exec`, that code will not be executed.), as illustrated below:
 
 ```
       +----------+   Exec   +----------+
