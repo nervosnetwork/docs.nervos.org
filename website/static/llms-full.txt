@@ -1539,7 +1539,7 @@ Further information about CKByte will be presented in the [Cell Model](cell-mode
 
 Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as JavaScript, Rust, and C.
 
-All programs on Nervos can store data and state on-chain，which makes creating complex applications and customized tokens a simple and straightforward process.
+All programs on Nervos can store data and state on-chain, which makes creating complex applications and customized tokens a simple and straightforward process.
 
 All code runs in CKB-VM. CKB-VM is a high-performance RISC-V virtual machine that provides a secure, consistent and flexible environment for developers. Multiple instances of CKB-VM can execute different smart contracts concurrently, which enables substantial scaling improvements through massive parallelization.
 
@@ -1560,10 +1560,10 @@ More details on the design of Nervos’ consensus implementation will be discuss
 ## Source: dapp/create-dob.mdx
 URL: https://docs.nervos.org/docs/dapp/create-dob
 
-Description: Build a dApp that uses the Spore Protocol to turn user-provided content into an immutable on-chain digital object on CKB.
+Description: Build a dApp that uses the Spore protocol to turn user-provided content into an immutable on-chain digital object on CKB.
 Tags: dapp, tutorial, spore, cell-data, ccc
 Audience: dApp developers
-Related: /docs/assets-token-standards/spore-protocol, /docs/dapp/write-message, /docs/dapp/create-token, /docs/sdk-and-devtool/ccc
+Related: /docs/assets-token-standards/spore-protocol, /docs/dapp/store-data-on-cell, /docs/dapp/create-token, /docs/sdk-and-devtool/ccc
 Difficulty: intermediate
 Last reviewed: 2026-06-24
 
@@ -1971,7 +1971,7 @@ After following this tutorial, you have mastered how custom tokens work on CKB. 
 ## Source: dapp/simple-lock.mdx
 URL: https://docs.nervos.org/docs/dapp/simple-lock
 
-Description: Build a full-stack CKB dApp with a toy hash Lock Script, script deployment, frontend integration, and token unlocking flow.
+Description: Build a full-stack CKB dApp with a simple hash Lock Script, Script deployment, frontend integration, and token unlocking flow.
 Tags: dapp, tutorial, script, lock-script, ckb-js-vm
 Audience: dApp developers, Script developers
 Related: /docs/script/intro-to-script, /docs/script/js/js-vm, /docs/script/rust/rust-example-simple-lock, /docs/dapp/transfer-ckb
@@ -4987,7 +4987,7 @@ A Script in CKB is a binary executable that can be executed on-chain. It is a 
 
 - `code_hash` : identifies the Script code to be loaded into the CKB-VM
 - `hash_type` : indicates the method CKB-VM uses to locate the Script code or Script.
-- `args` : provides specific arguments that differentiate one Script from another, such as a users’s public key hash.
+- `args` : provides specific arguments that differentiate one Script from another, such as a user’s public key hash.
 
 There’re two main types of Scripts:
 
@@ -5039,7 +5039,7 @@ URL: https://docs.nervos.org/docs/getting-started/quick-start
 
 Description: Set up a local CKB devnet with OffCKB and choose the right next path for building dApps, scripts, nodes, or core concepts.
 Tags: getting-started, devnet, offckb, dapp, script
-Audience: dApp developers, Script developers, node operators
+Audience: dApp developers, Script developers, Node operators
 Related: /docs/dapp/transfer-ckb, /docs/script/rust/rust-quick-start, /docs/getting-started/how-ckb-works, /docs/ckb-fundamentals/cell-model
 Difficulty: beginner
 Last reviewed: 2026-06-24
@@ -5157,7 +5157,7 @@ URL: https://docs.nervos.org/docs/getting-started/rpcs
 
 Description: Connect to CKB JSON-RPC endpoints, use public RPC nodes safely, and call common methods such as get_tip_block_number and send_transaction.
 Tags: rpc, node, json-rpc, transaction
-Audience: dApp developers, node operators
+Audience: dApp developers, Node operators
 Related: /docs/node/install-ckb, /docs/node/run-mainnet-node, /docs/node/run-testnet-node, /docs/sdk-and-devtool/ccc
 Difficulty: intermediate
 Last reviewed: 2026-06-24
@@ -6760,9 +6760,9 @@ In addition to the direct impact of CKB price declines on miners, a surge in CKB
 ## Source: node/install-ckb.mdx
 URL: https://docs.nervos.org/docs/node/install-ckb
 
-Description: Install the CKB binary from releases, source, or Docker, then continue to mainnet, testnet, or Docker node setup.
+Description: Install the CKB binary from releases, source, or Docker, then proceed to Mainnet, Testnet, or Docker node setup.
 Tags: node, install, mainnet, testnet, docker
-Audience: node operators
+Audience: Node operators
 Related: /docs/node/run-mainnet-node, /docs/node/run-testnet-node, /docs/node/run-node-docker, /docs/getting-started/rpcs
 Difficulty: beginner
 Last reviewed: 2026-06-24
@@ -10308,7 +10308,7 @@ Before we finish, I do want to shout out Google's [fuzzing](https://github.com/g
 ## Source: script/intro-to-script.mdx
 URL: https://docs.nervos.org/docs/script/intro-to-script
 
-Description: Learn what CKB Scripts are, how Lock Scripts and Type Scripts execute, and how code_hash, hash_type, and args locate script code.
+Description: Learn what CKB Scripts are, how Lock Scripts and Type Scripts execute, and how code_hash, hash_type, and args locate Script code.
 Tags: script, concept, lock-script, type-script, ckb-vm
 Audience: Script developers
 Related: /docs/script/rust/rust-quick-start, /docs/tech-explanation/script, /docs/tech-explanation/lock-script, /docs/tech-explanation/type-script
@@ -15154,7 +15154,7 @@ Here's a quick recap:
 ## Source: script/rust/rust-quick-start.mdx
 URL: https://docs.nervos.org/docs/script/rust/rust-quick-start
 
-Description: Create, build, test, and debug CKB scripts in Rust using the recommended project template, no_std setup, and local examples.
+Description: Create, build, test, and debug CKB Scripts in Rust using the recommended project template, no_std setup, and local examples.
 Tags: script, tutorial, rust, ckb-vm, testing
 Audience: Rust developers, Script developers
 Related: /docs/script/intro-to-script, /docs/script/rust/rust-build, /docs/script/rust/rust-test, /docs/script/rust/rust-debug

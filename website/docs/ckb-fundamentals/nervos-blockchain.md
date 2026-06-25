@@ -50,7 +50,7 @@ Further information about CKByte will be presented in the [Cell Model](cell-mode
 
 Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as JavaScript, Rust, and C.
 
-All programs on Nervos can store data and state on-chain，which makes creating complex applications and customized tokens a simple and straightforward process.
+All programs on Nervos can store data and state on-chain, which makes creating complex applications and customized tokens a simple and straightforward process.
 
 All code runs in CKB-VM. CKB-VM is a high-performance RISC-V virtual machine that provides a secure, consistent and flexible environment for developers. Multiple instances of CKB-VM can execute different smart contracts concurrently, which enables substantial scaling improvements through massive parallelization.
 
