@@ -1,6 +1,22 @@
 ---
 id: create-token
 title: Create a Fungible Token
+description: "Issue and query a custom fungible token on CKB using the xUDT standard, Type Scripts, Cell data, and the CCC SDK."
+tags:
+  - dapp
+  - tutorial
+  - xudt
+  - type-script
+  - ccc
+audience:
+  - dApp developers
+related:
+  - /docs/assets-token-standards/xudt
+  - /docs/dapp/transfer-ckb
+  - /docs/dapp/create-dob
+  - /docs/sdk-and-devtool/ccc
+difficulty: intermediate
+last_reviewed: 2026-06-24
 ---
 
 import Tabs from "@theme/Tabs";
@@ -209,7 +225,7 @@ const txHash = await signer.sendTransaction(tx);
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how custom tokens work on CKB. Here's a quick recap:
+After following this tutorial, you have mastered how custom tokens work on CKB. Here's a quick recap:
 
 - Create a CKB transaction containing a xUDT Cell in the outputs
 - The data of the xUDT Cell contains the amount number of the token

@@ -1,6 +1,22 @@
 ---
 id: nervos-blockchain
 title: Nervos Blockchain
+description: "Get a beginner overview of Nervos CKB as a layered, proof-of-work blockchain for CKBytes, on-chain state, and CKB-VM programs."
+tags:
+  - concept
+  - layer-1
+  - ckb-vm
+  - consensus
+audience:
+  - dApp developers
+  - Script developers
+related:
+  - /docs/getting-started/how-ckb-works
+  - /docs/ckb-fundamentals/cell-model
+  - /docs/ckb-fundamentals/ckb-vm
+  - /docs/ckb-fundamentals/consensus
+difficulty: beginner
+last_reviewed: 2026-06-24
 ---
 
 ## What is the Nervos Blockchain?
@@ -32,7 +48,7 @@ Further information about CKByte will be presented in the [Cell Model](cell-mode
 
 ## Programming on Nervos
 
-Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as Javascript, Rust, and C.
+Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as JavaScript, Rust, and C.
 
 All programs on Nervos can store data and state on-chain，which makes creating complex applications and customized tokens a simple and straightforward process.
 

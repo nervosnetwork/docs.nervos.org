@@ -1,6 +1,22 @@
 ---
 id: rpcs
 title: RPCs
+description: "Connect to CKB JSON-RPC endpoints, use public RPC nodes safely, and call common methods such as get_tip_block_number and send_transaction."
+tags:
+  - rpc
+  - node
+  - json-rpc
+  - transaction
+audience:
+  - dApp developers
+  - node operators
+related:
+  - /docs/node/install-ckb
+  - /docs/node/run-mainnet-node
+  - /docs/node/run-testnet-node
+  - /docs/sdk-and-devtool/ccc
+difficulty: intermediate
+last_reviewed: 2026-06-24
 ---
 
 import Tabs from "@theme/Tabs";
@@ -43,7 +59,7 @@ CKB exposes a set of RPCs in [JSON-RPC 2.0](https://www.jsonrpc.org/specificatio
 
 ## Basic Usage
 
-The following commands uses [get_tip_block_number](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#get_tip_block_number) RPC to fetch the `tip` block number, of the latest block number in the longest blockchain:
+The following command uses the [get_tip_block_number](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#get_tip_block_number) RPC to fetch the `tip` block number, the latest block number in the longest blockchain:
 
 ```mdx-code-block
 <Tabs>
@@ -76,7 +92,7 @@ http://localhost:8114
 </Tabs>
 ```
 
-The following commands uses `send_transaction` RPC to send transactions to the CKB network:
+The following command uses the `send_transaction` RPC to send transactions to the CKB network:
 
 ```mdx-code-block
 <Tabs>
@@ -153,7 +169,7 @@ http://localhost:8114
 </Tabs>
 ```
 
-It should be noted that `send_transaction` is asynchronous, that is, the return of the transaction hash, does not mean that the transaction is fully verified, if you need to follow up on the status of the transaction, it is recommended to use the following get_transaction rpc：
+It should be noted that `send_transaction` is asynchronous. Returning the transaction hash does not mean that the transaction is fully verified. If you need to follow up on the status of the transaction, use the following `get_transaction` RPC:
 
 ```mdx-code-block
 <Tabs>
