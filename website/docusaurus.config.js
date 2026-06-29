@@ -216,6 +216,45 @@ const config = {
             from: "/docs/sdk-and-devtool/lumos",
             to: "/docs/sdk-and-devtool/ccc",
           },
+          {
+            from: [
+              "/docs/basics/guides/crypto wallets/imtoken",
+              "/docs/basics/guides/imtoken",
+            ],
+            to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/imtoken",
+          },
+          {
+            from: "/docs/tech-explanation/ckb-vs-btc",
+            to: "/docs/ckb-fundamentals/ckb-vs-btc",
+          },
+          {
+            from: "/docs/tech-explanation/ckb-address",
+            to: "/docs/ckb-fundamentals/ckb-address",
+          },
+          {
+            from: "/docs/script-course/intro-to-script-1",
+            to: "/docs/script/intro-to-script",
+          },
+          {
+            from: "/docs/script-course/intro-to-script-2",
+            to: "/docs/script/program-language-for-script",
+          },
+          {
+            from: "/docs/script/ckb-script-ipc",
+            to: "/docs/script/ckb-ipc",
+          },
+          {
+            from: "/docs/script/rust/rust-example-spawn-script",
+            to: "/docs/script/rust/rust-api-spawn",
+          },
+          {
+            from: ["/docs/wallets", "/getting-started/wallet"],
+            to: "/docs/integrate-wallets/intro-to-wallets",
+          },
+          {
+            from: "/docs/getting-started/blockchain-networks",
+            to: "/docs/getting-started/ckb-networks",
+          },
         ],
         createRedirects(existingPath) {
           if (
