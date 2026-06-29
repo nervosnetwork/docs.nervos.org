@@ -1,6 +1,24 @@
 ---
 id: transaction
 title: Transaction
+description: "Reference the CKB transaction structure, including cell_deps, header_deps, inputs, witnesses, outputs, outputs_data, and transaction states."
+tags:
+  - transaction
+  - reference
+  - cell-model
+  - witness
+  - cell-deps
+audience:
+  - dApp developers
+  - Script developers
+related:
+  - /docs/tech-explanation/inputs
+  - /docs/tech-explanation/outputs
+  - /docs/tech-explanation/witness
+  - /docs/tech-explanation/cell-deps
+  - /docs/dapp/transfer-ckb
+difficulty: intermediate
+last_reviewed: 2026-06-24
 ---
 
 import Tooltip from "@components/Tooltip";

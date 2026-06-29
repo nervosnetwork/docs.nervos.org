@@ -37,17 +37,41 @@ function parseFrontmatter(content) {
 
   const raw = match[1];
   const meta = {};
+  let currentArrayKey = null;
+
+  function cleanValue(value) {
+    value = value.trim();
+    if (value.startsWith('"') && value.endsWith('"')) {
+      return value.slice(1, -1);
+    }
+    if (value.startsWith("'") && value.endsWith("'")) {
+      return value.slice(1, -1);
+    }
+    return value;
+  }
+
   for (const line of raw.split("\n")) {
+    const arrayItemMatch = line.match(/^\s+-\s+(.*)$/);
+    if (currentArrayKey && arrayItemMatch) {
+      meta[currentArrayKey].push(cleanValue(arrayItemMatch[1]));
+      continue;
+    }
+
     const m = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
     if (m) {
-      let value = m[2].trim();
-      if (value.startsWith('"') && value.endsWith('"')) {
-        value = value.slice(1, -1);
-      } else if (value.startsWith("'") && value.endsWith("'")) {
-        value = value.slice(1, -1);
+      const key = m[1];
+      const value = m[2].trim();
+      if (value === "") {
+        meta[key] = [];
+        currentArrayKey = key;
+      } else {
+        meta[key] = cleanValue(value);
+        currentArrayKey = null;
       }
-      meta[m[1]] = value;
+      continue;
     }
+
+    currentArrayKey = null;
   }
   return { frontmatter: match[0], body: content.slice(match[0].length), meta };
 }
@@ -295,6 +319,29 @@ function getDocUrl(filePath, meta) {
   return `https://docs.nervos.org/docs/${withoutExt}`;
 }
 
+function formatPageMetadata(meta) {
+  const fields = [
+    ["description", "Description"],
+    ["tags", "Tags"],
+    ["audience", "Audience"],
+    ["related", "Related"],
+    ["difficulty", "Difficulty"],
+    ["last_reviewed", "Last reviewed"],
+  ];
+  const lines = [];
+
+  for (const [key, label] of fields) {
+    const value = meta[key];
+    if (Array.isArray(value) && value.length > 0) {
+      lines.push(`${label}: ${value.join(", ")}`);
+    } else if (typeof value === "string" && value.length > 0) {
+      lines.push(`${label}: ${value}`);
+    }
+  }
+
+  return lines.length > 0 ? `${lines.join("\n")}\n\n` : "";
+}
+
 function main() {
   const files = walk(DOCS_DIR).sort();
 
@@ -328,6 +375,7 @@ function main() {
     output += `---\n\n`;
     output += `## Source: ${relative}\n`;
     output += `URL: ${url}\n\n`;
+    output += formatPageMetadata(meta);
     output += cleaned;
     output += "\n\n";
   }

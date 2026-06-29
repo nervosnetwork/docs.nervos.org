@@ -166,9 +166,9 @@ Use these resources when you want an AI assistant or coding agent to answer ques
 
 These files make the CKB docs easier to use with AI tools, long-context models, and retrieval systems.
 
-| File | Description | Actions |
-| --- | --- | --- |
-| `llms.txt` | A concise map of the official docs with recommended entry points and CKB-specific answer guardrails. | <LlmFileActions path="/llms.txt" filename="llms.txt" /> |
+| File            | Description                                                                                                                              | Actions                                                           |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `llms.txt`      | A concise map of the official docs with recommended entry points and CKB-specific answer guardrails.                                     | <LlmFileActions path="/llms.txt" filename="llms.txt" />           |
 | `llms-full.txt` | The full documentation corpus converted from docs source files into cleaner Markdown for long-context models, RAG, and offline indexing. | <LlmFileActions path="/llms-full.txt" filename="llms-full.txt" /> |
 
 ## Starter Prompts
@@ -988,6 +988,13 @@ CKB-VM isn’t just a virtual machine—it is a **universal computer** embedded 
 ## Source: ckb-fundamentals/cell-model.md
 URL: https://docs.nervos.org/docs/ckb-fundamentals/cell-model
 
+Description: Understand CKB's generalized UTXO Cell Model, including Live Cells, Dead Cells, capacity, ownership, state rent, and scalability.
+Tags: concept, cell-model, utxo, capacity, transaction
+Audience: dApp developers, Script developers
+Related: /docs/getting-started/how-ckb-works, /docs/tech-explanation/cell, /docs/tech-explanation/capacity, /docs/tech-explanation/transaction
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 > Nervos CKB inherits Bitcoin’s architecture and creates the Cell Model, a generalized UTXO model as state storage.
 > This approach maintains Bitcoin's simplicity and consistency.
 > In CKB, all states are stored in Cells, computation is done off-chain, and nodes handle all verification.
@@ -1126,7 +1133,7 @@ Nervos CKB offers native SDKs in several mainstream programming languages, such 
 
 ## CKB-VM Version
 
-The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. To check out all versions of the CKB-VM from previous hard fork events, please visit [VM Version History](/docs/history-and-hard-forks/history-vm-version)
+The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. To check out all versions of the CKB-VM from previous hard fork events, please visit [VM Version History](/docs/script/vm-version)
 
 ---
 
@@ -1494,6 +1501,13 @@ For more information on Eaglesong, refer to [RFC Eaglesong](https://github.com/n
 ## Source: ckb-fundamentals/nervos-blockchain.md
 URL: https://docs.nervos.org/docs/ckb-fundamentals/nervos-blockchain
 
+Description: Get a beginner overview of Nervos CKB as a layered, proof-of-work blockchain for CKBytes, on-chain state, and CKB-VM programs.
+Tags: concept, layer-1, ckb-vm, consensus
+Audience: dApp developers, Script developers
+Related: /docs/getting-started/how-ckb-works, /docs/ckb-fundamentals/cell-model, /docs/ckb-fundamentals/ckb-vm, /docs/ckb-fundamentals/consensus
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 ## What is the Nervos Blockchain?
 
 Nervos blockchain, also known as Common Knowledge Base, is the rock-bottom layer of the Nervos ecosystem. As the foundation, Nervos blockchain provides trust for all the layers built on top of it. It is designed to maximize decentralization while remaining minimal, flexible, and secure. Its primary objective is to reliably preserve any data and assets stored therein.
@@ -1519,13 +1533,13 @@ To store 100 bytes of data in Nervos, it is mandatory to have 100 CKBytes. If yo
 
 CKBytes can also be deposited in the Nervos DAO，where they gain rewards in a staking-like process.
 
-Further information about CKByte will be presented in the [Cell Model](cell-model.md) and [Economics](economics.md) sections.
+Further information about CKByte will be presented in the [Cell Model](cell-model.md) and [Economics](/docs/assets-token-standards/economics) sections.
 
 ## Programming on Nervos
 
-Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as Javascript, Rust, and C.
+Nervos offers smart contract programmability using a growing number of well-known general-purpose programming languages, such as JavaScript, Rust, and C.
 
-All programs on Nervos can store data and state on-chain，which makes creating complex applications and customized tokens a simple and straightforward process.
+All programs on Nervos can store data and state on-chain, which makes creating complex applications and customized tokens a simple and straightforward process.
 
 All code runs in CKB-VM. CKB-VM is a high-performance RISC-V virtual machine that provides a secure, consistent and flexible environment for developers. Multiple instances of CKB-VM can execute different smart contracts concurrently, which enables substantial scaling improvements through massive parallelization.
 
@@ -1545,6 +1559,13 @@ More details on the design of Nervos’ consensus implementation will be discuss
 
 ## Source: dapp/create-dob.mdx
 URL: https://docs.nervos.org/docs/dapp/create-dob
+
+Description: Build a dApp that uses the Spore protocol to turn user-provided content into an immutable on-chain digital object on CKB.
+Tags: dapp, tutorial, spore, cell-data, ccc
+Audience: dApp developers
+Related: /docs/assets-token-standards/spore-protocol, /docs/dapp/store-data-on-cell, /docs/dapp/create-token, /docs/sdk-and-devtool/ccc
+Difficulty: intermediate
+Last reviewed: 2026-06-24
 
 # Create a Digital Object Using Spore Protocol
 
@@ -1704,7 +1725,7 @@ const renderSpore = async () => {
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how digital-object works on CKB. Here's a quick recap:
+After following this tutorial, you have mastered how digital objects work on CKB. Here's a quick recap:
 
 - How Spore protocol works on CKB
 - Create an on-chain digital object with a picture via Spore-SDK
@@ -1723,6 +1744,13 @@ By following this tutorial this far, you have mastered how digital-object works 
 
 ## Source: dapp/create-token.mdx
 URL: https://docs.nervos.org/docs/dapp/create-token
+
+Description: Issue and query a custom fungible token on CKB using the xUDT standard, Type Scripts, Cell data, and the CCC SDK.
+Tags: dapp, tutorial, xudt, type-script, ccc
+Audience: dApp developers
+Related: /docs/assets-token-standards/xudt, /docs/dapp/transfer-ckb, /docs/dapp/create-dob, /docs/sdk-and-devtool/ccc
+Difficulty: intermediate
+Last reviewed: 2026-06-24
 
 # Create a Fungible Token
 
@@ -1921,7 +1949,7 @@ const txHash = await signer.sendTransaction(tx);
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how custom tokens work on CKB. Here's a quick recap:
+After following this tutorial, you have mastered how custom tokens work on CKB. Here's a quick recap:
 
 - Create a CKB transaction containing a xUDT Cell in the outputs
 - The data of the xUDT Cell contains the amount number of the token
@@ -1942,6 +1970,13 @@ By following this tutorial this far, you have mastered how custom tokens work on
 
 ## Source: dapp/simple-lock.mdx
 URL: https://docs.nervos.org/docs/dapp/simple-lock
+
+Description: Build a full-stack CKB dApp with a simple hash Lock Script, Script deployment, frontend integration, and token unlocking flow.
+Tags: dapp, tutorial, script, lock-script, ckb-js-vm
+Audience: dApp developers, Script developers
+Related: /docs/script/intro-to-script, /docs/script/js/js-vm, /docs/script/rust/rust-example-simple-lock, /docs/dapp/transfer-ckb
+Difficulty: advanced
+Last reviewed: 2026-06-24
 
 # Build a Simple Lock
 
@@ -2308,6 +2343,13 @@ By following this tutorial, you've mastered the basics of building a custom lock
 ## Source: dapp/transfer-ckb.mdx
 URL: https://docs.nervos.org/docs/dapp/transfer-ckb
 
+Description: Build a simple dApp that generates accounts, checks CKB balances, creates a transfer transaction, pays fees, and broadcasts it.
+Tags: dapp, tutorial, ccc, transaction, cell-model
+Audience: dApp developers
+Related: /docs/getting-started/quick-start, /docs/sdk-and-devtool/ccc, /docs/dapp/write-message, /docs/ckb-fundamentals/cell-model
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 # View and Transfer a CKB Balance
 
 **Estimated Time:** 2 - 5 min
@@ -2368,7 +2410,7 @@ export async function capacityOf(address: string): Promise<bigint> {
 }
 ```
 
-In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In CCC SDK, the value handle are mostly done in the **Shannon unit**.
+In Nervos CKB, Shannon is the smallest currency unit, with 1 CKB = 10^8 Shannons. This unit system is similar to Bitcoin's Satoshis, where 1 Bitcoin = 10^8 Satoshis. In the CCC SDK, values are mostly handled in the **Shannon unit**.
 
 Next, we can start to transfer balance. Check out the transfer function in `lib.ts`:
 
@@ -2442,7 +2484,7 @@ You can open the console on the browser to see the full transaction to confirm t
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how balance transfers work on CKB. Here's a quick recap:
+After following this tutorial, you have mastered how balance transfers work on CKB. Here's a quick recap:
 
 - The capacity of a Cell indicates both the CKB balance and the amount of data that can be stored in the Cell simultaneously.
 - Transferring CKB balance involves transferring some Cells from the sender to the receiver.
@@ -2460,6 +2502,13 @@ By following this tutorial this far, you have mastered how balance transfers wor
 ## Source: dapp/write-message.mdx
 URL: https://docs.nervos.org/docs/dapp/store-data-on-cell
 
+Description: Build a dApp that writes a text message into CKB Cell data, then reads the Live Cell back and decodes the stored value.
+Tags: dapp, tutorial, cell-data, cell-model, ccc
+Audience: dApp developers
+Related: /docs/dapp/transfer-ckb, /docs/ckb-fundamentals/cell-model, /docs/tech-explanation/outputs-data, /docs/sdk-and-devtool/ccc
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 # Store Data on Cell
 
 **Estimated Time:** 2 - 5 min
@@ -2469,7 +2518,7 @@ URL: https://docs.nervos.org/docs/dapp/store-data-on-cell
 
 In this tutorial, you will learn how to tuck a nifty message - "**Hello CKB!**" - into a Cell on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
-As you have learned from the first tutorial [Transfer CKB](/docs/dapp/transfer-ckb), the Cell can store any type of data in the data field of Cell structure. Here we will put a text message encoding in hex string format and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll then get the hex string from the same Cell back and then decode them to the original text message. the method of encoding and decoding is totally up to your favorite, we use the `TextDecoder` for simplicity through the tutorial.
+As you learned from the first tutorial, [Transfer CKB](/docs/dapp/transfer-ckb), a Cell can store any type of data in the data field of the Cell structure. Here, we will encode a text message as a hex string and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll get the hex string back from the same Cell and decode it to the original text message. The encoding and decoding method is up to you; we use `TextDecoder` for simplicity throughout the tutorial.
 
 ## Setup Devnet & Run Example
 
@@ -2488,11 +2537,11 @@ You can also read the full code online or download it here.
 
 ## Behind the Scene
 
-Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
+Open the `lib.ts` file in your project. It lists the important functions that do most of the work for the project.
 
 ### Encode & Decode Message
 
-Since Cell's data field can store any type of data, we need to design our encoding and decoding method for the message we want to read and write on-chain.
+Since a Cell's data field can store any type of data, we need to design an encoding and decoding method for the message we want to read and write on-chain.
 
 ```ts
 export function utf8ToHex(utf8String: string): string {
@@ -2547,7 +2596,7 @@ const tx = ccc.Transaction.from({
 
 Here we build the output Cell to store the message data by putting the hex format of the text message into the data field of the output Cell.
 
-Next, we ask CCC to complete the transaction for us with transaction fee:
+Next, we ask CCC to complete the transaction for us with a transaction fee:
 
 ```ts
 // Complete missing parts for transaction
@@ -2593,7 +2642,7 @@ export async function readOnChainMessage(txHash: string, index = "0x0") {
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how storing data on Cells works on CKB. Here's a quick recap:
+After following this tutorial, you have mastered how storing data on Cells works on CKB. Here's a quick recap:
 
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
@@ -4884,6 +4933,13 @@ offckb system-scripts --network <devnet/testnet/mainnet>
 ## Source: getting-started/how-ckb-works.mdx
 URL: https://docs.nervos.org/docs/getting-started/how-ckb-works
 
+Description: Learn how CKB uses Cells, Scripts, transactions, CKB-VM, and proof-of-work consensus to secure and update on-chain state.
+Tags: concept, cell-model, script, transaction, ckb-vm
+Audience: dApp developers, Script developers
+Related: /docs/getting-started/quick-start, /docs/ckb-fundamentals/cell-model, /docs/script/intro-to-script, /docs/tech-explanation/transaction
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 # How CKB Works
 
 Whether you’re new to blockchain or have a technical background, this guide will help you understand how CKB works. We’ll explore the fundamental components—Cell Model, Scripts, Transaction, and CKB-VM—in a way that’s easy to grasp.
@@ -4930,8 +4986,8 @@ A Script in CKB is a binary executable that can be executed on-chain. It is a 
 {" "}
 
 - `code_hash` : identifies the Script code to be loaded into the CKB-VM
-- `hash_type` : indicates the the method CKB-VM uses to locate the Script code or Script.
-- `args` : provides specific arguments that differentiate one Script from another, such as a users’s public key hash.
+- `hash_type` : indicates the method CKB-VM uses to locate the Script code or Script.
+- `args` : provides specific arguments that differentiate one Script from another, such as a user’s public key hash.
 
 There’re two main types of Scripts:
 
@@ -4980,6 +5036,13 @@ With the above theoretical knowledge, you're ready to hit the road.
 
 ## Source: getting-started/quick-start.mdx
 URL: https://docs.nervos.org/docs/getting-started/quick-start
+
+Description: Set up a local CKB devnet with OffCKB and choose the right next path for building dApps, scripts, nodes, or core concepts.
+Tags: getting-started, devnet, offckb, dapp, script
+Audience: dApp developers, Script developers, Node operators
+Related: /docs/dapp/transfer-ckb, /docs/script/rust/rust-quick-start, /docs/getting-started/how-ckb-works, /docs/ckb-fundamentals/cell-model
+Difficulty: beginner
+Last reviewed: 2026-06-24
 
 # Quick Start (5min)
 
@@ -5092,6 +5155,13 @@ Happy building! 🎉
 ## Source: getting-started/rpcs.mdx
 URL: https://docs.nervos.org/docs/getting-started/rpcs
 
+Description: Connect to CKB JSON-RPC endpoints, use public RPC nodes safely, and call common methods such as get_tip_block_number and send_transaction.
+Tags: rpc, node, json-rpc, transaction
+Audience: dApp developers, Node operators
+Related: /docs/node/install-ckb, /docs/node/run-mainnet-node, /docs/node/run-testnet-node, /docs/sdk-and-devtool/ccc
+Difficulty: intermediate
+Last reviewed: 2026-06-24
+
 # RPCs
 
 CKB RPCs are a set of programming interfaces provided by the Nervos CKB blockchain, enabling developers to interact with the network for querying data, managing transactions, and deploying Scripts directly.
@@ -5124,7 +5194,7 @@ CKB exposes a set of RPCs in [JSON-RPC 2.0](https://www.jsonrpc.org/specificatio
 
 ## Basic Usage
 
-The following commands uses [get_tip_block_number](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#get_tip_block_number) RPC to fetch the `tip` block number, of the latest block number in the longest blockchain:
+The following command uses the [get_tip_block_number](https://github.com/nervosnetwork/ckb/blob/master/rpc/README.md#get_tip_block_number) RPC to fetch the `tip` block number, the latest block number in the longest blockchain:
 
 **Command:**
 
@@ -5146,7 +5216,7 @@ http://localhost:8114
 {"jsonrpc":"2.0","result":"0x2cb4","id":2}
 ```
 
-The following commands uses `send_transaction` RPC to send transactions to the CKB network:
+The following command uses the `send_transaction` RPC to send transactions to the CKB network:
 
 **Command:**
 
@@ -5212,7 +5282,7 @@ http://localhost:8114
 }
 ```
 
-It should be noted that `send_transaction` is asynchronous, that is, the return of the transaction hash, does not mean that the transaction is fully verified, if you need to follow up on the status of the transaction, it is recommended to use the following get_transaction rpc：
+It should be noted that `send_transaction` is asynchronous. Returning the transaction hash does not mean that the transaction is fully verified. If you need to follow up on the status of the transaction, use the following `get_transaction` RPC:
 
 **Command:**
 
@@ -6690,13 +6760,20 @@ In addition to the direct impact of CKB price declines on miners, a surge in CKB
 ## Source: node/install-ckb.mdx
 URL: https://docs.nervos.org/docs/node/install-ckb
 
+Description: Install the CKB binary from releases, source, or Docker, then proceed to Mainnet, Testnet, or Docker node setup.
+Tags: node, install, mainnet, testnet, docker
+Audience: Node operators
+Related: /docs/node/run-mainnet-node, /docs/node/run-testnet-node, /docs/node/run-node-docker, /docs/getting-started/rpcs
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 # Install CKB
 
 There are three ways to install and run the CKB binary, depending on your platform and preference:
 
-- [Download from release](#download-from-release) – the fastest way. Grab a prebuilt binary package from the official GitHub Releases
+- [Download from release](#method-1-download-from-release) – the fastest way. Grab a prebuilt binary package from the official GitHub Releases
   page and unzip it.
-- [Build from source](#build-from-source) – recommended if you want to compile with the latest changes or verify the build process yourself.
+- [Build from source](#method-2-build-from-source) – recommended if you want to compile with the latest changes or verify the build process yourself.
 - [Use Docker](/docs/node/run-node-docker) – if your platform isn’t directly supported, or if you prefer containerized environments, you can run CKB inside Docker.
 
 ## Method 1: Download from Release
@@ -6895,9 +6972,9 @@ ckb.toml
 
 This article covers the following configuration topics:
 
-- [Node Discoverability](#improve-node-discoverability)
+- [Node Discoverability](#node-discoverability)
 - [Light client support and WSS access](#light-client-support--wss-access)
-- [Proxy and onion support](#proxy-and-onion-support)
+- [Proxy and onion support](#proxy-and-toronion)
 - [Fee estimator](#fee-estimator)
 - [Run multiple nodes](#run-multiple-nodes)
 
@@ -7696,6 +7773,8 @@ Modify the `genesis_epoch_length` parameter in the `specs/dev.toml` file under t
 [params]
 genesis_epoch_length = 1000  # The unit of meansurement is "block".
 ```
+
+If you are initializing a devnet from existing Mainnet or Testnet data, `genesis_epoch_length` must match the value used by the source chain. Mainnet was launched with `1743`, while Testnet uses the default `1000`. A mismatch produces a genesis hash mismatch error on startup. See the upstream [`docs/devnet-from-existing-data.md`](https://github.com/nervosnetwork/ckb/blob/v0.207.0/docs/devnet-from-existing-data.md) for the full procedure.
 
 #### 3b. Set Permanent Difficulty
 
@@ -9734,6 +9813,8 @@ where:
 - `__ckb_std_main`: the entry function. When executed, it dynamically loads the lib and runs this function. The transaction information of the Script is passed through the two above-mentioned environment variables.
 - `__set_script_info`: responsible for passing the global state necessary for `exec` and `spawn`.
 
+:::caution Attention
+
 - The separate crate `$crate::env::Arg` is used to prevent project complexity, as combining these two functions would complicate maintenance.
 - For developers wishing to use this feature, we recommend to use `ckb-testtool` for development and testing to simplify work.
 - Script and Native Simulator are bound one-to-one. If `ckb-testtool` cannot locate the corresponding Native Simulator, it will automatically execute the Script's results.
@@ -10227,6 +10308,13 @@ Before we finish, I do want to shout out Google's [fuzzing](https://github.com/g
 ## Source: script/intro-to-script.mdx
 URL: https://docs.nervos.org/docs/script/intro-to-script
 
+Description: Learn what CKB Scripts are, how Lock Scripts and Type Scripts execute, and how code_hash, hash_type, and args locate Script code.
+Tags: script, concept, lock-script, type-script, ckb-vm
+Audience: Script developers
+Related: /docs/script/rust/rust-quick-start, /docs/tech-explanation/script, /docs/tech-explanation/lock-script, /docs/tech-explanation/type-script
+Difficulty: beginner
+Last reviewed: 2026-06-24
+
 # Intro to Script
 
 A Script in Nervos CKB is a binary executable that can be executed on-chain. It is Turing-complete and can perform arbitrary logic to guard and protect your on-chain assets. You can think of it as smart contract.
@@ -10248,7 +10336,7 @@ A Script can be one of two types:
 
 In most cases, Lock Script and Type Script function similarly. The only key difference is that, the output Cells' Lock Scripts will NOT be executed in a transaction, whereas the input Cells' Lock Scripts, the input Cells' Type Scripts, and the output Cells' Type Scripts will be executed.
 
-This difference has led to the different usecases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control owner ship of a Cell while Type Script defines what kinds of changes of a Cell is valid for the transaction.
+This difference has led to the different use cases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control ownership of a Cell, while Type Script defines what kinds of changes to a Cell are valid for the transaction.
 
 ## Script Structure
 
@@ -10679,7 +10767,7 @@ ckb-js-vm supports the following options to control its execution behavior:
 - `-e <code>`: Execute JavaScript code directly from the command line string
 - `-r <filename>`: Read and execute JavaScript code from the specified file
 - `-t <target>`: Specify the target resource cell's code_hash and hash_type in hexadecimal format
-- `-f`: Enable [file system](./js-vm#simple-file-system-and-modules) mode, which provides support for JavaScript modules and imports
+- `-f`: Enable [file system](./js-vm-file-system) mode, which provides support for JavaScript modules and imports
 
 Note, the `-c` and `-r` options can only work with `ckb-debugger`. The `-c` option is particularly useful for preparing
 optimized bytecode as described in the previous section. When no options are specified, ckb-js-vm runs in its default
@@ -10889,7 +10977,7 @@ While it's often more resource-efficient to write all JavaScript code in a singl
 support in ckb-js-vm through either:
 
 - Executing or spawning ckb-js-vm with the "-f" parameter
-- Using ckb-js-vm flags with file system enabled (see the [Working with ckb-js-vm](./js-vm#ckb-js-vm-command-line-options) chapter for details)
+- Using ckb-js-vm flags with file system enabled (see the [Command Line Options](./js-vm-cmd-line-options) chapter for details)
 
 ### Unpacking a Simple File System
 
@@ -14006,6 +14094,8 @@ where:
 - `__ckb_std_main`: the entry function. When executed, it dynamically loads the lib and runs this function. The transaction information of the Script is passed through the two above-mentioned environment variables.
 - `__set_script_info`: responsible for passing the global state necessary for `exec` and `spawn`.
 
+:::caution Attention
+
 - The separate crate `$crate::env::Arg` is used to prevent project complexity, as combining these two functions would complicate maintenance.
 - For developers wishing to use this feature, we recommend to use `ckb-testtool` for development and testing to simplify work.
 - Script and Native Simulator are bound one-to-one. If `ckb-testtool` cannot locate the corresponding Native Simulator, it will automatically execute the Script's results.
@@ -15064,12 +15154,19 @@ Here's a quick recap:
 ## Source: script/rust/rust-quick-start.mdx
 URL: https://docs.nervos.org/docs/script/rust/rust-quick-start
 
+Description: Create, build, test, and debug CKB Scripts in Rust using the recommended project template, no_std setup, and local examples.
+Tags: script, tutorial, rust, ckb-vm, testing
+Audience: Rust developers, Script developers
+Related: /docs/script/intro-to-script, /docs/script/rust/rust-build, /docs/script/rust/rust-test, /docs/script/rust/rust-debug
+Difficulty: intermediate
+Last reviewed: 2026-06-24
+
 # Quick Start
 
 **Estimated Time:** 5 - 15min
 **Tools:** script
 
-This chapter provides a step-by-step guide on developing contracts with Rust on CKB with several examples. As a "Quick Start" guide, it will not diving into in-depth details. For a more comprehensive understanding, please refer to the subsequent chapters.
+This chapter provides a step-by-step guide on developing contracts with Rust on CKB with several examples. As a "Quick Start" guide, it will not go into deep detail. For a more comprehensive understanding, please refer to the subsequent chapters.
 
 Before proceeding, you should be familiar with:
 
@@ -16141,11 +16238,11 @@ URL: https://docs.nervos.org/docs/script/spawn-cross-script-calling
 
 The Meepo hard fork in 2024 has introduced a range of enhancements into CKB Script development, with one major innovation being Spawn.
 
-In [CKB Script](/docs/script/intro-to-script), Spawn refers to a concept and a set of syscalls for creating new processes. Unlike the [exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) introduced during [CKB’s first hard fork in 2021](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), Spawn enables **direct cross-script calls**, simplifying development process while offering greater control and optimization.
+In [CKB Script](/docs/script/intro-to-script), Spawn refers to a concept and a set of syscalls for creating new processes. Unlike the [exec syscall](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0034-vm-syscalls-2/0034-vm-syscalls-2.md#exec) introduced during [CKB’s first hard fork in 2021](/docs/history-and-hard-forks/ckb-hard-fork-history#mirana-hardfork), Spawn enables **direct cross-script calls**, simplifying development process while offering greater control and optimization.
 
 ## Why Spawn
 
-The exec syscall, introduced into CKB-VM during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#1st-hard-fork--ckb-edition-mirana-2021), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost (This means that even if Script A has remaining code after executing `exec`, that code will not be executed.), as illustrated below:
+The exec syscall, introduced into CKB-VM during [CKB’s first hard fork](/docs/history-and-hard-forks/ckb-hard-fork-history#mirana-hardfork), was designed to enable the loading and executing of a new Script within the current execution space. While powerful, exec can be inefficient, especially when preserving the current execution space is necessary. With exec, all state information of the current Script is discarded. When Script A calls Script B using exec, Script A's context is lost (This means that even if Script A has remaining code after executing `exec`, that code will not be executed.), as illustrated below:
 
 ```
       +----------+   Exec   +----------+
@@ -16552,7 +16649,7 @@ A collection of CKB-VM syscalls. Also include relevant constant, such as return 
 | 0       | 2061       | [ckb_load_tx_hash](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-transaction-hash)                                                          | Calculate the hash of the current transaction and copy it using partial loading.                                                                                                                                                                                                                                |
 | 0       | 2062       | [ckb_load_script_hash](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-script-hash)                                                           | Calculate the hash of currently running Script and copy it using partial loading.                                                                                                                                                                                                                               |
 | 0       | 2071       | [ckb_load_cell](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell)                                                                         | Serialize the specified Cell in the current transaction using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                                                 |
-| 0       | 2072       | [ckb_load_header](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-header)                                                                     | Serialize the specified header associated with an input Cell, dep Cell, or header dep using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                   |
+| 0       | 2072       | [ckb_load_header](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-header)                                                                     | Serialize the specified header associated with an input Cell, dep Cell, or header dep using the Molecule Encoding 1 format and copy it using partial loading. For unconfirmed Cells supplied by the tx-pool, the syscall returns `CKB_ITEM_MISSING` instead of aborting.                                        |
 | 0       | 2073       | [ckb_load_input](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-input)                                                                       | Serialize the specified input Cell in the current transaction using the Molecule Encoding 1 format and copy it using partial loading.                                                                                                                                                                           |
 | 0       | 2074       | [ckb_load_witness](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-witness)                                                                   | Load the specified witness in the current transaction and copy it using partial loading.                                                                                                                                                                                                                        |
 | 0       | 2081       | [ckb_load_cell_by_field](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-by-field)                                                       | Load a single field from the specified Cell in the current transaction and copy it using partial loading.                                                                                                                                                                                                       |
@@ -16561,7 +16658,7 @@ A collection of CKB-VM syscalls. Also include relevant constant, such as return 
 | 0       | 2091       | [ckb_load_cell_data_as_code](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data-as-code)                                               | Load the data from the Cell data field in the specified Cell from the current transaction, mark the loaded memory page as executable, and copy it using partial loading. The loaded code can then be executed by CKB-VM at a later time.                                                                        |
 | 0       | 2092       | [ckb_load_cell_data](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#load-cell-data)                                                               | Load the data from the Cell data field in the specified Cell from the current transaction and copy it using partial loading.                                                                                                                                                                                    |
 | 0       | 2177       | [ckb_debug](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0009-vm-syscalls/0009-vm-syscalls.md#debug)                                                                                 | Print the specified message in CKB's terminal output for the purposes of debugging.                                                                                                                                                                                                                             |
-| 2       | 2104       | [ckb_load_extension](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#load-block-extension)                                                     | Load the extension field data and copy it using partial loading.                                                                                                                                                                                                                                                |
+| 2       | 2104       | [ckb_load_extension](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#load-block-extension)                                                     | Load the extension field data and copy it using partial loading. For unconfirmed Cells supplied by the tx-pool, the syscall returns `CKB_ITEM_MISSING` instead of aborting.                                                                                                                                     |
 | 2       | 2601       | [ckb_spawn](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#spawn)                                                                             | Run a Script executable from the specified Cell using the current VM context, but return to the original calling Script executable upon termination. This is similar to the [spawn function](<https://en.wikipedia.org/wiki/Spawn_(computing)>) found in several operating systems and programming languages.   |
 | 2       | 2602       | [ckb_wait](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#wait)                                                                               | Pause until the execution of a process specified by `pid` has ended.                                                                                                                                                                                                                                            |
 | 2       | 2603       | [ckb_process_id](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0050-vm-syscalls-3/0050-vm-syscalls-3.md#process-id)                                                                   | Get the current process id.                                                                                                                                                                                                                                                                                     |
@@ -17527,11 +17624,18 @@ No known issues have been reported for this VM version.
 ## Source: sdk-and-devtool/ccc.mdx
 URL: https://docs.nervos.org/docs/sdk-and-devtool/ccc
 
+Description: Use the CCC TypeScript SDK to compose transactions, connect wallets, sign messages, issue assets, and build CKB applications.
+Tags: ccc, typescript, sdk, transaction, wallet
+Audience: dApp developers
+Related: /docs/dapp/transfer-ckb, /docs/dapp/create-token, /docs/integrate-wallets/ccc-wallet, /docs/getting-started/rpcs
+Difficulty: intermediate
+Last reviewed: 2026-06-24
+
 # JavaScript/TypeScript (CCC)
 
 ## Introduction
 
-Common Chain Connector (CCC) is a JavaScript/Typescript SDK tailored for CKB. Highly recommended as the primary CKB development tool, CCC offers advantages over alternatives such as [Lumos](https://github.com/ckb-js/lumos) and [ckb-js-sdk](https://github.com/ckb-js/ckb-sdk-js).
+Common Chain Connector (CCC) is a JavaScript/TypeScript SDK tailored for CKB. Highly recommended as the primary CKB development tool, CCC offers advantages over alternatives such as [Lumos](https://github.com/ckb-js/lumos) and [ckb-js-sdk](https://github.com/ckb-js/ckb-sdk-js).
 
 CCC also serves as a [wallet connector](/docs/integrate-wallets/ccc-wallet) enhancing interoperability between wallets across different blockchains. Explore by checking out the [CCC Demo](https://app.ckbccc.com/).
 
@@ -17586,7 +17690,7 @@ Please notice that these advanced interfaces are subject to change and may not b
 
 ## Transaction Composing
 
-Below is a example demonstrating how to compose a transaction for transferring CKB:
+Below is an example demonstrating how to compose a transaction for transferring CKB:
 
 ```tsx
 const tx = ccc.Transaction.from({
@@ -20480,15 +20584,30 @@ println!("address: {}", address.to_string());
 
 In the world of CKB, a Lock Script can be represented as an address. It is possible to parse an address from an encoded string and then obtain its network and Script.
 
+If you are testing this inside a new `cargo new --bin` project, add these dependencies to `Cargo.toml` and place the code inside `src/main.rs`.
+
+```bash title='Cargo.toml'
+[dependencies]
+ckb-sdk = "3.7.0"
+ckb-types = "0.200.0"
+```
+
 ```rust
 use ckb_sdk::types::Address;
 use ckb_types::packed::Script;
 use std::str::FromStr;
 
-let addr_str = "ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqgvf0k9sc40s3azmpfvhyuudhahpsj72tsr8cx3d";
-let addr = Address::from_str(addr_str).unwrap();
-let _network = addr.network();
-let _script: Script = addr.payload().into();
+fn main() {
+    let addr_str = "ckt1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqvwg2cen8extgq8s5puft8vf40px3f599cytcyd8";
+
+    let addr = Address::from_str(addr_str).expect("valid CKB address");
+    let network = addr.network();
+    let script: Script = addr.payload().into();
+
+    println!("Address: {}", addr);
+    println!("Network: {:?}", network);
+    println!("Lock Script: {:?}", script);
+}
 ```
 
 Short address and full bech32 address are deprecated. For more details about addresses, check out [CKB Address](/docs/ckb-fundamentals/ckb-address) and [RFC-0021](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0021-ckb-address-format/0021-ckb-address-format.md).
@@ -25173,7 +25292,7 @@ URL: https://docs.nervos.org/docs/tech-explanation/outputs
 
 # outputs
 
-The transaction destroys the Cells listed in `inputs` and creates new Cells listed in `outputs`. These output Cells follow the same structure as the standard [Cell structure](<(/docs/tech-explanation/cell#cell-structure)>) and can later be used as inputs in future transactions.
+The transaction destroys the Cells listed in `inputs` and creates new Cells listed in `outputs`. These output Cells follow the same structure as the standard [Cell structure](/docs/tech-explanation/cell#cell-structure) and can later be used as inputs in future transactions.
 
 ---
 
@@ -25298,6 +25417,13 @@ We differentiate the terms Script and Code as follows:
 
 ## Source: tech-explanation/transaction.md
 URL: https://docs.nervos.org/docs/tech-explanation/transaction
+
+Description: Reference the CKB transaction structure, including cell_deps, header_deps, inputs, witnesses, outputs, outputs_data, and transaction states.
+Tags: transaction, reference, cell-model, witness, cell-deps
+Audience: dApp developers, Script developers
+Related: /docs/tech-explanation/inputs, /docs/tech-explanation/outputs, /docs/tech-explanation/witness, /docs/tech-explanation/cell-deps, /docs/dapp/transfer-ckb
+Difficulty: intermediate
+Last reviewed: 2026-06-24
 
 # Transaction
 

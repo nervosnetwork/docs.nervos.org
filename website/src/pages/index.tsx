@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import LogRocket from "logrocket";
 import Layout from "@theme/Layout";
 import clsx from "clsx";
 import { useColorMode } from "@docusaurus/theme-common";
@@ -22,10 +21,6 @@ import {
 } from "../components/Home";
 
 export default function Home() {
-  useEffect(() => {
-    LogRocket.init("ghkibu/nervos-doc");
-  }, []);
-
   return (
     <Layout
       wrapperClassName={clsx(styles.homeLayout, styles.relative)}

@@ -1,6 +1,22 @@
 ---
 id: store-data-on-cell
 title: Store Data on Cell
+description: "Build a dApp that writes a text message into CKB Cell data, then reads the Live Cell back and decodes the stored value."
+tags:
+  - dapp
+  - tutorial
+  - cell-data
+  - cell-model
+  - ccc
+audience:
+  - dApp developers
+related:
+  - /docs/dapp/transfer-ckb
+  - /docs/ckb-fundamentals/cell-model
+  - /docs/tech-explanation/outputs-data
+  - /docs/sdk-and-devtool/ccc
+difficulty: beginner
+last_reviewed: 2026-06-24
 ---
 
 import Tabs from "@theme/Tabs";
@@ -19,7 +35,7 @@ import ExampleLink from "@components/ExampleLink";
 
 In this tutorial, you will learn how to tuck a nifty message - "**Hello CKB!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
-As you have learned from the first tutorial [Transfer CKB](/docs/dapp/transfer-ckb), the Cell can store any type of data in the data field of Cell structure. Here we will put a text message encoding in hex string format and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll then get the hex string from the same Cell back and then decode them to the original text message. the method of encoding and decoding is totally up to your favorite, we use the `TextDecoder` for simplicity through the tutorial.
+As you learned from the first tutorial, [Transfer CKB](/docs/dapp/transfer-ckb), a Cell can store any type of data in the data field of the Cell structure. Here, we will encode a text message as a hex string and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll get the hex string back from the same Cell and decode it to the original text message. The encoding and decoding method is up to you; we use `TextDecoder` for simplicity throughout the tutorial.
 
 ## Setup Devnet & Run Example
 
@@ -40,11 +56,11 @@ You can also read the full code online or download it <ExampleLink path="dApp/st
 
 ## Behind the Scene
 
-Open the `lib.ts` file in your project, it lists all the important functions that do the most of work for the project.
+Open the `lib.ts` file in your project. It lists the important functions that do most of the work for the project.
 
 ### Encode & Decode Message
 
-Since Cell's data field can store any type of data, we need to design our encoding and decoding method for the message we want to read and write on-chain.
+Since a Cell's data field can store any type of data, we need to design an encoding and decoding method for the message we want to read and write on-chain.
 
 ```ts
 export function utf8ToHex(utf8String: string): string {
@@ -99,7 +115,7 @@ const tx = ccc.Transaction.from({
 
 Here we build the output Cell to store the message data by putting the hex format of the text message into the data field of the output Cell.
 
-Next, we ask CCC to complete the transaction for us with transaction fee:
+Next, we ask CCC to complete the transaction for us with a transaction fee:
 
 ```ts
 // Complete missing parts for transaction
@@ -145,7 +161,7 @@ export async function readOnChainMessage(txHash: string, index = "0x0") {
 
 ## Congratulations!
 
-By following this tutorial this far, you have mastered how storing data on Cells works on CKB. Here's a quick recap:
+After following this tutorial, you have mastered how storing data on Cells works on CKB. Here's a quick recap:
 
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
