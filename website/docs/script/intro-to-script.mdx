@@ -1,6 +1,22 @@
 ---
 id: intro-to-script
 title: "Intro to Script"
+description: "Learn what CKB Scripts are, how Lock Scripts and Type Scripts execute, and how code_hash, hash_type, and args locate Script code."
+tags:
+  - script
+  - concept
+  - lock-script
+  - type-script
+  - ckb-vm
+audience:
+  - Script developers
+related:
+  - /docs/script/rust/rust-quick-start
+  - /docs/tech-explanation/script
+  - /docs/tech-explanation/lock-script
+  - /docs/tech-explanation/type-script
+difficulty: beginner
+last_reviewed: 2026-06-24
 ---
 
 import Tooltip from "@components/Tooltip";
@@ -26,7 +42,7 @@ A Script can be one of two types:
 
 In most cases, Lock Script and Type Script function similarly. The only key difference is that, the output Cells' Lock Scripts will NOT be executed in a transaction, whereas the input Cells' Lock Scripts, the input Cells' Type Scripts, and the output Cells' Type Scripts will be executed.
 
-This difference has led to the different usecases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control owner ship of a Cell while Type Script defines what kinds of changes of a Cell is valid for the transaction.
+This difference has led to the different use cases of Lock Script and Type Script as we have mentioned above. Lock Script is often used to control ownership of a Cell, while Type Script defines what kinds of changes to a Cell are valid for the transaction.
 
 ## Script Structure
 

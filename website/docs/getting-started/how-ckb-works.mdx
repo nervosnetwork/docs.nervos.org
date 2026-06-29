@@ -1,6 +1,23 @@
 ---
 id: how-ckb-works
 title: How CKB Works
+description: "Learn how CKB uses Cells, Scripts, transactions, CKB-VM, and proof-of-work consensus to secure and update on-chain state."
+tags:
+  - concept
+  - cell-model
+  - script
+  - transaction
+  - ckb-vm
+audience:
+  - dApp developers
+  - Script developers
+related:
+  - /docs/getting-started/quick-start
+  - /docs/ckb-fundamentals/cell-model
+  - /docs/script/intro-to-script
+  - /docs/tech-explanation/transaction
+difficulty: beginner
+last_reviewed: 2026-06-24
 ---
 
 # How CKB Works
@@ -78,7 +95,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
      src="/img/how-ckb-works/confirm.png"
      width="688px"
      height="276px"
-     alt="Miners select the transaciton from the mempool and include it in a new block. The block is added to the blockchain after validation."
+     alt="Miners select the transaction from the mempool and include it in a new block. The block is added to the blockchain after validation."
    />{" "}
 
 As a result:
@@ -101,8 +118,8 @@ A Script in CKB is a binary executable that can be executed on-chain. It is a 
 />{" "}
 
 - `code_hash` : identifies the Script code to be loaded into the CKB-VM
-- `hash_type` : indicates the the method CKB-VM uses to locate the Script code or Script.
-- `args` : provides specific arguments that differentiate one Script from another, such as a users’s public key hash.
+- `hash_type` : indicates the method CKB-VM uses to locate the Script code or Script.
+- `args` : provides specific arguments that differentiate one Script from another, such as a user’s public key hash.
 
 There’re two main types of Scripts:
 

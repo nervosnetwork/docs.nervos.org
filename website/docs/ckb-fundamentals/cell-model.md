@@ -1,6 +1,23 @@
 ---
 id: cell-model
 title: Cell Model
+description: "Understand CKB's generalized UTXO Cell Model, including Live Cells, Dead Cells, capacity, ownership, state rent, and scalability."
+tags:
+  - concept
+  - cell-model
+  - utxo
+  - capacity
+  - transaction
+audience:
+  - dApp developers
+  - Script developers
+related:
+  - /docs/getting-started/how-ckb-works
+  - /docs/tech-explanation/cell
+  - /docs/tech-explanation/capacity
+  - /docs/tech-explanation/transaction
+difficulty: beginner
+last_reviewed: 2026-06-24
 ---
 
 > Nervos CKB inherits Bitcoin’s architecture and creates the Cell Model, a generalized UTXO model as state storage.
