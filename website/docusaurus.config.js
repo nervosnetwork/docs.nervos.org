@@ -18,6 +18,15 @@ const config = {
   baseUrl: "/",
   organizationName: "nervosnetwork",
   projectName: "docs-new",
+  headTags: [
+    {
+      tagName: "meta",
+      attributes: {
+        name: "algolia-site-verification",
+        content: "7DB3E865E8FA4713",
+      },
+    },
+  ],
   stylesheets: [
     {
       href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
