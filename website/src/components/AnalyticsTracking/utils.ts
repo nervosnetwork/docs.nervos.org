@@ -15,6 +15,9 @@ type AnalyticsEventParams = Record<
   string | number | boolean | null | undefined
 >;
 
+const CURRENT_PAGE_PATH_KEY = "ckb_docs_current_page_path";
+const PREVIOUS_PAGE_PATH_KEY = "ckb_docs_previous_page_path";
+
 function isLocalAnalyticsHost(): boolean {
   return (
     window.location.hostname === "localhost" ||
@@ -25,6 +28,84 @@ function isLocalAnalyticsHost(): boolean {
 
 export function getCurrentPagePath(): string {
   return `${window.location.pathname}${window.location.hash || ""}`;
+}
+
+function getSessionStorageValue(key: string): string | undefined {
+  try {
+    return window.sessionStorage.getItem(key) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function setSessionStorageValue(key: string, value: string): void {
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    // Ignore storage failures from private browsing or blocked storage.
+  }
+}
+
+function removeSessionStorageValue(key: string): void {
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {
+    // Ignore storage failures from private browsing or blocked storage.
+  }
+}
+
+export function rememberCurrentPagePath(
+  pagePath: string,
+  { updatePreviousPagePath = true }: { updatePreviousPagePath?: boolean } = {}
+): void {
+  const currentPagePath = getSessionStorageValue(CURRENT_PAGE_PATH_KEY);
+
+  if (
+    updatePreviousPagePath &&
+    currentPagePath &&
+    currentPagePath !== pagePath
+  ) {
+    setSessionStorageValue(PREVIOUS_PAGE_PATH_KEY, currentPagePath);
+  } else if (!updatePreviousPagePath) {
+    removeSessionStorageValue(PREVIOUS_PAGE_PATH_KEY);
+  }
+
+  setSessionStorageValue(CURRENT_PAGE_PATH_KEY, pagePath);
+}
+
+export function getPageNotFoundSourceParams(): AnalyticsEventParams {
+  const pagePath = getCurrentPagePath();
+  const previousPagePath = getSessionStorageValue(PREVIOUS_PAGE_PATH_KEY);
+  const referrer = document.referrer;
+
+  if (!referrer) {
+    return {
+      page_not_found_path: pagePath,
+      previous_page_path: previousPagePath,
+      referrer_type: previousPagePath ? "internal" : "direct",
+    };
+  }
+
+  let referrerUrl: URL;
+
+  try {
+    referrerUrl = new URL(referrer);
+  } catch {
+    return {
+      page_not_found_path: pagePath,
+      previous_page_path: previousPagePath,
+      referrer_type: previousPagePath ? "internal" : "unknown",
+    };
+  }
+
+  const isInternalReferrer = referrerUrl.origin === window.location.origin;
+
+  return {
+    page_not_found_path: pagePath,
+    previous_page_path: previousPagePath,
+    referrer_type: isInternalReferrer ? "internal" : "external",
+    referrer_url: referrerUrl.href,
+  };
 }
 
 export function sendAnalyticsEvent(
