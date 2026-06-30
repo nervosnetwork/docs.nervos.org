@@ -12,11 +12,14 @@ import ThemedImage from "@theme/ThemedImage";
 import styles from "./styles.module.css";
 import Button from "@site/src/components/Button";
 import Link from "@docusaurus/Link";
-import { sendAnalyticsEvent } from "@site/src/components/AnalyticsTracking/utils";
+import {
+  getPageNotFoundSourceParams,
+  sendAnalyticsEvent,
+} from "@site/src/components/AnalyticsTracking/utils";
 
 export default function NotFoundContent({ className }: Props): JSX.Element {
   const sendEvent = () => {
-    sendAnalyticsEvent("page_not_found", {});
+    sendAnalyticsEvent("page_not_found", getPageNotFoundSourceParams());
   };
 
   useEffect(() => {
