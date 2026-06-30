@@ -153,12 +153,6 @@ const config = {
   ],
   plugins: [
     [
-      require.resolve("@cmfcmf/docusaurus-search-local"),
-      {
-        style: undefined,
-      },
-    ],
-    [
       "@docusaurus/plugin-client-redirects",
       {
         redirects: [
@@ -495,9 +489,9 @@ const config = {
       ],
     },
     algolia: {
-      appId: "LU9B8PQ7W5",
-      apiKey: "122c7efa6c0425cfd6852286c746e653",
-      indexName: "nervos",
+      appId: "WYC5SBQV9M",
+      apiKey: "9acc3e7ff4ae448feb832bc90204bf2e",
+      indexName: "Nervos CKB Official Doc",
     },
   },
 };

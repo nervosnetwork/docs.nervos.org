@@ -3,14 +3,18 @@ import { useLocation } from "@docusaurus/router";
 import {
   getDeveloperDestination,
   getSafePagePath,
+  getSafeUrl,
   sendAnalyticsEvent,
 } from "@site/src/components/AnalyticsTracking/utils";
 
-const SEARCH_INPUT_SELECTOR = ".aa-Input";
-const SEARCH_RESULT_LINK_SELECTOR = ".aa-ItemLink";
+const SEARCH_INPUT_SELECTOR = ".DocSearch-Input";
+const SEARCH_RESULT_LINK_SELECTOR = ".DocSearch-Hit a";
 const SELECTED_SEARCH_RESULT_SELECTOR =
-  ".aa-Item[aria-selected='true'] .aa-ItemLink, .aa-Item[aria-current='true'] .aa-ItemLink";
-const SEARCH_EVENT_DELAY = 1000;
+  ".DocSearch-Hit[aria-selected='true'] a, .DocSearch-Hit[aria-current='true'] a";
+const SEARCH_NO_RESULTS_SELECTOR = ".DocSearch-NoResults";
+const SEARCH_ERROR_SELECTOR = ".DocSearch-ErrorScreen";
+const SEARCH_EVENT_DELAY = 500;
+const SEARCH_EVENT_MAX_WAIT = 4000;
 const MAX_SEARCH_TERM_LENGTH = 100;
 const SENSITIVE_SEARCH_PATTERNS = [
   /\b0x[a-fA-F0-9]{40,}\b/g,
@@ -31,14 +35,62 @@ function getSearchResultLinks(): HTMLAnchorElement[] {
   );
 }
 
+function isSearchResultStateReady(): boolean {
+  return Boolean(
+    document.querySelector(SEARCH_RESULT_LINK_SELECTOR) ||
+      document.querySelector(SEARCH_NO_RESULTS_SELECTOR) ||
+      document.querySelector(SEARCH_ERROR_SELECTOR)
+  );
+}
+
+function hasSearchError(): boolean {
+  return Boolean(document.querySelector(SEARCH_ERROR_SELECTOR));
+}
+
+function getSearchResultStateSignature(): string {
+  const resultLinks = getSearchResultLinks()
+    .map((link) => `${link.href}:${link.textContent?.trim() || ""}`)
+    .join("|");
+  const noResults = document.querySelector(
+    SEARCH_NO_RESULTS_SELECTOR
+  )?.textContent;
+  const error = document.querySelector(SEARCH_ERROR_SELECTOR)?.textContent;
+
+  return [resultLinks, noResults, error].join("::");
+}
+
 export default function SearchTermTracker(): null {
   const location = useLocation();
   const trackedSearchTerms = useRef<Set<string>>(new Set());
   const searchEventTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    const sendSearchTermEvent = (searchTerm: string) => {
+    const sendSearchTermEvent = (
+      searchTerm: string,
+      startedAt: number,
+      initialResultStateSignature: string
+    ) => {
       if (!searchTerm) {
+        return;
+      }
+
+      const resultStateSignature = getSearchResultStateSignature();
+      const hasFreshResultState =
+        resultStateSignature !== initialResultStateSignature;
+
+      if (!hasFreshResultState || !isSearchResultStateReady()) {
+        if (Date.now() - startedAt < SEARCH_EVENT_MAX_WAIT) {
+          scheduleSearchTermEvent(
+            searchTerm,
+            startedAt,
+            initialResultStateSignature
+          );
+        }
+
+        return;
+      }
+
+      if (hasSearchError()) {
         return;
       }
 
@@ -67,13 +119,17 @@ export default function SearchTermTracker(): null {
       }
     };
 
-    const scheduleSearchTermEvent = (searchTerm: string) => {
+    const scheduleSearchTermEvent = (
+      searchTerm: string,
+      startedAt = Date.now(),
+      initialResultStateSignature = getSearchResultStateSignature()
+    ) => {
       if (searchEventTimer.current !== null) {
         window.clearTimeout(searchEventTimer.current);
       }
 
       searchEventTimer.current = window.setTimeout(() => {
-        sendSearchTermEvent(searchTerm);
+        sendSearchTermEvent(searchTerm, startedAt, initialResultStateSignature);
       }, SEARCH_EVENT_DELAY);
     };
 
@@ -108,6 +164,7 @@ export default function SearchTermTracker(): null {
         search_term: searchTerm,
         result_count: resultLinks.length,
         result_rank: resultRank || undefined,
+        search_result_url: getSafeUrl(selectedUrl.href),
         ...getDeveloperDestination(selectedUrl),
       });
     };

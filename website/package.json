@@ -37,7 +37,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@cmfcmf/docusaurus-search-local": "^1.1.0",
     "@docusaurus/core": "3.3.2",
     "@docusaurus/plugin-client-redirects": "3.3.2",
     "@docusaurus/preset-classic": "3.3.2",
