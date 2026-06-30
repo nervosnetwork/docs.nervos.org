@@ -8,19 +8,27 @@
   width: 100%;
 }
 
-.mobileSearchRow :global(.aa-DetachedSearchButton) {
+.mobileSearchRow :global(.DocSearch-Button) {
   width: 100% !important;
   height: 2.5rem;
   border-radius: 999px;
   background: transparent;
   border: 1px solid var(--dark-border-subtle);
-  padding: 0 1rem 0 0.5rem;
+  padding: 0 1rem 0 0.75rem;
+  margin: 0;
 }
-.mobileSearchRow :global(.aa-DetachedSearchButton):hover {
+
+.mobileSearchRow :global(.DocSearch-Button):hover {
   background: var(--dark-hover);
 }
-.mobileSearchRow :global(.aa-DetachedSearchButtonPlaceholder) {
+
+.mobileSearchRow :global(.DocSearch-Button-Placeholder) {
   display: block;
+  padding: 0 0.75rem;
+}
+
+.mobileSearchRow :global(.DocSearch-Button-Keys) {
+  display: flex;
 }
 
 .groups {
