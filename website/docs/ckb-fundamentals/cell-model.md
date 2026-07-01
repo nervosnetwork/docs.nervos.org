@@ -2,7 +2,7 @@
 id: cell-model
 title: Cell Model
 description: "Understand CKB's generalized UTXO Cell Model, including Live Cells, Dead Cells, capacity, ownership, state rent, and scalability."
-tags:
+keywords:
   - concept
   - cell-model
   - utxo

@@ -2,7 +2,7 @@
 id: nervos-blockchain
 title: Nervos Blockchain
 description: "Get a beginner overview of Nervos CKB as a layered, proof-of-work blockchain for CKBytes, on-chain state, and CKB-VM programs."
-tags:
+keywords:
   - concept
   - layer-1
   - ckb-vm
