@@ -2,7 +2,7 @@
 id: transaction
 title: Transaction
 description: "Reference the CKB transaction structure, including cell_deps, header_deps, inputs, witnesses, outputs, outputs_data, and transaction states."
-tags:
+keywords:
   - transaction
   - reference
   - cell-model
