@@ -9,7 +9,7 @@
   border: 1px solid var(--dark-border-invisible);
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
 }
 .text {
   margin-right: 2rem;

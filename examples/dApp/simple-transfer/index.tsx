@@ -73,7 +73,7 @@ export function App() {
     amountInCKB.length > 0 && +amountInCKB < 61 ? (
       <span>
         amount must larger than 61 CKB, see{' '}
-        <a href="https://docs.nervos.org/docs/wallets/#requirements-for-ckb-transfers">why</a>
+        <a href="https://docs.nervos.org/docs/integrate-wallets/intro-to-wallets/#requirements-for-ckb-transfers">why</a>
       </span>
     ) : null;
 

@@ -153,12 +153,6 @@ const config = {
   ],
   plugins: [
     [
-      require.resolve("@cmfcmf/docusaurus-search-local"),
-      {
-        style: undefined,
-      },
-    ],
-    [
       "@docusaurus/plugin-client-redirects",
       {
         redirects: [
@@ -224,6 +218,45 @@ const config = {
           {
             from: "/docs/sdk-and-devtool/lumos",
             to: "/docs/sdk-and-devtool/ccc",
+          },
+          {
+            from: [
+              "/docs/basics/guides/crypto wallets/imtoken",
+              "/docs/basics/guides/imtoken",
+            ],
+            to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/imtoken",
+          },
+          {
+            from: "/docs/tech-explanation/ckb-vs-btc",
+            to: "/docs/ckb-fundamentals/ckb-vs-btc",
+          },
+          {
+            from: "/docs/tech-explanation/ckb-address",
+            to: "/docs/ckb-fundamentals/ckb-address",
+          },
+          {
+            from: "/docs/script-course/intro-to-script-1",
+            to: "/docs/script/intro-to-script",
+          },
+          {
+            from: "/docs/script-course/intro-to-script-2",
+            to: "/docs/script/program-language-for-script",
+          },
+          {
+            from: "/docs/script/ckb-script-ipc",
+            to: "/docs/script/ckb-ipc",
+          },
+          {
+            from: "/docs/script/rust/rust-example-spawn-script",
+            to: "/docs/script/rust/rust-api-spawn",
+          },
+          {
+            from: ["/docs/wallets", "/getting-started/wallet"],
+            to: "/docs/integrate-wallets/intro-to-wallets",
+          },
+          {
+            from: "/docs/getting-started/blockchain-networks",
+            to: "/docs/getting-started/ckb-networks",
           },
         ],
         createRedirects(existingPath) {
@@ -495,9 +528,9 @@ const config = {
       ],
     },
     algolia: {
-      appId: "LU9B8PQ7W5",
-      apiKey: "122c7efa6c0425cfd6852286c746e653",
-      indexName: "nervos",
+      appId: "WYC5SBQV9M",
+      apiKey: "9acc3e7ff4ae448feb832bc90204bf2e",
+      indexName: "Nervos CKB Official Doc",
     },
   },
 };

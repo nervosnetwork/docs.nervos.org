@@ -7,26 +7,33 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0;
+  color: var(--dark-text-secondary);
   background: none;
   border: none;
   cursor: pointer;
   font: inherit;
   border-bottom: 2px solid transparent;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.trigger:hover,
+.trigger:focus {
+  color: var(--dark-text-link);
 }
 
 .megaItemActive .trigger {
-  color: var(--text-link);
-  border-bottom-color: var(--text-link);
+  color: var(--dark-text-link);
+  border-bottom-color: var(--dark-text-link);
 }
 
 .chevron {
   width: 14px;
   height: 14px;
-  color: var(--text-secondary);
+  color: currentColor;
   transition: transform 150ms ease, color 150ms ease;
 }
 .megaItemActive .chevron {
-  color: var(--text-link);
+  color: var(--dark-text-link);
 }
 
 .panelWrapper {
