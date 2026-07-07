@@ -173,6 +173,26 @@ const config = {
             to: "/docs/assets-token-standards/economics",
           },
           {
+            from: "/docs/basics/concepts/cell-model",
+            to: "/docs/ckb-fundamentals/cell-model",
+          },
+          {
+            from: "/docs/basics/concepts/ckb-vm",
+            to: "/docs/ckb-fundamentals/ckb-vm",
+          },
+          {
+            from: "/docs/basics/concepts/consensus",
+            to: "/docs/ckb-fundamentals/consensus",
+          },
+          {
+            from: "/docs/basics/concepts/cryptowallet",
+            to: "/docs/integrate-wallets/intro-to-wallets",
+          },
+          {
+            from: "/docs/basics/concepts/nervos-blockchain",
+            to: "/docs/ckb-fundamentals/nervos-blockchain",
+          },
+          {
             from: "/docs/basics/glossary/",
             to: "/docs/tech-explanation/glossary",
           },
