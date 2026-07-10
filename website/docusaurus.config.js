@@ -19,6 +19,19 @@ const config = {
   organizationName: "nervosnetwork",
   projectName: "docs-new",
   headTags: [
+    ...(enableGtag
+      ? [
+          {
+            tagName: "script",
+            attributes: {
+              defer: "true",
+              src: "https://umami.retric.uk/script.js",
+              "data-website-id": "f5709da4-2855-4563-9d49-b0cbbf1fb615",
+              "data-domains": "docs.nervos.org",
+            },
+          },
+        ]
+      : []),
     {
       tagName: "meta",
       attributes: {
