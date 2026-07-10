@@ -112,21 +112,21 @@ export function sendAnalyticsEvent(
   eventName: string,
   params: AnalyticsEventParams
 ): void {
-  if (
-    typeof window === "undefined" ||
-    typeof window.gtag !== "function" ||
-    isLocalAnalyticsHost()
-  ) {
+  if (typeof window === "undefined" || isLocalAnalyticsHost()) {
     return;
   }
 
-  window.gtag(
-    "event",
-    eventName,
-    Object.fromEntries(
-      Object.entries(params).filter(([, value]) => value !== undefined)
-    )
+  const eventParams = Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== undefined)
   );
+
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, eventParams);
+  }
+
+  if (typeof window.umami?.track === "function") {
+    window.umami.track(eventName, eventParams);
+  }
 }
 
 export function getLlmsFileName(value: string): string | undefined {
