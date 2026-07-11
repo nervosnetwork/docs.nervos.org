@@ -19,6 +19,19 @@ const config = {
   organizationName: "nervosnetwork",
   projectName: "docs-new",
   headTags: [
+    ...(enableGtag
+      ? [
+          {
+            tagName: "script",
+            attributes: {
+              defer: "true",
+              src: "https://umami.retric.uk/script.js",
+              "data-website-id": "f5709da4-2855-4563-9d49-b0cbbf1fb615",
+              "data-domains": "docs.nervos.org",
+            },
+          },
+        ]
+      : []),
     {
       tagName: "meta",
       attributes: {
@@ -171,6 +184,26 @@ const config = {
           {
             from: "/docs/basics/concepts/economics",
             to: "/docs/assets-token-standards/economics",
+          },
+          {
+            from: "/docs/basics/concepts/cell-model",
+            to: "/docs/ckb-fundamentals/cell-model",
+          },
+          {
+            from: "/docs/basics/concepts/ckb-vm",
+            to: "/docs/ckb-fundamentals/ckb-vm",
+          },
+          {
+            from: "/docs/basics/concepts/consensus",
+            to: "/docs/ckb-fundamentals/consensus",
+          },
+          {
+            from: "/docs/basics/concepts/cryptowallet",
+            to: "/docs/integrate-wallets/intro-to-wallets",
+          },
+          {
+            from: "/docs/basics/concepts/nervos-blockchain",
+            to: "/docs/ckb-fundamentals/nervos-blockchain",
           },
           {
             from: "/docs/basics/glossary/",
