@@ -498,6 +498,7 @@ export default {
             "node/run-mainnet-node",
             "node/run-testnet-node",
             "node/run-devnet-node",
+            "node/devnet-from-existing-data",
             "node/run-node-docker",
             "node/run-node-over-tor",
           ],
