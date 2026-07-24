@@ -276,6 +276,62 @@ const config = {
             to: "/docs/script/program-language-for-script",
           },
           {
+            // Class 3: UDT
+            from: "/docs/script-course/intro-to-script-3",
+            to: "/docs/script/rust/rust-example-sudt-script",
+          },
+          {
+            // Class 4: WebAssembly on CKB (no modern equivalent page)
+            from: "/docs/script-course/intro-to-script-4",
+            to: "/docs/script/program-language-for-script",
+          },
+          {
+            // Class 5: Debugging
+            from: "/docs/script-course/intro-to-script-5",
+            to: "/docs/script/debug-script",
+          },
+          {
+            // Class 6: Type ID
+            from: "/docs/script-course/intro-to-script-6",
+            to: "/docs/script/type-id",
+          },
+          {
+            // Class 7: Advanced Duktape Examples
+            from: "/docs/script-course/intro-to-script-7",
+            to: "/docs/script/js/js-vm",
+          },
+          {
+            // Class 8: Performant WASM (no modern equivalent page)
+            from: "/docs/script-course/intro-to-script-8",
+            to: "/docs/script/program-language-for-script",
+          },
+          {
+            // Class 9: Cycle Reductions in Duktape Script
+            from: "/docs/script-course/intro-to-script-9",
+            to: "/docs/script/vm-cycle-limits",
+          },
+          {
+            // Class 10: Language Choices
+            from: "/docs/script-course/intro-to-script-10",
+            to: "/docs/script/program-language-for-script",
+          },
+          {
+            from: "/docs/tech-explanation/ckb-vm",
+            to: "/docs/ckb-fundamentals/ckb-vm",
+          },
+          {
+            from: "/docs/tech-explanation/cell-model",
+            to: "/docs/ckb-fundamentals/cell-model",
+          },
+          {
+            from: "/docs/basics/faq/general",
+            to: "https://docs-old.nervos.org/docs/basics/faq/general",
+          },
+          {
+            from: ["/docs/reference/economics", "/docs/concepts/supply"],
+            to: "/docs/assets-token-standards/economics",
+          },
+          {
             from: "/docs/script/ckb-script-ipc",
             to: "/docs/script/ckb-ipc",
           },
