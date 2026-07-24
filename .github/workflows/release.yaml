@@ -1,0 +1,90 @@
+name: Release
+
+run-name: Release ${{ inputs.custom_version || inputs.bump_type }} by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: Version increment
+        required: true
+        default: minor
+        type: choice
+        options:
+          - minor
+          - patch
+          - major
+          - custom
+      custom_version:
+        description: Exact version when increment is custom (for example 3.0.0)
+        required: false
+        type: string
+      dry_run:
+        description: Validate and preview without changing GitHub
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Orchestrate release
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Create release app token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-actions: read
+          permission-checks: read
+          permission-contents: write
+          permission-pull-requests: write
+          permission-statuses: read
+
+      - name: Check out develop
+        uses: actions/checkout@v7
+        with:
+          ref: develop
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 20.x
+          cache: yarn
+          cache-dependency-path: website/yarn.lock
+
+      - name: Configure release bot
+        env:
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          app_user="${APP_SLUG}[bot]"
+          app_user_id="$(gh api "/users/${app_user}" --jq .id)"
+          git config user.name "${app_user}"
+          git config user.email \
+            "${app_user_id}+${app_user}@users.noreply.github.com"
+          gh auth setup-git
+
+      - name: Test release automation
+        run: node --test scripts/release/*.test.mjs
+
+      - name: Run release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          RELEASE_BUMP: ${{ inputs.bump_type }}
+          RELEASE_VERSION: ${{ inputs.custom_version }}
+          RELEASE_DRY_RUN: ${{ inputs.dry_run }}
+        run: node scripts/release/release.mjs
