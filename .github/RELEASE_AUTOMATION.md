@@ -120,8 +120,26 @@ The generator first honors these optional labels:
 - `release:new-content`
 - `release:fix`
 - `release:other`
+- `release:skip`
 
 Without a release label, `feat:` and `docs:` PR titles become New
 Content, `fix:` and similar titles become Fixes, and everything else
-becomes Other. The production envelope PR targeting `master` is excluded
-from the notes.
+becomes Other.
+
+For reader-facing wording, add an optional section to the pull request
+body:
+
+```markdown
+## Release note
+
+Added a CKB debugging guide with common troubleshooting steps.
+```
+
+The generator uses this text in the Release. When the section is blank
+or absent, it falls back to the pull request title with a conventional
+commit prefix such as `docs:` or `fix:` removed.
+
+Add `release:skip` to dependency updates, CI changes, and other internal
+pull requests that should remain in the Full Changelog without appearing
+in a category. The generated version bump PR and the production PR
+targeting `master` are excluded automatically.

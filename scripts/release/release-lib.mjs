@@ -62,6 +62,16 @@ function normalizedLabels(pullRequest) {
   );
 }
 
+export function shouldSkipPullRequest(pullRequest) {
+  const labels = normalizedLabels(pullRequest);
+  const title = String(pullRequest.title ?? "").trim();
+
+  return (
+    labels.includes("release:skip") ||
+    /^chore: bump version to \d+\.\d+\.\d+$/i.test(title)
+  );
+}
+
 export function classifyPullRequest(pullRequest) {
   const labels = normalizedLabels(pullRequest);
 
@@ -105,6 +115,33 @@ export function classifyPullRequest(pullRequest) {
   return "other";
 }
 
+export function releaseSummary(pullRequest) {
+  const body = String(pullRequest.body ?? "").replace(/\r\n?/g, "\n");
+  const header = /(?:^|\n)##[ \t]+Release note[ \t]*(?:\n|$)/i.exec(body);
+
+  if (header) {
+    const remainder = body.slice(header.index + header[0].length);
+    const nextSection = /\n##[ \t]+\S/.exec(remainder);
+    const section = (
+      nextSection ? remainder.slice(0, nextSection.index) : remainder
+    )
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .trim()
+      .replace(/\s+/g, " ");
+
+    if (section && !/^(?:n\/a|none|-)$/i.test(section)) {
+      return section;
+    }
+  }
+
+  const title = String(pullRequest.title ?? "").trim();
+  const cleanedTitle = title.replace(
+    /^[a-z][a-z0-9-]*(?:\([^)]*\))?!?:\s*/i,
+    ""
+  );
+  return cleanedTitle || title;
+}
+
 function releaseLine(pullRequest) {
   const author =
     pullRequest.user?.login ??
@@ -112,7 +149,8 @@ function releaseLine(pullRequest) {
     pullRequest.author ??
     "unknown";
   const url = pullRequest.html_url ?? pullRequest.url;
-  return `* ${pullRequest.title} by @${author} in ${url}`;
+  const link = pullRequest.number ? `[#${pullRequest.number}](${url})` : url;
+  return `* ${releaseSummary(pullRequest)} (${link}) by @${author}`;
 }
 
 function section(title, pullRequests, emptyText) {
@@ -135,9 +173,11 @@ export function renderReleaseNotes({
     other: [],
   };
 
-  const sorted = [...pullRequests].sort((left, right) =>
-    String(left.merged_at ?? "").localeCompare(String(right.merged_at ?? ""))
-  );
+  const sorted = pullRequests
+    .filter((pullRequest) => !shouldSkipPullRequest(pullRequest))
+    .sort((left, right) =>
+      String(left.merged_at ?? "").localeCompare(String(right.merged_at ?? ""))
+    );
 
   for (const pullRequest of sorted) {
     categories[classifyPullRequest(pullRequest)].push(pullRequest);

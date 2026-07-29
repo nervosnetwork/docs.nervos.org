@@ -4,8 +4,10 @@ import test from "node:test";
 import {
   classifyPullRequest,
   evaluateCommitValidation,
+  releaseSummary,
   renderReleaseNotes,
   resolveTargetVersion,
+  shouldSkipPullRequest,
 } from "./release-lib.mjs";
 
 test("resolves semantic version bumps", () => {
@@ -72,6 +74,62 @@ test("classifies release notes from labels and conventional titles", () => {
   );
 });
 
+test("uses a reader-facing release note with a cleaned-title fallback", () => {
+  assert.equal(
+    releaseSummary({
+      title: "docs(guide): add a CKB debugging guide",
+      body: `## Summary
+
+Internal implementation details.
+
+## Release note
+
+<!-- Optional guidance is ignored. -->
+Added a CKB debugging guide with
+common troubleshooting steps.
+
+## Testing
+
+Built the website locally.`,
+    }),
+    "Added a CKB debugging guide with common troubleshooting steps."
+  );
+
+  assert.equal(
+    releaseSummary({
+      title: "docs(guide): add a CKB debugging guide",
+      body: `## Release note
+
+<!-- Leave blank to use the pull request title. -->`,
+    }),
+    "add a CKB debugging guide"
+  );
+});
+
+test("skips explicitly excluded and automated version pull requests", () => {
+  assert.equal(
+    shouldSkipPullRequest({
+      title: "ci: reorganize workflows",
+      labels: [{ name: "release:skip" }],
+    }),
+    true
+  );
+  assert.equal(
+    shouldSkipPullRequest({
+      title: "chore: bump version to 2.50.0",
+      labels: [],
+    }),
+    true
+  );
+  assert.equal(
+    shouldSkipPullRequest({
+      title: "docs: add a guide",
+      labels: [],
+    }),
+    false
+  );
+});
+
 test("renders the three required release note sections", () => {
   const notes = renderReleaseNotes({
     repository: "nervosnetwork/docs.nervos.org",
@@ -80,15 +138,20 @@ test("renders the three required release note sections", () => {
     pullRequests: [
       {
         title: "fix: repair a redirect",
+        body: `## Release note
+
+Repaired the redirect from the legacy quick-start URL.`,
         labels: [],
         merged_at: "2026-07-24T01:00:00Z",
+        number: 1,
         html_url: "https://github.com/nervosnetwork/docs.nervos.org/pull/1",
         user: { login: "maintainer" },
       },
       {
-        title: "chore: bump version",
+        title: "chore: bump version to 2.50.0",
         labels: [],
         merged_at: "2026-07-24T02:00:00Z",
+        number: 2,
         html_url: "https://github.com/nervosnetwork/docs.nervos.org/pull/2",
         user: { login: "release-bot" },
       },
@@ -98,9 +161,10 @@ test("renders the three required release note sections", () => {
   assert.match(notes, /## New Content/);
   assert.match(notes, /No new content in this release/);
   assert.match(notes, /## Fixes/);
-  assert.match(notes, /fix: repair a redirect/);
+  assert.match(notes, /Repaired the redirect from the legacy quick-start URL/);
   assert.match(notes, /## Other/);
-  assert.match(notes, /chore: bump version/);
+  assert.match(notes, /No other changes in this release/);
+  assert.doesNotMatch(notes, /bump version/);
   assert.match(notes, /v2\.49\.0\.\.\.v2\.50\.0/);
 });
 
