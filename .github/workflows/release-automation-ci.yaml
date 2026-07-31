@@ -1,0 +1,30 @@
+name: Release Automation
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/release.yaml
+      - .github/workflows/release-automation-ci.yaml
+      - scripts/release/**
+  push:
+    branches:
+      - develop
+    paths:
+      - .github/workflows/release.yaml
+      - .github/workflows/release-automation-ci.yaml
+      - scripts/release/**
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20.x
+          package-manager-cache: false
+      - run: node --check scripts/release/release.mjs
+      - run: node --test scripts/release/*.test.mjs

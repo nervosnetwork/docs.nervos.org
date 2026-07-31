@@ -36,21 +36,24 @@ If you run into an issue on our documentation website you can contact us on [Ner
 
 ### Release
 
-Production release should be on the master branch.
+Production releases are automated by the
+[`Release`](./.github/workflows/release.yaml) GitHub Actions workflow.
 
-Please follow the steps below:
+To publish a release:
 
-1. Create a new PR that bumps the version in the `package.json` under `/website`
-2. Merge the PR on `develop` branch
-3. Create a new PR from `develop` that targeting on the `master` branch
-4. Obtain at least one approval before merging the PR into `master` branch
-5. Merge the PR into `master` branch using **regular merge only**; squash merge and rebase merge are not allowed
-6. Create a new tag and release on github targeting on the master branch
-7. The release content should include description of changes following 3 sections:
-   - New Content
-   - Fixes
-   - Others
-8. Example release content: https://github.com/nervosnetwork/docs.nervos.org/releases/tag/v2.35.0 
+1. Open **Actions → Release → Run workflow** on GitHub.
+2. Keep the workflow branch set to `develop`.
+3. Select `minor`, `patch`, `major`, or `custom`.
+4. Optionally enable `dry_run`, then run the workflow.
+
+The workflow validates and builds the site, creates the version PR into
+`develop`, creates the production PR into `master`, waits for CI and
+Vercel at every stage, uses regular merge commits, and publishes the tag
+and GitHub Release.
+
+See [Release Automation](./.github/RELEASE_AUTOMATION.md) for one-time
+GitHub App and ruleset setup, the complete sequence, release note rules,
+and failure recovery.
 
 ### Develop
 
