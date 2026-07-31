@@ -347,6 +347,30 @@ const config = {
             from: "/docs/getting-started/blockchain-networks",
             to: "/docs/getting-started/ckb-networks",
           },
+          {
+            // Malformed external links that picked up trailing CJK punctuation
+            from: "/docs/script/intro-to-script))。",
+            to: "/docs/script/intro-to-script",
+          },
+          {
+            from: "/docs/getting-started/how-ckb-works))。",
+            to: "/docs/getting-started/how-ckb-works",
+          },
+          {
+            from: "/docs/concepts/ckb-vm",
+            to: "/docs/ckb-fundamentals/ckb-vm",
+          },
+          {
+            from: [
+              "/docs/tech-explanation/previous-output",
+              "/docs/tech-explanation/cellinput",
+            ],
+            to: "/docs/tech-explanation/inputs",
+          },
+          {
+            from: "/docs/basics/guides/testnet",
+            to: "/docs/node/run-testnet-node",
+          },
         ],
         createRedirects(existingPath) {
           if (
