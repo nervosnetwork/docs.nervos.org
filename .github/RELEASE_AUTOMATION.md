@@ -39,8 +39,9 @@ revoked when the job finishes.
 
 ### 3. Configure the production ruleset
 
-Edit the `production` ruleset that targets `master`. Add the installed
-GitHub App to **Bypass list** and select **For pull requests only**.
+Edit the `production` ruleset that targets `master` and the default
+branch (`develop`). Add the installed GitHub App to **Bypass list** and
+select **For pull requests only**.
 
 Keep the existing rules:
 
@@ -48,9 +49,10 @@ Keep the existing rules:
 - Allow regular merge only.
 - Block force pushes and deletion.
 
-The pull-request-only bypass lets the release App merge the production
-PR without a human approval, while preventing direct pushes to
-`master`. Both release PRs and merge commits remain in the audit log.
+The release script uses `gh pr merge --admin` to explicitly select this
+bypass after verifying the expected head commit, Node.js checks, and
+Vercel. The pull-request-only mode prevents direct pushes to protected
+branches. Both release PRs and merge commits remain in the audit log.
 
 ## Running a release
 
