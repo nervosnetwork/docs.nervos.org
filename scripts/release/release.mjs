@@ -12,6 +12,8 @@ import {
   parseVersion,
   renderReleaseNotes,
   resolveTargetVersion,
+  selectReusablePullRequest,
+  shouldRetryGitHubRequest,
 } from "./release-lib.mjs";
 
 const DEVELOP_BRANCH = "develop";
@@ -19,6 +21,7 @@ const MASTER_BRANCH = "master";
 const PACKAGE_PATH = "website/package.json";
 const DEFAULT_TIMEOUT_SECONDS = 20 * 60;
 const DEFAULT_POLL_SECONDS = 15;
+const DEFAULT_GET_ATTEMPTS = 4;
 
 function requiredEnvironment(name) {
   const value = process.env[name]?.trim();
@@ -108,39 +111,82 @@ class GitHubClient {
 
   async request(method, endpoint, options = {}) {
     const { allow404 = false, body } = options;
-    const response = await fetch(`${this.apiUrl}${endpoint}`, {
-      method,
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${this.token}`,
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-      body: body === undefined ? undefined : JSON.stringify(body),
-    });
-    const responseText = await response.text();
-    let data = null;
+    const maxAttempts = method === "GET" ? DEFAULT_GET_ATTEMPTS : 1;
 
-    if (responseText) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      let response;
       try {
-        data = JSON.parse(responseText);
-      } catch {
-        data = responseText;
+        response = await fetch(`${this.apiUrl}${endpoint}`, {
+          method,
+          headers: {
+            Accept: "application/vnd.github+json",
+            Authorization: `Bearer ${this.token}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+          body: body === undefined ? undefined : JSON.stringify(body),
+        });
+      } catch (error) {
+        if (
+          !shouldRetryGitHubRequest({
+            attempt,
+            maxAttempts,
+            method,
+            status: undefined,
+          })
+        ) {
+          throw error;
+        }
+        console.warn(
+          `${method} ${endpoint} failed (${error.message}); retrying ${attempt}/${maxAttempts}`
+        );
+        await delay(1000 * 2 ** (attempt - 1));
+        continue;
       }
+
+      const responseText = await response.text();
+      let data = null;
+
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = responseText;
+        }
+      }
+
+      if (response.status === 404 && allow404) {
+        return null;
+      }
+
+      if (
+        shouldRetryGitHubRequest({
+          attempt,
+          maxAttempts,
+          method,
+          status: response.status,
+        })
+      ) {
+        console.warn(
+          `${method} ${endpoint} failed (${response.status}); retrying ${attempt}/${maxAttempts}`
+        );
+        await delay(1000 * 2 ** (attempt - 1));
+        continue;
+      }
+
+      if (!response.ok) {
+        const message =
+          typeof data === "object" && data?.message
+            ? data.message
+            : responseText;
+        throw new Error(
+          `${method} ${endpoint} failed (${response.status}): ${message}`
+        );
+      }
+
+      return data;
     }
 
-    if (response.status === 404 && allow404) {
-      return null;
-    }
-
-    if (!response.ok) {
-      const message =
-        typeof data === "object" && data?.message ? data.message : responseText;
-      throw new Error(
-        `${method} ${endpoint} failed (${response.status}): ${message}`
-      );
-    }
-
-    return data;
+    throw new Error(`${method} ${endpoint} exhausted all retry attempts`);
   }
 
   get(endpoint, options) {
@@ -209,7 +255,7 @@ class GitHubClient {
 
   async findPull({ base, head, title }) {
     const pulls = await this.pulls({ base, head });
-    return pulls.find((pullRequest) => pullRequest.title === title) ?? null;
+    return selectReusablePullRequest(pulls, title);
   }
 
   async findMergedPullByTitle({ base, title }) {
@@ -543,11 +589,6 @@ async function ensureVersionPull({ client, releaseBranch, targetVersion }) {
     });
   }
 
-  if (pullRequest.state === "closed" && !pullRequest.merged_at) {
-    throw new Error(
-      `Version PR #${pullRequest.number} was closed without merging`
-    );
-  }
   return pullRequest;
 }
 

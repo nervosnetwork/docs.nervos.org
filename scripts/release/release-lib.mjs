@@ -28,6 +28,31 @@ export function adminMergeArguments({
   ];
 }
 
+export function selectReusablePullRequest(pullRequests, title) {
+  const matching = pullRequests.filter(
+    (pullRequest) => pullRequest.title === title
+  );
+
+  return (
+    matching.find((pullRequest) => pullRequest.state === "open") ??
+    matching.find((pullRequest) => pullRequest.merged_at) ??
+    null
+  );
+}
+
+export function shouldRetryGitHubRequest({
+  attempt,
+  maxAttempts,
+  method,
+  status,
+}) {
+  if (method !== "GET" || attempt >= maxAttempts) {
+    return false;
+  }
+
+  return status === undefined || status === 429 || status >= 500;
+}
+
 export function parseVersion(value) {
   const normalized = String(value ?? "")
     .trim()

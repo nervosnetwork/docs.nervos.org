@@ -8,6 +8,8 @@ import {
   releaseSummary,
   renderReleaseNotes,
   resolveTargetVersion,
+  selectReusablePullRequest,
+  shouldRetryGitHubRequest,
   shouldSkipPullRequest,
 } from "./release-lib.mjs";
 
@@ -29,6 +31,79 @@ test("builds a guarded administrator merge command", () => {
       "--match-head-commit",
       "a".repeat(40),
     ]
+  );
+});
+
+test("ignores closed unmerged pull requests when resuming", () => {
+  const closed = {
+    number: 877,
+    title: "chore: bump version to 2.50.0",
+    state: "closed",
+    merged_at: null,
+  };
+  const open = {
+    number: 880,
+    title: "chore: bump version to 2.50.0",
+    state: "open",
+    merged_at: null,
+  };
+  const merged = {
+    number: 881,
+    title: "chore: bump version to 2.50.0",
+    state: "closed",
+    merged_at: "2026-07-31T15:30:00Z",
+  };
+
+  assert.equal(
+    selectReusablePullRequest([closed], closed.title),
+    null
+  );
+  assert.equal(
+    selectReusablePullRequest([closed, merged, open], closed.title),
+    open
+  );
+  assert.equal(
+    selectReusablePullRequest([closed, merged], closed.title),
+    merged
+  );
+});
+
+test("retries only transient read requests", () => {
+  assert.equal(
+    shouldRetryGitHubRequest({
+      attempt: 1,
+      maxAttempts: 4,
+      method: "GET",
+      status: undefined,
+    }),
+    true
+  );
+  assert.equal(
+    shouldRetryGitHubRequest({
+      attempt: 1,
+      maxAttempts: 4,
+      method: "GET",
+      status: 502,
+    }),
+    true
+  );
+  assert.equal(
+    shouldRetryGitHubRequest({
+      attempt: 4,
+      maxAttempts: 4,
+      method: "GET",
+      status: 502,
+    }),
+    false
+  );
+  assert.equal(
+    shouldRetryGitHubRequest({
+      attempt: 1,
+      maxAttempts: 4,
+      method: "POST",
+      status: 502,
+    }),
+    false
   );
 });
 
