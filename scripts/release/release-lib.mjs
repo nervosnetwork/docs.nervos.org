@@ -1,5 +1,33 @@
 const SEMVER_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 
+export function adminMergeArguments({
+  expectedHeadSha,
+  pullNumber,
+  repository,
+}) {
+  if (!Number.isInteger(pullNumber) || pullNumber <= 0) {
+    throw new Error(`Invalid pull request number: ${pullNumber}`);
+  }
+  if (!/^[^/\s]+\/[^/\s]+$/.test(repository)) {
+    throw new Error(`Invalid repository: ${repository}`);
+  }
+  if (!/^[0-9a-f]{40}$/i.test(expectedHeadSha)) {
+    throw new Error(`Invalid expected head SHA: ${expectedHeadSha}`);
+  }
+
+  return [
+    "pr",
+    "merge",
+    String(pullNumber),
+    "--repo",
+    repository,
+    "--admin",
+    "--merge",
+    "--match-head-commit",
+    expectedHeadSha,
+  ];
+}
+
 export function parseVersion(value) {
   const normalized = String(value ?? "")
     .trim()

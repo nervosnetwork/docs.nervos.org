@@ -6,6 +6,7 @@ import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
 import {
+  adminMergeArguments,
   compareVersions,
   evaluateCommitValidation,
   parseVersion,
@@ -230,21 +231,26 @@ class GitHubClient {
   }
 
   async mergePull(pullRequest, expectedHeadSha) {
-    const response = await this.put(
-      `/repos/${this.repository}/pulls/${pullRequest.number}/merge`,
-      {
-        merge_method: "merge",
-        sha: expectedHeadSha,
-      }
+    run(
+      "gh",
+      adminMergeArguments({
+        expectedHeadSha,
+        pullNumber: pullRequest.number,
+        repository: this.repository,
+      }),
+      { capture: false }
     );
 
-    if (!response.merged) {
+    const mergedPull = await this.get(
+      `/repos/${this.repository}/pulls/${pullRequest.number}`
+    );
+    if (!mergedPull.merged_at || !mergedPull.merge_commit_sha) {
       throw new Error(
-        `PR #${pullRequest.number} was not merged: ${response.message}`
+        `PR #${pullRequest.number} did not report a merge commit after gh completed`
       );
     }
 
-    return response.sha;
+    return mergedPull.merge_commit_sha;
   }
 
   async waitForValidation(

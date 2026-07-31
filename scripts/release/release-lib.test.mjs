@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  adminMergeArguments,
   classifyPullRequest,
   evaluateCommitValidation,
   releaseSummary,
@@ -9,6 +10,27 @@ import {
   resolveTargetVersion,
   shouldSkipPullRequest,
 } from "./release-lib.mjs";
+
+test("builds a guarded administrator merge command", () => {
+  assert.deepEqual(
+    adminMergeArguments({
+      expectedHeadSha: "a".repeat(40),
+      pullNumber: 877,
+      repository: "nervosnetwork/docs.nervos.org",
+    }),
+    [
+      "pr",
+      "merge",
+      "877",
+      "--repo",
+      "nervosnetwork/docs.nervos.org",
+      "--admin",
+      "--merge",
+      "--match-head-commit",
+      "a".repeat(40),
+    ]
+  );
+});
 
 test("resolves semantic version bumps", () => {
   assert.equal(
