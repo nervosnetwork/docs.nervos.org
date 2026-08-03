@@ -53,6 +53,9 @@ The release script uses `gh pr merge --admin` to explicitly select this
 bypass after verifying the expected head commit, Node.js checks, and
 Vercel. The pull-request-only mode prevents direct pushes to protected
 branches. Both release PRs and merge commits remain in the audit log.
+The release App must create the pull request for this bypass mode to apply.
+Closed, unmerged release pull requests are ignored so a later run can create
+a fresh App-authored pull request from a recreated release branch.
 
 ## Running a release
 
