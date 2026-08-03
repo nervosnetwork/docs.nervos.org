@@ -371,6 +371,40 @@ const config = {
             from: "/docs/basics/guides/testnet",
             to: "/docs/node/run-testnet-node",
           },
+          {
+            from: "/docs/getting-started/devtool",
+            to: "/docs/sdk-and-devtool/devtool",
+          },
+          {
+            from: "/docs/dapp/rpcs",
+            to: "/docs/getting-started/rpcs",
+          },
+          {
+            from: "/docs/tech-explanation/header-dep",
+            to: "/docs/tech-explanation/header-deps",
+          },
+          {
+            from: "/docs/tech-explanation/outpoint",
+            to: "/docs/tech-explanation/glossary#outpoint",
+          },
+          {
+            from: "/docs/tech-explanation/dep-type",
+            to: "/docs/tech-explanation/glossary#dep-type",
+          },
+          {
+            from: "/docs/common-scripts/spore-protocol",
+            to: "/docs/ecosystem-scripts/spore-protocol",
+          },
+          {
+            from: "/docs/common-scripts/xudt",
+            to: "/docs/ecosystem-scripts/xudt",
+          },
+          {
+            // The blog has been removed, so archive pagination URLs have no
+            // equivalent page — send them to the homepage
+            from: "/blog/page/3",
+            to: "/",
+          },
         ],
         createRedirects(existingPath) {
           if (
