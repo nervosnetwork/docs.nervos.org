@@ -371,6 +371,43 @@ const config = {
             from: "/docs/basics/guides/testnet",
             to: "/docs/node/run-testnet-node",
           },
+          {
+            from: "/docs/getting-started/devtool",
+            to: "/docs/sdk-and-devtool/devtool",
+          },
+          {
+            from: "/docs/dapp/rpcs",
+            to: "/docs/getting-started/rpcs",
+          },
+          {
+            from: "/docs/tech-explanation/header-dep",
+            to: "/docs/tech-explanation/header-deps",
+          },
+          {
+            from: "/docs/tech-explanation/outpoint",
+            to: "/docs/tech-explanation/glossary#outpoint",
+          },
+          {
+            from: "/docs/tech-explanation/dep-type",
+            to: "/docs/tech-explanation/glossary#dep-type",
+          },
+          {
+            from: "/docs/common-scripts/spore-protocol",
+            to: "/docs/ecosystem-scripts/spore-protocol",
+          },
+          {
+            from: "/docs/common-scripts/xudt",
+            to: "/docs/ecosystem-scripts/xudt",
+          },
+          {
+            // The blog has been removed. It used postsPerPage: 1 sorted by
+            // ascending date, so /blog/page/3 was "Introduction to CKB Script
+            // Programming 3: UDT" — send it to the modern Script-section
+            // equivalent (mirrors the /docs/script-course/intro-to-script-3
+            // redirect above)
+            from: "/blog/page/3",
+            to: "/docs/script/rust/rust-example-sudt-script",
+          },
         ],
         createRedirects(existingPath) {
           if (
