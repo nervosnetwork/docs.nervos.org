@@ -400,10 +400,13 @@ const config = {
             to: "/docs/ecosystem-scripts/xudt",
           },
           {
-            // The blog has been removed, so archive pagination URLs have no
-            // equivalent page — send them to the homepage
+            // The blog has been removed. It used postsPerPage: 1 sorted by
+            // ascending date, so /blog/page/3 was "Introduction to CKB Script
+            // Programming 3: UDT" — send it to the modern Script-section
+            // equivalent (mirrors the /docs/script-course/intro-to-script-3
+            // redirect above)
             from: "/blog/page/3",
-            to: "/",
+            to: "/docs/script/rust/rust-example-sudt-script",
           },
         ],
         createRedirects(existingPath) {
