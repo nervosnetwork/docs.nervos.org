@@ -72,6 +72,16 @@ You can also read the full code online or download it <ExampleLink path="dApp/si
 
 ### Step 3: Build and Deploy the Script
 
+:::note Prerequisite
+
+Before building the contract, make sure `ckb-debugger` is installed and available in your PATH.
+
+The build process invokes `ckb-debugger` to compile the JavaScript/TypeScript contract into the CKB bytecode (`.bc`) artifact that will be deployed in the next step.
+
+If you haven't installed it yet, please follow the [Debug with ckb-debugger](/docs/script/rust/rust-debug#debug-with-ckb-debugger) guide before continuing.
+
+:::
+
 To compile the contract, navigate to the `root` directory and run:
 
 <CodeTabs
