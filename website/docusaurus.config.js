@@ -430,12 +430,6 @@ const config = {
             to: "/docs/integrate-wallets/intro-to-wallets",
           },
           {
-            // nervosj was the original name of the CKB Java SDK
-            // (now ckb-sdk-java)
-            from: ["/nervosj", "/nervosj.html"],
-            to: "/docs/sdk-and-devtool/java",
-          },
-          {
             // Retired labs tutorial; the archived version lives on docs-old
             from: "/docs/labs/sudtbycapsule",
             to: "https://docs-old.nervos.org/docs/labs/sudtbycapsule",
