@@ -54,7 +54,7 @@ Cell Model’s unique structure inherently grants scalability, reflected in the 
 
 <img src="/img/cell/cell-scalability.png" alt="Cell Model's scalability" width="688" height="387" />
 
-Cell Model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensures compliance with developer-set rules.
+Cell Model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensure compliance with developer-set rules.
 
 In Cell Model, smart contract execution is parallel. Each transaction runs independently in its own virtual machine; multiple virtual machines run simultaneously. This gives the Cell Model dramatic scaling improvements on modern computers with increasing CPU cores.
 
