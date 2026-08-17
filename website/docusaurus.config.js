@@ -408,6 +408,32 @@ const config = {
             from: "/blog/page/3",
             to: "/docs/script/rust/rust-example-sudt-script",
           },
+          {
+            // 2019-era docs routes (root-level URLs from the pre-Docusaurus
+            // site). Both extensionless and .html variants circulated in old
+            // bookmarks and external posts.
+            from: ["/getting-started/mine", "/getting-started/mine.html"],
+            to: "/docs/mining/guide",
+          },
+          {
+            from: [
+              "/getting-started/run-node",
+              "/getting-started/run-node.html",
+            ],
+            to: "/docs/node/node-overview",
+          },
+          {
+            from: [
+              "/references/neuron-wallet-guide.html",
+              "/references/neuron-wallet-guide",
+            ],
+            to: "/docs/integrate-wallets/intro-to-wallets",
+          },
+          {
+            // Retired labs tutorial; the archived version lives on docs-old
+            from: "/docs/labs/sudtbycapsule",
+            to: "https://docs-old.nervos.org/docs/labs/sudtbycapsule",
+          },
         ],
         createRedirects(existingPath) {
           if (
