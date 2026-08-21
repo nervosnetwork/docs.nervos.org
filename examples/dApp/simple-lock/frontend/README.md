@@ -1,44 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Simple Lock Frontend
 
-## Getting Started
+The Next.js frontend derives a hash-lock address from a preimage, checks its live capacity, and builds an unlock transaction.
 
-First, run the development server:
+## Run
+
+The root deploy command automatically copies the selected contract and system-script artifacts into this directory.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Devnet is the default
 pnpm dev
-# or
-bun dev
+
+# Testnet
+NEXT_PUBLIC_NETWORK=testnet pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Only `devnet` and `testnet` are accepted because current OffCKB Mainnet artifacts do not include the required `ckb-js-vm` dependency. Restart the frontend after changing networks or redeploying.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment Health
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Before enabling transfers, the page checks that both dependency OutPoints are live:
 
-## Targeting on Different CKB Networks
+- the deployed `hash-lock.bc` cell;
+- the network's `ckb-js-vm` cell.
 
-edit `.env` file:
+If either is missing, redeploy for the active network and confirm both JSON files here match their counterparts in the root `deployment/` directory.
 
-```bash
-NEXT_PUBLIC_NETWORK=devnet # devnet, testnet or mainnet
-```
+## Transaction States
 
-## Learn More
+The UI reports `submitting`, `pending`, `committed`, or `failed` and keeps the transaction hash. A timeout does not prove failure; check the node with the transaction hash before submitting again.
 
-To learn more about Next.js, take a look at the following resources:
+## Educational Warning
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The transaction deliberately sends change back to the revealed hash lock. Once the preimage is public, returned change and other cells using that hash are unsafe. This behavior is retained to teach the limitation; production applications should send change to a signature-protected address.

@@ -18,8 +18,16 @@
   padding-left: 2.5rem;
 }
 .details {
-  padding-left: 1rem;
-  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.details pre {
+  margin: 0.75rem 0;
 }
 .collapsibleHeader {
   margin-left: -1.125rem;
