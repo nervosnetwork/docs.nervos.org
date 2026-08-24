@@ -126,22 +126,53 @@ function extractCodeTabs(content) {
   });
 }
 
-function extractTutorialHeader(content) {
-  const re = /<TutorialHeader\b[\s\S]*?\/>/g;
-  return content.replace(re, (match) => {
-    const timeMatch = match.match(/time\s*=\s*\{?\s*["']([^"']+)["']\s*\}?/);
-    const toolsMatch = match.match(/tools\s*=\s*\{?\s*["']([^"']+)["']\s*\}?/);
-    const time = timeMatch ? timeMatch[1].trim() : null;
-    const tools = toolsMatch ? toolsMatch[1].trim() : null;
+function extractRequiredTools(match) {
+  const requiredToolsMatch = match.match(/requiredTools\s*=\s*\{\[([\s\S]*?)\]\}/);
+  if (!requiredToolsMatch) return [];
 
-    let out = "";
-    if (time) {
-      out += `**Estimated Time:** ${time}\n`;
-    }
-    if (tools) {
-      out += `**Tools:** ${tools}\n`;
-    }
-    return out || "";
+  return Array.from(requiredToolsMatch[1].matchAll(/<div\b[^>]*>([\s\S]*?)<\/div>/g), (item) =>
+    item[1]
+      .replace(/\{["']([^"']*)["']\}/g, "$1")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+  ).filter(Boolean);
+}
+
+function formatTutorialHeaderMetadata(match) {
+  const timeMatch = match.match(/time\s*=\s*\{?\s*["']([^"']+)["']\s*\}?/);
+  const toolsMatch = match.match(/tools\s*=\s*\{?\s*["']([^"']+)["']\s*\}?/);
+  const time = timeMatch ? timeMatch[1].trim() : null;
+  const tools = toolsMatch ? toolsMatch[1].trim() : null;
+  const requiredTools = extractRequiredTools(match);
+
+  let out = "";
+  if (time) {
+    out += `**Estimated Time:** ${time}\n`;
+  }
+  if (tools) {
+    out += `**Tools:** ${tools}\n`;
+  }
+  if (requiredTools.length > 0) {
+    out += `**Required Tools:** ${requiredTools.join(", ")}\n`;
+  }
+  return out || "";
+}
+
+function extractTutorialHeader(content) {
+  const multilinePaired = /<TutorialHeader\b[\s\S]*?^\s*>\s*\n([\s\S]*?)^\s*<\/TutorialHeader>\s*/gm;
+  content = content.replace(multilinePaired, (match, body) => {
+    return `${formatTutorialHeaderMetadata(match)}\n${body.trim()}\n`;
+  });
+
+  const singleLinePaired = /<TutorialHeader\b[^>\n]*>([\s\S]*?)<\/TutorialHeader>/g;
+  content = content.replace(singleLinePaired, (match, body) => {
+    return `${formatTutorialHeaderMetadata(match)}\n${body.trim()}\n`;
+  });
+
+  const selfClosing = /<TutorialHeader\b[\s\S]*?\/>/g;
+  return content.replace(selfClosing, (match) => {
+    return formatTutorialHeaderMetadata(match);
   });
 }
 

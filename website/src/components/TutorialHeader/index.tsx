@@ -1,11 +1,14 @@
 import React from "react";
 import styles from "./styles.module.css";
 import Link from "@docusaurus/Link";
+import { selectTutorialTools } from "./selectTools.mjs";
 
 export interface TutorialHeaderProps {
   time: string;
-  tools: "dapp" | "script" | "debug";
+  tools?: "dapp" | "script" | "debug";
   customTools?: JSX.Element[];
+  requiredTools?: JSX.Element[];
+  children?: React.ReactNode;
 }
 
 const DAPP_HEADER: JSX.Element[] = [
@@ -96,6 +99,8 @@ export default function TutorialHeader({
   time,
   tools,
   customTools,
+  requiredTools,
+  children,
 }: TutorialHeaderProps): JSX.Element {
   const baseTools =
     tools === "dapp"
@@ -106,9 +111,11 @@ export default function TutorialHeader({
       ? DEBUG_HEADER
       : [];
 
-  const selectedTools = customTools
-    ? [...baseTools, ...customTools]
-    : baseTools;
+  const selectedTools = selectTutorialTools(
+    baseTools,
+    customTools,
+    requiredTools
+  );
 
   return (
     <div className={styles.box}>
@@ -124,6 +131,7 @@ export default function TutorialHeader({
           <li key={index}>{tool}</li>
         ))}
       </ul>
+      {children ? <div className={styles.details}>{children}</div> : null}
     </div>
   );
 }

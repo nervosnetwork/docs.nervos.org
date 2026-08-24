@@ -66,4 +66,50 @@ describe("hash-lock contract", () => {
     const verifier = Verifier.from(resource, tx);
     verifier.verifySuccess(true);
   });
+
+  test("should reject an incorrect preimage with exit code 11", async () => {
+    const resource = Resource.default();
+    const tx = Transaction.default();
+
+    const mainScript = resource.deployCell(
+      hexFrom(readFileSync(DEFAULT_SCRIPT_CKB_JS_VM)),
+      tx,
+      false,
+    );
+    const alwaysSuccessScript = resource.deployCell(
+      hexFrom(readFileSync(DEFAULT_SCRIPT_ALWAYS_SUCCESS)),
+      tx,
+      false,
+    );
+    const contractScript = resource.deployCell(
+      hexFrom(readFileSync("dist/hash-lock.bc")),
+      tx,
+      false,
+    );
+
+    const preimage = "Hello World";
+    const hash = hashCkb(Array.from(preimage).map((c) => c.charCodeAt(0)));
+
+    mainScript.args = hexFrom(
+      "0x0000" +
+        contractScript.codeHash.slice(2) +
+        hexFrom(hashTypeToBytes(contractScript.hashType)).slice(2) +
+        hash.slice(2),
+    );
+
+    const inputCell = resource.mockCell(mainScript, undefined, "0x");
+    tx.inputs.push(Resource.createCellInput(inputCell));
+    tx.outputs.push(Resource.createCellOutput(alwaysSuccessScript));
+    tx.outputsData.push(hexFrom("0x"));
+    tx.witnesses.push(
+      hexFrom(
+        new WitnessArgs(
+          hexFrom(Array.from("Wrong secret").map((c) => c.charCodeAt(0))),
+        ).toBytes(),
+      ),
+    );
+
+    const verifier = Verifier.from(resource, tx);
+    verifier.verifyFailure(11, true);
+  });
 });

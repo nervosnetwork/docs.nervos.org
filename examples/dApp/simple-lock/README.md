@@ -1,181 +1,77 @@
-# simple-lock
+# Simple Lock
 
-A JavaScript/TypeScript dApp demonstrating the `hash-lock` smart contract on CKB.
+An educational CKB dApp that deploys a JavaScript hash-lock contract, creates a hash-lock address, and spends cells by revealing a preimage.
 
-## Overview
+> This contract proves knowledge of a secret, not ownership. The preimage becomes public when used, so do not use it with valuable funds. The runnable flow supports Devnet and Testnet.
 
-This project demonstrates a full-stack dApp using the CKB JavaScript VM (ckb-js-vm).
-It includes a `hash-lock` contract and a web frontend for interacting with it.
+## Prerequisites
 
-## Project Structure
+- Git
+- Node.js 18.18 or later
+- pnpm
+- OffCKB
+- Rust and `ckb-debugger`
+- protobuf if installing `ckb-debugger` reports `Could not find protoc`
 
-```
-simple-lock/
-├── contracts/           # Smart contract source code
-│   └── hash-lock/       # Hash-lock contract
-│       └── src/
-│           └── index.ts # Contract implementation
-├── frontend/            # Next.js web frontend
-│   └── app/
-│       └── hash-lock.ts # Frontend integration
-```
+Install `ckb-debugger` with `cargo install ckb-debugger`. On macOS, install protobuf with `brew install protobuf`. On Windows, ensure the npm global bin directory and Cargo bin directory are in `PATH`, approve required pnpm build scripts if prompted, and keep the project in a path without `#`.
 
-## Getting Started
+First-time setup can take 30–45 minutes because `ckb-debugger` compiles locally. Once tools are installed, the tutorial usually takes 10–15 minutes.
 
-### Prerequisites
+## Devnet Quick Start
 
-- Node.js (v18 or later)
-- pnpm package manager
-
-### Installation
-
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-
-### Building Contracts
-
-Build all contracts:
+In one terminal:
 
 ```bash
-pnpm run build
+pnpm install
+offckb node
 ```
 
-Build a specific contract:
+Keep the Devnet running. In a second terminal, return to this directory and run:
 
 ```bash
-pnpm run build:contract hello-world
+pnpm run deploy -- --network devnet
+cd frontend
+pnpm dev
 ```
 
-### Running Tests
+The deploy command builds the contract, deploys `dist/hash-lock.bc`, refreshes the selected network's system-script information, and validates and synchronizes both deployment files with the frontend. Synchronization failure makes deployment fail.
 
-Run all tests:
+The frontend defaults to Devnet when `NEXT_PUBLIC_NETWORK` is unset. It verifies that both the deployed `hash-lock.bc` and `ckb-js-vm` OutPoints are live before enabling transfers.
 
-```bash
-pnpm test
-```
+## Testnet
 
-Run tests for a specific contract:
+Fund the deployer key with Testnet CKB, then run:
 
 ```bash
-pnpm test -- hello-world
-```
-
-### Adding New Contracts
-
-Create a new contract:
-
-```bash
-pnpm run add-contract my-new-contract
-```
-
-This will:
-
-- Create a new contract directory under `contracts/`
-- Generate a basic contract template
-- Create a corresponding test file
-
-## Development
-
-### Contract Development
-
-1. Edit your contract in `contracts/<contract-name>/src/index.typescript`
-2. Build the contract: `pnpm run build:contract <contract-name>`
-3. Run tests: `pnpm test -- <contract-name>`
-
-### Build Output
-
-All contracts are built to the global `dist/` directory:
-
-- `dist/{contract-name}.js` - Bundled JavaScript code
-- `dist/{contract-name}.bc` - Compiled bytecode for CKB execution
-
-### Testing
-
-Tests use the `ckb-testtool` framework to simulate CKB blockchain execution. Each test:
-
-1. Sets up a mock CKB environment
-2. Deploys the contract bytecode
-3. Executes transactions
-4. Verifies results
-
-## Available Scripts
-
-- `build` - Build all contracts
-- `build:contract <name>` - Build a specific contract
-- `test` - Run all tests
-- `add-contract <name>` - Add a new contract
-- `deploy` - Deploy contracts to CKB network
-- `clean` - Remove all build outputs
-- `format` - Format code with Prettier
-
-## Deployment
-
-Deploy your contracts to CKB networks using the built-in deploy script:
-
-### Basic Usage
-
-```bash
-# Deploy to devnet (default)
-pnpm run deploy
-
-# Deploy to testnet
-pnpm run deploy -- --network testnet
-
-# Deploy to mainnet
-pnpm run deploy -- --network mainnet
-```
-
-### Advanced Options
-
-```bash
-# Deploy with upgradable type ID
-pnpm run deploy -- --network testnet --type-id
-
-# Deploy with custom private key
 pnpm run deploy -- --network testnet --privkey 0x...
-
-# Combine multiple options
-pnpm run deploy -- --network testnet --type-id --privkey 0x...
+cd frontend
+NEXT_PUBLIC_NETWORK=testnet pnpm dev
 ```
 
-### Available Options
+Current OffCKB supports direct deployment only to Devnet and Testnet, and its Mainnet system-script export does not provide the `ckb-js-vm` dependency this example needs. The deploy command reports that limitation directly instead of starting a deployment that cannot complete.
 
-- `--network <network>` - Target network: `devnet`, `testnet`, or `mainnet` (default: `devnet`)
-- `--privkey <privkey>` - Private key for deployment (default: uses offckb's deployer account)
-- `--type-id` - Enable upgradable type ID for contract updates
+For Mainnet-state testing, use an isolated [OffCKB Mainnet fork](https://github.com/ckb-devrel/offckb) and follow its replay-risk guidance. This tutorial's frontend remains configured for Devnet and Testnet.
 
-### Deployment Artifacts
+## Stale OutPoints
 
-After successful deployment, artifacts are saved to the `deployment/` directory:
+An OutPoint identifies one specific cell by transaction hash and output index. Redeploying, switching networks, or resetting Devnet invalidates old OutPoints. If the frontend reports a stale dependency:
 
-- `deployment/scripts.json` - Contract script information
-- `deployment/<network>/<contract>/deployment.toml` - Deployment configuration
-- `deployment/<network>/<contract>/migrations/` - Migration history
+1. Confirm `NEXT_PUBLIC_NETWORK` matches the network you deployed to.
+2. Redeploy the contract for that network.
+3. Confirm the contract and system-script files under `deployment/` match the copies under `frontend/deployment/`.
+4. Restart the frontend and select **Check again**.
 
-## Dependencies
+## Commands
 
-### Core Dependencies
+```bash
+pnpm build
+pnpm test -- hash-lock.mock.test.ts --runInBand
+pnpm test:deploy
+pnpm --dir frontend build
+```
 
-- `@ckb-js-std/bindings` - CKB JavaScript VM bindings
-- `@ckb-js-std/core` - Core CKB JavaScript utilities
+Contract output is written to `dist/`. Deployment history is written under `deployment/<network>/hash-lock.bc/`.
 
-### Development Dependencies
+## Security Model
 
-- `ckb-testtool` - Testing framework for CKB contracts
-- `esbuild` - Fast JavaScript bundler
-- `jest` - JavaScript testing framework
-- `typescript` - TypeScript compiler
-- `ts-jest` - TypeScript support for Jest
-- `prettier` - Code formatter
-
-## Resources
-
-- [CKB JavaScript VM Documentation](https://github.com/nervosnetwork/ckb-js-vm)
-- [CKB Developer Documentation](https://docs.nervos.org/docs/script/js/js-quick-start)
-- [The Little Book of ckb-js-vm ](https://nervosnetwork.github.io/ckb-js-vm/)
-
-## License
-
-MIT
+The example intentionally returns change to the same hash lock. After the preimage is revealed, that change and any untouched cells using the same hash can be spent by anyone who knows it. A production transaction should use a signature-protected change address and stronger authorization.

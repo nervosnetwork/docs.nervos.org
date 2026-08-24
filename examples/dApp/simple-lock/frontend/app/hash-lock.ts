@@ -1,53 +1,123 @@
 import { ccc, hexFrom, hashTypeToBytes } from "@ckb-ccc/core";
-import { cccClient, readEnvNetwork } from "./ccc-client";
+import { activeNetwork, cccClient, Network } from "./ccc-client";
+import { stringToBytesHex } from "./preimage";
+import { assertOutputCapacities } from "./transaction-validation";
 import scripts from "../deployment/scripts.json";
 import systemScripts from "../deployment/system-scripts.json";
 
-const myScripts = scripts[readEnvNetwork()] as any;
-const mySystemScripts = systemScripts[readEnvNetwork()] as any;
+type DeploymentScript = {
+  codeHash: string;
+  hashType: string;
+  cellDeps: Array<{ cellDep: ccc.CellDepLike }>;
+};
 
-export function uint8ArrayToHexString(uint8Array: Uint8Array): string {
-  return Array.prototype.map
-    .call(uint8Array, (x) => ("00" + x.toString(16)).slice(-2))
-    .join("");
+type NetworkDeployments = {
+  "hash-lock.bc"?: DeploymentScript;
+};
+
+type SystemDeployment = {
+  ckb_js_vm?: { script: DeploymentScript };
+};
+
+export type DeploymentStatus =
+  | {
+      kind: "ready";
+      network: Network;
+      codeHash: string;
+      contractOutPoint: ccc.OutPoint;
+      ckbJsVmOutPoint: ccc.OutPoint;
+    }
+  | {
+      kind: "error";
+      network: Network;
+      message: string;
+    };
+
+const deployments = scripts as unknown as Record<Network, NetworkDeployments>;
+const networkSystemScripts = systemScripts as unknown as Record<
+  Network,
+  SystemDeployment
+>;
+
+function deploymentConfig() {
+  const contract = deployments[activeNetwork]?.["hash-lock.bc"];
+  const ckbJsVm = networkSystemScripts[activeNetwork]?.ckb_js_vm?.script;
+  if (!contract) {
+    throw new Error(
+      `No hash-lock.bc deployment was found for ${activeNetwork}. Run the deploy command for this network and restart the frontend.`,
+    );
+  }
+  if (!ckbJsVm) {
+    throw new Error(
+      `No ckb-js-vm deployment was found for ${activeNetwork}. Regenerate the system scripts and restart the frontend.`,
+    );
+  }
+
+  const contractCellDep = ccc.CellDep.from(contract.cellDeps[0]?.cellDep);
+  const ckbJsVmCellDep = ccc.CellDep.from(ckbJsVm.cellDeps[0]?.cellDep);
+  return { contract, ckbJsVm, contractCellDep, ckbJsVmCellDep };
 }
 
-export function stringToBytesHex(text: string) {
-  const encoder = new TextEncoder();
-  const buf: Uint8Array = encoder.encode(text);
-  console.log("preimage: ", buf);
-  return "0x" + uint8ArrayToHexString(buf);
+export async function getDeploymentStatus(): Promise<DeploymentStatus> {
+  try {
+    const { contract, contractCellDep, ckbJsVmCellDep } = deploymentConfig();
+    const [contractCell, ckbJsVmCell] = await Promise.all([
+      cccClient.getCellLive(contractCellDep.outPoint, true),
+      cccClient.getCellLive(ckbJsVmCellDep.outPoint, true),
+    ]);
+
+    if (!contractCell) {
+      throw new Error(
+        `The hash-lock.bc OutPoint is not live on ${activeNetwork}. Redeploy so scripts.json contains the current network artifact.`,
+      );
+    }
+    if (!ckbJsVmCell) {
+      throw new Error(
+        `The ckb-js-vm OutPoint is not live on ${activeNetwork}. Regenerate the system scripts for the active network.`,
+      );
+    }
+
+    return {
+      kind: "ready",
+      network: activeNetwork,
+      codeHash: contract.codeHash,
+      contractOutPoint: contractCellDep.outPoint,
+      ckbJsVmOutPoint: ckbJsVmCellDep.outPoint,
+    };
+  } catch (error) {
+    return {
+      kind: "error",
+      network: activeNetwork,
+      message: error instanceof Error ? error.message : String(error),
+    };
+  }
 }
 
 export async function capacityOf(address: string): Promise<bigint> {
   const addr = await ccc.Address.fromString(address, cccClient);
-  let balance = await cccClient.getBalance([addr.script]);
-  return balance;
+  return cccClient.getBalance([addr.script]);
 }
 
-export async function wait(seconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-}
-
-export function shannonToCKB(amount: bigint) {
-  return amount / BigInt(100000000);
+export function shannonToCKB(amount: bigint): string {
+  return ccc.fixedPointToString(amount);
 }
 
 export function generateAccount(hash: string) {
+  const { contract, ckbJsVm } = deploymentConfig();
   const lockArgs =
     "0x0000" +
-    myScripts["hash-lock.bc"]!.codeHash.slice(2) +
-    hexFrom(hashTypeToBytes(myScripts["hash-lock.bc"]!.hashType)).slice(2) +
+    contract.codeHash.slice(2) +
+    hexFrom(hashTypeToBytes(contract.hashType)).slice(2) +
     hash;
-  const lockScript = {
-    codeHash: mySystemScripts["ckb_js_vm"]!.script.codeHash,
-    hashType: mySystemScripts["ckb_js_vm"]!.script.hashType,
+  const lockScript = ccc.Script.from({
+    codeHash: ckbJsVm.codeHash,
+    hashType: ccc.hashTypeFrom(ckbJsVm.hashType),
     args: lockArgs,
-  };
-  const address = ccc.Address.fromScript(lockScript, cccClient).toString();
+  });
+
   return {
-    address,
-    lockScript: ccc.Script.from(lockScript),
+    address: ccc.Address.fromScript(lockScript, cccClient).toString(),
+    lockScript,
   };
 }
 
@@ -55,65 +125,34 @@ export async function unlock(
   fromAddr: string,
   toAddr: string,
   amountInCKB: string,
+  preimage: string,
 ): Promise<string> {
+  if (!preimage) {
+    throw new Error("Enter the preimage used to create this hash lock.");
+  }
+
   const fromScript = (await ccc.Address.fromString(fromAddr, cccClient)).script;
   const toScript = (await ccc.Address.fromString(toAddr, cccClient)).script;
+  const amount = ccc.fixedPointFrom(amountInCKB);
+  if (amount <= ccc.Zero) {
+    throw new Error("The transfer amount must be greater than zero.");
+  }
+
+  const { contractCellDep, ckbJsVmCellDep } = deploymentConfig();
   const readSigner = new ccc.SignerCkbScriptReadonly(cccClient, fromScript);
-
-  // Build the full transaction
-  const tx = ccc.Transaction.from({
-    outputs: [{ lock: toScript }],
-    outputsData: [],
+  const transaction = ccc.Transaction.from({
+    outputs: [{ lock: toScript, capacity: amount }, { lock: fromScript }],
+    outputsData: ["0x", "0x"],
   });
 
-  // CCC transactions are easy to be edited
-  tx.outputs.forEach((output, i) => {
-    if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
-      alert(`Insufficient capacity at output ${i} to store data`);
-      return;
-    }
-    output.capacity = ccc.fixedPointFrom(amountInCKB);
-  });
-
-  // Complete missing parts for transaction
-  await tx.addCellDeps(myScripts["hash-lock.bc"]!.cellDeps[0].cellDep);
-  await tx.addCellDeps(
-    mySystemScripts["ckb_js_vm"]!.script.cellDeps[0].cellDep,
+  await transaction.addCellDeps(contractCellDep, ckbJsVmCellDep);
+  await transaction.completeInputsByCapacity(readSigner);
+  transaction.setWitnessArgsAt(
+    0,
+    ccc.WitnessArgs.from({ lock: stringToBytesHex(preimage) }),
   );
+  await transaction.completeFeeChangeToOutput(readSigner, 1, 1000);
+  assertOutputCapacities(transaction);
 
-  // Here calculate the minimum capacity of a single Cell (about 73)
-  let occupiedSize = ccc.CellOutput.from({
-    capacity: BigInt(1000),
-    lock: fromScript,
-  }).occupiedSize;
-  console.log(`occupiedSize: ${occupiedSize}`);
-
-  await tx.completeInputsByCapacity(
-    readSigner,
-    ccc.fixedPointFrom(occupiedSize),
-  );
-  const balanceDiff =
-    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
-  console.log("balanceDiff: ", balanceDiff);
-  if (balanceDiff > ccc.Zero) {
-    tx.addOutput({
-      lock: fromScript,
-      capacity: balanceDiff - BigInt(1000), // Fee 1000
-    });
-  }
-
-  // fill the witness with preimage
-  const preimageAnswer = window.prompt("please enter the preimage: ");
-  if (preimageAnswer == null) {
-    throw new Error("user abort input!");
-  }
-  const newWitnessArgs = new ccc.WitnessArgs(
-    stringToBytesHex(preimageAnswer) as `0x${string}`,
-  );
-  console.log(`newWitnessArgs: ${JSON.stringify(newWitnessArgs)}`);
-  tx.setWitnessArgsAt(0, newWitnessArgs);
-
-  const txHash = await cccClient.sendTransaction(tx);
-  console.log("Full transaction: ", tx.stringify());
-  return txHash;
+  return cccClient.sendTransaction(transaction);
 }

@@ -1,7 +1,7 @@
 import { ccc, CellDepInfoLike, KnownScript, Script } from "@ckb-ccc/core";
 import systemScripts from "../deployment/system-scripts.json";
 
-export type Network = "devnet" | "testnet" | "mainnet";
+export type Network = "devnet" | "testnet";
 
 export type ScriptInfo = Pick<Script, "codeHash" | "hashType"> & {
   cellDeps: CellDepInfoLike[];
@@ -22,28 +22,35 @@ export const DEVNET_SCRIPTS: Record<string, ScriptInfo> = {
 
 export function buildCccClient(network: Network) {
   const client =
-    network === "mainnet"
-      ? new ccc.ClientPublicMainnet()
-      : network === "testnet"
-        ? new ccc.ClientPublicTestnet()
-        : new ccc.ClientPublicTestnet({
-            url: "http://localhost:28114", // the default offckb devnet proxy rpc url
-            scripts: DEVNET_SCRIPTS as any,
-          });
+    network === "testnet"
+      ? new ccc.ClientPublicTestnet()
+      : new ccc.ClientPublicTestnet({
+          url: "http://localhost:28114", // the default offckb devnet proxy rpc url
+          scripts: DEVNET_SCRIPTS as any,
+        });
 
   return client;
 }
 
 export function readEnvNetwork(): Network {
   const network = process.env.NEXT_PUBLIC_NETWORK;
-  const defaultNetwork = "testnet";
+  const defaultNetwork = "devnet";
   if (!network) return defaultNetwork;
 
-  if (!["devnet", "testnet", "mainnet"].includes(network)) {
-    return defaultNetwork;
+  if (network === "mainnet") {
+    throw new Error(
+      "Mainnet is not available for this example because current OffCKB Mainnet artifacts do not provide the required ckb-js-vm dependency. Use Devnet or Testnet.",
+    );
+  }
+
+  if (!["devnet", "testnet"].includes(network)) {
+    throw new Error(
+      `Unsupported NEXT_PUBLIC_NETWORK "${network}". Supported values are devnet and testnet.`,
+    );
   }
 
   return network as Network;
 }
 
-export const cccClient = buildCccClient(readEnvNetwork());
+export const activeNetwork = readEnvNetwork();
+export const cccClient = buildCccClient(activeNetwork);
