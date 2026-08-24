@@ -53,6 +53,7 @@ describe("hash-lock contract", () => {
     await tx.completeFeeBy(signer, 1000);
     const txHash = await signer.sendTransaction(tx);
     console.log(`Transaction sent: ${txHash}`);
+    await client.waitTransaction(txHash);
 
     // construct second tx to consume the cell we just created
     const secondTx = ccc.Transaction.from({
@@ -82,5 +83,6 @@ describe("hash-lock contract", () => {
     await secondTx.completeFeeBy(signer, 1000);
     const secondTxHash = await signer.sendTransaction(secondTx);
     console.log(`Second Transaction sent: ${secondTxHash}`);
+    await client.waitTransaction(secondTxHash);
   });
 });

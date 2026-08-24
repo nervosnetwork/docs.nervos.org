@@ -1,12 +1,13 @@
 {
   "name": "docs.nervos.org",
-  "version": "2.53.0",
+  "version": "2.54.0",
   "description": "Official docs website for Nervos CKB",
   "license": "MIT",
   "scripts": {
     "examples": "docusaurus-examples",
     "start": "docusaurus start",
     "build": "docusaurus build",
+    "test:tutorial-header": "node --test src/components/TutorialHeader/selectTools.test.mjs",
     "serve": "docusaurus serve",
     "type": "module",
     "gen-term": "node scripts/generate-key-terms.mjs",

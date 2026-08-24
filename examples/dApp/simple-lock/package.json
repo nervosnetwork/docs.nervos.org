@@ -8,6 +8,8 @@
     "build": "node scripts/build-all.js",
     "build:contract": "node scripts/build-contract.js",
     "test": "node scripts/build-all.js && jest",
+    "test:devnet": "node scripts/build-all.js && jest --config jest.devnet.config.cjs --runInBand",
+    "test:deploy": "node --test scripts/deploy.test.js",
     "add-contract": "node scripts/add-contract.js",
     "deploy": "node scripts/build-all.js && node scripts/deploy.js",
     "clean": "rimraf dist",
