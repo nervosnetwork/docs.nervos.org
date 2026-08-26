@@ -1,6 +1,23 @@
 ---
 id: offckb
 title: OffCKB
+description: "Install and use OffCKB to run a local CKB Devnet, manage test accounts, create and deploy Scripts, debug transactions, and customize the environment."
+keywords:
+  - offckb
+  - devnet
+  - script
+  - deployment
+  - debugging
+audience:
+  - dApp developers
+  - Script developers
+related:
+  - /docs/getting-started/quick-start
+  - /docs/script/js/js-quick-start
+  - /docs/dapp/simple-lock
+  - /docs/node/run-devnet-node
+difficulty: beginner
+last_reviewed: 2026-08-26
 ---
 
 import Tabs from "@theme/Tabs";
@@ -12,14 +29,23 @@ import Tooltip from "@components/Tooltip";
 [offckb](https://github.com/ckb-devrel/offckb) is an all-in-one CLI tool that provides a local CKB development environment.
 
 - Simplifies development with one-line command to start the devnet
-- Comes with 20 pre-funded accounts and multiple minimal dApp templates for quick project setup
+- Comes with pre-funded Devnet accounts
+- Generates JavaScript or TypeScript CKB Smart Contract projects from templates
 - Embeds common Scripts in the genesis block, such as Omnilock, xUDT, and Spore
 - Provides debugging tools like ckb-debugger
 - Offers configurable settings via a JSON file
 
-This guide will walk you through leveraging OffCKB to kickstart your first CKB project. The version used here is [`v0.4.0`](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.0) or later.
+This guide will walk you through leveraging OffCKB to kickstart your first CKB project. The version used here is [`v0.4.13`](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.13) or later.
 
 ## Install
+
+OffCKB requires **Node.js 20 or later**. Check your installed version:
+
+```bash
+node -v
+```
+
+If the version is below `v20.0.0`, install a current [Node.js LTS release](https://nodejs.org/en/download) before continuing.
 
 ```sh
 npm install -g @offckb/cli
@@ -31,8 +57,6 @@ or use `pnpm` to install:
 pnpm install -g @offckb/cli
 ```
 
-_Requires Node version `>= v20.0.0`. We recommend using latest [LTS](https://nodejs.org/en/download/package-manager) version of Node to run `offckb`_
-
 ## Usage
 
 ```sh
@@ -41,211 +65,422 @@ Usage: offckb [options] [command]
 ckb development network for your first try
 
 Options:
-  -V, --version                                 output the version number
-  -h, --help                                    display help for command
+  -V, --version                                output the version number
+  --json                                       Output logs in JSON format for agent/programmatic consumption
+  -h, --help                                   display help for command
 
 Commands:
-  node [CKB-Version]                            Use the CKB to start devnet
-  deploy [options]                              Deploy contracts to different networks, only supports devnet and testnet
-  debug [options]                               Quickly debug transaction with tx-hash
-  system-scripts [options]                      Print/Output system scripts of the CKB blockchain
-  clean                                         Clean the devnet data, need to stop running the chain first
-  accounts                                      Print account list info
-  deposit [options] [toAddress] [amountInCKB]   Deposit CKB tokens to address, only devnet and testnet
-  transfer [options] [toAddress] [amountInCKB]  Transfer CKB tokens to address, only devnet and testnet
-  transfer-all [options] [toAddress]            Transfer All CKB tokens to address, only devnet and testnet
-  balance [options] [toAddress]                 Check account balance, only devnet and testnet
-  debugger                                      Port of the raw CKB Standalone Debugger
-  config <action> [item] [value]                do a configuration action
-  help [command]                                display help for command
+  node [options] [CKB-Version]                 Use the CKB to start devnet
+  logs [options] [target]                      Show devnet logs: node (default), contract script debug output, miner, or RPC proxy events
+  create [options] [project-name]              Create a new CKB Smart Contract project in JavaScript.
+  deploy [options]                             Deploy contracts to different networks, only supports devnet and testnet
+  debug [options]                              Quickly debug transaction with tx-hash
+  system-scripts [options]                     Print/Output system scripts of the CKB blockchain
+  clean [options]                              Clean the devnet data, need to stop running the chain first
+  accounts [options]                           Print account list info
+  deposit [options] [toAddress] [amountInCKB]  Deposit CKB tokens to address, only devnet and testnet
+  transfer [options] [toAddress] [amount]      Transfer CKB or UDT tokens to address, only devnet and testnet
+  transfer-all [options] [toAddress]           Transfer All CKB tokens to address, only devnet and testnet
+  balance [options] <toAddress>                Check account balance (CKB + detected SUDT/xUDT), only devnet and testnet
+  udt                                          UDT token commands
+  install <tool>                               Install a tool binary used by offckb (e.g. the native ckb-debugger)
+  debugger                                     Port of the raw CKB Standalone Debugger
+  status [options]                             Show ckb-tui status interface
+  config <action> [item] [value]               do a configuration action
+  devnet                                       Devnet utility commands
+  help [command]                               display help for command
 ```
 
-_Use `offckb [command] -h` to learn more about a specific command._
+Use `offckb [command] -h` to learn more about a specific command.
 
 ## Get started
 
-### Running CKB
+### Run a Local CKB Devnet
 
-Start a local blockchain with the default CKB version:
+Start a local blockchain with one command:
 
-```sh
+```mdx-code-block
+<Tabs>
+  <TabItem value="start-devnet" label="Command">
+```
+
+```bash
 offckb node
 ```
 
-Or specify a CKB version:
-
-```sh
-offckb node 0.201.0
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-start-devnet" label="Response">
 ```
 
-Or set the default CKB version:
+```bash
+Launching CKB devnet Node...
+CKB devnet is ready at http://127.0.0.1:8114.
+Follow the full node log with: offckb logs -f
+CKB devnet RPC Proxy server running on http://127.0.0.1:28114
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+Your local CKB blockchain is now running. Use the proxy RPC endpoint at [http://127.0.0.1:28114](http://127.0.0.1:28114) as the default for local development. It forwards requests to the node and records failed transactions for debugging. The direct RPC endpoint at [http://127.0.0.1:8114](http://127.0.0.1:8114) bypasses the debugging proxy.
+
+Keep this terminal open while you use the Devnet, and open a second terminal for the commands you run next. To stop the chain, press `CTRL+C`. To resume where you left off, run `offckb node` again.
+
+:::note
+This Devnet runs only on your computer. Its transactions will not appear in public Testnet or Mainnet explorers.
+:::
+
+To run a specific CKB version:
 
 ```sh
-offckb config set ckb-version 0.201.0
+offckb node 0.208.0
+```
+
+To save it as the default version:
+
+```sh
+offckb config set ckb-version 0.208.0
 offckb node
 ```
 
-Once you start the devnet, there is a RPC server running at `http://127.0.0.1:8114`. There is also a RPC proxy server running at `http://127.0.0.1:28114` which will proxy all the requests to the RPC server. The meaning of using a proxy RPC server is to record request and automatically dump failed transactions so you can debug them easily later.
-
-In the same way, you can also start proxy RPC server for `testnet` and `mainnet` by running:
+You can also run a local debugging proxy in front of a public Testnet or Mainnet RPC. This does not start a Testnet or Mainnet node on your computer:
 
 ```sh
 offckb node --network <testnet or mainnet>
 ```
 
-Using a local proxy RPC server for public testnet/mainnet is also very helpful for debugging the requests and the automatically recorded dump transactions.
+### View Pre-funded Accounts
 
-### List scripts info
+In the second terminal, list the pre-funded Devnet accounts:
 
-Print all the predefined scripts for the local blockchain:
+```mdx-code-block
+<Tabs>
+  <TabItem value="list-devnet-accounts" label="Command">
+```
+
+```bash
+offckb accounts
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-devnet-accounts" label="Response">
+```
+
+```text
+#### ALL ACCOUNTS ARE FOR TEST AND DEVELOP ONLY
+#### DON'T USE THESE ACCOUNTS ON MAINNET
+#### OTHERWISE YOU WILL LOSE YOUR MONEY
+
+Print account list, each account is funded with 42_000_000_00000000 capacity in the devnet genesis block.
+
+- "#": 0
+  address: ckt1...
+  pubkey: 0x...
+  lock_arg: 0x...
+  lockScript:
+    codeHash: 0x...
+    hashType: type
+    args: 0x...
+...
+- "#": 19
+  address: ckt1...
+  pubkey: 0x...
+  lock_arg: 0x...
+  lockScript:
+    codeHash: 0x...
+    hashType: type
+    args: 0x...
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+Run `offckb accounts` whenever you need the account list or funding provided by your installed version.
+
+:::warning
+These accounts are for local testing only. Never send Mainnet assets to them.
+:::
+
+- Private keys are hidden by default. Display them only in a trusted local terminal with `offckb accounts --show-private-keys`.
+- Contract deployment costs are deducted from these Devnet accounts, so no faucet or manual funding is required.
+
+### Create a Contract Project
+
+Generate a JavaScript or TypeScript contract project:
 
 ```sh
-offckb system-scripts
+offckb create <project-name> -c <contract-name>
 ```
 
-Or print the scripts info to a lumos JSON file:
+The `-c` option is optional; the default contract name is `hello-world`. Generated projects include their own build, test, and deployment scripts. Follow the generated project's README because its commands and artifact paths may differ from Rust projects or other templates.
 
-```sh
-offckb system-scripts --export-style lumos
-```
-
-Or print the scripts info in a CCC style:
-
-```sh
-offckb system-scripts --export-style ccc
-```
-
-You can also export the scripts info to a JSON file:
-
-```sh
-offckb system-scripts --output <output-file-path>
-```
-
-### Tweak Devnet Config
-
-By default, offckb use a fixed devnet config for the local blockchain. You can tweak the config to customize the devnet, for example, modify the default log level for the devnet CKB Node `warn,ckb-script=debug`.
-
-To tweak the devnet config, follow the steps below:
-
-1. Locate your devnet config folder by running:
-
-```sh
-offckb config list
-```
-
-Result:
-
-```json
-{
-  "devnet": {
-    "rpcUrl": "http://127.0.0.1:8114",
-    "configPath": "~/Library/Application Support/offckb-nodejs/devnet",
-    "dataPath": "~/Library/Application Support/offckb-nodejs/devnet/data"
-  }
-}
-```
-
-2. Pay attention to the `devnet.configPath` and `devnet.dataPath`. They are the ones we need.
-3. `cd` into the `devnet.configPath`, this is the config folder for the local blockchain. Modify the config in the folder to better customize the devnet. For customization, see [Custom Devnet Setup](https://docs.nervos.org/docs/node/run-devnet-node#custom-devnet-setup) and [Configure CKB](https://github.com/nervosnetwork/ckb/blob/develop/docs/configure.md) for better explanation of the config files.
-4. After modifications, remove everything in the `devnet.dataPath` folder. This will clean the chain data.
-5. Restart local blockchain by running `offckb node`
-
-Done.
+When a generated example includes dApp or client-side code, it uses [CCC](https://github.com/ckb-devrel/ccc) to interact with CKB. CCC does not compile the on-chain Script.
 
 ### Deploy a CKB Smart Contract
 
-To deploy the script, use `offckb deploy` command:
+Before deploying, confirm that:
 
-```sh
-offckb deploy --network <devnet/testnet> --target <path-to-your-contract-binary-file-or-folder> --output <output-folder-path>
+- The target Devnet is running (`offckb node`), or the Testnet RPC is reachable.
+- The contract has been compiled using the command documented by its project.
+- The compiled binary or target folder exists.
+- The deployment network matches the network used by your application.
+
+If you already have a compiled contract binary or folder, deploy it directly with OffCKB:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="deploy-contract" label="Command">
 ```
 
-Pass `--type-id` option if you want Scripts to be upgradable
+```bash
+offckb deploy --network devnet --target <path-to-contract-binary-or-folder> --output ./deployment
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-deployment-result" label="Response">
+```
+
+```text
+contract <contract-name> deployed, tx hash: 0x...
+wait for tx confirmed on-chain...
+tx committed.
+📦 Saving deployment artifacts for 1 contract(s)...
+- ✅ Successfully saved artifacts for <contract-name>
+- 📄 Script info file generated: deployment/scripts.json
+🎉 All deployment artifacts saved successfully!
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+If your project provides a deployment script, prefer that project-level command. For example:
+
+```sh
+npm run deploy
+```
+
+Project-level scripts may compile the contract, select the correct `--target`, and synchronize deployment information automatically.
+
+Unlike an EVM contract, a deployed CKB Script does not have a contract address. Its code is stored in a <Tooltip>Cell</Tooltip> and identified by an <Tooltip>OutPoint</Tooltip>; transactions include that reference in a [`CellDep`](/docs/tech-explanation/cell-deps).
+
+After a successful deployment, OffCKB writes these deployment records:
+
+- `<output>/<network>/<contract>/deployment.toml`
+- `<output>/<network>/<contract>/migrations/<timestamp>.json`
+- `<output>/scripts.json`
+
+These files are outputs of a successful deployment. They do not need to exist before the first deployment.
+
+Pass `--type-id` if you want the Script to be upgradable:
 
 ```sh
 offckb deploy --type-id --network <devnet/testnet>
 ```
 
-Your deployed scripts info will be listed in the `output-folder-path` which you defined in the command.
+Upgrades are keyed by the contract artifact's name. Do not rename the artifact between deployments; otherwise, OffCKB cannot find its previous Type ID information and creates a new Type ID.
 
-Note that upgrades are keyed by the contract's artifact name. If you plan to upgrade with `--type-id`, do not rename your contract artifact. Renaming it makes the offckb unable to find the previous Type ID info from the `output-folder-path` and will create a new Type ID.
+### When Deployment Fails
 
-### Debug a transaction
+| Symptom                             | What to check                                                                                                                                                           |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cannot connect to the node or RPC   | Start `offckb node` and wait for the ready message. Use `offckb logs -f` to inspect the full node log.                                                                  |
+| Contract binary or target not found | Run the build command from the project's README and confirm the path passed to `--target`.                                                                              |
+| Deployment records are missing      | Confirm that the command reached `tx committed.`, then check the folder passed to `--output`. OffCKB generates the records after a successful deployment.               |
+| Transaction is rejected             | Send requests through `http://127.0.0.1:28114`, then run `offckb debug --tx-hash <transaction-hash>` to inspect the recorded transaction.                               |
+| Insufficient capacity or fee        | Check the output's [occupied capacity](/docs/tech-explanation/capacity) and the transaction fee rate. Larger signatures and additional Cell data can increase the cost. |
 
-If you are interacting the CKB devnet via the proxy RPC server(`localhost:28114`), all the failed transactions will be dumped and recorded so you can debug them later.
+### Debug a Transaction
 
-Every time you run a transaction, you can debug it with the transaction hash:
+When you send Devnet requests through the proxy RPC endpoint at `http://127.0.0.1:28114`, failed transactions are recorded so you can debug them later.
+
+Start by checking the relevant logs:
 
 ```sh
-offckb debug <transaction-hash>
+offckb logs script                       # Contract Script output
+offckb logs rpc                          # RPC requests and errors
+offckb logs rpc --tail 200 --grep ERROR  # Recent RPC errors
 ```
 
-It will verify all the scripts in the transaction and print the detailed info in the terminal.
+Then debug the transaction with its hash:
 
 ```sh
-offckb debug --tx-hash 0x64c936ee78107450d49e57b7453dce9031ce68b056b2f1cdad5c2218ab7232ad
+offckb debug --tx-hash <transaction-hash>
+```
+
+Projects generated with `offckb create` install the native `ckb-debugger` automatically. If OffCKB reports that it is missing, install it once:
+
+```sh
+offckb install ckb-debugger
+```
+
+The command verifies the Scripts in the transaction and prints their execution results and cycle usage. A shortened response looks like this:
+
+```text
+offckb debug --tx-hash 0x...
 Dump transaction successfully
 
 ******************************
 ****** Input[0].Lock ******
 
-hello, this is new add!
-Hashed 1148 bytes in sighash_all
-sighash_all = 5d9b2340738ee28729fc74eba35e6ef969878354fe556bd89d5b6f62642f6e50
-event = {"pubkey":"45c41f21e1cf715fa6d9ca20b8e002a574db7bb49e96ee89834c66dac5446b7a","tags":[["ckb_sighash_all","5d9b2340738ee28729fc74eba35e6ef969878354fe556bd89d5b6f62642f6e50"]],"created_at":1725339769,"kind":23334,"content":"Signing a CKB transaction\n\nIMPORTANT: Please verify the integrity and authenticity of connected Nostr client before signing this message\n","id":"90af298075ac878901282e23ce35b24e584b7727bc545e149fc259875a23a7aa","sig":"b505e7d5b643d2e6b1f0e5581221bbfe3c37f17534715e51eecf5ff97a2e1b828a3d767eb712555c78a8736e9085b4960458014fa171d5d169a1b267b186d2f3"}
-verify_signature costs 3654 k cycles
 Run result: 0
-Total cycles consumed: 4013717(3.8M)
-Transfer cycles: 44947(43.9K), running cycles: 3968770(3.8M)
-
-******************************
-****** Output[0].Type ******
-
-verify_signature costs 3654 k cycles
-Run result: 0
-Total cycles consumed: 3916670(3.7M)
-Transfer cycles: 43162(42.2K), running cycles: 3873508(3.7M)
+Total cycles consumed: ...
 ```
 
 If you want to debug a single cell script in the transaction, you can use the following command:
 
 ```sh
-offckb debug <transaction-hash> --single-script <single-cell-script-option>
+offckb debug --tx-hash <transaction-hash> --single-script <single-cell-script-option>
 ```
 
-The `single-cell-script-option` format is `<cell-type>[<cell-index>].<script-type>`, eg: `"input[0].lock"`
+The `single-cell-script-option` format is `<cell-type>[<cell-index>].<script-type>`, for example, `"input[0].lock"`.
 
-- `cell-type` could be `input` or `output`, refers to the cell type
-- `cell-index` is the index of the cell in the transaction
-- `script-type` could be `lock` or `type`, refers to the script type
+- `cell-type` is `input` or `output`.
+- `cell-index` is the Cell's index in the transaction.
+- `script-type` is `lock` or `type`.
 
 Or you can replace the script with a binary file in your single cell script debug session:
 
 ```sh
-offckb debug <transaction-hash> --single-script <single-cell-script-option> --bin <path/to/binary/file>
+offckb debug --tx-hash <transaction-hash> --single-script <single-cell-script-option> --bin <path/to/binary/file>
 ```
 
-All the debug utils are borrowed from [ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger).
+These debugging features use [ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger).
 
-## Config Setting
+### Reset the Devnet
 
-### List All Settings
+If you need to start fresh with a new chain, first stop the running node by pressing `CTRL+C`. Then run:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="clean-node-data" label="Command">
+```
+
+```bash
+offckb clean
+```
+
+```mdx-code-block
+  </TabItem>
+  <TabItem value="node-data-cleaned" label="Response">
+```
+
+```text
+Chain data cleaned.
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+:::caution
+Cleaning the Devnet creates a new local chain. Transaction hashes and deployed Script <Tooltip>OutPoints</Tooltip> from the previous chain will no longer be valid.
+:::
+
+### Inspect Built-in Scripts
+
+Print all predefined Scripts for the local blockchain:
 
 ```sh
+offckb system-scripts
+```
+
+Export them in Lumos or CCC format, or write them to a JSON file:
+
+```sh
+offckb system-scripts --export-style lumos
+offckb system-scripts --export-style ccc
+offckb system-scripts --output <output-file-path>
+```
+
+The default Devnet includes xUDT, Omnilock, AnyoneCanPay, AlwaysSuccess, Spore, CKB-JS-VM, Nostr-Lock, and Type ID. Use `offckb system-scripts` to inspect the information for the Scripts included with your installed version.
+
+## Configuration
+
+### Locate Configuration Files
+
+Run the following command and look for the `devnet.configPath` and `devnet.dataPath` values:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="list-offckb-config" label="Command">
+```
+
+```bash
 offckb config list
 ```
 
-### Set CKB version
+```mdx-code-block
+  </TabItem>
+  <TabItem value="show-offckb-config" label="Response">
+```
+
+```text
+config file: ~/Library/Preferences/offckb-nodejs/settings.json
+{
+  ...
+  "devnet": {
+    "rpcUrl": "http://127.0.0.1:8114",
+    "rpcProxyPort": 28114,
+    "configPath": "~/Library/Application Support/offckb-nodejs/devnet",
+    "dataPath": "~/Library/Application Support/offckb-nodejs/devnet/data",
+    ...
+  },
+  ...
+}
+```
+
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
+
+### Customize the Devnet
+
+Stop the running node, then open the Devnet configuration editor:
+
+```sh
+offckb devnet config
+```
+
+After saving your changes, remove only the existing chain data and restart the Devnet:
+
+```sh
+offckb clean -d
+offckb node
+```
+
+:::caution
+Running `offckb clean -d` preserves the Devnet configuration but deletes its chain data. Transaction hashes and deployed Script OutPoints from the previous chain will no longer be valid.
+:::
+
+For advanced changes, you can edit the files under `devnet.configPath` directly. See [Custom Devnet Setup](/docs/node/run-devnet-node#custom-devnet-setup) and [Configure CKB](https://github.com/nervosnetwork/ckb/blob/develop/docs/configure.md) for details.
+
+### Set the Default CKB Version
+
+Set and confirm the version used when `offckb node` is run without a version argument:
 
 ```sh
 offckb config get ckb-version
-> 0.113.0
-offckb config set ckb-version 0.117.0
+> 0.208.0
+offckb config set ckb-version 0.208.0
+> save new settings
 offckb config get ckb-version
-> 0.117.0
+> 0.208.0
 ```
 
-### Set Network Proxy
+### Set an HTTP Proxy
+
+This setting controls the HTTP proxy OffCKB uses for downloads and network requests. It is separate from the CKB RPC proxy at `http://127.0.0.1:28114`.
 
 ```sh
 offckb config set proxy http://127.0.0.1:1086
@@ -258,43 +493,10 @@ offckb config get proxy
 > No Proxy.
 ```
 
-## Log-Level
+### Configure Logging
 
-You can tweak env `LOG_LEVEL` to control the `offckb` log level.
-
-For example, set `LOG_LEVEL=debug` gives you more outputs of offckb proxy RPC.
+Set `LOG_LEVEL=debug` to print more detailed OffCKB and RPC proxy logs:
 
 ```sh
 LOG_LEVEL=debug offckb node
 ```
-
-## Built-in scripts
-
-- [x] xUDT https://github.com/nervosnetwork/rfcs/pull/428
-  - commit id: 410b16c
-- [x] Omnilock https://github.com/cryptape/omnilock
-  - commit id: cd764d7
-- [x] AnyoneCanPay https://github.com/cryptape/anyone-can-pay
-  - commit id: b845b3b
-- [x] AlwaysSuccess https://github.com/nervosnetwork/ckb-production-scripts/blob/master/c/always_success.c
-  - commit id: 410b16c
-- [x] Spore https://github.com/sporeprotocol/spore-contract
-  - version: 0.2.2-beta.1
-- [x] CKB-JS-VM https://github.com/nervosnetwork/ckb-js-vm
-  - version: 1.0.0
-- [x] Nostr-Lock https://github.com/cryptape/nostr-binding/tree/main/contracts/nostr-lock
-  - version: 25dd59d
-- [x] Type ID built-in
-
-## Accounts
-
-`offckb` comes with 20 accounts, each account is funded with 42_000_000_00000000 capacity in the genesis block.
-
-all the private keys are recorded in the `account/keys` file.
-detail informations about each account are recorded in the `account/account.json` file.
-
-:warning: **DO NOT SEND REAL ASSETS INTO ALL THESE ACCOUNTS, YOU CAN LOOSE YOUR MONEY** :warning:
-
-## About CCC
-
-`offckb` uses [CCC](https://github.com/ckb-devrel/ccc) as the development framework to build the CKB dApp template projects.
