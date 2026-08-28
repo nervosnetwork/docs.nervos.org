@@ -63,20 +63,36 @@ export async function buildMessageTx(
   await tx.completeInputsByCapacity(signer);
   await tx.completeFeeBy(signer, 1000);
   const txHash = await signer.sendTransaction(tx);
-  alert(`The transaction hash is ${txHash}`);
 
   return txHash;
 }
 
-export async function readOnChainMessage(txHash: string, index = "0x0") {
-  const cell = await cccClient.getCellLive({ txHash, index }, true);
-  if (cell == null) {
-    return alert("cell not found, please retry later");
+type ReadMessageOptions = {
+  intervalMs?: number;
+  maxAttempts?: number;
+};
+
+export async function readOnChainMessage(
+  txHash: string,
+  index = "0x0",
+  options: ReadMessageOptions = {},
+) {
+  const { intervalMs = 1000, maxAttempts = 30 } = options;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const cell = await cccClient.getCellLive({ txHash, index }, true);
+    if (cell != null) {
+      return hexToUtf8(cell.outputData);
+    }
+
+    if (attempt < maxAttempts) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
   }
-  const data = cell.outputData;
-  const msg = hexToUtf8(data);
-  alert("read msg: " + msg);
-  return msg;
+
+  throw new Error(
+    "The message Cell is not live yet. Wait for the transaction to be committed, then try again.",
+  );
 }
 
 export function shannonToCKB(amount: bigint){
