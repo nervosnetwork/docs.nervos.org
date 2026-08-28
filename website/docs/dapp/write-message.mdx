@@ -66,7 +66,7 @@ import Link from "@docusaurus/Link";
 
 ## Tutorial Overview
 
-In this tutorial, you will learn how to tuck a nifty message - "**Hello CKB!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
+In this tutorial, you will learn how to tuck a nifty message - "**hello common knowledge base!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
 As you learned from the first tutorial, [Transfer CKB](/docs/dapp/transfer-ckb), a Cell can store any type of data in the data field of the Cell structure. Here, we will encode a text message as a hex string and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll get the hex string back from the same Cell and decode it to the original text message. The encoding and decoding method is up to you; we use `TextDecoder` for simplicity throughout the tutorial.
 
@@ -94,7 +94,7 @@ Server running at http://localhost:1234
 ✨ Built in ...`}
 />
 
-`npm start` refreshes the Devnet system-script references from OffCKB before launching the dApp. It uses the local Devnet at `http://127.0.0.1:28114`. The dApp itself opens at [http://localhost:1234](http://localhost:1234); the RPC endpoint does not serve a webpage.
+`npm start` exports the system-script references from the initialized local OffCKB Devnet before launching the dApp. The dApp connects to its RPC proxy at [http://127.0.0.1:28114](http://127.0.0.1:28114). The dApp itself opens at [http://localhost:1234](http://localhost:1234); the RPC endpoint does not serve a webpage.
 
 ## Behind the Scene
 
@@ -134,7 +134,7 @@ Now, check out the core function `buildMessageTx`. It requires two parameters:
 - **Private Key**: Your private key, used for transaction authorization.
 - **Message**: The message you want to write into the Cell.
 
-The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field
+The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field.
 
 ```ts
 export async function buildMessageTx(
@@ -184,7 +184,7 @@ To retrieve a specific Live Cell, we use the RPC method `getLiveCell` with `OutP
 
 Given a specific transaction hash, we can locate the output Cells of the transaction. By knowing the position index of the Cell, we can find out the specific one.
 
-For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`
+For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`.
 
 ```ts title="lib.ts" {8}
 type ReadMessageOptions = {
@@ -224,7 +224,7 @@ After following this tutorial, you have mastered how storing data on Cells works
 
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
-- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells meets our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
+- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells that meet our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
 
 ## Next Step: Try Testnet
 

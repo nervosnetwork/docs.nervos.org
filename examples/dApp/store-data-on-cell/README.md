@@ -38,11 +38,11 @@ Enter the funded Testnet private key in the dApp. Never use a Mainnet private ke
 
 ## Troubleshooting
 
-- **`offckb: command not found`:** If you use NVM, select the Node.js version where OffCKB was installed, or reinstall OffCKB for the active version.
+- **`offckb: command not found`:** If you use nvm, select the Node.js version where OffCKB was installed, or reinstall OffCKB for the active version.
 - **`Failed to fetch`:** Confirm `offckb node` is still running and the dApp reports `devnet · http://127.0.0.1:28114`.
 - **Wrong page or port:** Open the dApp at `http://localhost:1234`. Port `28114` is the RPC endpoint and does not serve the dApp UI.
 - **Port or database lock error:** Stop duplicate OffCKB processes, then run `offckb node` again.
-- **`TransactionFailedToResolve` or an unknown CellDep:** Restart `npm start` after an OffCKB upgrade or Devnet reset so the example refreshes its system-script references.
+- **`TransactionFailedToResolve` or an unknown CellDep:** Run `npm start` again after an OffCKB upgrade or Devnet reset so the example synchronizes its system-script references with the initialized Devnet.
 - **Confirmation timed out:** Select **Check again** to retry the same transaction. Do not select **Write** again unless you intend to submit another message.
 - **Parcel native binary error:** Switch to Node.js 20, remove `node_modules`, and run `npm install` again.
 
