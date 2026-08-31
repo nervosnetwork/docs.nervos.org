@@ -7,7 +7,7 @@ An educational CKB dApp that deploys a JavaScript hash-lock contract, creates a 
 ## Prerequisites
 
 - Git
-- Node.js 18.18 or later
+- Node.js 20 or later
 - pnpm
 - OffCKB
 - Rust and `ckb-debugger`
