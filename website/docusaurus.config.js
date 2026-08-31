@@ -434,6 +434,59 @@ const config = {
             from: "/docs/labs/sudtbycapsule",
             to: "https://docs-old.nervos.org/docs/labs/sudtbycapsule",
           },
+          {
+            // Legacy intro routes. /docs/intro/overview predates the current
+            // information architecture; /docs/basics/introduction was the old
+            // "Basics" section index. Both were entry points for newcomers.
+            from: ["/docs/intro/overview", "/docs/basics/introduction"],
+            to: "/docs/getting-started/how-ckb-works",
+          },
+          {
+            // Old "layers & consensus" taxonomy; layering and PoW consensus
+            // are now covered together in the Nervos Blockchain overview
+            from: "/docs/basics/layers-consensus",
+            to: "/docs/ckb-fundamentals/nervos-blockchain",
+          },
+          {
+            // Old Reference section: its cell page became the Cell Model doc
+            from: "/docs/reference/cell",
+            to: "/docs/ckb-fundamentals/cell-model",
+          },
+          {
+            // Old Reference section landing page; the glossary is the modern
+            // dictionary-style reference
+            from: "/docs/reference/introduction",
+            to: "/docs/tech-explanation/glossary",
+          },
+          {
+            // Never a real page — circulated as a mistaken path version of
+            // the old /docs/Node#run-a-mainnet-node anchor
+            from: "/docs/node/run-a-mainnet-node",
+            to: "/docs/node/run-mainnet-node",
+          },
+          {
+            // The economics doc lived at this path before moving to
+            // assets-token-standards
+            from: "/docs/tech-explanation/economics",
+            to: "/docs/assets-token-standards/economics",
+          },
+          {
+            // 2019-era "CKB Architecture" page (cell/transaction/script/block
+            // data structures). Both section prefixes and both extensionless
+            // and .html variants circulated in old bookmarks.
+            from: [
+              "/basic-concepts/architecture",
+              "/basic-concepts/architecture.html",
+              "/technical-concepts/architecture",
+              "/technical-concepts/architecture.html",
+            ],
+            to: "/docs/getting-started/how-ckb-works",
+          },
+          {
+            // Retired essay; the archived version lives on docs-old
+            from: "/docs/essays/upgradability",
+            to: "https://docs-old.nervos.org/docs/essays/upgradability",
+          },
         ],
         createRedirects(existingPath) {
           if (
