@@ -3,6 +3,8 @@ import Content from "./_SetupProjectContent.mdx";
 
 export interface SetupProjectProp {
   imageSrc: string;
+  command?: string;
+  response?: string;
 }
 
 const SetupProject = (props: SetupProjectProp) => {

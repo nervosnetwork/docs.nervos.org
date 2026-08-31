@@ -8,10 +8,18 @@ import {
   shannonToCKB,
 } from "./lib";
 import { Script } from "@ckb-ccc/core";
+import { activeNetwork, activeRpcUrl } from "./ccc-client";
 
-const container = document.getElementById("root");
-const root = createRoot(container)
-root.render(<App />);
+function explainError(error: unknown): string {
+  const detail = error instanceof Error ? error.message : String(error);
+  if (
+    activeNetwork === "devnet" &&
+    /(failed to fetch|network|econnrefused|connect)/i.test(detail)
+  ) {
+    return "Cannot connect to the local Devnet at http://127.0.0.1:28114. Run offckb node and try again.";
+  }
+  return detail;
+}
 
 export function App() {
   // default value: first account privkey from offckb
@@ -24,14 +32,23 @@ export function App() {
 
   const [message, setMessage] = useState("hello common knowledge base!");
   const [txHash, setTxHash] = useState<string>();
+  const [confirmedMessage, setConfirmedMessage] = useState<string>();
+  const [displayedMessage, setDisplayedMessage] = useState<string>();
+  const [status, setStatus] = useState("Connecting to the selected network...");
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     const updateFromInfo = async () => {
-      const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
-      const capacity = await capacityOf(address);
-      setFromAddr(address);
-      setFromLock(lockScript);
-      setBalance(shannonToCKB(capacity).toString());
+      try {
+        const { lockScript, address } = await generateAccountFromPrivateKey(privKey);
+        const capacity = await capacityOf(address);
+        setFromAddr(address);
+        setFromLock(lockScript);
+        setBalance(shannonToCKB(capacity).toString());
+        setStatus("Ready.");
+      } catch (error) {
+        setStatus(explainError(error));
+      }
     };
 
     if (privKey) {
@@ -54,12 +71,48 @@ export function App() {
     }
   };
 
-  const enabled = +balance > 0 && message.length > 0;
-  const enabledRead = !!txHash;
+  const enabled = !busy && +balance > 0 && message.length > 0;
+  const enabledRead = !busy && confirmedMessage !== undefined;
+
+  const confirmMessage = async (submittedTxHash: string) => {
+    setBusy(true);
+    setStatus("Waiting for confirmation...");
+
+    try {
+      const storedMessage = await readOnChainMessage(submittedTxHash);
+      setConfirmedMessage(storedMessage);
+      setStatus("Message ready.");
+    } catch (error) {
+      setStatus(explainError(error));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const writeMessage = async () => {
+    setBusy(true);
+    setTxHash(undefined);
+    setConfirmedMessage(undefined);
+    setDisplayedMessage(undefined);
+    setStatus("Submitting transaction...");
+
+    try {
+      const submittedTxHash = await buildMessageTx(message, privKey);
+      setTxHash(submittedTxHash);
+      await confirmMessage(submittedTxHash);
+    } catch (error) {
+      setStatus(explainError(error));
+      setBusy(false);
+    }
+  };
 
   return (
     <div>
       <h1>Store Data on Cell</h1>
+      <p>
+        <strong>Network:</strong> {activeNetwork} · {activeRpcUrl}
+      </p>
+      <p role="status">{status}</p>
       <label htmlFor="private-key">Private Key: </label>&nbsp;
       <input
         id="private-key"
@@ -89,23 +142,33 @@ export function App() {
       <br />
       <button
         disabled={!enabled}
-        onClick={() => {
-          buildMessageTx(message, privKey).then(txHash => setTxHash(txHash));
-        }}
+        onClick={writeMessage}
       >
         Write
       </button>
       <hr />
-      {txHash && <li>tx Hash: {txHash}</li>}
+      {txHash && <p>Transaction hash: {txHash}</p>}
+      {txHash && confirmedMessage === undefined && !busy && (
+        <button onClick={() => confirmMessage(txHash)}>Check again</button>
+      )}
       <button
         disabled={!enabledRead}
         onClick={() => {
-          readOnChainMessage(txHash);
+          setDisplayedMessage(confirmedMessage);
+          setStatus("Message read.");
         }}
       >
         Read
       </button>
-     
+      {displayedMessage !== undefined && <p>Message: {displayedMessage}</p>}
     </div>
   );
 }
+
+const container = document.getElementById("root");
+
+if (!container) {
+  throw new Error("Unable to find the application root element.");
+}
+
+createRoot(container).render(<App />);

@@ -16,24 +16,57 @@ related:
   - /docs/tech-explanation/outputs-data
   - /docs/sdk-and-devtool/ccc
 difficulty: beginner
-last_reviewed: 2026-06-24
+last_reviewed: 2026-08-28
 ---
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
 import TutorialHeader from "@components/TutorialHeader";
 import Tooltip from "@components/Tooltip";
 import SetupProject from "./SetupProject.tsx";
-import SwitchToTestnet from "./_SwitchToTestnet.tsx";
 import ExampleLink from "@components/ExampleLink";
+import Link from "@docusaurus/Link";
 
 # Store Data on Cell
 
-<TutorialHeader time={"2 - 5 min"} tools={"dapp"} />
+<TutorialHeader
+  time={"2 - 5 min"}
+  requiredTools={[
+    <div key="git">
+      <Link href="https://git-scm.com/" target="_blank">
+        Git
+      </Link>
+    </div>,
+    <div key="node">
+      <Link href="https://nodejs.org/" target="_blank">
+        Node.js 20 or later
+      </Link>
+    </div>,
+    <div key="npm">
+      <Link
+        href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
+        target="_blank"
+      >
+        npm
+      </Link>
+    </div>,
+    <div key="offckb">
+      <Link to="/docs/node/run-devnet-node">OffCKB</Link>
+    </div>,
+  ]}
+>
+  <details>
+    <summary>Setup checks</summary>
+    <p>Verify the required commands before starting:</p>
+    <pre>
+      <code>
+        {"git --version\nnode --version\nnpm --version\noffckb --version"}
+      </code>
+    </pre>
+  </details>
+</TutorialHeader>
 
 ## Tutorial Overview
 
-In this tutorial, you will learn how to tuck a nifty message - "**Hello CKB!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
+In this tutorial, you will learn how to tuck a nifty message - "**hello common knowledge base!**" - into a <Tooltip>Cell</Tooltip> on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
 As you learned from the first tutorial, [Transfer CKB](/docs/dapp/transfer-ckb), a Cell can store any type of data in the data field of the Cell structure. Here, we will encode a text message as a hex string and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll get the hex string back from the same Cell and decode it to the original text message. The encoding and decoding method is up to you; we use `TextDecoder` for simplicity throughout the tutorial.
 
@@ -52,7 +85,16 @@ You can also read the full code online or download it <ExampleLink path="dApp/st
 
 ### Step 2: Start the Devnet
 
-<SetupProject imageSrc="img/dapps/store-data.png" />
+<SetupProject
+  imageSrc="img/dapps/store-data.png"
+  command={"npm install\nnpm start"}
+  response={`File .../system-scripts.json generated successfully.
+Synchronized Devnet system scripts with OffCKB.
+Server running at http://localhost:1234
+✨ Built in ...`}
+/>
+
+`npm start` exports the system-script references from the initialized local OffCKB Devnet before launching the dApp. The dApp connects to its RPC proxy at [http://127.0.0.1:28114](http://127.0.0.1:28114). The dApp itself opens at [http://localhost:1234](http://localhost:1234); the RPC endpoint does not serve a webpage.
 
 ## Behind the Scene
 
@@ -92,7 +134,7 @@ Now, check out the core function `buildMessageTx`. It requires two parameters:
 - **Private Key**: Your private key, used for transaction authorization.
 - **Message**: The message you want to write into the Cell.
 
-The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field
+The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field.
 
 ```ts
 export async function buildMessageTx(
@@ -123,13 +165,13 @@ await tx.completeInputsByCapacity(signer);
 await tx.completeFeeBy(signer, 1000);
 ```
 
-Lastly, we use signer to sign and broadcast the transaction to the blockchain network through rpc:
+Lastly, we use the signer to sign and broadcast the transaction through RPC:
 
 ```ts
 const txHash = await signer.sendTransaction(tx);
 ```
 
-Therefore, the message is successfully stored on a Cell and lives in the blockchain.
+Broadcasting returns a transaction hash immediately. The dApp then waits until the transaction is committed and its output Cell becomes live before enabling **Read**.
 
 ### Read Cell Messages
 
@@ -142,18 +184,35 @@ To retrieve a specific Live Cell, we use the RPC method `getLiveCell` with `OutP
 
 Given a specific transaction hash, we can locate the output Cells of the transaction. By knowing the position index of the Cell, we can find out the specific one.
 
-For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`
+For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`.
 
-```ts
-export async function readOnChainMessage(txHash: string, index = "0x0") {
-  const cell = await cccClient.getCellLive({ txHash, index }, true);
-  if (cell == null) {
-    return alert("Cell not found, please retry later");
+```ts title="lib.ts" {8}
+type ReadMessageOptions = {
+  intervalMs?: number;
+  maxAttempts?: number;
+};
+
+export async function readOnChainMessage(
+  txHash: string,
+  index = "0x0",
+  options: ReadMessageOptions = {}
+) {
+  const { intervalMs = 1000, maxAttempts = 30 } = options;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const cell = await cccClient.getCellLive({ txHash, index }, true);
+    if (cell != null) {
+      return hexToUtf8(cell.outputData);
+    }
+
+    if (attempt < maxAttempts) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
   }
-  const data = cell.outputData;
-  const msg = hexToUtf8(data);
-  alert("read msg: " + msg);
-  return msg;
+
+  throw new Error(
+    "The message Cell is not live yet. Wait for the transaction to be committed, then try again."
+  );
 }
 ```
 
@@ -165,11 +224,22 @@ After following this tutorial, you have mastered how storing data on Cells works
 
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
-- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells meets our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
+- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells that meet our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
 
-## Next Step
+## Next Step: Try Testnet
 
-<SwitchToTestnet readmeLink="dApp/store-data-on-cell" />
+After the local flow works, you can run the same dApp on Testnet:
+
+1. Create a separate Testnet account and fund it from the [CKB Testnet Faucet](https://faucet.nervos.org/).
+2. Restart the dApp with:
+
+   ```bash
+   npm run start:testnet
+   ```
+
+3. Enter the funded Testnet private key in the dApp.
+
+Never use a Mainnet private key or Mainnet assets in this tutorial.
 
 ## Additional Resources
 

@@ -1,2 +1,5 @@
 .parcel-cache
+.parcel-cache-build
+.parcel-cache-dev
+.parcel-dev
 dist

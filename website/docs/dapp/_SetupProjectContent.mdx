@@ -2,6 +2,7 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import ImgContainer from "@components/ImgContainer";
 import useBaseUrl from "@docusaurus/useBaseUrl";
+import CodeBlock from "@theme/CodeBlock";
 import StartDevnet from "./_StartDevnet.mdx";
 
 <StartDevnet />
@@ -15,27 +16,28 @@ Navigate to your project, install the node dependencies, and start running the e
   <TabItem value="offckb-npm-start" label="Command">
 ```
 
-```bash
-npm install && NETWORK=devnet npm start
-```
+<CodeBlock language="bash">
+  {props.command ?? "npm install && NETWORK=devnet npm start"}
+</CodeBlock>
 
 ```mdx-code-block
   </TabItem>
   <TabItem value="offckb-npm-start-result" label="Response">
 ```
 
-```bash
-$ parcel index.html
+<CodeBlock language="bash">
+  {props.response ??
+    `$ parcel index.html
 Server running at http://localhost:1234
-✨ Built in 66ms
-```
+✨ Built in 66ms`}
+</CodeBlock>
 
 ```mdx-code-block
   </TabItem>
 </Tabs>
 ```
 
-Now, the app is running in http://localhost:1234
+Now, the app is running at [http://localhost:1234](http://localhost:1234).
 
 <ImgContainer src={useBaseUrl(props.imageSrc)} />
 

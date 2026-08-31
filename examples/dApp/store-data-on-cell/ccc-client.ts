@@ -1,7 +1,12 @@
 import { ccc, CellDepInfoLike, KnownScript, Script } from "@ckb-ccc/core";
 import systemScripts from "./system-scripts.json";
 
-export type Network = 'devnet' | 'testnet' | 'mainnet';
+export type Network = "devnet" | "testnet";
+
+export const NETWORK_RPC_URLS: Record<Network, string> = {
+  devnet: "http://127.0.0.1:28114",
+  testnet: "https://testnet.ckb.dev",
+};
 
 export type ScriptInfo = Pick<Script, "codeHash" | "hashType"> & { cellDeps: CellDepInfoLike[] };
 
@@ -21,12 +26,10 @@ export const DEVNET_SCRIPTS: Record<
 
 export function buildCccClient(network: Network) {
   const client =
-    network === "mainnet"
-      ? new ccc.ClientPublicMainnet()
-      : network === "testnet"
+    network === "testnet"
       ? new ccc.ClientPublicTestnet()
       : new ccc.ClientPublicTestnet({
-          url: "http://localhost:28114", // the default offckb devnet proxy rpc url
+          url: NETWORK_RPC_URLS.devnet,
           scripts: DEVNET_SCRIPTS as any,
         });
 
@@ -35,14 +38,24 @@ export function buildCccClient(network: Network) {
 
 export function readEnvNetwork(): Network {
   const network = process.env.NETWORK;
-  const defaultNetwork = 'testnet';
+  const defaultNetwork = "devnet";
   if (!network) return defaultNetwork;
 
-  if (!['devnet', 'testnet', 'mainnet'].includes(network)) {
-    return defaultNetwork;
+  if (network === "mainnet") {
+    throw new Error(
+      "Mainnet is not available for this tutorial example. Use Devnet or Testnet.",
+    );
+  }
+
+  if (!['devnet', 'testnet'].includes(network)) {
+    throw new Error(
+      `Unsupported NETWORK "${network}". Supported values are devnet and testnet.`,
+    );
   }
 
   return network as Network;
 }
 
-export const cccClient = buildCccClient(readEnvNetwork());
+export const activeNetwork = readEnvNetwork();
+export const activeRpcUrl = NETWORK_RPC_URLS[activeNetwork];
+export const cccClient = buildCccClient(activeNetwork);
