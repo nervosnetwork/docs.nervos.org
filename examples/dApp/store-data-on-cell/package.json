@@ -8,7 +8,7 @@
     "clean": "node scripts/clean-dist.cjs",
     "start": "npm run sync:devnet && parcel index.html --dist-dir .parcel-dev --cache-dir .parcel-cache-dev",
     "start:testnet": "cross-env NETWORK=testnet parcel index.html --dist-dir .parcel-dev --cache-dir .parcel-cache-dev",
-    "build": "npm run sync:devnet && npm run clean && parcel build index.html --dist-dir dist --cache-dir .parcel-cache-build --public-url ./ && node scripts/verify-browser-bundle.cjs",
+    "build": "npm run clean && parcel build index.html --dist-dir dist --cache-dir .parcel-cache-build --public-url ./ && node scripts/verify-browser-bundle.cjs",
     "lint": "tsc --noEmit"
   },
   "keywords": [],
