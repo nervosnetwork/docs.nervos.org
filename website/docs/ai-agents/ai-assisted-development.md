@@ -14,7 +14,7 @@ During development and troubleshooting, work through the following layers in ord
 
 `ckb-script-templates` (create and manage the project) → `ckb-debugger` (debug Script execution) → `ckb-vm` (investigate lower-level behavior)
 
-Usually, you only need the repository relevant to the current stage. Move to the next layer only when the available information cannot explain the issue.
+Usually, you only need the repository relevant to the current layer. Move to the next layer only when the available information cannot explain the issue.
 
 ### 1. Create and Manage Projects with `ckb-script-templates`
 
@@ -28,7 +28,7 @@ If the code and test output alone do not reveal the cause, give the agent the er
 
 ### 3. Consult `ckb-vm` When Necessary
 
-Consult `ckb-vm` only when the debugging results may depend on the CKB-VM version, instruction support, cycle accounting, or differences between interpreters. Ask the agent to read the repository's [`AGENTS.md`](https://github.com/nervosnetwork/ckb-vm/blob/develop/AGENTS.md) first, then verify its conclusions against the relevant source code and tests.
+Consult `ckb-vm` only when the debugging results may depend on the CKB-VM version, instruction support, cycle accounting, or differences between interpreters. Ask the agent to read the repository's [`AGENTS.md`](https://github.com/nervosnetwork/ckb-vm/blob/develop/AGENTS.md) first, then verify the agent's conclusions against the relevant source code and tests.
 
 ## Usage Guidelines
 

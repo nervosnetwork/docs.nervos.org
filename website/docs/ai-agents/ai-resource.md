@@ -11,7 +11,7 @@ Use these resources when you want an AI assistant or coding agent to answer ques
 
 ## AI-Assisted CKB On-Chain Script Development
 
-Learn how repository-level instructions help AI coding agents develop, test, and debug CKB on-chain Scripts in the [AI-assisted development guide](./ai-assisted-script-development). The guide uses `ckb-vm` only as an advanced, read-only reference for complex contract issues.
+Learn how project-level instructions help AI coding agents develop, test, and debug CKB on-chain Scripts in the [AI-assisted development guide](./ai-assisted-script-development). The guide uses `ckb-vm` only as an advanced, read-only reference for complex on-chain Script issues.
 
 ## Access LLM Files
 
