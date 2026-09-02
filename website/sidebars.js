@@ -42,7 +42,10 @@ export default {
       customProps: {
         icon: "ai",
       },
-      items: ["ai-agents/ai-resource"],
+      items: [
+        "ai-agents/ai-resource",
+        "ai-agents/ai-assisted-script-development",
+      ],
     },
     {
       type: "category",
