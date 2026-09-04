@@ -17,8 +17,8 @@ const walletCardContents: WalletCardProps[] = [
     tags: ["Mobile"],
   },
   {
-    title: "CKBull",
-    href: "https://ckbull.app/#download",
+    title: "Bitcoinl Light (formerly CKBull)",
+    href: "https://www.bitcoinlight.app",
     tags: ["Mobile"],
   },
   {
