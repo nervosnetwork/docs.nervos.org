@@ -1,0 +1,210 @@
+---
+title: CKB-VM Snapshot V2 — Evolution
+---
+
+## Background
+
+In [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366), we introduced the earliest snapshot approach in CKB-VM: copy every dirty page in full and serialize it together with registers and PC. This approach is correct and simple, but in real workloads it reveals a clear weakness: snapshot size can be much larger than “data actually modified by the script.”
+
+A typical class of examples is syscall-driven loading of transaction-originated data into script memory. When a script calls `ckb_load_witness`, witness bytes are copied into a target buffer; when it calls `ckb_load_cell_data`, cell bytes (sometimes from large dep cells) may cover dozens of pages; and when it reads structured transaction fields (input/output lock, type, capacity, header, script hash, out point), many small metadata slices are repeatedly copied via syscalls. At the memory layer, all of these copies look like page writes and are marked dirty, so V1 serializes them as if they were script-produced modifications. Semantically, however, these bytes are byte-for-byte transfers from already available on-chain transaction data, so saving them again in snapshots is redundant and can significantly inflate snapshot size.
+
+There is also another important scenario: the program image itself. During ELF loading, code segments and read-only data segments are written into VM memory, which still appears as ordinary page writes to the memory subsystem. But these bytes come from a fixed, immutable ELF input rather than from runtime computation by the script. If snapshots persist them page by page again, they effectively package the program one more time, which becomes a noticeable overhead for larger binaries.
+
+Therefore, the problem Snapshot V2 solves can be stated more generally: whenever a memory region is populated by byte-for-byte transfer from a stable external object, rather than newly computed by script execution, it should not be treated as dirty pages by default. Witness is only the easiest example to observe; cell data, transaction metadata, and ELF program segments are all the same class of problem.
+
+Snapshot V2 is designed for exactly this type of scenario. Its core idea is to introduce a “data source” abstraction: pages whose content comes entirely from external data that can be deterministically retrieved again are stored as references (`id + offset + length`) instead of full page bytes. Pages truly produced or modified by script computation are still saved page-by-page like V1.
+
+This article introduces Snapshot V2. The source code is in [src/snapshot2.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/snapshot2.rs).
+
+## DataSource Abstraction
+
+V2 uses a trait to describe a data source that is addressable and stable during VM lifetime:
+
+```rust
+pub trait DataSource<I: Clone + PartialEq> {
+    fn load_data(&self, id: &I, offset: u64, length: u64) -> Option<(Bytes, u64)>;
+}
+```
+
+- `I` is the identifier type of data entries, defined by the integrator. In CKB, it is usually an enum used to distinguish cell data, witness, and other sources, while carrying their indices.
+- `load_data` takes `id`, `offset`, and requested `length`, and returns both the actual bytes read and the “full remaining length from offset.” This mirrors CKB syscall behavior, allowing the caller to tell scripts how many bytes are actually available even when only a slice is read this time.
+
+DataSource has an implicit contract: within a VM lifetime, the same `(id, offset, length)` must always return the same bytes. Otherwise, the resumed VM would not be equivalent to the suspended VM. Using transaction data as a source naturally satisfies this contract because transactions are immutable.
+
+## Snapshot2Context
+
+V2 is no longer a stateless set of functions. It introduces a stateful context object, `Snapshot2Context`, that lives alongside VM execution:
+
+```rust
+pub struct Snapshot2Context<I: Clone + PartialEq, D: DataSource<I>> {
+    // page index -> (id, offset, flag)
+    pages: HashMap<u64, (I, u64, u8)>,
+    data_source: D,
+}
+```
+
+This `pages` map is the core data structure of V2. It records each page whose content comes entirely from a data source, including the source id, source offset, and page flag. Entries correspond one-to-one with real memory pages, but page bytes are not stored in the map; bytes can be retrieved on demand via `data_source.load_data`.
+
+As long as this map stays accurate, snapshot creation can replace these pages with data-source references, and snapshot size drops naturally.
+
+## Tracking and Untracking
+
+`Snapshot2Context` maintains the `pages` map through two inverse operations:
+
+```rust
+pub fn track_pages<M>(&mut self, machine: &mut M,
+    start: u64, mut length: u64, id: &I, mut offset: u64) -> Result<(), Error>;
+
+pub fn untrack_pages<M>(&mut self, machine: &mut M,
+    start: u64, length: u64) -> Result<(), Error>;
+```
+
+`track_pages` records fully covered pages in `[start, start+length)` as “coming from source `id` starting at `offset`.” Several details matter:
+
+- It aligns `start` upward to a page boundary and drops head/tail fragments that do not cover full pages. The reason is that partial pages can contain a mix of source bytes and other content, and therefore cannot be represented by a single source reference.
+- Before recording, it explicitly calls `clear_flag(page, FLAG_DIRTY)`. Although those bytes may have just been written via `store_bytes`, semantically they are still “loaded from source as-is” and should not be treated as dirty pages, otherwise snapshot creation would redundantly save them again as V1-style dirty data.
+- The stored flag is the current page flag read back after clearing DIRTY, so resume can restore other bits as well (read/write/execute, etc.).
+
+`untrack_pages` performs the opposite operation. When a memory range is about to be written by script logic, all overlapping pages are first removed from `pages`, and DIRTY is set again. This prevents misclassifying pages as clean source pages after partial overwrites. Once overwritten, such a page no longer equals source content.
+
+## Two Integration Entry Points
+
+Track/untrack alone is not enough. They must be inserted into all operations that move data-source bytes into memory. V2 provides two high-level entry points.
+
+The first is `store_bytes`, which replaces direct `Memory::store_bytes` for syscalls that write external data into script memory:
+
+```rust
+pub fn store_bytes<M>(&mut self, machine: &mut M,
+    addr: u64, id: &I, offset: u64, length: u64, size_addr: u64
+) -> Result<(u64, u64), Error> {
+    let (data, full_length) = self.load_data(id, offset, length)?;
+    machine.memory_mut().store64(
+        &M::REG::from_u64(size_addr), &M::REG::from_u64(full_length))?;
+    self.untrack_pages(machine, addr, data.len() as u64)?;
+    machine.memory_mut().store_bytes(addr, &data)?;
+    self.track_pages(machine, addr, data.len() as u64, id, offset)?;
+    Ok((data.len() as u64, full_length))
+}
+```
+
+Its execution order is: load data → write “full length” to `size_addr` (matching CKB syscall convention) → untrack target range (clear any existing references) → write bytes → track again with new references. All syscall-style loading paths (load witness, load cell data, etc.) should enter memory through this method to benefit from V2 size optimization.
+
+The second entry point is `mark_program`, used to register the ELF program itself. CKB-VM’s current `load_program` is not on the `SupportMachine` trait and is not easy to intercept directly, so V2 uses a two-step workflow:
+
+```rust
+pub fn mark_program<M>(&mut self, machine: &mut M,
+    metadata: &ProgramMetadata, id: &I, offset: u64) -> Result<(), Error> {
+    for action in &metadata.actions {
+        self.init_pages(machine, action, id, offset)?;
+    }
+    Ok(())
+}
+```
+
+The caller first gets `ProgramMetadata` from `elf::parse_elf`, then loads the program using `load_program_with_metadata`, and finally passes metadata to `mark_program`. Each `LoadingAction` in metadata describes how one ELF segment is loaded: destination address, length, and source range in the file. `init_pages` converts this to `(memory address, source offset, length)` and calls `track_pages`. This makes code segments and read-only data segments also represented as data-source references, further reducing snapshot size.
+
+## Creating a Snapshot
+
+`make_snapshot` serializes current VM state into `Snapshot2`:
+
+```rust
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Snapshot2<I: Clone + PartialEq> {
+    // (address, flag, id, source offset, source length)
+    pub pages_from_source: Vec<(u64, u8, I, u64, u64)>,
+    // (address, flag, content)
+    pub dirty_pages: Vec<(u64, u8, Vec<u8>)>,
+    pub version: u32,
+    pub registers: [u64; RISCV_GENERAL_REGISTER_NUMBER],
+    pub pc: u64,
+    pub cycles: u64,
+    pub max_cycles: u64,
+    pub load_reservation_address: u64,
+}
+```
+
+Compared with V1, this adds three categories: `pages_from_source` for source references, `cycles` and `max_cycles` for restoring VM metering state (V1 does not store these and leaves management to callers). Other fields keep the same meaning.
+
+Snapshot creation runs in two passes:
+
+```rust
+pub fn make_snapshot<M>(&self, machine: &mut M) -> Result<Snapshot2<I>, Error> {
+    let mut dirty_pages: Vec<(u64, u8, Vec<u8>)> = vec![];
+    for i in 0..machine.memory().memory_pages() as u64 {
+        let flag = machine.memory_mut().fetch_flag(i)?;
+        if flag & FLAG_DIRTY == 0 { continue; }
+        let address = i * PAGE_SIZE;
+        let mut data: Vec<u8> = machine.memory_mut().load_bytes(address, PAGE_SIZE)?.into();
+        if let Some(last) = dirty_pages.last_mut() {
+            if last.0 + last.2.len() as u64 == address && last.1 == flag {
+                last.2.append(&mut data);
+            }
+        }
+        if !data.is_empty() {
+            dirty_pages.push((address, flag, data));
+        }
+    }
+    // ... second pass: scan self.pages to build pages_from_source
+}
+```
+
+The first pass collects dirty pages like V1, but with merging: if the current record is contiguous with the previous one and has the same flag, they are merged. This “merge contiguous ranges” optimization is even more important when generating `pages_from_source`. In the second pass over `self.pages`, pages are merged only when all four conditions hold: contiguous addresses, same flag, same `id`, and contiguous source offsets. This can compress multi-page references to one witness range into a single record, further reducing snapshot size.
+
+`make_snapshot` also performs a small but important conflict resolution: if a page appears in both `self.pages` and the dirty list, dirty wins and the corresponding `pages_from_source` entry is skipped. This covers boundary cases like “loaded via `store_bytes`, then partially overwritten later without a proper `untrack_pages` path,” and dirty-first guarantees correctness after resume.
+
+## Resuming a Snapshot
+
+`resume` is the inverse of `make_snapshot`:
+
+```rust
+pub fn resume<M>(&mut self, machine: &mut M, snapshot: &Snapshot2<I>) -> Result<(), Error> {
+    if machine.version() != snapshot.version { return Err(Error::InvalidVersion); }
+    self.pages.clear();
+    // restore registers, PC, cycles, max_cycles ...
+    for (address, flag, id, offset, length) in &snapshot.pages_from_source {
+        let (data, _) = self.load_data(id, *offset, *length)?;
+        machine.memory_mut().store_bytes(*address, &data)?;
+        for i in 0..(data.len() as u64 / PAGE_SIZE) {
+            machine.memory_mut().set_flag(address / PAGE_SIZE + i, *flag)?;
+        }
+        self.track_pages(machine, *address, data.len() as u64, id, *offset)?;
+    }
+    for (address, flag, content) in &snapshot.dirty_pages {
+        machine.memory_mut().store_bytes(*address, content)?;
+        for i in 0..(content.len() as u64 / PAGE_SIZE) {
+            machine.memory_mut().set_flag(address / PAGE_SIZE + i, *flag)?;
+        }
+    }
+    machine.memory_mut()
+        .set_lr(&M::REG::from_u64(snapshot.load_reservation_address));
+    Ok(())
+}
+```
+
+The first step is still version validation. The second step clears `self.pages`, because resume enters a fresh context where old tracking info is meaningless. Then it restores registers, PC, cycles, and max_cycles.
+
+Next it processes `pages_from_source`: for each reference, it reloads bytes from the data source via `load_data`, writes them to memory, restores page flags via `set_flag`, and finally calls `track_pages` to rebuild tracking entries in `self.pages`. This is crucial: resumed state must be equivalent not only in memory/register contents but also in tracking semantics, so future `make_snapshot` calls still recognize source pages correctly. During this step, each reference is alignment-validated, and `MemPageUnalignedAccess` is returned immediately if address or length is not page-aligned.
+
+Finally it processes `dirty_pages`: content is written back in V1 style and flags are restored. These pages naturally carry DIRTY and do not need to be tracked in `self.pages`.
+
+## Comparison with V1
+
+V2 introduces three substantive extensions over V1:
+
+- It adds the DataSource abstraction, storing pages whose content comes from external data as references rather than full bytes. For scripts that load large external data through syscalls, snapshot size can drop by more than an order of magnitude.
+- It tracks the ELF program itself. Through `mark_program`, code and read-only segments are also represented as source references, shrinking snapshots further.
+- It includes `cycles` and `max_cycles` in snapshots. V1 only saves computational state and leaves metering to callers; V2 treats metering as VM state, making the resumed VM fully equivalent to the suspended VM and easier to use.
+
+The trade-off is that V2 makes page tracking part of all data-loading paths. Any syscall that moves external bytes into VM memory must use `Snapshot2Context::store_bytes` rather than `Memory::store_bytes`. Otherwise optimization is lost, and in some cases snapshot information may become incomplete. This difference is transparent to script authors, but syscall implementers must consistently route through `Snapshot2Context`.
+
+## Series of articles
+
+- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
+- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
+- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
+- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
+- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+
+---
+
+_This article is adapted from [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
