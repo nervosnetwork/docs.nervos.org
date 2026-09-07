@@ -9,6 +9,10 @@ import LlmFileActions from "@components/LlmFileActions";
 
 Use these resources when you want an AI assistant or coding agent to answer questions with the current Nervos CKB documentation as context.
 
+## AI-Assisted CKB On-Chain Script Development
+
+Learn how project-level instructions help AI coding agents develop, test, and debug CKB on-chain Scripts in the [AI-assisted development guide](./ai-assisted-script-development). The guide uses `ckb-vm` only as an advanced, read-only reference for complex on-chain Script issues.
+
 ## Access LLM Files
 
 These files make the CKB docs easier to use with AI tools, long-context models, and retrieval systems.
