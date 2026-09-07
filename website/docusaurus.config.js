@@ -487,6 +487,55 @@ const config = {
             from: "/docs/essays/upgradability",
             to: "https://docs-old.nervos.org/docs/essays/upgradability",
           },
+          {
+            // 2019-era key-concepts / basic-concepts HTML routes (Broken Journeys)
+            from: [
+              "/key-concepts/cell-model.html",
+              "/key-concepts/cell-model",
+              "/basic-concepts/cell-model.html",
+              "/basic-concepts/cell-model",
+            ],
+            to: "/docs/ckb-fundamentals/cell-model",
+          },
+          {
+            from: [
+              "/key-concepts/consensus.html",
+              "/key-concepts/consensus",
+            ],
+            to: "/docs/ckb-fundamentals/consensus",
+          },
+          {
+            from: [
+              "/glossary/glossary-general.html",
+              "/glossary/glossary-general",
+            ],
+            to: "/docs/tech-explanation/glossary",
+          },
+          {
+            // File is write-message.mdx but doc id/slug is store-data-on-cell
+            from: "/docs/dapp/write-message",
+            to: "/docs/dapp/store-data-on-cell",
+          },
+          {
+            // Relocated in #423 to how-to-query-tx-state
+            from: "/docs/how-tos/how-to-manage-txs",
+            to: "/docs/how-tos/how-to-query-tx-state",
+          },
+          {
+            // Blog removed; postsPerPage:1 ascending — page N was script-course N
+            // (same mapping pattern as existing /blog/page/3 redirect)
+            from: "/blog/page/7",
+            to: "/docs/script/js/js-vm",
+          },
+          {
+            from: "/blog/page/8",
+            to: "/docs/script/program-language-for-script",
+          },
+          {
+            // Docs tag index not generated for this tag; send to the topic page
+            from: "/docs/tags/cell-model",
+            to: "/docs/ckb-fundamentals/cell-model",
+          },
         ],
         createRedirects(existingPath) {
           if (
