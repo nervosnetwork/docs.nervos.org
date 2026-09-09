@@ -498,10 +498,7 @@ const config = {
             to: "/docs/ckb-fundamentals/cell-model",
           },
           {
-            from: [
-              "/key-concepts/consensus.html",
-              "/key-concepts/consensus",
-            ],
+            from: ["/key-concepts/consensus.html", "/key-concepts/consensus"],
             to: "/docs/ckb-fundamentals/consensus",
           },
           {
