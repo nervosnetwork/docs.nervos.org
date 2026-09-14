@@ -155,12 +155,58 @@ listed in alphabetical order by file path.
 
 ---
 
+## Source: ai-agents/ai-assisted-development.md
+URL: https://docs.nervos.org/docs/ai-agents/ai-assisted-script-development
+
+Description: Use project-level instructions to guide AI coding agents through developing, testing, and debugging CKB Scripts.
+
+# AI-Assisted CKB Script Development and Debugging
+
+This guide explains how to use project-provided instructions to help AI coding agents develop and troubleshoot CKB Scripts. Here, “agent support” means that a project provides agent-readable documentation, such as an `AGENTS.md` file or a user guide. It does not mean that the project includes a purpose-built agent.
+
+## Development and Debugging Workflow
+
+During development and troubleshooting, work through the following layers in order:
+
+`ckb-script-templates` (create and manage the project) → `ckb-debugger` (debug Script execution) → `ckb-vm` (investigate lower-level behavior)
+
+Usually, you only need the repository relevant to the current layer. Move to the next layer only when the available information cannot explain the issue.
+
+### 1. Create and Manage Projects with `ckb-script-templates`
+
+Use `ckb-script-templates` to create or manage a CKB Script project. For detailed instructions, see [Rust Quick Start](/docs/script/rust/rust-quick-start).
+
+Projects generated from the template include an [`AGENTS.md` file with CKB Script-specific instructions](https://github.com/nervosnetwork/ckb-script-templates/blob/main/workspace/AGENTS.md). Start the coding agent from the project root, then provide the business rules and the transaction scenarios that the Script should accept or reject. The agent can then help implement the Script, add tests, and run the project's checks.
+
+### 2. Debug with `ckb-debugger`
+
+If the code and test output alone do not reveal the cause, give the agent the error messages, logs, or an exported transaction file, and ask it to read the [CKB Debugger User Guide](https://github.com/nervosnetwork/ckb-standalone-debugger/blob/develop/ckb-debugger/guide.md) first. The agent can help construct debugging commands, identify the target Script Group, and interpret exit codes, logs, and cycle consumption. For detailed usage, see [Debug Scripts](/docs/script/debug-script).
+
+### 3. Consult `ckb-vm` When Necessary
+
+Consult `ckb-vm` only when the debugging results may depend on the CKB-VM version, instruction support, cycle accounting, or differences between interpreters. Ask the agent to read the repository's [`AGENTS.md`](https://github.com/nervosnetwork/ckb-vm/blob/develop/AGENTS.md) first, then verify the agent's conclusions against the relevant source code and tests.
+
+## Usage Guidelines
+
+- Start the agent from the project root so that it can discover and apply the project-level instructions.
+- If a user guide is outside the current project, give the agent an explicit link or file and ask it to read the guide before investigating the issue.
+- Provide only the code, transactions, and logs needed for the current stage; there is no need to load all three repositories into context at once.
+- Unless the task specifically involves modifying CKB-VM, treat `ckb-vm` as a read-only reference.
+
+An agent is not a substitute for testing, code review, or security audits. Any Script that safeguards assets still requires an independent audit proportionate to its risk.
+
+---
+
 ## Source: ai-agents/ai-resource.md
 URL: https://docs.nervos.org/docs/ai-agents/ai-resource
 
 # AI Resources
 
 Use these resources when you want an AI assistant or coding agent to answer questions with the current Nervos CKB documentation as context.
+
+## AI-Assisted CKB On-Chain Script Development
+
+Learn how project-level instructions help AI coding agents develop, test, and debug CKB on-chain Scripts in the [AI-assisted development guide](./ai-assisted-script-development). The guide uses `ckb-vm` only as an advanced, read-only reference for complex on-chain Script issues.
 
 ## Access LLM Files
 
@@ -989,7 +1035,6 @@ CKB-VM isn’t just a virtual machine—it is a **universal computer** embedded 
 URL: https://docs.nervos.org/docs/ckb-fundamentals/cell-model
 
 Description: Understand CKB's generalized UTXO Cell Model, including Live Cells, Dead Cells, capacity, ownership, state rent, and scalability.
-Tags: concept, cell-model, utxo, capacity, transaction
 Audience: dApp developers, Script developers
 Related: /docs/getting-started/how-ckb-works, /docs/tech-explanation/cell, /docs/tech-explanation/capacity, /docs/tech-explanation/transaction
 Difficulty: beginner
@@ -1011,9 +1056,9 @@ Transactions reflect the state change of Cells, where a group of Live Cells are 
 
 ## First-Class Assets
 
-In Cell Model, all digital assets (e.g., CKBytes, tokens, collectibles) are considered first-class, exclusively owned by their respective owners. While assets must comply with smart contracts rules during transactions, they are inherently owned by the user, not the smart contracts. This ownership structure ensures that only the owner has permission to use the assets, regardless of how the smart contract defines the token. If a contract exploit, attackers would be unable to access the asset, as it remains under the user's control, effectively mitigating the negative impact.
+In Cell Model, all digital assets (e.g., CKBytes, tokens, collectibles) are considered first-class, exclusively owned by their respective owners. While assets must comply with smart contract rules during transactions, they are inherently owned by the user, not the smart contracts. This ownership structure ensures that only the owner has permission to use the assets, regardless of how the smart contract defines the token. If a contract is exploited, attackers would be unable to access the asset, as it remains under the user's control, effectively mitigating the negative impact.
 
-This ownership structure also defines the responsibility for asset upkeep. As assets occupy space on Nervos, the owner are subject to a small recurring upkeep fee, known as **state rent,** which is elaborated in the [Tokenomics](/docs/assets-token-standards/economics) section.
+This ownership structure also defines the responsibility for asset upkeep. As assets occupy space on Nervos, the owners are subject to a small recurring upkeep fee, known as **state rent**, which is elaborated upon in the [Tokenomics](/docs/assets-token-standards/economics) section.
 
 ## Flexible Transaction Fee Coverage
 
@@ -1025,7 +1070,7 @@ Cell Model provides the flexibility by allowing any party to cover the transacti
 
 Cell Model’s unique structure inherently grants scalability, reflected in the three perspectives below.
 
-Cell Model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensures compliance with developer-set rules.
+Cell Model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensure compliance with developer-set rules.
 
 In Cell Model, smart contract execution is parallel. Each transaction runs independently in its own virtual machine; multiple virtual machines run simultaneously. This gives the Cell Model dramatic scaling improvements on modern computers with increasing CPU cores.
 
@@ -1502,7 +1547,6 @@ For more information on Eaglesong, refer to [RFC Eaglesong](https://github.com/n
 URL: https://docs.nervos.org/docs/ckb-fundamentals/nervos-blockchain
 
 Description: Get a beginner overview of Nervos CKB as a layered, proof-of-work blockchain for CKBytes, on-chain state, and CKB-VM programs.
-Tags: concept, layer-1, ckb-vm, consensus
 Audience: dApp developers, Script developers
 Related: /docs/getting-started/how-ckb-works, /docs/ckb-fundamentals/cell-model, /docs/ckb-fundamentals/ckb-vm, /docs/ckb-fundamentals/consensus
 Difficulty: beginner
@@ -1561,7 +1605,6 @@ More details on the design of Nervos’ consensus implementation will be discuss
 URL: https://docs.nervos.org/docs/dapp/create-dob
 
 Description: Build a dApp that uses the Spore protocol to turn user-provided content into an immutable on-chain digital object on CKB.
-Tags: dapp, tutorial, spore, cell-data, ccc
 Audience: dApp developers
 Related: /docs/assets-token-standards/spore-protocol, /docs/dapp/store-data-on-cell, /docs/dapp/create-token, /docs/sdk-and-devtool/ccc
 Difficulty: intermediate
@@ -1746,7 +1789,6 @@ After following this tutorial, you have mastered how digital objects work on CKB
 URL: https://docs.nervos.org/docs/dapp/create-token
 
 Description: Issue and query a custom fungible token on CKB using the xUDT standard, Type Scripts, Cell data, and the CCC SDK.
-Tags: dapp, tutorial, xudt, type-script, ccc
 Audience: dApp developers
 Related: /docs/assets-token-standards/xudt, /docs/dapp/transfer-ckb, /docs/dapp/create-dob, /docs/sdk-and-devtool/ccc
 Difficulty: intermediate
@@ -1971,372 +2013,355 @@ After following this tutorial, you have mastered how custom tokens work on CKB. 
 ## Source: dapp/simple-lock.mdx
 URL: https://docs.nervos.org/docs/dapp/simple-lock
 
-Description: Build a full-stack CKB dApp with a simple hash Lock Script, Script deployment, frontend integration, and token unlocking flow.
-Tags: dapp, tutorial, script, lock-script, ckb-js-vm
+Description: Build and deploy an educational CKB hash Lock Script, connect it to a frontend, and verify successful and rejected transactions.
 Audience: dApp developers, Script developers
 Related: /docs/script/intro-to-script, /docs/script/js/js-vm, /docs/script/rust/rust-example-simple-lock, /docs/dapp/transfer-ckb
 Difficulty: advanced
-Last reviewed: 2026-06-24
+Last reviewed: 2026-08-21
 
 # Build a Simple Lock
 
-**Estimated Time:** 10 - 15 min
-**Tools:** dapp
+**Estimated Time:** 30 - 45 min first setup; 10 - 15 min afterward
+**Required Tools:** Git, Node.js 20 or later, pnpm, OffCKB, Rust, ckb-debugger, Protobuf, only if installing ckb-debugger reports that protoc is missing
 
-## Tutorial Overview
+<details>
+    <summary>Setup checks and platform notes</summary>
+    <p>Verify the required commands before starting:</p>
+    <pre>
+      <code>
+        {
+          "git --version\nnode --version\npnpm --version\noffckb --version\nckb-debugger --version"
+        }
+      </code>
+    </pre>
+    <p>
+      Installing <code>ckb-debugger</code> compiles native dependencies and can
+      take around ten minutes. Install it with{" "}
+      <code>cargo install ckb-debugger</code>. If installation reports{" "}
+      <code>Could not find protoc</code>, install protobuf and retry:
+    </p>
+    <pre>
+      <code>
+        {"# macOS\nbrew install protobuf\ncargo install ckb-debugger"}
+      </code>
+    </pre>
+    <p>
+      <strong>Windows:</strong>
+    </p>
+    <ul>
+      <li>
+        Add the npm global bin directory and{" "}
+        <code>{"%USERPROFILE%\\.cargo\\bin"}</code> to <code>PATH</code>.
+      </li>
+      <li>
+        If pnpm reports <code>ERR_PNPM_IGNORED_BUILDS</code>, approve the
+        required dependency build scripts and reinstall.
+      </li>
+      <li>
+        Keep the repository in a path without <code>#</code>; Next.js asset
+        resolution can fail in such paths.
+      </li>
+      <li>
+        If native tooling remains difficult to configure, use WSL or a Linux
+        Codespace.
+      </li>
+    </ul>
+  </details>
+## What You Will Build
 
-In this tutorial, you will learn how to create a full-stack dApp, including both the frontend and the Script, to deepen your understanding of CKB blockchain development.
+This tutorial builds a full-stack CKB dApp with a Lock Script named `hash-lock`. The Script stores the hash of a secret in its arguments. A transaction may consume Cells protected by that Script only when its witness contains a preimage whose `blake2b-256` hash matches.
 
-Our example dApp will use a simple toy lock. You will create a Lock Script named `hash_lock` to secure some CKB tokens and build a web interface for users to transfer tokens from this `hash_lock`.
+You will:
 
-The `hash_lock` project involves specifying a hash in the Script's script_args. To unlock it, users must provide the preimage that matches this hash.
+1. Build and deploy the Script with OffCKB;
+2. Derive a CKB address from the deployed code and a preimage hash;
+3. Deposit Devnet CKB into Cells protected by that address;
+4. Submit the correct preimage and wait for the transaction to commit.
 
-This toy lock example isn't intended for production. Use it ONLY in Testnet or Devnet as a starting point for learning the basics.
+:::danger Educational use only
 
-This tutorial uses **JavaScript/TypeScript** contracts running on [ckb-js-vm](/docs/script/js/js-vm).
-For production use, we recommend using [**Rust**](/docs/script/rust/rust-quick-start).
-You can find a [Rust implementation of the same hash-lock logic here](/docs/script/rust/rust-example-simple-lock).
+This hash lock proves **knowledge of a secret**, not identity or ownership. The preimage is disclosed publicly when it is used, so do not use this example with valuable funds. The runnable flow supports Devnet and Testnet.
 
-## Setup Devnet & Run Example
+The example uses JavaScript/TypeScript on [ckb-js-vm](/docs/script/js/js-vm). For production Scripts, start with [Rust](/docs/script/rust/rust-quick-start) and a signature-based authorization design.
 
-### Step 1: Download the Source Code
+## Run the Example on Devnet
 
-To get started with the tutorial dApp, clone the repository and navigate to the appropriate directory:
+### 1. Download the Source
 
 ```bash
 git clone https://github.com/nervosnetwork/docs.nervos.org.git --depth 1
 cd docs.nervos.org/examples/dApp/simple-lock
+pnpm install
 ```
 
-You can also read the full code online or download it here.
+You can also inspect or download the example from the repository.
 
-### Step 2: Start the Devnet
+### 2. Start Devnet
 
-### Step 3: Build and Deploy the Script
+Resetting Devnet creates a new chain. Every OutPoint from the previous chain becomes invalid, so redeploy the contract after a reset.
 
-To compile the contract, navigate to the `root` directory and run:
+### 3. Build and Deploy the Script
+
+Build the TypeScript contract into CKB-VM bytecode:
 
 **Command:**
 
 ```bash
-pnpm install
 pnpm build
 ```
 
 **Response:**
 
 ```
-> node scripts/build-all.js
-
 Building 1 contract(s): hash-lock
-
-📦 Building contract: hash-lock
-Building hash-lock from contracts/hash-lock/src/index.ts...
 📦 Bundling with esbuild...
 🔧 Compiling to bytecode...
 ✅ Contract 'hash-lock' built successfully!
-📄 JavaScript: dist/hash-lock.js
 🔗 Bytecode: dist/hash-lock.bc
-✅ Successfully built: hash-lock
-
-🎉 All contracts built successfully!
 ```
 
-Once compiled, the contract files will be available in the `simple-lock/dist` directory.
-
-Deploy the Script binary to the Devnet:
+Deploy it to Devnet:
 
 **Command:**
 
 ```bash
-pnpm run deploy --network devnet
+pnpm run deploy -- --network devnet
 ```
 
 **Response:**
 
 ```
-> node scripts/build-all.js && node scripts/deploy.js "--network" "devnet"
-
-Building 1 contract(s): hash-lock
-
-📦 Building contract: hash-lock
-Building hash-lock from contracts/hash-lock/src/index.ts...
-📦 Bundling with esbuild...
-🔧 Compiling to bytecode...
-✅ Contract 'hash-lock' built successfully!
-📄 JavaScript: dist/hash-lock.js
-🔗 Bytecode: dist/hash-lock.bc
-✅ Successfully built: hash-lock
-
-🎉 All contracts built successfully!
-🚀 Deploying contracts...
-📁 Target: dist
-📄 Output: deployment
 🌐 Network: devnet
-
-💻 Running: offckb deploy --network devnet --target dist --output deployment
-
-You are about to deploy the following contracts:
-
-- /Users/Desktop/docs.nervos.org/examples/simple-lock/dist/hash-lock.bc
-
-The deployment will be saved to /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment
-
-The network is: devnet
-? Are you sure you want to deploy these contracts? yes
-contract hash-lock.bc deployed, tx hash: 0x5f71110ed1ab57196976f357083d4c4fd767de6088a97fad6846ec9559c61f58
+contract hash-lock.bc deployed
 wait for tx confirmed on-chain...
 tx committed.
-Saving artifacts for hash-lock.bc...
-hash-lock.bc deployment.toml file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/devnet/hash-lock.bc/deployment.toml generated successfully.
-Migration json file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/devnet/hash-lock.bc/migrations/2025-09-08-205232.json generated successfully.
-Script info file /Users/Desktop/docs.nervos.org/examples/simple-lock/deployment/scripts.json generated successfully.
-
 🎉 Deployment completed successfully!
-📁 Deployment artifacts saved to: deployment/
-
-💡 Next steps:
-
-- Check the deployment artifacts in the deployment/ folder
-- Run your tests to use the deployed contract scripts
+🔄 Contract deployment synchronized: frontend/deployment/scripts.json
+🔄 System scripts synchronized: frontend/deployment/system-scripts.json
+📍 Contract OutPoint: 0x...:0
+📍 ckb-js-vm OutPoint: 0x...:15
 ```
 
-The deployment artifacts will be saved to the `examples/simple-lock/deployment` directory.
+Deployment creates or updates `deployment/scripts.json` and refreshes `deployment/system-scripts.json`. The deploy script validates the `hash-lock.bc` and `ckb-js-vm` entries for Devnet, copies both files to `frontend/deployment/`, and fails if either copy does not match its source.
 
-### Step 4: Run the DApp
+An OutPoint is a transaction hash plus output index that identifies one specific Cell. OutPoints are network-specific. They become stale after redeployment, a network switch, or a Devnet reset.
 
-Next, you need to copy the `scripts.json` file from `deployment` folder to the `frontend/deployment` directory.
-
-Then, navigate to the frontend folder, install the node dependencies, and start running the example:
-
-**Command:**
+### 4. Start the Frontend
 
 ```bash
-cd frontend && pnpm i && pnpm run dev
+cd frontend
+pnpm dev
 ```
 
-**Response:**
+Open [http://localhost:3000](http://localhost:3000). When `NEXT_PUBLIC_NETWORK` is unset, the frontend uses Devnet.
 
-```
-> frontend@0.1.0 dev
-> next dev
+Before enabling transfers, the page calls `getCellLive` for both required dependencies:
 
-▲ Next.js 14.2.3
+- The Cell containing your deployed `hash-lock.bc` bytecode;
+- The Cell containing the `ckb-js-vm` interpreter.
 
-- Local: http://localhost:3000
-- Environments: .env
+If either OutPoint is missing or stale, the page shows recovery guidance instead of constructing a transaction.
 
-✓ Starting...
-✓ Ready in 1631ms
-```
+### 5. Create and Fund a Hash Lock
 
-Now, the app is running in http://localhost:3000.
+Enter a preimage such as `Hello World`. The frontend hashes it and creates a Lock Script that combines:
 
-At the top of the page, developers can select their preferred language based on their needs.
+- The `ckb-js-vm` interpreter code hash;
+- The deployed `hash-lock.bc` code hash and hash type;
+- The expected preimage hash.
 
-### Step 5: Deposit Some CKB
+The page displays both a **contract code hash** and a **CKB address**. They are not interchangeable:
 
-With our dApp up and running, you can now input a hash value to construct a `hash_lock` Script. To utilize this `hash_lock` Script, we need to prepare some Live Cells that use this Script as their Lock Script. This preparation process is known as **deposit**. We can use `offckb` to quickly deposit to any CKB address. Here's an example of how to deposit 300 CKB into a specific address:
+- The code hash identifies deployed bytecode;
+- The CKB address encodes the complete Lock Script, including its arguments, and is the value you fund.
 
-**Command:**
+Copy the generated hash-lock address and deposit Devnet CKB:
 
 ```bash
-offckb deposit --network devnet ckt1qp02fww4qzf6rx2rm3ugc9dmma7dnky7l4ne3xsck930aj5pfkgtkqgqqpdsmqftz49xmjqgm2yr0ejj5jpsgw9w6vtazlaukdf9xecu4z32kqgsdyg7f7p70y8pavhnn00ly0qaksldttujr8mk8et38zd0yyjeegxctl4m 300
+offckb deposit --network devnet <HASH_LOCK_ADDRESS> 300
 ```
 
-**Response:**
+The returned transaction hash proves only that the transaction was submitted. Wait for commitment, then refresh the page and confirm that **Total live capacity** shows the deposit before transferring.
 
+### 6. Optional: Test Rejection with a Wrong Preimage
+
+In **Preimage to reveal**, enter a value different from the one used to create the address and select **Transfer CKB**.
+
+The Script returns `11`, and the frontend reports that the preimage does not match. CKB rejects the transaction atomically: no output becomes chain state, the original input Cells remain live, and their capacity is unchanged.
+
+### 7. Transfer with the Correct Preimage
+
+Enter the original preimage and submit again. The frontend reports each phase:
+
+```text
+submitting → pending → committed
 ```
-tx hash:  0x0668292c875ee31906e48651a553a16158307c02f2e91d24be75166ca080e1fd
-```
 
-Once you've deposited some CKB into the `hash_lock` CKB address, you can attempt to transfer some balance from this address to another. This will allow you to test the `hash_lock` Script and see if it functions as expected.
-
-You can try clicking the **"Transfer"** button. The website will prompt you to enter the preimage value. If the preimage is correct, the transaction will be accepted on-chain. If not, the transaction will fail because our `hash_lock` Script rejects the incorrect preimage and works as expected.
+It keeps the transaction hash and uses `cccClient.waitTransaction()` rather than assuming that a fixed delay means success.
 
 ![](/img/dapps/simple-lock.png)
 
----
+## How the Script Works
 
-## Behind the Scene
+The on-chain logic is intentionally small:
 
-### Script Logic
+1. read the expected hash from the Script arguments;
+2. read the preimage from the group-input witness;
+3. hash the preimage with CKB's `blake2b-256` function;
+4. return `0` when the hashes match or `11` when they do not.
 
-Here's what the script does step-by-step:
-
-1. It reads the **expected hash** from the Script's `args` field.
-2. It retrieves the **preimage** from the transaction's **witness** field.
-3. It computes the **hash** of the preimage using the default CKB hash function (`blake2b-256`).
-4. If the computed hash matches the one in the `script_args`, the script returns success (0). Otherwise, it fails.
-
-Here is the complete `hash_lock` script logic:
-
-```typescript
+```typescript title="contracts/hash-lock/src/index.ts"
 import * as bindings from "@ckb-js-std/bindings";
 import { HighLevel, log, hashCkb, bytesEq } from "@ckb-js-std/core";
 
 function main() {
   log.setLevel(log.LogLevel.Debug);
-  let expect_hash = new Uint8Array(HighLevel.loadScript().args).slice(35);
+  const expectedHash = new Uint8Array(HighLevel.loadScript().args).slice(35);
+  const witnessArgs = HighLevel.loadWitnessArgs(0, bindings.SOURCE_GROUP_INPUT);
+  const preimage = witnessArgs.lock!;
+  const actualHash = hashCkb(preimage);
 
-  let witness_args = HighLevel.loadWitnessArgs(0, bindings.SOURCE_GROUP_INPUT);
-  let preimage = witness_args.lock!;
-
-  let hash = hashCkb(preimage);
-
-  if (!bytesEq(hash, expect_hash.buffer)) {
-    log.error(`Check hash failed: ${new Uint8Array(hash)}, ${expect_hash}`);
+  if (!bytesEq(actualHash, expectedHash.buffer)) {
     return 11;
-  } else {
-    return 0;
   }
+  return 0;
 }
 
 bindings.exit(main());
 ```
 
-A few key things to highlight for developers coming from the JavaScript ecosystem:
+The first 35 bytes of `args` tell `ckb-js-vm` which bytecode to execute. The remaining 32 bytes contain the expected preimage hash.
 
-- The `@ckb-js-std/core` and `bindings` libraries provide high-level syscalls for accessing blockchain data.
-- `HighLevel.loadScript()` gets the current Script, and `.args` retrieves the expected hash.
-- `HighLevel.loadWitnessArgs()` fetches the witness for the transaction input, where the preimage is stored.
-- `hashCkb()` is used to calculate the `blake2b-256` hash.
-- If the hash matches, the script returns `0`. Otherwise, it logs the error and returns a failure code (`11`).
+## How the Frontend Builds the Address
 
-This approach demonstrates how to write on-chain logic in a developer-friendly TypeScript environment, allowing you to test and iterate quickly with familiar tooling.
-
-### Use the Hash_Lock Script in Your DApp
-
-Let's take a look at the `generateAccount` function: It accepts a hash string parameter. This hash string is used as `script_args` to build a `hash_lock` Script. This Script can then be used as the lock to secure CKB tokens.
-
-```ts title='simple-lock/frontend/app/hash-lock.ts'
-// ...
+```ts title="frontend/app/hash-lock.ts"
 export function generateAccount(hash: string) {
+  const { contract, ckbJsVm } = deploymentConfig();
   const lockArgs =
     "0x0000" +
-    myScripts["hash-lock.bc"]!.codeHash.slice(2) +
-    hexFrom(hashTypeToBytes(myScripts["hash-lock.bc"]!.hashType)).slice(2) +
+    contract.codeHash.slice(2) +
+    hexFrom(hashTypeToBytes(contract.hashType)).slice(2) +
     hash;
-  const lockScript = {
-    codeHash: mySystemScripts["ckb_js_vm"]!.script.codeHash,
-    hashType: mySystemScripts["ckb_js_vm"]!.script.hashType,
+  const lockScript = ccc.Script.from({
+    codeHash: ckbJsVm.codeHash,
+    hashType: ccc.hashTypeFrom(ckbJsVm.hashType),
     args: lockArgs,
-  };
-  const address = ccc.Address.fromScript(lockScript, cccClient).toString();
+  });
+
   return {
-    address,
-    lockScript: ccc.Script.from(lockScript),
+    address: ccc.Address.fromScript(lockScript, cccClient).toString(),
+    lockScript,
   };
 }
-// ...
 ```
 
-Another important aspect of the `generateAccount` function is that it also returns a CKB address. This address is computed from the Lock Script using CCC utils `ccc.Address.fromScript`. Essentially, the CKB address is just the encoded version of the Lock Script.
+An address is an encoded representation of a Lock Script. The displayed balance is the sum of live, pure-CKB Cell capacities protected by that exact Script; typed or data-bearing Cells are not selected. It is not an account balance stored inside the contract.
 
-Think of it like a safe deposit box. The address is like the serial number of the lock (used to identify the lock) on top of the safe box. When you deposit CKB tokens into a CKB address, it's like depositing money into a specific safe box with a specific lock.
+## How the Frontend Builds the Transaction
 
-When we talk about how much balance a CKB address holds, we're simply referring to how much value a specific lock secures. The balance (capacities) calculation function in our frontend code works by collecting the Live Cells that use a specific Lock Script and summing their capacities.
-
-```ts title='simple-lock/frontend/app/hash-lock.ts'
-// ...
-export async function capacityOf(address: string): Promise<bigint> {
-  const addr = await ccc.Address.fromString(address, cccClient);
-  let balance = await cccClient.getBalance([addr.script]);
-  return balance;
-}
-// ...
-```
-
-To transfer (or unlock) CKB from this `hash_lock` Script address, we need to build a CKB transaction that consumes some Live Cells which use the `hash_lock` Script and generates new Live Cells which use the receiver's Lock Script. Additionally, in the witness field of the transaction, we need to provide the preimage for the hash value in the `hash_lock` Script args to prove that we are indeed the owner of the `hash_lock` Script (since only the owner knows the preimage).
-
-We use CCC to build such a transaction.
-
-```ts title='simple-lock/frontend/app/hash-lock.ts'
-// ...
+```ts title="frontend/app/hash-lock.ts"
 export async function unlock(
   fromAddr: string,
   toAddr: string,
-  amountInCKB: string
+  amountInCKB: string,
+  preimage: string
 ): Promise<string> {
   const fromScript = (await ccc.Address.fromString(fromAddr, cccClient)).script;
   const toScript = (await ccc.Address.fromString(toAddr, cccClient)).script;
+  const amount = ccc.fixedPointFrom(amountInCKB);
+  const { contractCellDep, ckbJsVmCellDep } = deploymentConfig();
   const readSigner = new ccc.SignerCkbScriptReadonly(cccClient, fromScript);
 
-  // Build the full transaction
-  const tx = ccc.Transaction.from({
-    outputs: [{ lock: toScript }],
-    outputsData: [],
+  const transaction = ccc.Transaction.from({
+    outputs: [{ lock: toScript, capacity: amount }, { lock: fromScript }],
+    outputsData: ["0x", "0x"],
   });
 
-  // CCC transactions are easy to be edited
-  tx.outputs.forEach((output, i) => {
-    if (output.capacity > ccc.fixedPointFrom(amountInCKB)) {
-      alert(`Insufficient capacity at output ${i} to store data`);
-      return;
-    }
-    output.capacity = ccc.fixedPointFrom(amountInCKB);
-  });
-
-  // fill the witness with preimage
-  const preimageAnswer = window.prompt("please enter the preimage: ");
-  if (preimageAnswer == null) {
-    throw new Error("user abort input!");
-  }
-  const newWitnessArgs = new ccc.WitnessArgs(
-    stringToBytesHex(preimageAnswer) as `0x${string}`
+  await transaction.addCellDeps(contractCellDep, ckbJsVmCellDep);
+  await transaction.completeInputsByCapacity(readSigner);
+  transaction.setWitnessArgsAt(
+    0,
+    ccc.WitnessArgs.from({ lock: stringToBytesHex(preimage) })
   );
-  console.log("newWitnessArgs: ", newWitnessArgs);
-  tx.setWitnessArgsAt(0, newWitnessArgs);
+  await transaction.completeFeeChangeToOutput(readSigner, 1, 1000);
+  assertOutputCapacities(transaction);
 
-  // Complete missing parts for transaction
-  await tx.addCellDeps(myScripts["hash-lock.bc"]!.cellDeps[0].cellDep);
-  await tx.completeInputsByCapacity(
-    readSigner,
-    ccc.fixedPointFrom(amountInCKB)
-  );
-  const balanceDiff =
-    (await tx.getInputsCapacity(cccClient)) - tx.getOutputsCapacity();
-  console.log("balanceDiff: ", balanceDiff);
-  if (balanceDiff > ccc.Zero) {
-    tx.addOutput({
-      lock: fromScript,
-    });
-  }
-  //await tx.completeFeeBy(readSigner, 1000);
-
-  const txHash = await cccClient.sendTransaction(tx);
-  console.log("Full transaction: ", tx.stringify());
-  return txHash;
+  return cccClient.sendTransaction(transaction);
 }
 ```
 
-### Is the Hash_Lock Safe to Use?
+Both CellDeps are required. `ckb-js-vm` provides the interpreter, while `hash-lock.bc` provides the program it loads.
 
-The short answer is no. The `hash_lock` is not very secure for guarding your CKB tokens. Some of you might already know the reason, but here are some points to consider:
+The recipient output has a fixed requested capacity. The second output receives the remaining capacity after the fee and intentionally uses the original hash lock.
 
-- **Miner Front-running**: Since the preimage value is revealed in the witness, once you submit the transaction to the blockchain, miners can see this preimage and construct a new transaction to transfer the tokens to their addresses before you do.
-- **Balance Vulnerability**: Once you transfer part of the balance from the `hash_lock` address, the preimage value is revealed on-chain. This makes the remaining tokens locked in the `hash_lock` vulnerable since anyone who sees the preimage can steal them.
+### Occupied Capacity
 
-Even though using a hash and preimage is too simple to be a secure Lock Script, it's a great starting point for learning. The goal is to understand how CKB Scripts work and gain experience with CKB development.
+A valid Cell must reserve enough capacity to store its complete structure. The requirement depends on its Lock Script, optional Type Script, and output data:
 
----
+```text
+occupied capacity = (CellOutput occupied bytes + output-data bytes) × 1 CKB
+```
 
-## Congratulations!
+Therefore, 61 CKB is not a universal minimum. The frontend calculates and validates the actual occupied capacity of both outputs after fee completion.
 
-By following this tutorial, you've mastered the basics of building a custom lock and a full-stack dApp on CKB. Here's a quick recap:
+The transaction order also matters: the witness changes transaction size, so it is set before the final fee is calculated. See the [CCC transaction composition guide](https://docs.ckbccc.com/en/docs/guides/compose-transactions) for the supported patterns.
 
-- We built a custom Lock Script to guard CKB tokens.
-- We built a dApp frontend to transfer/unlock tokens from this Lock Script.
-- We explored the limitations and vulnerabilities of our naive Lock Script design.
+## Security: What This Example Does Not Prove
 
-## Next Step
+The witness contains the preimage in public transaction data. Anyone observing a pending or committed transaction can read it. The Script checks only the hash; it does not check who submitted the transaction or which recipient should benefit.
+
+This frontend intentionally demonstrates another unsafe behavior: it returns change to the same hash lock. After the preimage is disclosed:
+
+- returned change is protected by a public secret;
+- untouched Cells using the same hash are also vulnerable;
+- another party may copy the preimage and construct a competing transaction.
+
+For real assets, use a standard signature-protected change address and bind authorization to the intended transaction. If a protocol genuinely needs a hash preimage, combine it with signatures, unique secrets, and an appropriate timeout or refund path.
+
+## Run on Testnet
+
+Testnet requires a separate deployment because Devnet OutPoints do not exist there.
+
+1. Create a Testnet private key and fund its address from the [CKB Testnet Faucet](https://faucet.nervos.org/).
+2. From the example root, deploy with the funded key:
+
+   ```bash
+   pnpm run deploy -- --network testnet --privkey 0x...
+   ```
+
+3. The deploy command validates and synchronizes the new Testnet contract and system-script artifacts automatically.
+4. Start the frontend for Testnet:
+
+   ```bash
+   cd frontend
+   NEXT_PUBLIC_NETWORK=testnet pnpm dev
+   ```
+
+5. Confirm the page reports both dependencies as **ready** before depositing Testnet CKB.
+
+Never reuse a Devnet address, transaction hash, or contract OutPoint on Testnet.
+
+## About Mainnet
+
+This example does not currently provide a direct Mainnet deployment path. OffCKB supports direct contract deployment only to Devnet and Testnet, and its Mainnet system-script export does not include the `ckb-js-vm` dependency required by this contract. Removing the local network check would only move the failure later in the deployment.
+
+For Mainnet-state inspection and debugging, use an isolated [OffCKB Mainnet fork](https://github.com/ckb-devrel/offckb) and follow its replay-risk guidance. The intentionally unsafe change behavior described above still applies, and this tutorial's frontend remains configured for Devnet and Testnet.
+
+## Conclusion
+
+You deployed bytecode as a Cell, used its code hash to construct a Lock Script, funded live Cells protected by that Script, and verified both rejected and committed state transitions. You also saw why a preimage is a bearer proof rather than proof of ownership, why dependency OutPoints must match the active network, and why every output must satisfy its own occupied-capacity requirement.
+
+:::danger Not for production
+
+This simple hash lock clearly demonstrates how hash-based authorization works, but its security weaknesses make it unsuitable for protecting real funds. Production applications should use a stronger authorization design.
 
 ## Additional Resources
 
-- [**Rust Quick Start**](/docs/script/rust/rust-quick-start) — Learn how to write CKB Scripts in Rust (recommended for production)
-- [**Rust Example: Simple Lock**](/docs/script/rust/rust-example-simple-lock) — The same hash-lock logic implemented in Rust (standalone contract, without frontend)
-- CKB transaction structure: [RFC-0022-transaction-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
-- CKB data structure basics: [RFC-0019-data-structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
+- [Rust Quick Start](/docs/script/rust/rust-quick-start)
+- [Rust Simple Lock Example](/docs/script/rust/rust-example-simple-lock)
+- [CCC transaction composition](https://docs.ckbccc.com/en/docs/guides/compose-transactions)
+- [RFC-0022: CKB Transaction Structure](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0022-transaction-structure/0022-transaction-structure.md)
+- [RFC-0019: CKB Data Structures](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0019-data-structures/0019-data-structures.md)
 
 ---
 
@@ -2344,9 +2369,8 @@ By following this tutorial, you've mastered the basics of building a custom lock
 URL: https://docs.nervos.org/docs/dapp/transfer-ckb
 
 Description: Build a simple dApp that generates accounts, checks CKB balances, creates a transfer transaction, pays fees, and broadcasts it.
-Tags: dapp, tutorial, ccc, transaction, cell-model
 Audience: dApp developers
-Related: /docs/getting-started/quick-start, /docs/sdk-and-devtool/ccc, /docs/dapp/write-message, /docs/ckb-fundamentals/cell-model
+Related: /docs/getting-started/quick-start, /docs/sdk-and-devtool/ccc, /docs/dapp/store-data-on-cell, /docs/ckb-fundamentals/cell-model
 Difficulty: beginner
 Last reviewed: 2026-06-24
 
@@ -2503,20 +2527,36 @@ After following this tutorial, you have mastered how balance transfers work on C
 URL: https://docs.nervos.org/docs/dapp/store-data-on-cell
 
 Description: Build a dApp that writes a text message into CKB Cell data, then reads the Live Cell back and decodes the stored value.
-Tags: dapp, tutorial, cell-data, cell-model, ccc
 Audience: dApp developers
 Related: /docs/dapp/transfer-ckb, /docs/ckb-fundamentals/cell-model, /docs/tech-explanation/outputs-data, /docs/sdk-and-devtool/ccc
 Difficulty: beginner
-Last reviewed: 2026-06-24
+Last reviewed: 2026-08-28
 
 # Store Data on Cell
 
 **Estimated Time:** 2 - 5 min
-**Tools:** dapp
+**Required Tools:** Git, Node.js 20 or later, npm, OffCKB
 
+npm
+      </Link>
+    </div>,
+    
+      OffCKB
+    ,
+  ]}
+>
+  <details>
+    <summary>Setup checks</summary>
+    <p>Verify the required commands before starting:</p>
+    <pre>
+      <code>
+        {"git --version\nnode --version\nnpm --version\noffckb --version"}
+      </code>
+    </pre>
+  </details>
 ## Tutorial Overview
 
-In this tutorial, you will learn how to tuck a nifty message - "**Hello CKB!**" - into a Cell on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
+In this tutorial, you will learn how to tuck a nifty message - "**hello common knowledge base!**" - into a Cell on the CKB blockchain. Imagine it as sending a message in a bottle, but the ocean is digital, and the bottle is a super secure, tamper-proof CKB Cell!
 
 As you learned from the first tutorial, [Transfer CKB](/docs/dapp/transfer-ckb), a Cell can store any type of data in the data field of the Cell structure. Here, we will encode a text message as a hex string and store it in the data field. Once your words are encoded and inscribed into the blockchain, we'll get the hex string back from the same Cell and decode it to the original text message. The encoding and decoding method is up to you; we use `TextDecoder` for simplicity throughout the tutorial.
 
@@ -2534,6 +2574,8 @@ cd docs.nervos.org/examples/dApp/store-data-on-cell
 You can also read the full code online or download it here.
 
 ### Step 2: Start the Devnet
+
+`npm start` exports the system-script references from the initialized local OffCKB Devnet before launching the dApp. The dApp connects to its RPC proxy at [http://127.0.0.1:28114](http://127.0.0.1:28114). The dApp itself opens at [http://localhost:1234](http://localhost:1234); the RPC endpoint does not serve a webpage.
 
 ## Behind the Scene
 
@@ -2573,7 +2615,7 @@ Now, check out the core function `buildMessageTx`. It requires two parameters:
 - **Private Key**: Your private key, used for transaction authorization.
 - **Message**: The message you want to write into the Cell.
 
-The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field
+The function then constructs a transaction to create a new Cell that incorporates the specified message in the data field.
 
 ```ts
 export async function buildMessageTx(
@@ -2604,13 +2646,13 @@ await tx.completeInputsByCapacity(signer);
 await tx.completeFeeBy(signer, 1000);
 ```
 
-Lastly, we use signer to sign and broadcast the transaction to the blockchain network through rpc:
+Lastly, we use the signer to sign and broadcast the transaction through RPC:
 
 ```ts
 const txHash = await signer.sendTransaction(tx);
 ```
 
-Therefore, the message is successfully stored on a Cell and lives in the blockchain.
+Broadcasting returns a transaction hash immediately. The dApp then waits until the transaction is committed and its output Cell becomes live before enabling **Read**.
 
 ### Read Cell Messages
 
@@ -2623,18 +2665,35 @@ To retrieve a specific Live Cell, we use the RPC method `getLiveCell` with `OutP
 
 Given a specific transaction hash, we can locate the output Cells of the transaction. By knowing the position index of the Cell, we can find out the specific one.
 
-For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`
+For the way we built the transaction, we know that the Live Cell that carries the message is always the first one of the output Cells. So we set `index = "0x0"`.
 
-```ts
-export async function readOnChainMessage(txHash: string, index = "0x0") {
-  const cell = await cccClient.getCellLive({ txHash, index }, true);
-  if (cell == null) {
-    return alert("Cell not found, please retry later");
+```ts title="lib.ts" {8}
+type ReadMessageOptions = {
+  intervalMs?: number;
+  maxAttempts?: number;
+};
+
+export async function readOnChainMessage(
+  txHash: string,
+  index = "0x0",
+  options: ReadMessageOptions = {}
+) {
+  const { intervalMs = 1000, maxAttempts = 30 } = options;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const cell = await cccClient.getCellLive({ txHash, index }, true);
+    if (cell != null) {
+      return hexToUtf8(cell.outputData);
+    }
+
+    if (attempt < maxAttempts) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
   }
-  const data = cell.outputData;
-  const msg = hexToUtf8(data);
-  alert("read msg: " + msg);
-  return msg;
+
+  throw new Error(
+    "The message Cell is not live yet. Wait for the transaction to be committed, then try again."
+  );
 }
 ```
 
@@ -2646,9 +2705,22 @@ After following this tutorial, you have mastered how storing data on Cells works
 
 - We can store arbitrary data in the `data` field of Cell.
 - We need a way to encode and decode our data for understanding and using our raw on-chain data later.
-- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells meets our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
+- To read the storing data, we need to locate the Live Cell that we put our data in. This can be done by querying Cells that meet our requirement or by getting the Cell directly with a known `OutPoint` through RPC.
 
-## Next Step
+## Next Step: Try Testnet
+
+After the local flow works, you can run the same dApp on Testnet:
+
+1. Create a separate Testnet account and fund it from the [CKB Testnet Faucet](https://faucet.nervos.org/).
+2. Restart the dApp with:
+
+   ```bash
+   npm run start:testnet
+   ```
+
+3. Enter the funded Testnet private key in the dApp.
+
+Never use a Mainnet private key or Mainnet assets in this tutorial.
 
 ## Additional Resources
 
@@ -4934,7 +5006,6 @@ offckb system-scripts --network <devnet/testnet/mainnet>
 URL: https://docs.nervos.org/docs/getting-started/how-ckb-works
 
 Description: Learn how CKB uses Cells, Scripts, transactions, CKB-VM, and proof-of-work consensus to secure and update on-chain state.
-Tags: concept, cell-model, script, transaction, ckb-vm
 Audience: dApp developers, Script developers
 Related: /docs/getting-started/quick-start, /docs/ckb-fundamentals/cell-model, /docs/script/intro-to-script, /docs/tech-explanation/transaction
 Difficulty: beginner
@@ -5038,13 +5109,12 @@ With the above theoretical knowledge, you're ready to hit the road.
 URL: https://docs.nervos.org/docs/getting-started/quick-start
 
 Description: Set up a local CKB devnet with OffCKB and choose the right next path for building dApps, scripts, nodes, or core concepts.
-Tags: getting-started, devnet, offckb, dapp, script
 Audience: dApp developers, Script developers, Node operators
 Related: /docs/dapp/transfer-ckb, /docs/script/rust/rust-quick-start, /docs/getting-started/how-ckb-works, /docs/ckb-fundamentals/cell-model
 Difficulty: beginner
-Last reviewed: 2026-06-24
+Last reviewed: 2026-08-26
 
-# Quick Start (5min)
+# Quick Start (5 min)
 
 Welcome to the Nervos CKB ecosystem! This guide will help you set up your local development environment in just a few minutes. After that, you can explore the various paths to build on CKB.
 
@@ -5052,7 +5122,17 @@ Welcome to the Nervos CKB ecosystem! This guide will help you set up your local 
 
 We recommend using [offCKB](https://www.npmjs.com/package/@offckb/cli) to quickly set up a local CKB Devnet for development.
 
+This setup is useful when you want to build a dApp or deploy and test a Script on a local chain. If you only want to learn CKB concepts, develop a Script with local testing tools, or run a Mainnet or Testnet node, you can skip to [Choose Your Path](#choose-your-path).
+
 ### Install OffCKB
+
+OffCKB requires **Node.js 20 or later**. Check your installed version:
+
+```bash
+node -v
+```
+
+If the version is below `v20.0.0`, install a current [Node.js LTS release](https://nodejs.org/en/download) before continuing.
 
 ```bash
 npm install -g @offckb/cli
@@ -5072,12 +5152,60 @@ offckb node
 
 ```bash
 Launching CKB devnet Node...
+CKB devnet is ready at http://127.0.0.1:8114.
+Follow the full node log with: offckb logs -f
 CKB devnet RPC Proxy server running on http://127.0.0.1:28114
 ```
 
-Your local CKB blockchain is currently active with a proxy RPC endpoint at [localhost:28114](http://localhost:28114). To stop the chain, press `CTRL+C` in the terminal. To resume where you left off, simply run `offckb node` again.
+Your local CKB blockchain is now running. Use the proxy RPC endpoint at [http://127.0.0.1:28114](http://127.0.0.1:28114) as the default for local development. It forwards requests to the node and records failed transactions for debugging. The direct RPC endpoint at [http://127.0.0.1:8114](http://127.0.0.1:8114) bypasses the debugging proxy.
 
-If you need to start fresh with a new chain, run the following command before starting the node:
+Keep this terminal open while you use the Devnet, and open a second terminal for the commands you run next. To stop the chain, press `CTRL+C`. To resume where you left off, run `offckb node` again.
+
+This Devnet runs only on your computer. Its transactions will not appear in public Testnet or Mainnet explorers.
+
+### View Pre-funded Accounts
+
+In the second terminal, list the pre-funded Devnet accounts:
+
+**Command:**
+
+```bash
+offckb accounts
+```
+
+**Response:**
+
+```text
+#### ALL ACCOUNTS ARE FOR TEST AND DEVELOP ONLY
+#### DON'T USE THESE ACCOUNTS ON MAINNET
+#### OTHERWISE YOU WILL LOSE YOUR MONEY
+
+Print account list, each account is funded with 42_000_000_00000000 capacity in the devnet genesis block.
+
+- "#": 0
+  address: ckt1...
+  pubkey: 0x...
+  lock_arg: 0x...
+  lockScript:
+    codeHash: 0x...
+    hashType: type
+    args: 0x...
+...
+- "#": 19
+  address: ckt1...
+  pubkey: 0x...
+  lock_arg: 0x...
+  lockScript:
+    codeHash: 0x...
+    hashType: type
+    args: 0x...
+```
+
+OffCKB also provides built-in Scripts like [Omnilock](https://github.com/nervosnetwork/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract), and useful debugging tools. Check out the [OffCKB documentation](/docs/sdk-and-devtool/offckb) for more details.
+
+### Reset the Devnet
+
+If you need to start fresh with a new chain, first stop the running node by pressing `CTRL+C`. Then run:
 
 **Command:**
 
@@ -5091,13 +5219,13 @@ offckb clean
 Chain data cleaned.
 ```
 
-OffCKB also provides pre-funded test accounts, built-in Scripts like [Omnilock](https://github.com/cryptape/omnilock) and [Spore-contract](https://github.com/sporeprotocol/spore-contract), and useful debugging tools. Check out the [OffCKB documentation](/docs/sdk-and-devtool/offckb) for more details.
+Cleaning the Devnet creates a new local chain. Transaction hashes and deployed Script OutPoints from the previous chain will no longer be valid.
 
 ---
 
 ## Choose Your Path
 
-Now that your Devnet is running, choose your path to start building on CKB:
+Choose the path that matches what you want to do on CKB:
 
 ### 🚀 Build a DApp
 
@@ -5110,13 +5238,15 @@ Learn how to build decentralized applications that interact with the CKB blockch
 
 ### 🔐 Write Smart Contracts (Scripts)
 
-CKB uses **Rust** as the primary language for writing on-chain smart contracts (Scripts). Get started with:
+CKB supports several languages for writing on-chain smart contracts (Scripts), but Rust is currently recommended for production use because of its performance, memory safety, and mature tooling.
+
+Unlike an EVM contract, a deployed CKB Script does not have a contract address. Its code is stored in a Cell and identified by an OutPoint; transactions include that reference in a [`CellDep`](/docs/tech-explanation/cell-deps). See [Deploy a CKB Smart Contract](/docs/sdk-and-devtool/offckb#deploy-a-ckb-smart-contract) for details.
+
+Get started with:
 
 - [**Rust Quick Start**](/docs/script/rust/rust-quick-start) — Set up your Rust environment and write your first Script (5-15 min)
 - [**Script Basics**](/docs/script/intro-to-script) — Understand how Scripts work on CKB
 - [**Program Languages for Script**](/docs/script/program-language-for-script) — Explore available programming languages for Script development
-
-While CKB supports multiple programming languages for Script development, we currently recommend **Rust** for production use due to its performance, memory safety, and mature tooling support.
 
 ### 📚 Learn Core Concepts
 
@@ -5126,6 +5256,10 @@ Deep dive into CKB's unique architecture:
 - [**Cell Model**](/docs/ckb-fundamentals/cell-model) — Learn about CKB's UTXO-like data model
 - [**CKB-VM**](/docs/ckb-fundamentals/ckb-vm) — Explore the RISC-V based virtual machine
 
+### 🖥️ Run a CKB Node
+
+- [**Run a Node**](/docs/node/node-overview) — Operate a persistent CKB Mainnet or Testnet node
+
 ---
 
 ## Additional Resources
@@ -5133,20 +5267,6 @@ Deep dive into CKB's unique architecture:
 - [**OffCKB CLI**](/docs/sdk-and-devtool/offckb) — Full documentation for the OffCKB tool
 - [**CCC SDK**](/docs/sdk-and-devtool/ccc) — CKB's official JavaScript/TypeScript SDK for building dApps
 - [**CKB CLI**](/docs/sdk-and-devtool/ckb-cli) — Command-line tool for interacting with CKB nodes
-
----
-
-## Next Steps
-
-Ready to dive deeper? Here are some recommendations based on your interests:
-
-| If you want to...                            | Start with...                                                                               |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Build a web frontend that interacts with CKB | [Transfer CKB Tutorial](/docs/dapp/transfer-ckb)                                            |
-| Issue tokens or NFTs                         | [Create a Fungible Token](/docs/dapp/create-token) or [Create a DOB](/docs/dapp/create-dob) |
-| Write on-chain smart contracts               | [Rust Quick Start](/docs/script/rust/rust-quick-start)                                      |
-| Understand CKB's unique features             | [How CKB Works](/docs/getting-started/how-ckb-works)                                        |
-| Run a CKB node                               | [Run a Node](/docs/node/node-overview)                                                      |
 
 Happy building! 🎉
 
@@ -5156,7 +5276,6 @@ Happy building! 🎉
 URL: https://docs.nervos.org/docs/getting-started/rpcs
 
 Description: Connect to CKB JSON-RPC endpoints, use public RPC nodes safely, and call common methods such as get_tip_block_number and send_transaction.
-Tags: rpc, node, json-rpc, transaction
 Audience: dApp developers, Node operators
 Related: /docs/node/install-ckb, /docs/node/run-mainnet-node, /docs/node/run-testnet-node, /docs/sdk-and-devtool/ccc
 Difficulty: intermediate
@@ -5167,6 +5286,8 @@ Last reviewed: 2026-06-24
 CKB RPCs are a set of programming interfaces provided by the Nervos CKB blockchain, enabling developers to interact with the network for querying data, managing transactions, and deploying Scripts directly.
 
 ## Public JSON RPC Nodes
+
+For live latency benchmarks of public CKB RPC nodes, see [OpenChainBench](https://openchainbench.com/benchmarks/ckb-rpc).
 
 - These nodes are provided by community members, they may be unstable, incomplete or not work at all, use at your own risk.
 - You may use these nodes to try out or test some features, but you should not use them for production.
@@ -6521,7 +6642,7 @@ This guide will help those who are interested in mining get started on Nervos. W
 
 Planning is the most important step in any successful mining operation. Do you have a well-ventilated place where the sound of the miners will not bother anyone? Do you have the proper electrical wiring to support your miners? Are your electricity rates competitive year-round? These are the kinds of questions you need to be able to answer *before* you start buying equipment.
 
-Many of these considerations and covered in the articles written [here](https://blog.sonami.cc/posts/should-i-start-mining-cryptocurrency/) and [here](https://blog.sonami.cc/posts/should-i-start-mining-cryptocurrency-part-2/). There are also many video resources on [YouTube](https://www.youtube.com/results?search_query=nervos+mining) that may also help you to get a better idea of what is involved with mining on Nervos. Using free tools like [mining calculators](https://minerstat.com/algorithm/eaglesong) can help you to understand what your costs will be. You can ask questions to other miners in the community-run [Nervos Mining CKB](https://t.me/NervosMining) Telegram channel or in the [#mining-chat](https://discord.com/channels/657799690070523914/671647273603694625) channel on the Nervos Discord server.
+Many of these considerations are covered in the articles written [here](https://blog.sonami.cc/posts/should-i-start-mining-cryptocurrency/) and [here](https://blog.sonami.cc/posts/should-i-start-mining-cryptocurrency-part-2/). There are also many video resources on [YouTube](https://www.youtube.com/results?search_query=nervos+mining) that may help you to get a better idea of what is involved with mining on Nervos. Using free tools like [mining calculators](https://minerstat.com/algorithm/eaglesong) can help you to understand what your costs will be. You can ask questions to other miners in the community-run [Nervos Mining CKB](https://t.me/NervosMining) Telegram channel or in the [#mining-chat](https://discord.com/channels/657799690070523914/671647273603694625) channel on the Nervos Discord server.
 
 Unlike mining for gold, there is very little guesswork in cryptocurrency mining. If you have properly done your research, then you should have realistic expectations about miner operation and profitability before you have made any kind of commitment. Don't skip out here! A little bit of research goes a very long way.
 
@@ -6541,7 +6662,7 @@ The CKB that you earn from mining are sent to the Nervos address that you specif
 
 [Neuron Wallet](https://docs-old.nervos.org/docs/basics/guides/crypto%20wallets/neuron) is a desktop wallet produced by the Nervos Foundation. It is a full node wallet, which means that it will download the full Nervos blockchain in the background. Because it runs a full node, it is often regarded to be the most secure wallet. However, the full node takes many gigabytes of disk space and may take up to 72 hours to complete the initial synchronization. Ledger hardware wallets can also be used with Neuron to give an extra layer of security.
 
-[CKBull](https://ckbull.app/), [imToken](https://docs-old.nervos.org/docs/basics/guides/crypto%20wallets/imtoken), and [SafePal](https://docs-old.nervos.org/docs/basics/guides/crypto%20wallets/safepal) are popular mobile wallets provided by third-party companies. All three wallets support both Google Android devices and Apple iOS devices.
+[Bitcoin Light](https://www.bitcoinlight.app), [imToken](https://docs-old.nervos.org/docs/basics/guides/crypto%20wallets/imtoken), and [SafePal](https://docs-old.nervos.org/docs/basics/guides/crypto%20wallets/safepal) are popular mobile wallets provided by third-party companies. All three wallets support both Google Android devices and Apple iOS devices.
 
 Many other wallets are also available. The Nervos Community maintains a more comprehensive [list of wallets](/docs/integrate-wallets/intro-to-wallets#ckb-wallet-options) within the Nervos ecosystem.
 
@@ -6564,19 +6685,19 @@ Part of a miner's duty is to protect the integrity of the network. A successful�
 
 The steps to create a pool account and the settings needed for your miner can differ from pool to pool. This information is specific to each pool and provided by the pools themselves. Search for specific mining guides for your chosen mining pool:
 
-- F2Pool: https://f2pool.zendesk.com/hc/en-us/articles/22893426126489-How-to-mine-Nervos
+- 2miners: https://ckb.2miners.com/
 - Antpool: https://antpoolsupport-hc.zendesk.com/hc/en-us/articles/5985104597913-CKB-Mining
 - Binance Pool: https://www.binance.com/en/support/faq/how-to-mine-nervos-ckb-on-binance-pool-6967ad3306b84ec49dcbb5ed8ac30a9b
-- 2miners: https://ckb.2miners.com/
-- ViaBTC: https://www.viabtc.com/pool/mining
 - DxPool: https://www.dxpool.net/help/zh/ckb-mining-tutorial
-- Poolin: https://help.poolin.me/hc/en-us/articles/360040689912-CKB-Mining-Settings
+- F2Pool: https://f2pool.zendesk.com/hc/en-us/articles/22893426126489-How-to-mine-Nervos
 
 Here are a few more helpful resources to see the hash rate, fees, and various features on several of the pools that support Nervos.
 
 - https://miningpoolstats.stream/nervos
-- https://minerstat.com/coin/ckb/pools
+- https://minerstat.com/coin/CKB/pools
 - https://wheretomine.io/coins/nervos
+
+{/* Anchor alias for legacy /getting-started/mine#configurations links */}
 
 ## Step 5: Set Up and Configure Your CKB Miner
 
@@ -6712,7 +6833,7 @@ The total amount of secondary issuance issued annually is fixed at 1.344 billion
 
 ## Proposal Reward and Commit Reward
 
-Proposal Reward and Commit Reward are both sourced from transaction fees. When a transaction enters the transaction pool, it subsequently enters the Proposal Zone, followed by the Commitment Zone (meaning the transaction is packaged into a block). This a two-step confirmation process comes from NC-Max, to eliminate the bottleneck of block propagation delay.
+Proposal Reward and Commit Reward are both sourced from transaction fees. When a transaction enters the transaction pool, it subsequently enters the Proposal Zone, followed by the Commitment Zone (meaning the transaction is packaged into a block). This two-step confirmation process comes from NC-Max, to eliminate the bottleneck of block propagation delay.
 
 Miners who mine block N will receive:
 
@@ -6757,11 +6878,108 @@ In addition to the direct impact of CKB price declines on miners, a surge in CKB
 
 ---
 
+## Source: node/devnet-from-existing-data.mdx
+URL: https://docs.nervos.org/docs/node/devnet-from-existing-data
+
+# Devnet From Existing Data
+
+This guide explains how to run a local `dev` chain using an existing Mainnet or Testnet data directory. This setup is useful when you want local testing with real chain data without syncing from scratch.
+
+Always work on a copy of the data directory. Never modify your original Mainnet or Testnet data directly.
+
+## 1. Copy the Existing Data Directory
+
+Copy the source data directory to a new location for the dev chain:
+
+```bash
+cp -r /path/to/ckb-data /path/to/ckb-dev-fork
+cd /path/to/ckb-dev-fork
+```
+
+All commands below assume the current directory is the copied directory.
+
+## 2. Get the Source Chain Spec File
+
+Download the chain spec file that matches your copied data:
+
+- Mainnet: `https://github.com/nervosnetwork/ckb/blob/develop/resource/specs/mainnet.toml`
+- Testnet: `https://github.com/nervosnetwork/ckb/blob/develop/resource/specs/testnet.toml`
+
+For example, for Mainnet:
+
+```bash
+curl -L -o mainnet.toml \
+  https://raw.githubusercontent.com/nervosnetwork/ckb/develop/resource/specs/mainnet.toml
+```
+
+## 3. Initialize the Dev Chain and Import the Source Spec
+
+```bash
+ckb init --chain dev --import-spec ./mainnet.toml --force
+```
+
+If you copied Testnet data, replace `mainnet.toml` with `testnet.toml`.
+
+## 4. Update `specs/dev.toml`
+
+Set `Dummy` Proof-of-Work for local development. The `[params]` section differs between Mainnet and Testnet — use the matching block below.
+
+`genesis_epoch_length` (together with the epoch reward fields) participates in the genesis cellbase reward calculation, which determines the genesis block hash. If the value here does not match the value the source chain was launched with, the node will refuse to start with `chainspec error: ChainSpec: genesis hash mismatch`.
+
+### Mainnet
+
+Mainnet was launched with `genesis_epoch_length = 1743`, so this value must be preserved:
+
+```toml
+[params]
+genesis_epoch_length = 1743
+cellbase_maturity = 0
+permanent_difficulty_in_dummy = true
+
+[pow]
+func = "Dummy"
+```
+
+### Testnet
+
+The bundled Testnet spec has no `[params]` section and was launched with the default `genesis_epoch_length = 1000`. Do **not** add `genesis_epoch_length` here — leaving it unset lets it fall back to the default and keeps the genesis hash consistent:
+
+```toml
+[params]
+cellbase_maturity = 0
+permanent_difficulty_in_dummy = true
+
+[pow]
+func = "Dummy"
+```
+
+- `cellbase_maturity = 0` makes locally mined cellbase outputs immediately spendable, which is convenient for development.
+- `permanent_difficulty_in_dummy = true` keeps the difficulty constant when running with `Dummy` PoW. Its default is `false`, which would let difficulty be recalculated from the dummy block timestamps and swing wildly once you start mining locally; the bundled `resource/specs/dev.toml` therefore enables it by default and the same is recommended here.
+
+## 5. First Run Requires Spec-Check Flags
+
+The copied database still records the original chain spec hash, so the first startup must include:
+
+```bash
+ckb run --skip-spec-check --overwrite-spec
+```
+
+After the first successful run, `ckb run` can be used normally.
+
+## Troubleshooting
+
+If you see a log like `init_snapshot Spec(GenesisMismatch(...))`, the running spec and database spec do not match. Ensure:
+
+1. You imported the correct source chain spec.
+2. The first run uses `--skip-spec-check --overwrite-spec`.
+3. You are operating in the copied data directory, not the original one.
+
+---
+
 ## Source: node/install-ckb.mdx
 URL: https://docs.nervos.org/docs/node/install-ckb
 
 Description: Install the CKB binary from releases, source, or Docker, then proceed to Mainnet, Testnet, or Docker node setup.
-Tags: node, install, mainnet, testnet, docker
 Audience: Node operators
 Related: /docs/node/run-mainnet-node, /docs/node/run-testnet-node, /docs/node/run-node-docker, /docs/getting-started/rpcs
 Difficulty: beginner
@@ -7588,6 +7806,8 @@ This guide covers two ways to run a Devnet node:
 
 - A quickstart using OffCKB, a tool that simplifies the process by running everything you need out of the box
 - A manual setup using the CKB binary, similar to running a Mainnet or Testnet node
+
+If you want to run a local dev chain that starts from existing Mainnet or Testnet data instead of a fresh genesis block, see [Devnet From Existing Data](/docs/node/devnet-from-existing-data).
 
 ## Quick Start with OffCKB
 
@@ -10309,7 +10529,6 @@ Before we finish, I do want to shout out Google's [fuzzing](https://github.com/g
 URL: https://docs.nervos.org/docs/script/intro-to-script
 
 Description: Learn what CKB Scripts are, how Lock Scripts and Type Scripts execute, and how code_hash, hash_type, and args locate Script code.
-Tags: script, concept, lock-script, type-script, ckb-vm
 Audience: Script developers
 Related: /docs/script/rust/rust-quick-start, /docs/tech-explanation/script, /docs/tech-explanation/lock-script, /docs/tech-explanation/type-script
 Difficulty: beginner
@@ -15155,7 +15374,6 @@ Here's a quick recap:
 URL: https://docs.nervos.org/docs/script/rust/rust-quick-start
 
 Description: Create, build, test, and debug CKB Scripts in Rust using the recommended project template, no_std setup, and local examples.
-Tags: script, tutorial, rust, ckb-vm, testing
 Audience: Rust developers, Script developers
 Related: /docs/script/intro-to-script, /docs/script/rust/rust-build, /docs/script/rust/rust-test, /docs/script/rust/rust-debug
 Difficulty: intermediate
@@ -17625,7 +17843,6 @@ No known issues have been reported for this VM version.
 URL: https://docs.nervos.org/docs/sdk-and-devtool/ccc
 
 Description: Use the CCC TypeScript SDK to compose transactions, connect wallets, sign messages, issue assets, and build CKB applications.
-Tags: ccc, typescript, sdk, transaction, wallet
 Audience: dApp developers
 Related: /docs/dapp/transfer-ckb, /docs/dapp/create-token, /docs/integrate-wallets/ccc-wallet, /docs/getting-started/rpcs
 Difficulty: intermediate
@@ -19963,19 +20180,34 @@ Additional Resources
 ## Source: sdk-and-devtool/offckb.mdx
 URL: https://docs.nervos.org/docs/sdk-and-devtool/offckb
 
+Description: Install and use OffCKB to run a local CKB Devnet, manage test accounts, create and deploy Scripts, debug transactions, and customize the environment.
+Audience: dApp developers, Script developers
+Related: /docs/getting-started/quick-start, /docs/script/js/js-quick-start, /docs/dapp/simple-lock, /docs/node/run-devnet-node
+Difficulty: beginner
+Last reviewed: 2026-08-26
+
 # OffCKB
 
 [offckb](https://github.com/ckb-devrel/offckb) is an all-in-one CLI tool that provides a local CKB development environment.
 
 - Simplifies development with one-line command to start the devnet
-- Comes with 20 pre-funded accounts and multiple minimal dApp templates for quick project setup
+- Comes with pre-funded Devnet accounts
+- Generates JavaScript or TypeScript CKB Smart Contract projects from templates
 - Embeds common Scripts in the genesis block, such as Omnilock, xUDT, and Spore
 - Provides debugging tools like ckb-debugger
 - Offers configurable settings via a JSON file
 
-This guide will walk you through leveraging OffCKB to kickstart your first CKB project. The version used here is [`v0.4.0`](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.0) or later.
+This guide will walk you through leveraging OffCKB to kickstart your first CKB project. The version used here is [`v0.4.13`](https://github.com/ckb-devrel/offckb/releases/tag/v0.4.13) or later.
 
 ## Install
+
+OffCKB requires **Node.js 20 or later**. Check your installed version:
+
+```bash
+node -v
+```
+
+If the version is below `v20.0.0`, install a current [Node.js LTS release](https://nodejs.org/en/download) before continuing.
 
 ```sh
 npm install -g @offckb/cli
@@ -19987,8 +20219,6 @@ or use `pnpm` to install:
 pnpm install -g @offckb/cli
 ```
 
-_Requires Node version `>= v20.0.0`. We recommend using latest [LTS](https://nodejs.org/en/download/package-manager) version of Node to run `offckb`_
-
 ## Usage
 
 ```sh
@@ -19997,211 +20227,359 @@ Usage: offckb [options] [command]
 ckb development network for your first try
 
 Options:
-  -V, --version                                 output the version number
-  -h, --help                                    display help for command
+  -V, --version                                output the version number
+  --json                                       Output logs in JSON format for agent/programmatic consumption
+  -h, --help                                   display help for command
 
 Commands:
-  node [CKB-Version]                            Use the CKB to start devnet
-  deploy [options]                              Deploy contracts to different networks, only supports devnet and testnet
-  debug [options]                               Quickly debug transaction with tx-hash
-  system-scripts [options]                      Print/Output system scripts of the CKB blockchain
-  clean                                         Clean the devnet data, need to stop running the chain first
-  accounts                                      Print account list info
-  deposit [options] [toAddress] [amountInCKB]   Deposit CKB tokens to address, only devnet and testnet
-  transfer [options] [toAddress] [amountInCKB]  Transfer CKB tokens to address, only devnet and testnet
-  transfer-all [options] [toAddress]            Transfer All CKB tokens to address, only devnet and testnet
-  balance [options] [toAddress]                 Check account balance, only devnet and testnet
-  debugger                                      Port of the raw CKB Standalone Debugger
-  config <action> [item] [value]                do a configuration action
-  help [command]                                display help for command
+  node [options] [CKB-Version]                 Use the CKB to start devnet
+  logs [options] [target]                      Show devnet logs: node (default), contract script debug output, miner, or RPC proxy events
+  create [options] [project-name]              Create a new CKB Smart Contract project in JavaScript.
+  deploy [options]                             Deploy contracts to different networks, only supports devnet and testnet
+  debug [options]                              Quickly debug transaction with tx-hash
+  system-scripts [options]                     Print/Output system scripts of the CKB blockchain
+  clean [options]                              Clean the devnet data, need to stop running the chain first
+  accounts [options]                           Print account list info
+  deposit [options] [toAddress] [amountInCKB]  Deposit CKB tokens to address, only devnet and testnet
+  transfer [options] [toAddress] [amount]      Transfer CKB or UDT tokens to address, only devnet and testnet
+  transfer-all [options] [toAddress]           Transfer All CKB tokens to address, only devnet and testnet
+  balance [options] <toAddress>                Check account balance (CKB + detected SUDT/xUDT), only devnet and testnet
+  udt                                          UDT token commands
+  install <tool>                               Install a tool binary used by offckb (e.g. the native ckb-debugger)
+  debugger                                     Port of the raw CKB Standalone Debugger
+  status [options]                             Show ckb-tui status interface
+  config <action> [item] [value]               do a configuration action
+  devnet                                       Devnet utility commands
+  help [command]                               display help for command
 ```
 
-_Use `offckb [command] -h` to learn more about a specific command._
+Use `offckb [command] -h` to learn more about a specific command.
 
 ## Get started
 
-### Running CKB
+### Run a Local CKB Devnet
 
-Start a local blockchain with the default CKB version:
+Start a local blockchain with one command:
 
-```sh
+**Command:**
+
+```bash
 offckb node
 ```
 
-Or specify a CKB version:
+**Response:**
 
-```sh
-offckb node 0.201.0
+```bash
+Launching CKB devnet Node...
+CKB devnet is ready at http://127.0.0.1:8114.
+Follow the full node log with: offckb logs -f
+CKB devnet RPC Proxy server running on http://127.0.0.1:28114
 ```
 
-Or set the default CKB version:
+Your local CKB blockchain is now running. Use the proxy RPC endpoint at [http://127.0.0.1:28114](http://127.0.0.1:28114) as the default for local development. It forwards requests to the node and records failed transactions for debugging. The direct RPC endpoint at [http://127.0.0.1:8114](http://127.0.0.1:8114) bypasses the debugging proxy.
+
+Keep this terminal open while you use the Devnet, and open a second terminal for the commands you run next. To stop the chain, press `CTRL+C`. To resume where you left off, run `offckb node` again.
+
+This Devnet runs only on your computer. Its transactions will not appear in public Testnet or Mainnet explorers.
+
+To run a specific CKB version:
 
 ```sh
-offckb config set ckb-version 0.201.0
+offckb node 0.208.0
+```
+
+To save it as the default version:
+
+```sh
+offckb config set ckb-version 0.208.0
 offckb node
 ```
 
-Once you start the devnet, there is a RPC server running at `http://127.0.0.1:8114`. There is also a RPC proxy server running at `http://127.0.0.1:28114` which will proxy all the requests to the RPC server. The meaning of using a proxy RPC server is to record request and automatically dump failed transactions so you can debug them easily later.
-
-In the same way, you can also start proxy RPC server for `testnet` and `mainnet` by running:
+You can also run a local debugging proxy in front of a public Testnet or Mainnet RPC. This does not start a Testnet or Mainnet node on your computer:
 
 ```sh
 offckb node --network <testnet or mainnet>
 ```
 
-Using a local proxy RPC server for public testnet/mainnet is also very helpful for debugging the requests and the automatically recorded dump transactions.
+### View Pre-funded Accounts
 
-### List scripts info
+In the second terminal, list the pre-funded Devnet accounts:
 
-Print all the predefined scripts for the local blockchain:
+**Command:**
+
+```bash
+offckb accounts
+```
+
+**Response:**
+
+```text
+#### ALL ACCOUNTS ARE FOR TEST AND DEVELOP ONLY
+#### DON'T USE THESE ACCOUNTS ON MAINNET
+#### OTHERWISE YOU WILL LOSE YOUR MONEY
+
+Print account list, each account is funded with 42_000_000_00000000 capacity in the devnet genesis block.
+
+- "#": 0
+  address: ckt1...
+  pubkey: 0x...
+  lock_arg: 0x...
+  lockScript:
+    codeHash: 0x...
+    hashType: type
+    args: 0x...
+...
+- "#": 19
+  address: ckt1...
+  pubkey: 0x...
+  lock_arg: 0x...
+  lockScript:
+    codeHash: 0x...
+    hashType: type
+    args: 0x...
+```
+
+Run `offckb accounts` whenever you need the account list or funding provided by your installed version.
+
+These accounts are for local testing only. Never send Mainnet assets to them.
+
+- Private keys are hidden by default. Display them only in a trusted local terminal with `offckb accounts --show-private-keys`.
+- Contract deployment costs are deducted from these Devnet accounts, so no faucet or manual funding is required.
+
+### Create a Contract Project
+
+Generate a JavaScript or TypeScript contract project:
 
 ```sh
-offckb system-scripts
+offckb create <project-name> -c <contract-name>
 ```
 
-Or print the scripts info to a lumos JSON file:
+The `-c` option is optional; the default contract name is `hello-world`. Generated projects include their own build, test, and deployment scripts. Follow the generated project's README because its commands and artifact paths may differ from Rust projects or other templates.
 
-```sh
-offckb system-scripts --export-style lumos
-```
-
-Or print the scripts info in a CCC style:
-
-```sh
-offckb system-scripts --export-style ccc
-```
-
-You can also export the scripts info to a JSON file:
-
-```sh
-offckb system-scripts --output <output-file-path>
-```
-
-### Tweak Devnet Config
-
-By default, offckb use a fixed devnet config for the local blockchain. You can tweak the config to customize the devnet, for example, modify the default log level for the devnet CKB Node `warn,ckb-script=debug`.
-
-To tweak the devnet config, follow the steps below:
-
-1. Locate your devnet config folder by running:
-
-```sh
-offckb config list
-```
-
-Result:
-
-```json
-{
-  "devnet": {
-    "rpcUrl": "http://127.0.0.1:8114",
-    "configPath": "~/Library/Application Support/offckb-nodejs/devnet",
-    "dataPath": "~/Library/Application Support/offckb-nodejs/devnet/data"
-  }
-}
-```
-
-2. Pay attention to the `devnet.configPath` and `devnet.dataPath`. They are the ones we need.
-3. `cd` into the `devnet.configPath`, this is the config folder for the local blockchain. Modify the config in the folder to better customize the devnet. For customization, see [Custom Devnet Setup](https://docs.nervos.org/docs/node/run-devnet-node#custom-devnet-setup) and [Configure CKB](https://github.com/nervosnetwork/ckb/blob/develop/docs/configure.md) for better explanation of the config files.
-4. After modifications, remove everything in the `devnet.dataPath` folder. This will clean the chain data.
-5. Restart local blockchain by running `offckb node`
-
-Done.
+When a generated example includes dApp or client-side code, it uses [CCC](https://github.com/ckb-devrel/ccc) to interact with CKB. CCC does not compile the on-chain Script.
 
 ### Deploy a CKB Smart Contract
 
-To deploy the script, use `offckb deploy` command:
+Before deploying, confirm that:
 
-```sh
-offckb deploy --network <devnet/testnet> --target <path-to-your-contract-binary-file-or-folder> --output <output-folder-path>
+- The target Devnet is running (`offckb node`), or the Testnet RPC is reachable.
+- The contract has been compiled using the command documented by its project.
+- The compiled binary or target folder exists.
+- The deployment network matches the network used by your application.
+
+If you already have a compiled contract binary or folder, deploy it directly with OffCKB:
+
+**Command:**
+
+```bash
+offckb deploy --network devnet --target <path-to-contract-binary-or-folder> --output ./deployment
 ```
 
-Pass `--type-id` option if you want Scripts to be upgradable
+**Response:**
+
+```text
+contract <contract-name> deployed, tx hash: 0x...
+wait for tx confirmed on-chain...
+tx committed.
+📦 Saving deployment artifacts for 1 contract(s)...
+- ✅ Successfully saved artifacts for <contract-name>
+- 📄 Script info file generated: deployment/scripts.json
+🎉 All deployment artifacts saved successfully!
+```
+
+If your project provides a deployment script, prefer that project-level command. For example:
+
+```sh
+npm run deploy
+```
+
+Project-level scripts may compile the contract, select the correct `--target`, and synchronize deployment information automatically.
+
+Unlike an EVM contract, a deployed CKB Script does not have a contract address. Its code is stored in a Cell and identified by an OutPoint; transactions include that reference in a [`CellDep`](/docs/tech-explanation/cell-deps).
+
+After a successful deployment, OffCKB writes these deployment records:
+
+- `<output>/<network>/<contract>/deployment.toml`
+- `<output>/<network>/<contract>/migrations/<timestamp>.json`
+- `<output>/scripts.json`
+
+These files are outputs of a successful deployment. They do not need to exist before the first deployment.
+
+Pass `--type-id` if you want the Script to be upgradable:
 
 ```sh
 offckb deploy --type-id --network <devnet/testnet>
 ```
 
-Your deployed scripts info will be listed in the `output-folder-path` which you defined in the command.
+Upgrades are keyed by the contract artifact's name. Do not rename the artifact between deployments; otherwise, OffCKB cannot find its previous Type ID information and creates a new Type ID.
 
-Note that upgrades are keyed by the contract's artifact name. If you plan to upgrade with `--type-id`, do not rename your contract artifact. Renaming it makes the offckb unable to find the previous Type ID info from the `output-folder-path` and will create a new Type ID.
+### When Deployment Fails
 
-### Debug a transaction
+| Symptom                             | What to check                                                                                                                                                           |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cannot connect to the node or RPC   | Start `offckb node` and wait for the ready message. Use `offckb logs -f` to inspect the full node log.                                                                  |
+| Contract binary or target not found | Run the build command from the project's README and confirm the path passed to `--target`.                                                                              |
+| Deployment records are missing      | Confirm that the command reached `tx committed.`, then check the folder passed to `--output`. OffCKB generates the records after a successful deployment.               |
+| Transaction is rejected             | Send requests through `http://127.0.0.1:28114`, then run `offckb debug --tx-hash <transaction-hash>` to inspect the recorded transaction.                               |
+| Insufficient capacity or fee        | Check the output's [occupied capacity](/docs/tech-explanation/capacity) and the transaction fee rate. Larger signatures and additional Cell data can increase the cost. |
 
-If you are interacting the CKB devnet via the proxy RPC server(`localhost:28114`), all the failed transactions will be dumped and recorded so you can debug them later.
+### Debug a Transaction
 
-Every time you run a transaction, you can debug it with the transaction hash:
+When you send Devnet requests through the proxy RPC endpoint at `http://127.0.0.1:28114`, failed transactions are recorded so you can debug them later.
+
+Start by checking the relevant logs:
 
 ```sh
-offckb debug <transaction-hash>
+offckb logs script                       # Contract Script output
+offckb logs rpc                          # RPC requests and errors
+offckb logs rpc --tail 200 --grep ERROR  # Recent RPC errors
 ```
 
-It will verify all the scripts in the transaction and print the detailed info in the terminal.
+Then debug the transaction with its hash:
 
 ```sh
-offckb debug --tx-hash 0x64c936ee78107450d49e57b7453dce9031ce68b056b2f1cdad5c2218ab7232ad
+offckb debug --tx-hash <transaction-hash>
+```
+
+Projects generated with `offckb create` install the native `ckb-debugger` automatically. If OffCKB reports that it is missing, install it once:
+
+```sh
+offckb install ckb-debugger
+```
+
+The command verifies the Scripts in the transaction and prints their execution results and cycle usage. A shortened response looks like this:
+
+```text
+offckb debug --tx-hash 0x...
 Dump transaction successfully
 
 ******************************
 ****** Input[0].Lock ******
 
-hello, this is new add!
-Hashed 1148 bytes in sighash_all
-sighash_all = 5d9b2340738ee28729fc74eba35e6ef969878354fe556bd89d5b6f62642f6e50
-event = {"pubkey":"45c41f21e1cf715fa6d9ca20b8e002a574db7bb49e96ee89834c66dac5446b7a","tags":[["ckb_sighash_all","5d9b2340738ee28729fc74eba35e6ef969878354fe556bd89d5b6f62642f6e50"]],"created_at":1725339769,"kind":23334,"content":"Signing a CKB transaction\n\nIMPORTANT: Please verify the integrity and authenticity of connected Nostr client before signing this message\n","id":"90af298075ac878901282e23ce35b24e584b7727bc545e149fc259875a23a7aa","sig":"b505e7d5b643d2e6b1f0e5581221bbfe3c37f17534715e51eecf5ff97a2e1b828a3d767eb712555c78a8736e9085b4960458014fa171d5d169a1b267b186d2f3"}
-verify_signature costs 3654 k cycles
 Run result: 0
-Total cycles consumed: 4013717(3.8M)
-Transfer cycles: 44947(43.9K), running cycles: 3968770(3.8M)
-
-******************************
-****** Output[0].Type ******
-
-verify_signature costs 3654 k cycles
-Run result: 0
-Total cycles consumed: 3916670(3.7M)
-Transfer cycles: 43162(42.2K), running cycles: 3873508(3.7M)
+Total cycles consumed: ...
 ```
 
 If you want to debug a single cell script in the transaction, you can use the following command:
 
 ```sh
-offckb debug <transaction-hash> --single-script <single-cell-script-option>
+offckb debug --tx-hash <transaction-hash> --single-script <single-cell-script-option>
 ```
 
-The `single-cell-script-option` format is `<cell-type>[<cell-index>].<script-type>`, eg: `"input[0].lock"`
+The `single-cell-script-option` format is `<cell-type>[<cell-index>].<script-type>`, for example, `"input[0].lock"`.
 
-- `cell-type` could be `input` or `output`, refers to the cell type
-- `cell-index` is the index of the cell in the transaction
-- `script-type` could be `lock` or `type`, refers to the script type
+- `cell-type` is `input` or `output`.
+- `cell-index` is the Cell's index in the transaction.
+- `script-type` is `lock` or `type`.
 
 Or you can replace the script with a binary file in your single cell script debug session:
 
 ```sh
-offckb debug <transaction-hash> --single-script <single-cell-script-option> --bin <path/to/binary/file>
+offckb debug --tx-hash <transaction-hash> --single-script <single-cell-script-option> --bin <path/to/binary/file>
 ```
 
-All the debug utils are borrowed from [ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger).
+These debugging features use [ckb-debugger](https://github.com/nervosnetwork/ckb-standalone-debugger/tree/develop/ckb-debugger).
 
-## Config Setting
+### Reset the Devnet
 
-### List All Settings
+If you need to start fresh with a new chain, first stop the running node by pressing `CTRL+C`. Then run:
+
+**Command:**
+
+```bash
+offckb clean
+```
+
+**Response:**
+
+```text
+Chain data cleaned.
+```
+
+Cleaning the Devnet creates a new local chain. Transaction hashes and deployed Script OutPoints from the previous chain will no longer be valid.
+
+### Inspect Built-in Scripts
+
+Print all predefined Scripts for the local blockchain:
 
 ```sh
+offckb system-scripts
+```
+
+Export them in Lumos or CCC format, or write them to a JSON file:
+
+```sh
+offckb system-scripts --export-style lumos
+offckb system-scripts --export-style ccc
+offckb system-scripts --output <output-file-path>
+```
+
+The default Devnet includes xUDT, Omnilock, AnyoneCanPay, AlwaysSuccess, Spore, CKB-JS-VM, Nostr-Lock, and Type ID. Use `offckb system-scripts` to inspect the information for the Scripts included with your installed version.
+
+## Configuration
+
+### Locate Configuration Files
+
+Run the following command and look for the `devnet.configPath` and `devnet.dataPath` values:
+
+**Command:**
+
+```bash
 offckb config list
 ```
 
-### Set CKB version
+**Response:**
+
+```text
+config file: ~/Library/Preferences/offckb-nodejs/settings.json
+{
+  ...
+  "devnet": {
+    "rpcUrl": "http://127.0.0.1:8114",
+    "rpcProxyPort": 28114,
+    "configPath": "~/Library/Application Support/offckb-nodejs/devnet",
+    "dataPath": "~/Library/Application Support/offckb-nodejs/devnet/data",
+    ...
+  },
+  ...
+}
+```
+
+### Customize the Devnet
+
+Stop the running node, then open the Devnet configuration editor:
+
+```sh
+offckb devnet config
+```
+
+After saving your changes, remove only the existing chain data and restart the Devnet:
+
+```sh
+offckb clean -d
+offckb node
+```
+
+Running `offckb clean -d` preserves the Devnet configuration but deletes its chain data. Transaction hashes and deployed Script OutPoints from the previous chain will no longer be valid.
+
+For advanced changes, you can edit the files under `devnet.configPath` directly. See [Custom Devnet Setup](/docs/node/run-devnet-node#custom-devnet-setup) and [Configure CKB](https://github.com/nervosnetwork/ckb/blob/develop/docs/configure.md) for details.
+
+### Set the Default CKB Version
+
+Set and confirm the version used when `offckb node` is run without a version argument:
 
 ```sh
 offckb config get ckb-version
-> 0.113.0
-offckb config set ckb-version 0.117.0
+> 0.208.0
+offckb config set ckb-version 0.208.0
+> save new settings
 offckb config get ckb-version
-> 0.117.0
+> 0.208.0
 ```
 
-### Set Network Proxy
+### Set an HTTP Proxy
+
+This setting controls the HTTP proxy OffCKB uses for downloads and network requests. It is separate from the CKB RPC proxy at `http://127.0.0.1:28114`.
 
 ```sh
 offckb config set proxy http://127.0.0.1:1086
@@ -20214,46 +20592,13 @@ offckb config get proxy
 > No Proxy.
 ```
 
-## Log-Level
+### Configure Logging
 
-You can tweak env `LOG_LEVEL` to control the `offckb` log level.
-
-For example, set `LOG_LEVEL=debug` gives you more outputs of offckb proxy RPC.
+Set `LOG_LEVEL=debug` to print more detailed OffCKB and RPC proxy logs:
 
 ```sh
 LOG_LEVEL=debug offckb node
 ```
-
-## Built-in scripts
-
-- [x] xUDT https://github.com/nervosnetwork/rfcs/pull/428
-  - commit id: 410b16c
-- [x] Omnilock https://github.com/cryptape/omnilock
-  - commit id: cd764d7
-- [x] AnyoneCanPay https://github.com/cryptape/anyone-can-pay
-  - commit id: b845b3b
-- [x] AlwaysSuccess https://github.com/nervosnetwork/ckb-production-scripts/blob/master/c/always_success.c
-  - commit id: 410b16c
-- [x] Spore https://github.com/sporeprotocol/spore-contract
-  - version: 0.2.2-beta.1
-- [x] CKB-JS-VM https://github.com/nervosnetwork/ckb-js-vm
-  - version: 1.0.0
-- [x] Nostr-Lock https://github.com/cryptape/nostr-binding/tree/main/contracts/nostr-lock
-  - version: 25dd59d
-- [x] Type ID built-in
-
-## Accounts
-
-`offckb` comes with 20 accounts, each account is funded with 42_000_000_00000000 capacity in the genesis block.
-
-all the private keys are recorded in the `account/keys` file.
-detail informations about each account are recorded in the `account/account.json` file.
-
-:warning: **DO NOT SEND REAL ASSETS INTO ALL THESE ACCOUNTS, YOU CAN LOOSE YOUR MONEY** :warning:
-
-## About CCC
-
-`offckb` uses [CCC](https://github.com/ckb-devrel/ccc) as the development framework to build the CKB dApp template projects.
 
 ---
 
@@ -25419,7 +25764,6 @@ We differentiate the terms Script and Code as follows:
 URL: https://docs.nervos.org/docs/tech-explanation/transaction
 
 Description: Reference the CKB transaction structure, including cell_deps, header_deps, inputs, witnesses, outputs, outputs_data, and transaction states.
-Tags: transaction, reference, cell-model, witness, cell-deps
 Audience: dApp developers, Script developers
 Related: /docs/tech-explanation/inputs, /docs/tech-explanation/outputs, /docs/tech-explanation/witness, /docs/tech-explanation/cell-deps, /docs/dapp/transfer-ckb
 Difficulty: intermediate
