@@ -47,8 +47,10 @@ Starting in [CKB v0.202.0](https://github.com/nervosnetwork/ckb/releases/tag/v0.
 
 ```bash title='ckb.toml'
 # Supported protocols list, only "Sync" and "Identify" are mandatory, others are optional
-support_protocols = ["Ping", "Discovery", "Identify", "Feeler", "DisconnectMessage", "Sync", "Relay", "Time", "Alert", "LightClient", "Filter", "HolePunching"]
+support_protocols = ["Ping", "Discovery", "Identify", "Feeler", "DisconnectMessage", "Sync", "Relay", "Time", "LightClient", "Filter", "HolePunching"]
 ```
+
+The `Alert` protocol was removed in [CKB v0.210.0](https://github.com/nervosnetwork/ckb/releases/tag/v0.210.0). If your existing `ckb.toml` still lists `"Alert"` in `support_protocols`, the value is ignored and can be safely removed.
 
 The `HolePunching` protocol helps nodes behind [NAT](https://en.wikipedia.org/wiki/Network_address_translation) become publicly accessible — significantly improving peer connectivity and making it easier to appear on tools like [Node Probe](https://nodes.ckb.dev/).
 
