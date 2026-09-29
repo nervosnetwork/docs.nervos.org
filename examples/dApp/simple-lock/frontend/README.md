@@ -11,7 +11,7 @@ The root deploy command automatically copies the selected contract and system-sc
 pnpm dev
 
 # Testnet
-NEXT_PUBLIC_NETWORK=testnet pnpm dev
+pnpm dev:testnet
 ```
 
 Only `devnet` and `testnet` are accepted because current OffCKB Mainnet artifacts do not include the required `ckb-js-vm` dependency. Restart the frontend after changing networks or redeploying.

@@ -199,7 +199,7 @@ If either OutPoint is missing or stale, the page shows recovery guidance instead
 
 ### 5. Create and Fund a Hash Lock
 
-Enter a preimage such as `Hello World`. The frontend hashes it and creates a Lock Script that combines:
+Enter a nonempty preimage such as `Hello World`. The frontend hashes it and creates a Lock Script that combines:
 
 - The `ckb-js-vm` interpreter code hash;
 - The deployed `hash-lock.bc` code hash and hash type;
@@ -270,7 +270,13 @@ The first 35 bytes of `args` tell `ckb-js-vm` which bytecode to execute. The rem
 ## How the Frontend Builds the Address
 
 ```ts title="frontend/app/hash-lock.ts"
-export function generateAccount(hash: string) {
+export function generateAccount(preimage: string) {
+  if (!preimage) {
+    throw new Error(
+      "Enter a nonempty preimage before generating a funding address."
+    );
+  }
+  const hash = ccc.hashCkb(stringToBytesHex(preimage)).slice(2);
   const { contract, ckbJsVm } = deploymentConfig();
   const lockArgs =
     "0x0000" +
@@ -369,7 +375,7 @@ Testnet requires a separate deployment because Devnet OutPoints do not exist the
 
    ```bash
    cd frontend
-   NEXT_PUBLIC_NETWORK=testnet pnpm dev
+   pnpm dev:testnet
    ```
 
 5. Confirm the page reports both dependencies as **ready** before depositing Testnet CKB.

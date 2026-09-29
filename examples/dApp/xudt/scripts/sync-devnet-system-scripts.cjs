@@ -7,7 +7,7 @@ const artifactPath = path.resolve(__dirname, "../system-scripts.json");
 
 function syncDevnetSystemScripts() {
   const directory = fs.mkdtempSync(
-    path.join(os.tmpdir(), "store-data-system-scripts-")
+    path.join(os.tmpdir(), "xudt-system-scripts-")
   );
   const exportedPath = path.join(directory, "system-scripts.json");
 
@@ -44,6 +44,12 @@ function syncDevnetSystemScripts() {
     if (!exported.devnet?.secp256k1_blake160_sighash_all?.script) {
       throw new Error(
         "The OffCKB export does not contain the Devnet secp256k1 system script."
+      );
+    }
+
+    if (!exported.devnet?.xudt?.script) {
+      throw new Error(
+        "The OffCKB export does not contain the Devnet xUDT system script."
       );
     }
 

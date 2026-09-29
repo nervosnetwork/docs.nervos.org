@@ -29,7 +29,7 @@ CKB devnet RPC Proxy server running on http://127.0.0.1:28114
 </Tabs>
 ```
 
-You might want to check pre-funded accounts and copy private keys for later use. Open another terminal and execute:
+Keep the Devnet running throughout the tutorial. Open another terminal to list the pre-funded accounts:
 
 ```mdx-code-block
 <Tabs>
@@ -49,7 +49,6 @@ offckb accounts
 Print account list, each account is funded with 42_000_000_00000000 capacity in the genesis block.
 [
   {
-    privkey: '0x6109170b275a09ad54877b82f7d9930f88cab5717d484fb4741ae9d1dd078cd6',
     pubkey: '0x02025fa7b61b2365aa459807b84df065f1949d58c0ae590ff22dd2595157bffefa',
     lockScript: {
       codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
@@ -60,7 +59,6 @@ Print account list, each account is funded with 42_000_000_00000000 capacity in 
     args: '0x8e42b1999f265a0078503c4acec4d5e134534297'
   },
   {
-    privkey: '0x9f315d5a9618a39fdc487c7a67a8581d40b045bd7a42d83648ca80ef3b2cb4a1',
     pubkey: '0x026efa0579f09cc7c1129b78544f70098c90b2ab155c10746316f945829c034a2d',
     lockScript: {
       codeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
@@ -78,3 +76,11 @@ Print account list, each account is funded with 42_000_000_00000000 capacity in 
   </TabItem>
 </Tabs>
 ```
+
+Private keys are hidden by default. If the tutorial asks you to copy a Devnet private key, append `--show-private-keys`:
+
+```bash
+offckb accounts --show-private-keys
+```
+
+Use plain `offckb accounts` for everyday account checks. These are public development keys for the local OffCKB Devnet; never use them for Mainnet or real assets. See [OffCKB's account documentation](https://github.com/ckb-devrel/offckb#accounts).

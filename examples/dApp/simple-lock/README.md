@@ -34,7 +34,7 @@ cd frontend
 pnpm dev
 ```
 
-The deploy command builds the contract, deploys `dist/hash-lock.bc`, refreshes the selected network's system-script information, and validates and synchronizes both deployment files with the frontend. Synchronization failure makes deployment fail.
+The deploy command builds and deploys `dist/hash-lock.bc`, then refreshes all system-script entries for the selected network, including signing dependencies. It validates the required scripts before saving and synchronizes both deployment files with the frontend. Synchronization failure makes deployment fail.
 
 The frontend defaults to Devnet when `NEXT_PUBLIC_NETWORK` is unset. It verifies that both the deployed `hash-lock.bc` and `ckb-js-vm` OutPoints are live before enabling transfers.
 
@@ -45,7 +45,7 @@ Fund the deployer key with Testnet CKB, then run:
 ```bash
 pnpm run deploy -- --network testnet --privkey 0x...
 cd frontend
-NEXT_PUBLIC_NETWORK=testnet pnpm dev
+pnpm dev:testnet
 ```
 
 Current OffCKB supports direct deployment only to Devnet and Testnet, and its Mainnet system-script export does not provide the `ckb-js-vm` dependency this example needs. The deploy command reports that limitation directly instead of starting a deployment that cannot complete.
@@ -75,3 +75,5 @@ Contract output is written to `dist/`. Deployment history is written under `depl
 ## Security Model
 
 The example intentionally returns change to the same hash lock. After the preimage is revealed, that change and any untouched cells using the same hash can be spent by anyone who knows it. A production transaction should use a signature-protected change address and stronger authorization.
+
+Choose a nonempty preimage. The frontend does not generate a funding address for an empty value. The script refresh updates local configuration only; it does not reset the blockchain or migrate assets.

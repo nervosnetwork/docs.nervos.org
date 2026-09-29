@@ -113,6 +113,10 @@ test("deployment validates and synchronizes ckb-js-vm system scripts", () => {
     },
   };
 
+  systemScripts.devnet.secp256k1_blake160_sighash_all = structuredClone(
+    systemScripts.devnet.ckb_js_vm,
+  );
+
   try {
     writeFileSync(sourcePath, `${JSON.stringify(systemScripts, null, 2)}\n`);
     const result = deploy.validateAndSyncSystemScripts({
@@ -134,54 +138,99 @@ test("deployment validates and synchronizes ckb-js-vm system scripts", () => {
   }
 });
 
-test("deployment refreshes only the selected ckb-js-vm entry", () => {
-  assert.equal(typeof deploy.mergeSystemScriptArtifact, "function");
-
-  const directory = mkdtempSync(join(tmpdir(), "simple-lock-merge-system-"));
-  const sourcePath = join(directory, "system-scripts.json");
-  const exportedPath = join(directory, "exported-system-scripts.json");
-  const retainedTestnet = { marker: "keep-testnet" };
-  const existing = {
-    devnet: {
-      secp256k1_blake160_sighash_all: { marker: "keep-devnet" },
-      ckb_js_vm: { file: "existing-portable-metadata", script: {} },
-    },
-    testnet: retainedTestnet,
-  };
-  const exported = {
-    devnet: {
-      ckb_js_vm: {
-        file: "/machine-specific/offckb/path",
-        script: {
-          codeHash: `0x${"56".repeat(32)}`,
-          hashType: "type",
-          cellDeps: [],
-        },
+const scriptFixture = (digit) => ({
+  codeHash: `0x${digit.repeat(64)}`,
+  hashType: "type",
+  cellDeps: [
+    {
+      cellDep: {
+        outPoint: { txHash: `0x${digit.repeat(64)}`, index: 0 },
+        depType: "code",
       },
     },
-  };
-
-  try {
-    writeFileSync(sourcePath, JSON.stringify(existing));
-    writeFileSync(exportedPath, JSON.stringify(exported));
-    deploy.mergeSystemScriptArtifact({
-      network: "devnet",
-      sourcePath,
-      exportedPath,
-    });
-
-    const merged = JSON.parse(readFileSync(sourcePath, "utf8"));
-    assert.deepEqual(merged.testnet, retainedTestnet);
-    assert.equal(
-      merged.devnet.secp256k1_blake160_sighash_all.marker,
-      "keep-devnet",
-    );
-    assert.equal(merged.devnet.ckb_js_vm.file, "existing-portable-metadata");
-    assert.equal(
-      merged.devnet.ckb_js_vm.script.codeHash,
-      exported.devnet.ckb_js_vm.script.codeHash,
-    );
-  } finally {
-    rmSync(directory, { recursive: true, force: true });
-  }
+  ],
 });
+
+for (const network of ["devnet", "testnet"]) {
+  test(`refreshes all ${network} scripts and preserves other networks`, () => {
+    const directory = mkdtempSync(join(tmpdir(), "simple-lock-merge-"));
+    const sourcePath = join(directory, "system-scripts.json");
+    const exportedPath = join(directory, "exported.json");
+    const existing = {
+      devnet: { marker: "devnet" },
+      testnet: { marker: "testnet" },
+      mainnet: { marker: "mainnet" },
+    };
+    existing[network] = {
+      stale: {},
+      ckb_js_vm: { file: "portable-path", script: scriptFixture("1") },
+      secp256k1_blake160_sighash_all: { script: scriptFixture("2") },
+    };
+    const fresh = {
+      ckb_js_vm: { file: "/local/path", script: scriptFixture("3") },
+      secp256k1_blake160_sighash_all: { script: scriptFixture("4") },
+      dao: { script: scriptFixture("5") },
+    };
+    try {
+      writeFileSync(sourcePath, JSON.stringify(existing));
+      writeFileSync(exportedPath, JSON.stringify({ [network]: fresh }));
+      deploy.mergeSystemScriptArtifact({ network, sourcePath, exportedPath });
+      const merged = JSON.parse(readFileSync(sourcePath, "utf8"));
+      assert.deepEqual(
+        merged[network].secp256k1_blake160_sighash_all,
+        fresh.secp256k1_blake160_sighash_all,
+      );
+      assert.deepEqual(merged[network].dao, fresh.dao);
+      assert.equal(merged[network].stale, undefined);
+      assert.equal(merged[network].ckb_js_vm.file, "portable-path");
+      for (const other of ["devnet", "testnet", "mainnet"].filter(
+        (n) => n !== network,
+      ))
+        assert.deepEqual(merged[other], existing[other]);
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+}
+
+for (const name of ["ckb_js_vm", "secp256k1_blake160_sighash_all"]) {
+  for (const invalid of ["missing", "malformed"]) {
+    test(`rejects ${invalid} ${name} before replacing either artifact`, () => {
+      const directory = mkdtempSync(join(tmpdir(), "simple-lock-invalid-"));
+      const sourcePath = join(directory, "source.json");
+      const exportedPath = join(directory, "exported.json");
+      const destinationPath = join(directory, "frontend.json");
+      const scripts = {
+        ckb_js_vm: { script: scriptFixture("1") },
+        secp256k1_blake160_sighash_all: { script: scriptFixture("2") },
+      };
+      if (invalid === "missing") delete scripts[name];
+      else scripts[name].script.cellDeps = [];
+      const bad = JSON.stringify({ devnet: scripts });
+      try {
+        writeFileSync(sourcePath, "{}");
+        writeFileSync(exportedPath, bad);
+        assert.throws(() =>
+          deploy.mergeSystemScriptArtifact({
+            network: "devnet",
+            sourcePath,
+            exportedPath,
+          }),
+        );
+        assert.equal(readFileSync(sourcePath, "utf8"), "{}");
+        writeFileSync(sourcePath, bad);
+        writeFileSync(destinationPath, "{}");
+        assert.throws(() =>
+          deploy.validateAndSyncSystemScripts({
+            network: "devnet",
+            sourcePath,
+            destinationPath,
+          }),
+        );
+        assert.equal(readFileSync(destinationPath, "utf8"), "{}");
+      } finally {
+        rmSync(directory, { recursive: true, force: true });
+      }
+    });
+  }
+}
