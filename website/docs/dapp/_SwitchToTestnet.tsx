@@ -12,18 +12,16 @@ export default function SwitchToTestnet({ readmeLink }: SwitchToTestnetProps) {
   return (
     <>
       <p>
-        Now that your dApp works great on the local blockchain, you might want
-        to switch it to different environments like Testnet or Mainnet.
-      </p>
-      <p>
-        To do that, simply change the <code>NETWORK</code> environment variable
-        to <code>testnet</code>:
+        To try the example on Testnet, stop the app with <code>Ctrl+C</code>,
+        then run:
       </p>
       <pre>
-        <code>export NETWORK=testnet</code>
+        <code>npm run start:testnet</code>
       </pre>
       <p>
-        Then restart the dApp. It should connect to the Testnet automatically.
+        Use a separate Testnet-only account funded with test CKB. Devnet
+        balances and assets do not exist on Testnet. To return to Devnet, stop
+        the app and run <code>npm start</code> with <code>NETWORK</code> unset.
       </p>
       <p>
         For more details, check out{" "}

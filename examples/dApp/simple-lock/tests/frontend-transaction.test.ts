@@ -1,3 +1,4 @@
+import { generateAccount } from "../frontend/app/hash-lock";
 import { ccc } from "@ckb-ccc/core";
 import { readEnvNetwork } from "../frontend/app/ccc-client";
 import { stringToBytesHex } from "../frontend/app/preimage";
@@ -8,6 +9,16 @@ import {
 } from "../frontend/app/transaction-validation";
 
 describe("Simple Lock frontend transaction guidance", () => {
+  test("does not generate a fundable address for an empty preimage", () => {
+    expect(() => generateAccount("")).toThrow(/preimage/i);
+  });
+
+  test("generates lock arguments from the exact UTF-8 preimage", () => {
+    const { lockScript } = generateAccount(" 🔒 ");
+    expect(
+      lockScript.args.endsWith(ccc.hashCkb(stringToBytesHex(" 🔒 ")).slice(2)),
+    ).toBe(true);
+  });
   test("explains why direct Mainnet configuration is unavailable", () => {
     const previousNetwork = process.env.NEXT_PUBLIC_NETWORK;
     process.env.NEXT_PUBLIC_NETWORK = "mainnet";

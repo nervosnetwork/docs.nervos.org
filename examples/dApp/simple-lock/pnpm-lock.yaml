@@ -29,6 +29,9 @@ importers:
       ckb-testtool:
         specifier: ~0.1.1
         version: 0.1.4(typescript@5.8.3)
+      cross-spawn:
+        specifier: ^7.0.6
+        version: 7.0.6
       esbuild:
         specifier: ~0.25.8
         version: 0.25.9
@@ -72,6 +75,9 @@ importers:
       "@types/react-dom":
         specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.27)
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
@@ -2311,6 +2317,14 @@ packages:
         integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==,
       }
     engines: { node: ^14.15.0 || ^16.10.0 || >=18.0.0 }
+    hasBin: true
+
+  cross-env@7.0.3:
+    resolution:
+      {
+        integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==,
+      }
+    engines: { node: ">=10.14", npm: ">=6", yarn: ">=1" }
     hasBin: true
 
   cross-fetch@4.0.0:
@@ -6929,6 +6943,10 @@ snapshots:
       - babel-plugin-macros
       - supports-color
       - ts-node
+
+  cross-env@7.0.3:
+    dependencies:
+      cross-spawn: 7.0.6
 
   cross-fetch@4.0.0:
     dependencies:
