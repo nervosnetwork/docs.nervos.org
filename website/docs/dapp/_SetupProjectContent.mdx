@@ -9,7 +9,7 @@ import StartDevnet from "./_StartDevnet.mdx";
 
 ### Step 3: Run the Example
 
-Navigate to your project, install the node dependencies, and start running the example:
+Navigate to your project folder (<code>{props.projectPath}</code>), install the dependencies, and start running the example:
 
 ```mdx-code-block
 <Tabs>
@@ -17,7 +17,7 @@ Navigate to your project, install the node dependencies, and start running the e
 ```
 
 <CodeBlock language="bash">
-  {props.command ?? "npm install && NETWORK=devnet npm start"}
+  {props.command ?? "npm install\nnpm start"}
 </CodeBlock>
 
 ```mdx-code-block
@@ -40,5 +40,7 @@ Server running at http://localhost:1234
 Now, the app is running at [http://localhost:1234](http://localhost:1234).
 
 <ImgContainer src={useBaseUrl(props.imageSrc)} />
+
+{props.children}
 
 ---

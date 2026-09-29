@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "start": "parcel index.html",
+    "sync:devnet": "node scripts/sync-devnet-system-scripts.cjs",
+    "start": "npm run sync:devnet && parcel index.html",
+    "test": "node --test scripts/*.test.cjs",
+    "start:testnet": "cross-env NETWORK=testnet parcel index.html",
     "build": "parcel build index.html --dist-dir dist --public-url ./",
     "lint": "tsc --noEmit"
   },
@@ -19,6 +22,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.11",
+    "cross-env": "^7.0.3",
+    "cross-spawn": "^7.0.6",
     "crypto-browserify": "^3.12.0",
     "events": "^3.1.0",
     "parcel": "^2.15.4",

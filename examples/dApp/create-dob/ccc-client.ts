@@ -35,11 +35,13 @@ export function buildCccClient(network: Network) {
 
 export function readEnvNetwork(): Network {
   const network = process.env.NETWORK;
-  const defaultNetwork = 'testnet';
+  const defaultNetwork = 'devnet';
   if (!network) return defaultNetwork;
 
   if (!['devnet', 'testnet', 'mainnet'].includes(network)) {
-    return defaultNetwork;
+    throw new Error(
+      `Unsupported NETWORK "${network}". Supported values are devnet, testnet and mainnet.`,
+    );
   }
 
   return network as Network;

@@ -21,7 +21,7 @@
  *   pnpm run deploy -- --network testnet --type-id
  */
 
-import { spawn, spawnSync } from "child_process";
+import spawn from "cross-spawn";
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -121,6 +121,18 @@ export function validateAndSyncDeployment({
   return { codeHash: contract.codeHash, outPoint };
 }
 
+function validateRequiredSystemScripts(scripts, network) {
+  for (const name of ["ckb_js_vm", "secp256k1_blake160_sighash_all"]) {
+    const script = scripts?.[name]?.script;
+    if (!script) {
+      throw new Error(
+        `System-script export does not contain ${network}.${name}.`,
+      );
+    }
+    validateScriptArtifact(script, `${network}.${name}`);
+  }
+}
+
 export function mergeSystemScriptArtifact({
   network,
   sourcePath = SYSTEM_SCRIPTS_SOURCE,
@@ -132,17 +144,20 @@ export function mergeSystemScriptArtifact({
     ? JSON.parse(fs.readFileSync(sourcePath, "utf8"))
     : {};
   const exported = JSON.parse(fs.readFileSync(exportedPath, "utf8"));
-  const exportedCkbJsVm = exported[network]?.ckb_js_vm;
-  if (!exportedCkbJsVm?.script) {
-    throw new Error(`${exportedPath} does not contain ${network}.ckb_js_vm.`);
-  }
+  const selected = exported[network];
+  validateRequiredSystemScripts(selected, network);
 
-  const previousFile = current[network]?.ckb_js_vm?.file;
-  current[network] ??= {};
-  current[network].ckb_js_vm = {
-    ...exportedCkbJsVm,
-    ...(previousFile ? { file: previousFile } : {}),
-  };
+  current[network] = Object.fromEntries(
+    Object.entries(selected).map(([name, entry]) => [
+      name,
+      {
+        ...entry,
+        ...(current[network]?.[name]?.file
+          ? { file: current[network][name].file }
+          : {}),
+      },
+    ]),
+  );
   fs.writeFileSync(sourcePath, `${JSON.stringify(current, null, 2)}\n`);
 }
 
@@ -156,10 +171,13 @@ export function exportSystemScripts({
   const exportedPath = path.join(directory, "system-scripts.json");
 
   try {
-    const result = spawnSync("offckb", ["system-scripts", "-o", exportedPath], {
-      stdio: "inherit",
-      shell: process.platform === "win32",
-    });
+    const result = spawn.sync(
+      "offckb",
+      ["system-scripts", "-o", exportedPath],
+      {
+        stdio: "inherit",
+      },
+    );
     if (result.error) {
       throw new Error(
         `Unable to export system scripts: ${result.error.message}`,
@@ -193,6 +211,8 @@ export function validateAndSyncSystemScripts({
   } catch (error) {
     throw new Error(`Unable to read ${sourcePath}: ${error.message}`);
   }
+
+  validateRequiredSystemScripts(systemScripts[network], network);
 
   const script = systemScripts[network]?.ckb_js_vm?.script;
   if (!script) {
@@ -318,7 +338,6 @@ function main() {
   // Execute the deploy command
   const deployProcess = spawn(offckbCmd, args, {
     stdio: "inherit",
-    shell: process.platform === "win32",
   });
 
   deployProcess.on("close", (code) => {

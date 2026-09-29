@@ -102,7 +102,13 @@ export function shannonToCKB(amount: bigint): string {
   return ccc.fixedPointToString(amount);
 }
 
-export function generateAccount(hash: string) {
+export function generateAccount(preimage: string) {
+  if (!preimage) {
+    throw new Error(
+      "Enter a nonempty preimage before generating a funding address.",
+    );
+  }
+  const hash = ccc.hashCkb(stringToBytesHex(preimage)).slice(2);
   const { contract, ckbJsVm } = deploymentConfig();
   const lockArgs =
     "0x0000" +

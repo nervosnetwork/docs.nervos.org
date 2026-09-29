@@ -38,7 +38,7 @@ export default function Home() {
   const [deployment, setDeployment] = useState<DeploymentStatus>();
   const [preimage, setPreimage] = useState("Hello World");
   const hash = useMemo(
-    () => hashCkb(stringToBytesHex(preimage)).slice(2),
+    () => (preimage ? hashCkb(stringToBytesHex(preimage)).slice(2) : ""),
     [preimage],
   );
   const [fromAddr, setFromAddr] = useState("");
@@ -72,7 +72,7 @@ export default function Home() {
     if (deployment?.kind !== "ready") return;
 
     try {
-      const { lockScript, address } = generateAccount(hash);
+      const { lockScript, address } = generateAccount(preimage);
       const nextBalance = shannonToCKB(await capacityOf(address));
       if (requestId !== lockRequestId.current) return;
 
@@ -83,7 +83,7 @@ export default function Home() {
       if (requestId !== lockRequestId.current) return;
       setErrorMessage(explainTransactionError(error));
     }
-  }, [deployment, hash]);
+  }, [deployment, preimage]);
 
   useEffect(() => {
     void updateLockInfo();
@@ -125,6 +125,7 @@ export default function Home() {
   const isBusy = phase === "submitting" || phase === "pending";
   const enabled =
     deployment?.kind === "ready" &&
+    preimage.length > 0 &&
     fromAddr.length > 0 &&
     toAddr.trim().length > 0 &&
     unlockPreimage.length > 0 &&
@@ -228,7 +229,9 @@ export default function Home() {
               className="mt-2 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2.5 outline-none transition focus:border-cyan-400 disabled:cursor-not-allowed disabled:text-slate-500"
             />
             <p className="mt-4 break-all font-mono text-xs leading-5 text-slate-500">
-              blake2b-256: 0x{hash}
+              {preimage
+                ? `blake2b-256: 0x${hash}`
+                : "Enter a nonempty preimage to generate a funding address."}
             </p>
           </div>
 
@@ -247,15 +250,19 @@ export default function Home() {
               <div>
                 <dt className="text-slate-500">Hash-lock address</dt>
                 <dd className="mt-1 break-all font-mono text-slate-300">
-                  {fromAddr || "Available when deployment health is ready"}
+                  {!preimage
+                    ? "Enter a nonempty preimage first"
+                    : fromAddr || "Available when deployment health is ready"}
                 </dd>
               </div>
               <div>
                 <dt className="text-slate-500">Total live capacity</dt>
-                <dd className="mt-1 text-xl font-semibold">{balance} CKB</dd>
+                <dd className="mt-1 text-xl font-semibold">
+                  {preimage ? balance : "0"} CKB
+                </dd>
                 <button
                   type="button"
-                  disabled={deployment?.kind !== "ready"}
+                  disabled={deployment?.kind !== "ready" || !preimage}
                   onClick={() => void updateLockInfo()}
                   className="mt-3 text-sm font-medium text-cyan-300 transition hover:text-cyan-200 disabled:cursor-not-allowed disabled:text-slate-600"
                 >
@@ -265,7 +272,7 @@ export default function Home() {
               <div>
                 <dt className="text-slate-500">Lock script</dt>
                 <dd className="mt-1 max-h-36 overflow-auto whitespace-pre-wrap break-all rounded-md bg-slate-900 p-3 font-mono text-xs text-slate-400">
-                  {fromLock
+                  {preimage && fromLock
                     ? JSON.stringify(
                         fromLock,
                         (_, value) =>
