@@ -26,7 +26,7 @@ import ExampleLink from "@components/ExampleLink";
 
 # Create a Fungible Token
 
-<TutorialHeader time={"10–15 min after setup"} tools={"dapp"} />
+<TutorialHeader time={"10 - 15 min after setup"} tools={"dapp"} />
 
 ## Tutorial Overview
 
@@ -36,8 +36,8 @@ In CKB, custom tokens are called User-Defined Tokens (UDTs). CKB defines a minim
 
 Steps to Issue a Custom Token with xUDT:
 
-1. Create a Special Cell: When you issue tokens, you create a special Cell representing a balance of your custom token, similar to how physical cash represents a balance of currency.
-2. Configure the Cell's Data: This Cell’s data field will store the token amount, while its Type Script will be the xUDT Script. In this example, the Script’s args field contains the issuer’s 32-byte Lock Script hash followed by the four-byte flags field `00000000`.
+1. **Create a Special Cell:** When you issue tokens, you create a special Cell representing a balance of your custom token, similar to how physical cash represents a balance of currency.
+2. **Configure the Cell's Data:** This Cell’s data field will store the token amount, while its Type Script will be the xUDT Script. In this example, the xUDT Script’s args field contains the issuer’s 32-byte Lock Script hash followed by the four-byte flags field `00000000`.
 3. **Establish a Unique Token ID:** In this example, the issuer’s Lock Script hash identifies the custom token. Different issuer Lock Script hashes represent different tokens.
 
 While xUDT includes more advanced features, this tutorial focuses on its core concept. For more details on xUDT’s capabilities, you can explore the [full xUDT spec](https://github.com/XuJiandong/rfcs/blob/xudt/rfcs/0052-extensible-udt/0052-extensible-udt.md).
@@ -65,10 +65,10 @@ You can also read the full code online or download it <ExampleLink path="dApp/xu
 
 #### Issue, Query, and Transfer
 
-The **Issue Custom Token** form is prefilled with the first pre-funded OffCKB Devnet account’s public development key. You can keep it for this local tutorial or replace it with another Devnet account’s key. It is included in the example code, not read from your wallet. Never use this key for Mainnet or real assets.
+The **Private Key** field in **Issue Custom Token** is prefilled with the first pre-funded OffCKB Devnet account’s private key. This is a publicly known development key included in the example code, not read from your wallet. Keep it for this local tutorial or replace it with another Devnet account’s private key. Never use this development key for Mainnet or real assets.
 
 1. In **Issue Custom Token**, enter a token amount and click **Issue Token**.
-2. Copy the complete **Token xUDT args** from the result into **View Custom Token**, not the Lock Script args shown in the account information. Wait for the transaction to be committed, then click **Query Issued Token**.
+2. Copy the complete **Token xUDT args** from the result into **View Custom Token**, not the `args` field inside the **Lock Script** JSON displayed in **Issue Custom Token**. Wait for the transaction to be committed, then click **Query Issued Token**.
 3. To transfer, use the same token args, the current token holder's private key, an amount they own, and another Devnet account's address. The sender also needs enough CKB capacity for the output Cells and transaction fee.
 
 </SetupProject>
@@ -119,7 +119,7 @@ const tx = ccc.Transaction.from({
 
 Note that the `outputsData` field is the amount of the custom token.
 
-Next, add the xUDT script dependency and use CCC to collect the CKB inputs needed for the output Cells and transaction fee.
+Next, add the xUDT Script dependency and use CCC to collect the CKB inputs needed for the output Cells and transaction fee.
 
 ```ts
   await tx.addCellDepsOfKnownScripts(signer.client, ccc.KnownScript.XUdt);
