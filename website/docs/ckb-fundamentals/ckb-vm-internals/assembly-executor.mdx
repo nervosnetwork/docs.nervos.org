@@ -1,0 +1,333 @@
+---
+title: CKB-VM Assembly Executor
+---
+
+In early 2026, we introduced the third assembly execution backend for CKB-VM: [riscv64](https://github.com/nervosnetwork/ckb-vm/pull/502). Together with the earlier [x64](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_x64.S) and [aarch64](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_aarch64.S), CKB-VM can now execute RISC-V programs with hand-written assembly on three major CPU architectures. After shipping all three architecture paths, the core design ideas are now very clear and worth a full review.
+
+This article starts from the motivation behind CKB-VM’s assembly executor, then walks through technical details such as the trace mechanism, register allocation, and memory model. By the end, you should have a complete mental model of how the CKB-VM assembly executor works.
+
+## Why We Still Need an Assembly Executor
+
+CKB-VM is a RISC-V virtual machine. The most straightforward implementation is, of course, an interpreter: fetch, decode, execute, update PC and loop. This model is simple enough and naturally serves as a golden reference for correctness.
+
+But here is the problem: for on-chain scripts, each RISC-V instruction does very little work. For example, an `add` just adds one register to another and writes the result back. On the host CPU, that may take one or two instructions, but in the interpreter it goes through a Rust loop and match branch, reads the register array, checks whether `x0` is the write target, accumulates cycle counters, and jumps back to the top of the loop. After tens of millions of such round trips, fixed overhead becomes significant.
+
+One classic theme in interpreter optimization is **reducing dispatch**. Move the hottest loop path from a high-level language down into assembly, and strip away unnecessary abstraction layers. That is the fundamental motivation for the ASM backend.
+
+> Reducing dispatch is a classic interpreter optimization strategy, and you can see it heavily used in interpreter ecosystems such as LuaJIT and Python. Common techniques include adaptive/tiered interpreters, superinstructions/macro-op fusion, and direct threaded code.
+
+However, one common misunderstanding should be cleared up first: CKB-VM’s ASM backend is not a JIT. It never translates user RISC-V programs into new host machine code. It is still an interpreter, except that hot paths such as the dispatch loop, register access, and memory permission checks are handled by hand-written assembly.
+
+## Trace: Decode Once, Execute Many Times
+
+A traditional interpreter skeleton looks like this:
+
+```rust
+loop {
+    let inst = fetch_instruction();
+    match inst.opcode() {
+        OP_ADD => { /* ... */ }
+        OP_SUB => { /* ... */ }
+        OP_MUL => { /* ... */ }
+        // ... hundreds of branches
+    }
+}
+```
+
+At its core, this is a giant loop wrapped around a giant match. The issue is not only the number of match branches, but also that a CPU branch predictor can hardly make useful predictions on such a jump table. Every time execution returns from `OP_ADD` to the `match` at the loop top, it is a potential pipeline flush.
+
+> From a systems perspective, centralized interpreter dispatch creates many-to-one control-flow convergence, which destroys the regular patterns branch predictors depend on. There are two major problems:
+>
+> Single Exit Disaster: In an interpreter loop, all bytecode instructions are dispatched through one match or switch site. From the predictor’s point of view, the jump source address is always the same, while the target address can be any handler.
+>
+> Branch aliasing: Modern predictors (for example, TAGE or Perceptron-based designs) rely on structures like BHT and BTB. If one jump instruction keeps switching randomly among dozens or hundreds of states, the predictor cannot extract stable history patterns (alternation, cycles, etc.), and prediction accuracy collapses. Every misprediction can cause a 10-20 cycle pipeline flush.
+
+LuaJIT author Mike Pall proposed a simple idea: instead of re-matching opcodes every time, **record** frequently sequential instruction sequences. This pre-decoded linear sequence is called a trace. With a trace, the execution path is no longer loop → match → opcode_handler → loop, but direct jumps along a pre-arranged label chain.
+
+In pseudocode:
+
+```auto
+OP_CUSTOM_TRACE_END:
+    trace = fetch_trace(pc)          // for example [OP_ADD, OP_SUB, OP_MUL, OP_CUSTOM_TRACE_END]
+    index = 0
+    goto trace[index].label          // jump to OP_ADD
+
+OP_ADD:
+    index += 1
+    handle_add(trace[index].args)    // execute OP_ADD
+    goto trace[index].label          // jump to OP_SUB
+
+OP_SUB:
+    index += 1
+    handle_sub(trace[index].args)    // execute OP_SUB
+    goto trace[index].label          // jump to OP_MUL
+
+OP_MUL:
+    index += 1
+    handle_mul(trace[index].args)    // execute OP_MUL
+    goto trace[index].label          // jump back to OP_CUSTOM_TRACE_END, start loading next trace
+```
+
+LuaJIT further compiles traces into machine code. CKB-VM does not compile, but it borrows the same front-end step: pre-decode an instruction sequence on the Rust side and build a trace. Each trace item contains two `u64` values; in CKB-VM these two numbers are called a thread:
+
+| Offset         | Content             | Meaning                                                                               |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------- |
+| `thread[2n]`   | label address       | Absolute address of a host assembly label, for example `.CKB_VM_ASM_LABEL_OP_ADD`     |
+| `thread[2n+1]` | decoded instruction | Decoded instruction parameters; register indices and immediates are already extracted |
+
+Inside the assembly executor, this structure is driven by two pointers:
+
+- `INST_PC`: points to the label address of the current thread.
+- `INST_ARGS`: points to the decoded instruction payload of the current thread.
+
+After executing one instruction, the `NEXT_INST` macro advances both pointers by 16 bytes (one trace item), then jumps directly to the next assembly label via `jmp *INST_PC`. A dispatch round is completed with just a few instructions. No loop, no match, no branch-prediction pressure. The per-instruction decode and dispatch cost is folded into trace construction ahead of time. The execution phase only needs to load an address and jump.
+
+**Source Reading**
+
+- [traces.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/traces.rs)
+- [execute_x64.S](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_x64.S)
+
+The trace design is the foundation of the CKB-VM ASM executor, and also one of the hardest parts of the project to understand.
+
+## Trace: Fixed and Dynamic
+
+CKB-VM’s trace system has two layers.
+
+**Fixed Trace** is the default implementation. It maintains a hash table of size 8192 in memory, using `slot = (PC >> 2) & 8191` to locate a slot. Each slot is a `FixedTrace` structure that can hold up to 16 instructions (plus a trailing `OP_CUSTOM_TRACE_END`, for a total of 17 threads). When the program executes within a basic block, these instructions are decoded together and executed together until a branch or trace end is reached.
+
+Fixed trace is enough for most scenarios. But for longer sequential code blocks, 16 instructions may not be enough. In that case, the trace decoder has two strategies:
+
+1. If there is nothing after it, end normally and return to `OP_CUSTOM_TRACE_END` next time for another table lookup.
+2. If more consecutive instructions remain (that is, the currently decoded instruction is not a basic-block terminator), the decoder builds a **Dynamic Trace**.
+
+Dynamic Trace is a variable-length structure using a [flexible array member](https://en.wikipedia.org/wiki/Flexible_array_member), which can encode an entire long sequential segment at once, not limited to 16 instructions. At the assembly layer, it looks **exactly the same** as FixedTrace: `address`, `length`, `cycles`, followed by the same thread sequence format.
+
+The two are connected as follows: the final thread of a fixed trace is replaced with `OP_CUSTOM_ASM_TRACE_JUMP`, and its argument is the full dynamic-trace address. When the assembly executor sees this opcode, it switches the `TRACE` pointer directly to the dynamic trace, then reuses the same `.trace_loaded` logic. Rust builds two different data structures, but assembly sees one unified shape.
+
+> The key to this uniformity is that the first three fields of DynamicTrace have exactly the same memory layout as FixedTrace. Assembly accesses them using the same offset macros (`CKB_VM_ASM_TRACE_OFFSET_ADDRESS`, `CKB_VM_ASM_TRACE_OFFSET_LENGTH`, `CKB_VM_ASM_TRACE_OFFSET_CYCLES`). There are dedicated unit tests in the source to verify this invariant.
+
+## Trace: How Rust Passes It to Assembly
+
+The ASM executor entry has only two parameters:
+
+```rust
+ckb_vm_asm_execute(machine, invoke_data)
+```
+
+`machine` is `AsmCoreMachine`, which stores VM state such as registers, PC, cycles, memory pointer, page flags, and frame flags. `invoke_data` is call-local data passed to assembly, whose key members include `pause`, `fixed_traces`, and `fixed_trace_mask`.
+
+At the assembly entry point, it first does a very conventional thing: save the callee-saved registers required by the calling convention, then pin several long-lived values in registers.
+
+````auto
+ckb_vm_asm_execute:
+  push %rbp
+  push %rbx
+  push %r12
+  push %r13
+  push %r14
+  mov ARG2, INVOKE_DATA     // 2nd argument -> INVOKE_DATA
+  mov ARG1, MACHINE         // 1st argument -> MACHINE
+  movq CKB_VM_ASM_ASM_CORE_MACHINE_OFFSET_MEMORY_SIZE(MACHINE), MEMORY_SIZE
+``` ```auto
+MACHINE     = %rsi
+TRACE       = %rbx
+MEMORY_SIZE = %r13
+INVOKE_DATA = %r14
+INST_PC     = %r8
+INST_ARGS   = %r9
+````
+
+`MACHINE` holds all VM state. `TRACE` points to the currently executing trace. `INST_PC` and `INST_ARGS` are not the RISC-V PC, but two pointers moving inside a trace: one to the next host jump target, one to the next decoded guest instruction payload.
+
+This is also where x64 gets tricky. `%rcx` must be reserved for shift operations via `%cl`, `%rax/%rdx` are consumed by multiply/divide instructions, and Windows/System V use different argument registers. That is why there is a large section of register aliases and macros like `PUSH_*_IF_*` at the top of the file. It looks verbose, but it reserves room for the next 2000+ lines of instruction implementations.
+
+Aarch64 and riscv64 have similar entry logic but with different flavor: aarch64 has more register headroom, so secondary yet frequently used pointers like `REGISTER_BASE` and `MEMORY_PTR` can stay in `x28`, `x29`. Riscv64 feels like looking in a mirror: host and guest are both RISC-V, so many guest instructions map directly to host instructions, but it still must obey host ABI, preserve `s0..s6`, and return the assembly execution result through `a0`.
+
+## Trace: Entry Is Exit, Exit Is Entry
+
+After entering the assembly main loop, execution first goes to `.CKB_VM_ASM_LABEL_OP_CUSTOM_TRACE_END`. This is a somewhat complex block:
+
+```auto
+.p2align 3
+.CKB_VM_ASM_LABEL_OP_CUSTOM_TRACE_END:
+  LOAD_PC(%rax, %eax, %rcx, %ecx, TEMP3d)
+  shr $2, %eax
+  andq CKB_VM_ASM_INVOKE_DATA_OFFSET_FIXED_TRACE_MASK(INVOKE_DATA), %rax
+  imul $CKB_VM_ASM_FIXED_TRACE_STRUCT_SIZE, %eax
+  movq CKB_VM_ASM_INVOKE_DATA_OFFSET_FIXED_TRACES(INVOKE_DATA), TRACE
+  addq %rax, TRACE
+  movq CKB_VM_ASM_TRACE_OFFSET_ADDRESS(TRACE), %rdx
+  cmp %rcx, %rdx
+  jne .exit_trace
+.trace_loaded:
+  mov CKB_VM_ASM_TRACE_OFFSET_LENGTH(TRACE), %edx
+  test %rdx, %rdx
+  je .exit_trace
+  movq CKB_VM_ASM_ASM_CORE_MACHINE_OFFSET_CYCLES(MACHINE), %rax
+  addq CKB_VM_ASM_TRACE_OFFSET_CYCLES(TRACE), %rax
+  jc .exit_cycles_overflow
+  cmp CKB_VM_ASM_ASM_CORE_MACHINE_OFFSET_MAX_CYCLES(MACHINE), %rax
+  ja .exit_max_cycles_exceeded
+  movq %rax, CKB_VM_ASM_ASM_CORE_MACHINE_OFFSET_CYCLES(MACHINE)
+  addq %rdx, PC_ADDRESS
+  /* Prefetch trace info for the consecutive block */
+  movq PC_ADDRESS, %rax
+  shr $2, %eax
+  andq CKB_VM_ASM_INVOKE_DATA_OFFSET_FIXED_TRACE_MASK(INVOKE_DATA), %rax
+  imul $CKB_VM_ASM_FIXED_TRACE_STRUCT_SIZE, %eax
+  movq CKB_VM_ASM_INVOKE_DATA_OFFSET_FIXED_TRACES(INVOKE_DATA), %rdx
+  prefetcht2 0(%rdx, %rax)
+  lea CKB_VM_ASM_TRACE_OFFSET_THREADS(TRACE), INST_PC
+  mov INST_PC, INST_ARGS
+  add $8, INST_ARGS
+  NEXT_INST
+```
+
+This block does not mean the program has ended. It means the current trace has reached its end and **must decide where to go next**. It may jump to the next trace, or return to Rust for re-decoding. On first entry into the assembly executor, this same logic also runs first, because in essence it is the unified entry for “load next trace and start execution”.
+
+Its core flow can be summarized in four steps:
+
+1. Use current PC to locate a slot in the fixed-trace table.
+2. Verify the trace start address in that slot matches current PC.
+3. Check that trace length and cycle budget allow continued execution.
+4. On success, switch to the new trace and `NEXT_INST`; on failure, go to `.exit_trace` and return `CKB_VM_ASM_RET_DECODE_TRACE`. Rust will decode again based on this return value, build a new trace, and call the assembly executor again.
+
+There are two easy-to-miss details.
+
+First, fixed traces are not chained directly by “next instruction in current trace.” Instead, each time it re-hashes the updated PC into the fixed-trace table and revalidates `trace.address == pc`. This guarantees that even with hash collisions or slot mismatch, execution safely returns to Rust for decoding, rather than jumping into a wrong trace.
+
+Second, `.CKB_VM_ASM_LABEL_OP_CUSTOM_ASM_TRACE_JUMP` loads the full trace address from thread arguments into `TRACE`, then reuses the same `.trace_loaded` logic. In other words, dynamic trace and fixed trace share the exact same execution-phase flow: length check + cycle accounting + setting `INST_PC/INST_ARGS`; only the source of the trace pointer differs.
+
+The significance of this block is that it centralizes the decision of whether to keep sprinting in assembly: if address matches, length is valid, and cycles are legal, continue thread dispatch; if any condition fails, return to Rust immediately. This gives the assembly executor both high-speed paths and correctness on edge conditions.
+
+## Zero Register
+
+In RISC-V, `x0` is always zero. This rule is simple, but in an executor implementation it can easily become a subtle trap.
+
+In early versions, the CKB-VM ASM backend often wrote back to `rd` and then zeroed register slot 0 in the register array. So macros like this appeared:
+
+```nasm
+#define WRITE_RD(v) \
+  movq v, REGISTER_ADDRESS(RD); \
+  movq $0, ZERO_ADDRESS
+```
+
+That means even if an instruction mistakenly wrote to `x0`, the next step would erase it. Later, some MOP pseudo-instructions wrote multiple registers within one guest semantic unit. If `x0` was zeroed immediately after each write, write-back order itself could affect results. So the source later introduced the `WRITE_RD_V2` and `NEXT_INST_V2` macro pair: the former only writes target registers, and the latter zeros `x0` once at the end of the whole pseudo-instruction.
+
+## Memory Checks
+
+If you only look at arithmetic instructions, the assembly executor is not hard to understand. `add` is just loading two registers, adding them, and writing back. What truly makes it complex is memory.
+
+CKB-VM’s memory model must reject out-of-bounds accesses, enforce W^X permissions, and support lazily initialized FastMemory. Every `lb`, `lw`, `ld`, `sb`, `sw`, `sd` may trigger this whole logic chain. If these checks are too slow, most ASM backend gains get eaten. If they are too aggressive, on-chain determinism and safety boundaries are compromised.
+
+All three assembly executors use a similar strategy: remember the last accessed memory frame for reads, or last written page for writes. If current access is still within the same range, take the fast path directly; if crossing boundaries, fall back to full checks.
+
+The read path is roughly three steps:
+
+- Check whether address plus length overflows bounds.
+- Check whether the corresponding memory frame is initialized.
+- If uninitialized, call Rust-side `inited_memory` to perform actual fill.
+
+The write path adds one more permission layer: the target page must be writable, and the dirty bit must be set so snapshots and later memory management know this page was modified.
+
+The most noteworthy detail here is `PREPCALL` and `POSTCALL`. Most of the time, the assembly executor does not want to return to Rust land, but tasks like memory initialization are still handled by Rust. Once a call to `inited_memory` is needed, assembly must save current register state, align stack according to target ABI, call the function, then restore context. This sounds like a basic ABI rule, but in a hand-written executor, missing one such rule often leads to very weird bugs.
+
+## If We Were to Build the Next ASM Executor
+
+Suppose one day we add a new host architecture for CKB-VM. Where should we start?
+
+Historically, CKB-VM has had three ASM executors: x64, aarch64, and riscv64. After finishing all three paths, the implementation recipe is quite clear. Here is the rough process I summarize.
+
+**Step 1: Understand Data Structures and Contracts**
+
+First, read through these three structs:
+
+- `AsmCoreMachine`: C layout of VM state. Assembly accesses fields via `CKB_VM_ASM_ASM_CORE_MACHINE_OFFSET_*` macros.
+- `InvokeData`: three pointers passed to assembly (`pause`, `fixed_traces`, `fixed_trace_mask`).
+- `FixedTrace`: trace memory layout: `address`, `length`, `cycles`, then a thread array of `2 * (TRACE_ITEM_LENGTH + 1)` `u64` values.
+
+These offset macros are not hand-written. They are auto-generated at build time by `definitions/src/generate_asm_constants.rs` into `cdefinitions_generated.h`. **Never maintain these offsets manually** , or one struct layout change will break everything.
+
+**Step 2: Build the Minimal Skeleton**
+
+Start with this minimal skeleton in assembly:
+
+```nasm
+ckb_vm_asm_execute:
+    save callee-saved registers
+    pin arguments into MACHINE / INVOKE_DATA
+    load MEMORY_SIZE
+    jump to OP_CUSTOM_TRACE_END
+```
+
+Then implement full `OP_CUSTOM_TRACE_END` logic immediately: lookup fixed trace, compare address, check cycles, set `INST_PC`/`INST_ARGS`, `NEXT_INST`.
+
+At the same time, wire up the label table. Rust calculates label addresses through `label_from_fastpath_opcode()`:
+
+```rust
+pub fn label_from_fastpath_opcode(opcode: InstructionOpcode) -> u64 {
+    unsafe {
+        u64::from(*(ckb_vm_asm_labels as *const u32).offset(opcode as u8 as isize))
+            + (ckb_vm_asm_execute as *const u32 as u64)
+    }
+}
+```
+
+`ckb_vm_asm_labels` is a symbol defined in the assembly file. It is actually a `u32` array, where each element is the offset of an opcode label relative to the `ckb_vm_asm_execute` entry address. As long as the skeleton runs, even with only `OP_CUSTOM_TRACE_END`, you have already crossed the most critical milestone.
+
+**Step 3: Register Allocation**
+
+This is the hardest part, arguably harder than implementing instructions themselves. The three backends use different allocation strategies:
+
+- **x64** : constrained by `%cl` for shifts and `%rax/%rdx` for multiply/divide; `RS2` is split, and `RD` shares `%rax` with `RS2`.
+- **aarch64** : more register headroom; only `xzr` cannot be used as a general-purpose register; extensive use of callee-saved registers is possible.
+- **riscv64** : both host and guest follow RISC-V ABI; use callee-saved `s0s6` to hold guest register state, reducing `PREPCALL`/`POSTCALL` save/restore scope.
+
+A few general principles for allocation:
+
+1. Put long-lived pointers (`MACHINE`, `TRACE`, `INST_PC`, `INST_ARGS`) in callee-saved registers so no restore is needed after `inited_memory` calls.
+2. Direct decode results (`RD`, `RS1`, `RS2`, `IMMEDIATE`) can be in caller-saved or callee-saved registers, but pay attention to read/write density.
+3. If a register has architecture-specific constraints (for example, x64 requiring `%rcx` for `IMMEDIATE`), satisfy those constraints first.
+
+**Step 4: Write Memory Macros**
+
+Memory macros should be stabilized before instruction families. Arithmetic bugs are usually easy to catch; memory-boundary bugs may surface only under cross-page access, specific VM versions, or random memory layouts in chaos mode. These bugs are very expensive to debug.
+
+A recommended implementation order:
+
+1. `_CHECK_READ_FRAMES`: internal macro for memory-frame initialization.
+2. `CHECK_READ_VERSION0` / `CHECK_READ_VERSION1`: bounds check plus `last_read_frame` caching.
+3. `CHECK_WRITE`: W^X check plus dirty marking plus frame initialization.
+4. `PREPCALL` / `POSTCALL`: ensure Rust call ABI correctness.
+
+**Step 5: Implement by Instruction Families**
+
+- First wave: base integer instructions in I, load/store, branch/jump. These form the main body of programs.
+- Second wave: M (mul/div). Focus on arithmetic edge cases (`INT64_MIN / -1`, division by zero).
+- Third wave: B (bitmanip) and MOP (macro-fusion ops). Focus on multi-register write-back and `x0` zeroing timing.
+
+**Step 6: Test**
+
+After each instruction group is added, it should run the same artifact set as the normal interpreter. CKB-VM currently has a complete test suite; for developers, passing `cargo test --features=asm` generally means the assembly executor is mostly correct.
+
+Also, CKB-VM’s fuzzing framework (`fuzz/fuzz_targets/asm.rs`) is a key correctness tool: it generates random instruction streams, executes them on ASM and interpreter backends respectively, then compares all registers and memory states.
+
+## Summary
+
+CKB-VM’s assembly executor is a restrained optimization. It does not introduce JIT, does not change on-chain program semantics, and does not hand safety boundaries to a host-code generator. What it does is more straightforward and more demanding: translate the interpreter’s hottest paths into hand-written assembly instruction by instruction, while preserving CKB-VM’s memory model, version semantics, cycle accounting, and exception behavior.
+
+From the Rust interpreter to x64 assembly, then aarch64 assembly, and finally riscv64 assembly, this path demonstrates an engineering tradeoff very characteristic of CKB-VM: build a clear reference implementation first, then make verifiable local replacements on hot paths. Each new backend is not a rewrite, but a retelling of the same loop under the same semantics, in the target architecture’s own language.
+
+That is what I like most about this design. The assembly executor looks complex, obscure, and hard to understand, but the goal it serves is simple: make on-chain programs run faster without sacrificing determinism and safety. For a blockchain VM, that is already both a plain and a very difficult goal.
+
+## Series of articles
+
+- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
+- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
+- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
+- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
+- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+
+---
+
+_This article is adapted from [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
