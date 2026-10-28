@@ -9,7 +9,7 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { useWindowSize } from "@docusaurus/theme-common";
-import { useDoc, useDocsSidebar } from "@docusaurus/theme-common/internal";
+import { useDoc, useDocsSidebar } from "@docusaurus/plugin-content-docs/client";
 import DocRootLayoutSidebar from "@theme/DocRoot/Layout/Sidebar";
 import DocItemPaginator from "@theme/DocItem/Paginator";
 import DocVersionBanner from "@theme/DocVersionBanner";
@@ -19,7 +19,7 @@ import DocItemTOCMobile from "@theme/DocItem/TOC/Mobile";
 import DocItemTOCDesktop from "@theme/DocItem/TOC/Desktop";
 import DocItemContent from "@theme/DocItem/Content";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
-import Unlisted from "@theme/Unlisted";
+import ContentVisibility from "@theme/ContentVisibility";
 import type { Props } from "@theme/DocItem/Layout";
 
 import styles from "./styles.module.css";
@@ -48,9 +48,7 @@ function useDocTOC() {
 
 export default function DocItemLayout({ children }: Props): JSX.Element {
   const docTOC = useDocTOC();
-  const {
-    metadata: { unlisted },
-  } = useDoc();
+  const { metadata } = useDoc();
   const sidebar = useDocsSidebar();
   const [hiddenSidebarContainer, setHiddenSidebarContainer] = useState(false);
   return (
@@ -63,7 +61,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         />
       )}
       <div className={clsx(!docTOC.hidden && styles.docItemCol)}>
-        {unlisted && <Unlisted />}
+        <ContentVisibility metadata={metadata} />
         <DocVersionBanner />
         <div className={styles.docItemContainer}>
           <article>
