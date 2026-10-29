@@ -289,6 +289,12 @@ CKB-VM has a memory size limit. If the contract uses any of the following fields
 - **witness**
 - **data**
 
+### Known Pitfalls
+
+Some Script bugs come from how CKB works rather than from the code, and they keep coming back. Every instance of a Script in a transaction reads the same outputs, so one payment can satisfy several instances that each ask for it. A truncated lock hash compared with a full one never matches, so a guard meant to refuse admits everything. A Cell that anyone may spend loses its capacity if only its data is checked. Write tests for these on purpose.
+
+[CKB Script Pitfalls](https://github.com/LusoCryptoLabs/ckb-script-pitfalls) collects such cases found in real Scripts. Each comes with the transaction that exploits it and a test in which that transaction is accepted by the Script as first written and refused by the fixed one.
+
 ## Final Remarks
 
 Testing CKB smart contracts requires a solid understanding of its UTXO model and validation logic. By analyzing transaction structure, grouping behavior, and contract APIs, developers can create comprehensive test suites that cover both Lock and Type Scripts. Special attention should be paid to grouping logic, Cycle consumption, and data boundaries to ensure stability under all conditions.
