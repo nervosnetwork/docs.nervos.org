@@ -291,9 +291,13 @@ CKB-VM has a memory size limit. If the contract uses any of the following fields
 
 ### Known Pitfalls
 
-Some Script bugs come from how CKB works rather than from the code, and they keep coming back. Every instance of a Script in a transaction reads the same outputs, so one payment can satisfy several instances that each ask for it. A truncated lock hash compared with a full one never matches, so a guard meant to refuse admits everything. A Cell that anyone may spend loses its capacity if only its data is checked. Write tests for these on purpose.
+Some Script bugs stem from CKB's transaction and execution model rather than from coding mistakes, and they recur across projects. Write tests that deliberately target them:
 
-[CKB Script Pitfalls](https://github.com/LusoCryptoLabs/ckb-script-pitfalls) collects such cases found in real Scripts. Each comes with the transaction that exploits it and a test in which that transaction is accepted by the Script as first written and refused by the fixed one.
+- **Shared payments.** Every instance of a Script in a transaction reads the same Outputs, so one payment can satisfy several instances that each require it.
+- **Truncated comparisons.** If a Script compares a truncated Lock Script hash against a full one, the comparison never matches, so a guard meant to block a specific lock admits every lock.
+- **Unchecked capacity.** If anyone may spend a Cell and the Script checks only its data, whoever spends it can take its capacity.
+
+[CKB Script Pitfalls](https://github.com/LusoCryptoLabs/ckb-script-pitfalls) collects such cases found in real Scripts. Each comes with the transaction that exploits it and a test in which that transaction is accepted by the original Script and refused by the fixed version.
 
 ## Final Remarks
 
