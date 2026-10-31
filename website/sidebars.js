@@ -312,6 +312,18 @@ export default {
         "ckb-fundamentals/ckb-vs-btc",
         "ckb-fundamentals/cell-model",
         "ckb-fundamentals/ckb-vm",
+        {
+          type: "category",
+          label: "CKB-VM Internals",
+          collapsible: true,
+          items: [
+            "ckb-fundamentals/ckb-vm-internals/snapshot-v1",
+            "ckb-fundamentals/ckb-vm-internals/snapshot-v2",
+            "ckb-fundamentals/ckb-vm-internals/memory-model-wx",
+            "ckb-fundamentals/ckb-vm-internals/assembly-executor",
+            "ckb-fundamentals/ckb-vm-internals/macro-ops-fusion",
+          ],
+        },
         "ckb-fundamentals/consensus",
         "ckb-fundamentals/ckb-address",
         "ckb-fundamentals/ckbhash",
