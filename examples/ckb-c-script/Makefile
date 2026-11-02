@@ -7,7 +7,7 @@ LLVM_CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs \
 		-Wno-error=unused-but-set-variable \
 		-Wno-error=unused-command-line-argument \
 		-Wno-error=bitwise-instead-of-logical
-LDFLAGS := -static -Wl,--gc-sections -nostdlib
+LDFLAGS := --ld-path=$(LD) -static -Wl,--gc-sections -nostdlib
 
 CFLAGS := -g -O3 -fPIC \
 		-Wall -Werror -Wno-nonnull -Wno-unused-function \
