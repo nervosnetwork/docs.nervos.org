@@ -1,13 +1,13 @@
-CC := clang-18
-LD := ld.lld-18
-OBJCOPY := llvm-objcopy-18
-AR := llvm-ar-18
-RANLIB := llvm-ranlib-18
+CC := clang-19
+LD := ld.lld-19
+OBJCOPY := llvm-objcopy-19
+AR := llvm-ar-19
+RANLIB := llvm-ranlib-19
 LLVM_CFLAGS := --target=riscv64 -march=rv64imc_zba_zbb_zbc_zbs \
 		-Wno-error=unused-but-set-variable \
 		-Wno-error=unused-command-line-argument \
 		-Wno-error=bitwise-instead-of-logical
-LDFLAGS := -static -Wl,--gc-sections -nostdlib
+LDFLAGS := --ld-path=$(LD) -static -Wl,--gc-sections -nostdlib
 
 CFLAGS := -g -O3 -fPIC \
 		-Wall -Werror -Wno-nonnull -Wno-unused-function \
