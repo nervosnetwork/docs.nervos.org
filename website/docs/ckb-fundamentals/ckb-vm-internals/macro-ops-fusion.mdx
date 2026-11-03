@@ -1,0 +1,151 @@
+---
+title: CKB-VM Macro-ops Fusion
+---
+
+## Overview
+
+Macro-Operation Fusion (MOP Fusion) is a performance optimization technique used in modern microprocessor architectures. During instruction decode, several adjacent macro-operations are merged into a single internal micro-operation, reducing dispatch overhead and execution cycles. This technique is widely used in high-performance microarchitectures for mainstream architectures such as x86 and ARM, and it can also be implemented at the virtual-machine layer through the decoder. The following example illustrates the principles and benefits of MOP fusion.
+
+Take signed division as an example. Suppose we want to compute 100 / 42 and obtain both the quotient and the remainder. The corresponding RISC-V assembly looks like this:
+
+```auto
+addi t0, t0, 100 # Load 100 into register t0
+
+addi t1, t1, 42 # Load 42 into register t1
+
+div a0, t0, t1 # Calc 100 / 42, store the result into a0
+
+rem a1, t0, t1 # Calc 100 % 42, store the result into a1
+```
+
+In normal execution mode, CKB-VM executes `div` and `rem` as two independent instructions. However, there is optimization potential here. The ASM backend of CKB-VM runs on an x86-64 host machine, and the x86-64 `IDIV` instruction produces both quotient and remainder when performing signed division ([reference manual](https://c9x.me/x86/html/file_module_x86_id_72.html)). Therefore, when `div` and `rem` appear adjacent to each other and both operands are exactly the same, we can fuse these two RISC-V instructions into a single internal pseudo-instruction. That internal instruction maps to one x86-64 `IDIV` instruction instead of two, substantially reducing execution cycles.
+
+CKB-VM introduced macro-operation fusion in the 2021 Edition hard fork, and expanded the fusion rule set further in the 2023 Edition. During decoding, CKB-VM checks whether adjacent instruction sequences satisfy the fusion conditions, and if so, merges them into a single internal instruction. These internal instructions usually correspond to just one native instruction in the x86-64 backend, rather than the multiple instructions that existed before fusion.
+
+The set of supported macro-fusion rules in CKB-VM has been expanded gradually across versions. There are currently 16 fusion rules in total. After fusion, the execution cycle count of the fused instruction equals the highest cycle count among the original instructions in the sequence, while the remaining instructions are reduced to zero cycles. The following sections describe the fusion rules introduced by the two hard forks.
+
+### CKB 2021 Edition
+
+**ADC** : Add with Carry, 5 instructions, cycle cost 1. Used for the low-word computation in 128-bit integer addition: it adds two 64-bit values and propagates the carry.
+
+[![adc](https://talk.nervos.org/uploads/default/original/2X/3/3406f9fa9c3bf851671bbd605d0785e84bb49cb7.svg)adc960×440 2.16 KB](https://talk.nervos.org/uploads/default/original/2X/3/3406f9fa9c3bf851671bbd605d0785e84bb49cb7.svg "adc")
+
+**SBB** : Subtract with Borrow, 5 instructions, cycle cost 1. Used for the low-word computation in 128-bit integer subtraction: it subtracts two 64-bit values and propagates the borrow.
+
+[![sbb](https://talk.nervos.org/uploads/default/original/2X/d/dee1e03da632d4fb2e5447e303940493da928bd7.svg)sbb960×440 2.16 KB](https://talk.nervos.org/uploads/default/original/2X/d/dee1e03da632d4fb2e5447e303940493da928bd7.svg "sbb")
+
+**WIDE_MUL** : Signed wide multiplication, 2 instructions, cycle cost 5. Computes both the high 64 bits and low 64 bits of the product of two signed 64-bit integers, yielding the full 128-bit result.
+
+[![wide_mul](https://talk.nervos.org/uploads/default/original/2X/e/e48ba68208d6e10becf7ce93481c3df6f2e060e5.svg)wide_mul960×400 1.9 KB](https://talk.nervos.org/uploads/default/original/2X/e/e48ba68208d6e10becf7ce93481c3df6f2e060e5.svg "wide_mul")
+
+**WIDE_MULU** : Unsigned wide multiplication, 2 instructions, cycle cost 5.
+
+[![wide_mulu](https://talk.nervos.org/uploads/default/original/2X/5/57e750daff6b40d90f8540831af84c100af8e50a.svg)wide_mulu960×400 1.9 KB](https://talk.nervos.org/uploads/default/original/2X/5/57e750daff6b40d90f8540831af84c100af8e50a.svg "wide_mulu")
+
+**WIDE_MULSU** : Signed/unsigned wide multiplication, 2 instructions, cycle cost 5.
+
+[![wide_mulsu](https://talk.nervos.org/uploads/default/original/2X/3/3913a027171b6c4a7f81b363391f4ac625263ac1.svg)wide_mulsu960×400 1.93 KB](https://talk.nervos.org/uploads/default/original/2X/3/3913a027171b6c4a7f81b363391f4ac625263ac1.svg "wide_mulsu")
+
+**WIDE_DIV** : Signed wide division, 2 instructions, cycle cost 32. Computes both the quotient and remainder of signed division, corresponding to the single x86-64 `IDIV` instruction.
+
+[![wide_div](https://talk.nervos.org/uploads/default/original/2X/1/17cc38065c478ed74091e85348b1ee7cb0c339bc.svg)wide_div960×400 1.9 KB](https://talk.nervos.org/uploads/default/original/2X/1/17cc38065c478ed74091e85348b1ee7cb0c339bc.svg "wide_div")
+
+**WIDE_DIVU** : Unsigned wide division, 2 instructions, cycle cost 32.
+
+[![wide_divu](https://talk.nervos.org/uploads/default/original/2X/3/30b54e6a0c2a6997480de792fbc27ef682ee84c4.svg)wide_divu960×400 1.91 KB](https://talk.nervos.org/uploads/default/original/2X/3/30b54e6a0c2a6997480de792fbc27ef682ee84c4.svg "wide_divu")
+
+**FAR_JUMP_REL** : PC-relative far jump, 2 instructions, cycle cost 3. Used to call functions whose offsets exceed the range reachable by `jal` (+/-1 MiB).
+
+[![far_jump_rel](https://talk.nervos.org/uploads/default/original/2X/9/9b5c4658babd12693517477cca5ee1026d9ff03c.svg)far_jump_rel960×400 1.87 KB](https://talk.nervos.org/uploads/default/original/2X/9/9b5c4658babd12693517477cca5ee1026d9ff03c.svg "far_jump_rel")
+
+**FAR_JUMP_ABS** : Absolute-address far jump, 2 instructions, cycle cost 3.
+
+[![far_jump_abs](https://talk.nervos.org/uploads/default/original/2X/4/446ed5a5a53bad068c807d90cdd40f4f8c48034a.svg)far_jump_abs960×400 1.86 KB](https://talk.nervos.org/uploads/default/original/2X/4/446ed5a5a53bad068c807d90cdd40f4f8c48034a.svg "far_jump_abs")
+
+**LD_SIGN_EXTENDED_32_CONSTANT** : Load a 32-bit sign-extended immediate, 2 instructions, cycle cost 1. Loads a 32-bit sign-extended immediate into a register.
+
+[![ld_sign_extended_32_constant](https://talk.nervos.org/uploads/default/original/2X/2/20910bf98bd545328fff44ce29562469b41fa1b6.svg)ld_sign_extended_32_constant960×400 1.89 KB](https://talk.nervos.org/uploads/default/original/2X/2/20910bf98bd545328fff44ce29562469b41fa1b6.svg "ld_sign_extended_32_constant")
+
+### CKB 2023 Edition
+
+**ADCS** : Add with Carry Out (Overflowing Addition), 2 instructions, cycle cost 1. This is a simplified form of `ADC`: it performs one addition and simultaneously outputs the carry flag. It is also the basic building block of `ADD3A`/`ADD3B`/`ADD3C`.
+
+[![adcs](https://talk.nervos.org/uploads/default/original/2X/9/924cf3fbc9f07f4509c6f61e76907c35f5d8bb53.svg)adcs960×400 1.9 KB](https://talk.nervos.org/uploads/default/original/2X/9/924cf3fbc9f07f4509c6f61e76907c35f5d8bb53.svg "adcs")
+
+**SBBS** : Subtract with Borrow Out (Borrowing Subtraction), 2 instructions, cycle cost 1. This is a simplified form of `SBB`: it performs one subtraction and simultaneously outputs the borrow flag.
+
+[![sbbs](https://talk.nervos.org/uploads/default/original/2X/1/18275d2fa6c3ed6b9802ba708ad8f9d61a28ec8d.svg)sbbs960×400 1.87 KB](https://talk.nervos.org/uploads/default/original/2X/1/18275d2fa6c3ed6b9802ba708ad8f9d61a28ec8d.svg "sbbs")
+
+**ADD3A** : Carry-propagating addition variant A, 3 instructions, cycle cost 1. The addition result is written back to the register holding rs2, the carry flag is stored in an independent register, and then an extra carry-in is added.
+
+[![add3a](https://talk.nervos.org/uploads/default/original/2X/7/7c08007460285c804482ae8bfc7bd407cf45e877.svg)add3a960×440 2.17 KB](https://talk.nervos.org/uploads/default/original/2X/7/7c08007460285c804482ae8bfc7bd407cf45e877.svg "add3a")
+
+**ADD3B** : Carry-propagating addition variant B, 3 instructions, cycle cost 1. The carry flag is written back to the register holding rs1, and then added to the third operand.
+
+[![add3b](https://talk.nervos.org/uploads/default/original/2X/6/62611c5f198a0ae1de5b4654cde1806414aea3b7.svg)add3b960×440 2.13 KB](https://talk.nervos.org/uploads/default/original/2X/6/62611c5f198a0ae1de5b4654cde1806414aea3b7.svg "add3b")
+
+**ADD3C** : Carry-propagating addition variant C, 3 instructions, cycle cost 1. The carry flag is stored in an independent register and then the third operand is accumulated in place.
+
+[![add3c](https://talk.nervos.org/uploads/default/original/2X/0/04e167e58229a538e2f3d14c150342b1aa68e1e0.svg)add3c960×440 2.16 KB](https://talk.nervos.org/uploads/default/original/2X/0/04e167e58229a538e2f3d14c150342b1aa68e1e0.svg "add3c")
+
+**LD_SIGN_EXTENDED_32_CONSTANT (auipc variant)** : PC-relative address materialization, 2 instructions, cycle cost 1. CKB 2023 Edition adds `auipc + addi` to the same fusion opcode as `lui + addiw` (`LD_SIGN_EXTENDED_32_CONSTANT`), allowing PC-relative offsets to be materialized directly as immediate constants during decoding.
+
+[![ld_sign_extended_32_constant_auipc](https://talk.nervos.org/uploads/default/original/2X/8/8b9e3068892d85bd35016b93426a117b4eeef2f2.svg)ld_sign_extended_32_constant_auipc960×400 1.91 KB](https://talk.nervos.org/uploads/default/original/2X/8/8b9e3068892d85bd35016b93426a117b4eeef2f2.svg "ld_sign_extended_32_constant_auipc")
+
+## Performance Analysis
+
+The following benchmarks compare the CKB-VM ASM backend with MOP fusion enabled and disabled:
+
+- **asm** : ASM backend, MOP fusion disabled
+
+- **mop** : ASM backend, MOP fusion enabled
+
+All test targets are cryptographic algorithms commonly used on CKB. Criterion is used to measure the median cycle count across 100 samples. Note that the cycles in the table refer to the cycles spent executing CKB-VM on the host x86-64 CPU, not RISC-V instruction cycles. The comparison is as follows:
+
+| Algorithm         | asm (cycles) | mop (cycles) | Change     |
+| ----------------- | ------------ | ------------ | ---------- |
+| ed25519           | 9,508,012    | 8,804,419    | **-7.4%**  |
+| k256_ecdsa        | 37,225,290   | 36,353,859   | **-2.3%**  |
+| k256_schnorr      | 17,603,180   | 16,870,957   | **-4.2%**  |
+| p256              | 28,359,207   | 24,815,077   | **-12.5%** |
+| rsa               | 27,871,846   | 24,778,071   | **-11.0%** |
+| secp256k1_ecdsa   | 10,776,242   | 9,732,561    | **-9.7%**  |
+| secp256k1_schnorr | 10,465,140   | 9,308,162    | **-11.0%** |
+| sphincsplus_ref   | 279,791,883  | 327,076,711  | **+16.9%** |
+
+Almost all algorithms benefit from performance improvements when MOP is enabled; only one algorithm regresses. To analyze these changes, we counted the fused opcode types triggered by each algorithm after enabling MOP, as well as the proportion of MOP instructions among total executed instructions. The results are shown below:
+
+| Algorithm         | MOPs                                                                  | MOP instruction percentage (%) |
+| ----------------- | --------------------------------------------------------------------- | ------------------------------ |
+| ed25519           | WIDE_MULU(15876), ADCS(52946), ADD3B(1518)                            | 7.1635                         |
+| k256_ecdsa        | WIDE_MULU(63072), ADCS(56685), SBBS(488), ADD3B(1827), ADD3C(12152)   | 3.2395                         |
+| k256_schnorr      | WIDE_MULU(31389), ADCS(22439), SBBS(4), ADD3B(766), ADD3C(5490)       | 3.0162                         |
+| p256              | WIDE_MULU(87082), ADCS(414371), SBBS(4846), ADD3B(15903), ADD3C(262)  | 12.8793                        |
+| rsa               | WIDE_MULU(191533), ADCS(198216)                                       | 10.5770                        |
+| secp256k1_ecdsa   | WIDE_MUL(146), WIDE_MULU(11877), ADCS(53290), ADD3B(1146), ADD3C(613) | 13.7066                        |
+| secp256k1_schnorr | WIDE_MUL(64), WIDE_MULU(11672), ADCS(51557), ADD3B(1127), ADD3C(589)  | 13.6859                        |
+| sphincsplus_ref   | /                                                                     | 0                              |
+
+From the table above, we can see that the types and counts of fused opcodes triggered by each algorithm vary significantly after MOP is enabled, which also explains the differences in performance gains. For `sphincsplus_ref`, because it never triggers any fused opcode, performance regresses after enabling MOP. This is because the MOP decoder introduces extra work during decoding, but the instruction stream of this algorithm offers no fusion opportunities to offset that overhead, resulting in an overall slowdown.
+
+It is worth noting that all of the tests above use algorithm implementations written in Rust and C. Their compiler optimization strategies and generated instruction streams may not be fully aligned with the MOP fusion rules, so the actual performance may be limited by implementation details. In practice, hand-written assembly optimizations for hot code paths can make better use of MOP fusion, and the real performance gains may exceed the benchmark results above.
+
+You can find the complete benchmark code and data in [this repository](https://github.com/nervosnetwork/ckb-vm-contrib/tree/main/ckb-vm-test-suite/benches).
+
+## Conclusion
+
+The essence of MOP fusion in CKB-VM is to exchange a small amount of pattern-matching overhead during decoding for significant instruction-level gains during execution: when an instruction sequence satisfies the fusion conditions, multiple RISC-V instructions can be compressed into a single internal operation and mapped to a more efficient native instruction path on the host machine. From the 2021 Edition to the 2023 Edition, the fusion rules expanded from 10 to 16, covering common hotspot patterns such as large-integer addition, subtraction, multiplication, division, far jumps, and constant/address materialization. This is the core reason why on-chain cryptographic algorithms achieve overall acceleration.
+
+The benchmark results also show the limits of MOP’s benefit: it is not a universal accelerator, but an optimizer for specific patterns. Algorithms that frequently trigger fused opcodes can often obtain substantial speedups; if the fusion rules are rarely hit, the extra decoder overhead may instead cause a small regression. Therefore, in real engineering work, MOP should be considered together with code-generation strategy. By tuning compiler options or hand-writing hot assembly paths to proactively construct instruction sequences that are easier to fuse, it is possible to consistently unlock the performance potential of the CKB-VM ASM backend.
+
+## Series of articles
+
+- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
+- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
+- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
+- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
+- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+
+---
+
+_This article is adapted from [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._

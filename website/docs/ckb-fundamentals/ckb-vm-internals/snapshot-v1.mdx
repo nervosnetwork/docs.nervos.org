@@ -1,0 +1,147 @@
+---
+title: CKB-VM Snapshot V1 — Architecture and Design Principles
+---
+
+## Background
+
+After receiving a new transaction, a CKB node must execute its scripts to validate it. A script is a user-provided Turing-complete program, and the compute cost of one execution can vary a lot: a simple signature check may need only a few million cycles, while a complex zero-knowledge proof verification can consume billions of cycles. If a node uses the same thread to process all transactions without distinction, one “large script” can occupy that thread for a long time, preventing newly arrived blocks from being validated in time.
+
+To address this, CKB node mempool logic uses two execution queues: a normal-script queue and a large-script queue. A new transaction enters the normal queue first and is executed by multiple worker threads in parallel. Once a transaction accumulates more than a configured cycle threshold in the normal queue, the node removes it from that queue and moves it to the dedicated large-script queue to continue execution. The benefit is that threads in the normal queue are not monopolized by a few long-running tasks, so the node always keeps enough compute capacity to react to new blocks.
+
+The key that makes this mechanism work is that when a script is **moved** , it must carry over its full execution state at that exact moment and continue seamlessly in another queue. It must neither restart from scratch nor lose intermediate results. Snapshot exists for this purpose: when a VM is about to reach the cycle limit of the current queue, it serializes the full execution state; later, in the large-script queue, the VM is restored from that snapshot under a new budget and continues unfinished work. This process is transparent to the script: the script does not need to know it was suspended and resumed.
+
+This article introduces Snapshot V1 in CKB-VM. The source code is in [src/snapshot.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/snapshot.rs).
+
+## What State Must Be Saved
+
+The execution state of a RISC-V VM can be divided into three parts: registers, program counter, and memory.
+
+Registers and PC are small and can be fully saved. Memory is the real trade-off. CKB-VM provides 4 MB of linear memory by default. If every snapshot serializes the whole memory as-is, it wastes both space and time. In practice, a script usually writes only a small fraction of memory during execution, so we only need to save these “dirty pages.”
+
+CKB-VM memory is managed in page granularity, 4 KB per page. Every page has one flag byte, and the `FLAG_DIRTY` bit marks whether the page has been written. The memory subsystem sets this flag automatically on every write. After `machine.load_elf` finishes loading the ELF, CKB-VM clears all dirty flags. Therefore, dirty pages observed during script execution correspond exactly to pages modified by the program, which are the pages snapshots must save.
+
+## Data Structure
+
+`Snapshot` is a serializable struct, defined as follows:
+
+```rust
+#[derive(Default, Deserialize, Serialize)]
+pub struct Snapshot {
+    pub version: u32,
+    pub registers: [u64; RISCV_GENERAL_REGISTER_NUMBER],
+    pub pc: u64,
+    pub page_indices: Vec<u64>,
+    pub page_flags: Vec<u8>,
+    pub pages: Vec<Vec<u8>>,
+    pub load_reservation_address: u64,
+}
+```
+
+Field meanings:
+
+- `version`: VM version number, used for validation during resume.
+- `registers`: 32 general-purpose RISC-V registers.
+- `pc`: program counter.
+- `page_indices`: list of dirty page indices.
+- `page_flags`: page flags corresponding one-to-one with `page_indices`.
+- `pages`: page contents corresponding one-to-one with `page_indices`, each page is 4 KB.
+- `load_reservation_address`: reservation address used by the A extension.
+
+The three `Vec` fields store dirty-page information as flattened arrays, instead of `Vec<(u64, u8, Vec<u8>)>`. This yields a more compact layout after serde serialization.
+
+## Creating a Snapshot
+
+The `make_snapshot` function builds a snapshot from a running VM. The core logic has two steps: copy registers and PC first, then iterate memory pages and extract dirty pages.
+
+```rust
+pub fn make_snapshot<T: CoreMachine>(machine: &mut T) -> Result<Snapshot, Error> {
+    let mut snap = Snapshot {
+        version: machine.version(),
+        pc: machine.pc().to_u64(),
+        load_reservation_address: machine.memory().lr().to_u64(),
+        ..Default::default()
+    };
+    for (i, v) in machine.registers().iter().enumerate() {
+        snap.registers[i] = v.to_u64();
+    }
+
+    for i in 0..machine.memory().memory_pages() {
+        let flag = machine.memory_mut().fetch_flag(i as u64)?;
+        if flag & FLAG_DIRTY != 0 {
+            let addr_from = i << RISCV_PAGE_SHIFTS;
+            let addr_to = (i + 1) << RISCV_PAGE_SHIFTS;
+            let mut page = vec![0; RISCV_PAGESIZE];
+            for i in (addr_from..addr_to).step_by(8) {
+                let v64 = machine
+                    .memory_mut()
+                    .load64(&T::REG::from_u64(i as u64))?
+                    .to_u64();
+                // ... split bytes and write into page
+            }
+            snap.page_indices.push(i as u64);
+            snap.page_flags.push(flag);
+            snap.pages.push(page);
+        }
+    }
+    Ok(snap)
+}
+```
+
+Two details are worth attention:
+
+First, memory traversal does not use direct `memcpy`; it calls `load64` with an 8-byte stride. This is because the `CoreMachine` trait abstracts different backends (pure Rust interpreter, ASM backend, AOT backend, etc.), and their internal memory layouts are different. The only universal read interface is the `load*` methods. Reading via `load64` and then splitting into 8 bytes guarantees snapshot logic works consistently across backends.
+
+Second, this code only checks the `FLAG_DIRTY` bit but saves the entire flag byte. This allows resume to restore other page attributes as well (such as executable, writable, etc.).
+
+## Resuming from a Snapshot
+
+The `resume` function loads a snapshot into a new VM. Callers typically `load_elf` again with the same ELF first. At that point, all static pages are in place and dirty flags are cleared. Then `resume` applies dirty-page patches on top of that base state to reconstruct a state equivalent to the suspended VM.
+
+```rust
+pub fn resume<T: CoreMachine>(machine: &mut T, snapshot: &Snapshot) -> Result<(), Error> {
+    if machine.version() != snapshot.version {
+        return Err(Error::InvalidVersion);
+    }
+    for (i, v) in snapshot.registers.iter().enumerate() {
+        machine.set_register(i, T::REG::from_u64(*v));
+    }
+    machine.update_pc(T::REG::from_u64(snapshot.pc));
+    machine.commit_pc();
+    for i in 0..snapshot.page_indices.len() {
+        let page_index = snapshot.page_indices[i];
+        let page_flag = snapshot.page_flags[i];
+        let page = &snapshot.pages[i];
+        let addr_from = page_index << RISCV_PAGE_SHIFTS;
+        machine.memory_mut().store_bytes(addr_from, &page[..])?;
+        machine.memory_mut().set_flag(page_index, page_flag)?;
+    }
+    machine
+        .memory_mut()
+        .set_lr(&T::REG::from_u64(snapshot.load_reservation_address));
+    Ok(())
+}
+```
+
+The first step is version validation: if the snapshot comes from a VM of a different version, it immediately returns `InvalidVersion`. Different hard-fork versions of CKB-VM can differ in instruction decoding and execution semantics, and cross-version resume may introduce subtle semantic errors. Rejecting is safer.
+
+Then registers, PC, and dirty pages are restored in sequence. `update_pc` \+ `commit_pc` is the standard PC update pattern in CKB-VM: `update_pc` writes the next instruction address, and `commit_pc` promotes it to current PC. This design matches the interpreter loop model of “fetch first, then commit.”
+
+## Limitations
+
+Snapshot V1 is simple and direct, but it has an obvious weakness: its definition of “dirty pages” is coarse. Any page that has been written is saved in full, even if most bytes were copied from read-only segments or transaction witness data that already exists elsewhere on-chain.
+
+For data-heavy scenarios (for example, scripts loading a full witness into memory via syscall), V1 snapshots can become very large. This is why CKB-VM later introduced Snapshot V2.
+
+The details of V2 are covered in the next article. Even after V2 appeared, V1 remains as the most basic and self-contained snapshot format, suitable for scenarios that do not depend on external data sources.
+
+## Series of articles
+
+- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
+- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
+- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
+- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
+- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+
+---
+
+_This article is adapted from [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
