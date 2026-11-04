@@ -1,0 +1,485 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/docs",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/rpc/",
+      "destination": "/docs/getting-started/rpcs",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/tools",
+      "destination": "/docs/sdk-and-devtool/devtool",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/concepts/economics",
+      "destination": "/docs/assets-token-standards/economics",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/concepts/cell-model",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/concepts/ckb-vm",
+      "destination": "/docs/ckb-fundamentals/ckb-vm",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/concepts/consensus",
+      "destination": "/docs/ckb-fundamentals/consensus",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/concepts/cryptowallet",
+      "destination": "/docs/integrate-wallets/intro-to-wallets",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/concepts/nervos-blockchain",
+      "destination": "/docs/ckb-fundamentals/nervos-blockchain",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/glossary/",
+      "destination": "/docs/tech-explanation/glossary",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/mainnet",
+      "destination": "/docs/node/run-mainnet-node",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/get-ckb",
+      "destination": "/docs/node/install-ckb",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/mining-ckb",
+      "destination": "/docs/mining/guide",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/halving",
+      "destination": "/docs/mining/halving",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/crypto wallets/neuron",
+      "destination": "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/neuron",
+      "destination": "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/tools",
+      "destination": "https://docs-old.nervos.org/docs/basics/tools",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script/minimal-script",
+      "destination": "/docs/script/rust/rust-example-minimal-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script/sudt-script",
+      "destination": "/docs/script/rust/rust-example-sudt-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/history-and-hard-forks/history-vm-version",
+      "destination": "/docs/script/vm-version",
+      "permanent": true
+    },
+    {
+      "source": "/docs/sdk-and-devtool/lumos",
+      "destination": "/docs/sdk-and-devtool/ccc",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/crypto wallets/imtoken",
+      "destination": "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/imtoken",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/imtoken",
+      "destination": "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/imtoken",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/ckb-vs-btc",
+      "destination": "/docs/ckb-fundamentals/ckb-vs-btc",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/ckb-address",
+      "destination": "/docs/ckb-fundamentals/ckb-address",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-1",
+      "destination": "/docs/script/intro-to-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-2",
+      "destination": "/docs/script/program-language-for-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-3",
+      "destination": "/docs/script/rust/rust-example-sudt-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-4",
+      "destination": "/docs/script/program-language-for-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-5",
+      "destination": "/docs/script/debug-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-6",
+      "destination": "/docs/script/type-id",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-7",
+      "destination": "/docs/script/js/js-vm",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-8",
+      "destination": "/docs/script/program-language-for-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-9",
+      "destination": "/docs/script/vm-cycle-limits",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script-course/intro-to-script-10",
+      "destination": "/docs/script/program-language-for-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/ckb-vm",
+      "destination": "/docs/ckb-fundamentals/ckb-vm",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/cell-model",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/faq/general",
+      "destination": "https://docs-old.nervos.org/docs/basics/faq/general",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/economics",
+      "destination": "/docs/assets-token-standards/economics",
+      "permanent": true
+    },
+    {
+      "source": "/docs/concepts/supply",
+      "destination": "/docs/assets-token-standards/economics",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script/ckb-script-ipc",
+      "destination": "/docs/script/ckb-ipc",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script/rust/rust-example-spawn-script",
+      "destination": "/docs/script/rust/rust-api-spawn",
+      "permanent": true
+    },
+    {
+      "source": "/docs/wallets",
+      "destination": "/docs/integrate-wallets/intro-to-wallets",
+      "permanent": true
+    },
+    {
+      "source": "/getting-started/wallet",
+      "destination": "/docs/integrate-wallets/intro-to-wallets",
+      "permanent": true
+    },
+    {
+      "source": "/docs/getting-started/blockchain-networks",
+      "destination": "/docs/getting-started/ckb-networks",
+      "permanent": true
+    },
+    {
+      "source": "/docs/script/intro-to-script\\)\\)。",
+      "destination": "/docs/script/intro-to-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/getting-started/how-ckb-works\\)\\)。",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/docs/concepts/ckb-vm",
+      "destination": "/docs/ckb-fundamentals/ckb-vm",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/previous-output",
+      "destination": "/docs/tech-explanation/inputs",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/cellinput",
+      "destination": "/docs/tech-explanation/inputs",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/guides/testnet",
+      "destination": "/docs/node/run-testnet-node",
+      "permanent": true
+    },
+    {
+      "source": "/docs/getting-started/devtool",
+      "destination": "/docs/sdk-and-devtool/devtool",
+      "permanent": true
+    },
+    {
+      "source": "/docs/dapp/rpcs",
+      "destination": "/docs/getting-started/rpcs",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/header-dep",
+      "destination": "/docs/tech-explanation/header-deps",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/outpoint",
+      "destination": "/docs/tech-explanation/glossary#outpoint",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/dep-type",
+      "destination": "/docs/tech-explanation/glossary#dep-type",
+      "permanent": true
+    },
+    {
+      "source": "/docs/common-scripts/spore-protocol",
+      "destination": "/docs/ecosystem-scripts/spore-protocol",
+      "permanent": true
+    },
+    {
+      "source": "/docs/common-scripts/xudt",
+      "destination": "/docs/ecosystem-scripts/xudt",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/3",
+      "destination": "/docs/script/rust/rust-example-sudt-script",
+      "permanent": true
+    },
+    {
+      "source": "/getting-started/mine",
+      "destination": "/docs/mining/guide",
+      "permanent": true
+    },
+    {
+      "source": "/getting-started/mine.html",
+      "destination": "/docs/mining/guide",
+      "permanent": true
+    },
+    {
+      "source": "/getting-started/run-node",
+      "destination": "/docs/node/node-overview",
+      "permanent": true
+    },
+    {
+      "source": "/getting-started/run-node.html",
+      "destination": "/docs/node/node-overview",
+      "permanent": true
+    },
+    {
+      "source": "/references/neuron-wallet-guide.html",
+      "destination": "/docs/integrate-wallets/intro-to-wallets",
+      "permanent": true
+    },
+    {
+      "source": "/references/neuron-wallet-guide",
+      "destination": "/docs/integrate-wallets/intro-to-wallets",
+      "permanent": true
+    },
+    {
+      "source": "/docs/labs/sudtbycapsule",
+      "destination": "https://docs-old.nervos.org/docs/labs/sudtbycapsule",
+      "permanent": true
+    },
+    {
+      "source": "/docs/intro/overview",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/introduction",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/docs/basics/layers-consensus",
+      "destination": "/docs/ckb-fundamentals/nervos-blockchain",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/cell",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/introduction",
+      "destination": "/docs/tech-explanation/glossary",
+      "permanent": true
+    },
+    {
+      "source": "/docs/node/run-a-mainnet-node",
+      "destination": "/docs/node/run-mainnet-node",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tech-explanation/economics",
+      "destination": "/docs/assets-token-standards/economics",
+      "permanent": true
+    },
+    {
+      "source": "/basic-concepts/architecture",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/basic-concepts/architecture.html",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/technical-concepts/architecture",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/technical-concepts/architecture.html",
+      "destination": "/docs/getting-started/how-ckb-works",
+      "permanent": true
+    },
+    {
+      "source": "/docs/essays/upgradability",
+      "destination": "https://docs-old.nervos.org/docs/essays/upgradability",
+      "permanent": true
+    },
+    {
+      "source": "/key-concepts/cell-model.html",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/key-concepts/cell-model",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/basic-concepts/cell-model.html",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/basic-concepts/cell-model",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/key-concepts/consensus.html",
+      "destination": "/docs/ckb-fundamentals/consensus",
+      "permanent": true
+    },
+    {
+      "source": "/key-concepts/consensus",
+      "destination": "/docs/ckb-fundamentals/consensus",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/glossary-general.html",
+      "destination": "/docs/tech-explanation/glossary",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/glossary-general",
+      "destination": "/docs/tech-explanation/glossary",
+      "permanent": true
+    },
+    {
+      "source": "/docs/dapp/write-message",
+      "destination": "/docs/dapp/store-data-on-cell",
+      "permanent": true
+    },
+    {
+      "source": "/docs/how-tos/how-to-manage-txs",
+      "destination": "/docs/how-tos/how-to-query-tx-state",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/7",
+      "destination": "/docs/script/js/js-vm",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/8",
+      "destination": "/docs/script/program-language-for-script",
+      "permanent": true
+    },
+    {
+      "source": "/docs/tags/cell-model",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    },
+    {
+      "source": "/docs/concepts/cell-model",
+      "destination": "/docs/ckb-fundamentals/cell-model",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/homeContents",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/search",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    }
+  ]
+}
