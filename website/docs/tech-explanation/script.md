@@ -1,6 +1,7 @@
 ---
 id: script
 title: Script
+description: "Learn the CKB Script structure, including code_hash, hash_type, args, script grouping, and execution rules."
 ---
 
 # Script

@@ -1,6 +1,7 @@
 ---
 id: spore-protocol
-title: Spore Protocol
+title: "Spore Protocol Asset Standard"
+sidebar_label: "Spore Protocol"
 ---
 
 # Spore Protocol

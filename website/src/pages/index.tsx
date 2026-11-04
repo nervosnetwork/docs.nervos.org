@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <Layout
       wrapperClassName={clsx(styles.homeLayout, styles.relative)}
-      title="Home"
+      title="Developer Documentation"
       description="Docs for Nervos CKB Blockchain dApp and Script development"
     >
       <img
