@@ -24,12 +24,7 @@ export default function EcoCard({
   className,
 }: EcoCardProps): JSX.Element {
   return (
-    <Link
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={clsx(styles.cardContainer, className)}
-    >
+    <article className={clsx(styles.cardContainer, className)}>
       <div className={styles.topContainer}>
         <img
           className={styles.banner}
@@ -38,10 +33,21 @@ export default function EcoCard({
         />
       </div>
       <div className={styles.bottomContainer}>
-        <h4 className={styles.title}>{title}</h4>
+        <h4 className={styles.title}>
+          <Link
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.primaryLink}
+          >
+            {title}
+          </Link>
+        </h4>
         <div className={styles.tagList}>
           {tags.map((tag) => (
-            <div className={styles.tag}>{tag}</div>
+            <div key={tag} className={styles.tag}>
+              {tag}
+            </div>
           ))}
         </div>
         <p className={styles.description}>{description}</p>
@@ -67,6 +73,6 @@ export default function EcoCard({
           ))}
         </div>
       </div>
-    </Link>
+    </article>
   );
 }

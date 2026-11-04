@@ -59,7 +59,7 @@ Here’s the data structure of a Cell:
 ```
 
 <img
-  src="/img/ckb-vs-btc/ckb-lock-script.png"
+  src="/img/ckb-vs-btc/ckb-lock-script.webp"
   width="688px"
   height="300px"
   alt="Cell with a Lock Script"
@@ -71,7 +71,7 @@ Here’s the data structure of a Cell:
 
 The Bitcoin Script Interpreter is **stack-based**, meaning it uses a stack data structure to store temporary data during Script execution. Operations in Bitcoin Script push (add) and pop (remove) data from the stack. Here's a GIF depicting a typical Bitcoin Script operation like simple P2PKH (Pay to Public Key Hash):
 
-![How btc-script-interpreter process Script](/img/ckb-vs-btc/btc-script-interpreter.gif)
+![How btc-script-interpreter process Script](/img/ckb-vs-btc/btc-script-interpreter.webp)
 
 ### **CKB-VM**
 
@@ -281,7 +281,7 @@ The following are the step-by-step breakdown of the verification process:
 
 - `OP_ADD` pops the top two numbers from the stack (5 and 3), adds them together, and pushes the result (8) back onto the stack
   <img
-    src="/img/ckb-vs-btc/execute-op-add.png"
+    src="/img/ckb-vs-btc/execute-op-add.webp"
     width="688px"
     height="424px"
     alt="Execution of OP_ADD"
@@ -296,7 +296,7 @@ The following are the step-by-step breakdown of the verification process:
    />
 4. `OP_EQUAL` pops the top two numbers from the stack (8 and 8), checks if they are equal, and pushes the result (TRUE) back onto the stack.
    <img
-     src="/img/ckb-vs-btc/execute-op-equal.png"
+     src="/img/ckb-vs-btc/execute-op-equal.webp"
      width="688px"
      height="424px"
      alt="Execution of OP_EQUAL"
@@ -320,7 +320,7 @@ return 1;
 ```
 
 <img
-  src="/img/ckb-vs-btc/ckb-lock-script.png"
+  src="/img/ckb-vs-btc/ckb-lock-script.webp"
   width="688px"
   height="281px"
   alt="The locking Script of an output Cell"
@@ -329,7 +329,7 @@ return 1;
 To unlock this Cell for spending, Alice must provide a key (similar to the unlocking Script in BTC). In this case, Alice provides the numbers 3 and 5 in the `witnesses` field.
 
 <img
-  src="/img/ckb-vs-btc/ckb-witness.png"
+  src="/img/ckb-vs-btc/ckb-witness.webp"
   width="732px"
   height="379px"
   alt="The unlocking Script in the witnesses field"
@@ -347,7 +347,7 @@ The following are the step-by-step breakdown of the verification process:
   ```
 
   <img
-    src="/img/ckb-vs-btc/execute-load-witness.png"
+    src="/img/ckb-vs-btc/execute-load-witness.webp"
     width="700px"
     height="533px"
     alt="Witness data fetched and decoded into registers"
@@ -362,7 +362,7 @@ The following are the step-by-step breakdown of the verification process:
   ```
 
   <img
-    src="/img/ckb-vs-btc/execute-check-sum.png"
+    src="/img/ckb-vs-btc/execute-check-sum.webp"
     width="700px"
     height="533px"
     alt="Sum the two values"
@@ -380,7 +380,7 @@ The following are the step-by-step breakdown of the verification process:
   ```
 
   <img
-    src="/img/ckb-vs-btc/execute-return-valid.png"
+    src="/img/ckb-vs-btc/execute-return-valid.webp"
     width="700px"
     height="533px"
     alt="Return the final result"

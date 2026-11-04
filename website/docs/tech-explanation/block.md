@@ -7,7 +7,7 @@ title: Block
 
 A block is a container of transactions, carrying the information required by consensus so the participants can verify and recognize the canonical chain.
 
-<img src={"/img/tech_explanation/block-structure.png"} width={688} height={400} alt="Structure of Block" />
+<img src={"/img/tech_explanation/block-structure.webp"} width={688} height={400} alt="Structure of Block" />
 
 ## Fields & Description
 

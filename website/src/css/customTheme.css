@@ -2,11 +2,13 @@
 
 @font-face {
   font-family: "Poppins-Bold";
-  src: url("../../static/fonts/Poppins-Bold.ttf") format("truetype");
+  src: url("../../static/fonts/Poppins-Bold.woff2") format("woff2");
+  font-display: swap;
 }
 @font-face {
   font-family: "Lato";
-  src: url("../../static/fonts/Lato-Regular.ttf") format("truetype");
+  src: url("../../static/fonts/Lato-Regular.woff2") format("woff2");
+  font-display: swap;
 }
 
 :root {

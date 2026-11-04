@@ -37,7 +37,7 @@ Each Cell requires at least [61 CKBytes](/docs/tech-explanation/capacity#capacit
 The Cell Model defines how these Cells behave, governed by [Scripts](#scripts) that set the rules for how Cells can be used or accessed. Once added to the blockchain, Cells are immutable, meaning they can’t be changed. To update a Cell’s data, you must consume it—extract the data, modify it, and create a new Cell with the updated information.
 
 <img
-  src="/img/how-ckb-works/cell-model.gif"
+  src="/img/how-ckb-works/cell-model.webp"
   width="688px"
   height="446px"
   alt="Cells are removed and added to the set of Live Cells"
@@ -48,7 +48,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 1. **Create**: You start by selecting a Live Cell with a capacity of 200 CKBytes. Two new Live Cells will be created as output: one Cell with 100 CKBytes, locked so only Alice can unlock it; another Cell with 99.999 CKBytes locked to yourself as your change. The 0.001 CKBytes difference will be used as the transaction fee.
 
    <img
-     src="/img/how-ckb-works/select-live-cell.png"
+     src="/img/how-ckb-works/select-live-cell.webp"
      width="688px"
      height="303px"
      alt="Select a Live Cell as input and define two new Live Cells as output"
@@ -57,7 +57,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 2. **Sign**: You sign the transaction with your private key, proving that you have the authority to spend the CKBytes in this Cell.
 
    <img
-     src="/img/how-ckb-works/sign-to-unlock.png"
+     src="/img/how-ckb-works/sign-to-unlock.webp"
      width="688px"
      height="303px"
      alt="Sign the transaction with your private key to unlock the input Cell"
@@ -66,7 +66,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 3. **Broadcast**: After signing, the transaction is broadcasted from your wallet to the nearest CKB network node.
 
    <img
-     src="/img/how-ckb-works/broadcast.png"
+     src="/img/how-ckb-works/broadcast.webp"
      width="688px"
      height="276px"
      alt="Transaction broadcasted to the nearest node"
@@ -75,7 +75,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 4. **Validate**: The receiving node performs several checks to validate your transaction. For more details, you can check out the [verification process](/docs/ckb-fundamentals/ckb-vs-btc#unlocking--verification-process)
 
    <img
-     src="/img/how-ckb-works/validate.png"
+     src="/img/how-ckb-works/validate.webp"
      width="688px"
      height="276px"
      alt="Node performs checks to validate your transaction"
@@ -84,7 +84,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 5. **Propagate**: The validated transaction is propagated to other nodes in the network and enters the mempool–a temporary storage area for unconfirmed transactions, waiting for miners to pick up.
 
    <img
-     src="/img/how-ckb-works/propagate.png"
+     src="/img/how-ckb-works/propagate.webp"
      width="688px"
      height="276px"
      alt="Transaction is propagated to other nodes and enters the mempool"
@@ -92,7 +92,7 @@ Cells that have not been consumed are known as Live Cells, and these are availab
 
 6. **Confirm**: Miners will select your transaction from the mempool and include it in a new block. Once the block containing your transaction is mined, it’s added to the blockchain. At this point, your transaction has 1 confirmation.
    <img
-     src="/img/how-ckb-works/confirm.png"
+     src="/img/how-ckb-works/confirm.webp"
      width="688px"
      height="276px"
      alt="Miners select the transaction from the mempool and include it in a new block. The block is added to the blockchain after validation."
@@ -111,7 +111,7 @@ As a result:
 A Script in CKB is a binary executable that can be executed on-chain. It is a program that runs on a virtual machine powered by the RISC-V instruction set, called the [CKB-VM](#ckb-vm), and can perform arbitrary logic to guard and protect your Cells. You can think of it as smart contract.
 
 <img
-  src="/img/how-ckb-works/structure-of-script.png"
+  src="/img/how-ckb-works/structure-of-script.webp"
   width="688px"
   height="257px"
   alt="A Script consists of code_hash, hash_type, and args"
