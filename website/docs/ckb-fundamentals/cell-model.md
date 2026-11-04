@@ -34,7 +34,7 @@ Each Cell can be consumed only once. A non-consumed Cell is a **Live Cell**. A c
 
 Transactions reflect the state change of Cells, where a group of Live Cells are consumed and new Cells are created. The network validates transactions by executing all associated Lock Scripts and Type Scripts. This ensures adherence to developer-defined rules and prevents fraudulent activities.
 
-<img src="/img/cell/cell-lifecycle.png" alt="Cell lifecycle" width="688" height="387" />
+<img src="/img/cell/cell-lifecycle.webp" alt="Cell lifecycle" width="688" height="387" />
 
 ## First-Class Assets
 
@@ -52,7 +52,7 @@ Cell Model provides the flexibility by allowing any party to cover the transacti
 
 Cell Model’s unique structure inherently grants scalability, reflected in the three perspectives below.
 
-<img src="/img/cell/cell-scalability.png" alt="Cell Model's scalability" width="688" height="387" />
+<img src="/img/cell/cell-scalability.webp" alt="Cell Model's scalability" width="688" height="387" />
 
 Cell Model separates computation and validation for smart contract execution. Computation happens off-chain, where new data is generated. This data is subsequently sent to the network to undergo on-chain validation. Full nodes execute the validation to ensure compliance with developer-set rules.
 

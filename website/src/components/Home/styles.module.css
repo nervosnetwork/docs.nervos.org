@@ -454,7 +454,7 @@
   position: absolute;
   inset: 0;
 
-  background-image: url("/img/noise.png");
+  background-image: url("/img/noise.webp");
   background-position: center;
   background-repeat: repeat;
 
@@ -613,4 +613,8 @@
     width: 100%;
     gap: 0.75rem;
   }
+}
+
+.sectionHeading {
+  font-size: var(--ifm-h1-font-size);
 }

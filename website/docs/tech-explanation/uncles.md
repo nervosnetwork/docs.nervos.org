@@ -7,7 +7,7 @@ title: uncles
 
 `uncles` is a list of [uncle blocks](/docs/tech-explanation/uncle-block) referenced by this block. Each item in `uncles` is of type `UncleBlock`, which contains the uncle’s header and proposals, but no transactions.
 
-<img src={"/img/tech_explanation/uncleblock-structure.png"} width={688} height={304} alt="Structure of UncleBlock" />
+<img src={"/img/tech_explanation/uncleblock-structure.webp"} width={688} height={304} alt="Structure of UncleBlock" />
 
 ## Structure of UncleBlock
 

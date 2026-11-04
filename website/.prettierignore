@@ -31,3 +31,5 @@ docs/sdk-and-devtool/ccc.mdx
 
 # Crawler policy is plain text.
 static/robots.txt
+
+*.woff2

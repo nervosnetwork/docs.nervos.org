@@ -7,7 +7,7 @@ import Tooltip from "@components/Tooltip";
 
 Uncle blocks are created when 2 blocks are mined and submitted to the ledger at roughly the same time. Only 1 can enter the ledger as an included block, and the other does not.
 
-<img src={"/img/tech_explanation/uncle-block-relationship.png"} width={688} height={271} alt="Uncle Block Condition" />
+<img src={"/img/tech_explanation/uncle-block-relationship.webp"} width={688} height={271} alt="Uncle Block Condition" />
 
 Block B1 is considered to be the uncle of block B2 if all the following conditions are met:
 

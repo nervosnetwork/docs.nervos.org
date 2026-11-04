@@ -5,6 +5,7 @@ import Link from "@docusaurus/Link";
 import styles from "./styles.module.css";
 import CardLayout from "../CardLayout";
 import Button from "../Button";
+import buttonStyles from "../Button/styles.module.css";
 import TutorialFrame from "../TutorialFrame";
 import WalletCard, { WalletCardProps } from "../WalletCard";
 import EcoCard, { EcoCardProps } from "../EcoCard";
@@ -29,12 +30,30 @@ interface EcoSectionProps {
   children: React.ReactNode;
 }
 
+function HomeCardFrame({
+  to,
+  className,
+  children,
+}: {
+  to?: string;
+  className: string;
+  children: React.ReactNode;
+}) {
+  return to ? (
+    <Link to={to} className={className}>
+      {children}
+    </Link>
+  ) : (
+    <div className={className}>{children}</div>
+  );
+}
+
 /* ---------------- Top cards ---------------- */
 function HomeCardSection() {
   return (
     <CardLayout colNum={[3, 1, 1, 1]} gap={16}>
       {homeCardContents.map((card) => (
-        <Link
+        <HomeCardFrame
           key={card.title}
           to={card.to}
           className={clsx(
@@ -83,7 +102,7 @@ function HomeCardSection() {
               ))}
             </div>
           ) : null}
-        </Link>
+        </HomeCardFrame>
       ))}
     </CardLayout>
   );
@@ -121,7 +140,7 @@ function DAppSection(): JSX.Element {
       </div>
 
       <div className={styles.tutorialLeft}>
-        <h1>DApp Tutorials</h1>
+        <h2 className={styles.sectionHeading}>DApp Tutorials</h2>
 
         <div className={styles.tutorialSidebar}>
           {tutorialSectionContents.map((t) => (
@@ -175,9 +194,9 @@ function UniqueCardSection(): JSX.Element {
 
             <p className={styles.uniqueCardDesc}>{card.description}</p>
 
-            <Button internal link={card.link} size="small">
+            <span className={clsx(buttonStyles.secBtn, buttonStyles.smallBtn)}>
               Learn More →
-            </Button>
+            </span>
           </Link>
         ))}
       </CardLayout>
@@ -277,6 +296,7 @@ function WalletDisplay(): JSX.Element {
             <WalletCard
               key={idx}
               title={card.title}
+              logo={card.logo}
               href={card.href}
               tags={card.tags}
               size="small"
@@ -477,7 +497,7 @@ function DevLogSection(): JSX.Element {
       </div>
 
       <div className={clsx(styles.flexCol, styles.leftContainer)}>
-        <h1>Discover Dev Log</h1>
+        <h2 className={styles.sectionHeading}>Discover Dev Log</h2>
         <div className={styles.description}>
           Dive into the continuous evolution of the Nervos CKB through our Dev
           Log, where we document the journey of innovation, feature
@@ -510,7 +530,9 @@ function HistorySection(): JSX.Element {
       </div>
 
       <div className={clsx(styles.flexCol, styles.leftContainer)}>
-        <h1>Explore CKB History & Hard Forks</h1>
+        <h2 className={styles.sectionHeading}>
+          Explore CKB History & Hard Forks
+        </h2>
         <div className={styles.description}>
           Delve into the milestones and pivotal updates that have shaped
           CKB&apos;s development. Gain detailed insights into each hard fork and

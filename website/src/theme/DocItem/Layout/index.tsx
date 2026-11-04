@@ -8,6 +8,8 @@
 
 import React, { useState } from "react";
 import clsx from "clsx";
+import Head from "@docusaurus/Head";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { useWindowSize } from "@docusaurus/theme-common";
 import { useDoc, useDocsSidebar } from "@docusaurus/plugin-content-docs/client";
 import DocRootLayoutSidebar from "@theme/DocRoot/Layout/Sidebar";
@@ -49,10 +51,27 @@ function useDocTOC() {
 export default function DocItemLayout({ children }: Props): JSX.Element {
   const docTOC = useDocTOC();
   const { metadata } = useDoc();
+  const { siteConfig } = useDocusaurusContext();
+  const article = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: metadata.title,
+    description: metadata.description,
+    url: new URL(metadata.permalink, siteConfig.url).href,
+    dateModified: metadata.lastUpdatedAt
+      ? new Date(metadata.lastUpdatedAt * 1000).toISOString()
+      : undefined,
+    publisher: { "@id": "https://docs.nervos.org/#organization" },
+  };
   const sidebar = useDocsSidebar();
   const [hiddenSidebarContainer, setHiddenSidebarContainer] = useState(false);
   return (
     <div className={styles.customLayout}>
+      <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(article).replace(/</g, "\\u003c")}
+        </script>
+      </Head>
       {sidebar && (
         <DocRootLayoutSidebar
           sidebar={sidebar.items}

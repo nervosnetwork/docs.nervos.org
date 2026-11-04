@@ -10,7 +10,7 @@ title: proposals
 - A transaction is considered **proposed** if its proposal ID is listed in the `proposals` field of a block or an uncle of that block.
 - A transaction is considered **committed** once it appears in a block’s `transactions` field.
 
-<img src={"/img/tech_explanation/proposal-lifecycle.png"} width={688} height={362} alt="Lifecycle of proposals" />
+<img src={"/img/tech_explanation/proposal-lifecycle.webp"} width={688} height={362} alt="Lifecycle of proposals" />
 
 Two protocol parameters, `close` and `far`, specify the closest and farthest on-chain distances between a transaction's proposal and commitment. A non-cellbase transaction commit in block `c` must have been proposed in block `p`, where
 

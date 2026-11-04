@@ -1,7 +1,36 @@
+import { useState } from "react";
+
 const TutorialFrame = ({ tutorialTitle, iframeSrc }) => {
+  const [loadedSrc, setLoadedSrc] = useState(null);
+  if (loadedSrc !== iframeSrc)
+    return (
+      <div
+        style={{
+          minHeight: 646,
+          borderRadius: 16,
+          display: "grid",
+          placeContent: "center",
+          gap: 16,
+          textAlign: "center",
+          padding: 24,
+          background: "var(--surface-02)",
+        }}
+      >
+        <p>Try the {tutorialTitle} tutorial in an interactive CodeSandbox.</p>
+        <button
+          type="button"
+          className="button button--primary"
+          onClick={() => setLoadedSrc(iframeSrc)}
+        >
+          Load interactive {tutorialTitle} example
+        </button>
+        <p>Loading connects to CodeSandbox, a third-party service.</p>
+      </div>
+    );
   return (
     <iframe
       src={iframeSrc}
+      loading="lazy"
       style={{
         width: "100%",
         height: 646,
