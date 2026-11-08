@@ -1,6 +1,7 @@
 ---
 id: cell
 title: Cell
+description: "Explore the fields of a CKB Cell, including capacity, Lock Script, optional Type Script, and Cell data."
 ---
 
 import Tooltip from "@components/Tooltip";

@@ -71,6 +71,7 @@ You can also read the full code online or download it <ExampleLink path="dApp/cr
 <SetupProject
   projectPath="docs.nervos.org/examples/dApp/create-dob"
   imageSrc="img/dapps/create-dob-dapp.jpg"
+  imageAlt="Create Digital Object example with an image upload and Spore creation form"
   response={`File .../system-scripts.json generated successfully.
 Synchronized Devnet system scripts with OffCKB.
 Server running at http://localhost:1234
@@ -186,7 +187,7 @@ const renderSpore = async () => {
 };
 
 ...
-{imageURL && <img src={imageURL} />}
+{imageURL && <img src={imageURL} alt="Preview of the content selected for the Spore DOB" />}
 ```
 
 ---

@@ -1,6 +1,7 @@
 ---
 id: data-type-diff
 title: "Data Hash vs. Type Hash"
+description: "Compare CKB Script data hash and type hash, hash_type values, VM versions, upgradeability, and Type ID."
 ---
 
 ## Introduction

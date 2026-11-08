@@ -35,7 +35,7 @@ table WitnessArgs {
 }
 ```
 
-<img src={"/img/tech_explanation/witnessArg-structure.png"} width={688} height={353} alt="Structure of WitnessArg" />
+<img src={"/img/tech_explanation/witnessArg-structure.webp"} width={688} height={353} alt="Structure of WitnessArg" />
 
 This structure is a [`table`](https://github.com/nervosnetwork/molecule/blob/master/docs/encoding_spec.md#table) defined in [Molecule](https://github.com/nervosnetwork/molecule). All three fields are optional (`Opt`), and can be chosen depending on the contract’s requirements.
 

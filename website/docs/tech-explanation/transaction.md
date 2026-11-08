@@ -29,7 +29,7 @@ import Link from "@docusaurus/Link";
 
 A transaction in CKB destroys some Cells (outputs from previous transactions) and generates new ones.
 
-<img src={"/img/tech_explanation/transaction-structure.png"} width={688} height={660} alt="Structure of Transaction" />
+<img src={"/img/tech_explanation/transaction-structure.webp"} width={688} height={660} alt="Structure of Transaction" />
 
 ## Fields & Description
 
@@ -123,7 +123,7 @@ Different states require different strategies as described in the following sect
 
 <img
 alt="Transition Between Different Transaction States"
-src={useBaseUrl("img/how-tos/transaction-states.png")}
+src={useBaseUrl("img/how-tos/transaction-states.webp")}
 width="688"
 />
 

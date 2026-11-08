@@ -1832,7 +1832,7 @@ Abbreviation of Child Pays For Parent. A transaction replacement method where a 
 
 <img
 alt="Child Pays for Parent"
-src={useBaseUrl("img/tech_explanation/CPFP.png")}
+src={useBaseUrl("img/tech_explanation/CPFP.webp")}
 width="688"
 />
 
@@ -2801,7 +2801,7 @@ Abbreviation of Replace-by-Fee. A transaction replacement strategy allowing a tr
 
 <img
 alt="Replace by Fee"
-src={useBaseUrl("img/tech_explanation/RBF.png")}
+src={useBaseUrl("img/tech_explanation/RBF.webp")}
 width="688"
 />
 
@@ -3112,7 +3112,7 @@ W is also the root of a [CKB Merkle Tree](#ckb-merkle-tree), but the items are t
 
 Interval for submitting proposals in the second stage specified by NC-Max. Set between 2 and 10 blocks in CKB.
 
-<img src={useBaseUrl("img/tx-proposal-window.png")}/>
+<img src={useBaseUrl("img/tech_explanation/proposal-lifecycle.webp")} alt="Transactions proposed in earlier blocks can be committed within the proposal window of Block 23."/>
 
 As shown above, when a transaction is first proposed in Block 13, it can be committed in the window between Block 15 and Block 23.
 
@@ -3209,7 +3209,7 @@ An uncle block has to meet the following conditions:
 || snapshot.is_uncle(&parent_hash))
 ```
 
-<img src={useBaseUrl("img/uncle_rule.png")}/>
+<img src={useBaseUrl("img/tech_explanation/uncle-rule.svg")} alt="Main chain A, eligible uncle blocks B3 and B4, and unconnected blocks C2 and C3."/>
 
 As illustrated above, A is the main chain. B3 can be the uncle of A4 (to be included in A4), since B3 is linked to A2. However, B4 cannot be included in A4, since the uncle’s block number must be smaller than A4, the current block on the main chain.
 

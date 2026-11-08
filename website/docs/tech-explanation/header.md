@@ -7,7 +7,7 @@ title: header
 
 The `header` field is part of the [Block](/docs/tech-explanation/block) and [UncleBlock](/docs/tech-explanation/uncles#structure-of-uncleblock) structures. It contains metadata that summarizes and secures the block's contents, and it plays a critical role in consensus and chain validation.
 
-<img src={"/img/tech_explanation/header-structure.png"} width={688} height={391} alt="Structure of header" />
+<img src={"/img/tech_explanation/header-structure.webp"} width={688} height={391} alt="Structure of header" />
 
 ## Structure of Header
 
@@ -20,7 +20,7 @@ The `header` field is part of the [Block](/docs/tech-explanation/block) and [Unc
 
 `RawHeader` is the payload of the block header.
 
-<img src={"/img/tech_explanation/rawheader-structure.png"} width={688} height={568} alt="Structure of RawHeader" />
+<img src={"/img/tech_explanation/rawheader-structure.webp"} width={688} height={568} alt="Structure of RawHeader" />
 
 | Name                | Type        | Description                                                                                                                                                                                                                                                                                                                      |
 | ------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
