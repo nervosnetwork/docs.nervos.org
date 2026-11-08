@@ -28,3 +28,6 @@ reports/link-check/history.jsonl
 # Ignore specific directories
 # since it has a bug for mdx tsx code block
 docs/sdk-and-devtool/ccc.mdx
+
+# Crawler policy is plain text.
+static/robots.txt

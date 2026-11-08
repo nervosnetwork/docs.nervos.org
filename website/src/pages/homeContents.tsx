@@ -1,3 +1,4 @@
+import Head from "@docusaurus/Head";
 export interface CardLinks {
   label: string;
   link: string;
@@ -175,7 +176,11 @@ const contactUsContents: CardLinks[] = [
 ];
 
 // default export placeholder
-const HomeContentsPage: React.FC = () => null;
+const HomeContentsPage: React.FC = () => (
+  <Head>
+    <meta name="robots" content="noindex, follow" />
+  </Head>
+);
 export default HomeContentsPage;
 
 export {

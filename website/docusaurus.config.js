@@ -19,6 +19,28 @@ const config = {
   organizationName: "nervosnetwork",
   projectName: "docs-new",
   headTags: [
+    {
+      tagName: "script",
+      attributes: { type: "application/ld+json" },
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://docs.nervos.org/#organization",
+            name: "Nervos Foundation",
+            url: "https://www.nervos.org/",
+            logo: "https://docs.nervos.org/img/logo-dark.png",
+          },
+          {
+            "@type": "WebSite",
+            url: "https://docs.nervos.org/",
+            name: "Nervos CKB Documentation",
+            publisher: { "@id": "https://docs.nervos.org/#organization" },
+          },
+        ],
+      }),
+    },
     ...(enableGtag
       ? [
           {
@@ -104,7 +126,7 @@ const config = {
           : {}),
         docs: {
           path: "./docs",
-          breadcrumbs: false,
+          breadcrumbs: true,
           showLastUpdateTime: true,
           showLastUpdateAuthor: false,
           sidebarPath: require.resolve("./sidebars.js"),
@@ -158,6 +180,10 @@ const config = {
             },
           },
         },
+        sitemap: {
+          lastmod: "date",
+          ignorePatterns: ["/search", "/homeContents"],
+        },
         theme: {
           customCss: [path.join(__dirname, "./src/css/customTheme.css")],
         },
@@ -168,372 +194,7 @@ const config = {
     [
       "@docusaurus/plugin-client-redirects",
       {
-        redirects: [
-          {
-            from: "/docs",
-            to: "/",
-          },
-          {
-            from: "/docs/reference/rpc/",
-            to: "/docs/getting-started/rpcs",
-          },
-          {
-            from: "/docs/reference/tools",
-            to: "/docs/sdk-and-devtool/devtool",
-          },
-          {
-            from: "/docs/basics/concepts/economics",
-            to: "/docs/assets-token-standards/economics",
-          },
-          {
-            from: "/docs/basics/concepts/cell-model",
-            to: "/docs/ckb-fundamentals/cell-model",
-          },
-          {
-            from: "/docs/basics/concepts/ckb-vm",
-            to: "/docs/ckb-fundamentals/ckb-vm",
-          },
-          {
-            from: "/docs/basics/concepts/consensus",
-            to: "/docs/ckb-fundamentals/consensus",
-          },
-          {
-            from: "/docs/basics/concepts/cryptowallet",
-            to: "/docs/integrate-wallets/intro-to-wallets",
-          },
-          {
-            from: "/docs/basics/concepts/nervos-blockchain",
-            to: "/docs/ckb-fundamentals/nervos-blockchain",
-          },
-          {
-            from: "/docs/basics/glossary/",
-            to: "/docs/tech-explanation/glossary",
-          },
-          {
-            from: "/docs/basics/guides/mainnet",
-            to: "/docs/node/run-mainnet-node",
-          },
-          {
-            from: "/docs/basics/guides/get-ckb",
-            to: "https://docs-old.nervos.org/docs/basics/guides/get-ckb",
-          },
-          {
-            from: "/docs/basics/guides/mining-ckb",
-            to: "/docs/mining/guide",
-          },
-          {
-            from: "/docs/reference/halving",
-            to: "/docs/mining/halving",
-          },
-          {
-            from: [
-              "/docs/basics/guides/crypto wallets/neuron",
-              "/docs/basics/guides/neuron",
-            ],
-            to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/neuron",
-          },
-          {
-            from: "/docs/basics/tools",
-            to: "https://docs-old.nervos.org/docs/basics/tools",
-          },
-          {
-            from: "/docs/script/minimal-script",
-            to: "/docs/script/rust/rust-example-minimal-script",
-          },
-          {
-            from: "/docs/script/sudt-script",
-            to: "/docs/script/rust/rust-example-sudt-script",
-          },
-          {
-            from: "/docs/history-and-hard-forks/history-vm-version",
-            to: "/docs/script/vm-version",
-          },
-          {
-            from: "/docs/sdk-and-devtool/lumos",
-            to: "/docs/sdk-and-devtool/ccc",
-          },
-          {
-            from: [
-              "/docs/basics/guides/crypto wallets/imtoken",
-              "/docs/basics/guides/imtoken",
-            ],
-            to: "https://docs-old.nervos.org/docs/basics/guides/crypto wallets/imtoken",
-          },
-          {
-            from: "/docs/tech-explanation/ckb-vs-btc",
-            to: "/docs/ckb-fundamentals/ckb-vs-btc",
-          },
-          {
-            from: "/docs/tech-explanation/ckb-address",
-            to: "/docs/ckb-fundamentals/ckb-address",
-          },
-          {
-            from: "/docs/script-course/intro-to-script-1",
-            to: "/docs/script/intro-to-script",
-          },
-          {
-            from: "/docs/script-course/intro-to-script-2",
-            to: "/docs/script/program-language-for-script",
-          },
-          {
-            // Class 3: UDT
-            from: "/docs/script-course/intro-to-script-3",
-            to: "/docs/script/rust/rust-example-sudt-script",
-          },
-          {
-            // Class 4: WebAssembly on CKB (no modern equivalent page)
-            from: "/docs/script-course/intro-to-script-4",
-            to: "/docs/script/program-language-for-script",
-          },
-          {
-            // Class 5: Debugging
-            from: "/docs/script-course/intro-to-script-5",
-            to: "/docs/script/debug-script",
-          },
-          {
-            // Class 6: Type ID
-            from: "/docs/script-course/intro-to-script-6",
-            to: "/docs/script/type-id",
-          },
-          {
-            // Class 7: Advanced Duktape Examples
-            from: "/docs/script-course/intro-to-script-7",
-            to: "/docs/script/js/js-vm",
-          },
-          {
-            // Class 8: Performant WASM (no modern equivalent page)
-            from: "/docs/script-course/intro-to-script-8",
-            to: "/docs/script/program-language-for-script",
-          },
-          {
-            // Class 9: Cycle Reductions in Duktape Script
-            from: "/docs/script-course/intro-to-script-9",
-            to: "/docs/script/vm-cycle-limits",
-          },
-          {
-            // Class 10: Language Choices
-            from: "/docs/script-course/intro-to-script-10",
-            to: "/docs/script/program-language-for-script",
-          },
-          {
-            from: "/docs/tech-explanation/ckb-vm",
-            to: "/docs/ckb-fundamentals/ckb-vm",
-          },
-          {
-            from: "/docs/tech-explanation/cell-model",
-            to: "/docs/ckb-fundamentals/cell-model",
-          },
-          {
-            from: "/docs/basics/faq/general",
-            to: "https://docs-old.nervos.org/docs/basics/faq/general",
-          },
-          {
-            from: ["/docs/reference/economics", "/docs/concepts/supply"],
-            to: "/docs/assets-token-standards/economics",
-          },
-          {
-            from: "/docs/script/ckb-script-ipc",
-            to: "/docs/script/ckb-ipc",
-          },
-          {
-            from: "/docs/script/rust/rust-example-spawn-script",
-            to: "/docs/script/rust/rust-api-spawn",
-          },
-          {
-            from: ["/docs/wallets", "/getting-started/wallet"],
-            to: "/docs/integrate-wallets/intro-to-wallets",
-          },
-          {
-            from: "/docs/getting-started/blockchain-networks",
-            to: "/docs/getting-started/ckb-networks",
-          },
-          {
-            // Malformed external links that picked up trailing CJK punctuation
-            from: "/docs/script/intro-to-script))。",
-            to: "/docs/script/intro-to-script",
-          },
-          {
-            from: "/docs/getting-started/how-ckb-works))。",
-            to: "/docs/getting-started/how-ckb-works",
-          },
-          {
-            from: "/docs/concepts/ckb-vm",
-            to: "/docs/ckb-fundamentals/ckb-vm",
-          },
-          {
-            from: [
-              "/docs/tech-explanation/previous-output",
-              "/docs/tech-explanation/cellinput",
-            ],
-            to: "/docs/tech-explanation/inputs",
-          },
-          {
-            from: "/docs/basics/guides/testnet",
-            to: "/docs/node/run-testnet-node",
-          },
-          {
-            from: "/docs/getting-started/devtool",
-            to: "/docs/sdk-and-devtool/devtool",
-          },
-          {
-            from: "/docs/dapp/rpcs",
-            to: "/docs/getting-started/rpcs",
-          },
-          {
-            from: "/docs/tech-explanation/header-dep",
-            to: "/docs/tech-explanation/header-deps",
-          },
-          {
-            from: "/docs/tech-explanation/outpoint",
-            to: "/docs/tech-explanation/glossary#outpoint",
-          },
-          {
-            from: "/docs/tech-explanation/dep-type",
-            to: "/docs/tech-explanation/glossary#dep-type",
-          },
-          {
-            from: "/docs/common-scripts/spore-protocol",
-            to: "/docs/ecosystem-scripts/spore-protocol",
-          },
-          {
-            from: "/docs/common-scripts/xudt",
-            to: "/docs/ecosystem-scripts/xudt",
-          },
-          {
-            // The blog has been removed. It used postsPerPage: 1 sorted by
-            // ascending date, so /blog/page/3 was "Introduction to CKB Script
-            // Programming 3: UDT" — send it to the modern Script-section
-            // equivalent (mirrors the /docs/script-course/intro-to-script-3
-            // redirect above)
-            from: "/blog/page/3",
-            to: "/docs/script/rust/rust-example-sudt-script",
-          },
-          {
-            // 2019-era docs routes (root-level URLs from the pre-Docusaurus
-            // site). Both extensionless and .html variants circulated in old
-            // bookmarks and external posts.
-            from: ["/getting-started/mine", "/getting-started/mine.html"],
-            to: "/docs/mining/guide",
-          },
-          {
-            from: [
-              "/getting-started/run-node",
-              "/getting-started/run-node.html",
-            ],
-            to: "/docs/node/node-overview",
-          },
-          {
-            from: [
-              "/references/neuron-wallet-guide.html",
-              "/references/neuron-wallet-guide",
-            ],
-            to: "/docs/integrate-wallets/intro-to-wallets",
-          },
-          {
-            // Retired labs tutorial; the archived version lives on docs-old
-            from: "/docs/labs/sudtbycapsule",
-            to: "https://docs-old.nervos.org/docs/labs/sudtbycapsule",
-          },
-          {
-            // Legacy intro routes. /docs/intro/overview predates the current
-            // information architecture; /docs/basics/introduction was the old
-            // "Basics" section index. Both were entry points for newcomers.
-            from: ["/docs/intro/overview", "/docs/basics/introduction"],
-            to: "/docs/getting-started/how-ckb-works",
-          },
-          {
-            // Old "layers & consensus" taxonomy; layering and PoW consensus
-            // are now covered together in the Nervos Blockchain overview
-            from: "/docs/basics/layers-consensus",
-            to: "/docs/ckb-fundamentals/nervos-blockchain",
-          },
-          {
-            // Old Reference section: its cell page became the Cell Model doc
-            from: "/docs/reference/cell",
-            to: "/docs/ckb-fundamentals/cell-model",
-          },
-          {
-            // Old Reference section landing page; the glossary is the modern
-            // dictionary-style reference
-            from: "/docs/reference/introduction",
-            to: "/docs/tech-explanation/glossary",
-          },
-          {
-            // Never a real page — circulated as a mistaken path version of
-            // the old /docs/Node#run-a-mainnet-node anchor
-            from: "/docs/node/run-a-mainnet-node",
-            to: "/docs/node/run-mainnet-node",
-          },
-          {
-            // The economics doc lived at this path before moving to
-            // assets-token-standards
-            from: "/docs/tech-explanation/economics",
-            to: "/docs/assets-token-standards/economics",
-          },
-          {
-            // 2019-era "CKB Architecture" page (cell/transaction/script/block
-            // data structures). Both section prefixes and both extensionless
-            // and .html variants circulated in old bookmarks.
-            from: [
-              "/basic-concepts/architecture",
-              "/basic-concepts/architecture.html",
-              "/technical-concepts/architecture",
-              "/technical-concepts/architecture.html",
-            ],
-            to: "/docs/getting-started/how-ckb-works",
-          },
-          {
-            // Retired essay; the archived version lives on docs-old
-            from: "/docs/essays/upgradability",
-            to: "https://docs-old.nervos.org/docs/essays/upgradability",
-          },
-          {
-            // 2019-era key-concepts / basic-concepts HTML routes (Broken Journeys)
-            from: [
-              "/key-concepts/cell-model.html",
-              "/key-concepts/cell-model",
-              "/basic-concepts/cell-model.html",
-              "/basic-concepts/cell-model",
-            ],
-            to: "/docs/ckb-fundamentals/cell-model",
-          },
-          {
-            from: ["/key-concepts/consensus.html", "/key-concepts/consensus"],
-            to: "/docs/ckb-fundamentals/consensus",
-          },
-          {
-            from: [
-              "/glossary/glossary-general.html",
-              "/glossary/glossary-general",
-            ],
-            to: "/docs/tech-explanation/glossary",
-          },
-          {
-            // File is write-message.mdx but doc id/slug is store-data-on-cell
-            from: "/docs/dapp/write-message",
-            to: "/docs/dapp/store-data-on-cell",
-          },
-          {
-            // Relocated in #423 to how-to-query-tx-state
-            from: "/docs/how-tos/how-to-manage-txs",
-            to: "/docs/how-tos/how-to-query-tx-state",
-          },
-          {
-            // Blog removed; postsPerPage:1 ascending — page N was script-course N
-            // (same mapping pattern as existing /blog/page/3 redirect)
-            from: "/blog/page/7",
-            to: "/docs/script/js/js-vm",
-          },
-          {
-            from: "/blog/page/8",
-            to: "/docs/script/program-language-for-script",
-          },
-          {
-            // Docs tag index not generated for this tag; send to the topic page
-            from: "/docs/tags/cell-model",
-            to: "/docs/ckb-fundamentals/cell-model",
-          },
-        ],
+        redirects: require("./redirects.json"),
         createRedirects(existingPath) {
           if (
             existingPath.includes("/docs/essays/") ||
@@ -562,6 +223,7 @@ const config = {
     },
   ],
   themeConfig: {
+    image: "img/social-card.png",
     prism: {
       additionalLanguages: ["bash", "powershell", "rust", "json"],
       theme: lightCodeTheme,
