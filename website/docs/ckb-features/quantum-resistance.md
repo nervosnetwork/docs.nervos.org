@@ -23,7 +23,7 @@ In blockchains like Ethereum or Bitcoin, the rule "Transaction X is valid" is ef
 
 CKB, by contrast, is designed as a **Cryptographic Abstraction** blockchain. In CKB, the protocol itself does not depend on any specific cryptographic algorithm such as secp256k1. Cryptography is not embedded in consensus rule; instead, it is implemented as a [Lock Script](/docs/tech-explanation/lock-script) (smart contract) that runs in a virtual machine. As a contrast, Ethereum embeds the hardcoded ECC directly into the EVM as a precompiled contracts.
 
-![Where cryptography lives](/img/ckb-features/where-cryptography-lives.png)
+![Where cryptography lives](/img/ckb-features/where-cryptography-lives.webp)
 
 - **Most other blockchains:** Function like a specialized calculator. They efficiently compute a fixed set of cryptographic operations, but extending them requires modifying the system itself.
 - **Nervos CKB:** Functions more like a generic CPU. New cryptographic constructions (such as lattice-based schemes) can be introduced by deploying new Scripts, without alterning fundamental protocols.
@@ -48,7 +48,7 @@ Using Bitcoin as an [example](https://x.com/bensig/status/1985426927893823667), 
 
 Nervos CKB does not face such a problem because the verification of signatures is done by separting the rule (Lock Script) from the proof (Witness). In addition, CKB supports grouping inputs that share the same Lock Scripts, allowing multiple inputs to be verified with a single signature stored in the transaction's Witnesses.
 
-![How Data Size in CKB Scale Differently](/img/ckb-features/signature-scale.png)
+![How Data Size in CKB Scale Differently](/img/ckb-features/signature-scale.webp)
 
 As a result, moving 100 Cells with SPHINCS+ signatures can require no more signature data than transferring a single Cell using the same scheme. Further details are available in the documentation on [Script Group Execution](/docs/tech-explanation/script-group-exe) and [Witness](/docs/tech-explanation/witness).
 
@@ -58,7 +58,7 @@ As a result, moving 100 Cells with SPHINCS+ signatures can require no more signa
 
 In 2023, the CKB team and Cryptape researchers implemented a production-ready **Quantum Resistant Lock Script** using **SPHINCS+**. In August 2024, NIST formally approved SPHINCS+ as a quantum-resistant digital signature algorithm under in its FIPS 205 standard. In 2025, the CKB team started deploying the SPHINCS+ Lock Script on the CKB mainnet.
 
-![Timeline](/img/ckb-features/sphincs-on-ckb.png)
+![Timeline](/img/ckb-features/sphincs-on-ckb.webp)
 
 - **Repository:** [cryptape/quantum-resistant-lock-script](https://github.com/cryptape/quantum-resistant-lock-script)
 

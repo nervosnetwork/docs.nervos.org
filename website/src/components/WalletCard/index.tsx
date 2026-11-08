@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 
 export interface WalletCardProps {
   title: string;
+  logo?: string;
   href: string;
   tags: string[];
   size?: "default" | "small";
@@ -12,12 +13,13 @@ export interface WalletCardProps {
 
 export default function WalletCard({
   title,
+  logo,
   href,
   tags,
   size = "default",
   className,
 }: WalletCardProps): JSX.Element {
-  const logoSrc = title.toLowerCase().replace(/\s+/g, "");
+  const logoSrc = logo || title.toLowerCase().replace(/\s+/g, "");
   const logoSize = size === "default" ? 48 : 32;
   return (
     <Link

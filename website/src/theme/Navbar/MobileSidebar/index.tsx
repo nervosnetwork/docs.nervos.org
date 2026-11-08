@@ -5,7 +5,7 @@
  * Reason for overriding:
  * - The default Docusaurus Navbar Sidebar only appears on screens < 996px, but we need it to be visible on screens <= 1280px.
  */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   useLockBodyScroll,
   useNavbarMobileSidebar,
@@ -19,8 +19,15 @@ export default function NavbarMobileSidebar(): JSX.Element | null {
   const mobileSidebar = useNavbarMobileSidebar();
   useLockBodyScroll(mobileSidebar.shown);
 
-  const isMobileScreen =
-    typeof window !== "undefined" && window.innerWidth <= 1280;
+  // Match the server on the first render, then follow the custom breakpoint.
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1280px)");
+    const update = () => setIsMobileScreen(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   if (!isMobileScreen) {
     return null;

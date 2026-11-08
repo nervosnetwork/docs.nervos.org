@@ -45,6 +45,30 @@ const titles = new Set();
 for (const url of urls) {
   const pathname = new URL(url).pathname.replace(/\/$/, "");
   const html = await readFile(`build${pathname}/index.html`, "utf8");
+  if (pathname !== "/blog")
+    assert.equal(
+      [...html.matchAll(/<h1(?:\s|>)/g)].length,
+      1,
+      `Expected one main heading: ${url}`
+    );
+  for (const match of html.matchAll(/<img\b[^>]*>/g)) {
+    const tag = match[0];
+    assert.match(tag, /\balt="[^"]*"/, `Image missing alt: ${url}: ${tag}`);
+    const src = tag.match(/\bsrc="([^"]*)"/)?.[1];
+    if (src?.startsWith("/"))
+      await access(`build${decodeURIComponent(src.split("?")[0])}`);
+  }
+  if (pathname.startsWith("/docs/")) {
+    const schemas = [
+      ...html.matchAll(
+        /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g
+      ),
+    ].map((m) => JSON.parse(m[1]));
+    assert.ok(
+      schemas.some((schema) => schema["@type"] === "TechArticle"),
+      `Missing article schema: ${url}`
+    );
+  }
   const title = html.match(/<title[^>]*>(.*?)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `Missing/duplicate title: ${url}`);
   titles.add(title);
