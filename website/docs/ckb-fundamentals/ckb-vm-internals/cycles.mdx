@@ -1,0 +1,110 @@
+---
+title: CKB-VM Cycles
+---
+
+In CKB scripts, an instruction is not executed for free.
+
+Every arithmetic addition, every memory read/write, and every on-chain data load consumes cycles. When accumulated cycles exceed the limit, the VM immediately stops and returns an error. This sounds straightforward, but it is one of the most important security mechanisms in CKB-VM and other blockchain VMs: without this gate, a single infinite loop could stall the verification thread. Unlike EVM, however, cycles in CKB-VM are not used for fee charging; they are used as a consensus-level measure of resource consumption. In other words, cycles are not for charging users, but for determining whether a script is consuming excessive resources.
+
+## Metering Execution Flow
+
+During CKB-VM execution, the rule is always "count first, execute second." That means before each instruction is executed, its cycle cost is computed and checked against the limit. If it exceeds the limit, the VM returns an error directly, and the instruction semantics are not executed. The benefit is protection against malicious infinite-loop attacks and strong consistency of resource metering.
+
+In source code terms, this corresponds to the `step` function in [src/machine/mod.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/mod.rs):
+
+```rust
+pub fn step<D: InstDecoder>(&mut self, decoder: &mut D) -> Result<(), Error> {
+    let instruction = {
+        let pc = self.pc().to_u64();
+        let memory = self.memory_mut();
+        decoder.decode(memory, pc)?
+    };
+    let cycles = self.instruction_cycle_func()(instruction);
+    self.add_cycles(cycles)?;
+    execute(instruction, self)
+}
+```
+
+You can see the standard CKB-VM execution path is: decode instruction -> compute cost -> accumulate cost -> execute instruction. Here, the second step uses `instruction_cycle_func`, a replaceable function pointer discussed later; the third step, `add_cycles`, is the core of the metering system. `add_cycles` is in the same file and has straightforward logic:
+
+```rust
+fn add_cycles(&mut self, cycles: u64) -> Result<(), Error> {
+    let new_cycles = self
+        .cycles()
+        .checked_add(cycles)
+        .ok_or(Error::CyclesOverflow)?;
+    if new_cycles > self.max_cycles() {
+        return Err(Error::CyclesExceeded);
+    }
+    self.set_cycles(new_cycles);
+    Ok(())
+}
+```
+
+This distinguishes two failures: `CyclesOverflow` means a `u64` addition overflow, while `CyclesExceeded` means exceeding `max_cycles`. Both are deterministic: every node on every platform running the same script will either succeed together or fail at the same position with the same error. In practice, `CyclesOverflow` is almost never seen; the check exists mainly to defend against extreme cases.
+
+## How Costs Are Defined
+
+CKB-VM does not hardcode per-instruction costs in the execution loop. It only defines a signature:
+
+```rust
+pub type InstructionCycleFunc = dyn Fn(Instruction) -> u64;
+```
+
+The concrete cost table is in [src/cost_model.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/cost_model.rs), which currently provides two implementations. The first is `constant_cycles`, where every instruction costs 1, mainly used in tests. The second is `estimate_cycles`, which assigns different values by opcode:
+
+| Instruction Class  | Example Instructions   | cycles |
+| ------------------ | ---------------------- | ------ |
+| Basic integer ops  | `add`, `xor`, `sll`    | 1      |
+| Memory access      | `ld`, `lw`, `sd`, `sw` | 2-3    |
+| Branch/jump        | `beq`, `jal`           | 3      |
+| Multiplication     | `mul`, `mulh`          | 5      |
+| Division/remainder | `div`, `rem`           | 32     |
+| System calls       | `ecall`, `ebreak`      | 500    |
+
+Syscall implementations can charge additional cycles beyond the base instruction cost shown above.
+
+CKB transaction verification configures the VM with `estimate_cycles`. The VM library exposes the cycle function as a builder option, so embedders must configure metering explicitly; the bare machine builder starts with a zero-cost function. If you are only writing tests for logic correctness, `constant_cycles` is often more intuitive: observed cycles are roughly equal to the number of executed instructions.
+
+> Why is add 1 while div is 32?
+>
+> Many people ask this when first seeing the table. The answer is not in CKB-VM code, but in physical CPU hardware.
+>
+> Integer addition is one of the most optimized operations in CPUs. There are dedicated adder units, mature forwarding networks, and very short pipeline latency. A scalar `add` is often around one cycle of latency on many architectures, with very high throughput.
+>
+> Integer division is a different story. It is not something simple combinational logic can finish in one shot. Hardware typically uses iterative algorithms or heavier dedicated divider units; in essence, a sequence of steps is needed to produce quotient and remainder. The result is usually much higher latency and lower throughput than addition. Divider units are also scarcer than adders on chip.
+>
+> So `div=32` is not an arbitrary number, nor does it mean exactly 32 cycles on every CPU. It says that on almost all modern processors, division hardware cost is significantly higher than addition, and the cycles system encodes this ratio into a consensus-reproducible rule.
+>
+> An interesting detail: on x86-64, `IDIV` latency is about 26-38 cycles on Skylake and 17-25 cycles on Zen 3, while `ADD` latency is 1 cycle. The value 32 sits roughly in that real-world range.
+
+## Metering Differences in the ASM Backend
+
+Although metering code is implemented in different places for the ASM backend and the Rust interpreter path, their semantics are consistent.
+
+In the Rust interpreter path, charging happens per instruction inside `step()`, as shown earlier.
+
+In the ASM path, instruction costs are summed during trace construction and charged before the trace executes. In [src/machine/asm/traces.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/traces.rs), after decoding an instruction, its cycles are accumulated into the trace:
+
+```rust
+trace.cycles += machine.instruction_cycle_func()(instruction);
+```
+
+The trace is then written into the assembly executor, and its total is added to machine cycles in one shot at load time. A fixed trace contains up to 16 instructions; dynamic traces can be longer, as described in the [assembly executor article](/docs/ckb-fundamentals/ckb-vm-internals/assembly-executor). On the ASM side, this effectively merges up to 16 rounds of "accumulate cycles + check overflow + check limit" into one round, reducing branch/jump overhead in the executor. But whether in the Rust interpreter or ASM backend, the same principle holds: "count first, execute second." The charging granularity differs, so intermediate metering state need not be identical when execution stops inside a trace.
+
+## Summary
+
+The CKB-VM cycles system does a few simple but correct things.
+
+1. It keeps script resource consumption bounded, preventing malicious infinite-loop attacks.
+2. It makes script resource usage consensus-reproducible, with a coarse correspondence to physical CPU resource cost.
+
+## More in This Series
+
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all ten articles in this series.
+
+---
+
+_Adapted from [Deep Dive Into CKB-VM Cycles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-cycles/10570) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
+
+This adaptation is licensed under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/), following the [Nervos Talk content license](https://talk.nervos.org/tos). Headings, formatting, examples, and series navigation have been adapted for these docs.

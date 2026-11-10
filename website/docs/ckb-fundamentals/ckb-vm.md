@@ -23,7 +23,7 @@ The CKB network has introduced various CKB-VM versions over time to enhance secu
 
 ## CKB-VM Internals
 
-For a deeper look at the design and implementation of CKB-VM, see the [CKB-VM Internals](/docs/ckb-fundamentals/ckb-vm-internals/overview) reading list. It links the docs articles on snapshots, the memory model, the assembly executor, and macro-op fusion, plus mohanson’s follow-up posts on the B extension, CFI, Spawn, cycles, and instruction decoding.
+For a deeper look at the design and implementation of CKB-VM, see the [CKB-VM Internals](/docs/ckb-fundamentals/ckb-vm-internals/overview) reading list. The ten articles cover snapshots, the memory model, the assembly executor, macro-op fusion, the B extension, CFI, Spawn, cycles, and instruction decoding.
 
 ---
 
