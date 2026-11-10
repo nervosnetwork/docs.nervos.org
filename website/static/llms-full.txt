@@ -687,7 +687,7 @@ Nervos CKB addresses this by decoupling concerns across a multi-layered architec
 ### The Last Line of Defense
 
 CKB is positioned at the **far-left edge** of this spectrum, serving as the immutable trust anchor and the **last line of defense** for the entire network. Compromising the base layer for usability or speed would weaken the security of the entire structure.
-![Blockchain Landscape Spectrum](/img/ckb-features/multi-layered-architecture.png)
+![Blockchain Landscape Spectrum](/img/ckb-features/multi-layered-architecture.webp)
 
 This separation establishes a clear division of labor:
 
@@ -702,7 +702,7 @@ Decentralization is not just about who mines the next block–it is about who ca
 
 CKB addresses this challenge through three radical design choices: **Sustainable State Management**, **Proof-of-Work Consensus**, and a viable **Light Client**, supported by ongoing engineering efforts to lower the barrier to running nodes.
 
-![How CKB Achieve Extreme Decentralization](/img/ckb-features/extreme-decentralization.png)
+![How CKB Achieve Extreme Decentralization](/img/ckb-features/extreme-decentralization.webp)
 
 ### 1. Sustainable State Management
 
@@ -792,7 +792,7 @@ In blockchains like Ethereum or Bitcoin, the rule "Transaction X is valid" is ef
 
 CKB, by contrast, is designed as a **Cryptographic Abstraction** blockchain. In CKB, the protocol itself does not depend on any specific cryptographic algorithm such as secp256k1. Cryptography is not embedded in consensus rule; instead, it is implemented as a [Lock Script](/docs/tech-explanation/lock-script) (smart contract) that runs in a virtual machine. As a contrast, Ethereum embeds the hardcoded ECC directly into the EVM as a precompiled contracts.
 
-![Where cryptography lives](/img/ckb-features/where-cryptography-lives.png)
+![Where cryptography lives](/img/ckb-features/where-cryptography-lives.webp)
 
 - **Most other blockchains:** Function like a specialized calculator. They efficiently compute a fixed set of cryptographic operations, but extending them requires modifying the system itself.
 - **Nervos CKB:** Functions more like a generic CPU. New cryptographic constructions (such as lattice-based schemes) can be introduced by deploying new Scripts, without alterning fundamental protocols.
@@ -817,7 +817,7 @@ Using Bitcoin as an [example](https://x.com/bensig/status/1985426927893823667), 
 
 Nervos CKB does not face such a problem because the verification of signatures is done by separting the rule (Lock Script) from the proof (Witness). In addition, CKB supports grouping inputs that share the same Lock Scripts, allowing multiple inputs to be verified with a single signature stored in the transaction's Witnesses.
 
-![How Data Size in CKB Scale Differently](/img/ckb-features/signature-scale.png)
+![How Data Size in CKB Scale Differently](/img/ckb-features/signature-scale.webp)
 
 As a result, moving 100 Cells with SPHINCS+ signatures can require no more signature data than transferring a single Cell using the same scheme. Further details are available in the documentation on [Script Group Execution](/docs/tech-explanation/script-group-exe) and [Witness](/docs/tech-explanation/witness).
 
@@ -827,7 +827,7 @@ As a result, moving 100 Cells with SPHINCS+ signatures can require no more signa
 
 In 2023, the CKB team and Cryptape researchers implemented a production-ready **Quantum Resistant Lock Script** using **SPHINCS+**. In August 2024, NIST formally approved SPHINCS+ as a quantum-resistant digital signature algorithm under in its FIPS 205 standard. In 2025, the CKB team started deploying the SPHINCS+ Lock Script on the CKB mainnet.
 
-![Timeline](/img/ckb-features/sphincs-on-ckb.png)
+![Timeline](/img/ckb-features/sphincs-on-ckb.webp)
 
 - **Repository:** [cryptape/quantum-resistant-lock-script](https://github.com/cryptape/quantum-resistant-lock-script)
 
@@ -1236,7 +1236,7 @@ Here’s the data structure of a Cell:
 
 The Bitcoin Script Interpreter is **stack-based**, meaning it uses a stack data structure to store temporary data during Script execution. Operations in Bitcoin Script push (add) and pop (remove) data from the stack. Here's a GIF depicting a typical Bitcoin Script operation like simple P2PKH (Pay to Public Key Hash):
 
-![How btc-script-interpreter process Script](/img/ckb-vs-btc/btc-script-interpreter.gif)
+![How btc-script-interpreter process Script](/img/ckb-vs-btc/btc-script-interpreter.webp)
 
 ### **CKB-VM**
 
@@ -1761,7 +1761,7 @@ const renderSpore = async () => {
 };
 
 ...
-{imageURL && <img src={imageURL} />}
+{imageURL && <img src={imageURL} alt="Preview of the content selected for the Spore DOB" />}
 ```
 
 ---
@@ -1830,6 +1830,7 @@ You can also read the full code online or download it here.
 
 <SetupProject projectPath="docs.nervos.org/examples/dApp/xudt"
   imageSrc="img/dapps/issue-token-dapp.jpg"
+  imageAlt="Issue Token example with token details and minting controls"
   command={"npm install\nnpm start"}
 
 >
@@ -2222,7 +2223,7 @@ submitting → pending → committed
 
 It keeps the transaction hash and uses `cccClient.waitTransaction()` rather than assuming that a fixed delay means success.
 
-![](/img/dapps/simple-lock.png)
+![Simple Lock dApp showing accounts and a CKB transfer form](/img/dapps/simple-lock.webp)
 
 ## How the Script Works
 
@@ -7190,6 +7191,8 @@ If you prefer containers, you can instead [Run a Node with Docker](/docs/node/ru
 ## Source: node/node-configuration.mdx
 URL: https://docs.nervos.org/docs/node/node-config
 
+Description: Configure a CKB node using ckb.toml and ckb-miner.toml, including network, RPC, storage, logging, and mining settings.
+
 ## Introduction
 
 CKB uses configuration files stored in `<config-dir>`, which by default is the current working directory. You can change this using the `-C <path>` argument to specify a different directory. For example:
@@ -7642,6 +7645,8 @@ ckb -C node2 run
 
 ## Source: node/overview.mdx
 URL: https://docs.nervos.org/docs/node/node-overview
+
+Description: Choose how to run a Nervos CKB node, install the software, connect to Mainnet or Testnet, and maintain your node.
 
 ## Introduction
 
@@ -9462,6 +9467,8 @@ If you're using a Unix-like system, run `./ckb import <source-path>` instead.
 ## Source: script/ckb-script-ipc.mdx
 URL: https://docs.nervos.org/docs/script/ckb-ipc
 
+Description: Understand CKB inter-process communication, process spawning, file descriptors, and data exchange between Scripts.
+
 # Inter-Process Communication (IPC) in Scripts: A Deep Dive into ckb-script-ipc Library
 
 ## Introduction
@@ -9659,6 +9666,8 @@ Error codes from common scripts via [ckb-script-error-codes](https://nervosnetwo
 
 ## Source: script/debug-script.mdx
 URL: https://docs.nervos.org/docs/script/debug-script
+
+Description: Debug CKB Scripts using reproducible transactions, the CKB debugger, logs, and cycle analysis.
 
 # Debug Scripts
 
@@ -10619,6 +10628,8 @@ A Script also includes the `args` part, which differentiates one Script from ano
 
 ## Source: script/js/00-js-quick-start.mdx
 URL: https://docs.nervos.org/docs/script/js/js-quick-start
+
+Description: Build and test your first JavaScript CKB Script with the CKB JavaScript VM and the recommended development tools.
 
 # JavaScript Quick Start
 
@@ -13939,6 +13950,8 @@ In early projects, the build process was often manually scripted into a Makefile
 
 ## Source: script/rust/rust-debug.mdx
 URL: https://docs.nervos.org/docs/script/rust/rust-debug
+
+Description: Debug Rust CKB Scripts with ckb-debugger and inspect transaction execution, program output, and cycle consumption.
 
 # Debug Rust Script
 
@@ -19825,6 +19838,8 @@ Besides the ones listed above, you can also explore other tools for building on 
 ## Source: sdk-and-devtool/go.mdx
 URL: https://docs.nervos.org/docs/sdk-and-devtool/go
 
+Description: Use the CKB Go SDK to access JSON-RPC, manage keys and addresses, and build and sign CKB transactions.
+
 # Go
 
 ## Introduction
@@ -20039,6 +20054,8 @@ Short address and full bech32 address are deprecated. For more details about add
 
 ## Source: sdk-and-devtool/java.mdx
 URL: https://docs.nervos.org/docs/sdk-and-devtool/java
+
+Description: Use the CKB Java SDK to connect to CKB nodes, manage addresses, and build and sign transactions.
 
 # Java
 
@@ -20636,13 +20653,15 @@ LOG_LEVEL=debug offckb node
 ## Source: sdk-and-devtool/playground.mdx
 URL: https://docs.nervos.org/docs/sdk-and-devtool/playground
 
+Description: Use CCC Playground to write TypeScript, test and debug CKB transactions and Scripts, and inspect transaction data in your browser.
+
 # Online Playground
 
 ## Introduction
 
 CCC Playground (https://live.ckbccc.com/) is an interactive development environment designed for CKB developers. It provides a powerful platform for testing, debugging, and experimenting with CKB transactions and scripts in real-time.
 
-![ccc-playground-preview](/img/devtools/ccc-playground-preview.png)
+![ccc-playground-preview](/img/devtools/ccc-playground-preview.webp)
 
 ## Key Features
 
@@ -20766,6 +20785,8 @@ Always verify which network (Testnet or Mainnet) you are currently connected to 
 
 ## Source: sdk-and-devtool/rust.mdx
 URL: https://docs.nervos.org/docs/sdk-and-devtool/rust
+
+Description: Use Rust libraries and tools for CKB application development, transaction building, signing, and JSON-RPC integration.
 
 # Rust
 
@@ -21937,6 +21958,8 @@ The Cell at `out_point` is a dep group. It contains a list of `OutPoint`s. CKB r
 ## Source: tech-explanation/cell.md
 URL: https://docs.nervos.org/docs/tech-explanation/cell
 
+Description: Explore the fields of a CKB Cell, including capacity, Lock Script, optional Type Script, and Cell data.
+
 # Cell
 
 ## Structure {#cell-structure}
@@ -21986,6 +22009,8 @@ URL: https://docs.nervos.org/docs/tech-explanation/code-hash
 
 ## Source: tech-explanation/data-type-diff.md
 URL: https://docs.nervos.org/docs/tech-explanation/data-type-diff
+
+Description: Compare CKB Script data hash and type hash, hash_type values, VM versions, upgradeability, and Type ID.
 
 ## Introduction
 
@@ -25757,6 +25782,8 @@ Similar to `CKB_SOURCE_GROUP_INPUT`, there is a special data source `CKB_SOURC
 
 ## Source: tech-explanation/script.md
 URL: https://docs.nervos.org/docs/tech-explanation/script
+
+Description: Learn the CKB Script structure, including code_hash, hash_type, args, script grouping, and execution rules.
 
 # Script
 
