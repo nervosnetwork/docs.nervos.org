@@ -8,7 +8,7 @@ After receiving a new transaction, a CKB node must execute its scripts to valida
 
 To address this, CKB node mempool logic uses two execution queues: a normal-script queue and a large-script queue. A new transaction enters the normal queue first and is executed by multiple worker threads in parallel. Once a transaction accumulates more than a configured cycle threshold in the normal queue, the node removes it from that queue and moves it to the dedicated large-script queue to continue execution. The benefit is that threads in the normal queue are not monopolized by a few long-running tasks, so the node always keeps enough compute capacity to react to new blocks.
 
-The key that makes this mechanism work is that when a script is **moved** , it must carry over its full execution state at that exact moment and continue seamlessly in another queue. It must neither restart from scratch nor lose intermediate results. Snapshot exists for this purpose: when a VM is about to reach the cycle limit of the current queue, it serializes the full execution state; later, in the large-script queue, the VM is restored from that snapshot under a new budget and continues unfinished work. This process is transparent to the script: the script does not need to know it was suspended and resumed.
+The key that makes this mechanism work is that when a script is **moved**, it must carry over its full execution state at that exact moment and continue seamlessly in another queue. It must neither restart from scratch nor lose intermediate results. Snapshot exists for this purpose: when a VM is about to reach the cycle limit of the current queue, it serializes the full execution state; later, in the large-script queue, the VM is restored from that snapshot under a new budget and continues unfinished work. This process is transparent to the script: the script does not need to know it was suspended and resumed.
 
 This article introduces Snapshot V1 in CKB-VM. The source code is in [src/snapshot.rs](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/snapshot.rs).
 
@@ -134,13 +134,9 @@ For data-heavy scenarios (for example, scripts loading a full witness into memor
 
 The details of V2 are covered in the next article. Even after V2 appeared, V1 remains as the most basic and self-contained snapshot format, suitable for scenarios that do not depend on external data sources.
 
-## Series of articles
+## More in This Series
 
-- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
-- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
-- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
-- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
-- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all articles, including the follow-up posts on Nervos Talk.
 
 ---
 

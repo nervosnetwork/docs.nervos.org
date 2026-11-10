@@ -4,13 +4,13 @@ title: CKB-VM Snapshot V2 — Evolution
 
 ## Background
 
-In [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366), we introduced the earliest snapshot approach in CKB-VM: copy every dirty page in full and serialize it together with registers and PC. This approach is correct and simple, but in real workloads it reveals a clear weakness: snapshot size can be much larger than “data actually modified by the script.”
+[Snapshot V1](/docs/ckb-fundamentals/ckb-vm-internals/snapshot-v1) describes the earliest snapshot approach in CKB-VM: copy every dirty page in full and serialize it together with registers and PC. This approach is correct and simple, but in real workloads it reveals a clear weakness: snapshot size can be much larger than “data actually modified by the script.”
 
 A typical class of examples is syscall-driven loading of transaction-originated data into script memory. When a script calls `ckb_load_witness`, witness bytes are copied into a target buffer; when it calls `ckb_load_cell_data`, cell bytes (sometimes from large dep cells) may cover dozens of pages; and when it reads structured transaction fields (input/output lock, type, capacity, header, script hash, out point), many small metadata slices are repeatedly copied via syscalls. At the memory layer, all of these copies look like page writes and are marked dirty, so V1 serializes them as if they were script-produced modifications. Semantically, however, these bytes are byte-for-byte transfers from already available on-chain transaction data, so saving them again in snapshots is redundant and can significantly inflate snapshot size.
 
 There is also another important scenario: the program image itself. During ELF loading, code segments and read-only data segments are written into VM memory, which still appears as ordinary page writes to the memory subsystem. But these bytes come from a fixed, immutable ELF input rather than from runtime computation by the script. If snapshots persist them page by page again, they effectively package the program one more time, which becomes a noticeable overhead for larger binaries.
 
-Therefore, the problem Snapshot V2 solves can be stated more generally: whenever a memory region is populated by byte-for-byte transfer from a stable external object, rather than newly computed by script execution, it should not be treated as dirty pages by default. Witness is only the easiest example to observe; cell data, transaction metadata, and ELF program segments are all the same class of problem.
+Therefore, the problem Snapshot V2 solves can be stated more generally: whenever a memory region is populated by byte-for-byte transfer from a stable external object, rather than newly computed by script execution, it should not be treated as dirty pages by default. Witness data is only the easiest example to observe; cell data, transaction metadata, and ELF program segments are all the same class of problem.
 
 Snapshot V2 is designed for exactly this type of scenario. Its core idea is to introduce a “data source” abstraction: pages whose content comes entirely from external data that can be deterministically retrieved again are stored as references (`id + offset + length`) instead of full page bytes. Pages truly produced or modified by script computation are still saved page-by-page like V1.
 
@@ -197,13 +197,9 @@ V2 introduces three substantive extensions over V1:
 
 The trade-off is that V2 makes page tracking part of all data-loading paths. Any syscall that moves external bytes into VM memory must use `Snapshot2Context::store_bytes` rather than `Memory::store_bytes`. Otherwise optimization is lost, and in some cases snapshot information may become incomplete. This difference is transparent to script authors, but syscall implementers must consistently route through `Snapshot2Context`.
 
-## Series of articles
+## More in This Series
 
-- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
-- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
-- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
-- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
-- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all articles, including the follow-up posts on Nervos Talk.
 
 ---
 

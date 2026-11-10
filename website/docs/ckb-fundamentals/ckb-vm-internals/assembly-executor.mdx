@@ -2,7 +2,7 @@
 title: CKB-VM Assembly Executor
 ---
 
-In early 2026, we introduced the third assembly execution backend for CKB-VM: [riscv64](https://github.com/nervosnetwork/ckb-vm/pull/502). Together with the earlier [x64](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_x64.S) and [aarch64](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_aarch64.S), CKB-VM can now execute RISC-V programs with hand-written assembly on three major CPU architectures. After shipping all three architecture paths, the core design ideas are now very clear and worth a full review.
+In early 2026, the CKB-VM team introduced the third assembly execution backend for CKB-VM: [riscv64](https://github.com/nervosnetwork/ckb-vm/pull/502). Together with the earlier [x64](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_x64.S) and [aarch64](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/machine/asm/execute_aarch64.S), CKB-VM can now execute RISC-V programs with hand-written assembly on three major CPU architectures. After shipping all three architecture paths, the core design ideas are now very clear and worth a full review.
 
 This article starts from the motivation behind CKB-VM’s assembly executor, then walks through technical details such as the trace mechanism, register allocation, and memory model. By the end, you should have a complete mental model of how the CKB-VM assembly executor works.
 
@@ -46,7 +46,7 @@ LuaJIT author Mike Pall proposed a simple idea: instead of re-matching opcodes e
 
 In pseudocode:
 
-```auto
+```text
 OP_CUSTOM_TRACE_END:
     trace = fetch_trace(pc)          // for example [OP_ADD, OP_SUB, OP_MUL, OP_CUSTOM_TRACE_END]
     index = 0
@@ -118,7 +118,7 @@ ckb_vm_asm_execute(machine, invoke_data)
 
 At the assembly entry point, it first does a very conventional thing: save the callee-saved registers required by the calling convention, then pin several long-lived values in registers.
 
-````auto
+```text
 ckb_vm_asm_execute:
   push %rbp
   push %rbx
@@ -128,26 +128,28 @@ ckb_vm_asm_execute:
   mov ARG2, INVOKE_DATA     // 2nd argument -> INVOKE_DATA
   mov ARG1, MACHINE         // 1st argument -> MACHINE
   movq CKB_VM_ASM_ASM_CORE_MACHINE_OFFSET_MEMORY_SIZE(MACHINE), MEMORY_SIZE
-``` ```auto
+```
+
+```text
 MACHINE     = %rsi
 TRACE       = %rbx
 MEMORY_SIZE = %r13
 INVOKE_DATA = %r14
 INST_PC     = %r8
 INST_ARGS   = %r9
-````
+```
 
 `MACHINE` holds all VM state. `TRACE` points to the currently executing trace. `INST_PC` and `INST_ARGS` are not the RISC-V PC, but two pointers moving inside a trace: one to the next host jump target, one to the next decoded guest instruction payload.
 
 This is also where x64 gets tricky. `%rcx` must be reserved for shift operations via `%cl`, `%rax/%rdx` are consumed by multiply/divide instructions, and Windows/System V use different argument registers. That is why there is a large section of register aliases and macros like `PUSH_*_IF_*` at the top of the file. It looks verbose, but it reserves room for the next 2000+ lines of instruction implementations.
 
-Aarch64 and riscv64 have similar entry logic but with different flavor: aarch64 has more register headroom, so secondary yet frequently used pointers like `REGISTER_BASE` and `MEMORY_PTR` can stay in `x28`, `x29`. Riscv64 feels like looking in a mirror: host and guest are both RISC-V, so many guest instructions map directly to host instructions, but it still must obey host ABI, preserve `s0..s6`, and return the assembly execution result through `a0`.
+AArch64 and RISC-V 64 have similar entry logic but with different flavor: AArch64 has more register headroom, so secondary yet frequently used pointers like `REGISTER_BASE` and `MEMORY_PTR` can stay in `x28`, `x29`. RISC-V 64 feels like looking in a mirror: host and guest are both RISC-V, so many guest instructions map directly to host instructions, but it still must obey host ABI, preserve `s0..s6`, and return the assembly execution result through `a0`.
 
 ## Trace: Entry Is Exit, Exit Is Entry
 
 After entering the assembly main loop, execution first goes to `.CKB_VM_ASM_LABEL_OP_CUSTOM_TRACE_END`. This is a somewhat complex block:
 
-```auto
+```text
 .p2align 3
 .CKB_VM_ASM_LABEL_OP_CUSTOM_TRACE_END:
   LOAD_PC(%rax, %eax, %rcx, %ecx, TEMP3d)
@@ -234,9 +236,9 @@ The most noteworthy detail here is `PREPCALL` and `POSTCALL`. Most of the time, 
 
 ## If We Were to Build the Next ASM Executor
 
-Suppose one day we add a new host architecture for CKB-VM. Where should we start?
+Adding a new host architecture follows a repeatable implementation process.
 
-Historically, CKB-VM has had three ASM executors: x64, aarch64, and riscv64. After finishing all three paths, the implementation recipe is quite clear. Here is the rough process I summarize.
+Historically, CKB-VM has had three ASM executors: x64, aarch64, and riscv64. After finishing all three paths, the implementation recipe is quite clear. The main steps are outlined below.
 
 **Step 1: Understand Data Structures and Contracts**
 
@@ -246,7 +248,7 @@ First, read through these three structs:
 - `InvokeData`: three pointers passed to assembly (`pause`, `fixed_traces`, `fixed_trace_mask`).
 - `FixedTrace`: trace memory layout: `address`, `length`, `cycles`, then a thread array of `2 * (TRACE_ITEM_LENGTH + 1)` `u64` values.
 
-These offset macros are not hand-written. They are auto-generated at build time by `definitions/src/generate_asm_constants.rs` into `cdefinitions_generated.h`. **Never maintain these offsets manually** , or one struct layout change will break everything.
+These offset macros are not hand-written. They are auto-generated at build time by `definitions/src/generate_asm_constants.rs` into `cdefinitions_generated.h`. **Never maintain these offsets manually**, or one struct layout change will break everything.
 
 **Step 2: Build the Minimal Skeleton**
 
@@ -279,9 +281,9 @@ pub fn label_from_fastpath_opcode(opcode: InstructionOpcode) -> u64 {
 
 This is the hardest part, arguably harder than implementing instructions themselves. The three backends use different allocation strategies:
 
-- **x64** : constrained by `%cl` for shifts and `%rax/%rdx` for multiply/divide; `RS2` is split, and `RD` shares `%rax` with `RS2`.
-- **aarch64** : more register headroom; only `xzr` cannot be used as a general-purpose register; extensive use of callee-saved registers is possible.
-- **riscv64** : both host and guest follow RISC-V ABI; use callee-saved `s0s6` to hold guest register state, reducing `PREPCALL`/`POSTCALL` save/restore scope.
+- **x64**: constrained by `%cl` for shifts and `%rax/%rdx` for multiply/divide; `RS2` is split, and `RD` shares `%rax` with `RS2`.
+- **aarch64**: more register headroom; only `xzr` cannot be used as a general-purpose register; extensive use of callee-saved registers is possible.
+- **riscv64**: both host and guest follow RISC-V ABI; use callee-saved `s0..s6` to hold guest register state, reducing `PREPCALL`/`POSTCALL` save/restore scope.
 
 A few general principles for allocation:
 
@@ -318,15 +320,11 @@ CKB-VM’s assembly executor is a restrained optimization. It does not introduce
 
 From the Rust interpreter to x64 assembly, then aarch64 assembly, and finally riscv64 assembly, this path demonstrates an engineering tradeoff very characteristic of CKB-VM: build a clear reference implementation first, then make verifiable local replacements on hot paths. Each new backend is not a rewrite, but a retelling of the same loop under the same semantics, in the target architecture’s own language.
 
-That is what I like most about this design. The assembly executor looks complex, obscure, and hard to understand, but the goal it serves is simple: make on-chain programs run faster without sacrificing determinism and safety. For a blockchain VM, that is already both a plain and a very difficult goal.
+The assembly executor looks complex, obscure, and hard to understand, but the goal it serves is simple: make on-chain programs run faster without sacrificing determinism and safety. For a blockchain VM, that is already both a plain and a very difficult goal.
 
-## Series of articles
+## More in This Series
 
-- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
-- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
-- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
-- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
-- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all articles, including the follow-up posts on Nervos Talk.
 
 ---
 

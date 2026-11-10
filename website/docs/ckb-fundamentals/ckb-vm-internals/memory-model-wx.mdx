@@ -2,9 +2,9 @@
 title: CKB-VM Memory Model — Design of W^X
 ---
 
-In the previous article, we explored CKB-VM [snapshots v1](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366) and [snapshots v2](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367). One of the core tasks of snapshotting is marking and saving “dirty pages.” That article repeatedly mentioned page flag markers: `FLAG_DIRTY`, `FLAG_EXECUTABLE`, `FLAG_WRITABLE` but never explained where these flags come from, or the more fundamental design behind them: the W^X memory model.
+The articles on [Snapshot V1](/docs/ckb-fundamentals/ckb-vm-internals/snapshot-v1) and [Snapshot V2](/docs/ckb-fundamentals/ckb-vm-internals/snapshot-v2) explain how CKB-VM preserves execution state. One of the core tasks of snapshotting is marking and saving “dirty pages.” Those articles mention page flags such as `FLAG_DIRTY`, `FLAG_EXECUTABLE`, and `FLAG_WRITABLE`. This article explains their origin and the W^X memory model behind them.
 
-This article fills that gap. We start from the lowest-level evolution of CKB-VM’s memory subsystem, move through the bit-level design of W^X, and then examine how it interacts with ELF loading and the snapshot system.
+This article fills that gap. It starts from the lowest-level evolution of CKB-VM’s memory subsystem, moves through the bit-level design of W^X, and then examines how it interacts with ELF loading and the snapshot system.
 
 ## Why the Memory Model Matters
 
@@ -14,15 +14,15 @@ From a security perspective, smart contracts on a blockchain run in an extremely
 - Chaining existing code gadgets into malicious logic (ROP/JOP)
 - Overwriting return addresses via crafted stack layouts to bypass permission checks
 
-For the first two categories, modern operating systems and browsers long ago converged on a standard answer: [W^X](https://en.wikipedia.org/wiki/W%5EX) (Write XOR Execute), any given memory page is, at any given moment, either writable or executable, **but never both**. This principle was first introduced by OpenBSD in 2003 and subsequently adopted by nearly every major platform: Windows (DEP), Linux (PaX/NX), macOS, and others.
+To prevent execution of injected code, modern operating systems and browsers use [W^X](https://en.wikipedia.org/wiki/W%5EX) (Write XOR Execute): any given memory page is, at any given moment, either writable or executable, **but never both**. This principle was first introduced by OpenBSD in 2003 and subsequently adopted by nearly every major platform: Windows (DEP), Linux (PaX/NX), macOS, and others.
 
-For an on-chain virtual machine like CKB-VM, W^X is essentially mandatory. Without it, any buffer overflow could be directly weaponized into remote code execution.
+W^X prevents executing code in writable pages. It does not prevent reuse of existing executable code through ROP/JOP, or eliminate the need for bounds checks in scripts.
 
 > CKB-VM also has a CFI extension instruction set designed to mitigate ROP/JOP attacks; it is still under development. See [this pull request](https://github.com/nervosnetwork/ckb-vm/pull/492) for details.
 
 ## The Simplest Starting Point: FlatMemory
 
-When you don’t need to worry about permissions or memory efficiency, the most intuitive memory implementation is a large array. From its earliest days, CKB-VM had an implementation called `FlatMemory` that used a single 4 MB `Vec<u8>` to simulate the entire linear address space. Its advantage is simplicity, no complex data structures or algorithms. Its disadvantage is wastefulness, since most scripts use far less than 4 MB in practice.
+When you don’t need to worry about permissions or memory efficiency, the most intuitive memory implementation is a large array. From its earliest days, CKB-VM had an implementation called `FlatMemory` that used a single 4 MB `Vec<u8>` to simulate the entire linear address space. Its advantage is simplicity: no complex data structures or algorithms. Its disadvantage is wastefulness, since most scripts use far less than 4 MB in practice.
 
 ```rust
 pub struct FlatMemory<R> {
@@ -33,7 +33,7 @@ pub struct FlatMemory<R> {
 }
 ```
 
-`FlatMemory` allocates the entire 4 MB at construction time via `vec![0; memory_size]`. It provides the most basic read/write interface, write operations automatically set `FLAG_DIRTY`, but performs no permission checks whatsoever. Its purpose is to serve as a correct, simple reference backend for interpreter mode and as a baseline for comparison with more complex implementations.
+`FlatMemory` allocates the entire 4 MB at construction time via `vec![0; memory_size]`. It provides a basic read/write interface. Write operations automatically set `FLAG_DIRTY`, but perform no permission checks. Its purpose is to serve as a correct, simple reference backend for interpreter mode and as a baseline for comparison with more complex implementations.
 
 > In early versions of CKB-VM, interpreter mode ran on FlatMemory. Later, to unify the permission model, all backends were switched to a `WXorXMemory` wrapping `SparseMemory` combination. Let’s continue reading.
 
@@ -83,7 +83,7 @@ pub struct WXorXMemory<M: Memory> {
 }
 ```
 
-This is the classic “decorator pattern” in Rust. Most methods (such as `load8`, `load16`, `fetch_flag`) are forwarded directly to `inner`; only write operations and instruction fetch operations are intercepted , they perform a permission check before forwarding.
+This is the classic “decorator pattern” in Rust. Most methods (such as `load8`, `load16`, `fetch_flag`) are forwarded directly to `inner`; only write operations and instruction fetch operations are intercepted. They perform a permission check before forwarding.
 
 ```rust
 fn store8(&mut self, addr: &Self::REG, value: &Self::REG) -> Result<(), Error> {
@@ -101,9 +101,9 @@ fn execute_load16(&mut self, addr: u64) -> Result<u16, Error> {
 }
 ```
 
-Note that `execute_load16` and `execute_load32` are **separate methods, distinct from regular loads**. The regular loads (`load8`/`load16`/`load32`/`load64`) serve data-access instructions like `lb`/`lw` and do not check `FLAG_EXECUTABLE`. `execute_load16` and `execute_load32` are dedicated to instruction fetch, reading the 16-bit or 32-bit encoding of (compressed) instructions. **Instruction fetches go through the executable check; data accesses go through the writable check. The two are mutually exclusive and complementary.**
+Note that `execute_load16` and `execute_load32` are **separate methods, distinct from regular loads**. The regular loads (`load8`/`load16`/`load32`/`load64`) serve data-access instructions like `lb`/`lw` and do not check `FLAG_EXECUTABLE`. `execute_load16` and `execute_load32` are dedicated to instruction fetch, reading the 16-bit or 32-bit encoding of (compressed) instructions. **Instruction fetches check executable permission; data writes check writable permission. Ordinary data reads do not check the W^X bit.**
 
-Now we come to what I consider the most elegant part of the entire implementation. Opening the source, the four flag constants are defined as follows:
+The permission model is encoded in the following flag constants:
 
 ```rust
 pub const FLAG_FREEZED:    u8 = 0b01;
@@ -113,7 +113,7 @@ pub const FLAG_WRITABLE:   u8 = (!FLAG_EXECUTABLE) & FLAG_WXORX_BIT;
 pub const FLAG_DIRTY:      u8 = 0b100;
 ```
 
-Look at the value of `FLAG_WRITABLE`. `!FLAG_EXECUTABLE` inverts all bits; in an 8-bit space that gives `0b11111101`. AND-ing with `FLAG_WXORX_BIT` (0b10) yields `0b00000000` , that is, 0.
+Look at the value of `FLAG_WRITABLE`. `!FLAG_EXECUTABLE` inverts all bits; in an 8-bit space that gives `0b11111101`. AND-ing with `FLAG_WXORX_BIT` (0b10) yields `0b00000000`, that is, 0.
 
 This means **FLAG_WRITABLE equals 0**. A page is “writable” when bit 1 is 0; it is “executable” when bit 1 is 1. A single bit, with its two possible values, exactly encodes the mutually exclusive W and X states.
 
@@ -135,14 +135,14 @@ pub fn check_permission<M: Memory>(
 }
 ```
 
-Let’s walk through the three scenarios:
+The two permission checks work as follows:
 
 | Operation         | `flag` argument          | `flag & 0b10` | Page writable (bit1=0) | Page executable (bit1=1) |
 | ----------------- | ------------------------ | ------------- | ---------------------- | ------------------------ |
 | Write             | `FLAG_WRITABLE` (0)      | `0`           | `0 == 0` → allow       | `0b10 != 0` → deny       |
 | Instruction fetch | `FLAG_EXECUTABLE` (0b10) | `0b10`        | `0 != 0b10` → deny     | `0b10 == 0b10` → allow   |
 
-No two independent check paths are needed; no if-else branch to distinguish “is this a write or an execute?” , a single bit comparison handles all four combinations. Encoding mutually exclusive states with one bit is common in hardware description languages but rare in software implementations. The trade-off is slightly reduced readability (you need to understand the logic behind the design), but once you do, it feels remarkably elegant.
+A single bit comparison handles both write and instruction-fetch permission checks. Encoding mutually exclusive states with one bit is common in hardware description languages but rare in software implementations. The trade-off is slightly reduced readability (you need to understand the logic behind the design), but once you do, it feels remarkably elegant.
 
 ## Page Freezing: FLAG_FREEZED
 
@@ -190,13 +190,13 @@ pub fn convert_flags(p_flags: u32, allow_freeze_writable: bool, vaddr: u64) -> R
 
 The translation rules are:
 
-- **Unreadable segment** : rejected outright. In CKB-VM, non-readable memory does not exist.
-- **Segment with both`PF_W` and `PF_X`**: rejected outright. This violates W^X.
-- **Code segment (`PF_X`)**: gets `FLAG_EXECUTABLE | FLAG_FREEZED`. Frozen , cannot be modified.
-- **Data segment (`PF_W`)**: gets `0` (i.e., `FLAG_WRITABLE`). Not frozen , the script may modify it at runtime.
-- **Read-only data segment (neither`PF_X` nor `PF_W`)**: gets `FLAG_FREEZED`. Frozen to prevent runtime tampering.
+- **Unreadable segment**: rejected outright. In CKB-VM, non-readable memory does not exist.
+- **Segment with both `PF_W` and `PF_X`**: rejected outright. This violates W^X.
+- **Code segment (`PF_X`)**: gets `FLAG_EXECUTABLE | FLAG_FREEZED`. Frozen, cannot be modified.
+- **Data segment (`PF_W`)**: gets `0` (i.e., `FLAG_WRITABLE`). Not frozen, the script may modify it at runtime.
+- **Read-only data segment (neither `PF_X` nor `PF_W`)**: gets `FLAG_FREEZED`. Frozen to prevent runtime tampering.
 
-Note the path `writable && !allow_freeze_writable` returns `0`, meaning writable segments are **not frozen** in their initial state. If `allow_freeze_writable` is true (certain special scenarios), writable segments are also frozen, turning them into regions that are readable after initialization but no longer writable , similar to `.data.rel.ro`.
+Note the path `writable && !allow_freeze_writable` returns `0`, meaning writable segments are **not frozen** in their initial state. If `allow_freeze_writable` is true (certain special scenarios), writable segments are also frozen, turning them into regions that are readable after initialization but no longer writable, similar to `.data.rel.ro`.
 
 When an ELF segment with `PF_W | PF_X` appears, CKB-VM refuses to load it. This cuts off the possibility of a W^X violation at the entry point itself.
 
@@ -236,10 +236,10 @@ Another important observation is that in the ASM execution loop, you do not see 
 
 Overall, W^X overhead at the x64 instruction level has two characteristics:
 
-- **Low amortized overhead** : for continuous writes within one page, extra cost is close to a constant-level branch overhead.
-- **Boundary sensitivity** : cross-page writes and first-touch writes trigger the full checking chain and cost noticeably more than the fast path.
+- **Low amortized overhead**: for continuous writes within one page, extra cost is close to a constant-level branch overhead.
+- **Boundary sensitivity**: cross-page writes and first-touch writes trigger the full checking chain and cost noticeably more than the fast path.
 
-From the source code, we can see that memory-read and memory-write operations involve far more instructions than simple arithmetic operations (such as `add`, `sub`, and so on). To quantify memory-operation performance, Our benchmark shows even when the cycle counts are similar, actual runtime for continuous single-page memory writes is roughly 3x that of the `add` instruction, which is still acceptable in a VM context. But for cross-page writes, because the full W^X checking chain is triggered, performance can degrade to around 5x or more relative to `add`. Therefore, when writing CKB scripts, favor continuous memory access and avoid cross-page writes whenever possible to reduce W^X-related overhead.
+From the source code, we can see that memory-read and memory-write operations involve far more instructions than simple arithmetic operations (such as `add`, `sub`, and so on). The original article reports that, even when CKB-VM cycle costs are similar, host CPU runtime for continuous single-page memory writes is roughly 3x that of the `add` instruction, which is still acceptable in a VM context. But for cross-page writes, because the full W^X checking chain is triggered, performance can degrade to around 5x or more relative to `add`. Therefore, when writing CKB scripts, favor continuous memory access and avoid cross-page writes whenever possible to reduce W^X-related overhead.
 
 ## Conclusion
 
@@ -247,13 +247,9 @@ The core of the CKB-VM memory model consists of three parts: FlatMemory for corr
 
 W^X itself is not a new technology; it has protected the operating systems and browsers we use every day for more than two decades. But in the context of a blockchain VM, it shifts from best practice to a hard survival baseline. Anyone can deploy code on-chain, and anyone can try to attack your contract. In such an adversarial environment, memory-model design cannot afford compromise.
 
-## Series of articles
+## More in This Series
 
-- [Deep Dive into CKB-VM Snapshot V1: Architecture and Design Principles](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v1-architecture-and-design-principles/10366)
-- [Deep Dive into CKB-VM Snapshot V2: Evolution](https://talk.nervos.org/t/deep-dive-into-ckb-vm-snapshot-v2-evolution/10367)
-- [Deep Dive into CKB-VM Memory Model: Design of W^X](https://talk.nervos.org/t/deep-dive-into-ckb-vm-memory-model-design-of-w-x/10398)
-- [Deep Dive into CKB-VM Assembly Executor](https://talk.nervos.org/t/deep-dive-into-ckb-vm-assembly-executor/10441)
-- [Deep Dive Into CKB-VM Macro-ops Fusion](https://talk.nervos.org/t/deep-dive-into-ckb-vm-macro-ops-fusion/10468)
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all articles, including the follow-up posts on Nervos Talk.
 
 ---
 

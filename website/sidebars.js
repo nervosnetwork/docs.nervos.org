@@ -312,8 +312,13 @@ export default {
         {
           type: "category",
           label: "CKB-VM Internals",
+          link: {
+            type: "doc",
+            id: "ckb-fundamentals/ckb-vm-internals/overview",
+          },
           collapsible: true,
           items: [
+            "ckb-fundamentals/ckb-vm-internals/overview",
             "ckb-fundamentals/ckb-vm-internals/snapshot-v1",
             "ckb-fundamentals/ckb-vm-internals/snapshot-v2",
             "ckb-fundamentals/ckb-vm-internals/memory-model-wx",
