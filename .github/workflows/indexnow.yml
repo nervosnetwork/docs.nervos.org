@@ -32,14 +32,28 @@ jobs:
           python-version: '3.12'
       - run: python -m unittest discover -s scripts/indexnow -v
 
-  notify:
+  dispatch:
     needs: test
     if: >-
-      github.event_name == 'schedule' ||
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'deployment_status' &&
-       github.event.deployment_status.state == 'success' &&
-       github.event.deployment.environment == 'Production')
+      github.event_name == 'deployment_status' &&
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      # deployment_status has no branch ref, so Actions cache is unavailable.
+      # Dispatch on the default branch to share a baseline with scheduled runs.
+      - name: Start a branch-scoped production notification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: gh workflow run indexnow.yml --ref "$DEFAULT_BRANCH" -f dry_run=false
+
+  notify:
+    needs: test
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     concurrency:
