@@ -1,0 +1,281 @@
+---
+title: CKB-VM CFI Extension
+---
+
+:::note CFI is under development
+
+This article explains a proposed extension. As of November 10, 2026, [the implementation PR](https://github.com/nervosnetwork/ckb-vm/pull/492) remains open and marked WIP. Its experimental compiler examples do not indicate support on the CKB network.
+
+:::
+
+In the RISC-V architecture, function calls rely on the `ra` (return address) register to store the return address. Each time a jump-and-link instruction such as `jal` executes, the processor writes the address of the next instruction into `ra` as the return address. In nested function-call scenarios, because there is only one `ra` register, the current return address must be saved to the stack in advance and restored when the function returns.
+
+This design introduces a critical security risk: if an attacker can corrupt stack contents through some means, such as a buffer overflow vulnerability, they can tamper with the return address stored on the stack. This is the core idea behind [ROP (Return-Oriented Programming)](https://en.wikipedia.org/wiki/Return-oriented_programming) and JOP attacks. By carefully constructing a chain of gadgets, the attacker can hijack program control flow and achieve arbitrary code execution.
+
+In CKB smart-contract scenarios, this threat is especially serious. An attacker does not even need to build a complex ROP chain; they only need to redirect the return address to the `exit` system call and set the exit code to 0 to bypass the contract's security checks and render the verification logic completely ineffective. This attack technique is simple, yet highly destructive.
+
+Therefore, a protection mechanism for the stack, especially validation of return-address integrity, is crucial to ensuring the security of CKB-VM. This is also the fundamental motivation for introducing CFI (Control Flow Integrity) extension instructions.
+
+## A Typical ROP Attack Chain
+
+The following intentionally vulnerable example illustrates a ROP attack. Its hard-coded stack offsets and recorded output depend on the compiler and generated stack frame; inspect the disassembly when reproducing it.
+
+```c
+#include <stdint.h>
+
+#include "ckb_syscalls.h"
+
+// We want to hijack control flow and jump here directly via ROP. This function calls ckb_exit(0) immediately, which means the script verification passes in the CKB-VM environment.
+void fun_rop_gadget_return_zero() {
+	ckb_exit(0);
+}
+
+// This is the vulnerable function. Here we directly modify the return address saved on the stack. In a real scenario, this vulnerability could be caused by a buffer overflow, a wild pointer,
+// use-after-free, or similar issues.
+void fun_vulner() {
+	// Get the address of fun_rop_gadget_return_zero.
+	uint64_t gadget_addr = (uint64_t)&fun_rop_gadget_return_zero;
+	// Get the current stack pointer.
+	register uint64_t sp_val;
+	asm volatile("mv %0, sp" : "=r"(sp_val));
+	// Under -O0 compilation, disassembly shows:
+	//   12bd8:  addi sp,sp,-48
+	//   12bda:  sd   ra,40(sp)
+	// So we need to modify the value at sp + 40.
+	uint64_t *return_addr_ptr = (uint64_t*)(sp_val + 40);
+	*return_addr_ptr = gadget_addr;
+	// When this function executes the ret instruction, it will load the return address from the stack.
+	// Since we have already modified the return address on the stack, it will jump to fun_rop_gadget_return_zero.
+	return;
+}
+
+int main() {
+	fun_vulner();
+	return 1;
+}
+```
+
+```bash
+$ riscv64-unknown-elf-gcc -O0 -nostdinc -nostdlib -nostartfiles -I ckb-c-stdlib -I ckb-c-stdlib/libc -g -o main main.c
+$ ckb-debugger --bin main
+
+# Run result: 0
+# All cycles: 3460(3.4K)
+# Exit code: 0
+```
+
+## A Realistic ROP Attack Example
+
+Building on the example above, we further improve `fun_vulner` so that it more closely resembles a real ROP attack scenario. Specifically, `fun_vulner` accepts a user input buffer and copies it into a local buffer on the stack without any bounds checking. An attacker can exploit this to craft malicious input that overwrites the return address saved on the stack, which is a classic buffer-overflow exploitation scenario.
+
+```c
+#include <stdint.h>
+
+#include "ckb_syscalls.h"
+
+// We want to hijack control flow and jump here directly via ROP. This function calls ckb_exit(0) immediately, which means the script verification passes in the CKB-VM environment.
+void fun_rop_gadget_return_zero() {
+	ckb_exit(0);
+}
+
+// This is the vulnerable function. It receives user input and copies it into a stack buffer, but performs no bounds checking.
+// This leads to a buffer overflow, allowing an attacker to overwrite the return address saved on the stack.
+void fun_vulner(const uint64_t *input) {
+	// Allocate a 64-byte buffer on the stack.
+	uint64_t buffer[8];
+	// Dangerous: copying without bounds checking.
+	// Here, 10 uint64_t values are copied, exceeding the size of buffer and causing a buffer overflow.
+	buffer[0] = input[0];
+	buffer[1] = input[1];
+	buffer[2] = input[2];
+	buffer[3] = input[3];
+	buffer[4] = input[4];
+	buffer[5] = input[5];
+	buffer[6] = input[6];
+	buffer[7] = input[7];
+	buffer[8] = input[8]; // Overflow! Overwrites saved s0 on the stack.
+	buffer[9] = input[9]; // Overflow! Overwrites saved ra (return address).
+}
+
+int main() {
+	// Construct malicious input for the ROP attack. The input data may come from user-defined witness args or lock args.
+	uint64_t malicious_input[10];
+
+	// Inspect the disassembly to locate the saved registers.
+	// This illustration assumes saved s0 and ra follow the eight buffer words.
+	// The exact layout depends on the compiler and optimization flags.
+	// Fill the first 64 bytes of the buffer (8 uint64_t values).
+	malicious_input[0] = 0x4141414141414141ULL;
+	malicious_input[1] = 0x4242424242424242ULL;
+	malicious_input[2] = 0x4343434343434343ULL;
+	malicious_input[3] = 0x4444444444444444ULL;
+	malicious_input[4] = 0x4545454545454545ULL;
+	malicious_input[5] = 0x4646464646464646ULL;
+	malicious_input[6] = 0x4747474747474747ULL;
+	malicious_input[7] = 0x4848484848484848ULL;
+
+	// Bytes 64-72: overwrite saved s0 (padding data).
+	malicious_input[8] = 0x5050505050505050ULL;
+	// Bytes 72-80: overwrite saved ra (the key to the ROP attack)!
+	malicious_input[9] = (uint64_t)&fun_rop_gadget_return_zero;
+
+	fun_vulner(malicious_input);
+	return 1;
+}
+```
+
+```bash
+$ riscv64-unknown-elf-gcc -O0 -nostdinc -nostdlib -nostartfiles -I ckb-c-stdlib -I ckb-c-stdlib/libc -g -o main main.c
+$ ckb-debugger --bin main
+
+# Run result: 0
+# All cycles: 3460(3.4K)
+# Exit code: 0
+```
+
+As you can see, the original code expects to return exit code 1 (meaning verification failed), but because the attacker overwrote the return address through malicious input, the program actually jumps to `fun_rop_gadget_return_zero`, which calls `ckb_exit(0)`, and ultimately returns 0 (meaning verification succeeded), completely bypassing the verification logic.
+
+## Attempting to Defend Against ROP Attacks
+
+From the ROP attack example above, we can conclude that the core of this kind of attack is the attacker being able to overwrite the return address saved on the stack. Therefore, protecting the integrity of the return address on the stack is the key to defending against such attacks.
+
+One approach is to preserve a protected copy of the return address at function entry and compare it with the return address used at function exit. Checking the ordinary stack pointer alone is insufficient: an attacker can overwrite a saved return address without changing the stack pointer. The shadow stack described below protects the return-address copy from ordinary writes.
+
+**This is exactly the core idea of the CFI extension instruction set, reflected in the following two dimensions:**
+
+- Forward protection: the program cannot jump arbitrarily to another location; it must jump to a valid target.
+
+- Backward protection: when a function returns, it must ensure that the return address has not been tampered with.
+
+> In the example above, the jump from `fun_vulner` to `fun_rop_gadget_return_zero` is an illegal jump. We want to prevent such illegal jumps through the corresponding mechanism. At the same time, when `fun_vulner` begins execution and before it returns, there must be a mechanism to ensure that its return address has not been modified.
+
+## Introduction to the CFI Extension
+
+The [RISC-V CFI specification](https://github.com/riscv/riscv-cfi) has officially been incorporated into the [RISC-V Instruction Set Manual](https://github.com/riscv/riscv-isa-manual). The specification is divided into the following two parts:
+
+- [Privileged ISA](https://github.com/riscv/riscv-isa-manual/blob/main/src/priv-cfi.adoc): the privileged instruction-set architecture, which defines CFI support at the operating system and hypervisor levels
+
+- [Unprivileged ISA](https://github.com/riscv/riscv-isa-manual/blob/main/src/unpriv-cfi.adoc): the unprivileged instruction-set architecture, which defines CFI instructions at the application level
+
+From the perspective of specification maturity, the CFI extension specification has entered the stable stage. For CKB-VM, the main focus is the Unprivileged ISA section, which introduces the following five new instructions:
+
+- `LPAD` (Landing Pad): marks a valid indirect-jump target, used for forward-edge protection
+
+- `SSPUSH` (Shadow Stack Push): pushes the return address onto the shadow stack
+
+- `SSPOPCHK` (Shadow Stack Pop and Check): pops the return address from the shadow stack and verifies its integrity
+
+- `SSRDP` (Shadow Stack Read Pointer): reads the shadow-stack pointer
+
+- `SSAMOSWAP` (Shadow Stack Atomic Swap): atomically swaps values on the shadow stack
+
+The core mechanism of these instructions is the Shadow Stack: in addition to the regular program stack, the hardware maintains an independent shadow stack dedicated to storing return addresses. When a function call occurs, the return address is saved on both the regular stack and the shadow stack. When the function returns, the hardware verifies whether the return addresses on the two stacks match. Because the shadow stack is invisible to ordinary memory access instructions, an attacker cannot synchronize any corruption of the regular stack with the shadow stack even if they can damage the regular stack, thereby protecting return-address integrity.
+
+On a physical processor, these mechanisms are implemented in hardware. In the proposed CKB-VM extension, their state and checks are implemented by the VM.
+
+## CFI Extension: Forward Protection
+
+The `LPAD` (Landing Pad) instruction is used to mark valid indirect-jump target locations and implement forward control-flow protection.
+
+1. When the compiler generates an indirect jump instruction such as `jr` or `jalr`, the target address must point to an `LPAD` instruction.
+
+2. CKB-VM checks whether the target address of the indirect jump corresponds to an `LPAD` instruction.
+
+3. If the target address is not an `LPAD`, a control-flow exception is triggered and program execution is terminated.
+
+Indirect jump instructions are typically used when calling virtual functions or invoking functions through function pointers. By inserting `LPAD` instructions at legitimate function-entry points, the program can be constrained to jump only to predefined valid locations, preventing attackers from redirecting execution to invalid code locations by tampering with function pointers or return addresses.
+
+**Example**
+
+```c
+// Call a function through a function pointer.
+typedef int (*func_ptr)(int, int);
+
+int add(int a, int b) {
+	// The compiler will insert an lpad instruction at the entry of add.
+	return a + b;
+}
+
+int main() {
+	func_ptr fp = &add;
+	// When executing jalr to jump to fp, CKB-VM verifies whether the target address is lpad.
+	int result = fp(5, 3);
+	return result;
+}
+```
+
+Forward protection takes effect only for indirect calls and indirect jumps. For direct function calls, whose target addresses are fixed at compile time, the jump target cannot be tampered with at runtime, so LPAD verification is unnecessary. Function returns (`ret`) are also a form of indirect jump in essence, but their control-flow integrity is handled by the backward-protection mechanism, namely the shadow stack, and therefore does not require LPAD involvement.
+
+## CFI Extension: Backward Protection
+
+Backward protection is implemented through the Shadow Stack mechanism, primarily relying on the `SSPUSH` and `SSPOPCHK` instructions to protect the integrity of function return addresses. A Shadow Stack is an independent stack structure maintained by hardware, dedicated to storing return addresses. Unlike the regular program stack, the Shadow Stack is invisible to ordinary memory access instructions such as `lw` and `sw`, and can only be accessed through dedicated CFI instructions. This design ensures that even if an attacker can corrupt the regular stack, they still cannot tamper with return addresses on the Shadow Stack.
+
+**When a function is called**
+
+1. At the entry of the callee function, during the function prologue, the compiler inserts an `SSPUSH` instruction.
+
+2. This instruction pushes the return address from the `ra` register onto the top of the Shadow Stack, and the Shadow Stack pointer is decremented accordingly. (The Shadow Stack grows in the same direction as the regular stack, toward lower addresses.)
+
+3. At this point, the return address is stored in both the regular stack and the Shadow Stack.
+
+**When a function returns**
+
+1. When the function returns, before executing `ret` or `jalr x0, 0(ra)`, the compiler inserts an `SSPOPCHK` instruction.
+
+2. This instruction pops the expected return address from the top of the Shadow Stack, and the Shadow Stack pointer is incremented accordingly.
+
+3. The hardware compares the return address popped from the Shadow Stack with the current value in the `ra` register, which has been restored from the regular stack in the function epilogue.
+
+4. If the two values do not match, a control-flow exception is triggered and program execution is terminated.
+
+5. If they match, the function is allowed to return normally.
+
+**Example**
+
+```c
+#include <stdint.h>
+
+int add(int a, int b) {
+	// Compiler inserts sspush ra.
+	int result = a + b;
+	// Compiler inserts sspopchk ra to verify return-address integrity.
+	return result;
+}
+
+int main() {
+	int result = add(5, 3);
+	return result;
+}
+```
+
+## Toolchain Status in the Original July 2026 Article
+
+As of July 2026, LLVM's support for the RISC-V CFI extension instructions has entered the experimental stage, and LLVM 22 officially provides the related compiler options. The CFI specification has been formally included in the RISC-V instruction set manual, and full toolchain support is still being actively developed.
+
+In LLVM 22, the experimental switches can be enabled with the following command-line options:
+
+```bash
+--target=riscv64
+-march=rv64imc_zba_zbb_zbc_zbs_zicfiss1p0_zicfilp1p0
+-menable-experimental-extensions
+-fcf-protection=full
+-mcf-branch-label-scheme=func-sig
+```
+
+The original article describes Rust 1.95.0 with LLVM 22 and the corresponding experimental CFI target features. Specifically, the following environment variable configuration can be used:
+
+```bash
+RUSTFLAGS="-C target-feature=+experimental-zicfiss,+experimental-zicfilp"
+```
+
+It should be noted that, as of the LLVM 22 release, Rust's support for CFI backward protection is still incomplete. Although the compiled output can generate LPAD instructions, the insertion of SSPUSH and SSPOPCHK instructions at function-call and return sites has not yet been implemented. This may improve in later versions, but before use, it is recommended to verify the actual support status of the current toolchain.
+
+## More in This Series
+
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all ten articles in this series.
+
+---
+
+_Adapted from [Deep Dive Into CKB-VM CFI Extension](https://talk.nervos.org/t/deep-dive-into-ckb-vm-cfi-extension/10515) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
+
+This adaptation is licensed under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/), following the [Nervos Talk content license](https://talk.nervos.org/tos). Headings, formatting, examples, and series navigation have been adapted for these docs.

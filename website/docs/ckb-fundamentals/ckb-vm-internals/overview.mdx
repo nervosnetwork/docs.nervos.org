@@ -1,0 +1,38 @@
+---
+title: CKB-VM Internals
+sidebar_label: Reading List
+---
+
+This reading list brings together [mohanson’s](https://talk.nervos.org/u/mohanson/activity/topics) CKB-VM deep dives on Nervos Talk. It covers ten posts published between June 11 and August 7, 2026, checked on November 10, 2026.
+
+Start with the [CKB-VM overview](/docs/ckb-fundamentals/ckb-vm) for background. All ten articles are adapted in these docs with their full text, examples, and source attribution.
+
+## Articles
+
+| Article                                                                                                            | Published      | Focus                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| [Snapshot V1 — Architecture and Design Principles](/docs/ckb-fundamentals/ckb-vm-internals/snapshot-v1)            | June 11, 2026  | Saving registers, the program counter, and dirty memory pages to suspend and resume execution.                                        |
+| [Snapshot V2 — Evolution](/docs/ckb-fundamentals/ckb-vm-internals/snapshot-v2)                                     | June 11, 2026  | Replacing copies of externally sourced pages with references and preserving cycle accounting.                                         |
+| [Memory Model — Design of W^X](/docs/ckb-fundamentals/ckb-vm-internals/memory-model-wx)                            | June 17, 2026  | Memory allocation, page permissions, ELF loading, and snapshot interactions.                                                          |
+| [Assembly Executor](/docs/ckb-fundamentals/ckb-vm-internals/assembly-executor)                                     | June 30, 2026  | Predecoded traces, assembly dispatch, register allocation, and memory checks.                                                         |
+| [Macro-op Fusion](/docs/ckb-fundamentals/ckb-vm-internals/macro-ops-fusion)                                        | July 7, 2026   | Combining instruction sequences to reduce dispatch and execution costs.                                                               |
+| [B Extension](/docs/ckb-fundamentals/ckb-vm-internals/b-extension)                                                 | July 13, 2026  | Bit-manipulation instructions, leading-zero counting, and compiler target options.                                                    |
+| [CFI Extension](/docs/ckb-fundamentals/ckb-vm-internals/cfi-extension)                                             | July 21, 2026  | Return-oriented programming attacks and proposed control-flow protection. **Design and development work; see the status note below.** |
+| [Spawn Syscall](/docs/ckb-fundamentals/ckb-vm-internals/spawn-syscall)                                             | July 27, 2026  | Child processes, cross-script calls, and communication through pipes.                                                                 |
+| [Cycles](/docs/ckb-fundamentals/ckb-vm-internals/cycles)                                                           | August 3, 2026 | Deterministic execution budgets, instruction costs, and overflow and limit checks.                                                    |
+| [Instruction Decoder and Instruction Cache](/docs/ckb-fundamentals/ckb-vm-internals/instruction-decoder-and-cache) | August 7, 2026 | Instruction fetching, compressed encodings, decode caching, and the entry point for macro-op fusion.                                  |
+
+:::note CFI status
+
+The [CFI article](/docs/ckb-fundamentals/ckb-vm-internals/cfi-extension) describes a proposed extension. As of November 10, 2026, the [implementation PR](https://github.com/nervosnetwork/ckb-vm/pull/492) remains open and is titled “[WIP] Implement CFI.” Treat this article as design material, not as documentation of an activated CKB network feature. W^X page permissions alone do not prevent ROP/JOP attacks.
+
+:::
+
+## Reading by Topic
+
+- **Execution and performance:** read the decoder article, then the assembly executor, macro-op fusion, and B extension articles.
+- **State and resource limits:** read Snapshot V1, Snapshot V2, and Cycles together.
+- **Memory and security:** read the memory model article before the CFI design article.
+- **Cross-script calls:** read Spawn alongside the [VM Version History](/docs/script/vm-version) and [Meepo hard fork history](/docs/history-and-hard-forks/ckb-hard-fork-history#meepo-hardfork).
+
+The articles describe different implementation layers. Check the VM version and hard fork documentation when choosing features for a deployed script; publication dates do not indicate network activation dates.
