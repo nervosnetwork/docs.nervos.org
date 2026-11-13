@@ -6,7 +6,7 @@
   "scripts": {
     "examples": "docusaurus-examples",
     "start": "docusaurus start",
-    "build": "docusaurus build",
+    "build": "docusaurus build && node scripts/check-doc-schema-dates.mjs",
     "test:tutorial-header": "node --test src/components/TutorialHeader/selectTools.test.mjs",
     "serve": "docusaurus serve",
     "type": "module",
