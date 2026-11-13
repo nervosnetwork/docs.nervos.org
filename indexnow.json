@@ -1,0 +1,13 @@
+{
+  "origin": "https://docs.nervos.org/",
+  "keyFile": "website/static/7ba975d812d29193c6926c8258066faf.txt",
+  "initialUrls": [
+    "https://docs.nervos.org/",
+    "https://docs.nervos.org/docs/getting-started/how-ckb-works"
+  ],
+  "excludePaths": [
+    "/blog",
+    "/search",
+    "/homeContents"
+  ]
+}

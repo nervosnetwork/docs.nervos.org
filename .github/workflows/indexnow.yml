@@ -1,0 +1,82 @@
+name: IndexNow
+
+on:
+  deployment_status:
+  schedule:
+    # Fallback for deployments that do not emit a GitHub deployment event.
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Inspect changes without submitting or updating the baseline
+        type: boolean
+        default: true
+  pull_request:
+    paths:
+      - '.github/workflows/indexnow.yml'
+      - 'scripts/indexnow/**'
+      - 'indexnow.json'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s scripts/indexnow -v
+
+  notify:
+    needs: test
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'deployment_status' &&
+       github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: indexnow-production
+      cancel-in-progress: false
+    steps:
+      # Always run trusted default-branch code; never a deployment payload ref.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache/restore@v4
+        with:
+          path: .indexnow/state.json
+          key: indexnow-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: indexnow-v1-
+      - name: Compare production pages and notify IndexNow
+        env:
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: |
+          if [ "$DRY_RUN" = 'true' ]; then
+            python scripts/indexnow/notify.py --dry-run
+          else
+            python scripts/indexnow/notify.py
+          fi
+      - uses: actions/cache/save@v4
+        if: success() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run)
+        with:
+          path: .indexnow/state.json
+          key: indexnow-v1-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .indexnow/report.json
+          if-no-files-found: ignore
+          retention-days: 30
