@@ -59,7 +59,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     description: metadata.description,
     url: new URL(metadata.permalink, siteConfig.url).href,
     dateModified: metadata.lastUpdatedAt
-      ? new Date(metadata.lastUpdatedAt * 1000).toISOString()
+      ? new Date(metadata.lastUpdatedAt).toISOString()
       : undefined,
     publisher: { "@id": "https://docs.nervos.org/#organization" },
   };
