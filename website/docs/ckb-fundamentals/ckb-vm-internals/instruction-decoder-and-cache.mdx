@@ -1,0 +1,124 @@
+---
+title: CKB-VM Instruction Decoder and Instruction Cache
+---
+
+If you have read the previous CKB articles, you probably already have a rough picture of the VM main loop: fetch, decode, execute, charge cycles, then move to the next instruction.
+
+In the earlier posts, we mainly focused on execution and cycle accounting. But as you can see, another stage is just as important: instruction fetch and decode.
+
+When people first read VM code, they usually focus on execution logic: how `add` is computed, how `lw` reads memory, and how `ecall` enters syscalls. But for a VM that must run a large number of on-chain scripts, execution logic is not the only cost. Before execution, the CPU still needs to translate raw bits in memory into internal instructions. If this step is poorly designed, it can significantly drag down overall system performance.
+
+This article explains how the CKB-VM instruction decoder works.
+
+## Overall Architecture
+
+In CKB-VM's execution pipeline, the decoder sits at a very fundamental position. Whether in Rust interpreter mode or ASM mode, bytes in memory must first be translated into an internal representation before actual execution can proceed.
+
+In the source code, this stage is implemented in [`src/decoder.rs`](https://github.com/nervosnetwork/ckb-vm/blob/develop/src/decoder.rs). Conceptually, its job can be split into three layers:
+
+1. Read raw instruction bits from memory.
+2. Parse those bits into a unified `Instruction`.
+3. Cache results when appropriate to avoid decoding the same instruction repeatedly.
+
+## RISC-V Encoding Format
+
+RISC-V is not only 32-bit fixed-width instructions. It also has compressed instructions (RVC), which are 16-bit encodings. That means a decoder cannot simply read 4 bytes every time and interpret them directly as one instruction.
+
+CKB-VM uses a clever approach: first read 2 bytes from memory, then check the lowest two bits.
+
+```text
+... XX XX 11 -> 32-bit instruction
+... XX XX 00 -> 16-bit compressed instruction
+... XX XX 01 -> 16-bit compressed instruction
+... XX XX 10 -> 16-bit compressed instruction
+```
+
+The reason is straightforward. According to the RISC-V spec, the lowest two bits of a 32-bit instruction are always `11`, while RVC instructions do not use `11` there. So after reading 16 bits, the decoder can decide whether the instruction is 16-bit or 32-bit. If it is 32-bit, it then reads the next 2 bytes and concatenates them.
+
+The correctness of this approach is obvious, but it comes with a trade-off: you may read memory twice. For a 32-bit instruction, you first read 2 bytes, then read the next 2 bytes, totaling 4 bytes but triggering two memory accesses and permission checks. As we will see later, CKB-VM includes a small optimization to reduce this repeated access.
+
+## decode_bits: Fast Path and Conservative Path
+
+The function `decode_bits` is the lowest-level function in the decoder. It does exactly one thing: fetch raw instruction bits from memory.
+
+It includes a practical optimization: if the current PC is not near a page boundary, it takes a direct 32-bit load path; if PC is close to the end of a page, it falls back to 16-bit loads to avoid out-of-bounds access. We can call the first one the fast path, and the second one the conservative path. On the fast path, after loading 32 bits, it checks the lowest two bits once; if the instruction is actually 16-bit, it discards the upper 16 bits and keeps only the lower 16 bits. This means that as long as PC is not near page end, both 16-bit and 32-bit instructions require only one memory check and one memory access, which is why this is the fast path.
+
+> A 32-bit instruction may cross pages. At page boundaries, directly reading 4 bytes may trigger extra checks or touch a memory boundary. So a more conservative path is needed.
+
+## decode_raw: The Real Decode Entry Point
+
+The higher-level entry point is `decode_raw`.
+
+It first checks whether the address is out of bounds, then looks up a small instruction cache. If the cache hits, it directly returns the previously decoded internal instruction. If not, it calls `decode_bits` and then tries each `InstructionFactory` in sequence.
+
+Two details are worth noting.
+
+1. CKB-VM does not cache instruction bytes. It caches already decoded internal instructions. So on a cache hit, it can skip parsing entirely.
+2. The cache is keyed by PC, not by instruction bit pattern. That is reasonable. The same machine code bytes at different addresses are still different instruction instances. For a VM, address is part of semantics.
+
+## Instruction Cache
+
+CKB-VM's instruction cache size is 4096, essentially a small hash table. But instead of using `pc % 4096` directly as the key, it uses a more carefully mixed index:
+
+```rust
+let aligned_pc = pc >> 1;
+let instruction_cache_key =
+    ((aligned_pc & 0xFF) | (aligned_pc >> 12 << 8)) as usize
+        % INSTRUCTION_CACHE_SIZE;
+```
+
+The lowest PC bit is always zero for these instruction encodings, so the decoder removes it first. It then combines the low 8 bits of the shifted address with higher bits to form the cache index. Each cache slot also stores the full PC, so an index collision cannot produce a false cache hit.
+
+**Why not use only low bits?**
+
+Because low bits tend to cover only local code regions. Many programs repeatedly jump among a few nearby addresses over short periods. If the key only uses low bits, those addresses may collide into the same slot too often, causing unnecessary conflicts.
+
+**Why still keep low bits then?**
+
+Because low bits are excellent for distinguishing nearby instructions. If you only use high bits, many close-by instructions map together and you lose locality.
+
+So this key is fundamentally a compromise: preserve locality for nearby code while reducing conflicts with far-away jump targets. This is a typical engineering optimization style: not mathematically perfect, but practically effective.
+
+This scheme is designed to balance local and remote code behavior, and the constants 12 and 8 are empirically chosen.
+
+## InstructionFactory: Composing Multiple ISA Modules
+
+Inside the decoder, instruction recognition is not implemented as one giant hardcoded if-else chain. Instead, it uses a set of `InstructionFactory` modules. In `DefaultDecoder::new`, ISA modules are registered in order:
+
+- `rvc::factory` handles compressed instructions.
+- `i::factory` handles base integer instructions.
+- `m::factory` handles multiply/divide extensions.
+- If B extension is enabled, `b::factory` is also registered.
+
+This means the decoder itself does not hardcode every detail of every instruction. It behaves more like an assembler of parsing stages: first obtain raw bits, then hand them to each module for matching. This layered design has two advantages:
+
+1. Clear structure. Adding a new ISA extension only requires adding a new factory, instead of stuffing all logic into a giant function.
+2. Better compatibility. Different CKB-VM versions can switch behavior via the `version` parameter, so older scripts keep expected semantics.
+
+## decode_mop: A Second Optimization Layer in the Decoder
+
+If `ISA_MOP` is enabled, `decode()` does not use plain `decode_raw`; it uses `decode_mop`. This is a different optimization category from caching. Caching avoids re-decoding the same instruction. MOP (macro-op fusion) merges several adjacent instructions into one internal pseudo-instruction.
+
+Combinations such as `div` + `rem`, `mulh` + `mul`, and `lui` + `jalr` may be folded into higher-level internal instructions during decoding. The reason is simple: some instruction combinations are naturally handled together by hardware, so splitting them into separate execution steps is unnecessary.
+
+So from a layering perspective, CKB-VM's decoder is not only a bytecode recognizer; it also performs part of instruction rewriting.
+
+## Summary
+
+CKB-VM's instruction decoder does more than translate machine code into internal instructions. It handles three things at once:
+
+1. Distinguish 16-bit and 32-bit encodings with minimal overhead.
+2. Reduce repeated decoding via a small cache.
+3. Provide an entry point for higher-level optimizations such as MOP.
+
+This is one reason CKB-VM is worth writing about: its implementation is not just feature stacking. Responsibilities are clearly separated by layer, so each micro-optimization can actually land on the hot execution path.
+
+## More in This Series
+
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all ten articles in this series.
+
+---
+
+_Adapted from [Deep Dive Into CKB-VM Instruction Decoder and Instruction Cache](https://talk.nervos.org/t/deep-dive-into-ckb-vm-instruction-decoder-and-instruction-cache/10592) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
+
+This adaptation is licensed under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/), following the [Nervos Talk content license](https://talk.nervos.org/tos). Headings, formatting, examples, and series navigation have been adapted for these docs.

@@ -1,0 +1,151 @@
+---
+title: CKB-VM B Extension
+---
+
+## Why Bit Manipulation Matters
+
+When writing code, we always hope it runs as fast as possible. The same is true for smart contracts on a blockchain.
+
+Faster execution means higher TPS. Of course, TPS is affected by many factors, and execution speed is only one dimension. At the same time, faster execution also means we can support more complex business logic: only when the VM is efficient enough can we afford to implement advanced cryptographic algorithms directly on-chain.
+
+There are usually two ways to improve performance: software-level and hardware-level optimization. On the software side, programmers have accumulated many optimization tricks over time. Some are obscure, but can bring substantial gains. A few lines of code may replace dozens of naive lines, or a clever algorithm may deliver 10x or even 100x speedups. I remember doing image processing work in 2017, with tens of terabytes of image data to process in batches. Every small algorithmic improvement could save hours, even dozens of hours. That sense of achievement was unforgettable.
+
+Still, pure software optimization eventually hits a ceiling. To break through bottlenecks, we need to optimize the underlying execution substrate. CKB on-chain programs run on CKB-VM, so making CKB-VM itself run faster is another key direction.
+
+## Counting Leading Zeros
+
+In Extension B, the B stands for Bit Manipulation. The RISC-V B extension is designed to strengthen a processor's bit-manipulation capabilities. Typical operations include Count Leading Zeros (CLZ), Count Trailing Zeros (CTZ), and rotate instructions.
+
+Below, I will use several versions of a CLZ algorithm to explain the practical value of introducing Extension B into CKB-VM. First, what is CLZ? Treat an integer as binary and count consecutive zeros starting from the most significant bit. For example, the binary representation of 12345678 is shown below, and its leading-zero count is 40:
+
+```text
+0000000000000000000000000000000000000000101111000110000101001110(12345678)
+|<--------------40-------------------->|
+```
+
+Implementing CLZ is not difficult. Most programmers can write it in under a minute. The most straightforward approach is bit-by-bit scanning: shift left by one each time, check whether the highest bit is zero, and stop when the first 1 appears.
+
+```c
+uint64_t clz(uint64_t n)
+{
+    int c = 0;
+    for (int i = 0; i < 64; i++) {
+        if (((n << i) & 0x8000000000000000) == 0) {
+            c += 1;
+        } else {
+            break;
+        }
+    }
+    return c;
+}
+```
+
+CLZ is frequently used in cryptographic algorithms and low-level computations, so it is natural to ask: can it run faster? For this kind of range-shrinking problem, **binary search** is often efficient. Halve the problem size each step and keep narrowing the target range until the answer is found. For CLZ specifically, we can first check whether the high 32 bits are all zero, then do the same for 16 bits, 8 bits, 4 bits, 2 bits, and 1 bit:
+
+```c
+uint64_t clz(uint64_t n)
+{
+    if (n == 0) return 64;
+    int c = 0;
+    if (n <= 0x00000000FFFFFFFF) { c += 32; n <<= 32; };
+    if (n <= 0x0000FFFFFFFFFFFF) { c += 16; n <<= 16; };
+    if (n <= 0x00FFFFFFFFFFFFFF) { c += 8; n <<= 8; };
+    if (n <= 0x0FFFFFFFFFFFFFFF) { c += 4; n <<= 4; };
+    if (n <= 0x3FFFFFFFFFFFFFFF) { c += 2; n <<= 2; };
+    if (n <= 0x7FFFFFFFFFFFFFFF) { c += 1; };
+    return c;
+}
+```
+
+The second version is much faster than the first. For current CKB-VM, this is likely one of the fastest pure software implementations, taking about 30 instructions. You can further accelerate it with a lookup table, a classic space-for-time tradeoff, at the cost of allocating a relatively large table in advance.
+
+But we can go further. Since CLZ is so common, why not provide it directly at the ISA level? RISC-V divides its ISA into a base ISA and extensions, and CLZ is included in Extension B. That means once CKB-VM implements Extension B, all software versions above can be replaced by a single instruction:
+
+```c
+static inline int64_t _rv64_clz(int64_t rs1) {
+    int64_t rd;
+    __asm__ ("clz %0, %1" : "=r"(rd) : "r"(rs1));
+    return rd;
+}
+```
+
+Compared with a 30-instruction software implementation, a single instruction provides an obvious performance gain. The full B extension introduces 43 new instructions in total, covering bit counting, bit extraction, byte reversal, shift-and-mix, and more. See the [official documentation](https://github.com/riscv/riscv-bitmanip) for details. Overall, for contracts with heavy bit-manipulation workloads (such as hashing algorithms or elliptic-curve arithmetic), introducing Extension B can deliver more than an order-of-magnitude speedup.
+
+## Enabling the B Extension in the Compiler
+
+The inline-assembly style above requires manually marking each bit operation, which is tedious and error-prone in real projects. A better way is to tell the compiler directly that the target platform supports Extension B and let the compiler select instructions automatically.
+
+In the specification, RISC-V Extension B is split into four subextensions:
+
+| Subextension | Name                      | Typical Instructions                       |
+| ------------ | ------------------------- | ------------------------------------------ |
+| `zba`        | Address calculation       | `sh1add`, `sh2add`, `sh3add`               |
+| `zbb`        | Basic bit-manipulation    | `clz`, `ctz`, `cpop`, `ror`, `rol`, `rev8` |
+| `zbc`        | Carry-less multiplication | `clmul`, `clmulh`, `clmulr`                |
+| `zbs`        | Single-bit operations     | `bset`, `bclr`, `binv`, `bext`             |
+
+When compiling with clang, append these subextensions to the base ISA string via the `-march` option:
+
+```bash
+$ clang --target=riscv64-unknown-elf \
+        -march=rv64imc_zba_zbb_zbc_zbs \
+        -O3 -o main main.c
+```
+
+After enabling these options, the compiler will automatically map C builtins (and even your handwritten naive implementations) to corresponding B-extension instructions. For example:
+
+```c
+#include <stdint.h>
+
+// Clang will compile this into one instruction: clz
+uint64_t clz(uint64_t n) { return __builtin_clzll(n); }
+
+// Clang will compile this into one instruction: cpop
+uint64_t pop(uint64_t n) { return __builtin_popcountll(n); }
+
+// Clang will compile this into one instruction: ror
+uint64_t ror(uint64_t n, int shift) { return (n >> shift) | (n << (64 - shift)); }
+```
+
+The C builtin example assumes `n != 0` for `__builtin_clzll`. The rotation expression assumes `1 <= shift && shift < 64`; shifting by 64 is undefined in C. Handle these boundary values explicitly in application code.
+
+Compile with the command below, and the generated assembly will directly use B-extension instructions such as clz, cpop, and ror, instead of ordinary instruction sequences that emulate them:
+
+```bash
+$ clang --target=riscv64-unknown-elf -march=rv64imc_zba_zbb_zbc_zbs -O3 -c -o main.o main.c
+$ llvm-objdump -d main.o
+# main.o: file format elf64-littleriscv
+#
+# Disassembly of section .text:
+#
+# 0000000000000000 <clz>:
+#        0: 60051513      clz     a0, a0
+#        4: 8082          ret
+#
+# 0000000000000006 <pop>:
+#        6: 60251513      cpop    a0, a0
+#        a: 8082          ret
+#
+# 000000000000000c <ror>:
+#        c: 60b55533      ror     a0, a0, a1
+#       10: 8082          ret
+```
+
+This means: as long as you pass the correct `-march` option when compiling CKB contracts, all eligible bit operations in your code will be automatically replaced with B-extension instructions, **without changing any source code**.
+
+For Rust, you can enable Extension B in a similar way. Simply set the `RUSTFLAGS` environment variable at build time, and the compiler will automatically map eligible bit operations to B-extension instructions:
+
+```bash
+RUSTFLAGS="-C target-feature=+zba,+zbb,+zbc,+zbs" \
+  cargo build --target=riscv64imac-unknown-none-elf
+```
+
+## More in This Series
+
+See the [complete CKB-VM Internals reading list](/docs/ckb-fundamentals/ckb-vm-internals/overview) for all ten articles in this series.
+
+---
+
+_Adapted from [Deep Dive Into CKB-VM B Extension](https://talk.nervos.org/t/deep-dive-into-ckb-vm-b-extension/10484) by [mohanson](https://talk.nervos.org/u/mohanson) on Nervos Talk._
+
+This adaptation is licensed under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/), following the [Nervos Talk content license](https://talk.nervos.org/tos). Headings, formatting, examples, and series navigation have been adapted for these docs.
