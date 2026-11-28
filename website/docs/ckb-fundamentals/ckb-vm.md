@@ -21,6 +21,10 @@ Nervos CKB offers native SDKs in several mainstream programming languages, such 
 
 The CKB network has introduced various CKB-VM versions over time to enhance security, performance, resolve bugs, and support new RISC-V extensions. To check out all versions of the CKB-VM from previous hard fork events, please visit [VM Version History](/docs/script/vm-version)
 
+## CKB-VM Internals
+
+For a deeper look at the design and implementation of CKB-VM, see the [CKB-VM Internals](/docs/ckb-fundamentals/ckb-vm-internals/overview) reading list. The ten articles cover snapshots, the memory model, the assembly executor, macro-op fusion, the B extension, CFI, Spawn, cycles, and instruction decoding.
+
 ---
 
 For more information on CKB-VM, please refer to the [RFC CKB-VM](https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0003-ckb-vm/0003-ckb-vm.md).
